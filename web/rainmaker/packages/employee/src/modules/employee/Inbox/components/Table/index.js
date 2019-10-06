@@ -60,7 +60,7 @@ class InboxData extends React.Component {
       await addWflowFileUrl(processInstances, prepareFinalObject);
     }
 
-    let baseUrl = document.location.origin;
+    let baseUrl = window.origin;
     let contextPath =
       status === "Initiated"
         ? process.env.NODE_ENV === "production"
@@ -193,7 +193,7 @@ export const Taskboard = ({ data }) => {
 };
 
 const onModuleCardClick = (route) => {
-  window.location.href = document.location.origin + route;
+  window.location.href = window.origin + route;
 };
 
 export const Boxboard = ({ data }) => {

@@ -6,13 +6,12 @@ import { Card, Icon } from "components";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import {
   setFieldProperty,
-  handleFieldChange,
-  initForm
+  handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 
 class PaymentModes extends Component {
-  allFormkeys = ["demandInfo", "chequeInfo", "cardInfo", "cashInfo"];
+  // allFormkeys = ["demandInfo", "chequeInfo", "cardInfo", "cashInfo"];
 
   FormDetails = ({ item }) => {
     return (
@@ -71,7 +70,7 @@ class PaymentModes extends Component {
                 labelName: "Bank details not found for this IFSC",
                 labelKey: "ERR_BANK_DETAILS_NOT_FOUND_FOR_IFSC"
               },
-              "error"
+              true
             );
           } else {
             setFieldProperty(formKey, "BankName", "hideField", false);
@@ -147,7 +146,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    initForm: form => dispatch(initForm(form)),
     removeForm: formKey => dispatch(removeForm(formKey)),
     setFieldProperty: (formKey, fieldKey, propertyName, propertyValue) =>
       dispatch(

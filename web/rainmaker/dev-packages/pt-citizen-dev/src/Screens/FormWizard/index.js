@@ -548,7 +548,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            "error"
+            true
           );
           break;
         }
@@ -576,7 +576,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            "error"
+            true
           );
           break;
         }
@@ -641,7 +641,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            "error"
+            true
           );
           break;
         }
@@ -792,17 +792,17 @@ class FormWizard extends Component {
     let { history, toggleSpinner, location } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    let callbackUrl = `${document.location.origin}/property-tax/payment-redirect-page`;
+    let callbackUrl = `${window.origin}/property-tax/payment-redirect-page`;
     if (process.env.NODE_ENV !== "development") {
       const userType =
         process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
       if (userType === "CITIZEN") {
         callbackUrl = `${
-          document.location.origin
+          window.origin
         }/citizen/property-tax/payment-redirect-page`;
       } else {
         callbackUrl = `${
-          document.location.origin
+          window.origin
         }/employee/property-tax/payment-redirect-page`;
       }
     }
@@ -857,7 +857,7 @@ class FormWizard extends Component {
           window.location = redirectionUrl;
         } else {
           toggleSpinner();
-          let moduleId = get(goToPaymentGateway, "Transaction.consumerCode");
+          let moduleId = get(goToPaymentGateway, "Transaction.moduleId");
           let tenantId = get(goToPaymentGateway, "Transaction.tenantId");
           history.push(
             "/property-tax/payment-success/" +
@@ -1017,7 +1017,7 @@ class FormWizard extends Component {
             labelName: "Error calculating tax!",
             labelKey: "ERR_ERROR_CALCULATING_TAX"
           },
-          "error"
+          true
         );
     }
   };

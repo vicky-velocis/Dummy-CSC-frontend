@@ -120,8 +120,7 @@ class PaymentSuccess extends Component {
   };
 
   goToHome = () => {
-    /* Mseva 2.0 changes */
-    this.props.history.push("/");
+    this.props.history.push("/property-tax");
   };
 
   convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
@@ -161,7 +160,6 @@ class PaymentSuccess extends Component {
           noExistingPropertyId={!this.props.existingPropertyId}
           generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
           receiptImageUrl={imageUrl && imageUrl}
-          extraData={this.props.extraData}
         />
       </Screen>
     );
@@ -237,11 +235,7 @@ const mapStateToProps = (state, ownProps) => {
     receiptDetails,
     cities,
     existingPropertyId,
-    generalMDMSDataById,
-    extraData: {
-      property: selProperty,
-      receipt: rawReceiptDetails
-    }
+    generalMDMSDataById
   };
 };
 

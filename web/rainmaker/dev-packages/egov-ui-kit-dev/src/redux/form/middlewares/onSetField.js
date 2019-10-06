@@ -15,7 +15,7 @@ const setFieldPropertyMiddleware = (store) => (next) => async (action) => {
       }
     } catch (error) {
       const { message } = error;
-      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message },  "error"));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, true));
       return;
     }
   }

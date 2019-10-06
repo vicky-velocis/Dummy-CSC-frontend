@@ -17,7 +17,7 @@ import { getBill } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  let callbackUrl = `${document.location.origin}/${
+  let callbackUrl = `${window.origin}/${
     process.env.NODE_ENV === "production" ? "citizen" : ""
   }/tradelicense-citizen/PaymentRedirectPage`;
   try {
@@ -357,12 +357,11 @@ export const footer = getCommonApplyFooter({
     props: {
       variant: "contained",
       color: "primary",
-      className: "framework-responsive-button"
-      // style: {
-      //   minWidth: "200px",
-      //   height: "48px",
-      //   marginRight: "45px"
-      // }
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
     },
     children: {
       submitButtonLabel: getLabel({

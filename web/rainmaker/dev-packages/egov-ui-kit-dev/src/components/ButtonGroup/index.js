@@ -24,8 +24,12 @@ const ButtonGroup = ({
         label={item.label}
         style={
           !multiple
-            ? item.value === selected ? { ...defaultStyle, ...selectedStyle } : defaultStyle
-            : selected.indexOf(item.value) > -1 ? { ...defaultStyle, ...selectedStyle } : defaultStyle
+            ? item.value === selected
+              ? { ...defaultStyle, ...selectedStyle }
+              : defaultStyle
+            : selected.indexOf(item.value) > -1
+            ? { ...defaultStyle, ...selectedStyle }
+            : defaultStyle
         }
         hoverColor="none"
         onClick={() => {
@@ -33,8 +37,12 @@ const ButtonGroup = ({
         }}
         labelStyle={
           !multiple
-            ? item.value === selected ? { ...defaultLabelStyle, ...selectedLabelStyle } : defaultLabelStyle
-            : selected.indexOf(item.value) > -1 ? { ...defaultLabelStyle, ...selectedLabelStyle } : defaultLabelStyle
+            ? item.value === selected
+              ? { ...defaultLabelStyle, ...selectedLabelStyle }
+              : defaultLabelStyle
+            : selected.indexOf(item.value) > -1
+            ? { ...defaultLabelStyle, ...selectedLabelStyle }
+            : defaultLabelStyle
         }
       />
     );

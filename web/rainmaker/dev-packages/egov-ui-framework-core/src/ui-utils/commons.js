@@ -1,6 +1,7 @@
 import isEmpty from "lodash/isEmpty";
 import { httpRequest, uploadFile } from "./api.js";
 import cloneDeep from "lodash/cloneDeep";
+// import store from "ui-redux/store";
 import {
   localStorageSet,
   localStorageGet,
@@ -10,9 +11,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import set from "lodash/set";
-import get from "lodash/get";
 import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -21,7 +20,9 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
         components[
           componentKey
         ].componentJsonpath = `${jsonPath}.${componentKey}`;
-        const childJsonpath = `${components[componentKey].componentJsonpath}.children`;
+        const childJsonpath = `${
+          components[componentKey].componentJsonpath
+        }.children`;
         addComponentJsonpath(components[componentKey].children, childJsonpath);
       } else {
         components[
@@ -474,58 +475,3 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     }
   }
 };
-
-export const validateFields = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
-  );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
-      }
-    }
-  }
-  return isFormValid;
-};
-
-export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-  if (typeof mSewaApp === "undefined") {
-    // we are running in browser
-    receiptPDF.download(filename);
-  } else {
-    // we are running under webview
-    receiptPDF.getBase64(data => {
-      mSewaApp.downloadBase64File(data, filename);
-    });
-  }
-};
-
-if (window) {
-  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
-}

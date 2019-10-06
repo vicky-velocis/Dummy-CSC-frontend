@@ -89,7 +89,7 @@ const getCitizenReceipetData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationContact}`,
+                text: "+91 27272828222",
                 bold: false
               }
             ],
@@ -113,7 +113,6 @@ const getCitizenReceipetData = transformedData => {
               }
             ],
             alignment: "left"
-            
           },
           {
             text: [
@@ -122,12 +121,12 @@ const getCitizenReceipetData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationWebsite}`,
+                text: "www.pmidc.com",
                 bold: false
               }
             ],
             alignment: "right",
-            margin: [0, 0, 0, 0]
+            margin: [100, 0, 0, 0]
           }
         ]
       },
@@ -434,7 +433,7 @@ const getReceiptData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationContact}`,
+                text: "+91 27272828222",
                 bold: false
               }
             ],
@@ -466,12 +465,12 @@ const getReceiptData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationWebsite}`,
+                text: "www.pmidc.com",
                 bold: false
               }
             ],
             alignment: "right",
-            margin: [0, 0, 0, 0]
+            margin: [100, 0, 0, 0]
           }
         ]
       },
@@ -704,7 +703,7 @@ const getReceiptData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationContact}`,
+                text: "+91 27272828222",
                 bold: false
               }
             ],
@@ -736,12 +735,12 @@ const getReceiptData = transformedData => {
                 bold: true
               },
               {
-                text:`${transformedData.corporationWebsite}`,
+                text: "www.pmidc.com",
                 bold: false
               }
             ],
             alignment: "right",
-            margin: [0, 0, 0, 0]
+            margin: [100, 0, 0, 0]
           }
         ]
       },
@@ -1013,7 +1012,8 @@ export const generateReciept = async rowData => {
   } else {
     const data = allReceipts.Receipt.find(
       item =>
-        get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData[0]
+        get(item, "Bill[0].billDetails[0].receiptNumber", "") ===
+        rowData["Receipt No"]
     );
     if (isEmpty(data)) {
       return;
@@ -1060,7 +1060,9 @@ export const generateCitizenReciept = async rowData => {
   );
   let citizenReceipt_data = {};
   const data = allReceipts.Receipt.find(
-    item => get(item, "Bill[0].billDetails[0].receiptNumber", "") === rowData[0]
+    item =>
+      get(item, "Bill[0].billDetails[0].receiptNumber", "") ===
+      rowData["Receipt No"]
   );
   if (isEmpty(data)) {
     return;

@@ -10,7 +10,7 @@ import commonConfig from "config/common";
 import redirectionLink from "egov-ui-kit/config/smsRedirectionLinks";
 import routes from "./Routes";
 import { LoadingIndicator } from "components";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import isEmpty from "lodash/isEmpty";
@@ -23,14 +23,14 @@ class App extends Component {
     props.history.listen((location, action) => {
       const { pathname: nextPath } = location;
       addBodyClass(nextPath);
-      props.toggleSnackbarAndSetText(false, { labelName: "", labelKey: "" }, "success");
+      props.toggleSnackbarAndSetText(false, { labelName: "", labelKey: "" }, false);
     });
     addBodyClass(currentPath);
   }
 
   componentDidMount = async () => {
     const { fetchLocalizationLabel, fetchCurrentLocation, fetchMDMSData } = this.props;
-    const { pathname } = window.location;
+    const { pathname, search } = window.location;
     let requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -72,8 +72,8 @@ class App extends Component {
   };
 
   handleSMSLinks = () => {
-    const { authenticated, setPreviousRoute, setRoute } = this.props;
-    const { href } = window.location;
+    const { authenticated, setPreviousRoute, setRoute, handleFieldChange } = this.props;
+    const { pathname, href } = window.location;
     if (!authenticated) {
       setRoute("/user/otp?smsLink=true");
       setPreviousRoute(redirectionLink(href));
@@ -83,13 +83,14 @@ class App extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { route: nextRoute, authenticated } = nextProps;
+    const { route: nextRoute, authenticated, location } = nextProps;
     const { route: currentRoute, history, setRoute } = this.props;
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
     }
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink")) {
+    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("withoutAuth");
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
@@ -99,7 +100,7 @@ class App extends Component {
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
-        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
+        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} error={toast.error} />}
         {loading && <LoadingIndicator />}
       </div>
     );

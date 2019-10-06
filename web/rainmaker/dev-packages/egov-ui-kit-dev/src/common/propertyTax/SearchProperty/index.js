@@ -48,7 +48,7 @@ class SearchProperty extends Component {
       this.props.toggleSnackbarAndSetText(
         true,
         { labelName: "Please fill atleast one field along with city", labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY" },
-        "error"
+        true
       );
     } else {
       const queryParams = [];

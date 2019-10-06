@@ -24,13 +24,12 @@ export const Taskboard = ({ data }) => {
 
 const onModuleCardClick = (route) => {
   const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
-  window.location.href = document.location.origin + "/" + url;
+  window.location.href = window.origin + "/" + url;
 };
 
 const iconStyle = {
   width: "48px",
   height: "46.02px",
-  color:"#fe7a51",
 };
 
 export const Boxboard = ({ data }) => {

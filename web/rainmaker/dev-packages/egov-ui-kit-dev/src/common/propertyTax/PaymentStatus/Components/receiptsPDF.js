@@ -1,26 +1,9 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
-import store from "redux/store";
-import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
-import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
-
-
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt, extraData) => {
-  const state = store.getState();
-  if (extraData) 
-      {
-        var stateCopy = JSON.parse(JSON.stringify(state));
-        if (stateCopy.app)
-          delete stateCopy.app;
-        if (stateCopy.common)
-          delete stateCopy.common;
-
-        extraData.state = stateCopy;
-
-      }
+const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
   let data;
   let { owners, address, propertyDetails, tax, taxNew, receipts, header } = details;
   let tableborder = {
@@ -267,7 +250,6 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
           {
             style: "pt-reciept-citizen-table",
             table: {
-              widths: ["*", "*", "*", "*", "*", "auto"],
               body: [
                 [
                   { text: "Existing Property ID:", border: borderKey, style: "receipt-table-key" },
@@ -469,26 +451,7 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
       break;
     default:
   }
-  if (data) {
-    if (window.appOverrides.validateForm)
-      {
-        window.appOverrides.validateForm("PTReceipt", {pdf: data, details: details, role:role, extraData: extraData})
-      }
-
-    var receiptPDF = pdfMake.createPdf(data)
-    var doNotDownloadReceipt = false;
-    if (window.appOverrides.submitForm) {
-      doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", {pdf: receiptPDF});
-    }
-
-    if (doNotDownloadReceipt !== true)
-    {
-      if (localStorageGet("rd-propertyId")==details.propertyId && localStorageGet("rd-assessmentNumber")==details.propertyDetails[0].assessmentNumber) {
-        downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
-        // receiptPDF.download(`${details.ReceiptNo}.pdf`);
-      }
-    }
-  }
+  data && pdfMake.createPdf(data).download(`${details.ReceiptNo}.pdf`);
 };
 
 export default generateReceipt;

@@ -54,9 +54,9 @@ class ImageUpload extends Component {
     const fileSize = getFileSize(file);
     const isImage = isFileImage(file);
     if (!isImage) {
-      toggleSnackbarAndSetText(true, { labelName: "The file is not a valid image", labelKey: "ERR_NOT_VALID_IMAGE" }, "error");
+      toggleSnackbarAndSetText(true, { labelName: "The file is not a valid image", labelKey: "ERR_NOT_VALID_IMAGE" }, true);
     } else if (fileSize > MAX_IMAGE_SIZE) {
-      toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: "ERR_FILE_MORE_THAN_FIVEMB" },"error");
+      toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: "ERR_FILE_MORE_THAN_FIVEMB" }, true);
     } else {
       if (images.length < 3) {
         fileUpload(formKey, fieldKey, { module, file, imageUri });
