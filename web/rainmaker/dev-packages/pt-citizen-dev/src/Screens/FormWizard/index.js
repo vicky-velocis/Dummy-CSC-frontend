@@ -1023,7 +1023,11 @@ class FormWizard extends Component {
           });
         break;
       case 5:
-        pay();
+        if (this.state.partialAmountError.length == 0) {
+          pay();
+        } else {
+          alert(this.state.partialAmountError);
+        }
         break;
       case 6:
         pay();
