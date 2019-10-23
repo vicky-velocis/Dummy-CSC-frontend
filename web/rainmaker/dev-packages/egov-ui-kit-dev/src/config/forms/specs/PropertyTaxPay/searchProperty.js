@@ -1,7 +1,5 @@
-
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
-import { CITY } from "egov-ui-kit/utils/endPoints";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import sortBy from "lodash/sortBy";
 
 const formConfig = {
@@ -59,18 +57,6 @@ const formConfig = {
       maxLength: 64,
       value: "",
     },
-    applicationNumber: {
-      id: "application-number",
-      jsonPath: "",
-      type: "textfield",
-      floatingLabelText: "PT_PROPERTY_APPLICATION_NUMBER",
-      errorMessage: "",
-      hintText: "PT_PROPERTY_APPLICATION_NUMBER_PLACEHOLDER",
-      numcols: 4,
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64,
-      value: "",
-    },
   },
   submit: {
     type: "submit",
@@ -81,7 +67,7 @@ const formConfig = {
     try {
       let state = store.getState();
       const { cities, citiesByModule } = state.common;
-      let tenantId = JSON.parse(getUserInfo()).tenantId;
+      let tenantId = getTenantId();
       const { PT } = citiesByModule;
       if (PT) {
         const tenants = PT.tenants;

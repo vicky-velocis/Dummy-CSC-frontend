@@ -60,7 +60,7 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
@@ -83,13 +83,13 @@ class SearchProperty extends Component {
         queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids.value) {
-        queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
+        queryParams.push({
+          key: "oldpropertyids",
+          value: oldpropertyids.value
+        });
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
-      }
-      if (applicationNumber.value) {
-        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
@@ -106,24 +106,23 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        applicationNo,
-        applicationType,
-        date,
+        oldPropertyId,
+        address,
         propertyDetails,
         tenantId
       } = property;
-      // const { doorNo, buildingName, street, locality } = address;
-      // let displayAddress = doorNo
-      //   ? `${doorNo ? doorNo + "," : ""}` +
-      //   `${buildingName ? buildingName + "," : ""}` +
-      //   `${street ? street + "," : ""}`
-      //   : `${locality.name ? locality.name : ""}`;
+      const { doorNo, buildingName, street, locality } = address;
+      let displayAddress = doorNo
+        ? `${doorNo ? doorNo + "," : ""}` +
+        `${buildingName ? buildingName + "," : ""}` +
+        `${street ? street + "," : ""}`
+        : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
-      // let assessmentNo = latestAssessment.assessmentNumber;
-      // const uuid = get(latestAssessment, "citizenInfo.uuid");
-      let propertyLink = (
+      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
+      let assessmentNo = latestAssessment.assessmentNumber;
+      const uuid = get(latestAssessment, "citizenInfo.uuid");
+      let button = (
         <a
           style={{
             height: 20,
@@ -136,7 +135,7 @@ class SearchProperty extends Component {
             userType === "CITIZEN"
               ? e => {
                 history.push(
-                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
+                  `/property-tax/my-properties/property/${propertyId}/${tenantId}?isMutationApplication=true`
                 );
               }
               : e => {
@@ -149,38 +148,13 @@ class SearchProperty extends Component {
           {propertyId}
         </a>
       );
-      let applicationLink = (
-        <a
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline"
-          }}
-          onClick={
-            userType === "CITIZEN"
-              ? e => {
-                history.push(
-                  `/property-tax/my-properties/property/${applicationNo}/${tenantId}`
-                );
-              }
-              : e => {
-                history.push(
-                  `/property-tax/property/${applicationNo}/${tenantId}`
-                );
-              }
-          }
-        >
-          {applicationNo}
-        </a>
-      );
       let item = {
-        applicationNo: applicationLink,
-        propertyId: propertyLink,
-        applicationType: applicationType,
+        index: index + 1,
+        propertyId: button,
         name: name,
-        date: date,
+        guardianName: guardianName,
+        oldPropertyId: oldPropertyId,
+        address: displayAddress,
         status: status
       };
       tableData.push(item);
