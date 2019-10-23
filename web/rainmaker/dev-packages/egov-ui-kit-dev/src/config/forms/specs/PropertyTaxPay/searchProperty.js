@@ -1,3 +1,4 @@
+
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -53,6 +54,18 @@ const formConfig = {
       floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
       errorMessage: "",
       hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
+      numcols: 4,
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      value: "",
+    },
+    applicationNumber: {
+      id: "application-number",
+      jsonPath: "",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_APPLICATION_NUMBER",
+      errorMessage: "",
+      hintText: "PT_PROPERTY_APPLICATION_NUMBER_PLACEHOLDER",
       numcols: 4,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
