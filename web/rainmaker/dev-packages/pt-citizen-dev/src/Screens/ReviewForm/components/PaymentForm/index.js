@@ -153,7 +153,8 @@ class PaymentForm extends Component {
   updateTotalAmount = value =>
     this.props.updateTotalAmount(
       value,
-      this.state.valueSelected === "Full_Amount"
+      this.state.valueSelected === "Full_Amount",
+      this.state.errorText
     );
 
   onRadioButtonChange = e => {
@@ -200,6 +201,8 @@ class PaymentForm extends Component {
       isPartialPaymentInValid,
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
+    console.log(this.props,'this.props');
+    
     return (
       <div>
         <Card

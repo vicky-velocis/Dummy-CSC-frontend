@@ -1158,9 +1158,7 @@ class FormWizard extends Component {
             "/property-tax/payment-success/" +
             moduleId.split(":")[0] +
             "/" +
-            tenantId +
-            "/" +
-            moduleId.split(":")[1]
+            tenantId 
           );
         }
       } catch (e) {
