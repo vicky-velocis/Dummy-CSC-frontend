@@ -40,12 +40,16 @@ class YearDialog extends Component {
             masterDetails: [
               {
                 name: "RoadType"
+              },
+              {
+                name: "ConstructionType"
               }
             ]
-          }
+          },
         ]
       }
     };
+
     toggleSpinner();
     loadMDMSData(requestBody);
     toggleSpinner();

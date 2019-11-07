@@ -7,6 +7,8 @@ import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import datePicker from "egov-ui-kit/components";
+
 
 const formConfig = {
   name: "basicInformation",
@@ -58,6 +60,17 @@ const formConfig = {
       },
       dropDownData: [],
     },
+      datePicker:{
+        id:"constructionyear",
+        type:"date",
+        floatingLabelText: "Construction Date",
+        localePrefix: { moduleName: "PropertyTax", masterName: "datePicker" },
+        numcols: 6,
+        fullWidth:true,
+        required:true,
+        hintText:"PT_COMMONS_SELECT_PLACEHOLDER",
+        disabled:false,
+      }
   },
   action: "",
   redirectionRoute: "",

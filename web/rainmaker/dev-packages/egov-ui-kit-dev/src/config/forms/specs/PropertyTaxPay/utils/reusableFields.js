@@ -10,6 +10,8 @@ import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
+import datePicker from "egov-ui-kit/components";
+
 
 let floorDropDownData = [];
 
@@ -55,6 +57,16 @@ export const floorCount = {
     dropDownData: floorDropDownData,
     updateDependentFields: ({ formKey, field, dispatch, state }) => {
       // removeFormKey(formKey, field, dispatch, state);
+     
+   
+
+      // let constructionTypes = get(floorCount, "PropertyTax.ConstructionType") &&
+      //       Object.values(get(loadMdmsData, "PropertyTax.ConstructionType")).map((item, index) => {
+      //         return { value: item.code, label: item.name };
+      //       });
+      //       dispatch(setFieldProperty("floorCount", "constructionType","dropDownData",constructionTypes));
+      // console.log("constructiontype---------->",constructionTypes)
+    
       var previousFloorNo = localStorageGet("previousFloorNo") || -1;
       localStorageSet("previousFloorNo", field.value);
       // dispatch(toggleSpinner());
@@ -97,6 +109,20 @@ export const subUsageType = {
     },
   },
 };
+export const constructionType = {
+  constructionType: {
+    id: "constructiontype",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryDetail",
+    localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
+    type: "singleValueList",
+    floatingLabelText: "Construction Type",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    fullWidth: true,
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+    numcols: 4,
+    // dropDownData:constructiontype,
+  },
+};
 
 export const occupancy = {
   occupancy: {
@@ -109,7 +135,15 @@ export const occupancy = {
     required: true,
     numcols: 4,
     dropDownData: [],
-    updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
+    updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
+      // let constructionTypes = ;
+      // console.log("constructionTypes------->>>",constructionTypes)
+      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`)).map((item, index) => {
+                return { value: item.code, label: item.name };
+              });
+              console.log("constructionTypes------->>>",consturctType)
+      dispatch(setFieldProperty(formKey,"constructionType","dropDownData",consturctType));
+
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
       switch (value) {
@@ -121,8 +155,13 @@ export const occupancy = {
           break;
       }
     },
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+     
+    // }
   },
 };
+
+
 
 export const builtArea = {
   builtArea: {
@@ -612,6 +651,18 @@ export const pincode = {
     errorMessage: "PT_PINCODE_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     pattern: "^([0-9]){6}$",
+  },
+};
+export const calendar = {
+  datePicker:{
+    id:"constructionyear",
+    type:"date",
+    floatingLabelText: "Construction Year",
+    localePrefix: { moduleName: "PropertyTax", masterName: "datePicker" },
+    numcols: 6,
+    fullWidth:true,
+    hintText:"PT_COMMONS_SELECT_PLACEHOLDER",
+    disabled:false
   },
 };
 
