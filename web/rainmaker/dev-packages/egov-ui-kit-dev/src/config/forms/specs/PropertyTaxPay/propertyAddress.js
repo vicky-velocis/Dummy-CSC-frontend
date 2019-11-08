@@ -187,16 +187,16 @@ const formConfig = {
       numcols: 6,
     },
     thanaType: {
-      id: "thanaType",
-      // jsonPath: "property.propertyDetails[0].additionalDetails.roadType",
-      localePrefix: { moduleName: "PropertyTax", masterName: "ThanaType" },
+      id: "Thana",
+      jsonPath: "property.propertyDetails[0].additionalDetails.thana",
+      localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
       type: "singleValueList",
       floatingLabelText: "Thana",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
-      dropDownData:thanatype,
+      // dropDownData:thanatype,
     },
 
   },
@@ -206,13 +206,6 @@ const formConfig = {
       const { localizationLabels } = state.app;
       const { cities, citiesByModule, loadMdmsData } = state.common;
 
-//       const constructionTypeData =
-//       get(loadMdmsData, "PropertyTax.ConstructionType") &&
-//       Object.values(get(loadMdmsData, "PropertyTax.ConstructionType")).map((item, index) => {
-//         return { value: item.code, label: item.name };
-//       });
-// console.log("constructiontype---------->",constructionTypeData)
-
       const roadTypeData =
       get(loadMdmsData, "PropertyTax.RoadType") &&
       Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
@@ -220,6 +213,14 @@ const formConfig = {
       });
 
     dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
+
+    const thanaData =
+    get(loadMdmsData, "PropertyTax.Thana") &&
+    Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
+      return { value: item.code, label: item.name };
+    });
+    console.log("thanaData------->>>",thanaData)
+    dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {
         const tenants = PT.tenants;

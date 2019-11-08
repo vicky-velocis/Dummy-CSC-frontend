@@ -120,7 +120,7 @@ export const constructionType = {
     fullWidth: true,
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 4,
-    // dropDownData:constructiontype,
+    required:true,
   },
 };
 
@@ -136,12 +136,9 @@ export const occupancy = {
     numcols: 4,
     dropDownData: [],
     updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
-      // let constructionTypes = ;
-      // console.log("constructionTypes------->>>",constructionTypes)
       let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`)).map((item, index) => {
                 return { value: item.code, label: item.name };
               });
-              console.log("constructionTypes------->>>",consturctType)
       dispatch(setFieldProperty(formKey,"constructionType","dropDownData",consturctType));
 
       const { value } = sourceField;
@@ -155,9 +152,6 @@ export const occupancy = {
           break;
       }
     },
-    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
-     
-    // }
   },
 };
 
@@ -435,6 +429,7 @@ export const beforeInitFormForPlot = {
           var masterTwo = get(state, "common.generalMDMSDataById.UsageCategoryMinor");
           var usageTypes = mergeMaster(masterOne, masterTwo, "usageCategoryMajor");
           var filterArrayWithoutMixed = filter(usageTypes, (item) => item.value !== "MIXED");
+          console.log("residentialvalue------->",filterArrayWithoutMixed)
           set(action, "form.fields.usageType.disabled", false);
           const usageTypeData = sortDropdown(filterArrayWithoutMixed, "label", true);
           set(action, "form.fields.usageType.dropDownData", usageTypeData);

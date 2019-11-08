@@ -43,6 +43,9 @@ class YearDialog extends Component {
               },
               {
                 name: "ConstructionType"
+              },
+              {
+                name: "Thana"
               }
             ]
           },
