@@ -4,12 +4,12 @@ import {
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { footer } from "./applyResource/footer";
+//import { footer } from "./applyResource/footer";
 import { nocDetails } from "./applyResource/nocDetails";
-import { propertyDetails } from "./applyResource/propertyDetails";
-import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
-import { applicantDetails } from "./applyResource/applicantDetails";
-import { documentDetails } from "./applyResource/documentDetails";
+//import { propertyDetails } from "./applyResource/propertyDetails";
+//import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
+//import { applicantDetails } from "./applyResource/applicantDetails";
+//import { documentDetails } from "./applyResource/documentDetails";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -17,22 +17,22 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
+// import {
+//   sampleSearch,
+//   sampleSingleSearch,
+//   sampleDocUpload
+// } from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
-  prepareDocumentsUploadData,
+  //prepareDocumentsUploadData,
   getSearchResults,
   furnishNocResponse,
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 
 export const stepsData = [
-  { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
+  { labelName: "Basic Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
   { labelName: "Property Details", labelKey: "NOC_COMMON_PROPERTY_DETAILS" },
   { labelName: "Applicant Details", labelKey: "NOC_COMMON_APPLICANT_DETAILS" },
   { labelName: "Documents", labelKey: "NOC_COMMON_DOCUMENTS" }
@@ -42,7 +42,7 @@ export const stepper = getStepperObject(
   stepsData
 );
 
-const applicationNumberContainer = () => {
+/* const applicationNumberContainer = () => {
   const applicationNumber = getQueryArg(
     window.location.href,
     "applicationNumber"
@@ -59,7 +59,7 @@ const applicationNumberContainer = () => {
       visible: true
     };
   else return {};
-};
+}; */
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -78,53 +78,53 @@ export const header = getCommonContainer({
   }
 });
 
-export const formwizardFirstStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form1"
-  },
-  children: {
-    nocDetails
-  }
-};
+// export const formwizardFirstStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form1"
+//   },
+//   children: {
+//     nocDetails
+//   }
+// };
 
-export const formwizardSecondStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form2"
-  },
-  children: {
-    propertyDetails,
-    propertyLocationDetails
-  },
-  visible: false
-};
+// export const formwizardSecondStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form2"
+//   },
+//   children: {
+//     propertyDetails,
+//     propertyLocationDetails
+//   },
+//   visible: false
+// };
 
-export const formwizardThirdStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form3"
-  },
-  children: {
-    applicantDetails
-  },
-  visible: false
-};
+// export const formwizardThirdStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form3"
+//   },
+//   children: {
+//     applicantDetails
+//   },
+//   visible: false
+// };
 
-export const formwizardFourthStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    documentDetails
-  },
-  visible: false
-};
+// export const formwizardFourthStep = {
+//   uiFramework: "custom-atoms",
+//   componentPath: "Form",
+//   props: {
+//     id: "apply_form4"
+//   },
+//   children: {
+//     documentDetails
+//   },
+//   visible: false
+// };
 
 const getMdmsData = async (action, state, dispatch) => {
   let tenantId =
@@ -191,7 +191,7 @@ const getFirstListFromDotSeparated = list => {
   return list;
 };
 
-const setCardsIfMultipleBuildings = (state, dispatch) => {
+/* const setCardsIfMultipleBuildings = (state, dispatch) => {
   if (
     get(
       state,
@@ -215,9 +215,9 @@ const setCardsIfMultipleBuildings = (state, dispatch) => {
       )
     );
   }
-};
+}; */
 
-export const prepareEditFlow = async (
+/* export const prepareEditFlow = async (
   state,
   dispatch,
   applicationNumber,
@@ -278,12 +278,13 @@ export const prepareEditFlow = async (
     // Set sample docs upload
     // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
   }
-};
+}; */
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  beforeInitScreen: (action, state, dispatch) => {
+  beforeInitScreen: (action, state, dispatch) => {return action},
+  /* beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
@@ -330,29 +331,6 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
-
-    // // Set Property City
-    // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
-
-    // // Handle dependent dropdowns in edit flow
-    // set(
-    //   "apply",
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
-    //   { display: "none" }
-    // );
-
-    // let pfo = {};
-    // if (applicationNumber && !step) {
-    //   pfo = searchSampleResponse();
-    //   dispatch(prepareFinalObject("FireNOCs[0]", get(pfo, "FireNOCs[0]")));
-    // }
-    // if (step && get(state, "screenConfiguration.preparedFinalObject")) {
-    //   pfo = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    //     {}
-    //   );
-    // }
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -434,49 +412,9 @@ const screenConfig = {
         { visibility: "hidden" }
       );
     }
-    // if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("MULTIPLEOWNERS")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-    //     {}
-    //   );
-    // } else if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("INSTITUTIONAL")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
-    //     {}
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
-    //     {}
-    //   );
-    // }
 
     return action;
-  },
+  }, */
   components: {
     div: {
       uiFramework: "custom-atoms",
@@ -499,11 +437,11 @@ const screenConfig = {
           }
         },
         stepper,
-        formwizardFirstStep,
-        formwizardSecondStep,
-        formwizardThirdStep,
-        formwizardFourthStep,
-        footer
+        //formwizardFirstStep,
+        // formwizardSecondStep,
+        // formwizardThirdStep,
+        // formwizardFourthStep,
+        // footer
       }
     }
   }

@@ -25,7 +25,7 @@ export const documentDetails = getCommonCard({
   break: getBreak(),
   documentList: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-bpa",
     componentPath: "DocumentListContainer",
     props: {
       documents: [

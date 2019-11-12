@@ -83,5 +83,5 @@ export {
   Receipt,
   ShareButton,
   CommonShare,
-  FloatingButton,
+  FloatingButton
 };
