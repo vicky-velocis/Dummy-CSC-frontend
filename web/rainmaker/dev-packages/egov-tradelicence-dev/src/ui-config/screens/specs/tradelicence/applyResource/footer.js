@@ -486,9 +486,10 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -516,9 +517,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "45px"
+        marginRight: "45px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -545,9 +547,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
-        marginRight: "45px"
+        marginRight: "45px",
+        borderRadius:"inherit"
       }
     },
     children: {
@@ -718,9 +721,10 @@ export const footerReview = (
                 variant: "outlined",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
-                  marginRight: "16px"
+                  marginRight: "16px",
+                  borderRadius:"inherit"
                 }
               },
               children: {
@@ -745,7 +749,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
@@ -772,7 +776,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
@@ -798,7 +802,7 @@ export const footerReview = (
                 variant: "contained",
                 color: "primary",
                 style: {
-                  minWidth: "200px",
+                  minWidth: "180px",
                   height: "48px",
                   marginRight: "45px"
                 }
