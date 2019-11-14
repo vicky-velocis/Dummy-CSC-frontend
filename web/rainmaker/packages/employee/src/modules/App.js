@@ -9,6 +9,7 @@ import Router from "./Router";
 import commonConfig from "config/common";
 // import logoMseva from "egov-ui-kit/assets/images/logo-white.png";
 import routes from "./Routes";
+
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty";
 import { LoadingIndicator, CommonShareContainer } from "components";
@@ -85,7 +86,9 @@ class App extends Component {
   render() {
     const { toast, loading, defaultUrl, hasLocalisation } = this.props;
     return (
+ 
       <div>
+        
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
         {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
