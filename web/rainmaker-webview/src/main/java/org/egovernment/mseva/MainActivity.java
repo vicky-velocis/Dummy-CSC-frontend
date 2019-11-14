@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
+import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 import android.app.AlertDialog;
 import android.webkit.DownloadListener;
+import android.app.DownloadManager;
 import android.os.AsyncTask;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -73,9 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 	final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
-	private static String URL   = "http://pdfmake.org/playground.html";
-//	private static String URL   = "http://www.google.com";
-//		BuildConfig.url; //complete URL of your website or webpage
+	private static String URL   =BuildConfig.url;
 	private String FILE_TYPE    = "image/*";  //to upload any file type using "*/*"; check file type references for more
 	public static String HOST	= getHost(URL);
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 	private GeolocationPermissions.Callback mGeoLocationCallback = null;
 	private String mGeoLocationRequestOrigin = null;
 
-//	final AppJavaScriptProxy proxy = new AppJavaScriptProxy(this);
+	private AppJavaScriptProxy proxy = null;
 
 
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -148,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (proxy == null) {
+        	proxy = new AppJavaScriptProxy(this);
+		}
 
 		if (Build.VERSION.SDK_INT >= 23) {
 			// Marshmallow+ Permission APIs
@@ -163,11 +167,22 @@ public class MainActivity extends AppCompatActivity {
         //Move this to Javascript Proxy
 
 		webView = (WebView) findViewById(R.id.webview);
-//		webView.addJavascriptInterface(proxy, "androidAppProxy");
+		webView.addJavascriptInterface(proxy, "mSewaApp");
 
+		String versionName = "";
+		int versionCode = 0;
+		try {
+			versionName = getBaseContext().getPackageManager().getPackageInfo(getBaseContext().getPackageName(), 0 ).versionName;
+			versionCode = getBaseContext().getPackageManager().getPackageInfo(getBaseContext().getPackageName(), 0 ).versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+
+		} finally {
+
+		}
 
 		WebSettings webSettings = webView.getSettings();
 
+		webSettings.setUserAgentString(webSettings.getUserAgentString() + " mSewa V." + versionName + "." + versionCode);
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setGeolocationEnabled(true);
 		webSettings.setAllowFileAccess(true);
@@ -190,7 +205,62 @@ public class MainActivity extends AppCompatActivity {
         webView.setVerticalScrollBarEnabled(false);
         webView.setWebViewClient(new CustomWebView());
 		webView.getSettings().setGeolocationDatabasePath(getFilesDir().getPath());
+		if (BuildConfig.DEBUG) {
+			webView.setWebContentsDebuggingEnabled(true);
+		}
 
+		webView.setDownloadListener(new DownloadListener() {
+			@Override
+			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+						if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+							== PackageManager.PERMISSION_GRANTED) {
+							Log.v(TAG,"Permission is granted");
+							downloadDialog(url,userAgent,contentDisposition,mimeType);
+						} else {
+
+							Log.v(TAG,"Permission is revoked");
+							//requesting permissions.
+							ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+						}
+					}
+					else {
+						//Code for devices below API 23 or Marshmallow
+						Log.v(TAG,"Permission is granted");
+						downloadDialog(url,userAgent,contentDisposition,mimeType);
+					}
+				}
+		});
+
+		/*webView.setDownloadListener(new DownloadListener() {
+			public void onDownloadStart(String url, String userAgent,
+										String contentDisposition, String mimetype,
+										long contentLength) {
+
+				//Checking runtime permission for devices above Marshmallow.
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+					if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+						== PackageManager.PERMISSION_GRANTED) {
+						Log.v(TAG,"Permission is granted");
+						downloadDialog(url,userAgent,contentDisposition,mimetype);
+					} else {
+
+						Log.v(TAG,"Permission is revoked");
+						//requesting permissions.
+						ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+					}
+				}
+				else {
+					//Code for devices below API 23 or Marshmallow
+					Log.v(TAG,"Permission is granted");
+					downloadDialog(url,userAgent,contentDisposition,mimetype);
+				}
+			}
+		});
+*/
         //Rendering the default URL
         loadView(URL,false);
 
@@ -276,6 +346,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+	public void downloadDialog(final String url,final String userAgent,String contentDisposition,String mimetype)
+	{
+		startActivity(Intent.makeMainSelectorActivity(
+			Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+			.setData(Uri.parse(url.toString())));
+	}
+
+
 
     @Override
     public void onResume() {
@@ -332,6 +410,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
     }
 
 	//Actions based on shouldOverrideUrlLoading
@@ -364,11 +444,28 @@ public class MainActivity extends AppCompatActivity {
 			startActivity(intent);
 
 			//Use to do download support
-		} else if (url.contains("pdfmake")) {
-			loadView(url, true);
-			//Opening external URLs in android default web browser
-		} else if (!getHost(url).equals(HOST)) {
-			loadView(url,false);
+		}
+//		else if (url.contains("98jf4")) {
+//			loadView(url, true);
+//			//Opening external URLs in android default web browser
+//		} 
+		else if (!getHost(url).equals(HOST)) {
+			try {
+				Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+
+				String fallbackUrl = intent.getStringExtra("browser_fallback_url");
+				if (fallbackUrl != null) {
+					loadView(fallbackUrl,false);
+					return true;
+				}else {
+					startActivity(intent);
+				}}
+
+			catch (URISyntaxException e) {
+				//not an intent uri
+				loadView(url,false);
+			}
+
 		} else {
 			returnValue  = false;
 		}
@@ -426,6 +523,9 @@ public class MainActivity extends AppCompatActivity {
 
 			case 3:
 				return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+
+			case 4:
+				return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
 		}
 		return false;
@@ -614,6 +714,10 @@ public class MainActivity extends AppCompatActivity {
 		final List<String> permissionsList = new ArrayList<String>();
 		if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
 			permissionsNeeded.add("Show Location");
+
+		if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE) || !addPermission(permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE))
+			permissionsNeeded.add("Read/Write Files");
+
 
 		if (permissionsList.size() > 0) {
 			if (permissionsNeeded.size() > 0) {
