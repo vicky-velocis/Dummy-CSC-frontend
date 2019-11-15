@@ -40,7 +40,7 @@ const getAcknowledgementCard = (
                             labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
                         }
                     }
-                    
+
                 }
             }),
             applicationSuccessCard: {
