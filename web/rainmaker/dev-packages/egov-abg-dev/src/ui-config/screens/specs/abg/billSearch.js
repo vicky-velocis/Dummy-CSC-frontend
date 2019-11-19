@@ -5,11 +5,13 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { billSearchCard } from "./billSearchResources/billSearchCard";
 //   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {resetGroupBillFields } from "./groupBillResource/groupBillSearch"
 import { searchResults } from "./billSearchResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const header = getCommonHeader({
   labelName: "Universal Bill",
@@ -115,11 +117,15 @@ const billSearchAndResult = {
                 })
               },
               onClickDefination: {
-                action: "page_change",
-                path:
-                  process.env.REACT_APP_SELF_RUNNING === "true"
-                    ? `/egov-ui-framework/abg/groupBills`
-                    : `/abg/groupBills`
+                // action: "page_change",
+                // path:
+                //   process.env.REACT_APP_SELF_RUNNING === "true"
+                //     ? `/egov-ui-framework/abg/groupBills`
+                //     : `/abg/groupBills`
+                action : "condition",
+                callBack : (state, dispatch) => {
+                  resetGroupBillFields(state, dispatch)
+                }
               }
             }
           }

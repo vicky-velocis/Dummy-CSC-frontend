@@ -155,7 +155,6 @@ export const getBoundaryData = async (
   dispatch,
   queryObject,
   tenantId
-  // componentPath
 ) => {
   try {
     let payload = await httpRequest(
@@ -165,12 +164,6 @@ export const getBoundaryData = async (
       queryObject,
       {}
     );
-    // process.env.REACT_APP_NAME === "Employee"
-    //   ? get(
-    //       state.screenConfiguration.preparedFinalObject,
-    //       "Licenses[0].tradeLicenseDetail.address.city"
-    //     )
-    //   : getQueryArg(window.location.href, "tenantId");
     const mohallaData =
       payload &&
       payload.TenantBoundary[0] &&
@@ -190,30 +183,14 @@ export const getBoundaryData = async (
     dispatch(
       prepareFinalObject("searchScreenMdmsData.localities", mohallaData)
     );
-
-    // dispatch(
-    //   handleField(
-    //     "apply",
-    //     "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-    //     "props.suggestions",
-    //     mohallaData
-    //   )
-    // );
-    // if (code) {
-    //   let data = payload.TenantBoundary[0].boundary;
-    //   let messageObject =
-    //     data &&
-    //     data.find(item => {
-    //       return item.code == code;
-    //     });
-    //   if (messageObject)
-    //     dispatch(
-    //       prepareFinalObject(
-    //         "Licenses[0].tradeLicenseDetail.address.locality.name",
-    //         messageObject.name
-    //       )
-    //     );
-    // }
+    dispatch(
+      handleField(
+        "groupBills",
+        "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
+        "props.suggestions",
+        mohallaData
+      )
+    );
   } catch (e) {
     console.log(e);
   }

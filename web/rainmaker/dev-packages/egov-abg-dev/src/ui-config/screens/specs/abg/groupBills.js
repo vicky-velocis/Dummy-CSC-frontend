@@ -86,7 +86,6 @@ const abgSearchAndResult = {
       getBoundaryData(action, state, dispatch, queryObj, tenantId);
     });
     //setting service category to PT for now. -- Hardcoding alert!!
-    dispatch(prepareFinalObject("searchCriteria.businessservice", "PT"));
     return action;
   },
   components: {
@@ -114,7 +113,6 @@ const abgSearchAndResult = {
         },
         abgSearchCard,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResults,
         breakAfterSearchResults: getBreak(),
         mergeDownloadButton
