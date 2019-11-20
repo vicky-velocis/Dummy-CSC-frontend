@@ -212,8 +212,7 @@ const tradeUnitCard = {
             }
           },
           tradeSubType: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-tradelicence",
+            uiFramework: "custom-containers",
             componentPath: "AutosuggestContainer",
             jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
             required: true,

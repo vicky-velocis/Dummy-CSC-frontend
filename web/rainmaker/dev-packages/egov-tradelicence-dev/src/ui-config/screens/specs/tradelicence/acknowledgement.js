@@ -3,16 +3,11 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
-import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
-import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
-// import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
-import generatePdf from "../utils/receiptPdf";
-import { Icon } from "egov-ui-framework/ui-atoms";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
 
@@ -395,7 +390,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      gotoHomeFooter
     };
   } else if (purpose === "sendback" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
@@ -434,7 +429,7 @@ const getAcknowledgementCard = (
           })
         }
       },
-      approvalSuccessFooter
+      gotoHomeFooter
     };
   } else if (purpose === "application" && status === "rejected") {
     return {

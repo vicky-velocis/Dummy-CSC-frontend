@@ -12,8 +12,7 @@ export const cityPicker = getCommonContainer({
   }),
   cityPicker: getCommonContainer({
     cityDropdown: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
+      uiFramework: "custom-containers",
       componentPath: "AutosuggestContainer",
       jsonPath: "citiesByModule.citizenTenantId",
       required: true,

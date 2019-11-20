@@ -962,6 +962,20 @@ const isApplicationPaid = currentStatus => {
   return isPAID;
 };
 
+export const getBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-calculator/v1/_getbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createEstimateData = async (
   LicenseData,
   jsonPath,
@@ -988,15 +1002,6 @@ export const createEstimateData = async (
   ];
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus);
-  // const payload = getFromReceipt
-  //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-  //   : await getBill(queryObj);
-  // const estimateData = payload
-  //   ? getFromReceipt
-  //     ? getEstimateData(payload.Receipt[0].Bill, getFromReceipt, LicenseData)
-  //     : payload.billResponse &&
-  //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
-  //   : [];
 
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))

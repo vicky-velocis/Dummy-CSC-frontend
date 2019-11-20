@@ -165,11 +165,11 @@ export const updatePFOforSearchResults = async (
       )
     );
   updateDropDowns(payload, action, state, dispatch, queryValue);
-  if (queryValuePurpose !== "cancel") {
-    set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
-    set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
-    set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
-  }
+  // if (queryValuePurpose !== "cancel") {
+  //   set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
+  //   set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
+  //   set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
+  // }
   set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
 
   setApplicationNumberBox(state, dispatch);
