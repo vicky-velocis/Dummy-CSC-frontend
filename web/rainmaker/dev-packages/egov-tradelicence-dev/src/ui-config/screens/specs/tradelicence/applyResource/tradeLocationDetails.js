@@ -7,10 +7,8 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getMapLocator } from "../../utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { showHideMapPopup, getDetailsFromProperty,getMapLocator } from "../../utils";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const tradeLocationDetails = getCommonCard(
   {
@@ -179,8 +177,7 @@ export const tradeLocationDetails = getCommonCard(
         jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
       }),
       tradeLocMohalla: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-tradelicence",
+        uiFramework: "custom-containers",
         componentPath: "AutosuggestContainer",
         jsonPath: "Licenses[0].tradeLicenseDetail.address.locality.code",
         required: true,
@@ -206,15 +203,6 @@ export const tradeLocationDetails = getCommonCard(
           inputLabelProps: {
             shrink: true
           }
-          // className: "tradelicense-mohalla-apply"
-        },
-        beforeFieldChange: async (action, state, dispatch) => {
-          // dispatch(
-          //   prepareFinalObject(
-          //     "Licenses[0].tradeLicenseDetail.address.locality.name",
-          //     action.value && action.value.label
-          //   )
-          // );
         },
         gridDefination: {
           xs: 12,
@@ -289,7 +277,6 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Enter Electricity Connection No. of Trade Loaction",
           labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
         },
-        // pattern: getPattern("ElectricityConnNo"),
         jsonPath:
           "Licenses[0].tradeLicenseDetail.additionalDetail.electricityConnectionNo"
       })

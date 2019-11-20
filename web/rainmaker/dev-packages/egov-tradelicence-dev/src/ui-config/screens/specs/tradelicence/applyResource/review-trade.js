@@ -7,7 +7,6 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-
 import { convertEpochToDate } from "../../utils";
 
 const accessoriesCard = {

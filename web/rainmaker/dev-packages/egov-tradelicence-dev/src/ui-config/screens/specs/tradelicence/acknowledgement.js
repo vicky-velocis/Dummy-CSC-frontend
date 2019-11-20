@@ -6,11 +6,10 @@ import { applicationSuccessFooter } from "./acknowledgementResource/applicationS
 import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
 import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/gotoHomeFooter";
-import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
+// import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
 import set from "lodash/set";
 
 const getAcknowledgementCard = (
@@ -35,10 +34,6 @@ const getAcknowledgementCard = (
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-          // style: {
-          //   position: "absolute",
-          //   width: "95%"
-          // }
         },
         children: {
           card: acknowledgementCard({
@@ -72,57 +67,61 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  } else if (purpose === "pay" && status === "success") {
-    loadReceiptGenerationData(applicationNumber, tenant);
-    return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Payment for New Trade License ${financialYearText}`,
-          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE",
-          dynamicArray: [financialYearText]
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
-            header: {
-              labelName:
-                "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
-              labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
-            },
-            body: {
-              labelName:
-                "A notification regarding Payment Collection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_CONFIRMATION_MESSAGE_SUB"
-            },
-            tailText: {
-              labelName: "Payment Receipt No.",
-              labelKey: "TL_PMT_RCPT_NO"
-            },
-            number: secondNumber
-          })
-        }
-      },
-      paymentSuccessFooter: paymentSuccessFooter(
-        state,
-        dispatch,
-        "APPROVED",
-        applicationNumber
-      )
-    };
-  } else if (purpose === "approve" && status === "success") {
+  }
+  
+  // else if (purpose === "pay" && status === "success") {
+  //   loadReceiptGenerationData(applicationNumber, tenant);
+  //   return {
+  //     header: getCommonContainer({
+  //       header: getCommonHeader({
+  //         labelName: `Payment for New Trade License ${financialYearText}`,
+  //         labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE",
+  //         dynamicArray: [financialYearText]
+  //       }),
+  //       applicationNumber: {
+  //         uiFramework: "custom-atoms-local",
+  //         moduleName: "egov-tradelicence",
+  //         componentPath: "ApplicationNoContainer",
+  //         props: {
+  //           number: applicationNumber
+  //         }
+  //       }
+  //     }),
+  //     applicationSuccessCard: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       children: {
+  //         card: acknowledgementCard({
+  //           icon: "done",
+  //           backgroundColor: "#39CB74",
+  //           header: {
+  //             labelName:
+  //               "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
+  //             labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
+  //           },
+  //           body: {
+  //             labelName:
+  //               "A notification regarding Payment Collection has been sent to trade owner at registered Mobile No.",
+  //             labelKey: "TL_CONFIRMATION_MESSAGE_SUB"
+  //           },
+  //           tailText: {
+  //             labelName: "Payment Receipt No.",
+  //             labelKey: "TL_PMT_RCPT_NO"
+  //           },
+  //           number: secondNumber
+  //         })
+  //       }
+  //     },
+  //     paymentSuccessFooter: paymentSuccessFooter(
+  //       state,
+  //       dispatch,
+  //       "APPROVED",
+  //       applicationNumber
+  //     )
+  //   };
+  // } 
+  
+  else if (purpose === "approve" && status === "success") {
     loadReceiptGenerationData(applicationNumber, tenant);
     return {
       header: getCommonContainer({
@@ -195,11 +194,6 @@ const getAcknowledgementCard = (
               labelName: "Application is sent back Successfully",
               labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
-            // body: {
-            //   labelName:
-            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
-            // },
             tailText: {
               labelName: "Trade License No.",
               labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
@@ -291,45 +285,47 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "pay" && status === "failure") {
-    return {
-      header: getCommonContainer({
-        header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          dynamicArray: [financialYearText],
-          labelKey: "TL_TRADE_APPLICATION"
-        }),
-        applicationNumber: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "ApplicationNoContainer",
-          props: {
-            number: applicationNumber
-          }
-        }
-      }),
-      applicationSuccessCard: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        children: {
-          card: acknowledgementCard({
-            icon: "close",
-            backgroundColor: "#E54D42",
-            header: {
-              labelName: "Payment has failed!",
-              labelKey: "TL_PAYMENT_FAILED"
-            },
-            body: {
-              labelName:
-                "A notification regarding payment failure has been sent to the trade owner and applicant.",
-              labelKey: "TL_PAYMENT_NOTIFICATION"
-            }
-          })
-        }
-      },
-      paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
-    };
-  } else if (purpose === "mark" && status === "success") {
+  } 
+  // else if (purpose === "pay" && status === "failure") {
+  //   return {
+  //     header: getCommonContainer({
+  //       header: getCommonHeader({
+  //         labelName: `Trade License Application ${financialYearText}`,
+  //         dynamicArray: [financialYearText],
+  //         labelKey: "TL_TRADE_APPLICATION"
+  //       }),
+  //       applicationNumber: {
+  //         uiFramework: "custom-atoms-local",
+  //         moduleName: "egov-tradelicence",
+  //         componentPath: "ApplicationNoContainer",
+  //         props: {
+  //           number: applicationNumber
+  //         }
+  //       }
+  //     }),
+  //     applicationSuccessCard: {
+  //       uiFramework: "custom-atoms",
+  //       componentPath: "Div",
+  //       children: {
+  //         card: acknowledgementCard({
+  //           icon: "close",
+  //           backgroundColor: "#E54D42",
+  //           header: {
+  //             labelName: "Payment has failed!",
+  //             labelKey: "TL_PAYMENT_FAILED"
+  //           },
+  //           body: {
+  //             labelName:
+  //               "A notification regarding payment failure has been sent to the trade owner and applicant.",
+  //             labelKey: "TL_PAYMENT_NOTIFICATION"
+  //           }
+  //         })
+  //       }
+  //     },
+  //     paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
+  //   };
+  // }
+   else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License ${financialYearText}`,

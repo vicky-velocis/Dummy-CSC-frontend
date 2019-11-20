@@ -25,10 +25,6 @@ const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
-const AutosuggestContainer = Loadable({
-  loader: () => import("./AutosuggestContainer"),
-  loading: () => <Loading />
-});
 const DocumentListContainer = Loadable({
   loader: () => import("./DocumentListContainer"),
   loading: () => <Loading />
@@ -54,7 +50,6 @@ export {
   CheckboxContainer,
   DownloadFileContainer,
   EstimateCardContainer,
-  AutosuggestContainer,
   DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,

@@ -8,7 +8,6 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-// import { progressStatus } from "./searchResource/progressStatus";
 import { searchResults } from "./searchResource/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import find from "lodash/find";

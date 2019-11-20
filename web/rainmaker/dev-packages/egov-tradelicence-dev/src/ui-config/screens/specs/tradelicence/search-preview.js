@@ -5,33 +5,29 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import get from "lodash/get";
-import set from "lodash/set";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
-} from "../utils";
-
-import { footerReview } from "./applyResource/footer";
-import {
+  getDialogButton,
   getFeesEstimateCard,
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
+import { footerReview } from "./applyResource/footer";
 import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import get from "lodash/get";
+import set from "lodash/set";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -152,13 +148,6 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     {},
     fetchFromReceipt
   );
-  //Fetch Bill and populate estimate card
-  // const code = get(
-  //   payload,
-  //   "Licenses[0].tradeLicenseDetail.address.locality.code"
-  // );
-  // const queryObj = [{ key: "tenantId", value: tenantId }];
-  // // getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
 const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
@@ -166,17 +155,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
       (await searchResults(action, state, dispatch, applicationNumber));
-
-    // const status = getTransformedStatus(
-    //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
-    // );
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
     );
-
     let data = get(state, "screenConfiguration.preparedFinalObject");
-
     const obj = setStatusBasedValue(status);
 
     // Get approval details based on status and set it in screenconfig
@@ -319,12 +302,9 @@ const estimate = getCommonGrayCard({
 });
 
 const reviewTradeDetails = getReviewTrade(false);
-
 const reviewOwnerDetails = getReviewOwner(false);
-
 const reviewDocumentDetails = getReviewDocuments(false, false);
 
-// let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
 
 const setActionItems = (action, object) => {
@@ -469,7 +449,6 @@ const screenConfig = {
           }
         },
         tradeReviewDetails
-        //footer
       }
     },
     breakUpDialog: {

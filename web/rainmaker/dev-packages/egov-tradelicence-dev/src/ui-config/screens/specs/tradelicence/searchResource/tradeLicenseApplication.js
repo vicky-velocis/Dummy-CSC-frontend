@@ -138,8 +138,6 @@ export const tradeLicenseApplication = getCommonCard({
   }),
 
   button: getCommonContainer({
-    // firstCont: {
-
     buttonContainer: getCommonContainer({
       firstCont: {
         uiFramework: "custom-atoms",

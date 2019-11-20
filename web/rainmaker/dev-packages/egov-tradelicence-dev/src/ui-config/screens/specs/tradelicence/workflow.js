@@ -6,10 +6,6 @@ import {
   getCommonTitle,
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
-import get from "lodash/get";
-import set from "lodash/set";
-
 import {
   commonTransform,
   objectToDropdown,
@@ -18,13 +14,11 @@ import {
 } from "../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
-import { tradeDetails } from "./applyResource/tradeDetails";
-import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
-import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
+import get from "lodash/get";
+import set from "lodash/set";
 import {
   updatePFOforSearchResults,
   getBoundaryData
@@ -42,10 +36,6 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-// export const queryValue = getQueryArg(
-//   window.location.href,
-//   "applicationNumber"
-// );
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -184,11 +174,9 @@ export const formwizardFourthStep = {
 const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
-  // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
     dispatch(prepareFinalObject("LicensesTemp", []));
-    // getData(action, state, dispatch);
     getData(action, state, dispatch).then(responseAction => {
       const tenantId = getTenantId();
       const queryObj = [{ key: "tenantId", value: tenantId }];

@@ -6,10 +6,6 @@ import {
   getCommonTitle,
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
-import get from "lodash/get";
-import set from "lodash/set";
-
 import {
   commonTransform,
   objectToDropdown,
@@ -35,6 +31,8 @@ import {
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
+import get from "lodash/get";
+import set from "lodash/set";
 
 export const stepsData = [
   { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
@@ -210,8 +208,6 @@ export const getData = async (action, state, dispatch) => {
           }
         ])
       );
-    // dispatch(prepareFinalObject("LicensesTemp", []));
-
     await updatePFOforSearchResults(action, state, dispatch, applicationNo);
     if (!queryValue) {
       const oldApplicationNo = get(

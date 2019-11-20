@@ -226,175 +226,6 @@ export const getTranslatedLabel = (labelKey, localizationLabels) => {
   return translatedLabel || labelKey;
 };
 
-export const getApprovalTextField = queryValue => {
-  if (queryValue === "reject") {
-    return getTextField({
-      label: {
-        labelName: "Comments",
-        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Rejection Comments",
-        labelKey: "TL_REJECTION_CHECKLIST_COMMENTS_PLACEHOLDER"
-      },
-      required: false,
-      pattern: "",
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.comments",
-      props: {
-        style: {
-          paddingBottom: 5
-        }
-      }
-    });
-  } else if (queryValue === "cancel") {
-    return getTextField({
-      label: {
-        labelName: "Comments",
-        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Cancellation Comments",
-        labelKey: "TL_CANCEL_CHECKLIST_COMMENTS_PLACEHOLDER"
-      },
-      required: false,
-      pattern: "",
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.comments",
-      props: {
-        style: {
-          paddingBottom: 5
-        }
-      }
-    });
-  } else {
-    return getTextField({
-      label: {
-        labelName: "Comments",
-        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Approval Comments",
-        labelKey: "TL_APPROVAL_CHECKLIST_COMMENTS_PLACEHOLDER_APPR"
-      },
-      required: false,
-      pattern: "",
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.comments",
-      props: {
-        style: {
-          paddingBottom: 5
-        }
-      }
-    });
-  }
-};
-
-export const getCheckBoxJsonpath = queryValue => {
-  if (queryValue === "reject") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.check";
-  } else if (queryValue === "cancel") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.check";
-  } else {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.check";
-  }
-};
-
-export const getSafetyNormsJson = queryValue => {
-  if (queryValue === "reject") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.safetyNorms";
-  } else if (queryValue === "cancel") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.safetyNorms";
-  } else {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.safetyNorms";
-  }
-};
-
-export const getHygeneLevelJson = queryValue => {
-  if (queryValue === "reject") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.hygieneLevels";
-  } else if (queryValue === "cancel") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.hygieneLevels";
-  } else {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.hygieneLevels";
-  }
-};
-
-export const getLocalityHarmedJson = queryValue => {
-  if (queryValue === "reject") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.rejectDetail.checklist.localityHarmed";
-  } else if (queryValue === "cancel") {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.cancelDetail.checklist.localityHarmed";
-  } else {
-    return "Licenses[0].tradeLicenseDetail.additionalDetail.approveDetail.checklist.localityHarmed";
-  }
-};
-
-export const getSubHeaderLabel = queryValue => {
-  if (queryValue === "reject") {
-    return getCommonSubHeader({
-      labelName: "Rejection CheckList",
-      labelKey: "TL_REJECTION_CHECKLIST_REJ_CHECKLIST"
-    });
-  } else if (queryValue === "cancel") {
-    return {};
-  } else {
-    return getCommonSubHeader({
-      labelName: "Approve Checklist",
-      labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_APPRV_CHECKLIST"
-    });
-  }
-};
-
-export const getFooterButtons = queryValue => {
-  if (queryValue === "reject") {
-    return getLabel({
-      labelName: "REJECT APPLICATION",
-      labelKey: "TL_REJECTION_CHECKLIST_BUTTON_REJ_APPL"
-    });
-  } else if (queryValue === "cancel") {
-    return getLabel({
-      labelName: "CANCEL TRADE LICENSE",
-      labelKey: "TL_COMMON_BUTTON_CANCEL_LICENSE"
-    });
-  } else {
-    return getLabel({
-      labelName: "APPROVE APPLICATION",
-      labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_APPRV_APPL"
-    });
-  }
-};
-
-export const onClickNextButton = (
-  applicationNumber,
-  secondNumber,
-  queryValue,
-  tenantId
-) => {
-  switch (queryValue) {
-    case "reject":
-      return `/tradelicence/acknowledgement?purpose=application&status=rejected&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-    case "cancel":
-      return `/tradelicence/acknowledgement?purpose=application&status=cancelled&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-    default:
-      return `/tradelicence/acknowledgement?purpose=approve&status=success&applicationNumber=${applicationNumber}&secondNumber=${secondNumber}&tenantId=${tenantId}`;
-  }
-};
-
-export const onClickPreviousButton = (
-  queryValue,
-  applicationNumber,
-  tenantId
-) => {
-  switch (queryValue) {
-    case "reject":
-      return `/tradelicence/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    case "cancel":
-      return `/tradelicence/search-preview?role=approver&status=approved&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    default:
-      return `/tradelicence/search-preview?role=approver&status=pending_approval&applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-  }
-};
 export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
@@ -495,20 +326,6 @@ export const getSearchResults = async queryObject => {
   } catch (error) {
     console.log(error);
     return {};
-  }
-};
-
-export const getBill = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/tl-calculator/v1/_getbill",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
   }
 };
 
@@ -1593,24 +1410,6 @@ export const updateDropDowns = async (
     }
   }
 
-  // const tradeTypes = get(
-  //   state.screenConfiguration.preparedFinalObject,
-  //   "applyScreenMdmsData.TradeLicense.TradeType",
-  //   []
-  // );
-  // // debugger;
-  // const tradeTypeDropdownData =
-  //   tradeTypes &&
-  //   Object.keys(tradeTypes).map(item => {
-  //     return { code: item, active: true };
-  //   });
-  // tradeTypeDropdownData &&
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-  //       tradeTypeDropdownData
-  //     )
-  //   );
   const tradeSubTypes = get(
     payload,
     "Licenses[0].tradeLicenseDetail.tradeUnits",
@@ -1689,9 +1488,6 @@ export const getDocList = (state, dispatch) => {
       })
     );
   });
-
-  // selectedTypes[0] &&
-  //
   let applicationDocArray = [];
 
   selectedTypes.forEach(tradeSubTypeDoc => {
@@ -1913,7 +1709,6 @@ export const getDialogButton = (name, key, screenKey) => {
         showHideBreakupPopup(state, dispatch, screenKey);
       }
     }
-    //visible: false
   };
 };
 

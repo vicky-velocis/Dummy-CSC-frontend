@@ -6,7 +6,6 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDate } from "../../utils";
-
 import { changeStep } from "./footer";
 
 export const reviewownershipType = getLabelWithValue(

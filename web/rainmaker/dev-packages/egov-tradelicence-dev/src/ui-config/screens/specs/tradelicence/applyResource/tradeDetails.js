@@ -22,9 +22,9 @@ import {
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
-  toggleSnackbar
+  toggleSnackbar,
+  handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
 
@@ -915,8 +915,6 @@ export const tradeDetails = getCommonCard({
               false
             )
           );
-          // dispatch(pFO("Licenses[0].validFrom", null));
-          // dispatch(pFO("Licenses[0].validTo", null));
         }
       }
     },
@@ -1006,7 +1004,6 @@ export const tradeDetails = getCommonCard({
               )
             )
           );
-          // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
         } catch (e) {
           console.log(e);
         }
