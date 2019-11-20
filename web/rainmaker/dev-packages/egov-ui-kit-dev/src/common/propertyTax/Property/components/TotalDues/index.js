@@ -3,7 +3,13 @@ import { Tooltip } from "egov-ui-framework/ui-molecules";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TotalDuesButton } from "./components";
 import { withRouter } from "react-router-dom";
+import {viewBill} from "egov-common/ui-utils/commons"
 import "./index.css";
+//import { PDFReader } from 'reactjs-pdf-reader';
+// import { Document, Page } from 'react-pdf'; 
+
+//import Pdf from 'react-native-pdf'
+//import { Document, Page } from 'react-pdf';
 
 const labelStyle = {
   color: "rgba(0, 0, 0, 0.6)",
@@ -13,9 +19,29 @@ const labelStyle = {
   textAlign: "left",
   paddingRight: "20px",
 };
+ 
 
-const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
-  const envURL='/egov-common/pay';
+
+class TotalDues extends React.Component  { 
+ state={
+   url:""
+
+   
+ }
+ onClickAction1= async (consumerCode,tenantId) => {
+
+  this.setState({
+    url : await viewBill(consumerCode,tenantId)
+  })
+  // const abc = await viewBill(consumerCode,tenantId);
+  
+  // console.log(abc);
+  // <PDFReader url={abc} > </PDFReader>
+}
+  render(){
+    const { totalBillAmountDue, consumerCode, tenantId, history } = this.props;
+    console.log(this.state.url);
+    const envURL='/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
   return (
     <div className="">
@@ -32,7 +58,24 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
       </div>
       {totalBillAmountDue > 0 && (
         <div className="col-xs-6 col-sm-3 flex-child">
-          {/* <TotalDuesButton labelText="PT_TOTALDUES_VIEW" /> */}
+          <TotalDuesButton labelText="PT_TOTALDUES_VIEW"  onClickAction={() => {
+           this.onClickAction1(consumerCode,tenantId);
+          //  <iframe src={this.state.url} /> 
+          //  <div className = "sudhanshu">
+          //  <iframe src='https://www.google.com/search?q=modi&biw=1920&bih=952&tbm=isch&source=lnms&sa=X&ved=0ahUKEwj5t5aLlPblAhWb4XMBHfGJCXkQ_AUICygC#imgrc=yFEXLLuwuWHcrM:' frameBorder="0"/>  
+          //   </div>
+        //   <div>
+
+        //   <Document
+        //     file={this.state.url}
+        //   >
+        //     <Page pageNumber={1} />
+        //   </Document>
+        //   <p>Page {1} of {1}</p>
+        // </div>
+           
+          window.open(this.state.url);
+          }}/>
         </div>
       )}
       {totalBillAmountDue > 0 && (
@@ -45,8 +88,14 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
           </div>
         </div>
       )}
+      {/* <PDFReader url={this.state.url} > </PDFReader> */}
+      {/* <Document
+          file={this.state.url}
+          
+       /> */}
     </div>
-  );
+  )
+        };
 };
 
 export default withRouter(TotalDues);

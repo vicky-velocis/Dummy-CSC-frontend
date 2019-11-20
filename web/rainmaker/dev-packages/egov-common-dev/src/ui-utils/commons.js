@@ -535,3 +535,57 @@ export const download = (receiptQueryString,mode="download") => {
     })
 
 }
+export const viewBill = async (consumerCode ,tenantId) => {
+  console.log(tenantId);
+  console.log(consumerCode);
+  const searchCriteria = {
+    consumerCode ,
+    tenantId
+  }
+  const FETCHBILL={
+    GET:{
+      URL:"egov-searcher/bill-genie/billswithaddranduser/_get",
+      ACTION: "_get",
+    }
+  }
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+
+
+  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const queryStr = [
+            { key: "key", value: "consolidatedreceipt" },
+            { key: "tenantId", value: "pb" }
+        ]
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+
+  const urlresponse=await getFileUrlFromAPI(pfResponse.filestoreIds[0]);
+  const urlresponse1=urlresponse[pfResponse.filestoreIds[0]];
+  console.log(urlresponse1);
+  // var win = window.open(urlresponse1, '_blank');
+  //         win.focus();
+
+  return urlresponse1; 
+
+//   httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],searchCriteria).then((payloadBillDetails) => {
+//     const queryStr = [
+//         { key: "key", value: "consolidatedreceipt" },
+//         { key: "tenantId", value: "pb" }
+//     ]
+
+// httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadBillDetails.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+//         .then(res => {
+//         console.log(res);
+//          return res.filestoreIds[0];
+
+//         }
+        
+//         );
+// })
+
+}
+
