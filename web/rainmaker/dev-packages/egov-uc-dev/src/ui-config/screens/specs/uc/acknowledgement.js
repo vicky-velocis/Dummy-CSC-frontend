@@ -141,16 +141,16 @@ const screenConfig = {
 
     getSearchData(dispatch, queryObject);
 
-    const data = getAcknowledgementCard(
-      state,
-      dispatch,
-      purpose,
-      status,
-      receiptNumber,
-      secondNumber,
-      tenant
-    );
-    set(action, "screenConfig.components.div.children", data);
+    // const data = getAcknowledgementCard(
+    //   state,
+    //   dispatch,
+    //   purpose,
+    //   status,
+    //   receiptNumber,
+    //   secondNumber,
+    //   tenant
+    // );
+    // set(action, "screenConfig.components.div.children", data);
     return action;
   }
 };
