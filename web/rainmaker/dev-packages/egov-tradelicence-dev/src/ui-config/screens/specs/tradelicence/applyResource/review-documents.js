@@ -53,8 +53,7 @@ export const getReviewDocuments = (isEditable = true) => {
           }
         },
         documents: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-tradelicence",
+          uiFramework: "custom-containers",
           componentPath: "DownloadFileContainer",
           props: {
             sourceJsonPath: "LicensesTemp[0].reviewDocData",

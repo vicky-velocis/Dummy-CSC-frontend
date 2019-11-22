@@ -8,6 +8,16 @@ const LabelContainer = Loadable({
   loading: () => <Loading />
 });
 
+const EstimateCardContainer = Loadable({
+  loader: () => import("./EstimateCardContainer"),
+  loading: () => <Loading />
+});
+
+const CheckboxContainer = Loadable({
+  loader: () => import("./CheckboxContainer"),
+  loading: () => <Loading />
+});
+
 const TextFieldContainer = Loadable({
   loader: () => import("./TextFieldContainer"),
   loading: () => <Loading />
@@ -45,11 +55,13 @@ const AutosuggestContainer = Loadable({
 
 export {
   TextFieldContainer,
+  CheckboxContainer,
   RadioGroupContainer,
   LabelContainer,
   MultiItem,
   SnackbarContainer,
   CustomTabContainer,
   DownloadFileContainer,
-  AutosuggestContainer
+  AutosuggestContainer,
+  EstimateCardContainer
 };

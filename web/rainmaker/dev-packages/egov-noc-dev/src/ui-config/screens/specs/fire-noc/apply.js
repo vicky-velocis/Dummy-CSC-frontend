@@ -17,11 +17,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -272,11 +267,6 @@ export const prepareEditFlow = async (
         nocType
       )
     );
-
-    // setCardsIfMultipleBuildings(state, dispatch);
-
-    // Set sample docs upload
-    // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
   }
 };
 
@@ -330,29 +320,6 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
-
-    // // Set Property City
-    // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
-
-    // // Handle dependent dropdowns in edit flow
-    // set(
-    //   "apply",
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
-    //   { display: "none" }
-    // );
-
-    // let pfo = {};
-    // if (applicationNumber && !step) {
-    //   pfo = searchSampleResponse();
-    //   dispatch(prepareFinalObject("FireNOCs[0]", get(pfo, "FireNOCs[0]")));
-    // }
-    // if (step && get(state, "screenConfiguration.preparedFinalObject")) {
-    //   pfo = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    //     {}
-    //   );
-    // }
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -434,47 +401,6 @@ const screenConfig = {
         { visibility: "hidden" }
       );
     }
-    // if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("MULTIPLEOWNERS")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.multipleApplicantContainer.props.style",
-    //     {}
-    //   );
-    // } else if (
-    //   get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
-    //     ""
-    //   ).includes("INSTITUTIONAL")
-    // ) {
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.singleApplicantContainer.props.style",
-    //     { display: "none" }
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.institutionContainer.props.style",
-    //     {}
-    //   );
-    //   set(
-    //     action.screenConfig,
-    //     "components.div.children.formwizardThirdStep.children.applicantDetails.children.cardContent.children.applicantTypeContainer.children.applicantSubType.props.style",
-    //     {}
-    //   );
-    // }
-
     return action;
   },
   components: {

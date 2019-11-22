@@ -42,11 +42,6 @@ const MapLocator = Loadable({
   loading: () => <Loading />
 });
 
-const FeesEstimateCard = Loadable({
-  loader: () => import("./FeesEstimateCard"),
-  loading: () => <Loading />
-});
-
 const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
@@ -60,7 +55,6 @@ export {
   UploadSingleFile,
   DocumentList,
   MapLocator,
-  FeesEstimateCard,
   DividerWithLabel,
   HowItWorks
 };

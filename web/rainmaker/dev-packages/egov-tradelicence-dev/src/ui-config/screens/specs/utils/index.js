@@ -229,8 +229,8 @@ export const getTranslatedLabel = (labelKey, localizationLabels) => {
 export const getFeesEstimateCard = props => {
   const { sourceJsonPath, ...rest } = props;
   return {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    uiFramework: "custom-containers",
+    // moduleName: "egov-tradelicence",
     componentPath: "EstimateCardContainer",
     props: {
       sourceJsonPath,
@@ -974,20 +974,6 @@ const isApplicationPaid = currentStatus => {
   }
 
   return isPAID;
-};
-
-export const getBill = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/tl-calculator/v1/_getbill",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-  }
 };
 
 export const createEstimateData = async (
@@ -2048,9 +2034,9 @@ export const getTextToLocalMapping = label => {
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+      return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
 
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
