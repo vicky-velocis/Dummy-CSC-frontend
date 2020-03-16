@@ -64,12 +64,12 @@ const EgovAppBar = ({
               />
             )}
             <div className="rainmaker-displayInline">
+            <Label containerStyle={{ marginLeft: "10px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
               <Label
-                containerStyle={{ marginLeft: "10px" }}
+                containerStyle={{ marginLeft: "4px" }}
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
-              />
-              <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
+              />          
             </div>
           </div>
         }
@@ -99,9 +99,10 @@ const EgovAppBar = ({
           </div>
         )}
 
-        <div className="appbar-right-logo">
+      {/* <div className="appbar-right-logo">
           <img src={digitLogo} />
         </div>
+            */}
         <div className="icon-button">
           {refreshButton && (
             <IconButton style={iconButtonStyle} onClick={(e) => location.reload()}>
