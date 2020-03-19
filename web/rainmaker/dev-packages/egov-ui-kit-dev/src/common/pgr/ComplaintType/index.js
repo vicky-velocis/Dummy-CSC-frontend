@@ -6,8 +6,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { getNestedObjFormat } from "./complaintTypeDataMaker";
 
 const customIconStyles = {
-  height: 25,
-  width: 25,
+  height: 35,
+  width: 35,
   margin: 0,
   top: 10,
   left: 12,
@@ -32,8 +32,17 @@ class ComplaintType extends Component {
   };
 
   generateDataSource = () => {
-    const { categories } = this.props;
-    const categoryList = getNestedObjFormat(categories);
+    const { categories,department } = this.props;
+      const departmentWiseCategory =[];
+    Object.values(categories).map((item) => {
+      if(item.department == department && ! departmentWiseCategory.includes(item.path))
+         departmentWiseCategory.push(item.menuPath);
+    });
+
+
+
+    const categoryListToFilter = getNestedObjFormat(categories);
+    const categoryList = categoryListToFilter.filter(item => departmentWiseCategory.includes(item.text))
     const transformedDataSource = [];
     this.generateResultsForAutoComplete(categoryList, transformedDataSource);
     this.setState({ dataSource: categoryList, transformedDataSource });
@@ -120,6 +129,7 @@ class ComplaintType extends Component {
 const mapStateToProps = (state) => {
   return {
     categories: state.complaints.categoriesById,
+    department : state.form.complaint && state.form.complaint.fields && state.form.complaint.fields.department && state.form.complaint.fields.department.value ,
   };
 };
 

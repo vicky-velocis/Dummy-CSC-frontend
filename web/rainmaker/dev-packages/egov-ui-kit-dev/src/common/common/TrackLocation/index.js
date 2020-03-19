@@ -108,7 +108,7 @@ class TrackLocation extends Component {
   render() {
     let { currLoc } = this.state;
     const { location } = this.props;
-    var _currloc = !isEmpty(currLoc) ? currLoc : isEmpty(location) ? { lat: 12.972442, lng: 77.580643 } : location;
+    var _currloc = !isEmpty(currLoc) ? currLoc : isEmpty(location) ? { lat: 30.743141, lng: 76.786279} : location;
     return (
       <div style={{ position: "relative", height: "100vh", width: "100vw" }}>
         <div className="back-btn">

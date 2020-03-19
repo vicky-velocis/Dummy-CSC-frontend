@@ -92,7 +92,7 @@ class Comments extends Component {
                   disabled={true}
                 />
 
-                {(isAssignedToEmployee && role === "employee") || role === "citizen" || role === "ao" || role === "csr"
+                {(isAssignedToEmployee && role === "employee") || role === "citizen" || role === "ao" || role === "csr"|| role === "eo"
                   ? currentstatus &&
                     currentstatus.toLowerCase() !== "closed" && <WriteCommentHOC userImage={userImage} currentstatus={currentstatus} />
                   : ""}

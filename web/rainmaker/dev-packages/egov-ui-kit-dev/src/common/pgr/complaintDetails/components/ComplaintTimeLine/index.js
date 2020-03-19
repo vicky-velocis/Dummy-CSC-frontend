@@ -79,6 +79,8 @@ const StatusIcon = ({ status }) => {
       return <Icon action="custom" name="reassign-request" style={statusCommonIconStyle} color={"#fe7a51"} />;
     case "assigned":
     case "re-assign":
+      case "escalatedlevel1pending":
+        case "escalatedlevel2pending":
       return <Icon action="custom" name="file-send" style={statusCommonIconStyle} color={"#fe7a51"} />;
     case "rejected":
       return <Icon action="content" name="clear" style={statusRejectedIconStyle} color={"#FFFFFF"} />;
@@ -95,6 +97,7 @@ var rejectStatusCount = 0;
 var resolveStatusCount = 0;
 var assigneeStatusCount = 0;
 var reassignRequestedCount = 0;
+let noReopen = true;
 
 const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker }) => {
   var {
@@ -202,7 +205,9 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
           )}
         </div>
       );
-    case "assigned":
+     case "assigned":
+     case "escalatedlevel1pending":
+     case "escalatedlevel2pending":
       assigneeStatusCount++;
       switch (role && role.toLowerCase()) {
         case "ao":
@@ -221,10 +226,14 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                       : "ES_COMPLAINT_ASSIGNED_HEADER"
                     : employeeName
                     ? "CS_COMMON_REASSIGNED_TO"
-                    : "ES_COMPLAINT_REASSIGNED_HEADER"
+                    : status ==="escalatedlevel1pending"
+                        ? "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER"
+                        :  status ==="escalatedlevel2pending"
+                          ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
+                          :"ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
-              <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />
+              {employeeName  &&  <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} /> }
               {employeeMobileNumber && assigneeStatusCount === 1 && (
                 <a className="pgr-call-icon" href={`tel:+91${employeeMobileNumber}`} style={{ textDecoration: "none", position: "relative" }}>
                   <Icon action="communication" name="call" style={callIconStyle} color={"#22b25f"} />
@@ -244,6 +253,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
             </div>
           );
           break;
+        case "eo":
         case "employee":
           return (
             <div className="complaint-timeline-content-section">
@@ -257,8 +267,12 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                       ? "ES_COMPLAINT_DETAILS_ASSIGNED_BY"
                       : "ES_COMPLAINT_ASSIGNED_HEADER"
                     : groName
-                    ? "ES_COMPLAINT_DETAILS_REASSIGNED_BY"
-                    : "ES_COMPLAINT_REASSIGNED_HEADER"
+                      ? "ES_COMPLAINT_DETAILS_REASSIGNED_BY"
+                      : status ==="escalatedlevel1pending"
+                        ? "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER"
+                        :  status ==="escalatedlevel2pending"
+                          ? "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER"
+                          :"ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
               />
               {groName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${groName}`} />}
@@ -344,7 +358,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
             containerStyle={{ width: "192px" }}
             label={comments && comments.split(";")[1] ? `" ${comments.split(";")[1]} "` : ""}
           />
-          {isReopenValid && currentStatus === "rejected" && (role === "citizen" || role === "csr") && rejectStatusCount === 1 && (
+          {isReopenValid && noReopen && currentStatus === "rejected" && (role === "citizen" || role === "csr") && rejectStatusCount === 1 && (
             <div
               className="complaint-details-timline-button"
               onClick={(e) => {
@@ -414,7 +428,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                   />
                 </div>
               )}
-              {isReopenValid && (
+              {isReopenValid && noReopen && (
                 <div
                   className="complaint-details-timline-button"
                   onClick={(e) => {
@@ -500,6 +514,12 @@ class ComplaintTimeLine extends Component {
     if (timeLine && timeLine.length === 1 && timeLine[0].status === "open") {
       timeLine = [{ status: "pending" }, ...timeLine];
     }
+   
+    noReopen = ! ((role === "citizen") 
+                   && timeLine.some(obj => obj.status === "resolved" || obj.status === "rejected")
+                   && timeLine.some(obj => obj.status === "escalatedlevel2pending")); 
+
+
     let steps = timeLine.map((step, key) => {
       return {
         props: {

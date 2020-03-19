@@ -322,6 +322,12 @@ export const getTransformedStatus = (status) => {
     case "assigned":
       transformedStatus = "ASSIGNED";
       break;
+      case "escalatedlevel1pending":
+      transformedStatus = "ESCALATED";
+      break;
+    case "escalatedlevel2pending":
+      transformedStatus = "ESCALATED";
+      break;
     default:
       transformedStatus = "UNASSIGNED";
       break;
@@ -348,10 +354,18 @@ export const getPropertyFromObj = (obj, id, property, defaultValue) => {
 };
 
 export const returnSLAStatus = (slaHours, submittedTime) => {
+  let slaStatement = "";
+  let daysCount ="";
+  if(slaHours === 0)
+    return {
+      slaStatement,
+      daysCount,
+    }
+
   const millsToAdd = slaHours * 60 * 60 * 1000;
   const toBeFinishedBy = millsToAdd + submittedTime;
-  let slaStatement = "";
-  const daysCount = dateDiffInDays(new Date(Date.now()), new Date(toBeFinishedBy));
+  
+   daysCount = dateDiffInDays(new Date(Date.now()), new Date(toBeFinishedBy));
   if (daysCount < 0) {
     slaStatement = Math.abs(daysCount) === 1 ? "CS_OVERDUE_BY_DAY" : "CS_OVERDUE_BY_DAYS";
     //slaStatement = Math.abs(daysCount) === 1 ? `Overdue by ${Math.abs(daysCount)} day` : `Overdue by ${Math.abs(daysCount)} days`;

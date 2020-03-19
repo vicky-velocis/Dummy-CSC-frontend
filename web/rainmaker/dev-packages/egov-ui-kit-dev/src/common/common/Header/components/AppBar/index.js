@@ -63,6 +63,7 @@ const EgovAppBar = ({
                 label={titleAddon}
               />
             )}
+      
             <div className="rainmaker-displayInline">
             <Label containerStyle={{ marginLeft: "10px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
               <Label

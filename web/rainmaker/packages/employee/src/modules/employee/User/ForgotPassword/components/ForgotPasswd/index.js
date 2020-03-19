@@ -40,7 +40,7 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
             prefixStyle={{ top: 21 }}
             {...fields.username}
           />
-          <CityPicker onChange={handleFieldChange} fieldKey="tenantId" field={fields.tenantId} />
+        {/*  <CityPicker onChange={handleFieldChange} fieldKey="tenantId" field={fields.tenantId} /> */}
 
           <Button id="login-submit-action" primary={true} label="CONTINUE" fullWidth={true} {...submit} />
         </div>
