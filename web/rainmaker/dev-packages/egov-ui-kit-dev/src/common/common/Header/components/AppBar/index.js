@@ -53,7 +53,7 @@ const EgovAppBar = ({
         title={
           <div className="citizen-header-logo-label">
             <div className="citizen-header-logo">
-              <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+              <img style = {{ height:49 , width:49}} src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
             </div>
             <Label containerStyle={{ marginLeft: "0px" }} className="screenHeaderLabelStyle appbar-title-label" label={title} />
             {titleAddon && (
@@ -71,6 +71,9 @@ const EgovAppBar = ({
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
               />          
+            </div>
+            <div className="rainmaker-displayInline-ut">
+              <Label  containerStyle={{ marginLeft: "10px" }} className="appbar-subheader-label" label={`TENANT_TENANTS_AREA`} />
             </div>
           </div>
         }
