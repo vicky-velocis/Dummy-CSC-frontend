@@ -139,8 +139,9 @@ export const logout = () => {
         // for finance
         if(process.env.REACT_APP_NAME !== "Citizen"){
           const response_finance = await httpRequest(FINANCE.LOGOUT.URL, FINANCE.LOGOUT.ACTION, [{ key: "access_token", value: authToken }]);
-        }
-       } else {
+          }
+         } 
+         else {
         clearUserDetails();
         process.env.REACT_APP_NAME === "Citizen"
           ? window.location.replace(`${window.basename}/user/register`)

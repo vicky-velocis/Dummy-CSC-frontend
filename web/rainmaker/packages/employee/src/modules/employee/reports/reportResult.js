@@ -704,10 +704,17 @@ class ShowField extends Component {
   }
 }
 const mapStateToProps = (state) => {
+let reportData ;
+  if( state.report.reportResult &&  state.report.reportResult.reportResponses && state.report.reportResult.reportResponses[0]) {
+    reportData = state.report.reportResult.reportResponses[0];
+  } 
+  else{
+    reportData = state.report.reportResult;
+  }
   return {
     isTableShow: state.formtemp.showTable,
     metaData: state.report.metaData,
-    reportResult: state.report.reportResult,
+    reportResult:reportData ,
     flag: state.report.flag,
     searchForm: state.formtemp.form,
     searchParams: state.report.searchParams,

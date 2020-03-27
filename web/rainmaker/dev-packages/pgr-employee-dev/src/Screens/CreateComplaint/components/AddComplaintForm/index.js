@@ -19,7 +19,7 @@ const AddComplaintForm = ({
   history
 }) => {
   const fields = form.fields || {};
-  const { name, phone, mohalla, city, address, landmark, houseNo } = fields;
+  const { name, phone, mohalla, city, address, landmark, houseNo,department } = fields;
   const submit = form.submit;
   return (
     <div className="create-complaint-main-cont">
@@ -51,6 +51,8 @@ const AddComplaintForm = ({
                   className="fix-for-layout-break"
                   localizationLabels={localizationLabels}
                   categories={categories}
+                  department ={department}
+                  handleFieldChange={handleFieldChange}
                   complaintType={fields.complaintType}
                 />
               </div>
@@ -61,7 +63,7 @@ const AddComplaintForm = ({
                   additionalDetails={fields.additionalDetails}
                 />
               </div>
-              <div className="col-sm-6 col-xs-12">
+         {/*   <div className="col-sm-6 col-xs-12">
                 <AutoSuggestDropdown
                   className="fix-for-layout-break"
                   fullWidth={true}
@@ -71,7 +73,7 @@ const AddComplaintForm = ({
                   }}
                   {...city}
                 />
-              </div>
+                </div> */}
               <div className="col-sm-6 col-xs-12">
                 <MohallaDropdown
                   handleFieldChange={handleFieldChange}
