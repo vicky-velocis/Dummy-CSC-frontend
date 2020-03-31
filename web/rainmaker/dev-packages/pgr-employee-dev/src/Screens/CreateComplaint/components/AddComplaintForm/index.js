@@ -9,6 +9,7 @@ import {
 import AdditionalDetailsCard from "../AdditionalDetails";
 import ComplaintTypeCard from "../ComplaintType";
 import MohallaDropdown from "../MohallaDropdown";
+import { ImageUpload } from "modules/common";
 
 const AddComplaintForm = ({
   formKey,
@@ -25,6 +26,7 @@ const AddComplaintForm = ({
     <div className="create-complaint-main-cont">
       {/* <Label label="Complaint Submission" fontSize={20} dark={true} bold={true} containerStyle={{ padding: "24px 0 8px 17px" }} /> */}
       <div className="create-comp-csr-form-cont form-without-button-cont-generic">
+      <ImageUpload module="rainmaker-pgr" formKey={formKey} fieldKey="media" />
         <Card
           id="create-complaint-card"
           className="create-complaint-main-card"

@@ -12,6 +12,12 @@ const formConfig = {
   name: "complaint",
   idJsonPath: "services[0].serviceRequestId",
   fields: {
+    media: {
+      id: "media",
+      jsonPath: "actionInfo[0].media",
+      file: true,
+      errorMessage: "CS_FILE_UPLOAD_FAILED",
+    },
     name: {
       id: "add-complaint",
       jsonPath: "services[0].citizen.name",
