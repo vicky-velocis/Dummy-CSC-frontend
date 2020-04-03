@@ -1,14 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Card, TextField, Image } from "components";
+import { Button, Card, TextField, Image , DropDown} from "components";
 import { CityPicker } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 
-const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) => {
+const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl,languages,onLanguageChange,languageSelected,hasLocalisation }) => {
   const fields = form.fields || {};
   const submit = form.submit;
+  const style = {
+    baseStyle: {
+      background: "#ffffff",
+      height: "30px",
+    //  marginRight: "30px",
+      width: "98px",
+      marginBottom: "10px",
+    },
+    label: {
+      color: "#5F5C57",
+      fontSize: "12px",
+      paddingRight: "40px",
+      top : "-27px"
+    },
+    iconStyle: {
+      top : "-24px",
+      fill : "black"
+    },
+    listStyle: {
+      display: "block",
+    },
+  }
   return (
     <Card
       className="user-screens-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-4 col-sm-4"
@@ -30,10 +52,12 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) =>
           <TextField onChange={(e, value) => handleFieldChange("username", value)} {...fields.username} />
           <TextField onChange={(e, value) => handleFieldChange("password", value)} {...fields.password}  />
     {/* <CityPicker onChange={handleFieldChange} fieldKey="city" field={fields.city} />  */}
+    <div style={{ display: "flex", flexDirection: "column"}}>
+          <div style={{ marginBottom: "0px", position: "relative", zIndex: 10 }} className="text-right">       
           <Link to="/forgot-password">
             <div style={{ float: "right" }}>
               <Label
-                containerStyle={{ cursor: "pointer", position: "relative", zIndex: 10 }}
+                containerStyle={{ cursor: "pointer", position: "relative", zIndex: 10 ,height: 30,marginRight:25 }}
                 labelStyle={{ marginBottom: "12px" }}
                 className="forgot-passwd"
                 fontSize={14}
@@ -41,6 +65,27 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl }) =>
               />
             </div>
           </Link>
+          </div >
+          <div style={{ marginBottom: "10px", position: "relative", zIndex: 10,height: 30  }} className="text-right">
+              <div style={{ display: "inline-block" }}>
+              <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label={`LANGUAGE_${languageSelected.toUpperCase()}`} />
+              </div>
+              <div style={{ display: "inline-block" , float:"right", height:40 }}>
+            {hasLocalisation && (
+        <DropDown
+            onChange={onLanguageChange}
+            listStyle={style.listStyle}
+            style={style.baseStyle}
+            labelStyle={style.label}
+            iconStyle={style.iconStyle}
+            dropDownData={languages}
+            value={languageSelected}
+            underlineStyle={{ borderBottom: "none" }}
+          />
+            )}  
+             </div>
+          </div>
+          </div>
           <Button {...submit} fullWidth={true} primary={true} />
         </div>
       }

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Banner } from "modules/common";
 import { LanguageSelectionForm } from "modules/common";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale,setDefaultLocale } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 
 class LanguageSelection extends Component {
@@ -14,6 +14,7 @@ class LanguageSelection extends Component {
   onClick = (value) => {
     this.setState({ value });
     this.props.fetchLocalizationLabel(value);
+    setDefaultLocale(value);
   };
 
   onLanguageSelect = () => {

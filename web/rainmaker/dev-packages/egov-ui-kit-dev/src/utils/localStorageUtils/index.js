@@ -19,7 +19,11 @@ export const getLocale = () => {
   return localStorage.getItem("locale");
 };
 
-//SET methods
+export const getDefaultLocale = () => {
+  return localStorage.getItem("defaultLocale");
+};
+
+//SET methods 
 export const setUserInfo = (userInfo) => {
   localStorageSet("user-info", userInfo, null);
 };
@@ -37,6 +41,10 @@ export const setLocale = (locale) => {
 };
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
+};
+
+export const setDefaultLocale = (locale) => {
+  localStorageSet("defaultLocale", locale);
 };
 
 //Remove Items (LOGOUT)
