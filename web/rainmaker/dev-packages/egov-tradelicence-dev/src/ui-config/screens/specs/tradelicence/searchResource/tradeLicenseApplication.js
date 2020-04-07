@@ -42,12 +42,10 @@ export const tradeLicenseApplication = getCommonCard({
 
     tradeLicenseNo: getTextField({
       label: {
-        labelName: "Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+        labelName: "Trade License No.", labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+        labelName: "Enter Trade License No.", labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -56,7 +54,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumbers"
+      jsonPath: "searchScreen.licenseNumber"
     }),
     ownerMobNo: getTextField({
       label: {
@@ -82,8 +80,8 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
-    applicationType: {
-      ...getSelectField({
+    applicationType: 
+      getSelectField({
         label: {
           labelName: "Application Type",
           labelKey: "TL_APPLICATION_TYPE_LABEL"
@@ -98,7 +96,13 @@ export const tradeLicenseApplication = getCommonCard({
         },
         jsonPath:
           "searchScreen.applicationType",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+        data: [{
+          code : "New"
+        },
+        {
+          code : "Renew"
+        }],
+        // sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
         gridDefination: {
           xs: 12,
           sm: 4
@@ -106,13 +110,11 @@ export const tradeLicenseApplication = getCommonCard({
         props: {
           className: "applicant-details-error"
         }
-      })
-    },
+      }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {
-        labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
+        labelName: "Select From Date",labelKey: "TL_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -157,34 +159,29 @@ export const tradeLicenseApplication = getCommonCard({
       },
       jsonPath: "searchScreen.status",
       data:[
-        {
-          code : "INITIATED"
-        },
-        {
-          code : "APPLIED"
-        },
-        {
-          code : "FIELDINSPECTION"
-        },
-        {
-          code : "APPROVED"
-        },
-        {
-          code : "CANCELLED"
-        },
-        {
-          code : "REJECTED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "PENDINGAPPROVAL"
-        }
       ],
+      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
+
+    tradeName: getSelectField({
+      label: {
+        labelName: "Trade Name", labelKey: "TL_HOME_SEARCH_RESULTS_TRADE_NAME_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Trade Name",
+        labelKey: "TL_HOME_SEARCH_RESULTS_TRADE_NAME_PLACEHOLDER"
+      },
+      required: false,
+      // localePrefix: {
+      //   moduleName: "WF",
+      //   masterName: "NEWTL"
+      // },
+      jsonPath: "searchScreen.businessService", 
+      data: [],
       // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
       gridDefination: {
         xs: 12,

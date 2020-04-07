@@ -14,6 +14,7 @@ function ApplicationNoContainer(props) {
   return <div className="application-no-container"><LabelContainer labelName="License No." labelKey ={"TL_LICENSE_NO_CODE"} dynamicArray={[licenseNumber]}/></div>;
   } 
 else
-  return <div className="application-no-container"><LabelContainer labelName="Application No." labelKey ={"TL_APPLICATION_NO_CODE"} dynamicArray={[number]}/></div>;
+  return <div className="application-no-container"><LabelContainer labelName="Application No." labelKey ={"TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"} dynamicArray={[number]}/></div>;
+  // return <div className="application-no-container">Application No. {number}</div>;
 }
 export default ApplicationNoContainer;

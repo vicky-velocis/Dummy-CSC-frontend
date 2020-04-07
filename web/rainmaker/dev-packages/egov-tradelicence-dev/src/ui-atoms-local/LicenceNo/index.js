@@ -8,5 +8,6 @@ function licenceNoContainer(props) {
   
   const { number } = props;
   return <div className="application-no-container"><LabelContainer labelName="License No." labelKey ={"TL_LICENSE_NO_CODE"} dynamicArray={[number]}/></div>;
+  // return <div className="application-no-container">License No. {number}</div>;
 }
 export default licenceNoContainer;

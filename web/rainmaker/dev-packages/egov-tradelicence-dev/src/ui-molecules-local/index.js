@@ -56,6 +56,11 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const Footer = Loadable({
+  loader: () => import("./Footer"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -66,5 +71,6 @@ export {
   MapLocator,
   FeesEstimateCard,
   HowItWorks,
-  ActionDialog
+  ActionDialog,
+  Footer
 };

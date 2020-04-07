@@ -1,21 +1,20 @@
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import React from 'react';
+import { getSearchResults, organizeLicenseData, getCount } from "../../../../../ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
+import set from "lodash/set";
+import TradeLicenseIcon from "../../../../../ui-atoms-local/Icons/TradeLicenseIcon";
+import FormIcon from '../../../../../ui-atoms-local/Icons/FormIcon';
 
-const getMdmsData = async () => {
+const getMdmsData = async (dispatch, body) => {
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: commonConfig.tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [{ name: "citymodule" }]
-        }
-      ]
+      moduleDetails: body
     }
   };
   try {
@@ -31,9 +30,22 @@ const getMdmsData = async () => {
     console.log(e);
   }
 };
-export const fetchData = async (action, state, dispatch) => {
-  const response = await getSearchResults();
-  const mdmsRes = await getMdmsData(dispatch);
+
+export const getTradeTypes = async (action, state, dispatch) => {
+  const tradeTypePayload = [{
+    moduleName: "TradeLicense",
+    masterDetails: [{name: "TradeType"}]
+  }]
+  const tradeRes = await getMdmsData(dispatch, tradeTypePayload);
+  const {TradeLicense} = tradeRes.MdmsRes || {}
+  const tradeTypes = TradeLicense.TradeType || [] 
+  set(state.common, "tradeTypes", tradeTypes);
+
+  const cityPayload = [{
+    moduleName: "tenant", 
+    masterDetails: [{name: "citymodule"}]
+  }]
+  const mdmsRes = await getMdmsData(dispatch, cityPayload);
   let tenants =
     mdmsRes &&
     mdmsRes.MdmsRes &&
@@ -46,6 +58,46 @@ export const fetchData = async (action, state, dispatch) => {
       tenants
     )
   );
+
+  const {licensesCount = 0} = await getCount() || {};
+  dispatch(
+    prepareFinalObject("myApplicationsCount", licensesCount)
+  );
+
+  const cardItems = [
+    {
+      label: {
+          labelKey: "Apply",
+          labelName: "Apply"
+      },
+      icon: <TradeLicenseIcon />,
+      route: `apply?tenantId=${tenants.tenants[0].code}`
+    },
+    {
+      label: {
+          labelKey: "TL_MY_APPLICATIONS",
+          labelName: "My Applications"
+      },
+      icon: <FormIcon />,
+      route: "my-applications"
+    }
+  ]
+  dispatch(
+    handleField(
+      "home",
+      "components.div.children.applyCard.props",
+      "items",
+      cardItems
+    )
+  );
+}
+
+export const fetchData = async (action, state, dispatch) => {
+  const queryObject = [{
+    key: "limit",
+    value: 100
+  }]
+  const response = await getSearchResults(queryObject);
   try {
     /*Mseva 1.0 */
     // let data =
@@ -75,7 +127,9 @@ export const fetchData = async (action, state, dispatch) => {
     /*Mseva 2.0 */
 
     if (response && response.Licenses && response.Licenses.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.Licenses));
+      const licenses = organizeLicenseData(response.Licenses)
+      dispatch(prepareFinalObject("actualResults", licenses));
+      dispatch(prepareFinalObject("searchResults", licenses));
       dispatch(
         prepareFinalObject("myApplicationsCount", response.Licenses.length)
       );

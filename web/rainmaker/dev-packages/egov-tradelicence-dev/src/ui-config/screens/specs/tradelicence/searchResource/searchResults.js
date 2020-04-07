@@ -4,17 +4,19 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import { searchApiCall } from "./functions";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",
   componentPath: "Table",
-  visible: false,
+  visible: true,
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
       getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("License Type"), 
+      getTextToLocalMapping("Service Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
       getTextToLocalMapping("Financial Year"),
@@ -58,9 +60,6 @@ export const searchResults = {
       },
 
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
-    ),
     options: {
       filter: false,
       download: false,

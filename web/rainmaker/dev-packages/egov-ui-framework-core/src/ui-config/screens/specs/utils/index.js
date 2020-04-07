@@ -580,9 +580,14 @@ export const getPattern = type => {
       return /^[a-zA-Z]{1,180}$/i;
 	  case "budget":
       return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
+    case "age":
+      return /^[1-9][0-9]$/i;
+    case "familyMonthlyIncome":
+      return /^[1-9][0-9]\d*$/i;
   }
   };
 
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
 };
+
