@@ -68,7 +68,7 @@ const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick, logoUrl,langu
           </div >
           <div style={{ marginBottom: "10px", position: "relative", zIndex: 10,height: 30  }} className="text-right">
               <div style={{ display: "inline-block" }}>
-              <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label={`LANGUAGE_${languageSelected.toUpperCase()}`} />
+              <Label containerStyle={{ cursor: "pointer" }} id="otp-resend" className="otp-resend" label={languageSelected ?`LANGUAGE_${languageSelected.toUpperCase()}`:'en_IN'} />
               </div>
               <div style={{ display: "inline-block" , float:"right", height:40 }}>
             {hasLocalisation && (
