@@ -19,7 +19,28 @@ export const getLocale = () => {
   return localStorage.getItem("locale");
 };
 
-//SET methods
+export const getDefaultLocale = () => {
+  return localStorage.getItem("defaultLocale");
+};
+
+export const getapplicationType = () => {
+  return localStorage.getItem("applicationType");
+};
+
+export const getapplicationNumber = () => {
+  return localStorage.getItem("ApplicationNumber");
+};
+
+export const getapplicationMode = () => {
+  return localStorage.getItem("applicationMode");
+};
+
+export const getOPMSTenantId = () => {
+  return localStorage.getItem('opms-tenant-id');
+};
+
+
+//SET methods 
 export const setUserInfo = (userInfo) => {
   localStorageSet("user-info", userInfo, null);
 };
@@ -38,6 +59,27 @@ export const setLocale = (locale) => {
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
 };
+
+export const setDefaultLocale = (locale) => {
+  localStorageSet("defaultLocale", locale);
+};
+
+export const setapplicationType = (applicationTypeName) => {
+  localStorageSet("applicationType", applicationTypeName);
+};
+
+export const setapplicationNumber = (applicationNumber) => {
+  localStorageSet("ApplicationNumber", applicationNumber);
+};
+
+export const setapplicationMode = (applicationMode) => {
+  localStorageSet("applicationMode", applicationMode);
+};
+export const setOPMSTenantId = (OPMSTenantId) => {
+  localStorageSet('opms-tenant-id',OPMSTenantId);
+};
+
+
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
@@ -76,4 +118,8 @@ export const localStorageSet = (key, data, path) => {
 export const lSRemoveItem = (key) => {
   const appName = process.env.REACT_APP_NAME;
   window.localStorage.removeItem(appName + "." + key);
+};
+
+export const lSRemoveItemlocal = (key) => {
+  window.localStorage.removeItem(key);
 };
