@@ -312,6 +312,30 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       } else {
+        if(
+          reportResult &&
+          reportResult.reportHeader &&
+          reportResult.reportHeader.length &&
+          reportResult.reportHeader[i] && reportResult.reportHeader[i].name== "department")
+          {
+          return( <Label
+            className=""
+            labelStyle={{ wordWrap: "unset", wordBreak: "unset"}}
+            label={`PGRDEPT.${val.toUpperCase().replace(/ /g, "")}`}
+          />)
+        }
+        else if(
+          reportResult &&
+          reportResult.reportHeader &&
+          reportResult.reportHeader.length &&
+          reportResult.reportHeader[i] && (reportResult.reportHeader[i].name== "servicecode" || reportResult.reportHeader[i].name== "complainttype"))
+        {
+          return( <Label
+            className=""
+            labelStyle={{ wordWrap: "unset", wordBreak: "unset" }}
+            label={`SERVICEDEFS.${val.toUpperCase().replace(/ /g, "")}`}
+          />)
+        }
         return val;
       }
     }

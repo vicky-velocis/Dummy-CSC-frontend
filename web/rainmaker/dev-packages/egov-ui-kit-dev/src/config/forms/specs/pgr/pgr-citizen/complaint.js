@@ -192,8 +192,8 @@ arrayOfDepartment =[];
 const sectorList = getNestedObjFormat(complaintSector);
 dispatch(setFieldProperty("complaint", "mohalla", "dropDownData", arrayOfDepartment));
 
-    let complaintType = get(state, "form.complaint.fields.complaintType");
-      if(complaintType && complaintType.value)
+    let department = get(state, "form.complaint.fields.department");
+      if(department && department.value)
         dispatch(setFieldProperty("complaint", "complaintType", "disabled", false));
       else
         dispatch(setFieldProperty("complaint", "complaintType", "disabled", true));

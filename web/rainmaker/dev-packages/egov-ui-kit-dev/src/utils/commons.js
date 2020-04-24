@@ -342,7 +342,9 @@ export const getFileSize = (file) => {
 
 export const isFileImage = (file) => {
   const mimeType = file["type"];
-  return (mimeType && mimeType.split("/")[0] == "image") || false;
+  const acceptedImageTypes = ["jpg", "jpeg", "png"];
+  const imgExtension = acceptedImageTypes.indexOf(mimeType.split("/")[1]) !== -1
+  return (mimeType && mimeType.split("/")[0] == "image" && imgExtension) || false;
 };
 
 export const getNameFromId = (obj, id, defaultValue) => {

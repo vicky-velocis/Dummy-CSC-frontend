@@ -99,6 +99,26 @@ var assigneeStatusCount = 0;
 var reassignRequestedCount = 0;
 let noReopen = true;
 
+ const getImageSource = (imageSource, size) => {
+  const images = imageSource.split(",");
+  if (!images.length) {
+    return null;
+  }
+  switch (size) {
+    case "small":
+      imageSource = images[2];
+      break;
+    case "medium":
+      imageSource = images[1];
+      break;
+    case "large":
+    default:
+      imageSource = images[0];
+  }
+  return imageSource || images[0];
+};
+
+
 const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating, role, filedBy, filedUserMobileNumber, reopenValidChecker }) => {
   var {
     action,
@@ -117,7 +137,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
   } = stepData;
   const currDate = new Date().getTime();
   const resolvedDate = new Date(date).getTime();
-  const isReopenValid = currDate - resolvedDate <= reopenValidChecker;
+  const isReopenValid = currDate - resolvedDate <= 86400000 //reopenValidChecker;
   switch (status) {
     case "open":
       openStatusCount++;
@@ -188,7 +208,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                             }}
                             size="medium"
                             source={image}
-                            onClick={() => changeRoute.push(`/image?source=${image}`)}
+                            onClick={() => window.open(getImageSource(image,"large"),'Image')}
                           />
                         </div>
                       )
@@ -249,7 +269,34 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                 labelClassName="rainmaker-small-font complaint-timeline-department"
                 // containerStyle={{ width: "192px" }}
                 label={employeeDepartment}
-              />
+              />  
+                 {media && (
+            <div style={{ display: "flex" }}>
+              {media.map((image, index) => {
+                return (
+                  isImage(image) && (
+                    <div
+                      style={{ marginRight: 8 }}
+                      className="complaint-detail-detail-section-padding-zero"
+                      id={`complaint-details-resolved-${resolveStatusCount}-image=${index}`}
+                      key={index}
+                    >
+                      <Image
+                        style={{
+                          width: "97px",
+                          height: "93px",
+                        }}
+                        size="medium"
+                        source={image}
+                        onClick={() => window.open(getImageSource(image,"large"),'Image')}  // changeRoute.push(`/image?source=${image}`)
+                      />
+                    </div>
+                  )
+                );
+              })}
+            </div>
+          )}
+           <Label labelClassName="rainmaker-small-font complaint-timeline-comments" containerStyle={{ width: "192px" }} label={comments} />
             </div>
           );
           break;
@@ -291,6 +338,33 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                   label={`${groDesignation}`}
                 />
               )}
+               {media && (
+            <div style={{ display: "flex" }}>
+              {media.map((image, index) => {
+                return (
+                  isImage(image) && (
+                    <div
+                      style={{ marginRight: 8 }}
+                      className="complaint-detail-detail-section-padding-zero"
+                      id={`complaint-details-resolved-${resolveStatusCount}-image=${index}`}
+                      key={index}
+                    >
+                      <Image
+                        style={{
+                          width: "97px",
+                          height: "93px",
+                        }}
+                        size="medium"
+                        source={image}
+                        onClick={() =>  window.open(getImageSource(image,"large"),'Image')}
+                      />
+                    </div>
+                  )
+                );
+              })}
+            </div>
+          )}
+           <Label labelClassName="rainmaker-small-font complaint-timeline-comments" containerStyle={{ width: "192px" }} label={comments} />
             </div>
           );
           break;
@@ -382,7 +456,16 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
       return (
         <div className="complaint-timeline-content-section">
           <Label labelClassName="rainmaker-small-font complaint-timeline-date" label={getDateFromEpoch(date)} />
+          <div className="rainmaker-displayInline">
           <Label labelClassName="dark-color complaint-timeline-status" label="CS_COMPLAINT_DETAILS_COMPLAINT_RESOLVED" />
+          <Label labelStyle={{padding : "0px 6px 0px 6px"}} label= " by: "/>
+          {employeeName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />}
+         </div>
+          <Label
+                labelClassName="rainmaker-small-font complaint-timeline-department"
+                // containerStyle={{ width: "192px" }}
+                label={employeeDesignation}
+              />
           {media && (
             <div style={{ display: "flex" }}>
               {media.map((image, index) => {
@@ -401,7 +484,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
                         }}
                         size="medium"
                         source={image}
-                        onClick={() => changeRoute.push(`/image?source=${image}`)}
+                        onClick={() =>  window.open(getImageSource(image,"large"),'Image')}
                       />
                     </div>
                   )
