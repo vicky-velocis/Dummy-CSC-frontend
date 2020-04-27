@@ -312,7 +312,7 @@ class ShowField extends Component {
       ) {
         return this.addCommas(Number(val) % 1 === 0 ? Number(val) : Number(val).toFixed(2));
       } else {
-        if(
+        if(window.location.pathname.includes('EmployeeReport') &&
           reportResult &&
           reportResult.reportHeader &&
           reportResult.reportHeader.length &&

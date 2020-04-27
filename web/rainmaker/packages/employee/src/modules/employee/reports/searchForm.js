@@ -611,7 +611,13 @@ class ShowForm extends Component {
     let reportName = rptName || this.state.reportName;
     let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
     let reportTitle = "";
-    if (reportTitleArr) {
+    if(rptName == 'ULBDepartmentReport'){
+      reportTitle = "Department Report"
+    }
+    else if (rptName == "ULBEmployeeWiseReport"){
+      reportTitle = "Employee Wise Report"
+    }
+    else if (reportTitleArr) {
       reportTitle = reportTitleArr.map((char) => {
         if (char.length == 1) {
           reportTitle = char + "";
