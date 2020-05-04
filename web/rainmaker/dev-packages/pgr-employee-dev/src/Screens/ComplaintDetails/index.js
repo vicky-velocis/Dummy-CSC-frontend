@@ -279,12 +279,20 @@ class ComplaintDetails extends Component {
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnTwoLabel = "ES_COMMON_REASSIGN";
         }
+        else if (complaint.complaintStatus.toLowerCase() === "escalated") {
+          btnOneLabel = "ES_REJECT_BUTTON";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+        }
       } else if(role == "eo"){
         if (complaint.status.toLowerCase() === "escalatedlevel1pending"||
         complaint.status.toLowerCase() === "escalatedlevel2pending") {
         btnOneLabel = "ES_REJECT_BUTTON";
         btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
+        else if (complaint.status.toLowerCase() === "assigned") {
+          btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+          }
       }     
       else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
@@ -345,7 +353,8 @@ class ComplaintDetails extends Component {
                   complaint.complaintStatus.toLowerCase() !== "closed") ||
                   (role === "eo" &&
                   (complaint.status.toLowerCase() === "escalatedlevel1pending"||
-                  complaint.status.toLowerCase() === "escalatedlevel2pending")) ||
+                  complaint.status.toLowerCase() === "escalatedlevel2pending" ||
+                  complaint.status.toLowerCase() === "assigned" )) ||
                 (role === "employee" &&
                   isAssignedToEmployee &&
                   complaint.complaintStatus.toLowerCase() === "assigned" &&
@@ -592,7 +601,16 @@ const mapStateToProps = (state, ownProps) => {
           );
         action.groMobileNumber =
           assignee && getPropertyFromObj(employeeById, gro, "mobileNumber", "");
-      } else if (
+      }
+      else if (action && action.status && action.status === "resolved") {
+        let assignee = action.assignee;
+        const empId = action.by.split(":")[0];
+        const selectedEmployee = employeeById && empId && employeeById[empId];
+        action.employeeDesignation =
+        selectedEmployee && getPropertyFromObj(designationsById, selectedEmployee.assignments[0].designation, "name", "");
+        action.employeeName = empId && getPropertyFromObj(employeeById, empId, "name", "");
+      }
+      else if (
         action &&
         action.status &&
         action.status === "reassignrequested"

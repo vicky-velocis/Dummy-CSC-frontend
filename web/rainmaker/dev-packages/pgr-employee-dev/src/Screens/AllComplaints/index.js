@@ -79,7 +79,7 @@ class AllComplaints extends Component {
         { key: "tenantId", value: getTenantId() },
         {
           key: "status",
-          value: "assigned"
+          value: "assigned,escalatedlevel1pending,escalatedlevel2pending"
         }
       ];
       let assignedTotalComplaints = await httpRequest(
@@ -110,7 +110,7 @@ class AllComplaints extends Component {
           [
             {
               key: "status",
-              value: "assigned"
+              value: "assigned,escalatedlevel1pending,escalatedlevel2pending"
             }
           ],
           true,
@@ -815,7 +815,8 @@ const mapStateToProps = state => {
       filteredEmployeeComplaints = transformedComplaints.filter(
         complaint =>
           complaint.rawStatus === "escalatedlevel1pending" ||
-          complaint.rawStatus === "escalatedlevel2pending" 
+          complaint.rawStatus === "escalatedlevel2pending" ||
+          complaint.rawStatus === "assigned" 
       );  
     }else{
       filteredEmployeeComplaints = transformedComplaints.filter(
@@ -832,7 +833,8 @@ const mapStateToProps = state => {
      searchFilterEmployeeComplaints = transformedComplaints.filter(
       complaint =>
         complaint.rawStatus === "escalatedlevel1pending" ||
-        complaint.rawStatus === "escalatedlevel2pending" 
+        complaint.rawStatus === "escalatedlevel2pending" ||
+        complaint.rawStatus === "assigned" 
     );  
   }
   else{
@@ -847,7 +849,7 @@ const mapStateToProps = state => {
   
 
   let filteredAssignedComplaints = transformedComplaints.filter(
-    complaint => complaint.complaintStatus === "ASSIGNED"
+    complaint => complaint.complaintStatus === "ASSIGNED" || complaint.complaintStatus === "ESCALATED"
   );
   let filteredUnassignedComplaints = transformedComplaints.filter(
     complaint => complaint.complaintStatus === "UNASSIGNED"

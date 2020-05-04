@@ -458,7 +458,7 @@ const StatusContent = ({ stepData, currentStatus, changeRoute, feedback, rating,
           <Label labelClassName="rainmaker-small-font complaint-timeline-date" label={getDateFromEpoch(date)} />
           <div className="rainmaker-displayInline">
           <Label labelClassName="dark-color complaint-timeline-status" label="CS_COMPLAINT_DETAILS_COMPLAINT_RESOLVED" />
-          <Label labelStyle={{padding : "0px 6px 0px 6px"}} label= " by: "/>
+          <Label labelStyle={{padding : "0px 6px 0px 6px"}} label= " by "/>
           {employeeName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />}
          </div>
           <Label
