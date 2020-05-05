@@ -18,7 +18,6 @@ import {
 
 const instance = axios.create({
   baseURL: window.location.origin,
- // baseURL: 'http://192.168.12.116:8096',
   headers: {
     "Content-Type": "application/json"
   }
