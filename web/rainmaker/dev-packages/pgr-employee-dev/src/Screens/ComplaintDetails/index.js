@@ -181,6 +181,21 @@ class ComplaintDetails extends Component {
         break;
     }
   };
+  btnThreeOnClick = (complaintNo, label) => {
+    //Action for third button
+    let { history } = this.props;
+    switch (label) {
+      case "ES_COMMON_ASSIGN":
+        history.push(`/assign-complaint/${complaintNo}`);
+        break;
+      case "ES_COMMON_REASSIGN":
+        history.push(`/reassign-complaint/${complaintNo}`);
+        break;
+      case "ES_RESOLVE_MARK_RESOLVED":
+        history.push(`/complaint-resolved/${complaintNo}`);
+        break;
+    }
+  };
 
   ShareButtonOnClick = () => {
     const complaintData = this.props.transformedComplaint.complaint;
@@ -263,6 +278,7 @@ class ComplaintDetails extends Component {
     } = this.props;
     let btnOneLabel = "";
     let btnTwoLabel = "";
+    let btnThreeLabel = "";
     let action;
     let complaintLoc = {};
     if (complaint && complaint.latitude) {
@@ -277,7 +293,9 @@ class ComplaintDetails extends Component {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_COMMON_REASSIGN";
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
-          btnTwoLabel = "ES_COMMON_REASSIGN";
+          btnOneLabel = "ES_REJECT_BUTTON";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+          btnThreeLabel = "ES_COMMON_REASSIGN"
         }
         else if (complaint.complaintStatus.toLowerCase() === "escalated") {
           btnOneLabel = "ES_REJECT_BUTTON";
@@ -367,6 +385,10 @@ class ComplaintDetails extends Component {
                     btnTwoLabel={btnTwoLabel}
                     btnTwoOnClick={() =>
                       this.btnTwoOnClick(serviceRequestId, btnTwoLabel)
+                    }
+                    btnThreeLabel ={btnThreeLabel}
+                    btnThreeOnClick={() =>
+                      this.btnThreeOnClick(serviceRequestId, btnThreeLabel)
                     }
                   />
                 ) : (
