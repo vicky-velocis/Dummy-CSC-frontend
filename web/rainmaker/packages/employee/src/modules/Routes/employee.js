@@ -117,6 +117,7 @@ const routes = [
       title: "Inbox",
       hideTitle: true,
       isHomeScreen: true,
+      notificationButton:true,
     },
   },
   {

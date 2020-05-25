@@ -71,16 +71,17 @@ class ImageUpload extends Component {
     const inputProps = { accept: "image/*", maxFiles: 3, multiple: true };
 
     return (
-      <div className="upload-photo-overlay">
+      <div >
         {loading && <LoadingIndicator />}
         {!images.length ? (
-          <FilePicker inputProps={inputProps} handleimage={onFilePicked}>
+          <FilePicker inputProps={inputProps} handleimage={onFilePicked}  className="upload-photo-overlay">
             <div className="upload-icon-cont">
               <Icon id="image-upload" action="image" name="add-a-photo" style={iconStyle} color={"#ffffff"} />
             </div>
             <Label label="CS_COMMON_UPLOAD_PHOTOS" labelStyle={labelStyle} fontSize="12px" />
           </FilePicker>
         ) : (
+          <div  className="upload-photo-overlay">
           <div className="upload-images-cont">
             {images.map((image, index) => {
               return (
@@ -90,12 +91,15 @@ class ImageUpload extends Component {
                     <Icon id="image-close-icon" action="navigation" name="close" color="#ffffff" style={{ width: "14px", height: "14px" }} />
                   </div>
                 </div>
+               
               );
             })}
             {this.fillPlaceholder(images, onFilePicked, inputProps)}
           </div>
+          </div>
         )}
       </div>
+      
     );
   }
 }

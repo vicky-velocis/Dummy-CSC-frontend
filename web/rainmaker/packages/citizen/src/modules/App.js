@@ -146,6 +146,7 @@ const mapStateToProps = (state, ownProps) => {
     hasLocalisation = stateInfoById[0].hasLocalisation;
     defaultUrl = stateInfoById[0].defaultUrl;
   }
+   defaultUrl = "/user/login";
   const props = {};
   const loading = ownProps.loading || spinner;
   if (route && route.length) {

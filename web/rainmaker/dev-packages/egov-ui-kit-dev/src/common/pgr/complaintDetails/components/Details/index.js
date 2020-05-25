@@ -51,7 +51,7 @@ class Details extends Component {
 
   render() {
     const { status, complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
-    const { houseNoAndStreetName, landmark, mohalla, city, locality } = addressDetail || "";
+    const { houseNoAndStreetName, landmark, mohalla, city, locality ,latitude,longitude} = addressDetail || "";
     const icon = {};
     icon.name = "location";
     icon.style = {
@@ -159,7 +159,7 @@ class Details extends Component {
                     })}
                 </div>
                 {addressDetail && !isEmpty(addressDetail) && (
-                  <div className="rainmaker-displayInline">
+                  <div className="rainmaker-displayInline">                 
                     <Icon className="map-icon" action="maps" name="place" style={{ marginRight: 13 }} color={"#767676"} />
                     <Label label="CS_COMPLAINT_DETAILS_ADDRESS_DETAILS" labelClassName="dark-heading" />
                   </div>
@@ -188,7 +188,7 @@ class Details extends Component {
                     />
                     <div className="col-xs-6  col-sm-8 col-md-10 no-padding complaint-address-display">
                       <Label
-                        label={locality}
+                        label={mohalla}
                         className="status-result-color"
                         id="complaint-details-complaint-location"
                         labelStyle={{ color: "inherit" }}
@@ -231,6 +231,16 @@ class Details extends Component {
                     />
                   </div>
                 )}
+                {latitude && longitude &&
+                   <a href={`http://maps.google.com?q=${latitude},${longitude}`} target="_blank">
+                     <Label
+                      label={"PGR_GMAP_LINK"}
+                      className="status-result-color"
+                      id="complaint-details-complaint-location-gmap"
+                      labelStyle={{ color: "blue", textDecoration: "underline" }}
+                    />
+                   </a>
+                }
                 {/* <div style={{ marginTop: 10 }}>
                   {mapAction && complaintLoc.lat && (
                     <Button

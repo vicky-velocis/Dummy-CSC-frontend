@@ -89,7 +89,7 @@ const EgovAppBar = ({
             handleItemClick={handleItemClick}
           />
         </Toolbar>
-        {notificationButton && role === "citizen" && (
+        {notificationButton  && (
           <div className="notification-icon-web notification-icon" onClick={(e) => onNotificationClick(history)}>
             {notificationsCount ? (
               <IconButton aria-label="4 pending messages">
@@ -129,7 +129,7 @@ const EgovAppBar = ({
             </IconButton>
           )}
         </div>
-        {notificationButton && role === "citizen" && (
+        {notificationButton  && (
           <div className="notification-icon-mobile notification-icon" onClick={(e) => onNotificationClick(history)}>
             {notificationsCount ? (
               <IconButton aria-label="4 pending messages">
