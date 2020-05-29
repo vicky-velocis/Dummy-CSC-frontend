@@ -598,7 +598,7 @@ class ComplaintTimeLine extends Component {
       timeLine = [{ status: "pending" }, ...timeLine];
     }
    
-    noReopen = ! ((role === "citizen") 
+    noReopen = ! ((role === "citizen" || role === "csr") 
                    && timeLine.some(obj => obj.status === "resolved" || obj.status === "rejected")
                    && timeLine.some(obj => obj.status === "escalatedlevel2pending")); 
 
