@@ -553,6 +553,33 @@ export const getPattern = type => {
   return /^[a-zA-Z. ]*$/i;
   case "BadageNumber":
   return /^[a-zA-Z0-9]*$/i;
+  case "Amountopms":
+      return /^[0-9.]{0,20}$/i;
+      case "validUrl":
+      return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
+      case "TextValidation":
+      return /^[a-zA-Z ]{1,180}$/i;
+     case "AlphaNumValidation":
+      return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
+      
+      case "EventDescription":
+      return /^(?![0-9.]*$)[a-zA-Z0-9. ]{1,500}$/i;
+      
+      case "EventTitle":
+      return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
+      
+      case "AlphaNumValidationLocation":
+      return /^(?![0-9-/,&]*$)[a-zA-Z0-9-/,& ]{1,180}$/i;
+
+      case "sizeofpublication":
+      return /^[0-9]{1,50}$/i;
+      
+      case "fileNumber":
+      return /^[a-zA-Z0-9-]{1,50}$/i;
+      case "TextValidationWithoutSpace":
+      return /^[a-zA-Z]{1,180}$/i;
+	  case "budget":
+      return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
   }
   };
 

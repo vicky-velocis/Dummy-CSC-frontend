@@ -82,6 +82,12 @@ export const setOPMSTenantId = (OPMSTenantId) => {
 
 
 
+export const seteventid = (eventId) => {
+  localStorageSet("eventId", eventId);
+};
+export const seteventuuid = (eventuuId) => {
+  localStorageSet("eventuuId", eventuuId);
+};
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
   Object.keys(localStorage).forEach((key) => {

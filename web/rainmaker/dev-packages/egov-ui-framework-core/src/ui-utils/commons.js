@@ -379,6 +379,18 @@ export const acceptedFiles = acceptedExt => {
   const acceptedFileTypes = splitExtByName.reduce((result, curr) => {
     if (curr.includes("image")) {
       result.push("image");
+    }
+	 else if (curr.includes("vnd.ms-excel")) {
+      result.push("vnd.ms-excel");
+    }
+	 else if (curr.includes("ms-excel")) {
+      result.push("ms-excel");
+    }
+    else if (curr.includes("audio")) {
+      result.push("audio");
+    }	
+    else if (curr.includes("video")) {
+      result.push("video");
     } else {
       result.push(curr.split(".")[1]);
     }
@@ -401,8 +413,16 @@ export const handleFileUpload = (event, handleDocument, props) => {
       const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
-        alert(`Only image or pdf files can be uploaded`);
-        uploadDocument = false;
+        if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
+        {
+          alert(`Only image or pdf files can be uploaded`);
+          uploadDocument = false;
+        } 
+        else
+        {
+          alert(`File type not supported`);
+          uploadDocument = false;
+        }  
       }
       if (!isSizeValid) {
         alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
