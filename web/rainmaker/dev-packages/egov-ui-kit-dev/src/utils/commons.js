@@ -403,11 +403,11 @@ export const getCommaSeperatedAddress = (address, cities) => {
 };
 
 export const getLatestCreationTime = (complaint) => {
-  for (let i = 0; i < complaint.actions.length; i++) {
-    if (complaint.actions[i].action === "reopen") {
-      return complaint.actions[i].when;
-    }
-  }
+  // for (let i = 0; i < complaint.actions.length; i++) {
+  //   if (complaint.actions[i].action === "reopen") {
+  //     return complaint.actions[i].when;
+  //   }
+  // }
   return complaint.auditDetails.createdTime;
 };
 
