@@ -81,8 +81,8 @@ const getPaymentGatwayList = async (action, state, dispatch) => {
       [],
       {}
     );
-      debugger
-      let payloadprocess = [];
+
+    let payloadprocess = [];
       for (let index = 0; index < payload.length; index++) {
         const element = payload[index];
         let pay = {
@@ -92,7 +92,6 @@ const getPaymentGatwayList = async (action, state, dispatch) => {
       }
 
     dispatch(prepareFinalObject("applyScreenMdmsData.payment", payloadprocess));
-    debugger
   } catch (e) {
     console.log(e);
   }

@@ -3,6 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, furnishRoadcutNocResponse } from "../../../../../ui-utils/commons";
+import { getOPMSPattern } from '../../utils/index'
 
 export const nocDetails = getCommonCard({
   header: getCommonTitle(
@@ -91,7 +92,7 @@ export const nocDetails = getCommonCard({
           labelName: "Enter Applicant Name",
           labelKey: "ROADCUT_APPLICANT_NAME_PLACEHOLDER"
         },
-        pattern: getPattern("VillageName"),
+        pattern: getOPMSPattern("petnocApplicantName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "ROADCUTNOC.applicantName"
@@ -108,7 +109,7 @@ export const nocDetails = getCommonCard({
           labelKey: "ROADCUT_DIVISION_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Division"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ROADCUTNOC.division"
       })
@@ -124,7 +125,7 @@ export const nocDetails = getCommonCard({
           labelKey: "ROADCUT_WARD_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Division"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ROADCUTNOC.ward"
       })
@@ -160,7 +161,7 @@ export const nocDetails = getCommonCard({
           labelKey: "ROADCUT_REQUESTED_LOCATION_PLACEHOLDER"
         },
         required: false,
-         pattern: getPattern("Address"),
+         pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ROADCUTNOC.requestedLocation"
       })
@@ -176,7 +177,7 @@ export const nocDetails = getCommonCard({
           labelKey: "ROADCUT_LANDMARK_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ROADCUTNOC.landmark"
       })
@@ -200,7 +201,7 @@ export const nocDetails = getCommonCard({
         sourceJsonPath: "applyScreenMdmsData.egpm.length",
         jsonPath: "ROADCUTNOC.length",
         required: true,
-		pattern: getPattern("Amount"),
+		    pattern: getOPMSPattern("Amount"),
         props: {
           className: "applicant-details-error",
           required: true
@@ -219,7 +220,7 @@ export const nocDetails = getCommonCard({
           labelKey: "ROADCUT_WIDTH_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Amount"),
+        pattern: getOPMSPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ROADCUTNOC.width"
       })

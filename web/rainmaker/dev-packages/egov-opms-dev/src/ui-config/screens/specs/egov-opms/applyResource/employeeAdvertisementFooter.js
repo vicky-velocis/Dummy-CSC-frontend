@@ -6,12 +6,6 @@ import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
-  setMultiOwnerForApply,
-  setValidToFromVisibilityForApply,
-  getDocList,
-  setOwnerShipDropDownFieldChange,
-  createEstimateData,
-  validateFields,
   showHideAdhocPopupopms,
   showHideAdhocPopupopmsReject,
   showHideAdhocPopupopmsReassign,
@@ -42,9 +36,11 @@ import {
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
 import { getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
+import { callbackforsummaryaction,callbackforsummaryactionpay } from '../advertisement_summary'
 
 let role_name = JSON.parse(getUserInfo()).roles[0].code
-//import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+let tenant = getQueryArg(window.location.href, "tenantId");
 
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
@@ -250,14 +246,13 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+
       }
     },
     children: {
-      previousButtonIcon: {
+      cancelButtonIcon: {
         uiFramework: "custom-atoms",
         componentPath: "Icon",
         props: {
@@ -266,12 +261,12 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "PM_COMMON_BUTTON_PREV_STEP"
+        labelKey: "NOC_CANCEL_BUTTON"
       })
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForPrevious
+      callBack: callbackforsummaryaction
     },
     visible: false
   },
@@ -457,10 +452,8 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "180px",
         height: "48px",
-        marginRight: "45px",
-        borderRadius: "inherit"
+        marginRight: "16px"
       }
     },
     children: {
@@ -485,22 +478,49 @@ export const footer = getCommonApplyFooter({
     },
     visible: false
   },
-  resendbutton: {
+  makePayment: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "180px",
+        minWidth: "200px",
         height: "48px",
-        marginRight: "45px",
-        borderRadius: "inherit"
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "MAKE PAYMENT",
+        labelKey: "NOC_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+      })
+    },
+    onClickDefination: {
+      action: "page_change",
+      path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=OPMSNOC`
+    },
+    
+    roleDefination: {
+      rolePath: "user-info.roles",
+      action: "PAY"
+    },
+    visible:  false
+  },
+  submitButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
       }
     },
     children: {
       nextButtonLabel: getLabel({
-        labelName: "RESEND",
-        labelKey: "RESEND"
+        labelName: "SUBMIT",
+        labelKey: "NOC_SUBMIT_BUTTON"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -512,13 +532,11 @@ export const footer = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
+      callBack: callbackforsummaryactionpay
+    }
+  }
 
-      callBack: (state, dispatch) => {
-        gotoApplyWithStep(state, dispatch, 0);
-      }
-    },
-    visible: role_name == "CITIZEN" && localStorageGet("app_noc_status") == "REASSIGN" ? true : false
-  },
+
 });
 
 export const footerReview = (

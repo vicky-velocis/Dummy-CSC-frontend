@@ -39,6 +39,8 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
 };
 
 const moveToReview = (state, dispatch, applnid) => {
+  if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
+  {
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"));
 
@@ -87,6 +89,18 @@ const moveToReview = (state, dispatch, applnid) => {
     }
   }
   return validateDocumentField;
+}
+else {
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+      "warning"
+    )
+  );
+ // validateDocumentField = false;
+ // break;
+}
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -158,7 +172,7 @@ const callBackForNext = async (state, dispatch) => {
       let responseStatus = "success";
       if (activeStep === 1) {
         prepareDocumentsUploadData(state, dispatch, 'apply_roadcut');
-        let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "RESENT" : "INITIATED";
+        let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "REASSIGN" : "DRAFT";
         let response = await createUpdateRoadCutNocApplication(state, dispatch, statuss);
         responseStatus = get(response, "status", "");
         let applicationId = get(response, "applicationId", "");
@@ -168,7 +182,7 @@ const callBackForNext = async (state, dispatch) => {
             setReviewPageRoute(state, dispatch, applicationId);
           }
           let errorMessage = {
-            labelName: 'APPLICATION ' + statuss + ' SUCCESSFULLY! ',
+            labelName: 'SUCCESS',
             labelKey: "" //UPLOAD_FILE_TOAST
           };
           dispatch(toggleSnackbar(true, errorMessage, "success"));

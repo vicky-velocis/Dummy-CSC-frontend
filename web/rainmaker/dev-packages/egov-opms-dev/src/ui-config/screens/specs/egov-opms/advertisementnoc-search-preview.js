@@ -160,13 +160,13 @@ const prepareDocumentsView = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]",
     {}
   );
-  let uploadVaccinationCertificate = JSON.parse(advtnocdetail.applicationdetail).hasOwnProperty('uploadDocuments') ?
+  let uploadDocuments = JSON.parse(advtnocdetail.applicationdetail).hasOwnProperty('uploadDocuments') ?
     JSON.parse(advtnocdetail.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
 
-  if (uploadVaccinationCertificate !== '') {
+  if (uploadDocuments !== '') {
     documentsPreview.push({
       title: "NOC_ADV_PHOTOCOPY_HOARDING",
-      fileStoreId: uploadVaccinationCertificate,
+      fileStoreId: uploadDocuments,
       linkText: "View"
     });
     let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
@@ -197,8 +197,7 @@ const setDownloadMenu = (state, dispatch) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
 
-  //Object creation for NOC's
-  let certificateDownloadObjectPET = {
+  let certificateDownloadObject = {
     label: { labelName: "NOC Certificate PET", labelKey: "NOC_CERTIFICATE_PET" },
     link: () => {
       window.location.href = httpLinkPET;
@@ -206,60 +205,9 @@ const setDownloadMenu = (state, dispatch) => {
     },
     leftIcon: "book"
   };
-  // let certificateDownloadObjectSELLMEAT = {
-  //   label: { labelName: "NOC Certificate SELLMEAT", labelKey: "NOC_CERTIFICATE_SELLMEAT" },
-  //   link: () => {
-  //     window.location.href = httpLinkSELLMEAT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectROADCUT = {
-  //   label: { labelName: "NOC Certificate ROADCUT", labelKey: "NOC_CERTIFICATE_ROADCUT" },
-  //   link: () => {
-  //     window.location.href = httpLinkROADCUT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectADVT = {
-  //   label: { labelName: "NOC Certificate ADVT", labelKey: "NOC_CERTIFICATE_ADVT" },
-  //   link: () => {
-  //     window.location.href = httpLinkADVT;
-  //   },
-  //   leftIcon: "book"
-  // };
-
-  //Object creation for Receipt's
-  // let certificateDownloadObjectPET_RECEIPT = {
-  //   label: { labelName: "NOC Certificate PET", labelKey: "NOC_RECEIPT_PET" },
-  //   link: () => {
-  //    window.location.href = httpLinkPET_RECEIPT;
-  //    //// generatePdf(state, dispatch, "certificate_download");
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectROADCUT_RECEIPT = {
-  //   label: { labelName: "NOC Certificate ROADCUT", labelKey: "NOC_RECEIPT_ROADCUT" },
-  //   link: () => {
-  //     window.location.href = httpLinkROADCUT_RECEIPT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectADVT_RECEIPT = {
-  //   label: { labelName: "NOC Certificate ADVT", labelKey: "NOC_RECEIPT_ADVT" },
-  //   link: () => {
-  //     window.location.href = httpLinkADVT_RECEIPT;
-  //   },
-  //   leftIcon: "book"
-  // };
 
   downloadMenu = [
-    certificateDownloadObjectPET
-    //certificateDownloadObjectSELLMEAT,
-    //certificateDownloadObjectROADCUT,
-    //certificateDownloadObjectADVT,
-    // certificateDownloadObjectPET_RECEIPT,
-    // certificateDownloadObjectROADCUT_RECEIPT,
-    // certificateDownloadObjectADVT_RECEIPT
+    certificateDownloadObject
   ];
 
   dispatch(
@@ -273,9 +221,9 @@ const setDownloadMenu = (state, dispatch) => {
   /** END */
 };
 
-const HideshowEdit = (action, nocStatus, exemptedcategory) => {
+const HideshowEdit = (action, nocStatus, exemptedcategory,dispatch) => {
   let showEdit = false;
-  if (nocStatus === "REASSIGN") {
+  if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
     showEdit = true;
   }
   // Hide edit buttons
@@ -317,16 +265,22 @@ const HideshowEdit = (action, nocStatus, exemptedcategory) => {
         : false
       : false);
 
+      
   set(
     action,
     "screenConfig.components.div.children.footer.children.withdraw.visible",
     role_name === "CITIZEN" ?
-    localStorageGet('pms_iswithdrawn')!=="yes"
-        ? exemptedcategory === 0
-          ? true
+      nocStatus != "INITIATED" ?
+        nocStatus != "DRAFT"?
+          localStorageGet('pms_iswithdrawn')!=="yes"?
+              exemptedcategory === 0
+            ? true
+            : false
           : false
         : false
-      : false);
+      :false
+    :false
+  );
 
 	set(
         action,
@@ -357,7 +311,27 @@ const HideshowEdit = (action, nocStatus, exemptedcategory) => {
 		"screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.body.children.withdrawapprovalamount.visible",
 		localStorageGet('pms_iswithdrawn')==="yes" ? true : false
 	  );
-}
+
+    set(
+      action,
+      "screenConfig.components.div.children.footer.children.previousButton.visible",
+      role_name === "CITIZEN" ?
+              nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"?
+           true
+        :false
+      :false
+      );
+    
+      set(
+        action,
+        "screenConfig.components.div.children.footer.children.submitButton.visible",
+        role_name === "CITIZEN" ?
+                nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"?
+             true
+          :false
+        :false
+        );
+  }
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResultsView([
@@ -381,7 +355,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   localStorageSet("footerApplicationStatus", applicationStatus);
   let exampted = get(state.screenConfiguration.preparedFinalObject, 'nocApplicationDetail[0].applicationdetail');
   let exemptedcategory = JSON.parse(exampted)['exemptedCategory'];
-  HideshowEdit(action, nocStatus, exemptedcategory);
+  HideshowEdit(action, nocStatus, exemptedcategory,dispatch);
 
   dispatch(
     handleField(

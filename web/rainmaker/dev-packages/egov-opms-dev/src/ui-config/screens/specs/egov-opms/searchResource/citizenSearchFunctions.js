@@ -319,9 +319,9 @@ export const getMasterGridData = async (action, state, dispatch) => {
         [getTextToLocalMapping("annualPrice")]:
           item.annualPrice,
         [getTextToLocalMapping("effectiveFromDate")]:
-          item.effectiveFromDate || "-",
+          item.effectiveFromDate.split(" ")[0] || "-",
         [getTextToLocalMapping("effectiveToDate")]:
-          item.effectiveToDate || "-",
+          item.effectiveToDate===null?"-":item.effectiveToDate.split(" ")[0] || "-",
 
       }));
 

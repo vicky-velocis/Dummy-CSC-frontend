@@ -45,6 +45,8 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
   }
 };
 const moveToReview = (state, dispatch, applnid) => {
+  if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
+  {
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -96,6 +98,17 @@ const moveToReview = (state, dispatch, applnid) => {
 
   // alert("validateDocumentField1 : " + validateDocumentField + " " + applnid)
   return validateDocumentField;
+}
+else {
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+      "warning"
+    )
+  );
+  
+}
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -163,7 +176,7 @@ const callBackForNext = async (state, dispatch) => {
         try {
           prepareDocumentsUploadData(state, dispatch, 'apply_Advt');
           //getMdmsData(state, dispatch);
-          let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "RESENT" : "INITIATED";
+          let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "REASSIGN" : "DRAFT";
           let response = await createUpdateADVNocApplication(state, dispatch, statuss);
           responseStatus = get(response, "status", "");
           let applicationId = get(response, "applicationId", "");
@@ -173,7 +186,7 @@ const callBackForNext = async (state, dispatch) => {
               setReviewPageRoute(state, dispatch, applicationId);
             }
             let errorMessage = {
-              labelName: 'APPLICATION ' + statuss + ' SUCCESSFULLY! ',
+              labelName: 'SUCCESS',
               labelKey: "" //UPLOAD_FILE_TOAST
             };
             dispatch(toggleSnackbar(true, errorMessage, "success"));

@@ -37,7 +37,7 @@ import {
   getLocale,
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-
+import { callbackforsummaryaction,callbackforsummaryactionpay } from '../petnoc_summary'
 let role_name=JSON.parse(getUserInfo()).roles[0].code
 //import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
 
@@ -261,13 +261,13 @@ export const footer = getCommonApplyFooter({
         }
       },
       previousButtonLabel: getLabel({
-        labelName: "Previous Step",
-        labelKey: "PM_COMMON_BUTTON_PREV_STEP"
+        labelName: "CANCEL",
+        labelKey: "NOC_CANCEL_BUTTON"
       })
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForPrevious
+      callBack: callbackforsummaryaction
     },
     visible: false
   },
@@ -411,6 +411,36 @@ export const footer = getCommonApplyFooter({
     }
     },
     visible: role_name=="SI"?false:role_name=="MOH"?true:false
+  }
+  ,
+  submitButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+      nextButtonLabel: getLabel({
+        labelName: "RESEND",
+        labelKey: "NOC_SUBMIT_BUTTON"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callbackforsummaryactionpay
+    }
   }
 });
 

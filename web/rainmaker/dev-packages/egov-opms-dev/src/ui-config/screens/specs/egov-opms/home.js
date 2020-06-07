@@ -1,9 +1,6 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getRequiredDocData } from "../utils";
-import get from "lodash/get";
-import set from "lodash/set";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import {
   getUserInfo,setOPMSTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
@@ -48,10 +45,6 @@ if (role_name === 'CITIZEN') {
         restaurant
       </i>,
       route: "sellMeatLanding"
-      // {
-      //   screenKey: "citizenMainLanding",
-      //   jsonPath: "components.adhocDialog"
-      // }
     },
     {
       label: {
@@ -65,10 +58,6 @@ if (role_name === 'CITIZEN') {
         picture_in_picture
       </i>,
       route: "advertisementLanding"
-      // {
-      //   screenKey: "home",
-      //   jsonPath: "components.adhocDialog"
-      // }
     },
     {
       label: {
@@ -82,10 +71,6 @@ if (role_name === 'CITIZEN') {
         report_problem
       </i>,
       route: "roadcutLanding"
-      // {
-      //   screenKey: "home",
-      //   jsonPath: "components.adhocDialog"
-      // }
     }
 
   ];
@@ -137,10 +122,6 @@ else if (role_name === 'CE' || role_name === 'JE' || role_name === 'SDO' || role
         report_problem
       </i>,
       route: "roadcut-search"
-      // {
-      //   screenKey: "home",
-      //   jsonPath: "components.adhocDialog"
-      // }
     }
   ];
   cardItems = cardlist;
@@ -159,31 +140,12 @@ else if (role_name === 'OSD' || role_name === 'COMMISSIONER' || role_name === 'A
         report_problem
       </i>,
       route: "advertisement-search"
-      // {
-      //   screenKey: "home",
-      //   jsonPath: "components.adhocDialog"
-      // }
     }
   ];
   cardItems = cardlist;
 }
 else if (role_name === 'SUPERINTENDENT') {
   const cardlist = [
-    // {
-      // label: {
-        // labelKey: "Permission to Keep Pet Dog",
-        // labelName: "Permission to Keep Pet Dog"
-      // },
-      // icon: <i
-        // viewBox="0 -8 35 42"
-        // color="primary"
-        // font-size="40px"
-        // class="material-icons module-page-icon">
-        // pets
-      // </i>,
-      // route: "search"
-
-    // },
     {
       label: {
         labelKey: "Permission to Sell Meat",
@@ -209,10 +171,6 @@ else if (role_name === 'SUPERINTENDENT') {
         picture_in_picture
       </i>,
       route: "advertisement-search"
-      // {
-      //   screenKey: "home",
-      //   jsonPath: "components.adhocDialog"
-      // }
     }
   ];
   cardItems = cardlist;
@@ -223,7 +181,9 @@ const PermissionManagementSearchAndResult = {
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
     let UsertenantInfo = JSON.parse(getUserInfo()).permanentCity;
-    setOPMSTenantId(UsertenantInfo);
+   
+   setOPMSTenantId("ch.chandigarh");
+   
     return action;
   },
   components: {

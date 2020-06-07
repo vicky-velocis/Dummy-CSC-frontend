@@ -32,7 +32,7 @@ import { searchBill } from "../utils/index";
 import { footer } from "./applyResource/employeeFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
 import { showHideAdhocPopup, showHideAdhocPopups } from "../utils";
-import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
+import { getRequiredDocuments } from "./requiredDocuments/reqDocsPreview";
 import { adhocPopup5, adhocPopup1, adhocPopup2, adhocPopup3, adhocPopup4 } from "./payResource/adhocPopup";
 import {
   applicantSummary, institutionSummary
@@ -46,13 +46,24 @@ import {
   getSearchResultsView, getSearchResultsForNocCretificate,
   getSearchResultsForNocCretificateDownload, preparepopupDocumentsUploadData, prepareDocumentsUploadData
 } from "../../../../ui-utils/commons";
+import { citizenFooter } from "./searchResource/citizenFooter";
 
 let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+
+const agree_undertaking = async (state, dispatch) => {
+  let tenantId = getOPMSTenantId();
+  event.target.checked === true ? localStorageSet("undertaking", "accept") : localStorageSet("undertaking", "")
+  event.target.checked === true ? showHideAdhocPopups(state, dispatch, "search-preview") : '';
+
+}
+
 
 const undertakingButton1 = getCommonContainer({
   addPenaltyRebateButton1: {
     componentPath: "Checkbox",
     props: {
+      checked:false,
       variant: "contained",
       color: "primary",
       style: {
@@ -66,12 +77,14 @@ const undertakingButton1 = getCommonContainer({
       previousButtonLabel: getLabel({
         labelName: "Undertaking",
         labelKey: "NOC_UNDERTAKING"
-      })
+      }),
     },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
-    }
+    // onClickDefination: {
+    //   action: "condition",
+    //   callBack: (state, dispatch) => agree_undertaking(state, dispatch)
+    // },
+    //checked:true,
+    visible: localStorageGet('app_noc_status') === "DRAFT" ? true : false,
   },
   addPenaltyRebateButton: {
     componentPath: "Button",
@@ -91,8 +104,9 @@ const undertakingButton1 = getCommonContainer({
     },
     onClickDefination: {
       action: "condition",
-      // callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
-    }
+      callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
+    },
+    visible: localStorageGet('app_noc_status') === 'DRAFT' ? true : false,
   },
   resendButton: {
     componentPath: "Button",
@@ -126,7 +140,7 @@ const undertakingButton1 = getCommonContainer({
         gotoApplyWithStep(state, dispatch, 0);
       }
     },
-    visible: localStorageGet("app_noc_status") == "REASSIGN" ? true : false
+    visible: false
 
   }
 });
@@ -288,6 +302,7 @@ const setSearchResponse = async (state, dispatch, action, applicationNumber, ten
 
   let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   localStorageSet("app_noc_status", nocStatus);
+  
   HideshowEdit(action, nocStatus);
 
 
@@ -297,14 +312,18 @@ const setSearchResponse = async (state, dispatch, action, applicationNumber, ten
     
     setSearchResponseForNocCretificate(state, dispatch, action, applicationNumber, tenantId);
   }
+
+
 };
 
 let httpLinkPET;
 let httpLinkPET_RECEIPT;
 
-const HideshowEdit = (action, nocStatus) => {
+const HideshowEdit
+ = (action, nocStatus) => {
+   
   let showEdit = false;
-  if (nocStatus === "REASSIGN") {
+  if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
     showEdit = true;
   }
   set(
@@ -334,6 +353,32 @@ const HideshowEdit = (action, nocStatus) => {
     "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
      false
   );
+
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.previousButton.visible",
+    role_name === "CITIZEN" ?
+            nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
+         true
+      :false
+    :false
+    );
+    set(
+    action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
+    nocStatus=== "DRAFT" ?true:false)
+
+    set(
+      action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
+      nocStatus=== "DRAFT" ?true:false)
+    set(
+      action,
+      "screenConfig.components.div.children.footer.children.submitButton.visible",
+      role_name === "CITIZEN" ?
+              nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
+           true
+        :false
+      :false
+      );
 
 }
 const setSearchResponseForNocCretificate = async (state, dispatch, action, applicationNumber, tenantId) => {
@@ -499,7 +544,6 @@ const screenConfig = {
       "screenConfig.components.undertakingdialog.children.popup",
       getRequiredDocuments()
     );
-
     // Set Documents Data (TEMP)
     preparepopupDocumentsUploadData(state, dispatch, 'PETNOC');
 
@@ -552,7 +596,7 @@ const screenConfig = {
             immunizationSummary: immunizationSummary,
             documentsSummary: documentsSummary,
             taskStatusSummary: taskStatusSummary,
-            //undertakingButton1
+            undertakingButton1
           }),
 
         // citizenFooter:

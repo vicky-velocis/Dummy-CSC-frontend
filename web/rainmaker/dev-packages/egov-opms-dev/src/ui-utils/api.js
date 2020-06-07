@@ -18,14 +18,14 @@ import {
 
 const instance = axios.create({
   baseURL: window.location.origin,
-  headers: {
+	headers: {
     "Content-Type": "application/json"
   }
 });
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   
-  let applicationnumber = getapplicationNumber();
+  let  applicationnumber = getapplicationNumber();
   let RequestInfo = {
     apiId: "Rainmaker",
     ver: ".01",
