@@ -2,22 +2,16 @@ import {
   getBreak, getCommonCard, getCommonContainer, getCommonHeader, getLabelWithValue, getStepperObject, getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView } from "../../../../ui-utils/commons";
-import { searchBill } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
+import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { citizenFooter } from "./searchResource/citizenFooter";
-import {
-  applicantSummary,
-  institutionSummary
-} from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import {
   sellmeatapplicantSummary
@@ -27,7 +21,8 @@ import {
   getOPMSTenantId,
   getLocale,
   getUserInfo,
-  localStorageGet
+  localStorageGet,
+  setapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
 
 export const stepsData = [
@@ -59,16 +54,51 @@ const titlebar = getCommonContainer({
   },
 });
 
-
-// REdirect to home page on submit 
-const callBackForNexthome = (state, dispatch) => {
-
+const routePage=(dispatch)=>{
   const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/sellmeatnoc-my-applications`;
   dispatch(setRoute(reviewUrl));
 
+}
 
+// REdirect to home page on submit 
+export const callBackForNexthome = async (state, dispatch) => {
+  let applicationStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+    {}
+  );
+
+  if(applicationStatus==="DRAFT"){
+        let response=await updateAppStatus(state,dispatch,"INITIATED");
+        let responseStatus = get(response, "status", "");
+        if (responseStatus == "success") {
+          routePage(dispatch);
+        }
+        else if(responseStatus == "fail" || responseStatus == "Fail"){
+          dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+        }
+  } else if(applicationStatus==="REASSIGN"){
+    let response=await updateAppStatus(state,dispatch,"RESENT");
+    let responseStatus = get(response, "status", "");
+    if (responseStatus == "success") {
+      routePage(dispatch);
+    }
+    else if(responseStatus == "fail" || responseStatus == "Fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  }
+  else{
+    routePage(dispatch);
+  }
+};
+
+export const callBackForCancel = async (state, dispatch) => {
+    const appendUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const reviewUrl = `${appendUrl}/egov-opms/sellmeatnoc-my-applications`;
+  dispatch(setRoute(reviewUrl));
 };
 
 
@@ -99,46 +129,16 @@ var titlebarfooter = getCommonContainer({
     },
     onClickDefination: {
       action: "condition",
-      callBack: callBackForNexthome
+      callBack: callBackForCancel
     },
     visible: true
   },
-  // draftButton: {
-  // componentPath: "Button",
-  // props: {
-  // variant: "contained",
-  // color: "primary",
-  // style: {
-  // // minWidth: "200px",
-  // height: "48px",
-  // marginRight: "16px"
-  // }
-  // },
-  // children: {
-  // nextButtonLabel: getLabel({
-  // labelName: "SAVE AS DRAFT",
-  // labelKey: "NOC_SAVE_AS_DRAFT"
-  // }),
-  // nextButtonIcon: {
-  // uiFramework: "custom-atoms",
-  // componentPath: "Icon",
-  // props: {
-  // iconName: "keyboard_arrow_right"
-  // }
-  // }
-  // },
-  // onClickDefination: {
-  // action: "condition",
-  // //callBack: callBackForNext
-  // }
-  // },
   resendButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
@@ -157,8 +157,7 @@ var titlebarfooter = getCommonContainer({
       }
     },
     onClickDefination: {
-      action: "condition",
-      //callBack: callBackForNext
+      action: "condition"
     },
     visible: false
   },
@@ -266,11 +265,11 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
+    setapplicationNumber(applicationNumber);
+
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
  
-    //Since payment option is not there we have commented this
-    //searchBill(dispatch, applicationNumber, tenantId);
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
@@ -280,17 +279,6 @@ const screenConfig = {
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    // Hide edit buttons
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
 
     return action;
   },

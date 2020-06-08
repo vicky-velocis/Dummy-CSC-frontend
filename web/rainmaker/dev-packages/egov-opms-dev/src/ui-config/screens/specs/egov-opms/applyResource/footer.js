@@ -24,7 +24,7 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
     const reviewUrl = `${appendUrl}/egov-opms/petnoc_summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    dispatch(setRoute(reviewUrl));
+    dispatch(window.location=(reviewUrl));
   }
   else {
     // const appendUrl =
@@ -35,12 +35,17 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
     const reviewUrl = `${appendUrl}/egov-opms/petnoc_summary?applicationNumber=${applnid}&tenantId=${tenantId}`;
-    dispatch(setRoute(reviewUrl));
+    dispatch(window.location=(reviewUrl));
   }
 };
 
 
 const moveToReview = (state, dispatch, applnid) => {
+
+  
+//alert(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"))
+if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
+{
   const documentsFormat = Object.values(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
 
@@ -52,8 +57,8 @@ const moveToReview = (state, dispatch, applnid) => {
       documentsFormat[i], "isDocumentTypeRequired");
 
     let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
+   // if (isDocumentRequired) {
+      if (documents && documents.length >0) {
         if (isDocumentTypeRequired) {
           if (get(documentsFormat[i], "dropdown.value")) {
             validateDocumentField = true;
@@ -82,14 +87,23 @@ const moveToReview = (state, dispatch, applnid) => {
         validateDocumentField = false;
         break;
       }
-    } else {
-      validateDocumentField = true;
-    }
+    // } else {
+    //   validateDocumentField = true;
+    // }
   }
 
   //validateDocumentField = true;
 
   return validateDocumentField;
+}
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+      "warning"
+    ))
+}
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -138,8 +152,12 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = false;
   let hasFieldToaster = true;
-
-  let validatestepformflag = validatestepform(activeStep + 1)
+  let immunizationSector= get(
+    state,
+  "screenConfiguration.preparedFinalObject.PETNOC.immunizationSector"
+  );
+  //screenConfiguration.preparedFinalObject.PETNOC.immunizationSector
+  let validatestepformflag = validatestepform(activeStep + 1,immunizationSector)
 
   isFormValid = validatestepformflag[0];
   hasFieldToaster = validatestepformflag[1];
@@ -164,7 +182,7 @@ const callBackForNext = async (state, dispatch) => {
 
         prepareDocumentsUploadData(state, dispatch);
         //getMdmsData(state, dispatch);
-        let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "RESENT" : "INITIATED";
+        let statuss = localStorageGet("app_noc_status") == "REASSIGN" ? "REASSIGN" : "DRAFT";
         let response = await createUpdateNocApplication(state, dispatch, statuss);
         responseStatus = get(response, "status", "");
         let applicationId = get(response, "applicationId", "");
@@ -174,7 +192,7 @@ const callBackForNext = async (state, dispatch) => {
             setReviewPageRoute(state, dispatch, applicationId);
           }
           let errorMessage = {
-            labelName: 'APPLICATION ' + statuss + ' SUCCESSFULLY! ',
+            labelName: 'SUCCESS',
             labelKey: "" //UPLOAD_FILE_TOAST
           };
           dispatch(toggleSnackbar(true, errorMessage, "success"));
@@ -452,7 +470,7 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
+export const validatestepform = (activeStep,immunizationSector, isFormValid, hasFieldToaster) => {
   let allAreFilled = true;
 
   document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
@@ -470,9 +488,13 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
       hasFieldToaster = true;
     }
   });
-
+  
+  if(activeStep!=2)
+  {
   document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+    
     if (i.value == i.placeholder) {
+      
       i.focus();
       allAreFilled = false;
       i.parentNode.classList.add("MuiInput-error-853");
@@ -482,7 +504,30 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
       hasFieldToaster = true;
     }
   });
+
+
+
+
   // 
+}
+
+
+
+
+// else{
+
+//   document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+//     if (i.value == i.placeholder) {
+//       i.focus();
+//       allAreFilled = false;
+//       i.parentNode.classList.add("MuiInput-error-853");
+//       i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+//       allAreFilled = false;
+//       isFormValid = false;
+//       hasFieldToaster = true;
+//     }
+//   });
+// }
   if (allAreFilled == false) {
     isFormValid = false;
     hasFieldToaster = true;

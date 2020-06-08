@@ -3,6 +3,7 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { furnishNocResponse, getSearchResults } from "../../../../../ui-utils/commons";
+import { getOPMSPattern } from '../../utils/index'
 
 
 export const nocDetails = getCommonCard({
@@ -30,7 +31,7 @@ export const nocDetails = getCommonCard({
           labelKey: "NOC_APPLICANT_NAME_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("petnocApplicantName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "PETNOC.applicantName",
       })
@@ -128,7 +129,7 @@ export const PetParticularDetails = getCommonCard(
            // }
           }
         },*/
-        pattern: getPattern("VillageName"),
+        pattern: getOPMSPattern("petnocApplicantName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "PETNOC.nameOfPetDog"
@@ -258,7 +259,7 @@ export const PetParticularDetails = getCommonCard(
             
            }
          },*/
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("petnocIdentificationMark"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "PETNOC.identificationMark",
 		 props: {

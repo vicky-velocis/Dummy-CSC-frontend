@@ -12,11 +12,11 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonGrayCard, getLabelOnlyValue,showHideAdhocPopups } from "../../utils";
 import store from "../../../../../ui-redux/store";
-
 import {
   localStorageGet, localStorageSet, setapplicationNumber, getOPMSTenantId, setapplicationType,
   getAccessToken, getLocale, getUserInfo, getapplicationType, getapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
+
 
 import { footer } from "./footer";
 import set from "lodash/set";
@@ -143,14 +143,14 @@ const setvalueCancel = async (state,dispatch) => {
   
   dispatch(
         handleField(
-          "petnoc_summary",
+          "search-preview",
           "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
           "props.checked",
           false
         )
       );
       localStorageSet("undertaking", "") 
-  showHideAdhocPopups(state, dispatch, "petnoc_summary")
+  showHideAdhocPopups(state, dispatch, "search-preview")
   
   
   
@@ -162,14 +162,14 @@ const setvalue = async (state,dispatch) => {
 
 dispatch(
       handleField(
-        "petnoc_summary",
+        "search-preview",
         "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
         "props.checked",
         true
       )
     );
     localStorageSet("undertaking", "accept") 
-showHideAdhocPopups(state, dispatch, "petnoc_summary")
+showHideAdhocPopups(state, dispatch, "search-preview")
 
 
 
@@ -212,7 +212,7 @@ export const getRequiredDocuments = () => {
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "petnoc_summary")
+              callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
             }
           },
        
@@ -347,6 +347,91 @@ export const getRequiredDocuments = () => {
           }
         }
       },
+      // okButton:  {
+      //   componentPath: "Button",
+      //   props: {
+      //     variant: "contained",
+      //     color: "primary",
+      //     style: {
+      //       minWidth: "200px",
+      //       height: "48px",
+      //       marginRight: "16px"
+      //     }
+      //   },
+      //   children: {
+      //     okButtonIcon: {
+      //       uiFramework: "custom-atoms",
+      //       componentPath: "Icon",
+      //       props: {
+      //         iconName: "keyboard_arrow_right"
+      //       },
+      //       children: {
+      //         printButtonLabel: getLabel({
+      //           labelName: "OK I Agree",
+      //           labelKey: "PM_COMMON_OK_I_AGREE_BUTTON"
+      //         })
+      //       },
+      //       // okButtonLabel: getLabel({
+      //       // labelName: "OK I Agree",
+      //       //   labelKey: "PM_COMMON_OK_I_AGREE_BUTTON"
+      //       // })
+      //     }
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     //callBack: (state, action) =>setvalue(state, action)
+  
+      //     callBack: (state, dispatch) => {
+      //       //// generatePdf(state, dispatch, "receipt_download");
+      //       setvalue( state, dispatch);
+            
+      //     }
+          
+      //   }
+      // },
+      // CancelButton:  {
+      //   componentPath: "Button",
+      //   props: {
+      //     variant: "contained",
+      //     color: "primary",
+      //     style: {
+      //       minWidth: "200px",
+      //       height: "48px",
+      //       marginRight: "16px"
+      //     }
+      //   },
+      //   children: {
+      //     CancelButtonIcon: {
+      //       uiFramework: "custom-atoms",
+      //       componentPath: "Icon",
+      //       props: {
+      //         iconName: "keyboard_arrow_right"
+      //       },
+      //       children: {
+      //         printButtonLabel: getLabel({
+      //           labelName: "Cancel",
+      //           labelKey: "PM_COMMON_CANCEL"
+      //         })
+      //       },
+      //       // okButtonLabel: getLabel({
+      //       // labelName: "Cancel",
+      //       //   labelKey: "PM_COMMON_CANCEL"
+      //       // })
+      //     }
+      //   },
+      //   onClickDefination: {
+      //     action: "condition",
+      //     //callBack: (state, action) =>setvalue(state, action)
+  
+      //     callBack: (state, dispatch) => {
+      //       //// generatePdf(state, dispatch, "receipt_download");
+      //       setvalueCancel( state, dispatch);
+            
+      //     }
+          
+      //   }
+      // }
+    
   },
     {
       style: {

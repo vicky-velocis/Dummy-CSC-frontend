@@ -39,7 +39,7 @@ import {
     getUserInfo
   } from "egov-ui-kit/utils/localStorageUtils";
   import { getapplicationType  } from "egov-ui-kit/utils/localStorageUtils";
-  
+  import { callBackForCancel,callBackForNexthome } from '../sellmeatnoc_summary'
   let role_name=JSON.parse(getUserInfo()).roles[0].code
   //import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
   
@@ -264,12 +264,12 @@ import {
         },
         previousButtonLabel: getLabel({
           labelName: "Previous Step",
-          labelKey: "PM_COMMON_BUTTON_PREV_STEP"
+          labelKey: "NOC_CANCEL_BUTTON"
         })
       },
       onClickDefination: {
         action: "condition",
-        callBack: callBackForPrevious
+        callBack: callBackForCancel
       },
       visible: false
     },
@@ -413,7 +413,38 @@ import {
       }
       },
       visible: role_name=="SI"?false:role_name=="MOH"?true:false
+    },
+    submitButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          // minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        nextButtonLabel: getLabel({
+          labelName: "SUBMIT",
+          labelKey: "NOC_SUBMIT_BUTTON"
+        }),
+        nextButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "keyboard_arrow_right"
+          }
+        }
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForNexthome
+      },
+      visible: false
     }
+  
   });
   
   export const footerReview = (

@@ -17,9 +17,8 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView } from "../../../../ui-utils/commons";
+import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill, searchdemand } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -31,7 +30,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { immunizationSummary } from "./summaryResource/immunizationSummary";
-import { getAccessToken, localStorageGet, localStorageSet, getOPMSTenantId, getLocale, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, localStorageGet, localStorageSet, getOPMSTenantId, getLocale, getUserInfo,setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { showHideAdhocPopup, showHideAdhocPopups } from "../utils";
@@ -40,7 +39,7 @@ export const stepsData = [
   { labelName: "PET NOC Details", labelKey: "Applicant_DETAILS" },
   { labelName: "Verternariy Details", labelKey: "STEP_PET_NOC_VETERINARY_DETAILS" },
   { labelName: "Documents", labelKey: "STEP_PET_NOC_DOCUMENTS" },
-  { labelName: "Summary", labelKey: "ADV_SUMMARY_NOC" }
+  { labelName: "Summary", labelKey: "PET_NOC_SUMMARY" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 3 } },
@@ -63,6 +62,7 @@ const undertakingButton1 = getCommonContainer({
   addPenaltyRebateButton1: {
     componentPath: "Checkbox",
     props: {
+      checked:false,
       variant: "contained",
       color: "primary",
       style: {
@@ -76,13 +76,9 @@ const undertakingButton1 = getCommonContainer({
       previousButtonLabel: getLabel({
         labelName: "Undertaking",
         labelKey: "NOC_UNDERTAKING"
-      })
+      }),
     },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => agree_undertaking(state, dispatch)
-    },
-    visible: localStorageGet('app_noc_status') === 'REASSIGN' ? false : true,
+    visible: true,
   },
   addPenaltyRebateButton: {
     componentPath: "Button",
@@ -102,9 +98,9 @@ const undertakingButton1 = getCommonContainer({
     },
     onClickDefination: {
       action: "condition",
-      // callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
+      callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "petnoc_summary")
     },
-    visible: localStorageGet('app_noc_status') === 'REASSIGN' ? false : true,
+    visible:  true ,
   },
   resendButton: {
     componentPath: "Button",
@@ -157,19 +153,43 @@ const titlebar = getCommonContainer({
   },
 });
 
-
-
-const callbackforsummaryactionpay = async (state, dispatch) => {
+const routeToPage=(dispatch,type)=>{
   let tenantId = getOPMSTenantId();
-  //alert("enter here")
 
   const applicationid = getQueryArg(window.location.href, "applicationNumber");
-  if (localStorageGet('app_noc_status') !== 'REASSIGN') {
+
+  const appendUrl =
+  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  if(type==="payment"){
+  const reviewUrl = `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`
+  dispatch(setRoute(reviewUrl));
+  }else if(type==="home"){
+    const reviewUrl = localStorageGet('app_noc_status') === 'REASSIGN' ?
+    `/egov-opms/my-applications` : ''
+  dispatch(setRoute(reviewUrl));
+  }
+
+
+}
+
+
+export const callbackforsummaryactionpay = async (state, dispatch) => {
+  let applicationStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+    {}
+  );
+
+  if (applicationStatus==="DRAFT") {
     if (localStorageGet("undertaking") == "accept") {
-      const appendUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-      const reviewUrl = `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`
-      dispatch(setRoute(reviewUrl));
+      let response=await updateAppStatus(state,dispatch,"INITIATED");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routeToPage(dispatch,"payment")
+      }
+      else if(responseStatus == "fail"){
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
     }
     else {
       let errorMessage = {
@@ -179,15 +199,26 @@ const callbackforsummaryactionpay = async (state, dispatch) => {
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-  } else {
-    const reviewUrl = localStorageGet('app_noc_status') === 'REASSIGN' ?
-      `/egov-opms/my-applications` : ''
-    dispatch(setRoute(reviewUrl));
+  } 
+  else if (applicationStatus==="INITIATED") {
+        routeToPage(dispatch,"payment")
+  } 
+  else  if (applicationStatus==="REASSIGN") {
+    let response=await updateAppStatus(state,dispatch,"RESENT");
+    let responseStatus = get(response, "status", "");
+    if (responseStatus == "success") {
+      routeToPage(dispatch,"home")
+    }
+    else if(responseStatus == "fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  } 
+  else {
+    routeToPage(dispatch,"home")
   }
-
 }
 
-const callbackforsummaryaction = async (state, dispatch) => {
+export const callbackforsummaryaction = async (state, dispatch) => {
   let action = "submit";
   if (action == 'submit') {
 
@@ -250,35 +281,6 @@ var titlebarfooter = getCommonContainer({
     },
     visible: true
   },
-  // draftButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //       // minWidth: "200px",
-  //       height: "48px",
-  //       marginRight: "16px"
-  //     }
-  //   },
-  //   children: {
-  //     nextButtonLabel: getLabel({
-  //       labelName: "SAVE AS DRAFT",
-  //       labelKey: "NOC_SAVE_AS_DRAFT"
-  //     }),
-  //     nextButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_right"
-  //       }
-  //     }
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: callbackforsummaryaction
-  //   }
-  // },
   resendButton: {
     componentPath: "Button",
     props: {
@@ -341,7 +343,6 @@ var titlebarfooter = getCommonContainer({
 });
 
 const prepareDocumentsView = async (state, dispatch) => {
-  //alert('prepare')
   let documentsPreview = [];
 
   // Get all documents from response
@@ -394,9 +395,6 @@ const prepareDocumentsView = async (state, dispatch) => {
   }
 };
 
-// const prepareDocumentsUploadRedux = (state, dispatch) => {
-//   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
-// };
 
 const setDownloadMenu = (state, dispatch) => {
   /** MenuButton data based on status */
@@ -514,12 +512,16 @@ const screenConfig = {
   name: "petnoc_summary",
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-
+    setapplicationNumber(applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
-    searchdemand(dispatch, applicationNumber, tenantId);
+    let res=    searchdemand(dispatch, applicationNumber, tenantId);
+    //alert(JSON.stringify(res))
+    if(res!=null){
     searchBill(dispatch, applicationNumber, tenantId);
+    }
+  
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
@@ -531,33 +533,20 @@ const screenConfig = {
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "opms");
-    // Hide edit buttons
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.immunizationSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
     set(
       action,
       "screenConfig.components.undertakingdialog.children.popup",
       getRequiredDocuments()
     );
+    set(
+      action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
+      localStorageGet("app_noc_status") !== 'REASSIGN' ?true:false)
+  
+      set(
+        action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
+        localStorageGet("app_noc_status") !== 'REASSIGN' ?true:false)
+  
+  
 
     return action;
   },
@@ -592,8 +581,7 @@ const screenConfig = {
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "nocApplicationDetail",
-            moduleName: "petnoc_summary",
-            //updateUrl: "/opms-services/v1/_update"
+            moduleName: "petnoc_summary"
           }
         },
         body: role_name !== 'CITIZEN' ? getCommonCard({
@@ -628,9 +616,7 @@ const screenConfig = {
       },
       children: {
         popup: {}
-        //popup:adhocPopup1
-      },
-      //visible : localStorageGet('app_noc_status') === 'REASSIGN' ? false :true,
+      }
     }
   }
 };

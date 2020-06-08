@@ -17,7 +17,7 @@ import {
   localStorageGet, localStorageSet
 } from "egov-ui-kit/utils/localStorageUtils";
 import { callPGService } from "./footer";
-
+import { getOPMSPattern } from '../../utils/index'
 let role_name = JSON.parse(getUserInfo()).roles[0].code
 
 const popupvalidate = () => {
@@ -162,15 +162,7 @@ const updateAdhoc1 = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": "FORWARD",
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-
-
-        }
+        "dataPayload": data
       }
     );
   }
@@ -233,13 +225,7 @@ const updateAdhocReaasign = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": role_name == "SI" ? "REASSIGN" : role_name == "MOH" ? "REASSIGNTOSI" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
 
@@ -297,13 +283,7 @@ const updateAdhocReject = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": "REJECTED",
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
   }
@@ -345,12 +325,6 @@ const updateAdhocApprove = (state, dispatch) => {
 
           )
 
-        },
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
         }
       }
     );
@@ -411,13 +385,7 @@ const updateAdhocAdvForward = (state, dispatch) => {
         "applicationStatus": role_name == "JEX" ? "REVIEWOFSUPERINTENDENT" : role_name == "SUPERINTENDENT" ? "REVIEWOFOSD" : role_name == "OSD" ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
   }
@@ -450,12 +418,6 @@ const updateAdhocAdvApprove = (state, dispatch) => {
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
-        },
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
         }
       }
     );
@@ -510,13 +472,7 @@ const updateAdhocAdvReject = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": localStorageGet('pms_iswithdrawn')==="yes"?'REJECTEFORWITHDRAW':'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
   }
@@ -573,13 +529,7 @@ const updateAdhocAdvReassign = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": role_name == "JEX" ? "REASSIGN" : role_name == "SUPERINTENDENT" ? "REASSIGNTOJEX" : role_name == "OSD" ? "REASSIGNTOSUPERINTENDENT": role_name == "COMMISSIONER" ? "REASSIGNTOOSD" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
   }
@@ -652,13 +602,7 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
           "tenantId": getOPMSTenantId(),
           "applicationStatus": role_name == "JEX" ? "REVIEWOFSPAFTERWITHDRAW" : role_name == "OSD" ? "PENDINGAPPROVALFORWITHDRAW" : '',
           "applicationId": localStorage.getItem('ApplicationNumber'),
-          "dataPayload": data,
-          "auditDetails": {
-            "createdBy": 1,
-            "lastModifiedBy": 1,
-            "createdTime": 1578894136873,
-            "lastModifiedTime": 1578894136873
-          }
+          "dataPayload": data
         }
       );
     } else {
@@ -666,7 +610,7 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
       store.dispatch(
         toggleSnackbar(
           true,
-          { labelName: "Withdraw smount should be less than actual amount", labelCode: "ADV_WITHDRAWAPP_INVALID_AMOUNT" },
+          { labelName: "Withdraw amount should be less than actual amount", labelCode: "ADV_WITHDRAWAPP_INVALID_AMOUNT" },
           "error"
         )
       );
@@ -708,13 +652,6 @@ const updateAdhocAdvWithdraw = (state, dispatch) => {
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": Remark
-        },
-        "auditDetails": {
-
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
         }
       }
     );
@@ -778,13 +715,7 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
         "applicationStatus": role_name == "SI" ? "REVIEWOFSUPERINTENDENT" : role_name == "SUPERINTENDENT" ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload":data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload":data
       }
     );
 
@@ -818,12 +749,6 @@ const updateAdhocSellMeatApprove = (state, dispatch) => {
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
-        },
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
         }
       }
     );
@@ -882,13 +807,7 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload":data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload":data
       }
     );
 
@@ -947,13 +866,7 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": role_name == "SI" ? "REASSIGN" : role_name == "SUPERINTENDENT" ? "REASSIGNTOSI" : role_name == "MOH" ? "REASSIGNTOSUPERINTENDENT" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
 
@@ -1021,9 +934,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
         "amount": RoadCutForwardAmount,
         "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
       }
-
     }
-      // createDemandForRoadCutNOCPOPup(state, dispatch, getapplicationNumber(), getOPMSTenantId());
     }
     else {
       if(file){
@@ -1060,13 +971,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
         "applicationStatus": role_name == "JE" ? "REVIEWSDO" : role_name == "SDO" ? "REVIEWOFEE" : role_name == "EE" ? "REVIEWOFSE" : role_name == "SE" ? "PENDINGAPRROVAL" : role_name == "CE" ? "PAYMENTPENDING" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
 
@@ -1100,12 +1005,6 @@ const updateAdhocRoadCutApprove = (state, dispatch) => {
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
-        },
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
         }
       }
     );
@@ -1162,13 +1061,7 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
 
@@ -1227,13 +1120,7 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": role_name == "JE" ? "REASSIGN" : role_name == "SDO" ? "REASSIGNTOJE" : role_name == "EE" ? "REASSIGNTOSDO" : role_name == "SE" ? "REASSIGNTOEE" : role_name == "CE" ? "REASSIGNTOSE" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data,
-        "auditDetails": {
-          "createdBy": 1,
-          "lastModifiedBy": 1,
-          "createdTime": 1578894136873,
-          "lastModifiedTime": 1578894136873
-        }
+        "dataPayload": data
       }
     );
   }
@@ -1501,6 +1388,8 @@ export const adhocPopup1 = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
+                
               }
             }
           }
@@ -1513,23 +1402,6 @@ export const adhocPopup1 = getCommonContainer({
     {
 
       rebateAmountAndReasonContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
         documentDetails,
         rebateReason: getTextField({
           label: {
@@ -1545,8 +1417,7 @@ export const adhocPopup1 = getCommonContainer({
             sm: 12
           },
           required: true,
-          pattern: /^[a-zA-Z0-9]*$/i,
-          //    pattern:getPattern('BadageNumber'),
+          pattern: getOPMSPattern("BadgeNumber"),
           props: {
             style: {
               width: "100%"
@@ -1570,8 +1441,7 @@ export const adhocPopup1 = getCommonContainer({
             sm: 12
           },
           required: true,
-          // pattern:/^[ A-Za-z0-9_@./#&+-]*$/i,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
           props: {
             style: {
               width: "100%"
@@ -1579,7 +1449,7 @@ export const adhocPopup1 = getCommonContainer({
           },
           jsonPath: "PetNoc[0].PetNocDetails.additionalDetail.remarks"
 
-        }),
+        })
 
       })
     },
@@ -1624,6 +1494,8 @@ export const adhocPopup1 = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+
+            window.location.reload();
           }
         }
       },
@@ -1730,6 +1602,7 @@ export const adhocPopup2 = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -1742,23 +1615,6 @@ export const adhocPopup2 = getCommonContainer({
     {
 
       rebateReaassignContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
 
         documentDetails,
 
@@ -1782,11 +1638,10 @@ export const adhocPopup2 = getCommonContainer({
           },
           jsonPath: "PetNoc[0].PetNocDetails.Reaasign.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
 
-        }),
-        //  documentDetails
+        })
       })
     },
     {
@@ -1830,6 +1685,7 @@ export const adhocPopup2 = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -1936,8 +1792,7 @@ export const adhocPopup3 = getCommonContainer({
             }
           }
         }
-      },
-      // documentDetails
+      }
     }
   },
 
@@ -1957,14 +1812,12 @@ export const adhocPopup3 = getCommonContainer({
             xs: 12,
             sm: 12
           },
-          //sourceJsonPath: "PetNoc[0].PetNocDetails.Approve.badgeNumber",        
           jsonPath: "PetNoc[0].PetNocDetails.Approve.badgeNumber",
           required: true,
-          //disabled:true,
           props: {
             disabled: true
           },
-          pattern: /^[a-zA-Z0-9]*$/i, // /^[a-zA-Z0-9]*$/i,
+          pattern: getOPMSPattern("BadgeNumber"),
           props: {
             style: {
               width: "100%"
@@ -1991,7 +1844,7 @@ export const adhocPopup3 = getCommonContainer({
           },
           jsonPath: "PetNoc[0].PetNocDetails.Approve.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
       })
@@ -2033,7 +1886,8 @@ export const adhocPopup3 = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupopmsApprove(state, dispatch, "search-preview")
-
+            window.location.reload();
+            
           }
         }
       },
@@ -2141,6 +1995,8 @@ export const adhocPopup4 = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
+                
               }
             }
           }
@@ -2156,23 +2012,6 @@ export const adhocPopup4 = getCommonContainer({
 
       rebateRejectContainer: getCommonContainer({
 
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
 
         documentDetails,
         rebateRejectField: getTextField({
@@ -2195,7 +2034,7 @@ export const adhocPopup4 = getCommonContainer({
           },
           jsonPath: "PetNoc[0].PetNocDetails.Reject.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -2244,6 +2083,7 @@ export const adhocPopup4 = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
 
         }
@@ -2352,6 +2192,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -2363,24 +2204,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
   adhocPopupAdvertisementJEXForwardRemarkCard: getCommonContainer(
     {
       advertisementJEXForwardRemarkContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-        documentDetails,
+         documentDetails,
         advertisementJEXForwardRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2401,7 +2225,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           },
           jsonPath: "advertisement[0].Forward.Remark",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -2449,6 +2273,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -2555,6 +2380,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -2566,24 +2392,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
   adhocPopupAdvertisementJEXReassignRemarkCard: getCommonContainer(
     {
       advertisementJEXReassignRemarkContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-        documentDetails,
+         documentDetails,
         advertisementJEXReassignRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2604,7 +2413,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           },
           jsonPath: "advertisement[0].Reassign.Remark",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -2651,6 +2460,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -2757,6 +2567,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -2768,24 +2579,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
   adhocPopupAdvertisementCommissionerRejectRemarkCard: getCommonContainer(
     {
       advertisementCommissionerRejectRemarkContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-        documentDetails,
+         documentDetails,
         advertisementCommissionerRejectRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2806,7 +2600,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           },
           jsonPath: "advertisement[0].Reject.Remark",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -2853,6 +2647,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -2954,7 +2749,11 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) =>
+              {
                 showHideAdhocPopupopmsApprove(state, dispatch, "advertisementnoc-search-preview")
+
+                window.location.reload();
+              }
             }
           }
         }
@@ -2986,7 +2785,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           },
           jsonPath: "advertisement[0].Approve.Remark",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
       })
@@ -3027,7 +2826,10 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) =>
+          {
             showHideAdhocPopupopmsApprove(state, dispatch, "advertisementnoc-search-preview")
+            window.location.reload();
+          }
         }
       },
       addButton: {
@@ -3128,7 +2930,10 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) =>
+              {
               showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+              window.location.reload();
+              }
             }
           }
         }
@@ -3198,7 +3003,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           jsonPath: "advertisement[0].WithdraApproval.Remark",
 
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
       })
@@ -3238,8 +3043,10 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
+          callBack: (state, dispatch) =>{
           showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+          window.location.reload();
+          }
         }
       },
       addButton: {
@@ -3345,7 +3152,8 @@ export const SellMeatForward = getCommonContainer({
                 set(state,
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
-                )
+                ),
+                window.location.reload();
               }
             }
           }
@@ -3358,24 +3166,7 @@ export const SellMeatForward = getCommonContainer({
     {
 
       SellMeatForwardContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-        documentDetails,
+         documentDetails,
         SellMeatForwardField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3396,7 +3187,7 @@ export const SellMeatForward = getCommonContainer({
           },
           jsonPath: "SellMeat[0].SellMeatDetails.Forward.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -3442,7 +3233,8 @@ export const SellMeatForward = getCommonContainer({
             set(state,
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
-            )
+            ),
+            window.location.reload();
           }
         }
       },
@@ -3549,7 +3341,8 @@ export const SellMeatReassign = getCommonContainer({
                 set(state,
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
-                )
+                ),
+                window.location.reload();
               }
             }
           }
@@ -3563,24 +3356,7 @@ export const SellMeatReassign = getCommonContainer({
 
       SellMeatReassignContainer: getCommonContainer({
 
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-        documentDetails,
+         documentDetails,
         SellMeatReassignField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3601,7 +3377,7 @@ export const SellMeatReassign = getCommonContainer({
           },
           jsonPath: "SellMeat[0].SellMeatDetails.Reassign.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -3648,6 +3424,7 @@ export const SellMeatReassign = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -3750,7 +3527,10 @@ export const SellMeatApprove = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) =>
+              {
                 showHideAdhocPopupopmsApprove(state, dispatch, "sellmeatnoc-search-preview")
+                window.location.reload();
+              }
             }
           }
         }
@@ -3784,7 +3564,7 @@ export const SellMeatApprove = getCommonContainer({
           },
           jsonPath: "SellMeat[0].SellMeatDetails.Approve.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
       })
@@ -3825,7 +3605,10 @@ export const SellMeatApprove = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) =>
+          {
             showHideAdhocPopupopmsApprove(state, dispatch, "sellmeatnoc-search-preview")
+            window.location.reload();
+          }
         }
       },
       addButton: {
@@ -3931,7 +3714,8 @@ export const SellMeatReject = getCommonContainer({
                 set(state,
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
-                )
+                ),
+                window.location.reload();
               }
             }
           }
@@ -3944,23 +3728,7 @@ export const SellMeatReject = getCommonContainer({
     {
 
       SellMeatRejectContainer: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
+ 
         documentDetails,
         SellMeatRejectField: getTextField({
           label: {
@@ -3982,7 +3750,7 @@ export const SellMeatReject = getCommonContainer({
           },
           jsonPath: "SellMeat[0].SellMeatDetails.Reject.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
 
 
@@ -4030,7 +3798,8 @@ export const SellMeatReject = getCommonContainer({
             set(state,
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
-            )
+            ),
+            window.location.reload();
           }
         }
       },
@@ -4137,7 +3906,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
                 set(state,
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
-                )
+                ),
+                window.location.reload();
               }
             }
           }
@@ -4150,23 +3920,6 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
     {
 
       ForwardContainerRoadCutForward: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
         documentDetails,
         RoadCutForwardAmount: getTextField({
           label: {
@@ -4188,7 +3941,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount",
           required: true,
-          pattern: getPattern("Amountopms"),
+          pattern: getOPMSPattern("ROADCUTFEE"),
 
 
         }),
@@ -4215,7 +3968,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount",
           required: true,
-          pattern: getPattern("Amountopms"),
+          pattern: getOPMSPattern("ROADCUTFEE"),
 
         }),
 
@@ -4240,7 +3993,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges",
           required: true,
-          pattern: getPattern("Amountopms"),
+          pattern: getPattern("ROADCUTFEE"),
 
 
         }),
@@ -4268,7 +4021,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -4314,7 +4067,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
             set(state,
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
-            )
+            ),
+            window.location.reload();
           }
         }
       },
@@ -4423,7 +4177,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
                 set(state,
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
-                )
+                ),
+                window.location.reload();
               }
             }
           }
@@ -4436,25 +4191,6 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
     {
 
       ContainerRoadCutReassign: getCommonContainer({
-
-
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
 
         documentDetails,
 
@@ -4478,7 +4214,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -4525,7 +4261,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
             set(state,
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
-            )
+            ),
+            window.location.reload();
           }
         }
       },
@@ -4629,7 +4366,10 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) =>
+              {
                 showHideAdhocPopupopmsApprove(state, dispatch, "roadcutnoc-search-preview")
+                window.location.reload();
+              }
             }
           }
         }
@@ -4665,7 +4405,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
       })
@@ -4706,7 +4446,10 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) =>
+          {
             showHideAdhocPopupopmsApprove(state, dispatch, "roadcutnoc-search-preview")
+            window.location.reload();
+          }
         }
       },
       addButton: {
@@ -4815,6 +4558,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -4827,23 +4571,6 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
     {
 
       ContainerCeRoadCutReject: getCommonContainer({
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
         documentDetails,
         FieldCeRoadCutRejectRemarks: getTextField({
           label: {
@@ -4865,7 +4592,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -4912,6 +4639,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -5019,6 +4747,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 )
+                window.location.reload();
               }
             }
           }
@@ -5031,27 +4760,6 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
     {
 
       ContainerSeRoadCutForward: getCommonContainer({
-
-
-        // documentList: {
-        //   uiFramework: "custom-containers-local",
-        //   moduleName: "egov-opms",
-        //   componentPath: "DocumentListContainer",
-        //   props: {      
-        //     buttonLabel: {
-        //       labelName: "UPLOAD FILE",
-        //       labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
-        //     },
-        //     description: "Only .jpg and .pdf files. 6MB max file size.",
-        //     inputProps: {
-        //       accept: ".pdf,.png,.jpeg"
-        //     },
-        //     maxFileSize: 1000
-        //   },
-        //   type: "array"
-        // },
-
-
         documentDetails,
         FieldSeRoadCutForwardRemarks: getTextField({
           label: {
@@ -5073,7 +4781,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
           },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
 
         }),
 
@@ -5120,6 +4828,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             )
+            window.location.reload();
           }
         }
       },
@@ -5225,7 +4934,10 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) =>
+              {
                 showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+                window.location.reload();
+              }
             }
           }
         }
@@ -5257,7 +4969,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
           },
           jsonPath: "advertisement[0].withdraw.Remark",
           required: true,
-          pattern: /^[ A-Za-z0-9_@./#&+-]{1,250}$/i,
+          pattern: getOPMSPattern("Remarks"),
         })
       })
     },
@@ -5297,7 +5009,10 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) =>
+          {
             showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+            window.location.reload();
+          }
         }
       },
       addButton: {

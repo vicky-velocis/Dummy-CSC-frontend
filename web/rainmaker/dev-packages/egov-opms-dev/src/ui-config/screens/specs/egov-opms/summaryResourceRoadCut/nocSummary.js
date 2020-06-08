@@ -167,7 +167,7 @@ export const nocSummary = getCommonGrayCard({
     lengthNumber: getLabelWithValue(
       {
         labelName: "Length",
-        labelKey: "ROADCUT_LENGTH_NOC"
+        labelKey: "ROADCUT_LENGTH_LABEL_NOC"
       },
       {
         jsonPath: "nocApplicationDetail[0].applicationdetail",

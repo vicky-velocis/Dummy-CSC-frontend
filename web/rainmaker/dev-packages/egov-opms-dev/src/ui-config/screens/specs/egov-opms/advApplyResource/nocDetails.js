@@ -166,7 +166,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_NAME_OF_APPLICANT_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("petnocApplicantName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantName",
       })
@@ -258,7 +258,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_APPLICANTADDR_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantAddress",
       })
@@ -274,7 +274,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_LANDMARK_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantLandmark",
       })
@@ -290,7 +290,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_APPLDIVISION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("petnocApplicantName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantDivision",
       })
@@ -307,7 +307,7 @@ export const AdvtDetails = getCommonCard({
         },
         jsonPath: "ADVERTISEMENTNOC.applicantWard",
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         props: {
           className: "applicant-details-error",
           required: true
@@ -321,7 +321,7 @@ export const AdvtDetails = getCommonCard({
           labelName: "Sector",
           labelKey: "ADV_SECTOR_NOC"
         },
-        optionLabel: "typeOfApplicant",
+        optionLabel: "name",
         placeholder: {
           labelName: "Sector",
           labelKey: "ADV_SECTOR_NOC_PLACEHOLDER"
@@ -347,7 +347,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_VILLAGE_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("VillageName"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantVillageSuSector",
       })
@@ -379,7 +379,7 @@ export const AdvtDetails = getCommonCard({
           labelKey: "ADV_EMAILID_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Email"),
+        pattern: getOPMSPattern("Email"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.emailId",
       })

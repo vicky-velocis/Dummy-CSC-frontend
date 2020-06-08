@@ -8,6 +8,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -23,7 +24,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView } from "../../../../ui-utils/commons";
+import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
 //import  generatePdf from "../utils/receiptPdf";
 
@@ -42,7 +43,8 @@ import {
   getLocale,
   getUserInfo,
   getapplicationNumber,
-  localStorageGet
+  localStorageGet,
+  setapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
   createUpdateRoadCutNocApplication
@@ -80,23 +82,49 @@ const titlebar = getCommonContainer({
   },
 });
 
-
-
-const callbackforSummaryActionSubmit = async (state, dispatch) => {
-  //localStorage.setItem('btnType','INITIATED')
-  //let response = await createUpdateRoadCutNocApplication(state, dispatch, "INITIATED");
-  //alert("Submmited PP : "+JSON.stringify(response));
+const routePage=(dispatch)=>{
   const appendUrl = process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/roadcutnoc-my-applications`;
   dispatch(setRoute(reviewUrl));
 
+
+}
+
+export const callbackforSummaryActionSubmit = async (state, dispatch) => {
+  let applicationStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+    {}
+  );
+
+  if(applicationStatus==="DRAFT"){
+    
+    let response=await updateAppStatus(state,dispatch,"INITIATED");
+    let responseStatus = get(response, "status", "");
+    if (responseStatus == "success") {
+      routePage(dispatch)
+    }
+    else if(responseStatus == "fail" || responseStatus == "Fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  }else if(applicationStatus==="REASSIGN"){
+    let response=await updateAppStatus(state,dispatch,"RESENT");
+    let responseStatus = get(response, "status", "");
+    if (responseStatus == "success") {
+      routePage(dispatch)
+    }
+    else if(responseStatus == "fail" || responseStatus == "Fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  }
+  else
+  {
+    routePage(dispatch)
+  }
 };
 
-const callbackforSummaryActionCancel = async (state, dispatch) => {
+export const callbackforSummaryActionCancel = async (state, dispatch) => {
 
-  // localStorage.setItem('btnType','CANCEL')
-  // let response = await createUpdateRoadCutNocApplication(state, dispatch, "INITIATED");
-  // alert("Submmited PP : "+JSON.stringify(response));
   const appendUrl = process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/home`;
@@ -184,35 +212,6 @@ var titlebarfooter = getCommonContainer({
     },
     visible: true
   },
-  // draftButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //      // minWidth: "200px",
-  //       height: "48px",
-  //       marginRight: "16px"
-  //     }
-  //   },
-  //   children: {
-  //     nextButtonLabel: getLabel({
-  //       labelName: "SAVE AS DRAFT",
-  //       labelKey: "NOC_SAVE_AS_DRAFT"
-  //     }),
-  //     nextButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_right"
-  //       }
-  //     }
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: callbackforSummaryActionDraft
-  //   }
-  // },
   resendButton: {
     componentPath: "Button",
     props: {
@@ -287,12 +286,9 @@ const prepareDocumentsView = async (state, dispatch) => {
   let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
     JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
 
-  // let uploadPetPicture=JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadPetPicture')?
-  // JSON.parse(ROADCUTNOC.applicationdetail).uploadPetPicture[0]['fileStoreId']:'';
 
   let allDocuments = [];
   allDocuments.push(uploadDocuments)
-  //allDocuments.push(uploadPetPicture)
 
   if (uploadDocuments !== '') {
     documentsPreview.push(
@@ -448,6 +444,8 @@ const screenConfig = {
   name: "roadcutnoc_summary",
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    setapplicationNumber(applicationNumber);
+
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
@@ -464,24 +462,6 @@ const screenConfig = {
       { key: "businessServices", value: "ROADCUTNOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
-    // Hide edit buttons
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?  true : false
-    );
-
     return action;
   },
   components: {

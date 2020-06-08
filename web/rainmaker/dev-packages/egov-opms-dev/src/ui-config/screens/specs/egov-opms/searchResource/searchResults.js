@@ -100,18 +100,18 @@ export const searchResults = {
       getTextToLocalMapping("Application Status"),
       getTextToLocalMapping("Applicant Name"),
 
-      {
-        name: getTextToLocalMapping(),
-        options: {
-          filter: false,
-          customBodyRender: value => (
+      // {
+      //   name: getTextToLocalMapping(),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
 
-            <span>
-              <i class="material-icons">history</i>
-            </span>
-          )
-        }
-      },
+      //       <span>
+      //         <i class="material-icons">history</i>
+      //       </span>
+      //     )
+      //   }
+      // },
 
     ],
     options: {
@@ -170,19 +170,19 @@ export const searchResultsSellmeat = {
       getTextToLocalMapping("Application Status"),
       getTextToLocalMapping("Applicant Name"),
 
-      {
-        name: getTextToLocalMapping(),
-        options: {
-          filter: false,
-          customBodyRender: value => (
+      // {
+      //   name: getTextToLocalMapping(),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
 
-            <span>
-              <i class="material-icons">history</i>
+      //       <span>
+      //         <i class="material-icons">history</i>
 
-            </span>
-          )
-        }
-      },
+      //       </span>
+      //     )
+      //   }
+      // },
 
     ],
     //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
@@ -244,19 +244,19 @@ export const searchResultsRoadcut = {
       getTextToLocalMapping("Application Status"),
       getTextToLocalMapping("Applicant Name"),
 
-      {
-        name: getTextToLocalMapping(),
-        options: {
-          filter: false,
-          customBodyRender: value => (
+      // {
+      //   name: getTextToLocalMapping(),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
 
-            <span>
-              <i class="material-icons">history</i>
+      //       <span>
+      //         <i class="material-icons">history</i>
 
-            </span>
-          )
-        }
-      },
+      //       </span>
+      //     )
+      //   }
+      // },
 
     ],
     //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
@@ -318,19 +318,19 @@ export const searchResultsAdvertisement = {
       getTextToLocalMapping("Application Status"),
       getTextToLocalMapping("Applicant Name"),
 
-      {
-        name: getTextToLocalMapping(),
-        options: {
-          filter: false,
-          customBodyRender: value => (
+      // {
+      //   name: getTextToLocalMapping(),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
 
-            <span>
-              <i class="material-icons">history</i>
+      //       <span>
+      //         <i class="material-icons">history</i>
 
-            </span>
-          )
-        }
-      },
+      //       </span>
+      //     )
+      //   }
+      // },
 
     ],
     //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
@@ -390,7 +390,15 @@ export const searchResultsMaser = {
     // data: [{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"}],
 
     columns: [
-      getTextToLocalMapping("Price Book Id"),
+    //  getTextToLocalMapping("Price Book Id"),
+      {
+        
+        name: getTextToLocalMapping("Price Book Id"),
+        options: {
+          display: false,
+        
+        }
+        },
       getTextToLocalMapping("categoryId"),
       getTextToLocalMapping("subCategoryId"),
       getTextToLocalMapping("perDayPrice"),

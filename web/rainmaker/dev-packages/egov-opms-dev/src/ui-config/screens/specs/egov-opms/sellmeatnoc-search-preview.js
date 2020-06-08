@@ -225,6 +225,7 @@ const prepareDocumentsView = async (state, dispatch) => {
       return doc;
     });
     dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+    
   }
 };
 
@@ -261,7 +262,7 @@ const setDownloadMenu = (state, dispatch) => {
 const HideshowEdit = (action, nocStatus) => {
 // Hide edit buttons
 let showEdit = false;
-if (nocStatus === "REASSIGN") {
+if (nocStatus === "REASSIGN" || nocStatus === "DRAFT")  {
   showEdit = true;
 }
 set(
@@ -281,7 +282,25 @@ set(
   false
 );
 
+set(
+  action,
+  "screenConfig.components.div.children.footer.children.previousButton.visible",
+  role_name === "CITIZEN" ?
+          nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
+       true
+    :false
+  :false
+  );
 
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.submitButton.visible",
+    role_name === "CITIZEN" ?
+            nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
+         true
+      :false
+    :false
+    );
 set(
   action,
   "screenConfig.components.adhocDialog.children.popup",
