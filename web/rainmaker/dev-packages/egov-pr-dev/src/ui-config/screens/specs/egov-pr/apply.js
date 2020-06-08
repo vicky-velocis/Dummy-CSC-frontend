@@ -36,7 +36,7 @@ import {
 } from "../../../../ui-utils/commons";
 import {setCommittiee} from "../egov-pr/searchResource/citizenSearchFunctions"
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-
+import commonConfig from '../../../../config/common';
 export const stepsData = [
   { labelName: "Event Details", labelKey: "PR_EVENT_DETAILS_HEADER" },
   { labelName: "Documents", labelKey: "PR_COMMON_DOCUMENTS" },
@@ -102,11 +102,11 @@ export const formwizardSecondStep = {
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+ // let tenantId = getTenantId();
 
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
