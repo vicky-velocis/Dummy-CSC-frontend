@@ -42,6 +42,10 @@ const AutosuggestContainer = Loadable({
   loader: () => import("./AutosuggestContainer"),
   loading: () => <Loading />
 });
+const CheckboxContainer = Loadable({
+  loader: () => import("./CheckboxContainer"),
+  loading: () => <Loading />
+});
 
 export {
   TextFieldContainer,
@@ -51,5 +55,6 @@ export {
   SnackbarContainer,
   CustomTabContainer,
   DownloadFileContainer,
-  AutosuggestContainer
+  AutosuggestContainer,
+  CheckboxContainer
 };

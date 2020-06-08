@@ -108,7 +108,11 @@ class InboxData extends React.Component {
     // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-
+    //for only pension module
+    if(row[0].subtext.toUpperCase()==='RRP_SERVICE' ||row[0].subtext.toUpperCase()=='DOE_SERVICE'||row[0].subtext.toUpperCase()=='DOP_SERVICE')
+    {
+      queryParams=`applicationNumber=${taskId}&tenantId=${tenantId}&step=${row[2].text.props.label}&module=${row[0].subtext.toUpperCase()}`;
+    }
     if(row[0].subtext=="PT.CREATE"){
       queryParams+='&type=property';
     }
