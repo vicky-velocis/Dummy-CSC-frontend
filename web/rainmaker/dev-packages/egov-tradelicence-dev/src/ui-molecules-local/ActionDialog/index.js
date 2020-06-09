@@ -84,9 +84,7 @@ class ActionDialog extends React.Component {
     }
   };
 
-  render() {
-    console.log('props',this.props);
-    
+  render() {  
     let {
       open,
       onClose,
@@ -160,7 +158,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && (
+                  {showEmployeeList && !!dropDownData.length && (
                     <Grid
                       item
                       sm="12"
@@ -212,7 +210,7 @@ class ActionDialog extends React.Component {
                         marginBottom: "8px"
                       }}
                     >
-                      <div className="rainmaker-displayInline">
+                      {/* <div className="rainmaker-displayInline">
                         <LabelContainer
                           labelName="Supporting Documents"
                           labelKey="WF_APPROVAL_UPLOAD_HEAD"
@@ -220,9 +218,9 @@ class ActionDialog extends React.Component {
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
-                      </div>
+                      </div> */}
                     </Typography>
-                    <div
+                    {/* <div
                       style={{
                         color: "rgba(0, 0, 0, 0.60)",
                         fontFamily: "Roboto",
@@ -244,7 +242,7 @@ class ActionDialog extends React.Component {
                       buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
-                    />
+                    /> */}
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
@@ -255,7 +253,7 @@ class ActionDialog extends React.Component {
                         }}
                         className="bottom-button"
                         onClick={() =>
-                          onButtonClick('FORWARD', isDocRequired)
+                          onButtonClick(buttonLabel, isDocRequired)
                         }
                       >
                         <LabelContainer

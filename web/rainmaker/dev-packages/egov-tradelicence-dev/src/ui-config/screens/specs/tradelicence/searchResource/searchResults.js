@@ -4,17 +4,19 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
+import { searchApiCall } from "./functions";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",
   componentPath: "Table",
-  visible: false,
+  visible: true,
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
       getTextToLocalMapping("License No"),
-      getTextToLocalMapping("Trade Name"),
+      getTextToLocalMapping("License Type"), 
+      getTextToLocalMapping("Service Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
       getTextToLocalMapping("Financial Year"),
@@ -58,9 +60,6 @@ export const searchResults = {
       },
 
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Trade License Applications"
-    ),
     options: {
       filter: false,
       download: false,
@@ -91,16 +90,7 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[7]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-      }`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[8]}`;
-      break;
-  }
+  window.location.href = `search-preview?applicationNumber=${
+    rowData[0]
+  }&tenantId=${rowData[9]}`;
 };

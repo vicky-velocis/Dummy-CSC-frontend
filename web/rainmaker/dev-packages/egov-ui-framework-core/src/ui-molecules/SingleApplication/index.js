@@ -53,13 +53,14 @@ class SingleApplication extends React.Component {
         { key: "tenantId", value: get(item, "tenantId") },
         {
           key: "businessServices",
-          value: wfCode
+          value: !!wfCode ? wfCode : "NewTL"
         }
       ];
-      this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
+      await this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
           setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+          break
         default:
           setRoute(`/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
       }
@@ -169,6 +170,8 @@ class SingleApplication extends React.Component {
       LabelKey = `${get(item, content.jsonPath,"").replace(/[._:-\s\/]/g, "_")}${
         content.suffix
       }`;
+    } else if(content.callBack) {
+      LabelKey = content.callBack(get(item, content.jsonPath,""))
     } else {
       LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
     }
