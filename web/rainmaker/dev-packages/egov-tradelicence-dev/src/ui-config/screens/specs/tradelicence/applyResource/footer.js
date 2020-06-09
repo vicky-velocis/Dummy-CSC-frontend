@@ -801,7 +801,7 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     "LicensesTemp[0].estimateCardData",
     dispatch
 );
-const route = `/tradelicense-citizen/apply?tenantId=${tenantId}`
+const route = `/tradelicense-citizen/apply?applicationNumber=${updateResponse.Licenses[0].applicationNumber}&tenantId=${tenantId}`
   dispatch(setRoute(route));
   dispatch(
     handleField(
