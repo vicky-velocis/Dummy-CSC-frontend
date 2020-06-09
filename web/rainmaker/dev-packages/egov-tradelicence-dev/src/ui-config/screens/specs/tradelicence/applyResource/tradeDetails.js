@@ -1274,7 +1274,7 @@ export const changeDocuments = (action, state, dispatch, licenseType) => {
         }, 
         maxFileSize: 6000,
         downloadUrl: item.downloadUrl,
-        moduleName: "egov-tradelicence",
+        moduleName: "tl-services",
         statement: {
             labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
             labelKey: item.description
@@ -1425,7 +1425,7 @@ export const showHideFields = (action, state, dispatch, data = {}) => {
     );
 }
 
-export const setServiceType = (action, state, dispatch, value) => {
+export const setServiceType = (action, state, dispatch, value,screen, path) => {
     let data = [];
 
     const MdmsTradeType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.MdmsTradeType")
@@ -1439,8 +1439,8 @@ export const setServiceType = (action, state, dispatch, value) => {
 
     dispatch(
         handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.serviceType.props",
+            screen,
+            path,
             "data",
             serviceTypes
         ))
@@ -1453,7 +1453,7 @@ export function buildTradeDetailsObj() {
             licenseType: {
                 ...getSelectField(tradeLicenseTypeField),
                 beforeFieldChange: (action, state, dispatch) => {
-                    setServiceType(action, state, dispatch, action.value)
+                    setServiceType(action, state, dispatch, action.value, "apply", "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.serviceType.props")
                     const type = get(state.screenConfiguration.screenConfig.apply, "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.licenseType.props.value")
                     if(type !== action.value) {
                         // dispatch(
@@ -1505,7 +1505,7 @@ export function buildTradeDetailsObj() {
                                         "apply",
                                         "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children._licensePeriod",
                                         "props.value",
-                                        licensePeriodValue || "15"
+                                        "15"
                                 )
                             )
                         }

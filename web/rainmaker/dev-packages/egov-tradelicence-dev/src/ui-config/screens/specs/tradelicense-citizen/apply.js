@@ -145,7 +145,7 @@ const prefillData = (action, state, dispatch) => {
               serviceType ===  DL_PEDAL_RICKSHAW_LOADING_REHRI
       )
   )
-  setServiceType(action, state, dispatch, licenseType)
+  setServiceType(action, state, dispatch, licenseType, "apply", "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.serviceType.props")
     const data = {
       applicationType: serviceType === RC_PEDAL_RICKSHAW_LOADING_REHRI || serviceType === DL_PEDAL_RICKSHAW_LOADING_REHRI || serviceType === LICENSE_DHOBI_GHAT,
       licensePeriod: serviceType === RC_PEDAL_RICKSHAW_LOADING_REHRI,

@@ -238,24 +238,29 @@ const getMdmsData = async (dispatch, body) => {
 export const getTradeTypes = async(action, state, dispatch) => {
   const tradeTypePayload = [{
     moduleName: "TradeLicense",
-    masterDetails: [{name: "TradeType"}]
+    masterDetails: [{ name: "TradeType", filter: `[?(@.type == "TL")]` }]
   }]
 
   const tradeRes = await getMdmsData(dispatch, tradeTypePayload);
   const {TradeLicense} = tradeRes.MdmsRes || {}
-  const tradeTypes = TradeLicense.TradeType || [] 
+  let tradeTypes = TradeLicense.TradeType || [] 
 
-  let data = tradeTypes.map((item,index) => {
-    return {
-      code : item.code
+  tradeTypes = tradeTypes.map((trade, index, array) => {
+    const findIndex = array.findIndex(item => item.category === trade.category);
+    if(index === findIndex) {
+      return {
+      code: trade.category,
+      label: getLocaleLabels(trade.category + "_GROUP", trade.category + "_GROUP")
     }
-  });
+    }
+  }).filter(item => !!item)
+  dispatch(
+    prepareFinalObject("applyScreenMdmsData.TradeLicense.MdmsTradeType", TradeLicense.TradeType)
+  )
   dispatch(
     prepareFinalObject(
       "applyScreenMdmsData.searchScreen.tradeType",
-      data
+      tradeTypes
     )
   );
-
-  set(action, "screenConfig.components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.tradeName.props.data", data)
 }

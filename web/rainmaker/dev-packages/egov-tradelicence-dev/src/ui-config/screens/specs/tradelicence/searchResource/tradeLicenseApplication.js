@@ -10,6 +10,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
+import { setServiceType } from "../applyResource/tradeDetails";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -167,28 +168,49 @@ export const tradeLicenseApplication = getCommonCard({
       }
     }),
 
-    tradeName: getSelectField({
+    tradeType: {...getSelectField({
       label: {
-        labelName: "Trade Name", labelKey: "TL_HOME_SEARCH_RESULTS_TRADE_NAME_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Trade Name",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TRADE_NAME_PLACEHOLDER"
-      },
-      required: false,
-      // localePrefix: {
-      //   moduleName: "WF",
-      //   masterName: "NEWTL"
-      // },
-      jsonPath: "searchScreen.businessService", 
-      data: [],
-      // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      gridDefination: {
+        labelName: "License Type",
+        labelKey: "TL_TRADE_TYPE_LABEL"
+    },
+    placeholder: {
+        labelName: "Select License Type",
+        labelKey: "TL_TRADE_TYPE_PLACEHOLDER"
+    },
+    required: false,
+    jsonPath: "searchScreen.licenseType",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.searchScreen.tradeType",
+    gridDefination: {
         xs: 12,
         sm: 4
-      }
+    }
     }),
-
+    beforeFieldChange:(action, state, dispatch) => {
+      setServiceType(action, state, dispatch, action.value, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.serviceType.props")
+    }
+  },
+    serviceType: getSelectField(
+      {
+        label: {
+            labelName: "Service Type",
+            labelKey: "TL_SERVICE_TYPE_LABEL"
+        },
+        placeholder: {
+            labelName: "Select Service Type",
+            labelKey: "TL_SERVICE_TYPE_PLACEHOLDER"
+        },
+        required: false,
+        jsonPath: "searchScreen.businessService",
+        optionValue: "code",
+        optionLabel: "label",
+        data: [],
+        gridDefination: {
+            xs: 12,
+            sm: 4 
+        }
+    })
   }),
   
 

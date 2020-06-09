@@ -441,7 +441,7 @@ class TableData extends Component {
     const inboxData = [{ headers: [], rows: [] }];
     try {
       this.showLoading();
-      this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
+      await this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
