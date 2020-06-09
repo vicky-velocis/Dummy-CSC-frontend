@@ -138,6 +138,7 @@ const getAcknowledgementCard = (
     || purpose === _ActionButton.BACKWORD1
     ||purpose === _ActionButton.BACKWORD2
     ||purpose === _ActionButton.SEND_BACK_TO_DETAILS_REVIEW
+    || purpose === _ActionButton.SEND_BACK_TO_DETAILS_VERIFICATION
     ) && status === "success") {
     return {
       headerdoe,
