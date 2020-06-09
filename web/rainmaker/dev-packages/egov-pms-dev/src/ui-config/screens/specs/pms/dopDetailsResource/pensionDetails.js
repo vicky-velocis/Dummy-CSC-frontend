@@ -1,6 +1,8 @@
 import {
   getBreak,
   getCommonCard,
+  getCommonParagraph,
+
   getCommonContainer,
   getCommonGrayCard,
   getCommonTitle,
@@ -151,6 +153,16 @@ export const pensionDetails = (data) => {
     
   },
   break: getBreak(),
+  CalculationNote:getCommonParagraph({
+    labelName: "Note: The calculated benefits will be removed if the application is sent back.",
+    labelKey: "PENSION_WF_PENDING_FOR_CALCULATION_WARNING",
+    props:{      
+      style:{      
+        fontweight:900
+      }
+    }
+  },
+  ),
   pensionDetailsConatiner: getCommonContainer({
    
    
