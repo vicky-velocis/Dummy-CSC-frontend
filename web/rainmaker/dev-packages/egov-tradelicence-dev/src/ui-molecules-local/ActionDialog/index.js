@@ -158,7 +158,7 @@ class ActionDialog extends React.Component {
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && (
+                  {showEmployeeList && !!dropDownData.length && (
                     <Grid
                       item
                       sm="12"
