@@ -24,18 +24,14 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
     const reviewUrl = `${appendUrl}/egov-opms/petnoc_summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    dispatch(window.location=(reviewUrl));
+    dispatch(setRoute(reviewUrl));
   }
   else {
-    // const appendUrl =
-    // process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    // const reviewUrl = `${appendUrl}/egov-opms/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    // dispatch(setRoute(reviewUrl));
     let tenantId = getOPMSTenantId();
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
     const reviewUrl = `${appendUrl}/egov-opms/petnoc_summary?applicationNumber=${applnid}&tenantId=${tenantId}`;
-    dispatch(window.location=(reviewUrl));
+    dispatch(setRoute(reviewUrl));
   }
 };
 
