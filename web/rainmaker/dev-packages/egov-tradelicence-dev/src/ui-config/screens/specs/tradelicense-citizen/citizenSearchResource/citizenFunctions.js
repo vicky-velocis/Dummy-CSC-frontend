@@ -9,6 +9,7 @@ import commonConfig from "config/common.js";
 import set from "lodash/set";
 import TradeLicenseIcon from "../../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import FormIcon from '../../../../../ui-atoms-local/Icons/FormIcon';
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const getMdmsData = async (dispatch, body) => {
   let mdmsBody = {
@@ -64,6 +65,8 @@ export const getTradeTypes = async (action, state, dispatch) => {
     prepareFinalObject("myApplicationsCount", licensesCount)
   );
 
+  const permanentCity = JSON.parse(getUserInfo()).permanentCity
+
   const cardItems = [
     {
       label: {
@@ -71,7 +74,10 @@ export const getTradeTypes = async (action, state, dispatch) => {
           labelName: "Apply"
       },
       icon: <TradeLicenseIcon />,
-      route: `apply?tenantId=${tenants.tenants[0].code}`
+      route: tenants.tenants.length > 1 ? {
+        screenKey: "home",
+        jsonPath: "components.cityPickerDialog"
+      } : !!tenants.tenants.length ? `apply?tenantId=${tenants.tenants[0].code}` : `apply?tenantId=${permanentCity}`
     },
     {
       label: {

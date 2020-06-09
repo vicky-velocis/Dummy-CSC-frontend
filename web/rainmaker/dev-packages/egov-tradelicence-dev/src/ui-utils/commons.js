@@ -760,21 +760,26 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 const isValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
-  const mimes = mimeType.split("/")
-  const accepted = acceptedFiles.split("/");
-  if(mimeType === acceptedFiles) {
+  const mimes = mimeType.split("/");
+  let acceptedTypes = acceptedFiles.split(",");
+  acceptedTypes = acceptedTypes.reduce((prev, curr) => {
+    const accepted = curr.split("/");
+    prev = [...prev, {first: accepted[0], second: accepted[1]}]
+    return prev
+  }, [])
+  if(acceptedFiles.includes(mimeType)) {
     return {valid: true}
-  } else if(mimes[0] === accepted[0] && accepted[1] === "*") {
+  } else  {
+   const findItem = acceptedTypes.find(item => item.first === mimes[0])
+   if(!!findItem && findItem.second === "*") {
     return {valid: true}
-  } else {
+   } else {
     return {  valid: false, 
-              errorMessage: accepted[0] === "image" 
-              ? "Only images can be uploaded" 
-              : "Only pdf files can be uploaded"
+              errorMessage: `Please upload the allowed type files only.`
             }
   }
 }
-
+}
 
 export const handleFileUpload = (event, handleDocument, props, stopLoading) => {
   const S3_BUCKET = {

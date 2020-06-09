@@ -141,30 +141,32 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         }
     }
 
-    const {licensesCount = 0} = await getCount(queryObject) || {};
+    // const {licensesCount = 0} = await getCount(queryObject) || {};
 
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.count",
-        licensesCount
-      )
-    );
-
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.title",
-        `${getTextToLocalMapping(
-          "Search Results for Trade License Applications"
-        )} (${licensesCount})`
-      )
-    );
+    
 
     const response = await getSearchResults(queryObject);
     try {
+      const length = response.Licenses.length
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.count",
+          length
+        )
+      );
+  
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Trade License Applications"
+          )} (${length})`
+        )
+      );
       let data = response.Licenses.map(item => ({
   
         [getTextToLocalMapping("Application No")]:
