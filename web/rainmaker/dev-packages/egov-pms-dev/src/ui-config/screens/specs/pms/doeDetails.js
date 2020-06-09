@@ -499,6 +499,17 @@ export const prepareEditFlow = async (
       DuesPresent
     )
   );
+  if(!Accesslable[4].IsCalculate)
+  {
+    dispatch(
+      handleField(
+        "doeDetails",
+        "components.div.children.formwizardSecondStep.children.pensionDetails.children.cardContent.children.CalculationNote",
+        "props.style",
+        { display: "none" }
+      )
+    );
+  }
   if(disabilityPercentage===0 || disabilityPercentage === null)
   { 
   dispatch(

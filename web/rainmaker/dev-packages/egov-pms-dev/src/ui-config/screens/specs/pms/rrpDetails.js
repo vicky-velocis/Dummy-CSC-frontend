@@ -585,8 +585,6 @@ export const prepareEditFlow = async (
       AnyMisconductInsolvencyInefficiency
     )
   );
-
-  alert(Accesslable[4].IsCalculate)
   if(!Accesslable[4].IsCalculate)
   {
     dispatch(

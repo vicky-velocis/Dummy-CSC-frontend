@@ -403,7 +403,7 @@ prepareEditFlow(state, dispatch, pensionerNumber, tenantId).then(res=>
             props: {
               dataPath: "ProcessInstances",
               moduleName: "DOE_SERVICE",
-              pageName:"REGISTER-BOTTOM"
+              pageName:"REGISTER"
              // updateUrl: "/tl-services/v1/_processWorkflow"
             }
         },

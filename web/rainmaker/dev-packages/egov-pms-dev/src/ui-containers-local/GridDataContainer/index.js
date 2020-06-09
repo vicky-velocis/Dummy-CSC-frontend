@@ -27,7 +27,7 @@ import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import "./index.css";
+//import "./index.css";
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -91,7 +91,7 @@ class GridDataContainer extends React.Component {
       }
       let response = await httpRequest(
       "post",
-      "/pension-ruleengine/v1/_calculateRevisedPension",
+      "/pension-calculator/v1/_calculateRevisedPension",
       "",
       [],
       { 

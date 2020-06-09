@@ -776,7 +776,7 @@ const wfActionSubmit= async (state, dispatch) => {
      //export const pmsfooter = footer(response) ;
      dispatch(prepareFinalObject("ProcessInstances", get(response, "ProcessInstances", [])));    
      dispatch(prepareFinalObject("TaskHistory", get(payload_, "ProcessInstances", [])));
-     dispatch(prepareFinalObject("IsCalculated", false));    
+     dispatch(prepareFinalObject("IsCalculated", true));    
     prepareDocumentsUploadData(state,dispatch)
   }
   else{

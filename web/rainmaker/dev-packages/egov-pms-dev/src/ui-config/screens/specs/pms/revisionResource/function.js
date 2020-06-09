@@ -238,7 +238,7 @@ export const calculateRevisedPension = async (state, dispatch) => {
               let ProcessInstances= get(state.screenConfiguration.preparedFinalObject,"ProcessInstances", [])
               let response = await httpRequest(
                   "post",
-                  "/pension-ruleengine/v1/_calculateRevisedPension",
+                  "/pension-calculator/v1/_calculateRevisedPension",
                   "",
                   [],
                   { 

@@ -407,7 +407,7 @@ let IsFormValid = ValidateForm(state,dispatch,activeStep,false)
      //export const pmsfooter = footer(response) ;
      dispatch(prepareFinalObject("ProcessInstances", get(response, "ProcessInstances", [])));    
      dispatch(prepareFinalObject("TaskHistory", get(payload_, "ProcessInstances", [])));
-     dispatch(prepareFinalObject("IsCalculated", false));    
+     dispatch(prepareFinalObject("IsCalculated", true));    
     prepareDocumentsUploadData(state,dispatch)
   }
 }
@@ -1231,7 +1231,7 @@ const callBackForNext = async (state, dispatch) => {
 else
 {
   const ActionItem = [
-    { action: "PENSION_INITIATE" }, 
+    { action: "INITIATE" }, 
   
   ];
 

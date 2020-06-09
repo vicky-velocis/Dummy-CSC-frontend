@@ -245,17 +245,17 @@ prepareEditFlow(state, dispatch, pensionerNumber, tenantId).then(res=>
           }
         },
      
-    PensionBasicDetails: {
-      uiFramework: "custom-containers-local",
-      componentPath: "PensionBasicContainer",
-      moduleName: "egov-pms",
-        props: {
-          dataPath: "ProcessInstances",
-          moduleName: "DOE_SERVICE",
-          pageName:"REVISION"
-        }
-    },
-    break: getBreak(),
+    // PensionBasicDetails: {
+    //   uiFramework: "custom-containers-local",
+    //   componentPath: "PensionBasicContainer",
+    //   moduleName: "egov-pms",
+    //     props: {
+    //       dataPath: "ProcessInstances",
+    //       moduleName: "DOE_SERVICE",
+    //       pageName:"REVISION"
+    //     }
+    // },
+    // break: getBreak(),
        
         PensionReview: {
           uiFramework: "custom-containers-local",        

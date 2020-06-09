@@ -508,7 +508,7 @@ else{
       }
       let response = await httpRequest(
       "post",
-      "/pension-ruleengine/v1/_calculateRevisedPension",
+      "/pension-calculator/v1/_calculateRevisedPension",
       "",
       [],
       { 
