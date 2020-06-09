@@ -32,7 +32,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   componentDidMount = async () => {
-    console.log("================hi=================")
     const { prepareFinalObject, toggleSnackbar } = this.props;
     const applicationNumber = getQueryArg(
       window.location.href,
@@ -210,7 +209,6 @@ class WorkFlowContainer extends React.Component {
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
-        
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;

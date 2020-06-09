@@ -242,7 +242,8 @@ export const updatePFOforSearchResults = async (
   }
 
   if (payload && payload.Licenses) {
-    dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
+    const licenses = organizeLicenseData(payload.Licenses);
+    dispatch(prepareFinalObject("Licenses[0]", licenses[0]));
   }
 
   const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
@@ -879,7 +880,7 @@ export const organizeLicenseData = data => {
       ...owner,
       age: Number((new Date().getTime() - owner.dob)/31536000000).toFixed(0)
     }))
-    tradeLicenseDetail = {...tradeLicenseDetail, owners}
+    tradeLicenseDetail = {...tradeLicenseDetail, additionalDetail: {...tradeLicenseDetail.additionalDetail, licensePeriod: tradeLicenseDetail.additionalDetail.licensePeriod + ""}, owners}
     applicationType = !applicationType && businessService === RENEWAL_RENT_DEED_SHOP ? "Renew" : applicationType
     return {...item, tradeLicenseDetail, applicationType}
   })

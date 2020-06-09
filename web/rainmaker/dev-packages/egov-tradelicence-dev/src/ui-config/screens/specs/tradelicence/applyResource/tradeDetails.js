@@ -1274,6 +1274,7 @@ export const changeDocuments = (action, state, dispatch, licenseType) => {
         }, 
         maxFileSize: 6000,
         downloadUrl: item.downloadUrl,
+        moduleName: "egov-tradelicence",
         statement: {
             labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
             labelKey: item.description
