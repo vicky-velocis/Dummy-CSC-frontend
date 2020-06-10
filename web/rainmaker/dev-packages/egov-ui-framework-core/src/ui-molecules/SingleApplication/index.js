@@ -113,34 +113,33 @@ class SingleApplication extends React.Component {
         }
       }
     } else if (moduleName === "PET-NOC") {
-      //debugger
       switch (item.status) {
-       case "INITIATED":
-         window.location.href=`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-       default:
-          window.location.href=`/egov-opms/search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`;
+        case "INITIATED":
+          setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
+        default:
+          setRoute(`/egov-opms/search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "SELL-MEAT-NOC") {
       switch (item.status) {
         case "INITIATED":
-          window.location.href=`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          window.location.href=`/egov-opms/sellmeatnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`;
+          setRoute(`/egov-opms/sellmeatnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "ADVERTISEMENT-NOC") {
       switch (item.status) {
         case "INITIATED":
-          window.location.href=`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          window.location.href=`/egov-opms/advertisementnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`;
+          setRoute(`/egov-opms/advertisementnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
     } else if (moduleName === "ROADCUT-NOC") {
       switch (item.status) {
         case "INITIATED":
-          window.location.href=`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
         default:
-          window.location.href=`/egov-opms/roadcutnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`;
-       }
+          setRoute(`/egov-opms/roadcutnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
+      }
     }
   };
 
