@@ -10,6 +10,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
+import { setServiceType } from "../applyResource/tradeDetails";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -42,12 +43,10 @@ export const tradeLicenseApplication = getCommonCard({
 
     tradeLicenseNo: getTextField({
       label: {
-        labelName: "Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+        labelName: "Trade License No.", labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
       },
       placeholder: {
-        labelName: "Enter Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+        labelName: "Enter Trade License No.", labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -56,7 +55,7 @@ export const tradeLicenseApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumbers"
+      jsonPath: "searchScreen.licenseNumber"
     }),
     ownerMobNo: getTextField({
       label: {
@@ -82,8 +81,8 @@ export const tradeLicenseApplication = getCommonCard({
     })
   }),
   applicationTypeAndToFromDateContainer: getCommonContainer({
-    applicationType: {
-      ...getSelectField({
+    applicationType: 
+      getSelectField({
         label: {
           labelName: "Application Type",
           labelKey: "TL_APPLICATION_TYPE_LABEL"
@@ -98,7 +97,13 @@ export const tradeLicenseApplication = getCommonCard({
         },
         jsonPath:
           "searchScreen.applicationType",
-        sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
+        data: [{
+          code : "New"
+        },
+        {
+          code : "Renew"
+        }],
+        // sourceJsonPath: "applyScreenMdmsData.searchScreen.applicationType",
         gridDefination: {
           xs: 12,
           sm: 4
@@ -106,13 +111,11 @@ export const tradeLicenseApplication = getCommonCard({
         props: {
           className: "applicant-details-error"
         }
-      })
-    },
+      }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {
-        labelName: "Select From Date",
-        labelKey: "TL_FROM_DATE_PLACEHOLDER"
+        labelName: "Select From Date",labelKey: "TL_FROM_DATE_PLACEHOLDER"
       },
       jsonPath: "searchScreen.fromDate",
       gridDefination: {
@@ -157,33 +160,6 @@ export const tradeLicenseApplication = getCommonCard({
       },
       jsonPath: "searchScreen.status",
       data:[
-        {
-          code : "INITIATED"
-        },
-        {
-          code : "APPLIED"
-        },
-        {
-          code : "FIELDINSPECTION"
-        },
-        {
-          code : "APPROVED"
-        },
-        {
-          code : "CANCELLED"
-        },
-        {
-          code : "REJECTED"
-        },
-        {
-          code : "CITIZENACTIONREQUIRED"
-        },
-        {
-          code : "PENDINGPAYMENT"
-        },
-        {
-          code : "PENDINGAPPROVAL"
-        }
       ],
       // sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
       gridDefination: {
@@ -192,6 +168,49 @@ export const tradeLicenseApplication = getCommonCard({
       }
     }),
 
+    tradeType: {...getSelectField({
+      label: {
+        labelName: "License Type",
+        labelKey: "TL_TRADE_TYPE_LABEL"
+    },
+    placeholder: {
+        labelName: "Select License Type",
+        labelKey: "TL_TRADE_TYPE_PLACEHOLDER"
+    },
+    required: false,
+    jsonPath: "searchScreen.licenseType",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.searchScreen.tradeType",
+    gridDefination: {
+        xs: 12,
+        sm: 4
+    }
+    }),
+    beforeFieldChange:(action, state, dispatch) => {
+      setServiceType(action, state, dispatch, action.value, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.serviceType.props")
+    }
+  },
+    serviceType: getSelectField(
+      {
+        label: {
+            labelName: "Service Type",
+            labelKey: "TL_SERVICE_TYPE_LABEL"
+        },
+        placeholder: {
+            labelName: "Select Service Type",
+            labelKey: "TL_SERVICE_TYPE_PLACEHOLDER"
+        },
+        required: false,
+        jsonPath: "searchScreen.businessService",
+        optionValue: "code",
+        optionLabel: "label",
+        data: [],
+        gridDefination: {
+            xs: 12,
+            sm: 4 
+        }
+    })
   }),
   
 

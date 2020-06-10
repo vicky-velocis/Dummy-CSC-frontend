@@ -14,6 +14,7 @@ import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils
 import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
+import { searchApiCall, getStatusList, getTradeTypes } from "./searchResource/functions"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -97,6 +98,9 @@ const tradeLicenseSearchAndResult = {
     //   );
     // }
     getMdmsData(dispatch);
+    getStatusList(state, dispatch, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo")
+    searchApiCall(state, dispatch, true)
+    getTradeTypes(action, state, dispatch)
     return action;
   },
   components: {
