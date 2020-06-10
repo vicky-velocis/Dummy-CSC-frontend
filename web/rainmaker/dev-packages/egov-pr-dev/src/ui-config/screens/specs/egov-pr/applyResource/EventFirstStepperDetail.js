@@ -190,7 +190,7 @@ import {
           jsonPath: "PublicRealation[0].CreateEventDetails.eventTitle",
           required: true,
           pattern: getPattern("EventTitle"),
-          errorMessage: "PR_ERR_DEFAULT_ALPHANUM_FIELD_MSG"
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
         }),
         area: {
           ...getSelectField({

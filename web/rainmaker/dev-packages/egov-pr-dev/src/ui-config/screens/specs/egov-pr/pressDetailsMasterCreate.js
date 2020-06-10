@@ -27,6 +27,8 @@ import {
   getSearchResultsViewEvent,
   furnishNocResponse_PressMaster
 } from "../../../../ui-utils/commons";
+import commonConfig from '../../../../config/common';
+
 
 const header = getCommonHeader({
   labelName: "Create Press Master",
@@ -36,7 +38,7 @@ const header = getCommonHeader({
 
 const getMdmsData = async (action, state, dispatch) => {
  
-  let tenantId =getTenantId();
+  let tenantId =commonConfig.tenantId;
 
   let mdmsBody = {
     MdmsCriteria: {

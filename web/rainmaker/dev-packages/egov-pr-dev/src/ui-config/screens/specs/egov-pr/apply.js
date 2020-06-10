@@ -55,7 +55,7 @@ const applicationNumberContainer = () => {
   if (applicationNumber)
     return {
       uiFramework: "custom-atoms-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "ApplicationNoContainer",
       props: {
         number: `${applicationNumber}`,
@@ -195,6 +195,7 @@ export const prepareEditFlow = async (
  
  if(response.ResponseBody.length>0)
  {
+   debugger
 	
    try {
      let payload1 = null;
@@ -229,39 +230,43 @@ export const prepareEditFlow = async (
       let PublicRelation = response.ResponseBody[0]
     
       let doc=JSON.parse(PublicRelation.eventString)
-     // console.log(doc.length)
+    
+     let doctitle = [];
       if(doc.length>0)
       {
-       doc.map(item => {
-	  
-	 
+ 
+  
+  if(doc.length>0)
+  {
+
+    for(let i=0; i<doc.length; i++) {
+      let eventDoc = doc[i]['fileStoreId']
+          doctitle.push(doc[i]['fileName:']);
+     
+      if (eventDoc !== '' || eventDoc!==undefined) {
         documentsPreview.push({
-          title: "EVENT_DOCUMENT",
-          fileStoreId: item.fileStoreId,
-          linkText: "View"
-        });
-	 });
-		console.log("Summary previewwwwwwwwwwww");
-		console.log(documentsPreview)
-	 
+          title: doc[i]['fileName:'],
+          fileStoreId: eventDoc,
+          linkText: "View",
+          fileName:doc[i]['fileName:']
+        })
         let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
         let fileUrls =
           fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-        documentsPreview = documentsPreview.map(function (doc, index) {
-			console.log("doccccccccccccccccc");
-			console.log(doc);
-      doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-          doc["documentType"] = `Document - ${index + 1}`;
 
-          doc["fileName"] = `Document - ${index + 1}`;
-          
-          
-            return doc;
+        documentsPreview = documentsPreview.map(function (doc, index) {
+  
+             
+      doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+      
+          return doc;
         });
-	
+      }
+      }
+
     }
+  }
         dispatch(prepareFinalObject("EventDocuments", documentsPreview));
-	 
   let Refurbishresponse = furnishNocResponse(response);
   let startdate= response.ResponseBody[0].startDate
   startdate=startdate.split(" ")[0]
@@ -275,7 +280,8 @@ export const prepareEditFlow = async (
       startdate
     )
   );
- }
+ 
+}
 }
 }
 

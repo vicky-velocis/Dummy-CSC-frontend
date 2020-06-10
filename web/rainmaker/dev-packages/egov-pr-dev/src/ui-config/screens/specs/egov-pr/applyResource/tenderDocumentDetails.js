@@ -26,7 +26,7 @@ export const tenderDocumentDetails = getCommonCard({
   documentList: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-pr",
-    componentPath: "DocumentListContainer",
+    componentPath: "DocumentListTenderContainer",
     required: true,
     props: {
       buttonLabel: {

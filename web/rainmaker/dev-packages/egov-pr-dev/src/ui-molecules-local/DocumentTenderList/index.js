@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { lSRemoveItemlocal, lSRemoveItem} from "../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -126,13 +125,19 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
-
+  
     const {
       documentsList,
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+	debugger
     let index = 0;
+    if(documentsUploadRedux)
+    {
+
+    }
+    else{
     documentsList.forEach(docType => {
       docType.cards &&
         docType.cards.forEach(card => {
@@ -188,24 +193,12 @@ class DocumentList extends Component {
     });
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
   };
-
+  }
   onUploadClick = uploadedDocIndex => {
-
-   
-    if(this.props.hasOwnProperty('documents') === false)
-    {
-      localStorage.setItem("libdocindex",uploadedDocIndex)
-    }
-    else
-    {
-      lSRemoveItemlocal("libdocindex")
-      lSRemoveItem("libdocindex")
-    }
     this.setState({ uploadedDocIndex });
   };
 
   handleDocument = async (file, fileStoreId) => {
-    debugger;
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);
@@ -235,7 +228,6 @@ class DocumentList extends Component {
   };
 
   handleChange = (key, event) => {
-   
     const { documentsUploadRedux, prepareFinalObject } = this.props;
     prepareFinalObject(`documentsUploadRedux`, {
       ...documentsUploadRedux,

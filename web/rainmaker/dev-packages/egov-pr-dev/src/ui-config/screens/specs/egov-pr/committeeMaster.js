@@ -3,7 +3,6 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import TodayIcon from "../../../../ui-atoms-local/Icons/TodayIcon";
 import LibraryIcon from "../../../../ui-atoms-local/Icons/LibraryIcon"
-import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
@@ -34,7 +33,7 @@ const cardItems = [
     class="material-icons module-page-icon" style={{fontSize:"50px"}}>
    forum
   </i>,
-    // <TodayIcon />
+   
     route: "createCommitteeMaster"
   },
   {
@@ -58,18 +57,7 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "eventHome",
   beforeInitScreen: (action, state, dispatch) => {
-    getRequiredDocData(action, state, dispatch).then(() => {
-      let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.FireNoc.Documents",
-        []
-      );
-      set(
-        action,
-        "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
-      );
-    });
+   
     return action;
   },
   components: {

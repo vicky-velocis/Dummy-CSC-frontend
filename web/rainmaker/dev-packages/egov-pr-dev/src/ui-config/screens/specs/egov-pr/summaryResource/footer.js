@@ -10,18 +10,41 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
 //import { Route } from "./C:/Users/Vaishnavi.Zadpe/AppData/Local/Microsoft/TypeScript/2.6/node_modules/@types/react-router";
 
+
+
+const cancelTohome = async (state, dispatch) => {
+  
+
+  setTimeout(function(){  
+    
+    const acknowledgementUrl =`/egov-pr/home?modulecode=`+localStorageGet("modulecode");
+   // dispatch(setRoute(acknowledgementUrl))
+ 
+   window.location.href = acknowledgementUrl;
+}, 1500); 
+
+  //}
+};
+
+
 const updateNocApplication = async (state, dispatch) => {
   let errorMessage = {
     labelName: "Event Created Successfully",
     labelKey: "PR_ERR_EVENT_MESSAGE_TOAST"
   };
-  dispatch(toggleSnackbar(true, errorMessage, "success")) 
-  setTimeout(function(){  
-    
-    const acknowledgementUrl =`home?modulecode=`+localStorageGet("modulecode");
-    dispatch(setRoute(acknowledgementUrl))
+
+
+
+  dispatch(toggleSnackbar(true, errorMessage, "success"))
+  
  
 
+  setTimeout(function(){  
+    
+    const acknowledgementUrl =`/egov-pr/home?modulecode=`+localStorageGet("modulecode");
+   // dispatch(setRoute(acknowledgementUrl))
+ 
+   window.location.href = acknowledgementUrl;
 }, 1500); 
 
   //}
@@ -109,7 +132,11 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: cancelNocApplication
     },
-    visbile:false
+    visible:getQueryArg(window.location.href,"status")==="EXPIRED"  || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?false:true
+
+   
+
+
   },
   submitButton: {
     componentPath: "Button",
@@ -138,9 +165,46 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: updateNocApplication
-    }
-  }
-,
+    },
+    visible:getQueryArg(window.location.href,"status")==="EXPIRED"  || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?false:true
+    
+
+  },
+  cancelbth: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "40px"
+      }
+    },
+    children: {
+      testButtonLabel: getLabel({
+        labelName: "CANCEL",
+        labelKey: "PR_COMMON_BUTTON_CANCEL"
+      }),
+      testButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: cancelTohome
+    },
+    visible:getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?true:false
+
+   
+
+
+  },
+
  
 
 });

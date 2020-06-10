@@ -47,6 +47,8 @@ import {getPressGridDatanote} from "../egov-pr/searchResource/citizenSearchFunct
 import { searchResultsPressMasterList,searchGridSecondstep } from "./searchResource/searchResults";
 import { getPressGridData } from "./searchResource/citizenSearchFunctions";
 import "./publishtender.css";
+import commonConfig from '../../../../config/common';
+
 export const stepsData = [
   { labelName: "PRESS NOTE DETAILS", labelKey: "PR_GENERATE_PRESS_NOTE_DETAILS" },
   { labelName: "PUBLICATION NAME LISXT", labelKey: "PR_PUBLICATION_NAME_LIST" },
@@ -121,7 +123,7 @@ export const formwizardThirdStep = {
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+  let tenantId =  commonConfig.tenantId;
 
   
   let mdmsBody = {
@@ -316,43 +318,7 @@ dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPrevie
   dispatch(prepareFinalObject("pressnote", Refurbishresponse));
 }
  }
-/* let documentsPreview = [];
- 
-     // Get all documents from response
-     let firenoc = get(state, "screenConfiguration.preparedFinalObject.PublicRealation", {});
-     let uploadVaccinationCertificate = firenoc.hasOwnProperty('eventImage') ?
-       firenoc[0].CreateEventDetails.eventImage[0]['fileStoreId'] : '';
 
- 
-     if (uploadVaccinationCertificate !== '') {
-       documentsPreview.push({
-         title: "PRESS_NOTE_DOCUMENT",
-         fileStoreId: uploadVaccinationCertificate,
-         linkText: "View"
-       })
-       let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-       let fileUrls =
-         fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-       documentsPreview = documentsPreview.map(function (doc, index) {
- 
-         doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-         //doc["name"] = doc.fileStoreId;
-         doc["name"] =
-           (fileUrls[doc.fileStoreId] &&
-             decodeURIComponent(
-               fileUrls[doc.fileStoreId]
-                 .split(",")[0]
-                 .split("?")[0]
-                 .split("/")
-                 .pop()
-                 .slice(13)
-             )) ||
-           `Document - ${index + 1}`;
-         return doc;
-       });
-       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-     }
-  */
 
 };
 
@@ -425,10 +391,6 @@ const screenConfig = {
     }
 
    
-     // set(
-		// action.screenConfig,  "components.div.children.formwizardThirdStep.children.EmailSmsContent.children.cardContent.children.SMSContent.props.value",		
-        // localStorageGet("smsTemplate")
-    // );
 
 	 set(
 		action.screenConfig,  "components.div.children.formwizardThirdStep.children.EmailSmsContent.children.cardContent.children.SMSContent.props.value",
@@ -470,11 +432,9 @@ const screenConfig = {
           }
         },
         stepper,
-       // searchResultsPressMasterList,
         formwizardFirstStep,
         formwizardSecondStep,
        formwizardThirdStep,
-        // formwizardFourthStep,
         pressapplyfooter
       }
     }

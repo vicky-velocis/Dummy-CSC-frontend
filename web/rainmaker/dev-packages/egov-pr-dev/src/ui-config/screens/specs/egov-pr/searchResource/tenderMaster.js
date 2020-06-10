@@ -72,7 +72,7 @@ export const tenderMSWordTemplate = getCommonCard({
           labelName: "Subject",
           labelKey: "PR_TENDER_DETAILS_SUBJECT_PLACEHOLDER"
         },
-        pattern: getPattern("TextValidation"),
+        pattern: getPattern("subjectvalidation"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "tenderNotice.tenderSubject",

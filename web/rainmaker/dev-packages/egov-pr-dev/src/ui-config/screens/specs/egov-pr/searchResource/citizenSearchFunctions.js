@@ -16,21 +16,11 @@ import {
   getQueryArg,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from '../../../../../config/common';
+
 export const fetchData = async (action, state, dispatch) => {
   const response = await getSearchResults();
-  //const mdmsRes = await getMdmsData(dispatch);
-  //   let tenants =
-  //     mdmsRes &&
-  //     mdmsRes.MdmsRes &&
-  //     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-  //       if (item.code === "TL") return true;
-  //     });
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "applyScreenMdmsData.common-masters.citiesByModule.TL",
-  //       tenants
-  //     )
-  //   );
+ 
   try {
     if (response && response.PublicRelations && response.PublicRelations.length > 0) {
       dispatch(prepareFinalObject("searchResults", response.PublicRelations));
@@ -65,7 +55,7 @@ export const getGridData = async (action, state, dispatch) => {
     //  value.split(" ")[0];
 let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -174,7 +164,7 @@ export const getlibraryGridData = async (action, state, dispatch) => {
 //  value.split(" ")[0];
 let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -803,7 +793,7 @@ export const GetEmployees = async (state, dispatch) => {
 	 // get department name 
 	 let mdmsBody = {
         MdmsCriteria: {
-          tenantId: getTenantId(),
+          tenantId:commonConfig.tenantId,
           moduleDetails: [
             {
               moduleName: "RAINMAKER-PR",
@@ -1090,7 +1080,7 @@ facebookurl="<a>"+facebookurl+"</a>"
   response.ResponseBody[0]['endDateEndTime']=endDate
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -1168,12 +1158,12 @@ dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
       {
         for(let i=0; i<doc.length; i++) {
       let eventDoc =  PublicRelation.hasOwnProperty('eventString')?doc[i]['fileStoreId']:''
-          doctitle.push(doc[i]['fileName']);
+          doctitle.push(doc[i]['fileName:']);
      
       if (eventDoc !== '' || eventDoc!==undefined) {
         documentsPreview.push({
-          title: doc[i]['fileName'],
-          title: doc[i]['fileName'],
+          title: doc[i]['fileName:'],
+          title: doc[i]['fileName:'],
           fileStoreId: eventDoc,
           linkText: "View"
         })
@@ -1186,8 +1176,8 @@ dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
               console.log("mappppppppppp");
               console.log(doc)
       doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-          doc["name"] = `Document - ${index + 1}`;
-          doc["title"] = doctitle[index] ?  doctitle[index] : `Document - ${index + 1}`
+       //   doc["name"] = `Document - ${index + 1}`;
+          //doc["title"] = doctitle[index] ?  doctitle[index] : `Document - ${index + 1}`
          // doc["name"] = doctitle[index];
             // (fileUrls[doc.fileStoreId] &&
               // decodeURIComponent(
@@ -1591,7 +1581,7 @@ export const getEventListforInvitation = async (action, state, dispatch) => {
      
 	let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -1800,7 +1790,7 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
 
     dispatch(prepareFinalObject("documentsPreview", documentsPreview));
 
-    
+    localStorageSet('tenderFilStore',doc)
 
     dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
     
@@ -2076,7 +2066,7 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
     //  console.log(response);
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: getTenantId(),
+        tenantId: commonConfig.tenantId,
         moduleDetails: [
           {
             moduleName: "RAINMAKER-PR",
@@ -2342,7 +2332,7 @@ export const getCommitieeGridByIdData = async (action, state, dispatch,payload_c
       
       let mdmsBody = {
         MdmsCriteria: {
-          tenantId: getTenantId(),
+          tenantId:commonConfig.tenantId,
           moduleDetails: [
             {
               moduleName: "RAINMAKER-PR",
@@ -2666,10 +2656,16 @@ export const resendinvitation = async (state, dispatch, type="event") => {
     
 		let invitedGuest = selectedrows.map((item , index)=>{
 		   invitedGuestlist[index] = {
-							"receiverUuid":item[4],
-							"receiverName":item[1],
+							// "receiverUuid":item[4],
+							// "receiverName":item[1],
+							// "receiverEmail":item[3],
+              // "receiverMobile":item[2],
+              
+
+              "receiverUuid":item[5],
+							"receiverName":item[2],
 							"receiverEmail":item[3],
-							"receiverMobile":item[2],
+							"receiverMobile":item[4],
 					}
 				
 		 }
@@ -2706,19 +2702,19 @@ export const resendinvitation = async (state, dispatch, type="event") => {
       if(localStorageGet("resendmodule") === "EVENT")
       {
 
-        window.location = "/egov-pr/eventList";
+        window.location.href= "/egov-pr/eventList";
     //dispatch(setRoute(`eventList`))
     
     
 	  }	
 	  else if(localStorageGet("resendmodule") == "PRESSNOTE")
       {
-        window.location = "/egov-pr/pressNoteList";
+        window.location.href = "/egov-pr/pressNoteList";
 	//	dispatch(setRoute(`pressNoteList`))
 	  }	
 	  else
 	  {
-      window.location = "/egov-pr/TenderSearch";
+      window.location.href= "/egov-pr/TenderSearch";
 		//dispatch(setRoute(`TenderSearch`))
 	  }	
       

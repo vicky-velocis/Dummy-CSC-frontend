@@ -34,6 +34,8 @@ class UploadExternalGuests extends React.Component {
   async fileUpload(file){
  
      const url = baserequestURL +'/prscp-services/v1/invitation/guest/_upload';
+     //const url = 'http://192.168.12.124:8079/prscp-services/v1/invitation/guest/_upload';
+     //const url = 'http://192.168.12.113:8079/prscp-services/v1/invitation/guest/_upload';
      
      const formData = new FormData();
    

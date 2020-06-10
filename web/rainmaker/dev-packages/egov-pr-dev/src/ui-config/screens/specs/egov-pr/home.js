@@ -25,10 +25,7 @@ import {
 
 
 
-// getQueryArg(
-//   window.location.href,
-//   "modulecode"
-// )==="PR"?
+
 const header = getCommonHeader(
   {
     labelName: "",
@@ -207,7 +204,7 @@ const PRSCPSearchAndResult = {
     
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

@@ -412,6 +412,40 @@ export const handleFileUpload = (event, handleDocument, props) => {
       const file = files[key];
       const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
       const isSizeValid = getFileSize(file) <= maxFileSize;
+	  
+	  
+	        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
+      {
+         
+        if(localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined')
+        {
+         
+            switch(localStorage.getItem("libdocindex"))
+            {
+              case "0" :
+                 fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
+              break;
+              case "1" :
+                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
+              break;
+              case "2" :
+                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
+              break;
+              case "3" :
+                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
+              break;
+              case "4" :
+              fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
+              break;
+              case "5" :
+              fileValid = isFileValid(file, ["WAV", "wav", "AIFF", "aiff", "AU", "au", "PCM", "pcm", "BWF", "bwf", "mp3", "mpeg", "mp4", "M4P", "m4p", "m4v", "M4V", "MPG", "mpg", "mp2", "MP2", "MPE", "mpe", "MPV", "mpv", "MOV", "mov", "qt", "QT","quicktime","ogg","basic",]);
+              break;
+              default :
+              break;
+            }
+        }
+      }
+	  
       if (!fileValid) {
         if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
         {

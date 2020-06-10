@@ -24,6 +24,7 @@ import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { getlibraryGridData } from "./searchResource/citizenSearchFunctions";
 import { LibraryFilter } from "./gridFilter/Filter";
 import { httpRequest } from "../../../../ui-utils";
+import commonConfig from '../../../../config/common';
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -42,13 +43,7 @@ const pageResetAndChange = (state, dispatch) => {
 };
 const getMdmsData = async (action, state, dispatch) => {
   debugger
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-    ) || getTenantId();
-
-    //let tenantId =    
+  let tenantId =commonConfig.tenantId;   
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -97,13 +92,6 @@ const LibrarySearchAndResult = {
     dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
     dispatch(prepareFinalObject("eventReport", {}));
-
-    //PublicRealation[0].filterEvent
-    //PublicRealation[0].filterInviteEvent
-    //PublicRealation[0].filterLibraryEvent
-    //PublicRealation[0].filterpress
-    //PublicRealation[0].filtertender
-    //PublicRealation[0].filterpressMaster
     getlibraryGridData(action, state, dispatch);
     getMdmsData(action, state, dispatch)
     
@@ -137,7 +125,7 @@ const LibrarySearchAndResult = {
         },
         LibraryFilter,
           breakAfterSearch: getBreak(),
-        // progressStatus,
+       
         searchResultsLibrary
       }
     },

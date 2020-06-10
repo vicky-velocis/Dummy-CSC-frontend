@@ -87,9 +87,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].eventTitle"
-        // callBack: value => {
-        //   return value.split(".")[0];
-        // }
+      
       }
     ),
     area: getLabelWithValue(
@@ -99,9 +97,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].area"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+       
       }
     ),
     eventLocation: getLabelWithValue(
@@ -111,9 +107,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].eventLocation"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+       
       }
     ),
     sector: getLabelWithValue(
@@ -135,63 +129,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].EmpName",
-  //       callBack: value => {
-  //             //  value.split(" ")[0];
-  // let mdmsBody = {
-  //   MdmsCriteria: {
-  //     tenantId: tenantId,
-  //     moduleDetails: [
-  //       {
-  //         moduleName: "RAINMAKER-PR",
-  //         masterDetails: [{ name: "eventType" }, { name: "eventStatus" },{ name: "eventDocuments" },  { name: "eventSector" },, { name: "localityAreaName" }]
-  //       },
-       
-  //       {
-  //         moduleName: "tenant",
-  //         masterDetails: [
-  //           {
-  //             name: "tenants"
-  //           }
-  //         ]
-  //       },
   
-  
-  //       {
-  //         moduleName: "tenant",
-  //         masterDetails: [
-  //           {
-  //             name: "tenants"
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         moduleName: "common-masters",
-  //         masterDetails: [
-  //           {
-  //             name: "Department"
-  //           }
-  //         ]
-  //       },
-  //     ]
-  //   }
-  // };
-  //   let payload = null;
-  //   payload = getEmp(mdmsBody)
-  //   alert(JSON.stringify(payload))
-  
-  
-  //   for(let i=0;i<payload.MdmsRes["common-masters"].Department.length;i++)
-  //   {
-      
-  // if(value===payload.MdmsRes["common-masters"].Department[i].code)
-  // {
-  //   return payload.MdmsRes["common-masters"].Department[i].name
-  // }
-      
-  
-  //   }
-         
-  //       }
       }
     ),
     organizerEmployee: getLabelWithValue(
@@ -201,9 +139,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].organizerUsernName",
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+       
       }
     ),
     TypeOfEvent: getLabelWithValue(
@@ -287,30 +223,7 @@ import {
         }
       }
     )
-  // , startTime: getLabelWithValue(
-  // {
-  //   labelName: "Start Time",
-  //   labelKey: "START_TIME_LABEL"
-  // },
-  // {
-  //   jsonPath: "eventDetails[0].startTime"
-  //   // callBack: value => {
-  //   //   return value.split(".")[1];
-  //   // }
-  // }
-  // )
-  // , endTime: getLabelWithValue(
-  // {
-  //   labelName: "End Time",
-  //   labelKey: "END_TIME_LABEL"
-  // },
-  // {
-  //   jsonPath: "eventDetails[0].endTime"
-  //   // callBack: value => {
-  //   //   return value.split(".")[1];
-  //   // }
-  // }
-  // )
+  
   
   })
   })
@@ -364,9 +277,7 @@ import {
             },
             {
               jsonPath: "eventDetails[0].twitterUrl"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
+             
             }
             )
              },
@@ -464,10 +375,7 @@ import {
           gridDefination: {
             xs: 8
           },
-          // ...getCommonSubHeader({
-          //   labelName: "Event Details",
-          //   labelKey: "PR_EVENT_DETAILS_HEADER"
-          // })
+         
         },
         editSection: {
           componentPath: "Button",

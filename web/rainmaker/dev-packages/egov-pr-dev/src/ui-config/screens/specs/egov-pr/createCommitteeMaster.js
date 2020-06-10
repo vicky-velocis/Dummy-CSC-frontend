@@ -33,6 +33,7 @@ import {
   import { createCommittee } from "./committeeResource/createCommittee";
   import { selectCommitteeMember } from "./committeeResource/selectCommitteeMember"
   
+  import commonConfig from '../../../../config/common';
   
   export const stepsData = [
     { labelName: "Create Commitee Details", labelKey: "PR_CREATE_COMMITTEE" },
@@ -85,7 +86,7 @@ import {
   };
   
   const getMdmsData = async (action, state, dispatch) => {
-    let tenantId = getTenantId();
+    let tenantId = commonConfig.tenantId;
      let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenantId,

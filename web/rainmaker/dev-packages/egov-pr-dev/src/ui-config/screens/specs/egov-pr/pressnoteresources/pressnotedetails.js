@@ -86,7 +86,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
             labelName: "Subject",
             labelKey: "PR_PRESS_NOTE_SUBJECT_PLACEHOLDER"
           },
-          pattern: getPattern("TextValidation"),
+          pattern:getPattern("subjectvalidation"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           required: true,
           jsonPath: "pressnote.pressSubject",
@@ -168,7 +168,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
                labelName:  "SMS CONTENT",
                 labelKey: "PRESS_NOTE_SMS_CONTENT_PLACEHOLDER"
               },
-             // pattern: /^[a-zA-Z0-9]*$/i,
+              pattern: getPattern("AlphaNumSubjectSMS"),
               errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
               required: true,
               jsonPath: "pressnote.smscontent"
@@ -204,7 +204,7 @@ export const EmailSmsContent = getCommonCard({
        labelName: "Subject",
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
-     // pattern: /^[a-zA-Z0-9-]*$/i,
+     pattern:getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "pressnote.subjectemail",
@@ -215,7 +215,7 @@ export const EmailSmsContent = getCommonCard({
         }
     })
   } ,
-  
+  //AlphaNumSubjectSMS
   // break: getBreak(),
   //  break: getBreak(),
   // Emailsubject: {
@@ -278,7 +278,7 @@ export const EmailSmsContent = getCommonCard({
         labelName: "SMS Template",
         labelKey: "PR_SMS_TEMPLATE"
       },
-      // pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "pressnote.SMSContent",

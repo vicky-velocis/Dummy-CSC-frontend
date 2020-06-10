@@ -3,13 +3,30 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getSearchResults ,getEventFilterResults,getPressMasterFilterResults,getPressFilterResults,getTenderFilterResults} from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-//import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getGridData } from "../searchResource/citizenSearchFunctions";
 import { httpRequest } from "../../../../../ui-utils";
 import { localStorageGet, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {  getUserInfo  } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../../config/common';
 
+
+
+
+ 
+const convertTime =(time)=> {
+  // Check correct time format and split into components
+  debugger
+  //time=time+":00"
+  time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)?$/) || [time];
+  
+  if (time.length > 1) { // If time format correct
+  time = time.slice(1); // Remove full string match value
+  time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+  time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+  return time.join(''); // return adjusted time or original string
+  }
 
 ///eventFilter
 
@@ -80,7 +97,7 @@ const response = await getEventFilterResults(data);
 //alert(JSON.stringify(response))
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId: commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -150,7 +167,7 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
           [item.EmpName, item.organizerUsernName]|| "-",
           [getTextToLocalMapping("Organizer Employee")]:
           item.organizerUsernName || "-",
-        [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+        [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
        [getTextToLocalMapping("Schedule Status")]:
           item.status || "-",
           [getTextToLocalMapping("Event Status")]:
@@ -217,16 +234,9 @@ export const searchLibraryApiCall = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "PublicRealation[0].filterLibraryEvent.eventTitle"
   ) || "",
-    // "scheduledStatus":get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "PublicRealation[0].filterEvent.Scedulestatus"
-    // ),
+    
     "eventStatus":"PUBLISHED",
     
-    // "status":get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "PublicRealation[0].CreateCommitteeDetails.committeename"
-    // ),
     "startDate":get(
       state.screenConfiguration.preparedFinalObject,
       "PublicRealation[0].filterLibraryEvent.fromDate"
@@ -245,7 +255,7 @@ export const searchLibraryApiCall = async (state, dispatch) => {
   //alert(JSON.stringify(response))
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -313,7 +323,7 @@ export const searchLibraryApiCall = async (state, dispatch) => {
         [item.EmpName, item.organizerUsernName]|| "-",
         [getTextToLocalMapping("Organizer Employee")]:
         item.organizerUsernName || "-",
-     [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+     [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
        [  getTextToLocalMapping("Schedule Status")]:
         item.status || "-",
         [getTextToLocalMapping("Event Status")]:
@@ -411,7 +421,7 @@ let data= {"requestBody":{
 const response = await getEventFilterResults(data);
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId: commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -483,7 +493,7 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
    [item.EmpName, item.organizerUsernName]|| "-",
    [getTextToLocalMapping("Organizer Employee")]:
    item.organizerUsernName || "-",
- [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+ [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
 [getTextToLocalMapping("Schedule Status")]:
    item.status || "-",
    [getTextToLocalMapping("Event Status")]:
@@ -507,7 +517,7 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
 
 
 export const searchPressApiCall = async (state, dispatch) => {
-  alert('aaa')
+ // alert('aaa')
 let data= {"RequestBody":{ 
   "tenantId":getTenantId(),
   "pressNoteUuid":"",
@@ -560,7 +570,6 @@ let data1 = response.ResponseBody.map(item => ({
   
     
    }));
-//  alert(JSON.stringify(data))
    dispatch(
      handleField(
        "pressNoteList",
@@ -598,7 +607,6 @@ let data1 = response.ResponseBody.map(item => ({
   
     
    }));
-//  alert(JSON.stringify(data))
    dispatch(
      handleField(
        "pressNoteList",
@@ -675,7 +683,6 @@ export const searchTenderApiCall = async (state, dispatch) => {
    }}
   
   const response = await getTenderFilterResults(data);
-  //alert(JSON.stringify(response))
   
     
   
@@ -780,53 +787,3 @@ let data1 = response.ResponseBody.map(item => ({
 
 
 
-
-
-export const validatestepform = (scheduledStatus,eventStatus,isFormValid, hasFieldToaster) => {
-  // alert(activeStep)
-  let activeStep=1
-   let allAreFilled = true;
-   if (activeStep == 1) {
-     document.getElementById("search").querySelectorAll("[required]").forEach(function (i) {
-    //  alert(i+"::::"+i.value)
-     //  alert(i.getAttribute("aria-invalid"))
-       if (!i.value) {
-         i.focus();
-         allAreFilled = false;
-         i.parentNode.classList.add("MuiInput-error-853");
-         i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-       }
-       if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-         i.parentNode.classList.add("MuiInput-error-853");
-         i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-         allAreFilled = false;
-         isFormValid = false;
-         hasFieldToaster = true;
-       }
-     })
-    // ,
- //alert(area)
- if(scheduledStatus===undefined || eventStatus===undefined )
- {
-     allAreFilled = false;
-    // scheduledStatus.parentNode.classList.add("MuiInput-error-853");
-  //   eventStatus.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-         allAreFilled = false;
-         isFormValid = false;
-         hasFieldToaster = true;
- 
- 
- }
-    
-   } 
-   if (allAreFilled == false) {
-   //  alert('Fill all fields')
-     isFormValid = false;
-     hasFieldToaster = true;
-   }
-   else {
-     isFormValid = true;
-     hasFieldToaster = false;
-   }
-   return [isFormValid, hasFieldToaster]
- };

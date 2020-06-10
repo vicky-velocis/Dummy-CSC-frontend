@@ -114,7 +114,7 @@ export const forwardTender = async data => {
   try {
     const response = await httpRequest(
       "post",
-      "/prscp-services/v1/tender/_forward",
+      "http://192.168.12.132:8079/prscp-services/v1/tender/_forward",
       "",
       [],
       data
@@ -139,7 +139,7 @@ export const publishTender = async data => {
   try {
     const response = await httpRequest(
       "post",
-      "/prscp-services/v1/tender/_publish",
+      "http://192.168.12.132:8079/prscp-services/v1/tender/_publish",
       "",
       [],
       data
@@ -164,7 +164,7 @@ export const getSearchResultsForTenderSummary = async data => {
     debugger
     const response = await httpRequest(
       "post",
-      "/prscp-services/v1/tender/_get",
+      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
       "",
       [],
       data
@@ -192,7 +192,7 @@ export const getSearchResultsTender = async queryObject => {
     debugger
     const response = await httpRequest(
       "post",
-      "/prscp-services/v1/tender/_get",
+      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
       "",
       [],
       data

@@ -9,10 +9,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import {getSearchResultsforTenderViewBilling} from "./searchResource/citizenSearchFunctions"
-  // import {
-  //   handleScreenConfigurationFieldChange as handleField,
-  //   prepareFinalObject
-  // } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  
   import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
   
   import {

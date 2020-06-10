@@ -27,6 +27,7 @@ import {EventFilter} from "./gridFilter/Filter";
 import { EventWiseReport } from "./searchResource/Report";
 import { EventReportSearchResults } from "./searchResource/searchResults";
 import {  localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../config/common';
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -44,27 +45,16 @@ const pageResetAndChange = (state, dispatch) => {
   
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-    ) || getTenantId();
+ 
 
-    //let tenantId =    
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
           masterDetails: [{ name: "eventStatus" },{ name: "localityAreaName" }, { name: "eventScheduledStatus" }]
         },
-       
-        //, { name: "eventStatus" }, { name: "localityAreaName" }
-       
-
-
         {
           moduleName: "tenant",
           masterDetails: [
@@ -109,45 +99,18 @@ const NOCSearchAndResult = {
   name: "EventReport",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("TimeseriesReport", {}));
-    dispatch(prepareFinalObject("LocalityReport", {}));
-    //dispatch(prepareFinalObject("eventReport", {}));
-    
+    dispatch(prepareFinalObject("LocalityReport", {}));    
     dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
- // getGridData(action, state, dispatch);
-
 
     const tenantId = getTenantId();
 
     getMdmsData(action, state, dispatch)
 
-    // const BSqueryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessServices", value: "PRSCP" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-    // const businessServiceData = JSON.parse(
-    //   localStorageGet("businessServiceData")
-    // );
-    // const data = find(businessServiceData, { businessService: "PRSCP" });
-    // const { states } = data || [];
-    // if (states && states.length > 0) {
-    //   const status = states.map((item, index) => {
-    //     return {
-    //       code: item.state
-    //     };
-    //   });
-    //   dispatch(
-    //     prepareFinalObject(
-    //       "applyScreenMdmsData.searchScreen.status",
-    //       status.filter(item => item.code != null)
-    //     )
-    //   );
-    // }
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
@@ -176,7 +139,7 @@ const NOCSearchAndResult = {
       componentPath: "Form",
       props: {
         className: "common-div-css",
-       // id: "EventReport"
+      
       },
       children: {
         headerDiv: {
@@ -191,61 +154,13 @@ const NOCSearchAndResult = {
               },
               ...header
             }}
-          //   newApplicationButton: {
-          //     componentPath: "Button",
-          //     gridDefination: {
-          //       xs: 12,
-          //       sm: 6,
-          //       align: "right"
-          //     },
-          //     visible: enableButton,
-          //     props: {
-          //       variant: "contained",
-          //       color: "primary",
-          //       style: {
-          //         color: "white",
-          //         borderRadius: "2px",
-          //         width: "250px",
-          //         height: "48px"
-          //       }
-          //     },
-
-          //     children: {
-          //       plusIconInsideButton: {
-          //         uiFramework: "custom-atoms",
-          //         componentPath: "Icon",
-          //         props: {
-          //           iconName: "add",
-          //           style: {
-          //             fontSize: "24px"
-          //           }
-          //         }
-          //       },
-
-          //       buttonLabel: getLabel({
-          //         labelName: "NEW APPLICATION",
-          //         labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-          //       })
-          //     },
-          //     onClickDefination: {
-          //       action: "condition",
-          //       callBack: (state, dispatch) => {
-          //         pageResetAndChange(state, dispatch);
-          //         showHideAdhocPopup(state, dispatch, "search");
-          //       }
-          //     },
-          //     roleDefination: {
-          //       rolePath: "user-info.roles",
-          //       roles: ["NOC_CEMP", "SUPERUSER"]
-          //     }
-          //   }
-          // }
+          
         },
-        // pendingApprovals,
+      
         EventWiseReport,
        
         breakAfterSearch: getBreak(),
-        // progressStatus,
+       
         EventReportSearchResults
       }
     },

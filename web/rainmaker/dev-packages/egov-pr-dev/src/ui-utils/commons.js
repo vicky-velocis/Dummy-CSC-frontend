@@ -854,23 +854,18 @@ export const furnishNocResponsePressNote = response => {
 export const furnishNocResponse = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
- // let applicationdetail = response.ResponseBody.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
- //ResponseBody[""0""].eventTitle
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
+  debugger
+ 
   if(response.ResponseBody[0]!==null && response.ResponseBody[0]!=='')
   {
     let startdate=response.ResponseBody[0].startDate
     startdate= startdate.split(' ');
     let enddate=response.ResponseBody[0].endDate
     enddate= enddate.split(' ');
-   // alert(endDate)
    let starttime=response.ResponseBody[0].startTime
-  // starttime= starttime.split(' ');
- //  starttime[0]+':00'
+ 
    let endtime=response.ResponseBody[0].endTime
 
-//  endtime= endtime.split(' ');
-//  endtime[0]+':00'
   set(refurnishresponse, "eventTitle", response.ResponseBody[0].eventTitle);
   set(refurnishresponse,"eventLocation", response.ResponseBody[0].eventLocation);
 
@@ -885,11 +880,7 @@ export const furnishNocResponse = response => {
   set(refurnishresponse,"area", response.ResponseBody[0].area);
 
 set(refurnishresponse, "startDate1",startdate[0]);
-  //set(refurnishresponse, "startDate1", '2020-04-01');
   
-  // set(refurnishresponse, "applicationuuid", applicationdetail.applicationuuid);
-  // set(refurnishresponse, "applicationtype", applicationdetail.applicationtype);
-  // set(refurnishresponse, "applicationstatus", response.nocApplicationDetail[0].applicationstatus);
 
   set(refurnishresponse, "endDate1",enddate[0]);
   set(refurnishresponse, "startTime",   starttime);
@@ -898,8 +889,7 @@ set(refurnishresponse, "startDate1",startdate[0]);
   set(refurnishresponse,"twitterUrl", response.ResponseBody[0].twitterUrl);
 
   set(refurnishresponse,"instagramUrl", response.ResponseBody[0].instagramUrl);
-  // set(refurnishresponse,"eventDescription", response.ResponseBody.eventDescription);
-  // set(refurnishresponse, "eventTitle", response.ResponseBody.startDate);
+  
   return refurnishresponse;
   }
 };
@@ -2282,7 +2272,7 @@ export const getInviteGuestGridData = async () => {
     try {
       const payload = await httpRequest(
         "post",
-        "/prscp-services/v1/tender/_get",
+        "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
         "",
         queryObject,
         requestBody
@@ -2403,7 +2393,7 @@ export const getInviteGuestGridData = async () => {
         try {
           const response = await httpRequest(
             "post",
-            "/prscp-services/v1/tender/_forward",
+            "http://192.168.12.132:8079/prscp-services/v1/tender/_forward",
             "",
             [],
             data
@@ -2627,7 +2617,9 @@ export const getsampleemailtemplate = async () => {
 //	console.log(resultdata[0].emailSubject);
 	localStorageSet("EmailTemplate", resultdata[0].emailBody)
 	localStorageSet("EmailTemplatesubject", resultdata[0].emailSubject)
-	localStorageSet("smsTemplate", payload.ResponseBody.smsContent)
+  localStorageSet("smsTemplate", payload.ResponseBody.smsContent)
+  localStorageSet("email", resultdata[0].emailBody)
+  localStorageSet("sms", payload.ResponseBody.smsContent)
    return payload;
   } catch (error) {
     //  store.dispatch(toggleSnackbar(true, error.message, "error"));
@@ -2639,7 +2631,7 @@ export const getsampleemailtemplate = async () => {
 export const invitationtoguests = async (state, dispatch) => {
   let subject1=get(state.screenConfiguration.preparedFinalObject, "CreateInvite.subjectemail")
   // Get all documents from response
-  if(subject1!==undefined)
+  if(subject1!==undefined && subject1!=="")
   {
   let attachmentid = '';
    attachmentid = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",
@@ -3161,7 +3153,7 @@ export const getSearchResultsTender = async queryObject => {
     debugger
     const response = await httpRequest(
       "post",
-      "/prscp-services/v1/tender/_get",
+      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
       "",
       [],
       data
@@ -3607,6 +3599,7 @@ export const getPressMasterFilterResults = async (data) => {
 
 };
 
+//http://192.168.12.115:8093
 
 
 export const getLocaliyReportData = async (data) => {
