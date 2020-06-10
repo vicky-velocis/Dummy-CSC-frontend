@@ -12,8 +12,8 @@ import {
   import get from "lodash/get";
   
   const header = getCommonHeader({
-    labelName: "Trade License",
-    labelKey: "TL_COMMON_TL"
+    labelName: "Rented Properties",
+    labelKey: "TL_COMMON_RENTED_PROPERTIES"
   });
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
