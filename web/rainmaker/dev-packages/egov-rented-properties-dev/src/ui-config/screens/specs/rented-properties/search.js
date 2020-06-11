@@ -10,6 +10,9 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";
   import get from "lodash/get";
+
+  import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
+
   
   const header = getCommonHeader({
     labelName: "Rented Properties",
@@ -39,7 +42,8 @@ import {
                 ...header
               }
             }
-          }
+          },
+          rentedPropertyApplication,
         }
       }
     }
