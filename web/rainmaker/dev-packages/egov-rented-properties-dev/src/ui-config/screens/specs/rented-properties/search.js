@@ -1,7 +1,8 @@
 import {
     getCommonHeader,
     getLabel,
-    getBreak
+    getBreak,
+    getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -40,7 +41,37 @@ import {
                   sm: 6
                 },
                 ...header
-              }
+              },
+              addButton: getCommonContainer({
+                buttonContainer: getCommonContainer({
+                  searchButton: {
+                    componentPath: "Button",
+                    gridDefination: {
+                      xs: 12,
+                      sm: 6
+                    },
+                    props: {
+                      variant: "contained",
+                      style: {
+                        color: "white",
+                        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+                        borderRadius: "2px",
+                        width: "50%",
+                        height: "48px"
+                      }
+                    },
+                    children: {
+                      buttonLabel: getLabel({
+                        labelName: "MASTER ADD/UPDATE",
+                        labelKey: "RP_HOME_SEARCH_ADD_UPDATE_BUTTON"
+                      })
+                    },
+                    onClickDefination: {
+            
+                    }
+                  }
+                })
+              })
             }
           },
           rentedPropertyApplication,
