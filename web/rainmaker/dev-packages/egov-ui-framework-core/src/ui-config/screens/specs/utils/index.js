@@ -584,6 +584,16 @@ export const getPattern = type => {
       return /^[1-9][0-9]$/i;
     case "familyMonthlyIncome":
       return /^[1-9][0-9]\d*$/i;
+        case "alpha-numeric-with-space":
+      return /^[a-z0-9 ]*$/i;
+      case "alpha-numeric-with-space-and-newline":
+      return /^[a-z0-9 \n]*$/i;
+  case "alpha-numeric":
+    return /^[a-z0-9]*$/i;
+  case "non-empty-alpha-numeric":
+      return /^[a-z0-9]+$/i;
+case "alpha-only":
+  return  /^[a-z]+$/i;
   }
   };
 

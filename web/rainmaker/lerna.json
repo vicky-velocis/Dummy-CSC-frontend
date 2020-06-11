@@ -15,6 +15,7 @@
     "dev-packages/egov-noc-dev",
     "dev-packages/egov-opms-dev",
     "dev-packages/egov-pms-dev",
+    "dev-packages/egov-store-asset-dev",
     "dev-packages/egov-bpa-dev", 
     "dev-packages/egov-pr-dev",
     "dev-packages/egov-boilerplate-dev",
