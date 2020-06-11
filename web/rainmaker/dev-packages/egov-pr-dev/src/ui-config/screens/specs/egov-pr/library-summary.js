@@ -19,7 +19,8 @@ import { librarysummaryFooter } from "./applyResource/librarysummaryFooter";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { generateBill } from "../utils/index";
 import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
-import {getSearchResultsView,getSearchResultsViewLibrary} from "../egov-pr/searchResource/citizenSearchFunctions"
+import {getSearchResultsView,getSearchResultsViewLibrary} from "../egov-pr/searchResource/citizenSearchFunctions";
+import "./publishtender.css"
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Library Details",

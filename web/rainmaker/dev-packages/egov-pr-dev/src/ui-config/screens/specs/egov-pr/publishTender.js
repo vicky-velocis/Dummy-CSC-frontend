@@ -14,7 +14,9 @@ import {prepareDocumentsUploadData, furnishNocResponsePressNote,getSearchResults
 import {getPressGridDatatender} from "./searchResource/citizenSearchFunctions";
 import { PressMasterListForTender,searchGridSecondstep } from "./searchResource/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import './publishtender.css'
+import './publishtender.css';
+import commonConfig from '../../../../config/common';
+
 export const stepsData = [
   { labelName: "PUBLISH TENDER DETAILS", labelKey: "PR_PUBLISH_TENDER_DETAILS" },
   { labelName: "PUBLICATION NAME LISXT", labelKey: "PR_PUBLICATION_NAME_LIST" },
@@ -81,7 +83,7 @@ export const formwizardThirdStep = {
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+  let tenantId =commonConfig.tenantId;
 
   
   let mdmsBody = {

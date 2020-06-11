@@ -389,7 +389,7 @@ export const EventFirstStepperTimeDetail = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "PublicRealation[0].CreateEventDetails.startTime",
 	  beforeFieldChange: (action, state, dispatch) => {
-			timevalidation(action, state, dispatch)
+			starttimevalidation(action, state, dispatch)
 	   
         }
       
@@ -464,7 +464,7 @@ export const timevalidation =(action, state, dispatch) =>
 								{}
 							);		
 
-		
+		debugger
        // alert(startdate +" , "+ enddate +" , "+ starttime)
 		localStorageSet("EventTimeINvalid","no");
 		if(startdate == enddate && starttime >= action.value)
@@ -493,6 +493,50 @@ export const timevalidation =(action, state, dispatch) =>
    
 }
 
+
+
+export const starttimevalidation =(action, state, dispatch) =>
+{
+	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startDate1",
+								{}
+							);
+							
+	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endDate1",
+								{}
+							);		
+			
+		 let endtime = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endTime",
+								{}
+							);		
+
+		debugger
+       // alert(startdate +" , "+ enddate +" , "+ starttime)
+		localStorageSet("EventTimeINvalid","no");
+		if(startdate == enddate && action.value >= endtime)
+		{
+			localStorageSet("EventTimeINvalid","yes");
+			dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "Select correct time slot", labelKey: "PR_END_TIME_VALIDATION_MESSAGE" },
+                "warning"
+              )
+            );
+			
+			setTimeout(function(){
+			dispatch(
+			  handleField(
+				"apply",            "components.div.children.formwizardFirstStep.children.EventFirstStepperTimeDetail.children.cardContent.children.propertyDetailsConatiner.children.EndTime",
+				"value",
+				""
+			  )
+			);
+			 }, 1000);
+			 
+			 //set(state, "screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endTime", "" )
+    }
+   
+}
 
 export const datevalidation =(action, state, dispatch) =>
 {

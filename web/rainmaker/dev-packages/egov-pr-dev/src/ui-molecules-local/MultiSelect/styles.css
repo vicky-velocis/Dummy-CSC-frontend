@@ -23,3 +23,7 @@ div#multiselectContainerReact {
 /*i.material-icons {
   font-size: 42px !important;
 }*/
+#material-ui-applicantTypeSelection ul.optionContainer {
+  max-height: unset !important;
+  height: auto !important;
+}

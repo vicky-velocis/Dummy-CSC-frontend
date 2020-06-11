@@ -59,7 +59,7 @@ const cardList = [
     class="material-icons module-page-icon" style={{fontSize:"50px"}}>
    local_library
   </i>, 
-    // icon: <LibraryIcon />,
+    
     route: "library-search"
   },
 
@@ -81,7 +81,7 @@ else{
       class="material-icons module-page-icon" style={{fontSize:"50px"}}>
      event
     </i>,
-    // icon: <TodayIcon />,
+   
       route: "apply"
     },
     {
@@ -98,7 +98,7 @@ else{
     </i>,
    
     
-      // icon: <MyApplicationIcon />,
+    
       route: "search"
     },
     {

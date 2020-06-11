@@ -3,9 +3,20 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import { Dialog, DialogContent } from "@material-ui/core";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "ui-redux/store";
 
 class InternalInviteContainer extends React.Component {
   handleClose = () => {
+  
+	 store.dispatch(
+       handleField(
+         "createInvite",	
+		 "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+         "props.data",
+         []
+       )
+     );
+	 
     const { screenKey } = this.props;
     this.props.handleField(
       screenKey,

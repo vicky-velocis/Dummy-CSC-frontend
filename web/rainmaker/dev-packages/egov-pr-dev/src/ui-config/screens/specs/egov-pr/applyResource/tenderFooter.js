@@ -57,7 +57,7 @@ if(tenderNoticeUuid!==null)
     );
     
   }else{
-
+//alert( get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId"))
     let data = {
       "RequestBody": {
         "tenantId": getTenantId(),
@@ -66,14 +66,19 @@ if(tenderNoticeUuid!==null)
         "moduleCode": localStorageGet("modulecode"),
         "tenderSubject": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", ""),
         "tenderDate":date[0],
-        "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", ""),
+        "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber"),
+        
        // "noteContent": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", ""),
        "tenderNoticeUuid": tenderNoticeUuid,
        "tenderNoticeId": tenderNoticeId,
         "noteContent": localStorageGet("tendernote"),
         "moduleCode":localStorageGet("modulecode"),
-        "tenderDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", {}) }]
+        "tenderDocument":get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")===undefined?[{ "fileStoreId":localStorageGet('tenderFilStore') }]: [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId") }],
+        ///===""?localStorageGet('tenderFilStore'): get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber")
 
+
+
+        
         
 
 

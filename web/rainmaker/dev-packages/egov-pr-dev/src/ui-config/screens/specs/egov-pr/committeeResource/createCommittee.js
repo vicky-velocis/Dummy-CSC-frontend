@@ -43,7 +43,7 @@ import {
             labelName: "Committee Name",
           labelKey: "PR_COMMITTEE_NAME"
           },
-        pattern:getPattern("TextValidationWithoutSpace"),
+        pattern:getPattern("TextValidation"),
           
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           

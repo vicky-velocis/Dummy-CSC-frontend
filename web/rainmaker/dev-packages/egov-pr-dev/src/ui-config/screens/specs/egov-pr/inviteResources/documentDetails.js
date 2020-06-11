@@ -32,19 +32,19 @@ export const documentDetails = getCommonCard({
     componentPath: "DocumentListContainer",
     props: {
       documents: [
-        {
-          name: "Identity Proof ",
-          required: true,
-          jsonPath: "pr.documents.identityProof",
-          selector: {
-            inputLabel: "Select Document",
-            menuItems: [
-              { value: "AADHAAR", label: "Aadhaar Card" },
-              { value: "VOTERID", label: "Voter ID Card" },
-              { value: "DRIVING", label: "Driving License" }
-            ]
-          }
-        },
+        // {
+          // name: "Identity Proof ",
+          // required: true,
+          // jsonPath: "pr.documents.identityProof",
+          // selector: {
+            // inputLabel: "Select Document",
+            // menuItems: [
+              // { value: "AADHAAR", label: "Aadhaar Card" },
+              // { value: "VOTERID", label: "Voter ID Card" },
+              // { value: "DRIVING", label: "Driving License" }
+            // ]
+          // }
+        // },
         {
           name: "Address Proof ",
           required: true,
@@ -59,7 +59,7 @@ export const documentDetails = getCommonCard({
       },
        description: "Only xls files. 2MB max file size.",
       inputProps: {
-        accept: " vnd.ms-excel, .ms-excel"
+        accept: "vnd.ms-excel,.ms-excel"
       },
       maxFileSize: 2000
     },

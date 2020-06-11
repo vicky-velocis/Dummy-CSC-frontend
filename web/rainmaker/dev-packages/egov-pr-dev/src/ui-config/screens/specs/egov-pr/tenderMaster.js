@@ -9,7 +9,9 @@ import { getFileUrlFromAPI, getQueryArg } from "egov-ui-framework/ui-utils/commo
 import get from "lodash/get";
 import {  furnishNocResponseTender,getSearchResultsForTenderSummary,getSearchResultsForTenderSummary1 } from "../../../../ui-utils/commons";
 import { prepareDocumentsUploadData } from "../../../../ui-utils/commons";
-import "./publishtender.css"
+import "./publishtender.css";
+import commonConfig from '../../../../config/common';
+
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
@@ -83,7 +85,7 @@ export const prepareEditFlow = async (
       
         
       
-    //  dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+    dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
       
    //   dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
       
@@ -99,7 +101,7 @@ export const prepareEditFlow = async (
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+  let tenantId = commonConfig.tenantId;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,

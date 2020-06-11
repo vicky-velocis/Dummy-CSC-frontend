@@ -16,14 +16,16 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "../../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../../config/common';
+
 const setReviewPageRoute = (state, dispatch) => {
-	             let id=getQueryArg(window.location.href, "eventuuId")            
+let id=getQueryArg(window.location.href, "eventuuId")            
 
 	if(id){
 		  let tenantId = getTenantId()
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-pr/summary?eventuuId=${id}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-pr/summary?eventuuId=${id}&tenantId=${tenantId}&eventstatus=PUBLISHED`;
   dispatch(setRoute(reviewUrl));
 	}
 	else{
@@ -34,7 +36,6 @@ const setReviewPageRoute = (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.EVENT.ResponseBody.eventId"
   );
-  //screenConfiguration.preparedFinalObject.
   const eventuuId = get(
     state,
     "screenConfiguration.preparedFinalObject.EVENT.ResponseBody.eventDetailUuid"
@@ -47,7 +48,7 @@ const setReviewPageRoute = (state, dispatch) => {
   const page="apply"
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-pr/summary?eventId=${eventId}&eventuuId=${eventuuId}&page=${page}&status=${eventStatus}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-pr/summary?eventId=${eventId}&eventuuId=${eventuuId}&page=${page}&status=${eventStatus}&eventstatus=PUBLISHED&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 	}
 };
@@ -108,14 +109,10 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId =
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-  ) || getTenantId();
+  //let tenantId = getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -225,9 +222,7 @@ let typeofevent=get(
 
 
   if (activeStep === 1) {
- //   moveToReview(state, dispatch);
-
-   // setReviewPageRoute(state, dispatch);
+ 
   }
 
   if (activeStep !== 2) {

@@ -16,14 +16,10 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { applicantSummary } from "./summaryResource/applicantSummary";
-import { institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary,documentsEventSummary } from "./summaryResource/documentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
-import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { getCommonApplyFooter, validateFields, getTextToLocalMapping } from "../utils";
-import { generateBill } from "../utils/index";
 import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import {getSearchResultsView, resendinvitation} from "../egov-pr/searchResource/citizenSearchFunctions"
 import { localStorageGet,localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -69,13 +65,7 @@ const setcreateinviteroute = () => {
 		window.location.href =reviewUrl;
  }
  
- // const resendinvitation = () => {
-		// alert("Resend Invitation");
-		
-		
-		
- // }
- 
+
  
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -108,7 +98,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "event_summary",
   beforeInitScreen: (action, state, dispatch) => {
-   // alert(getQueryArg(window.location.href, "eventuuId"))
    
    localStorageSet("ResendInvitelist","");
    localStorageSet("ResendInvitelistAll","");
@@ -129,9 +118,7 @@ const screenConfig = {
       
             }
 	getSearchResultsView(state, dispatch,payload).then( response => {
-		console.log("Preview Dataaaaaaaaaaaaaaa");
-		console.log(response);
-		console.log(response.ResponseBody[0].inviteGuest);
+	
 		let invitedguests = response.ResponseBody[0].inviteGuest;
 		
     const guestarray = invitedguests.filter((el) => {
@@ -142,7 +129,7 @@ const screenConfig = {
 
   let selectedrows = []
   let allrows = guestarray;
-  console.log(allrows)
+ 
   if(allrows!==null)
   {
   localStorageSet("gridobjlength", allrows.length)
@@ -153,7 +140,7 @@ const screenConfig = {
 }
 		if (guestarray.length >  0) {
 			let data = guestarray.map(item => ({
-      // alert(item)
+     
       
 		  [getTextToLocalMapping("Guest Type")]:
 			 item.eventGuestType || "-",
@@ -178,7 +165,6 @@ const screenConfig = {
   }
   else
   {
-	//alert("Failed to fetch employees")
 	dispatch(
               toggleSnackbar(
                 true,
@@ -187,11 +173,6 @@ const screenConfig = {
               )
             );
 	
-	// set(
-        // action,
-		// "screenConfiguration.screenConfig.event_summary.components.div.children.resendbody.visible",
-        // false
-      // );	
 	
 	 dispatch(
        handleField(
@@ -210,17 +191,13 @@ const screenConfig = {
          false
        )
      );
-    // set(
-        // action,
-		// "screenConfiguration.screenConfig.event_summary.components.div.children.footer.children.ResendButton",
-        // false
-      // );	 
+    
 	  
   }
 	});;
 	
 	
-     //  generateBill(dispatch, applicationNumber, tenantId);
+    
     prepareDocumentsView(state, dispatch);
 	
 	set(
@@ -259,11 +236,9 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          // estimateSummary: estimateSummary,
-         // nocSummary: nocSummary,
+         
         eventSummary: propertySummary,
-          // applicantSummary: applicantSummary,
-          // institutionSummary: institutionSummary,
+        
            documentsSummary: documentsEventSummary,
 		   
         }),
@@ -293,13 +268,7 @@ const screenConfig = {
 					labelName: "Cancel",
 					labelKey: "PR_CANCEL_BUTTON"
 				  }),
-				  // previousButtonIcon: {
-					// uiFramework: "custom-atoms",
-					// componentPath: "Icon",
-					// props: {
-					  // iconName: "keyboard_arrow_left"
-					// }
-				  // }
+				 
 				},
 				onClickDefination: {
 				  action: "condition",
@@ -322,19 +291,13 @@ const screenConfig = {
 					labelName: "Invite",
 					labelKey: "PR_RESEND_BUTTON"
 				  }),
-				  // nextButtonIcon: {
-					// uiFramework: "custom-atoms",
-					// componentPath: "Icon",
-					// props: {
-					  // iconName: "keyboard_arrow_right"
-					// }
-				  // }
+				 
 				},
 				onClickDefination: {
 				  action: "condition",
 				  callBack: resendinvitation
 				},
-				//visible : localStorageGet("gridobj") === null ? false : true
+				
 		},
 		inviteButton: {
 				componentPath: "Button",
@@ -352,13 +315,7 @@ const screenConfig = {
 					labelName: "Invite",
 					labelKey: "PR_INVITE_BUTTON"
 				  }),
-				  // nextButtonIcon: {
-					// uiFramework: "custom-atoms",
-					// componentPath: "Icon",
-					// props: {
-					  // iconName: "keyboard_arrow_right"
-					// }
-				  // }
+				 
 				},
 				onClickDefination: {
 				  action: "condition",

@@ -21,6 +21,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import { documentDetails } from "./applyResource/documentDetails";
 import set from "lodash/set";
+import commonConfig from '../../../../config/common';
 
 import { getTenantId, setapplicationType, lSRemoveItem, lSRemoveItemlocal, setapplicationNumber, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -120,8 +121,7 @@ export const prepareDocumentsUploadData = (state, dispatch, type) => {
   dispatch(prepareFinalObject("documentsContract", documentsContract));
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
-  let tenantId = getTenantId();
+  let tenantId = commonConfig.tenantId;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
