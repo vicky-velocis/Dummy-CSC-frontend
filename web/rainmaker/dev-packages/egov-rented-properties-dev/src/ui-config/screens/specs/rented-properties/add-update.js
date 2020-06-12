@@ -379,6 +379,63 @@ import {
   }
 
 
+  const paymentDateField = {
+    label: {
+        labelName: "Date of Payment",
+        labelKey: "RP_DATE_PAYMENT_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Date of Payment",
+        labelKey: "RP_DATE_PAYEMNT_PLACEHOLDER"
+    },
+    pattern: getPattern("Date"),
+    required: true,
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
+
+
+  const paymentAmountField = {
+    label: {
+        labelName: "Payment Amount",
+        labelKey: "RP_PAYMENT_AMOUNT_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Payment Amount",
+        labelKey: "RP_PAYMENT_AMOUNT"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
+  const paymentModeField = {
+    label: {
+        labelName: "Payment Mode",
+        labelKey: "RP_PAYMENT_MODE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Payment Mode",
+        labelKey: "RP_PAYMENT_MODE"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
 
 
 
@@ -427,6 +484,19 @@ import {
     {
         labelName: "Rent Details",
         labelKey: "RP_RENT_DETAILS_HEADER"
+    },
+    {
+        style: {
+            marginBottom: 18,
+            marginTop: 18
+        }
+    }
+  )
+
+  const paymentDetailsHeaderObj = getCommonTitle(
+    {
+        labelName: "Payment Details",
+        labelKey: "RP_PAYMENT_DETAILS_HEADER"
     },
     {
         style: {
@@ -487,6 +557,17 @@ import {
     }
   )
 
+  const paymentDetails = getCommonCard(
+    {
+      header: paymentDetailsHeaderObj,
+      detailsContainer: getCommonContainer({
+        paymentAmount: getTextField(paymentAmountField),
+        paymentDate: getTextField(paymentDateField), 
+        paymentMode: getTextField(paymentModeField),
+      })
+    }
+  )
+
 
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
@@ -498,7 +579,8 @@ import {
       propertyDetails,
       rentHolderDetails,
       addressDetails,
-      rentDetails
+      rentDetails,
+      paymentDetails
     }
   };
   
