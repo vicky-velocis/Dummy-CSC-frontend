@@ -165,6 +165,7 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
+
       onRowClick: (row, index) => {
         onRowClick(row);
       }
@@ -829,16 +830,16 @@ export const searchGridSecondstep = {
 const onRowClick = rowData => {
   const page="search"
 
-  if(rowData[5]==="CANCELLED")
-  {
+  // if(rowData[5]==="CANCELLED")
+  // {
   
-  }
-  else{
-    const reviewUrl = `summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&page=${page}&status=${rowData[4]}&tenantId=`+getTenantId();
+  // }
+  // else{
+    const reviewUrl = `summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&page=${page}&status=${rowData[4]}&eventstatus=${rowData[5]}&tenantId=`+getTenantId();
     
     
         window.location.href =reviewUrl;
-  }
+ // }
      
   
 
@@ -1300,7 +1301,7 @@ export const TimeSeriessearchResults = {
   //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
-      download: false,
+      download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
@@ -1352,7 +1353,7 @@ export const TimeSeriessearchEventResults = {
   //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
-      download: false,
+      download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
@@ -1402,7 +1403,7 @@ export const LocalityReportSearchResults = {
   //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
-      download: false,
+      download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
@@ -1440,7 +1441,7 @@ export const EventReportSearchResults = {
   //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
-      download: false,
+      download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,

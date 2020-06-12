@@ -23,6 +23,7 @@ import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { getEventListforInvitation } from "./searchResource/citizenSearchFunctions";
 import {InviteGuestFilter} from "./gridFilter/Filter";
 import { httpRequest } from "../../../../ui-utils";
+import commonConfig from '../../../../config/common';
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -40,27 +41,17 @@ const pageResetAndChange = (state, dispatch) => {
  
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-    ) || getTenantId();
-
-    //let tenantId =    
+  
+   
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
           masterDetails: [{ name: "eventStatus" }, { name: "eventScheduledStatus" }]
         },
        
-        //, { name: "eventStatus" }, { name: "localityAreaName" }
-       
-
-
         {
           moduleName: "tenant",
           masterDetails: [
@@ -82,10 +73,7 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    debugger
-
-	console.log("Event Statusssssssss");
-	console.log(payload.MdmsRes)
+    
 	let responsedata = payload.MdmsRes['RAINMAKER-PR'].eventScheduledStatus;
 	responsedata.splice(0, 1);
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
@@ -98,7 +86,6 @@ const EventSearchAndResult = {
   name: "eventList",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
- //   dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
     dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));

@@ -250,8 +250,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     ;
 
 
-	window.location.href=applyUrl;
-	// dispatch(setRoute(applyUrl));
+	 dispatch(setRoute(applyUrl));
 };
 export const showHideAdhocPopups = (state, dispatch, screenKey) => {
 

@@ -269,6 +269,8 @@ export const searchemployee = getCommonCard({
 
 
 export const EmailSmsContent = getCommonCard({
+
+  
 	//  subjectemail: getCommonTitle(
   //   {
   //     labelName: "Subject",
@@ -300,7 +302,7 @@ export const EmailSmsContent = getCommonCard({
        labelName: "Subject",
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
-      //pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern: getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "CreateInvite.subjectemail",
@@ -367,7 +369,7 @@ export const EmailSmsContent = getCommonCard({
        labelName: "",
         labelKey: ""
       },
-      //pattern: /^[a-zA-Z0-9-]*$/i,
+     // pattern: getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "CreateInvite.SMSContent",

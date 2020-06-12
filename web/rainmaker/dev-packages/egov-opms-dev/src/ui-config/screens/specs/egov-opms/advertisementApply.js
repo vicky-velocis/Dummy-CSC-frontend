@@ -205,7 +205,22 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       setapplicationNumber(applicationNumber);
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
+    let typecateID =
+    get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
+      item => item.name === Refurbishresponse.typeOfAdvertisement
+      );
 
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new",typecateID[0].subTypeOfAdvertisement
+    )
+  );
+
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.egpm.duration-new",typecateID[0].durationDropdown
+    )
+  );
     // Set sample docs upload
     // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
     let documentsPreview = [];
@@ -333,6 +348,7 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
+    
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {

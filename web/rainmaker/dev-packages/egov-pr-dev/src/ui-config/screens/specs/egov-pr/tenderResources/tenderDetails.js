@@ -97,7 +97,7 @@ export const EmailSmsContent = getCommonCard({
        labelName: "Subject",
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
-      pattern: getPattern("TextValidation"),
+      pattern: getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "tender.subjectemail",
@@ -161,7 +161,7 @@ export const EmailSmsContent = getCommonCard({
         labelKey: "PR_SMS_TEMPLATE"
       },
      
-      //pattern: /^[a-zA-Z0-9-]*$/i,
+      pattern:getPattern("AlphaNumValidationsms"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "tender.SMSContent",

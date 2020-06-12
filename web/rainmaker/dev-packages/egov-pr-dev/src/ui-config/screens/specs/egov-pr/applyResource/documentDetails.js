@@ -18,16 +18,37 @@ export const documentDetails = getCommonCard({
       },
       description: "Only .jpg and .pdf files. 1MB max file size.",
       inputProps: {
-        accept: ".pdf,.png,.jpeg,.zip,.WAV,.wav,.AIFF, .aiff,.AU,.au,.PCM,.pcm,.BWF,.bwf,.mp3,.mpeg,.mp4,.M4P,.m4p,.m4v,.M4V, .MPG,.mpg,.mp2,.MP2,.MPE,.mpe,.MPV,.mpv,.MOV,.mov,.qt,.QT "
+        accept: ".quicktime,.ogg,.basic,.pdf,.png,.jpeg,.zip,.WAV,.wav,.AIFF, .aiff,.AU,.au,.PCM,.pcm,.BWF,.bwf,.mp3,.mpeg,.mp4,.M4P,.m4p,.m4v,.M4V, .MPG,.mpg,.mp2,.MP2,.MPE,.mpe,.MPV,.mpv,.MOV,.mov,.qt,.QT"
       },
-      maxFileSize: 15000
+      maxFileSize: 15000,
+
     },
     type: "array"
   } 
 
 });
 
+export const documentDetails1 = getCommonCard({
+  documentList: {
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-pr",
+  componentPath: "DocumentListContainerCommunication",
+  required:true,
+  props: {      
+    buttonLabel: {
+      labelName: "UPLOAD FILE",
+      labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+    },
+    description: "Only .jpg and .pdf files. 1MB max file size.",
+    inputProps: {
+      accept: ".pdf,.png,.jpeg,.zip,.WAV,.wav,.AIFF, .aiff,.AU,.au,.PCM,.pcm,.BWF,.bwf,.mp3,.mpeg,.mp4,.M4P,.m4p,.m4v,.M4V, .MPG,.mpg,.mp2,.MP2,.MPE,.mpe,.MPV,.mpv,.MOV,.mov,.qt,.QT"
+    },
+    maxFileSize: 15000
+  },
+  type: "array"
+} 
 
+});
 export const pressNotedocumentDetails = getCommonCard({
   // header: getCommonTitle(
   //   {

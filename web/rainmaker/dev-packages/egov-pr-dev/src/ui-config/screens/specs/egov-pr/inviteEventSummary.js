@@ -17,11 +17,9 @@ import { applicantSummary } from "./summaryResource/applicantSummary";
 import { institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { invitedocumentsSummary } from "./summaryResource/invitedocumentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer, eventInviteFooter } from "./summaryResource/footer";
-import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/eventSummary";
-import { generateBill } from "../utils/index";
+
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -122,8 +120,7 @@ const screenConfig = {
         action,	"screenConfig.inviteEventSummary.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
         false
       );
-    //generateBill(dispatch, applicationNumber, tenantId);
-    //prepareDocumentsView(state, dispatch);
+   
     return action;
   },
   components: {
@@ -148,11 +145,9 @@ const screenConfig = {
           }
         },
         body: getCommonCard({
-          // estimateSummary: estimateSummary,
-         // nocSummary: nocSummary,
+         
         propertySummary: propertySummary,
-          // applicantSummary: applicantSummary,
-          // institutionSummary: institutionSummary,
+         
         documentsSummary: invitedocumentsSummary
         }),
         footer: eventInviteFooter
