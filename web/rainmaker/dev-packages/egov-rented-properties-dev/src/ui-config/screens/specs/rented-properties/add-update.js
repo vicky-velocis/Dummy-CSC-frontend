@@ -269,6 +269,118 @@ import {
     required: true
   }
 
+  const areaField = {
+    label: {
+        labelName: "Area",
+        labelKey: "RP_AREA_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Area",
+        labelKey: "RP_AREA_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+  const areaDetailsField = {
+    label: {
+        labelName: "Area Details",
+        labelKey: "RP_AREA_DETAILS_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Area Details",
+        labelKey: "RP_AREA_DETAILS_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+  const housePlotField = {
+    label: {
+        labelName: "House No/ Plot No",
+        labelKey: "RP_HOUSE_PLOT_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter House No/ Plot No",
+        labelKey: "RP_HOUSE_PLOT_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
+  const monthlyRentField = {
+    label: {
+        labelName: "Monthly Rent Amount",
+        labelKey: "RP_MONTHLY_RENT_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Monthly Rent Amount",
+        labelKey: "RP_MONTHLY_RENT_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+  const rentAmountRevisedField = {
+    label: {
+        labelName: "Rent Amount Revised Period",
+        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Rent Amount Revised Period",
+        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+  const rentAmountRevisedPercentageField = {
+    label: {
+        labelName: "Rent Amount Revision Percentage",
+        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Rent Amount Revised Period",
+        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
+
+
 
 
 
@@ -289,6 +401,32 @@ import {
     {
         labelName: "Rent holder Particulars",
         labelKey: "RP_RENT_HOLDER_PARTICULAR_HEADER"
+    },
+    {
+        style: {
+            marginBottom: 18,
+            marginTop: 18
+        }
+    }
+  )
+
+  const addressDetailsHeaderObj = getCommonTitle(
+    {
+        labelName: "Address Details",
+        labelKey: "RP_ADDRESS_DETAILS_HEADER"
+    },
+    {
+        style: {
+            marginBottom: 18,
+            marginTop: 18
+        }
+    }
+  )
+
+  const rentDetailsHeaderObj = getCommonTitle(
+    {
+        labelName: "Rent Details",
+        labelKey: "RP_RENT_DETAILS_HEADER"
     },
     {
         style: {
@@ -326,6 +464,29 @@ import {
     }
   )
 
+  const addressDetails = getCommonCard(
+    {
+      header: addressDetailsHeaderObj,
+      detailsContainer: getCommonContainer({
+        sitePlotNumber: getTextField(sitePlotNumberField),
+        housePlot: getTextField(housePlotField), 
+        area: getTextField(areaField),
+        areaDetails: getTextField(areaDetailsField), 
+      })
+    }
+  )
+
+  const rentDetails = getCommonCard(
+    {
+      header: rentDetailsHeaderObj,
+      detailsContainer: getCommonContainer({
+        sitePlotNumber: getTextField(monthlyRentField),
+        housePlot: getTextField(rentAmountRevisedField), 
+        area: getTextField(rentAmountRevisedPercentageField),
+      })
+    }
+  )
+
 
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
@@ -335,7 +496,9 @@ import {
     },
     children: {
       propertyDetails,
-      rentHolderDetails
+      rentHolderDetails,
+      addressDetails,
+      rentDetails
     }
   };
   
