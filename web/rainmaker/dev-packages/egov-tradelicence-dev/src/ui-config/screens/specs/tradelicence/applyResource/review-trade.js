@@ -339,8 +339,8 @@ const businessStartDateValue = {
 }
 
 const familyMonthlyIncomeLabel = {
-    labelName: "Family Monthly Income",
-    labelKey: "TL_FAMILY_MONTHLY_INCOME_LABEL"
+    labelName: "Family Monthly Income from all sources",
+    labelKey: "TL_FAMILY_MONTHLY_INCOME_PLACEHOLDER"
 }
 const familyMonthlyIncomeValue = {
     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.familyMonthlyIncome"

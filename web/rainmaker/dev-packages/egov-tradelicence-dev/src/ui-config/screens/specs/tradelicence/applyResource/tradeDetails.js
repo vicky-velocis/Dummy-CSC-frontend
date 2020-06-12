@@ -24,7 +24,8 @@ import {
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
-  toggleSnackbar
+  toggleSnackbar,
+  prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -991,7 +992,6 @@ const ageField = {
   required: true,
   props: { disabled: true },
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].age",
-  pattern: getPattern("age"),
   beforeFieldChange: (action, state, dispatch) => {
     const licenseType = get(state.screenConfiguration.preparedFinalObject,
         "Licenses[0].businessService","")
@@ -1238,8 +1238,8 @@ const businessStartDateField = {
 
 const familyMonthlyIncomeField = {
     label: {
-        labelName: "Family Monthly Income",
-        labelKey: "TL_FAMILY_MONTHLY_INCOME_LABEL"
+        labelName: "Family Monthly Income from all Sources",
+        labelKey: "TL_FAMILY_MONTHLY_INCOME_PLACEHOLDER"
     },
     placeholder: {
         labelName: "Enter Family Monthly Income from all Sources",
@@ -1425,7 +1425,7 @@ export const showHideFields = (action, state, dispatch, data = {}) => {
     );
 }
 
-export const setServiceType = (action, state, dispatch, value,screen, path) => {
+export const setServiceType = (action, state, dispatch, value,screen, path, path2) => {
     let data = [];
 
     const MdmsTradeType = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.TradeLicense.MdmsTradeType")
@@ -1444,6 +1444,9 @@ export const setServiceType = (action, state, dispatch, value,screen, path) => {
             "data",
             serviceTypes
         ))
+    if(!!path2 && !!serviceTypes.length) {
+        dispatch(prepareFinalObject(path2, serviceTypes[0].code));
+    }
 }
 
 export function buildTradeDetailsObj() {

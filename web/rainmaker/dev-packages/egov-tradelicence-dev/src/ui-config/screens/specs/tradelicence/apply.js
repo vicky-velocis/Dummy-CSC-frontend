@@ -40,7 +40,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICENSE_DHOBI_GHAT, RENEWAL_RENT_DEED_SHOP } from "../../../../ui-constants";
 
 export const stepsData = [
-  { labelName: "Trade Details", labelKey: "TL_COMMON_TR_DETAILS" },
+  { labelName: "Details", labelKey: "TL_DETAILS_PROV_DET_HEADER" },
   // { labelName: "Owner Details", labelKey: "TL_COMMON_OWN_DETAILS" },
   { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
   { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
