@@ -152,10 +152,143 @@ import {
     }
   }
 
+  const ownerNameField = {
+    label: {
+        labelName: "Owner Name",
+        labelKey: "RP_OWNER_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Owner Name",
+        labelKey: "RP_OWNER_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
+  const mobileNumberField = {
+    label: {
+        labelName: "Mobile No.",
+        labelKey: "RP_MOBILE_NO_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Mobile No.",
+        labelKey: "RP_MOBILE_NO_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("MobileNo"),
+  }
+
+  const birthDateField = {
+    label: {
+        labelName: "Date of Birth",
+        labelKey: "RP_DATE_BIRTH_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Date of Birth",
+        labelKey: "RP_DATE_BIRTH_PLACEHOLDER"
+    },
+    pattern: getPattern("Date"),
+    required: true,
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
+
+  const genderRadioButton = {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "",
+    props: {
+      label: {
+        name: "Gender",
+        key: "TL_COMMON_GENDER_LABEL"
+      },
+      buttons: [
+        {
+          labelName: "Male",
+          labelKey: "COMMON_MALE",
+          value: "MALE"
+        },
+        {
+          label: "Female",
+          labelKey: "COMMON_FEMALE",
+          value: "FEMALE"
+        }
+      ],
+      jsonPath:"",
+      required: true
+    },
+    required: true,
+    type: "array"
+  };
+
+  const emailField = {
+    label: {
+      labelName: "Email",
+      labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
+    },
+    props:{
+      className:"applicant-details-error"
+    },
+    placeholder: {
+      labelName: "Enter Email",
+      labelKey: "RP_OWNER_DETAILS_EMAIL_PLACEHOLDER"
+    },
+    pattern: getPattern("Email"),
+    jsonPath: ""
+  }
+
+  const aadhaarField = {
+    label: {
+        labelName: "Aadhar Number",
+        labelKey: "RP_AADHAR_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Aadhar Number",
+        labelKey: "RP_AADHAR_NUMBER_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true
+  }
+
+
+
+
   const propertyDetailsHeaderObj = getCommonTitle(
     {
         labelName: "Property Details",
         labelKey: "RP_PROPERTY_DETAILS_HEADER"
+    },
+    {
+        style: {
+            marginBottom: 18,
+            marginTop: 18
+        }
+    }
+  )
+
+  const rentHolderParticularHeaderObj = getCommonTitle(
+    {
+        labelName: "Rent holder Particulars",
+        labelKey: "RP_RENT_HOLDER_PARTICULAR_HEADER"
     },
     {
         style: {
@@ -179,6 +312,20 @@ import {
     }
   )
 
+  const rentHolderDetails = getCommonCard(
+    {
+      header: rentHolderParticularHeaderObj,
+      detailsContainer: getCommonContainer({
+          ownerName: getTextField(ownerNameField),
+          mobileNumber: getTextField(mobileNumberField),
+          birthDate: getDateField(birthDateField), 
+          gender: genderRadioButton,   
+          email: getTextField(emailField),
+          aadhaarField: getTextField(aadhaarField),
+      })
+    }
+  )
+
 
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
@@ -187,7 +334,8 @@ import {
       id: "apply_form1"
     },
     children: {
-      propertyDetails
+      propertyDetails,
+      rentHolderDetails
     }
   };
   
