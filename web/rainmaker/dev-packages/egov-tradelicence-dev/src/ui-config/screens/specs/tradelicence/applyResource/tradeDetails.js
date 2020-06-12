@@ -1239,7 +1239,7 @@ const businessStartDateField = {
 const familyMonthlyIncomeField = {
     label: {
         labelName: "Family Monthly Income from all Sources",
-        labelKey: "TL_FAMILY_MONTHLY_INCOME_PLACEHOLDER"
+        labelKey: "TL_FAMILY_MONTHLY_INCOME_LABEL"
     },
     placeholder: {
         labelName: "Enter Family Monthly Income from all Sources",

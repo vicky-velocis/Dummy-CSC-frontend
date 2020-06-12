@@ -960,7 +960,7 @@ const getStatementForDocType = docType => {
 
 export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   const queryStr = [
-    { key: "key", value: "tlapplication" },
+    { key: "key", value: `tlapplication_${Licenses[0].businessService}` },
     { key: "tenantId", value: "ch" }
   ]
   let {documents} = Licenses[0].additionalDetails;
