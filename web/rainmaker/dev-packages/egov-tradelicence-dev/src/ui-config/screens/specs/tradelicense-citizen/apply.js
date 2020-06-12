@@ -176,6 +176,12 @@ const screenConfig = {
           []
         )
       )
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp",
+          []
+        )
+      )
     }
     const queryValue = getQueryArg(window.location.href, "applicationNumber") || get(
       state.screenConfiguration.preparedFinalObject,
