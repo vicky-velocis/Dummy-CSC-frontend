@@ -64,7 +64,7 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     const {preparedFinalObject} = this.props.state.screenConfiguration;
-    const {workflow: {ProcessInstances = []}} = preparedFinalObject || {}
+    const {workflow: {ProcessInstances = []}, Licenses} = preparedFinalObject || {}
     let employeeList = [];
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
@@ -72,22 +72,14 @@ class Footer extends React.Component {
     } else {
       let action = ""
       switch(item.buttonLabel) {
-        case "SENDBACK2": {
-          action = "VERFIYANDFORWARD1"
-          break
-        }
-        case "SENDBACK3": {
-          action = "VERFIYANDFORWARD2"
-          break
-        }
-        case "SENDBACK4": {
-          action = "VERFIYANDFORWARD3"
+        case "SENDBACK": {
+          action = "FORWARD"
           break
         }
         default : action = ""
       }
       let assignee = [];
-      if(!!action) {
+      if(!!action && Licenses[0].status !== "PENDINGL1VERIFICATION") {
         const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
         assignee = !!assigner.uuid ? [assigner.uuid] : []
       }
