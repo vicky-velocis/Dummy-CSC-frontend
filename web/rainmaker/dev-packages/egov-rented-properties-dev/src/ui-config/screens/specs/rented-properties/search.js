@@ -16,7 +16,10 @@ import {
   import { searchApiCall } from "./searchResource/functions"
   import { searchResults } from "./searchResource/searchResults";
 
-  
+  const addMaster = (state, dispatch) => {
+    dispatch(setRoute(`/rented-properties/add-update?`));
+  }
+
   const header = getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
@@ -74,7 +77,10 @@ import {
                       })
                     },
                     onClickDefination: {
-            
+                      action: "condition",
+                      callBack: (state, dispatch) => {
+                        addMaster(state, dispatch);
+                      }
                     }
                   }
                 })
