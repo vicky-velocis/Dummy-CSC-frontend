@@ -13,6 +13,8 @@ import {
   import get from "lodash/get";
 
   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
+  import { searchApiCall } from "./searchResource/functions"
+  import { searchResults } from "./searchResource/searchResults";
 
   
   const header = getCommonHeader({
@@ -22,6 +24,11 @@ import {
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
     name: "rented-search",
+    beforeInitScreen: (action, state, dispatch) => {
+      console.log("test");
+      searchApiCall(state, dispatch, true)
+      return action
+    },
     components: {
       div: {
         uiFramework: "custom-atoms",
@@ -75,6 +82,8 @@ import {
             }
           },
           rentedPropertyApplication,
+          breakAfterSearch: getBreak(),
+          searchResults
         }
       }
     }
