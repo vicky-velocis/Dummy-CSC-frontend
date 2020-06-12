@@ -1164,6 +1164,7 @@ else{
 
   const mapDispacthToProps = dispatch => {
     return {
+     // setRoute: (url) => dispatch(setRoute(url)),
       prepareFinalObject: (path, value) =>
         dispatch(prepareFinalObject(path, value)),
       toggleSnackbar: (open, message, variant) =>

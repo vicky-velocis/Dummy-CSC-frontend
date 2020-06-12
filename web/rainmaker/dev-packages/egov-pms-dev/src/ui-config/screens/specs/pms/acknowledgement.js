@@ -27,6 +27,7 @@ import {
   
   ActionButton
 } from "../../../../ui-utils/sampleResponses";
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
@@ -37,7 +38,8 @@ export const header = getCommonContainer({
     moduleName: "egov-noc",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
+      number: applicationNumber,
+
     },
     visible: true
   }
@@ -107,7 +109,21 @@ const getAcknowledgementCard = (
   
   if (purpose === _ActionButton.FORWARD && status === "success") {
     return {
-      header,
+      ackheaderforword:getCommonContainer({
+        header: getCommonHeader({
+          labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
+          labelKey: "PENSION_COMMON_APPLY_PENSION_HEADER_LABEL"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -141,7 +157,21 @@ const getAcknowledgementCard = (
     || purpose === _ActionButton.SEND_BACK_TO_DETAILS_VERIFICATION
     ) && status === "success") {
     return {
-      header,
+      ackheaderback:getCommonContainer({
+      header: getCommonHeader({
+        labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
+        labelKey: "PENSION_COMMON_APPLY_PENSION_HEADER_LABEL"
+      }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-noc",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number:applicationNumber
+        },
+        visible: true
+      }
+    }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -170,7 +200,21 @@ const getAcknowledgementCard = (
   } 
   else if ((purpose === _ActionButton.REJECT) && status === "success") {
     return {
-      header,
+      ackheaderreject:getCommonContainer({
+        header: getCommonHeader({
+          labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
+          labelKey: "PENSION_COMMON_APPLY_PENSION_HEADER_LABEL"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -200,7 +244,21 @@ const getAcknowledgementCard = (
   else if ((purpose === _ActionButton.CLOSE) && status === "success") {
     return {
 
-      header,
+      ackheaderClose:getCommonContainer({
+        header: getCommonHeader({
+          labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
+          labelKey: "PENSION_COMMON_APPLY_PENSION_HEADER_LABEL"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -230,7 +288,21 @@ const getAcknowledgementCard = (
   else if ((purpose === _ActionButton.INITIATED) && status === "success") {
     return {
 
-      header,
+      ackheaderINITIATE:getCommonContainer({
+        header: getCommonHeader({
+          labelName: `PENSION_COMMON_APPLY_PENSION_HEADER_LABEL`, //later use getFinancialYearDates
+          labelKey: "PENSION_COMMON_APPLY_PENSION_HEADER_LABEL"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
