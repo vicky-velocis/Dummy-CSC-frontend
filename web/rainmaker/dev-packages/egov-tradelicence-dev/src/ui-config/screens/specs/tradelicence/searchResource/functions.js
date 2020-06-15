@@ -35,7 +35,7 @@ export const getStatusList = async (state, dispatch, screen, path) => {
   }
 }
 
-export const searchApiCall = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
+export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100 , hideTable = true) => {
   !!hideTable && showHideTable(false, dispatch);
   let queryObject = [
     {
