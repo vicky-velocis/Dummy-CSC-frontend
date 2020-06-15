@@ -780,7 +780,7 @@ else{
       employee_name:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.user.name", '' ),
       department:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.assignments[0].department", '' ),
       designation:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.assignments[0].designation", '' ),
-      
+      dateOfDeath :convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.dateOfDeath",  0 ),'dob'),
       employee_type:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.employeeType", '' ),
       employee_status:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.employeeStatus", '' ),    
       permanentAddress:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.user.permanentAddress", '' ),
@@ -824,7 +824,7 @@ else{
       noDuesForAvailGovtAccomodation:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.noDuesForAvailGovtAccomodation", false) === true? "YES" : "NO",
       // disability info
       disabilityPercentage:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeDisability.disabilityPercentage", 0 ),
-      woundExtraordinaryPension:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeDisability.woundExtraordinaryPension", false ) === true? "YES" : "NO",
+      woundExtraordinaryPension:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeDisability.woundExtraordinaryPension", 0 ),
       attendantAllowanceGranted:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeDisability.attendantAllowanceGranted", false ) === true? "YES" : "NO",
       
     }
@@ -1164,6 +1164,7 @@ else{
 
   const mapDispacthToProps = dispatch => {
     return {
+     // setRoute: (url) => dispatch(setRoute(url)),
       prepareFinalObject: (path, value) =>
         dispatch(prepareFinalObject(path, value)),
       toggleSnackbar: (open, message, variant) =>

@@ -71,3 +71,5 @@ const TaskDialog = props => {
 };
 
 export default withStyles(styles)(withMobileDialog({breakpoint: 'xs'})(TaskDialog));
+
+// export default withStyles(styles)(TaskDialog);

@@ -357,18 +357,18 @@ export const createUpdateNPApplication = async (state, dispatch, status) => {
     let payload =[]
     if(step_calculation)
     {
-      let queryObject = [
-        {
-          key: "businessIds",
-        value: getQueryArg(window.location.href, "applicationNumber")
+      // let queryObject = [
+      //   {
+      //     key: "businessIds",
+      //   value: getQueryArg(window.location.href, "applicationNumber")
          
-        }];
-      queryObject.push({
-        key: "tenantId",
-        value: getQueryArg(window.location.href, "tenantId")
-      });
-      response = await getworkflowData(queryObject);
-       payload = get(response, "ProcessInstances", [])
+      //   }];
+      // queryObject.push({
+      //   key: "tenantId",
+      //   value: getQueryArg(window.location.href, "tenantId")
+      // });
+      // response = await getworkflowData(queryObject);
+       payload = get(state.screenConfiguration.preparedFinalObject, "ProcessInstances", [])
     }
     else
     {

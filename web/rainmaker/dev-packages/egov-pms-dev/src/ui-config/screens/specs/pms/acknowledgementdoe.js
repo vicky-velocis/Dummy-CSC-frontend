@@ -27,6 +27,7 @@ import {
   
   ActionButton
 } from "../../../../ui-utils/sampleResponses";
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `Application for Fire NOC`, //later use getFinancialYearDates
@@ -52,7 +53,7 @@ export const headerdoe = getCommonContainer({
     moduleName: "egov-pms",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
+      number: applicationNumber,
     },
     visible: true
   }
@@ -104,10 +105,24 @@ const getAcknowledgementCard = (
 ) => {
   let _ActionButton= ActionButton()
 
-  //
+  
   if (purpose === _ActionButton.FORWARD && status === "success") {
     return {
-      headerdoe,
+      ackheaderforword:getCommonContainer({
+        header: getCommonHeader({
+          labelName: "Death of an employee",
+    labelKey: "PENSION_NP_DETAIL_HEADER_DOE"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -136,12 +151,26 @@ const getAcknowledgementCard = (
   } 
   else if ((purpose === _ActionButton.BACKWORD 
     || purpose === _ActionButton.BACKWORD1
-    ||purpose === _ActionButton.BACKWORD2
-    ||purpose === _ActionButton.SEND_BACK_TO_DETAILS_REVIEW
+    || purpose === _ActionButton.BACKWORD2
+    || purpose === _ActionButton.SEND_BACK_TO_DETAILS_REVIEW
     || purpose === _ActionButton.SEND_BACK_TO_DETAILS_VERIFICATION
     ) && status === "success") {
     return {
-      headerdoe,
+      ackheaderback:getCommonContainer({
+      header: getCommonHeader({
+        labelName: "Death of an employee",
+        labelKey: "PENSION_NP_DETAIL_HEADER_DOE"
+      }),
+      applicationNumber: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-noc",
+        componentPath: "ApplicationNoContainer",
+        props: {
+          number:applicationNumber
+        },
+        visible: true
+      }
+    }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -170,7 +199,21 @@ const getAcknowledgementCard = (
   } 
   else if ((purpose === _ActionButton.REJECT) && status === "success") {
     return {
-      headerdoe,
+      ackheaderreject:getCommonContainer({
+        header: getCommonHeader({
+          labelName: "Death of an employee",
+    labelKey: "PENSION_NP_DETAIL_HEADER_DOE"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -200,7 +243,21 @@ const getAcknowledgementCard = (
   else if ((purpose === _ActionButton.CLOSE) && status === "success") {
     return {
 
-      headerdoe,
+      ackheaderClose:getCommonContainer({
+        header: getCommonHeader({
+          labelName: "Death of an employee",
+    labelKey: "PENSION_NP_DETAIL_HEADER_DOE"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -230,7 +287,21 @@ const getAcknowledgementCard = (
   else if ((purpose === _ActionButton.INITIATED) && status === "success") {
     return {
 
-      headerdoe,
+      ackheaderINITIATE:getCommonContainer({
+        header: getCommonHeader({
+          labelName: "Death of an employee",
+    labelKey: "PENSION_NP_DETAIL_HEADER_DOE"
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-noc",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number:applicationNumber
+          },
+          visible: true
+        }
+      }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
