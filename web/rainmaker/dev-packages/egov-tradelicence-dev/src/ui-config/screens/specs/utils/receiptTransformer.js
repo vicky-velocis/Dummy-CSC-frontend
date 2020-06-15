@@ -68,7 +68,7 @@ export const loadUlbLogo = tenantid => {
     store.dispatch(prepareFinalObject("base64UlbLogo", canvas.toDataURL()));
     canvas = null;
   };
-  img.src = 'https://egov.transerve.com/media/logo.png';
+  img.src = `${process.env.REACT_APP_MEDIA_BASE_URL}/logo.png`;
 };
 
 export const loadApplicationData = async (applicationNumber, tenant, state, dispatch) => {
