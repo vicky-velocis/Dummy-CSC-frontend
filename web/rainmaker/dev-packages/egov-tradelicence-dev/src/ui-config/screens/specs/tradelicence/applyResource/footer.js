@@ -694,6 +694,25 @@ dispatch(
   )
 );
 
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.footer.children.nextButton",
+    "visible",
+    false
+  )
+);
+
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.footer.children.payButton",
+    "visible",
+    true
+  )
+);
+
+
   // const wfCode = "DIRECTRENEWAL";
 //   set(licences[0], "action", "INITIATE");
 //   set(licences[0], "workflowCode", wfCode);
