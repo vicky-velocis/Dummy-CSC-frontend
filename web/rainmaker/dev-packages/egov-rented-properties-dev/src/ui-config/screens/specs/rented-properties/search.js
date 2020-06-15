@@ -13,8 +13,13 @@ import {
   import get from "lodash/get";
 
   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
+  import { searchApiCall } from "./searchResource/functions"
+  import { searchResults } from "./searchResource/searchResults";
 
-  
+  const addMaster = (state, dispatch) => {
+    dispatch(setRoute(`/rented-properties/add-update?`));
+  }
+
   const header = getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
@@ -22,6 +27,11 @@ import {
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
     name: "rented-search",
+    beforeInitScreen: (action, state, dispatch) => {
+      console.log("test");
+      searchApiCall(state, dispatch, true)
+      return action
+    },
     components: {
       div: {
         uiFramework: "custom-atoms",
@@ -67,7 +77,10 @@ import {
                       })
                     },
                     onClickDefination: {
-            
+                      action: "condition",
+                      callBack: (state, dispatch) => {
+                        addMaster(state, dispatch);
+                      }
                     }
                   }
                 })
@@ -75,6 +88,8 @@ import {
             }
           },
           rentedPropertyApplication,
+          breakAfterSearch: getBreak(),
+          searchResults
         }
       }
     }
