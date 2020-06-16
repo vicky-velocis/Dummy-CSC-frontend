@@ -1348,7 +1348,7 @@ export const pensionDetails = (data) => {
       props: {
         disabled:true,    
       },
-      pattern: getPMSPattern("Amount"),
+      pattern: getPMSPattern("Date"),
       jsonPath: "ProcessInstances[0].pensionCalculationDetails.familyPensionIEndDateSystem"
     }),
     familyPensionIEndDateVerified: getDateField({
@@ -1395,7 +1395,7 @@ export const pensionDetails = (data) => {
       props: {
        disabled:true,       
       },
-      pattern: getPMSPattern("Amount"),
+      pattern: getPMSPattern("Date"),
       jsonPath: "ProcessInstances[0].pensionCalculationDetails.familyPensionIIStartDateSystem"
     }),
     familyPensionIIStartDateVerified: getDateField({
@@ -1417,7 +1417,7 @@ export const pensionDetails = (data) => {
       props: {
         disabled:data[3].pensionDataUpdate,
       },
-      pattern: getPMSPattern("Amount"),
+      pattern: getPMSPattern("Date"),
       jsonPath: "ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified"
     }),  
 

@@ -92,64 +92,103 @@ return getCommonCard({
   }),
     employeeAOPDtailCobainer:getCommonContainer(
       {
-        
-        isTakenMonthlyPensionAndGratuity: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-pms",
-         componentPath: "CheckboxContainer",
-         gridDefination: {
-          xs: 12
-        },
-          isFieldValid: true,
-          required:false,
-  
-          props: {         
-            content: "PENSION_IS_TAKEN_MONTHLY_PENSION_AND_GRATUITY",
-            jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity",
-           disabled: data[0].employeeOtherDetailsUpdate,
-           visibility:"hidden",
+        ReasionOption: {
+          uiFramework: "custom-containers",
+          componentPath: "RadioGroupContainer",
+          gridDefination: {
+            xs: 6
+          },
+          jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+          type: "array",
+          props: {
+            required: false,
+            disabled: data[0].employeeOtherDetailsUpdate,
+            label: { name: "Is dues present", key: "PENSION_IS_DUES_PRESENT" },
+            buttons: [
+              {
+                labelName: "Yes",
+                labelKey: "PENSION_IS_TAKEN_MONTHLY_PENSION_AND_GRATUITY",
+                value:"YES",
+                disabled: data[0].employeeOtherDetailsUpdate,
+              },
+              {
+                label: "NO",
+                labelKey: "PENSION_IS_TAKEN_COMPENSATION_PENSION_AND_GRATUITY",
+                value:"YES",
+                disabled: data[0].employeeOtherDetailsUpdate,
+              },
+              {
+                label: "NO",
+                labelKey: "PENSION_IS_TAKEN_GRATUITY_COMMUTATION_TERMINAL_BENEFIT",
+                value:"NO",
+                disabled: data[0].employeeOtherDetailsUpdate,
+              }
+            ],
+          
+            defaultValue: "NO"
+          },
+          type: "array",
+          beforeFieldChange: (action, state, dispatch) => {
+           
           }
+        },
+        // isTakenMonthlyPensionAndGratuity: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-pms",
+        //  componentPath: "CheckboxContainer",
+        //  gridDefination: {
+        //   xs: 12
+        // },
+        //   isFieldValid: true,
+        //   required:false,
+  
+        //   props: {         
+        //     content: "PENSION_IS_TAKEN_MONTHLY_PENSION_AND_GRATUITY",
+        //     jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity",
+        //    disabled: data[0].employeeOtherDetailsUpdate,
+        //    visibility:"hidden",
+        //   }
  
       
-        },
-        isTakenGratuityCommutationTerminalBenefit: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-pms",
-         componentPath: "CheckboxContainer",
-         gridDefination: {
-          xs: 12
-        },
-          isFieldValid: true,
-          required:false,
+        // },
+        // isTakenGratuityCommutationTerminalBenefit: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-pms",
+        //  componentPath: "CheckboxContainer",
+        //  gridDefination: {
+        //   xs: 12
+        // },
+        //   isFieldValid: true,
+        //   required:false,
   
-          props: {         
-            content: "PENSION_IS_TAKEN_COMPENSATION_PENSION_AND_GRATUITY",
-            jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit",
-           disabled: data[0].employeeOtherDetailsUpdate,
-           visibility:"hidden",
-          }
-  
-      
-        },
-        isTakenCompensationPensionAndGratuity: {
-          uiFramework: "custom-containers-local",
-          moduleName: "egov-pms",
-         componentPath: "CheckboxContainer",
-         gridDefination: {
-          xs: 12
-        },
-          isFieldValid: true,
-          required:false,
-  
-          props: {         
-            content: "PENSION_IS_TAKEN_GRATUITY_COMMUTATION_TERMINAL_BENEFIT",
-            jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity",
-           disabled: data[0].employeeOtherDetailsUpdate,
-           visibility:"hidden",
-          }
+        //   props: {         
+        //     content: "PENSION_IS_TAKEN_COMPENSATION_PENSION_AND_GRATUITY",
+        //     jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit",
+        //    disabled: data[0].employeeOtherDetailsUpdate,
+        //    visibility:"hidden",
+        //   }
   
       
-        },
+        // },
+        // isTakenCompensationPensionAndGratuity: {
+        //   uiFramework: "custom-containers-local",
+        //   moduleName: "egov-pms",
+        //  componentPath: "CheckboxContainer",
+        //  gridDefination: {
+        //   xs: 12
+        // },
+        //   isFieldValid: true,
+        //   required:false,
+  
+        //   props: {         
+        //     content: "PENSION_IS_TAKEN_GRATUITY_COMMUTATION_TERMINAL_BENEFIT",
+        //     jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity",
+        //    disabled: data[0].employeeOtherDetailsUpdate,
+        //    visibility:"hidden",
+        //   }
+  
+      
+        // },
 
       }
     ),

@@ -130,7 +130,7 @@ return getCommonCard({
               {
                 label: "Np",
                 labelKey: "PENSION_IS_DUES_AMOUNT_DECIDED_NO",
-                value:"NO",
+                value:"DEFAULT",
                 disabled: data[0].employeeOtherDetailsUpdate,
               }
             ],
