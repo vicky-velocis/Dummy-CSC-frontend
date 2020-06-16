@@ -166,7 +166,6 @@ class DocumentList extends Component {
     let { uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, preparedFinalObject } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
-   (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" || !!getQueryArg(window.location.href, "applicationNumber") )&&
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject("LicensesTemp[0].removedDocs", [
         ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
