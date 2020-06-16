@@ -928,6 +928,43 @@ else{
   get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef",0) 
   wef = convertDateToEpoch(wef);
   set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef", wef);
+
+  // im case of AOP 
+  let TakenMonthlyPensionAndGratuity = ''
+    let isTakenMonthlyPensionAndGratuity = false;
+    let isTakenGratuityCommutationTerminalBenefit = false;
+    let isTakenCompensationPensionAndGratuity = false;
+    TakenMonthlyPensionAndGratuity = get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity",'') ;
+    
+    if(TakenMonthlyPensionAndGratuity === "YES")
+    {
+      
+    isTakenMonthlyPensionAndGratuity = true
+    isTakenGratuityCommutationTerminalBenefit = false
+    isTakenCompensationPensionAndGratuity = false
+
+    }
+   if(TakenMonthlyPensionAndGratuity === "NO")
+    {
+     
+    isTakenMonthlyPensionAndGratuity = false
+    isTakenGratuityCommutationTerminalBenefit = true
+    isTakenCompensationPensionAndGratuity = false
+
+    }
+   if (TakenMonthlyPensionAndGratuity === "DEFAULT")
+    {
+      
+    isTakenMonthlyPensionAndGratuity = false
+    isTakenGratuityCommutationTerminalBenefit = false
+    isTakenCompensationPensionAndGratuity = true
+
+    }
+   
+set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", isTakenMonthlyPensionAndGratuity);
+set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit", isTakenGratuityCommutationTerminalBenefit);
+set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity", isTakenCompensationPensionAndGratuity);
+
     try {
 
       let payload = get(

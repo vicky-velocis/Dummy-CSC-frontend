@@ -98,12 +98,12 @@ return getCommonCard({
           gridDefination: {
             xs: 6
           },
-          jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+          jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity",
           type: "array",
           props: {
             required: false,
             disabled: data[0].employeeOtherDetailsUpdate,
-            label: { name: "Is dues present", key: "PENSION_IS_DUES_PRESENT" },
+           // label: { name: "Is dues present", key: "PENSION_IS_DUES_PRESENT" },
             buttons: [
               {
                 labelName: "Yes",
@@ -114,7 +114,7 @@ return getCommonCard({
               {
                 label: "NO",
                 labelKey: "PENSION_IS_TAKEN_COMPENSATION_PENSION_AND_GRATUITY",
-                value:"YES",
+                value:"DEFAULT",
                 disabled: data[0].employeeOtherDetailsUpdate,
               },
               {
