@@ -584,15 +584,15 @@ export const prepareEditFlow = async (
   let TakenMonthlyPensionAndGratuity ="YES"
  if(isTakenMonthlyPensionAndGratuity)
  TakenMonthlyPensionAndGratuity = "YES"
- else if(isTakenGratuityCommutationTerminalBenefit)
+  if(isTakenGratuityCommutationTerminalBenefit)
  TakenMonthlyPensionAndGratuity = "NO"
- else if(isTakenCompensationPensionAndGratuity)
+  if(isTakenCompensationPensionAndGratuity)
  TakenMonthlyPensionAndGratuity = "DEFAULT"
     
   dispatch(
    handleField(
      "rrpDetails",
-     "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeOtherDetailsConatiner.children.isDuesPresent",
+     "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer.children.ReasionOption",
      "props.value",
      TakenMonthlyPensionAndGratuity
    )
