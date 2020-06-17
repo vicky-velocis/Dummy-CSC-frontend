@@ -1091,8 +1091,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
       &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
-      &&fields.accountNumber!==undefined 
-      &&fields.bankAddress!==undefined 
+      // &&fields.accountNumber!==undefined 
+      // &&fields.bankAddress!==undefined 
       && fields.totalNoPayLeaves!==undefined) 
       {
         
@@ -1109,8 +1109,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
-          ||fields.accountNumber.isFieldValid ===false
-          ||fields.bankAddress.isFieldValid === false
+          // ||fields.accountNumber.isFieldValid ===false
+          // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
             isFormValid = false
@@ -1734,6 +1734,15 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         };
 
       }
+       else if(!isGratuityPensionValid)
+          {
+            errorMessage = {
+              labelName:
+                "Please add at lease one valid dependent to get pension amount",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };
+  
+          }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }

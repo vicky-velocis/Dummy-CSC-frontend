@@ -17,7 +17,7 @@ import { Actiongetlocalization, } from "../../ui-utils/LocalizationCode";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg , epochToYmd, getDateInEpoch, setBusinessServiceDataToLocalStorage} from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { convertEpochToDate ,getTextToLocalMapping} from "../../ui-config/screens/specs/utils";
 import { downloadAcknowledgementLetter , downloadAcknowledgementForm} from "../../ui-config/screens/specs/utils";
 import {
   getUserInfo,
@@ -771,7 +771,12 @@ else{
   }
   }
   setvalue =(state) =>{ 
-
+    let Group = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
+    Group = getTextToLocalMapping(`EGOV_PENSION_EMPLOYEEGROUP_${Group}`);
+    let reasonForRetirement = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
+    let businessService = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessService", '' )
+    if(businessService === WFConfig().businessServiceRRP)
+    reasonForRetirement = getTextToLocalMapping(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
     let ApplicationDetails = {
   // basic details
       businessId: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessId", '' ),
@@ -791,8 +796,8 @@ else{
       serviceTo:convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceTo", 0 ),'dob'),
       // other details
   
-      reasonForRetirement:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' ),
-      employeeGroup:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.employeeGroup", '' ),
+      reasonForRetirement:reasonForRetirement,
+      employeeGroup:Group,
       lpd:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.lpd", 0 ),
       ltc:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.ltc", 0 ),
       fma:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.fma", 0 ),

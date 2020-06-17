@@ -95,7 +95,8 @@ let payload =[];
 
 
 const setvalue =(state) =>{ 
-
+  let Group = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
+  Group = Group;
   let ApplicationDetails = {
 // basic details
     businessId: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessId", '' ),
@@ -115,7 +116,7 @@ const setvalue =(state) =>{
     // other details
 
     reasonForRetirement:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' ),
-    employeeGroup:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' ),
+    employeeGroup: Group,
     lpd:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.lpd", 0 ),
     ltc:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.ltc", 0 ),
     fma:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.fma", 0 ),
@@ -1090,8 +1091,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
       &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
-      &&fields.accountNumber!==undefined 
-      &&fields.bankAddress!==undefined
+      // &&fields.accountNumber!==undefined 
+      // &&fields.bankAddress!==undefined
       && fields.totalNoPayLeaves!==undefined) 
       {
         
@@ -1108,8 +1109,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
-          ||fields.accountNumber.isFieldValid ===false
-          ||fields.bankAddress.isFieldValid === false
+          // ||fields.accountNumber.isFieldValid ===false
+          // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
             isFormValid = false
@@ -1732,6 +1733,16 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         };
 
       }
+      else if(!isGratuityPensionValid)
+          {
+            errorMessage = {
+              labelName:
+                "Please add at lease one valid dependent to get pension amount",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };
+  
+          }
+      
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
