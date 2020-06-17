@@ -17,7 +17,7 @@ import { Actiongetlocalization, } from "../../ui-utils/LocalizationCode";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg , epochToYmd, getDateInEpoch, setBusinessServiceDataToLocalStorage} from "egov-ui-framework/ui-utils/commons";
-import { convertEpochToDate ,getTextToLocalMapping} from "../../ui-config/screens/specs/utils";
+import { convertEpochToDate ,getLocalizationCodeValue} from "../../ui-config/screens/specs/utils";
 import { downloadAcknowledgementLetter , downloadAcknowledgementForm} from "../../ui-config/screens/specs/utils";
 import {
   getUserInfo,
@@ -771,12 +771,12 @@ else{
   }
   }
   setvalue =(state) =>{ 
-    let Group = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
-    Group = getTextToLocalMapping(`EGOV_PENSION_EMPLOYEEGROUP_${Group}`);
+    let Group = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.employeeGroup", '' );
+    Group = getLocalizationCodeValue(`EGOV_PENSION_EMPLOYEEGROUP_${Group}`);
     let reasonForRetirement = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
     let businessService = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessService", '' )
     if(businessService === WFConfig().businessServiceRRP)
-    reasonForRetirement = getTextToLocalMapping(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
+    reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
     let ApplicationDetails = {
   // basic details
       businessId: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessId", '' ),
