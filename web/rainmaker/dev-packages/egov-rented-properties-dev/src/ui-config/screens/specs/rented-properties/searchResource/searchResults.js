@@ -13,47 +13,10 @@ export const _searchResults = {
   visible: true,
   props: {
     columnData: [
-      {label: getTextToLocalMapping("Application No"),
-        options: {
-          customBodyRender: value => (
-            <span style={{color: "#2196F3"}}>
-              {value}
-            </span>
-          )
-        }
-      },
-      {label: getTextToLocalMapping("License No")},
-      {label: getTextToLocalMapping("License Type")},
-      {label: getTextToLocalMapping("Service Type")},
-      {label: getTextToLocalMapping("Owner Name")},
-      {label: getTextToLocalMapping("Application Date")},
-      {label: getTextToLocalMapping("Financial Year")},
-      {
-        label: getTextToLocalMapping("Application Type"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span>
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
-      {
-        label: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      }
+      {label: getTextToLocalMapping("Transit No")},
+      {label: getTextToLocalMapping("Colony")},
+      {label: getTextToLocalMapping("Owner")},
+      {label: getTextToLocalMapping("Status")},
     ],
     onRowClick: (row) => onRowClick(row),
     onPageChanged: (state, dispatch, offset = 0, limit = 10, hideTable) => searchApiCall(state, dispatch, true, offset, limit, hideTable)
@@ -74,52 +37,10 @@ export const searchResults = {
   visible: true,
   props: {
     columns: [
-      getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("License No"),
-      getTextToLocalMapping("License Type"), 
-      getTextToLocalMapping("Service Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Financial Year"),
-      {
-        name: getTextToLocalMapping("Application Type"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span>
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
-      {
-        name: "tenantId",
-        options: {
-          display: false
-        }
-      },
-      {
-        name:"status1",
-        options: {
-          display: false
-        }
-      },
-
+      getTextToLocalMapping("Transit No"),
+      getTextToLocalMapping("Colony"),
+      getTextToLocalMapping("Owner"),
+      getTextToLocalMapping("Status"),
     ],
     options: {
       filter: false,

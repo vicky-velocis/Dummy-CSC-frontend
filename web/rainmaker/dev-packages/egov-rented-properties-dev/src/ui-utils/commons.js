@@ -89,7 +89,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      "/csp/property/_search",
       "",
       queryObject
     );

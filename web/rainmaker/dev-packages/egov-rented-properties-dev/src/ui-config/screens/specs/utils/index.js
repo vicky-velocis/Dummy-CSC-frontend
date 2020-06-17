@@ -2538,6 +2538,34 @@ export const getTextToLocalMapping = label => {
       
       case RENEWAL_RENT_DEED_SHOP:
         return getLocaleLabels("Initiated,", label, localisationLabels);
+
+      case "Transit No":
+          return getLocaleLabels(
+            "Transit No",
+            "RP_COMMON_TABLE_COL_TRANSIT_NO",
+            localisationLabels
+          );
+
+      case "Colony":
+        return getLocaleLabels(
+          "Colony",
+          "RP_COMMON_TABLE_COL_COLONY",
+          localisationLabels
+        );
+
+      case "Status":
+        return getLocaleLabels(
+          "Status",
+          "RP_COMMON_TABLE_COL_STATUS",
+          localisationLabels
+        );
+
+      case "Owner":
+        return getLocaleLabels(
+          "Owner",
+          "RP_COMMON_TABLE_COL_OWNER",
+          localisationLabels
+        );
   }
 };
 
