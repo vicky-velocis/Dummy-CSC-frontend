@@ -23,11 +23,6 @@ export const _searchResults = {
   }
 }
 
-const _onRowClick = rowData => {
-  window.location.href = `search-preview?applicationNumber=${
-    rowData["Application No"]
-  }&tenantId=${rowData.tenantId}`;
-};
 
 
 export const searchResults = {
@@ -72,16 +67,5 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[7]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[8]
-      }`;
-      break;
-    default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[8]}`;
-      break;
-  }
+      window.location.href = `search-preview?transitNumber=${rowData[0]}`;
 };
