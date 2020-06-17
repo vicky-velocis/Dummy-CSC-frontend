@@ -481,6 +481,7 @@ return getCommonCard({
         labelKey: "PENSION_EMPLOYEE_PENSION_BA"
       },
       required:false,
+      visible:false,
       props: {
         disabled: data[0].employeeOtherDetailsUpdate,      
       },
@@ -500,6 +501,7 @@ return getCommonCard({
         labelKey: "PENSION_EMPLOYEE_PENSION_AN"
       },
       required: false,
+      visible:false,
       minValue:0,
       maxLength:18,
       props: {

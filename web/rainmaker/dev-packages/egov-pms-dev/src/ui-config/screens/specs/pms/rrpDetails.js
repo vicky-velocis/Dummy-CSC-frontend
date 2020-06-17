@@ -588,15 +588,18 @@ export const prepareEditFlow = async (
  TakenMonthlyPensionAndGratuity = "NO"
   if(isTakenCompensationPensionAndGratuity)
  TakenMonthlyPensionAndGratuity = "DEFAULT"
-    
-  dispatch(
-   handleField(
-     "rrpDetails",
-     "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer.children.ReasionOption",
-     "props.value",
-     TakenMonthlyPensionAndGratuity
-   )
- );
+    if(reasonForRetirement)
+    {
+      dispatch(
+        handleField(
+          "rrpDetails",
+          "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer.children.ReasionOption",
+          "props.value",
+          TakenMonthlyPensionAndGratuity
+        )
+      );
+    }
+  
 
  
 

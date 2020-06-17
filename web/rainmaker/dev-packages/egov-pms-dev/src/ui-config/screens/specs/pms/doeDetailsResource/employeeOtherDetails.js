@@ -553,7 +553,7 @@ return getCommonCard({
         labelKey: "PENSION_EMPLOYEE_PENSION_AN"
       },
       required: false,
-      Vosible:false,
+      visible:false,
       minValue:0,
       maxLength:18,
       props: {
