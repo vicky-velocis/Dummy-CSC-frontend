@@ -571,6 +571,39 @@ export const prepareEditFlow = async (
     )
   );
 
+  // set value for AOP case
+  let isTakenMonthlyPensionAndGratuity =
+ get(response, "ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity") 
+
+ let isTakenGratuityCommutationTerminalBenefit =
+ get(response, "ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit") 
+ let isTakenCompensationPensionAndGratuity =
+ get(response, "ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity") 
+
+ 
+  let TakenMonthlyPensionAndGratuity ="YES"
+ if(isTakenMonthlyPensionAndGratuity)
+ TakenMonthlyPensionAndGratuity = "YES"
+  if(isTakenGratuityCommutationTerminalBenefit)
+ TakenMonthlyPensionAndGratuity = "NO"
+  if(isTakenCompensationPensionAndGratuity)
+ TakenMonthlyPensionAndGratuity = "DEFAULT"
+    if(reasonForRetirement)
+    {
+      dispatch(
+        handleField(
+          "rrpDetails",
+          "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer.children.ReasionOption",
+          "props.value",
+          TakenMonthlyPensionAndGratuity
+        )
+      );
+    }
+  
+
+ 
+
+
 
   let AnyMisconductInsolvencyInefficiency =
   isAnyMisconductInsolvencyInefficiency === true

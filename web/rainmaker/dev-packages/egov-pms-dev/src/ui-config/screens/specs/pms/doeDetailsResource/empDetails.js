@@ -940,7 +940,7 @@ const dependentUnitcard = {
               },
               placeholder: {
                 labelName: "Select Marital Status",
-                labelKey: "PENSION_DEPENDENT_SELECT_MARITAL_STATUS_TYPE"
+                labelKey: "PENSION_DEPENDENT_MARITAL_STATUS_TYPE"
               },
               required: true,
              
@@ -1116,7 +1116,7 @@ const dependentUnitcard = {
               labelName: "Gratuity percentage",
               labelKey: "PENSION_DEPENDENT_GC"
             },
-            required: false,
+            required: true,
       
             minValue:0,
             props: {

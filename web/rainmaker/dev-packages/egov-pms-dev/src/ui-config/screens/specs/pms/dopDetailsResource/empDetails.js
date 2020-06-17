@@ -1097,7 +1097,7 @@ const dependentUnitcard = {
               labelName: "Gratuity percentage",
               labelKey: "PENSION_DEPENDENT_GC"
             },
-            required: false,
+            required: true,
       
             minValue:0,
             props: {
