@@ -61,8 +61,8 @@ return getCommonCard({
        
       }),
       beforeFieldChange: (action, state, dispatch) => {
-        //alert(action.value)
-        if (action.value === "ABOLISHION_OF_POST") {
+        //alert(action.value)//ABOLITION_OF_POST//ABOLISHION_OF_POST
+        if (action.value === "ABOLITION_OF_POST") {
        
           dispatch(
             handleField(
