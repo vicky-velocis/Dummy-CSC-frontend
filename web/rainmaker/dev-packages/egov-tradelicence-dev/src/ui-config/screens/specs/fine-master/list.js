@@ -257,7 +257,8 @@ const getTableData = (state, dispatch, list, screenKey) => {
       [UOM]:arrayItem.uom,
       [RATE]:arrayItem.rate,
       ["tenantId"]: arrayItem.tenantId,
-      ["id"]:arrayItem.id
+      ["id"]:arrayItem.id,
+      ["type"]: arrayItem.feeType
     })).sort((a, b) => {
       return a[FEE_TYPE] > b[FEE_TYPE] ? 1 : a[FEE_TYPE] < b[FEE_TYPE] ? -1 :0
     })
@@ -284,6 +285,12 @@ const getTableData = (state, dispatch, list, screenKey) => {
               display: false
             }
           },
+          {
+            name:"type",
+            options: {
+              display: false
+            }
+          }
           ],
         options: {
           filter: false,
@@ -321,7 +328,7 @@ const onRowClick = (row, businessService, screenKey, state, dispatch) => {
   const fineMasterEditData = {
       businessService,
       applicationType: row[0],
-      feeType:row[1],
+      feeType:row[8],
       fromUom:row[2],
       toUom:row[3],
       uom:row[4],
