@@ -2,8 +2,9 @@ import {
     getCommonHeader,
     getLabel,
     getBreak,
-    getCommonContainer
-  } from "egov-ui-framework/ui-config/screens/specs/utils";
+    getCommonContainer,
+    getCommonCard
+} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -12,51 +13,68 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
-  
+import { getReviewProperty } from "./applyResource/review-property";
+
+import { getReviewOwner } from "./applyResource/review-property";
 
 
-const header = getCommonHeader({
+const headerrow = getCommonContainer({
+  header: getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
+  })
+});
+const reviewOwnerDetails = getReviewOwner(false);
+
+
+export const propertyReviewDetails = getCommonCard({
+  reviewOwnerDetails,
 });
 
-const transitNumber = null;
-
 const rentedPropertiesDetailPreview = {
-    uiFramework: "material-ui",
-    name: "rented-search",
-    beforeInitScreen: (action, state, dispatch) => {
-        transitNumber = getQueryArg(window.location.href, "transitNumber");
-        console.log(transitNumber);
-        return action;
+  uiFramework: "material-ui",
+  name: "search-preview",
+  beforeInitScreen: (action, state, dispatch) => {
+    return action;
+  },
+  components: {
+    div: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        className: "common-div-css search-preview"
       },
-    components: {
-      div: {
-        uiFramework: "custom-atoms",
-        componentPath: "Form",
-        props: {
-          className: "common-div-css",
-          id: "search"
-        },
-        children: {
-          headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            children: {
-              header: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 6
-                },
-                ...header
+      children: {
+        headerDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          children: {
+            header1: {
+              gridDefination: {
+                xs: 12,
+                sm: 8
+              },
+             ...headerrow
+            },
+            helpSection: {
+              uiFramework: "custom-atoms",
+              componentPath: "Container",
+              props: {
+                color: "primary",
+                style: { justifyContent: "flex-end" }
+              },
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
               }
             }
           }
-        }
+        },
+        propertyReviewDetails
       }
     }
-  };
-  
-  export default rentedPropertiesDetailPreview;
-  
+  }
+};
+export default rentedPropertiesDetailPreview;
 
