@@ -777,6 +777,22 @@ else{
     let businessService = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessService", '' )
     if(businessService === WFConfig().businessServiceRRP)
     reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
+    let TakenMonthlyPensionAndGratuity =  "NA";
+    let TakenGratuityCommutationTerminalBenefit = "NA";
+    let TakenCompensationPensionAndGratuity = "NA";
+    if(reasonForRetirement === "ABOLITION_OF_POST")
+    {
+      TakenMonthlyPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", false)=== true? "YES" : "NO";
+      TakenGratuityCommutationTerminalBenefit=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit", false)=== true? "YES" : "NO";
+      isTakenCompensationPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity", false)=== true? "YES" : "NO";
+    }
+    // else
+    // {
+    //   TakenMonthlyPensionAndGratuity="NA"
+    //   TakenGratuityCommutationTerminalBenefit="NA"
+    //   TakenCompensationPensionAndGratuity="NA"
+
+    // }
     let ApplicationDetails = {
   // basic details
       businessId: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessId", '' ),
@@ -816,9 +832,9 @@ else{
       isEligibleForPension:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isEligibleForPension", false )=== true? "YES" : "NO",
       isCommutationOpted:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isCommutationOpted", false )=== true? "YES" : "NO",
       isCompassionatePensionGranted:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted", false )=== true? "YES" : "NO",
-      isTakenMonthlyPensionAndGratuity:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", false )=== true? "YES" : "NO",
-      isTakenGratuityCommutationTerminalBenefit:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit", false )=== true? "YES" : "NO",
-      isTakenCompensationPensionAndGratuity:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity", false)=== true? "YES" : "NO",
+      isTakenMonthlyPensionAndGratuity:TakenMonthlyPensionAndGratuity,
+      isTakenGratuityCommutationTerminalBenefit: TakenGratuityCommutationTerminalBenefit,
+      isTakenCompensationPensionAndGratuity:TakenCompensationPensionAndGratuity,
       isAnyJudicialProceedingIsContinuing:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isAnyJudicialProceedingIsContinuing", false )=== true? "YES" : "NO",  
       isAnyMisconductInsolvencyInefficiency:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isAnyMisconductInsolvencyInefficiency", false )=== true? "YES" : "NO",
       isConvictedSeriousCrimeOrGraveMisconduct:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isConvictedSeriousCrimeOrGraveMisconduct", false)=== true? "YES" : "NO" ,
