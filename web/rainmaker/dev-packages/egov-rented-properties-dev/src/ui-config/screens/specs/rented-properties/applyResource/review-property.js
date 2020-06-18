@@ -12,6 +12,35 @@ import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICEN
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 
+
+
+export const getReviewProperty = () => {
+    return getCommonGrayCard({
+        headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+                style: { marginBottom: "10px" }
+            },
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Property Details",
+                        labelKey: "TL_PROPERTY_DETAILS_HEADER"
+                    })
+                }
+            }
+        },
+        viewOne: getCommonContainer({})
+    })
+}
+
+
+
 export const getReviewOwner = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -31,34 +60,6 @@ export const getReviewOwner = (isEditable = true) => {
                         labelKey: "TL_OWNER_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                    }
-                }
             }
         },
         viewOne: getCommonContainer({})

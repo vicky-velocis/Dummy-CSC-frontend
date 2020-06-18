@@ -13,9 +13,8 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getReviewProperty } from "./applyResource/review-property";
 
-import { getReviewOwner } from "./applyResource/review-property";
+import { getReviewOwner, getReviewProperty } from "./applyResource/review-property";
 
 
 const headerrow = getCommonContainer({
@@ -24,10 +23,13 @@ const headerrow = getCommonContainer({
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
   })
 });
-const reviewOwnerDetails = getReviewOwner(false);
+const reviewOwnerDetails = getReviewOwner();
+const reviewPropertyDetails = getReviewProperty();
+
 
 
 export const propertyReviewDetails = getCommonCard({
+  reviewPropertyDetails,
   reviewOwnerDetails,
 });
 
