@@ -859,7 +859,7 @@ export const getPMSPattern = type => {
       case "Comment":
         return /^[^\$\"'<>\\\\~`@$%^()+={}\[\]*:;]{1,500}$/i;
         case "WFComment":
-        return /^[^\$\"'<>\\\\~`@$%^()+={}\[\]*:;]{1,w20}$/i;
+        return /^[^\$\"'<>\\\\~`@$%^()+={}\[\]*:;]{1,120}$/i;
   }
 };
 
