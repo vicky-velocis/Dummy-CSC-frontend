@@ -1,8 +1,7 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
-import { getRequiredDocData } from "../utils";
+
 import get from "lodash/get";
 import set from "lodash/set";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
@@ -59,22 +58,11 @@ const cardItems = [
  
 
 ];
-const tradeLicenseSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "libraryHome",
   beforeInitScreen: (action, state, dispatch) => {
-    getRequiredDocData(action, state, dispatch).then(() => {
-      let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.FireNoc.Documents",
-        []
-      );
-      set(
-        action,
-        "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
-      );
-    });
+   
     const modulecode = getQueryArg(
       window.location.href,
       "modulecode"
@@ -120,4 +108,4 @@ const tradeLicenseSearchAndResult = {
 };
 
 
-export default tradeLicenseSearchAndResult;
+export default PRSearchAndResult;

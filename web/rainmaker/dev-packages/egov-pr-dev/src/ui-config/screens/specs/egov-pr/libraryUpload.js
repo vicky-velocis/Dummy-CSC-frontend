@@ -34,7 +34,7 @@ export const header = getCommonContainer({
  
 });
 export const prepareDocumentsUploadData = (state, dispatch, type) => {
-  debugger
+  
   let documents = '';
   if (type == "doc") {
     documents = get(

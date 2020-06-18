@@ -20,88 +20,6 @@ const getLocalTextFromCode = localCode => {
   );
 };
 
-export const textToLocalMapping = {
-  "Application No": getLocaleLabels(
-    "Application No",
-    "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Status: getLocaleLabels(
-    "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  INITIATED: getLocaleLabels(
-    "Initiated,",
-    "NOC_INITIATED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPLIED: getLocaleLabels(
-    "Applied",
-    "NOC_APPLIED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  DOCUMENTVERIFY: getLocaleLabels(
-    "Pending for Document Verification",
-    "WF_PublicRelation_DOCUMENTVERIFY",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPROVED: getLocaleLabels(
-    "Approved",
-    "NOC_APPROVED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  REJECTED: getLocaleLabels(
-    "Rejected",
-    "NOC_REJECTED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  CANCELLED: getLocaleLabels(
-    "Cancelled",
-    "NOC_CANCELLED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGAPPROVAL: getLocaleLabels(
-    "Pending for Approval",
-    "WF_PublicRelation_PENDINGAPPROVAL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGPAYMENT: getLocaleLabels(
-    "Pending payment",
-    "WF_PublicRelation_PENDINGPAYMENT",
-    getTransformedLocalStorgaeLabels()
-  ),
-  FIELDINSPECTION: getLocaleLabels(
-    "Pending for Field Inspection",
-    "WF_PublicRelation_FIELDINSPECTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Search Results for PUBLIC-RELATIONS Applications": getLocaleLabels(
-    "Search Results for PUBLIC-RELATIONS Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
-    getTransformedLocalStorgaeLabels()
-  )
-};
 
 export const pressGrid = {
   uiFramework: "custom-molecules",
@@ -116,11 +34,7 @@ export const pressGrid = {
         name: getTextToLocalMapping("Press Id"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
       getTextToLocalMapping("Publication name"),
@@ -129,14 +43,9 @@ export const pressGrid = {
 
       getTextToLocalMapping("Email Id"),
       getTextToLocalMapping("Mobile No"),
-      // getTextToLocalMapping("Event Id"),
-      // getTextToLocalMapping("Date & Time"),
-      // getTextToLocalMapping("Commitiee"),
-      // getTextToLocalMapping("Budjet"),
-      // getTextToLocalMapping("Mobile No"),
+     
      
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -173,44 +82,3 @@ const onRowClick = rowData => {
      
   
 };
-
-// const onRowClick = rowData => {
-//   switch (rowData[5]) {
-//     case "INITIATED":
-//       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-//         rowData[6]
-//       }`;
-//       break;
-//     default:
-//       window.location.href = `search-preview?applicationNumber=${
-//         rowData[0]
-//       }&tenantId=${rowData[6]}`;
-//       break;
-//   }
-// };
-
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/egov-pr/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/egov-pr/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/egov-pr/search`;
-//   }
-// };

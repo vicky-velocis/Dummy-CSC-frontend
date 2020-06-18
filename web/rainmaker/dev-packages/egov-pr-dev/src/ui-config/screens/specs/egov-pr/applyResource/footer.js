@@ -53,7 +53,7 @@ let id=getQueryArg(window.location.href, "eventuuId")
 	}
 };
 const moveToReview = (state, dispatch) => {
-  debugger
+  
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -148,23 +148,22 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
- console.log(activeStep);
- debugger
+ 
   let isFormValid = true;
   let hasFieldToaster = false;
 let area=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].CreateEventDetails.area",
+  "PublicRelation[0].CreateEventDetails.area",
   
 );
 let dept=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].CreateEventDetails.organizerDepartmentName",
+  "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
   
 );
 let typeofevent=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].CreateEventDetails.eventType",
+  "PublicRelation[0].CreateEventDetails.eventType",
   
 );
   let validatestepformflag = validatestepform(activeStep + 1,area,dept,typeofevent)

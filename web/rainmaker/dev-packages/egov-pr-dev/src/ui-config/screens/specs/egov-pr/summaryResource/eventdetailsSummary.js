@@ -117,9 +117,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].sector"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        
       }
     ),
     organizerDetails: getLabelWithValue(
@@ -149,9 +147,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].eventType"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        
       }
     ),
     EventBudjet: getLabelWithValue(
@@ -161,9 +157,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].eventBudget"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        
       }
     ),
     committiee: getLabelWithValue(
@@ -173,9 +167,7 @@ import {
       },
       {
         jsonPath: "eventDetails[0].committeeName"
-        // callBack: value => {
-        //   return value.split(".")[1];
-        // }
+        
       }
     )
   
@@ -310,9 +302,7 @@ import {
             },
             {
               jsonPath: "eventDetails[0].instagramUrl"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
+             
             }
             ),
              },
@@ -349,9 +339,7 @@ import {
             },
             {
               jsonPath: "eventDetails[0].eventDescription"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
+              
             }
             )
   })

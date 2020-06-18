@@ -123,7 +123,6 @@ else if (hasFieldToaster) {
 }
 export const callBackForNext = async (state, dispatch) => {
     
-  console.log("pressDetailsMasterCreate", state);
   let response = await createUpdateNocApplication(state, dispatch, "pressdetails_summary");
   if (get(response, "status", "") === "success") {
   
@@ -174,14 +173,12 @@ export const pressFooter = getCommonApplyFooter({
 
 
 export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
-  // alert(activeStep)
-  debugger
+  
   activeStep=0
    let allAreFilled = true;
    if (activeStep == 0) {
      document.getElementById("pressDetailsMasterCreate").querySelectorAll("[required]").forEach(function (i) {
-    //  alert(i+"::::"+i.value)
-     //  alert(i.getAttribute("aria-invalid"))
+   
        if (!i.value) {
          i.focus();
          allAreFilled = false;
@@ -199,10 +196,8 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
  
  
      document.getElementById("pressDetailsMasterCreate").querySelectorAll("input[type='hidden']").forEach(function (i) {
-       // alert("hidden "+i+"::::"+i.value)
-       //  alert(i.getAttribute("aria-invalid"))
+      
        if (i.value == i.placeholder) {
-       	// alert(" inside hidden "+i+"::"+i.placeholder+"::"+i.value)
          i.focus();
          allAreFilled = false;
          i.parentNode.classList.add("MuiInput-error-853");
@@ -215,7 +210,7 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
      })
    } 
    if (allAreFilled == false) {
-   //  alert('Fill all fields')
+  
      isFormValid = false;
      hasFieldToaster = true;
    }

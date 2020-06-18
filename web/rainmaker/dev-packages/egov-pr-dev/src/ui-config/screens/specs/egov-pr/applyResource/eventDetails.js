@@ -338,7 +338,7 @@ import {
           
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           
-        jsonPath: "PublicRealation[0].CreateEventDetails.facebookUrl"
+        jsonPath: "PublicRelation[0].CreateEventDetails.facebookUrl"
       }),
       twitterUrl: getTextField({
         label: {
@@ -353,7 +353,7 @@ import {
        pattern:getPattern("validUrl"),
        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.twitterUrl"
+        jsonPath: "PublicRelation[0].CreateEventDetails.twitterUrl"
       }),
       instagram: getTextField({
         label: {
@@ -368,7 +368,7 @@ import {
          
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           
-        jsonPath: "PublicRealation[0].CreateEventDetails.instagramUrl"
+        jsonPath: "PublicRelation[0].CreateEventDetails.instagramUrl"
       }),
      
     })

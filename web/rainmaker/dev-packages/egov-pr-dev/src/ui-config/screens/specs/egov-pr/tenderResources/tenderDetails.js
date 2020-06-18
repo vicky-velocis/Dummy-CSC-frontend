@@ -28,7 +28,9 @@ import {
 
   import "./index.css";
 
-
+  import store from "ui-redux/store";
+  import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  
   
 
   export const tenderDetails = getCommonCard({
@@ -193,7 +195,7 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
-				tempdata2.map( item => {
+				tempdata2.map( (item,index) => {
 					//console.log("------");
 					console.log((item));
 					let temp = JSON.parse(item) 
@@ -204,7 +206,7 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
 					  obj[3]=temp.email ? temp.email : "-"
 					  obj[4]=temp.mobile ? temp.mobile : "-"
 					  obj[5]=temp.pressMasterUuid ? temp.pressMasterUuid : "-"
-					 
+					  obj[6]=index
 					selectedrows.push(obj)
 	
 			})
@@ -221,7 +223,7 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
 		}
 
 }
-const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , allRowsSelected) => {
+const onPressselect = async (type, rowData, allrowdata, index) => {
 
 	
 	if(allrowdata == "resend")
@@ -239,7 +241,7 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
 			
 			console.log(type);
 			console.log( rowData);
-			debugger;
+			;
 			let selectedrows = [];
 			let localinvdata = localStorageGet("ResendInvitelist");
 			if(localinvdata === null || localinvdata === "undefined")
@@ -256,19 +258,69 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
                 checked=true;
                 tempAll.splice(index,1)
                 localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
+                let selIndex1=[]
+                let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+                selIndex.map((item,index)=>{
+                
+                   selIndex1.push(item[6])	
+                
+                 })
+                 console.log('selectedRows1')
+                 
+                 console.log(selIndex1)
+             
+             console.log('selectedRows1')
+            
+             store.dispatch(
+              handleField(
+                "tender-Summary-Publish",
+                "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+                "props.options.rowsSelected",
+                selIndex1
+              )
+             
+            );
                 
               }
               })
             }
               if(checked===false){
-				selectedrows.push(rowData)
+                let temp = rowData
+                temp.push(index.rowIndex)
+                
+				selectedrows.push(temp)
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+     
+     store.dispatch(
+      handleField(
+        "tender-Summary-Publish",
+        "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );
               }
 			}
 			else
 			{
-				let temp = JSON.parse(localStorageGet("ResendInvitelist"));
-				console.log("temppppppppppppp")
+        let temp = JSON.parse(localStorageGet("ResendInvitelist"));
+        let temp2 = rowData
+        temp2.push(index.rowIndex)
+        				console.log("temppppppppppppp")
         console.log(temp)
         let checked=false;
         temp.map((item,index)=>{
@@ -277,13 +329,69 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
             checked=true;
             temp.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(temp));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            selIndex.map((item,index)=>{
             
+               selIndex1.push(item[6])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         
+       
+         store.dispatch(
+          handleField(
+            "tender-Summary-Publish",
+            "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+         
+        );
           }
           })
     if(checked===false){
-				selectedrows = temp;
-				selectedrows.push(rowData)
-        localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));	
+      //   selectedrows = temp;
+      //   let temp2=rowData
+      //  temp2.push(index.rowIndex)
+        
+      //   selectedrows.push(temp2)
+// 
+
+//         selectedrows = temp;
+// 				selectedrows.push(temp)
+
+temp.push(temp2)
+
+selectedrows = (temp)
+        localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+   
+     store.dispatch(
+      handleField(
+        "tender-Summary-Publish",
+        "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );	
     }
 			}	
 		}
@@ -300,7 +408,7 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
 		{	
 			console.log(type);
 			console.log( rowData);
-			debugger;
+			;
 			let selectedrows = [];
 			let localinvdata = localStorageGet("ResendInvitelist");
 			if(localinvdata === null || localinvdata === "undefined")
@@ -315,20 +423,66 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
             checked=true;
             tempAll.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            selIndex.map((item,index)=>{
             
+               selIndex1.push(item[6])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         
+        
+         store.dispatch(
+          handleField(
+            "tender-Summary-Publish",
+            "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+         
+        );
           }
           })
           if(checked===false){
-
-
+let temp=rowData
+            temp.push(index.rowIndex)
 				selectedrows.push(rowData)
 
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+    
+     store.dispatch(
+      handleField(
+        "tender-Summary-Publish",
+        "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );
           }
 			}
 			else
 			{
-				let temp = JSON.parse(localStorageGet("ResendInvitelist"));
+        let temp = JSON.parse(localStorageGet("ResendInvitelist"));
+        temp.push(index.rowIndex)
 				console.log("temppppppppppppp")
         console.log(temp)
         let checked=false;
@@ -338,13 +492,58 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
             checked=true;
             temp.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(temp));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            selIndex.map((item,index)=>{
             
+               selIndex1.push(item[6])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         
+         
+         store.dispatch(
+          handleField(
+            "tender-Summary-Publish",
+            "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+         
+        );
           }
           })
           if(checked===false){
 				selectedrows = temp;
 				selectedrows.push(temp)
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+  
+     store.dispatch(
+      handleField(
+        "tender-Summary-Publish",
+        "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );
           }	
 			}	
 		}
@@ -389,7 +588,7 @@ export const ResendTenderInviteGrid = {
 	  },
 	  onRowClick: (row, index) => {
 	    
-		onPressselect('rowdata',row,"resend")
+		onPressselect('rowdata',row,"resend",index)
       }
     },
    

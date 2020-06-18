@@ -44,7 +44,7 @@ const cardItems = [
   }
 ];
 
-const tradeLicenseSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "pressDetailsHome",
   beforeInitScreen: (action, state, dispatch) => {
@@ -71,7 +71,7 @@ const tradeLicenseSearchAndResult = {
    
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,
@@ -85,4 +85,4 @@ const tradeLicenseSearchAndResult = {
   }
 };
 
-export default tradeLicenseSearchAndResult;
+export default PRSearchAndResult;

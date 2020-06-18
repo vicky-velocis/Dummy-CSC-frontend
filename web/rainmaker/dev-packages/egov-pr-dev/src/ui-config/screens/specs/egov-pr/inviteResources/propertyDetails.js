@@ -340,7 +340,7 @@ export const propertyDetails = getCommonCard({
         labelKey: "NOC_EVENT_START_DATE_PLACEHOLDER"
       },
      
-      jsonPath: "PublicRealation[0].CreateEventDetails.startDate"
+      jsonPath: "PublicRelation[0].CreateEventDetails.startDate"
     }),
     EndDate: getDateField({
       label: {
@@ -354,7 +354,7 @@ export const propertyDetails = getCommonCard({
       },
      
      
-      jsonPath: "PublicRealation[0].CreateEventDetails.endDate"
+      jsonPath: "PublicRelation[0].CreateEventDetails.endDate"
     }),
     StartTime: getTimeField({
       label: {
@@ -366,7 +366,7 @@ export const propertyDetails = getCommonCard({
         labelKey: "NOC_EVENT_START_TIME_PLACEHOLDER"
       },
      
-      jsonPath: "PublicRealation[0].CreateEventDetails.startTime"
+      jsonPath: "PublicRelation[0].CreateEventDetails.startTime"
     }),
     EndTime: getTimeField({
       label: {
@@ -379,7 +379,7 @@ export const propertyDetails = getCommonCard({
         labelKey: "NOC_EVENT_END_TIME_PLACEHOLDER"
       },
      
-      jsonPath: "PublicRealation[0].CreateEventDetails.endTime"
+      jsonPath: "PublicRelation[0].CreateEventDetails.endTime"
     }),
   })
 });

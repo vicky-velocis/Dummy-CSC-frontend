@@ -85,11 +85,11 @@ const EventSearchAndResult = {
   uiFramework: "material-ui",
   name: "eventList",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
     
     dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));

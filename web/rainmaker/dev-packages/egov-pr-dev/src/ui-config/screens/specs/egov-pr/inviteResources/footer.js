@@ -147,6 +147,9 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+
   var x = document.getElementById("custom-atoms-footer");
   x.classList.remove("addpadding");
 

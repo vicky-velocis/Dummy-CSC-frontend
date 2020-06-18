@@ -104,10 +104,8 @@ const callBackForSubmit = async (state, dispatch) => {
   else{
   
   
-  console.log(localStorageGet("PressNoteList")) 
   
   let pressdata=JSON.parse(localStorageGet("PressNoteList"))
-  console.log(pressdata)
   let arr=[]
   for(let i=0;i<pressdata.length;i++)
   {
@@ -116,7 +114,6 @@ const callBackForSubmit = async (state, dispatch) => {
       
       
       }
-    console.log(obj)
       arr.push(obj)
       }
       let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -149,7 +146,7 @@ const callBackForSubmit = async (state, dispatch) => {
   }
   };
 const moveToReview = (state, dispatch) => {
-  debugger
+  
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -228,8 +225,8 @@ const getMdmsData = async (state, dispatch) => {
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.PR.Documents",
+        payload.MdmsRes.PR.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -244,8 +241,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
- console.log(activeStep);
- debugger
+ 
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -268,7 +264,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep !== 2) {
-    debugger
+    
 
     if (isFormValid) {
       let responseStatus = "success";

@@ -15,6 +15,7 @@ import {
   getUserInfo
 ,localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
+import { checkForRole } from "../../../../ui-utils/commons";
 
 const header = getCommonHeader(
   {
@@ -34,7 +35,7 @@ const header = getCommonHeader(
   }
 );
 let cardItems=[]
-if(JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER")
+if(checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER'))
 {
 const cardList = [
   
@@ -157,7 +158,7 @@ const PRSCPSearchAndResult = {
    
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

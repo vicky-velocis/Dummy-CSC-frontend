@@ -34,18 +34,10 @@ import {
     );
   };
   
-  const getMapLocator = textSchema => {
-    return {
-      uiFramework: "custom-molecules-local",
-      moduleName: "egov-noc",
-      componentPath: "MapLocator",
-      props: {}
-    };
-  };
+  
   
   // GET EMPLOYEES
   const GetEmployees = async (action, state, dispatch,deptvalue) => {
-    //alert(deptvalue)
     try {
       let payload = null;
       let user=[]
@@ -59,7 +51,6 @@ import {
         queryStr,
         {}
       );
-   //  console.log()
       for(let i=0;i<payload.Employees.length;i++)
       {
         if(payload.Employees[i].user!==null)
@@ -145,14 +136,7 @@ import {
                 payload.Properties[0].address
               )
             );
-            // dispatch(
-            //   handleField(
-            //     "apply",
-            //     "components.div.children.formwizardSecondStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
-            //     "props.value",
-            //     payload.Properties[0].address.tenantId
-            //   )
-            // );
+           
           }
         }
       }
@@ -187,7 +171,7 @@ import {
           },
           
          
-          jsonPath: "PublicRealation[0].CreateEventDetails.eventTitle",
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventTitle",
           required: true,
           pattern: getPattern("EventTitle"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -195,10 +179,7 @@ import {
         area: {
           ...getSelectField({
             label: { labelName: "Area", labelKey: "PR_AREA_LABEL" },
-            // localePrefix: {
-            //   moduleName: "TENANT",
-            //   masterName: "TENANTS"
-            // },
+            
             optionLabel: "name",
             optionValue: "name",
             placeholder: {
@@ -206,7 +187,7 @@ import {
               labelKey: "PR_AREA_PLACEHOLDER"
             },
             sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].localityAreaName",
-            jsonPath: "PublicRealation[0].CreateEventDetails.area",
+            jsonPath: "PublicRelation[0].CreateEventDetails.area",
             required: true,
             
             props: {
@@ -229,7 +210,7 @@ import {
             labelKey: "PR_EVENT_LOCATION_PLACEHOLDER"
           },
          
-          jsonPath: "PublicRealation[0].CreateEventDetails.eventLocation",
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventLocation",
           required: true,
           pattern: getPattern("AlphaNumValidationLocation"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -237,10 +218,7 @@ import {
         typeOfEvent: {
           ...getSelectField({
             label: { labelName: "Type Of Event", labelKey: "PR_TYPE_OF_EVENT_LABEL" },
-            // localePrefix: {
-            //   moduleName: "TENANT",
-            //   masterName: "TENANTS"
-            // },
+           
             optionLabel: "name",
             optionValue: "name",
             placeholder: {
@@ -248,7 +226,7 @@ import {
               labelKey: "PR_TYPE_OF_EVENT_PLACEHOLDER"
             },
             sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventType",
-            jsonPath: "PublicRealation[0].CreateEventDetails.eventType",
+            jsonPath: "PublicRelation[0].CreateEventDetails.eventType",
             required: true,
             
             props: {
@@ -274,21 +252,17 @@ import {
          required: false,
          props: {
            className:"applicant-details-error",
-        //   required: true
-           // disabled: true
+        
          },
         sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventSector",
   
-          jsonPath: "PublicRealation[0].CreateEventDetails.sector"
+          jsonPath: "PublicRelation[0].CreateEventDetails.sector"
         })
       },
       committiee: {
         ...getSelectField({
           label: { labelName: "Committiee", labelKey: "PR_COMMITTEE_LABEL" },
-          // localePrefix: {
-          //   moduleName: "TENANT",
-          //   masterName: "TENANTS"
-          // },
+         
           optionLabel: "committeeName",
           optionValue:"committeeUuid",
           placeholder: {
@@ -296,7 +270,7 @@ import {
             labelKey: "PR_COMMITTEE_PLACEHOLDER"
           },
           sourceJsonPath: "committieeData",
-          jsonPath: "PublicRealation[0].CreateEventDetails.committeeUuid",
+          jsonPath: "PublicRelation[0].CreateEventDetails.committeeUuid",
           required: false,
           props: {
             className:"applicant-details-error",
@@ -309,10 +283,7 @@ import {
       organizerDetail: {
           ...getSelectField({
             label: { labelName: "Organizer Department", labelKey: "PR_ORGANIZER_DETAILS_LABEL" },
-            // localePrefix: {
-            //   moduleName: "TENANT",
-            //   masterName: "TENANTS"
-            // },
+           
             optionLabel: "name",
             optionValue: "code",
             placeholder: {
@@ -322,15 +293,14 @@ import {
             sourceJsonPath: "applyScreenMdmsData[common-masters].Department",
            required: true,
             id:'dept',
-            jsonPath: "PublicRealation[0].CreateEventDetails.organizerDepartmentName",
+            jsonPath: "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
             props: {
               className:"applicant-details-error",
              required: true
-              // disabled: true
+             
             },
            
             afterFieldChange: (action, state, dispatch) => {
-           //   alert(JSON.stringify(action.value))
   
                
             
@@ -342,11 +312,7 @@ import {
         organizerEmployee: {
           ...getSelectField({
             label: { labelName: "Organizer Employee", labelKey: "PR_ORGANIZER_EMPLOYEE_LABEL" },
-            // localePrefix: {
-            //   moduleName: "TENANT",
-            //   masterName: "TENANTS"
-            // },
-         //   screenConfiguration.preparedFinalObject.applyScreenMdmsData.employees.Employees[2].user.name
+          
             optionLabel: "name",
             optionValue: "name",
             placeholder: {
@@ -356,11 +322,10 @@ import {
             sourceJsonPath: "applyScreenMdmsData.employees",
            required: false,
             
-            jsonPath: "PublicRealation[0].CreateEventDetails.organizerUsernName",
+            jsonPath: "PublicRelation[0].CreateEventDetails.organizerUsernName",
             props: {
               className:"applicant-details-error",
              required: false
-              // disabled: true
             },
            
         
@@ -382,26 +347,13 @@ import {
         //  required: true,
           pattern: getPattern("budget"),
          
-          jsonPath: "PublicRealation[0].CreateEventDetails.eventBudget"
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventBudget"
         }),
         
         
       }),
       
-      mapsDialog: {
-        componentPath: "Dialog",
-        props: {
-          open: false
-        },
-        children: {
-          dialogContent: {
-            componentPath: "DialogContent",
-            children: {
-              popup: getMapLocator()
-            }
-          }
-        }
-      }
+     
     },
     {
       style: { overflow: "visible" }

@@ -35,8 +35,7 @@ import get from "lodash/get";
 import {
   prepareDocumentsUploadData,
   getSearchResults,
-  furnishNocResponse,
-  furnishNocResponsePressNote,
+  furnishResponsePressNote,
 
   getSearchResultsViewPressnotedata,
     getsampleemailtemplate,
@@ -62,7 +61,7 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Generate press note`, //later use getFinancialYearDates
+    labelName: `Generate press note`, 
     labelKey: "PR_GENERATE_PRESS_NOTE"
   }),
  
@@ -211,8 +210,7 @@ export const prepareEditFlow = async (
     return (el.notifyStatus !== true);
 });	
 
-console.log('guestarray')
-console.log(guestarray)
+
 
    let empdata=await getPressGridDatanote(action, state, dispatch);
    
@@ -221,12 +219,11 @@ console.log(guestarray)
  let selectedRows=[];
  let selectedrows1=[];
  empdata.map(function (item, index) {
-   debugger
+   
    if(item.pressMasterUuid){
    response.ResponseBody[0].publicationList.map(function (commiteeMember,index1) {
      if(commiteeMember.pressMasterUuid===item.pressMasterUuid){
       let obj={}
-     // alert(item.publicationName)
       obj['Publication Name']=item.publicationName
      obj['Type of the Press']= item.pressType
      obj['Personnel Name']=item.personnelName
@@ -279,7 +276,7 @@ console.log(guestarray)
 
 
   let documentsPreview = [];
-  debugger
+  
   let fileStoreIds1 = response.ResponseBody[0].documentAttachment
   documentsPreview.push({
     
@@ -314,7 +311,7 @@ doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStore
 dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
 
 
-  let Refurbishresponse = furnishNocResponsePressNote(response);
+  let Refurbishresponse = furnishResponsePressNote(response);
   dispatch(prepareFinalObject("pressnote", Refurbishresponse));
 }
  }
@@ -333,7 +330,6 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     localStorageSet("pressnote", "");
-	 // Get Sample email tmplate for event 
       localStorageSet("eventifforinvitatoin", "");
       localStorageSet("templateMappedUuid", "");
       localStorageSet("templateType", "PRESS_RELEASE");
@@ -345,7 +341,6 @@ const screenConfig = {
       localStorageSet("EmailTemplate", "");
       localStorageSet("smsTemplate", "");
      getsampleemailtemplate(action, state, dispatch);
-    //localStorage.setItem("PressNoteList",[])
     localStorageSet("PressNoteList", []);	
     localStorageSet("PressNoteListAll", []);	
 

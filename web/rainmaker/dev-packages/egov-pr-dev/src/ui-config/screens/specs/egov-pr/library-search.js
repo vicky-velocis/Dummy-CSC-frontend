@@ -42,7 +42,7 @@ const pageResetAndChange = (state, dispatch) => {
   
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
+  
   let tenantId =commonConfig.tenantId;   
   let mdmsBody = {
     MdmsCriteria: {
@@ -74,7 +74,7 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    debugger
+    
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -84,11 +84,11 @@ const LibrarySearchAndResult = {
   uiFramework: "material-ui",
   name: "library-search",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
     dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
     dispatch(prepareFinalObject("eventReport", {}));

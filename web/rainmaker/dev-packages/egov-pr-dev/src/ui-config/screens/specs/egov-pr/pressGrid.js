@@ -79,16 +79,16 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
-const NOCSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "pressGrid",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-  //  dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+  //  dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
     
 
   getPressMasterGridData(action, state, dispatch);
@@ -141,7 +141,7 @@ const NOCSearchAndResult = {
     },
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,
@@ -155,4 +155,4 @@ const NOCSearchAndResult = {
   }
 };
 
-export default NOCSearchAndResult;
+export default PRSearchAndResult;

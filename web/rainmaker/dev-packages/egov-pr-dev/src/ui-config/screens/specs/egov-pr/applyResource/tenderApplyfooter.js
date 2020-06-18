@@ -60,10 +60,8 @@ const callBackForSubmit = async (state, dispatch) => {
 
     
   
-  console.log(localStorageGet("PressTenderList")) 
   
   let pressdata= localStorageGet("PressTenderList") === null ? JSON.parse(localStorageGet("PressTenderListAll")) : JSON.parse(localStorageGet("PressTenderList"))
-  console.log(pressdata)
   let arr=[]
   
   for(let i=0;i<pressdata.length;i++)
@@ -71,7 +69,6 @@ const callBackForSubmit = async (state, dispatch) => {
     let obj= {
       "pressMasterUuid":pressdata[i]['Press master UUID'],
     }
-    console.log(obj)
       arr.push(obj)
       }
   
@@ -191,20 +188,13 @@ const callBackForSubmit = async (state, dispatch) => {
   
   
   
-    // if (activeStep === 1) {
-    // alert("Enter Here 1");
-   // //   moveToReview(state, dispatch);
-  
-     // // setReviewPageRoute(state, dispatch);
-    // }
-  
     if (activeStep !== 2) {
       
   
       if (isFormValid) {
         let responseStatus = "success";
         if (activeStep === 1) {
-         // prepareDocumentsUploadData(state, dispatch, 'create_pressnote');
+      
           
           
         } 
@@ -288,24 +278,17 @@ export const changeStep = (
     localStorageGet("smsTemplate")
     )
     );
-//alert(activeStep)
-debugger
- // const isPreviousButtonVisible =  activeStep < 2 ? true : false;
+
   const isNextButtonVisible = activeStep < 2 ? true : false;
   const isPayButtonVisible = activeStep === 2 ? true : false;
   const iscancleButtonVisible = activeStep === 2 ? true : false;
- // alert(isPreviousButtonVisible) 
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
       property: "activeStep",
       value: activeStep
     },
-    // {
-    //   path: "components.div.children.tenderApplyfooter.children.previousButton",
-    //   property: "visible",
-    //   value: isPreviousButtonVisible
-    // },
+    
     {
       path: "components.div.children.tenderApplyfooter.children.nextButton",
       property: "visible",
@@ -417,37 +400,7 @@ export const redirectfunction = async (state, dispatch) => {
 }
 
 export const tenderApplyfooter = getCommonApplyFooter({
-  // previousButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "outlined",
-  //     color: "primary",
-  //     style: {
-  //      // minWidth: "200px",
-  //       height: "48px",
-  //       marginRight: "16px" 
-  //     }
-  //   },
-  //   children: {
-  //     previousButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_left"
-  //       }
-  //     },
-  //     previousButtonLabel: getLabel({
-  //       labelName: "Previous Step",
-  //       labelKey: "PR_COMMON_BUTTON_PREV_STEP"
-  //     })
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: callBackForPrevious
-  //   },
-  // visible:false
-
-  // },
+  
   nextButton: {
     componentPath: "Button",
     props: {
@@ -543,15 +496,13 @@ visible:false
 
 
 export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
- debugger;
-// alert(activeStep)
+ 
   let allAreFilled = true;
   if (activeStep == 0) {
- // alert("Enter here");
+ 
     activeStep+=1;
     document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
-   // alert(i+"::::"+i.value)
-   //  alert(i.getAttribute("aria-invalid"))
+   
       if (!i.value) {
         i.focus();
         allAreFilled = false;
