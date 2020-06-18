@@ -626,6 +626,7 @@ for (let index = 0; index < dependents.length; index++) {
   dispatch(prepareFinalObject("IsCalculated", false));
   dispatch(prepareFinalObject("IsCalculatedWarning", false));
   prepareDocumentsUploadData(state, dispatch);
+ // window.location.reload(false);
 };
 export const pmsfooter = footer(response) ;
 const screenConfig = {
@@ -686,6 +687,7 @@ prepareEditFlow(state, dispatch, applicationNumber, tenantId, action).then(res=>
         );
       }
     }
+   
          return action;
   },
   components: {
@@ -744,7 +746,8 @@ prepareEditFlow(state, dispatch, applicationNumber, tenantId, action).then(res=>
        // pmsfooter
       }
     }
-  }
+  },
+  
 };
 
 export default screenConfig;

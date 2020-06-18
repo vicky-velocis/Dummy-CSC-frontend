@@ -133,6 +133,7 @@ export const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = true;
+  let ageFieldError = false;
   if (activeStep === TRADE_DETAILS_STEP) {
       const data = get(state.screenConfiguration, "preparedFinalObject");
       // setOwnerShipDropDownFieldChange(state, dispatch, data);
@@ -184,212 +185,45 @@ export const callBackForNext = async (state, dispatch) => {
           state,
           dispatch
       )
-
-      //Filter documents based on the ones configured for the screen.
-      // let documentTypes = setDocumentTypes(state,tradeLicenseType).map(item => item.code);
-
-      // const documentList = get(state.screenConfiguration.screenConfig.apply, "components.div.children.formwizardThirdStep.children.tradeDocumentDetails.children.cardContent.children.documentList.props.inputProps" )
-      
-      // const documentTypes = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.common-masters.DocumentType").map(item => item.code);
-      // const filteredDocumentTypes = documentTypes.filter(documentType => documentList.some(documentListItem => documentListItem.type === documentType));
-      // let applicationDocuments = get(state.screenConfiguration.preparedFinalObject, "LicensesTemp[0].applicationDocuments") || []
-      // if(!!applicationDocuments.length) {
-      //   applicationDocuments = prepareDocumentTypeObj(filteredDocumentTypes);
-      //   dispatch(
-      //     prepareFinalObject(
-      //       "LicensesTemp[0].applicationDocuments",
-      //       applicationDocuments
-      //     )
-      //   );
-      // }
-
-      // const isTradeLocationValid = validateFields(
-      //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      //   state,
-      //   dispatch
-      // );
-      // let accessoriesJsonPath =
-      //   "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.accessoriesCard.props.items";
-      // let accessories = get(
-      //   state.screenConfiguration.screenConfig.apply,
-      //   accessoriesJsonPath,
-      //   []
-      // );
-      // let isAccessoriesValid = true;
-      // for (var i = 0; i < accessories.length; i++) {
-      //   if (
-      //     (accessories[i].isDeleted === undefined ||
-      //       accessories[i].isDeleted !== false) &&
-      //     !validateFields(
-      //       `${accessoriesJsonPath}[${i}].item${i}.children.cardContent.children.accessoriesCardContainer.children`,
-      //       state,
-      //       dispatch
-      //     )
-      //   )
-      //     isAccessoriesValid = false;
-      // }
-
-      // let tradeUnitJsonPath =
-      //   "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
-      // let tradeUnits = get(
-      //   state.screenConfiguration.screenConfig.apply,
-      //   tradeUnitJsonPath,
-      //   []
-      // );
-      // let isTradeUnitValid = true;
-
-      // for (var j = 0; j < tradeUnits.length; j++) {
-      //   if (
-      //     (tradeUnits[j].isDeleted === undefined ||
-      //       tradeUnits[j].isDeleted !== false) &&
-      //     !validateFields(
-      //       `${tradeUnitJsonPath}[${j}].item${j}.children.cardContent.children.tradeUnitCardContainer.children`,
-      //       state,
-      //       dispatch
-      //     )
-      //   )
-      //     isTradeUnitValid = false;
-      // }
-      // if (
-      //   !isTradeDetailsValid ||
-      //   !isTradeLocationValid ||
-      //   !isAccessoriesValid ||
-      //   !isTradeUnitValid
-      // ) {
-      //   isFormValid = false;
-      // }
       if (!!isTradeDetailsValid && !!isOwnerDetailsValid) {
-          await getDocList(state, dispatch, licenseType);
-          getReviewDetails(state, dispatch, "apply", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewOne", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewOne", true)
-          const response = await applyTradeLicense(state, dispatch, activeStep);
-          if(!!response) {
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.licenseType.props",
-                "disabled",
-                true
-              )
-            );
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.serviceType.props",
-                "disabled",
-                true
-              )
-            );
+          const age = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].tradeLicenseDetail.owners[0].age")
+          if(age < 18) {
+            isFormValid = false;
+            ageFieldError = true
+          } else {
+            await getDocList(state, dispatch, licenseType);
+            getReviewDetails(state, dispatch, "apply", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewOne", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewOne", true)
+            const response = await applyTradeLicense(state, dispatch, activeStep);
+            if(!!response) {
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.licenseType.props",
+                  "disabled",
+                  true
+                )
+              );
+              dispatch(
+                handleField(
+                  "apply",
+                  "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.serviceType.props",
+                  "disabled",
+                  true
+                )
+              );
+            }
           }
       }
       else {
         isFormValid = false;
       }
   }
-
-  //   if (activeStep === 1) {
-  //     await getDocList(state, dispatch);
-
-  //     let isOwnerShipValid = validateFields(
-  //       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
-  //       state,
-  //       dispatch
-  //     );
-  //     let ownership = get(
-  //       state.screenConfiguration.preparedFinalObject,
-  //       "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
-  //       "INDIVIDUAL"
-  //     );
-  //     if (ownership === "INDIVIDUAL") {
-  //       let ownersJsonPath =
-  //         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
-  //       let owners = get(
-  //         state.screenConfiguration.screenConfig.apply,
-  //         ownersJsonPath,
-  //         []
-  //       );
-  //       for (var k = 0; k < owners.length; k++) {
-  //         if (
-  //           (owners[k].isDeleted === undefined ||
-  //             owners[k].isDeleted !== false) &&
-  //           !validateFields(
-  //             `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainer.children`,
-  //             state,
-  //             dispatch
-  //           )
-  //         )
-  //           isFormValid = false;
-  //       }
-  //     } else {
-  //       let ownersJsonPath =
-  //         "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
-  //       // let owners = get(
-  //       //   state.screenConfiguration.screenConfig.apply,
-  //       //   ownersJsonPath,
-  //       //   []
-  //       // );
-  //       // for (var x = 0; x < owners.length; x++) {
-  //       //   if (
-  //       //     (owners[x].isDeleted === undefined ||
-  //       //       owners[x].isDeleted !== false) &&
-  //       //     !validateFields(
-  //       //       `${ownersJsonPath}[${x}].item${x}.children.cardContent.children.tradeUnitCardContainer.children`,
-  //       //       state,
-  //       //       dispatch
-  //       //     )
-  //       //   )
-  //       if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
-  //     }
-
-  //     // check for multiple owners
-  //     if (
-  //       get(
-  //         state.screenConfiguration.preparedFinalObject,
-  //         "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-  //       ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
-  //       get(
-  //         state.screenConfiguration.preparedFinalObject,
-  //         "Licenses[0].tradeLicenseDetail.owners"
-  //       ).length <= 1
-  //     ) {
-  //       dispatch(
-  //         toggleSnackbar(
-  //           true,
-  //           {
-  //             labelName: "Please add multiple owners !",
-  //             labelKey: "ERR_ADD_MULTIPLE_OWNERS"
-  //           },
-  //           "error"
-  //         )
-  //       );
-  //       return false; // to show the above message
-  //     }
-  //     if (isFormValid && isOwnerShipValid) {
-  //       isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-  //       if (!isFormValid) {
-  //         hasFieldToaster = false;
-  //       }
-  //     } else {
-  //       isFormValid = false;
-  //     }
-  //   }
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
       const LicenseData = get(
           state.screenConfiguration.preparedFinalObject,
           "Licenses[0]",
           {}
       );
-
-      // get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-      // get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-      //   "."
-      // )[0] === "INDIVIDUAL"
-      //   ? setMultiOwnerForApply(state, true)
-      //   : setMultiOwnerForApply(state, false);
-
-      // if (get(LicenseData, "licenseType")) {
-      //   setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
-      // }
-
       const uploadedDocData = get(
           state.screenConfiguration.preparedFinalObject,
           "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -469,20 +303,28 @@ export const callBackForNext = async (state, dispatch) => {
                   "Please fill all mandatory fields and upload the documents !",
               labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
           };
-          switch (activeStep) {
-              case TRADE_DETAILS_STEP:
-                  errorMessage = {
-                      labelName:
-                          "Please fill all mandatory fields for Trade Details, then do next !",
-                      labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
-                  };
-                  break;
-              case DOCUMENT_UPLOAD_STEP:
-                  errorMessage = {
-                      labelName: "Please upload all the required documents !",
-                      labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
-                  };
-                  break;
+          if(!!ageFieldError) {
+            errorMessage = {
+              labelName:
+                  "Age should not be less than 18",
+              labelKey: "ERR_AGE_FIELD"
+          };
+          } else {
+            switch (activeStep) {
+                case TRADE_DETAILS_STEP:
+                    errorMessage = {
+                        labelName:
+                            "Please fill all mandatory fields for Trade Details, then do next !",
+                        labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+                    };
+                    break;
+                case DOCUMENT_UPLOAD_STEP:
+                    errorMessage = {
+                        labelName: "Please upload all the required documents !",
+                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                    };
+                    break;
+            }
           }
           dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
@@ -801,7 +643,7 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     "LicensesTemp[0].estimateCardData",
     dispatch
 );
-const route = `/tradelicense-citizen/apply?tenantId=${tenantId}`
+const route = `/tradelicense-citizen/apply?applicationNumber=${updateResponse.Licenses[0].applicationNumber}&tenantId=${tenantId}`
   dispatch(setRoute(route));
   dispatch(
     handleField(
@@ -835,6 +677,41 @@ dispatch(
       true
   )
 );
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.oldLicenseNumber.props",
+    "disabled",
+    true
+  )
+);
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.oldLicenseValidTo.props",
+    "disabled",
+    true
+  )
+);
+
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.footer.children.nextButton",
+    "visible",
+    false
+  )
+);
+
+dispatch(
+  handleField(
+    "apply",
+    "components.div.children.footer.children.payButton",
+    "visible",
+    true
+  )
+);
+
 
   // const wfCode = "DIRECTRENEWAL";
 //   set(licences[0], "action", "INITIATE");

@@ -1091,8 +1091,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
       &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
-      &&fields.accountNumber!==undefined 
-      &&fields.bankAddress!==undefined 
+      // &&fields.accountNumber!==undefined 
+      // &&fields.bankAddress!==undefined 
       && fields.totalNoPayLeaves!==undefined) 
       {
         
@@ -1109,8 +1109,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
-          ||fields.accountNumber.isFieldValid ===false
-          ||fields.bankAddress.isFieldValid === false
+          // ||fields.accountNumber.isFieldValid ===false
+          // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
             isFormValid = false
@@ -1247,7 +1247,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
 
   if (activeStep === 1) {
     // wfActionLoad(state, dispatch).then(res=>{   
-    // })
+    // })    
+    isGratuityPensionValid = true;    
     const documentsRequired = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsContract")
   ); 
@@ -1410,6 +1411,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   }
 
   if (activeStep === 2) {
+    isGratuityPensionValid = true;
     let isPensionCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.pensionDetails.children.cardContent.children.pensionDetailsConatiner.children",
       state,
@@ -1424,6 +1426,12 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
     }
       //set filestoreid after upload all required or non required documnt upload
     // 
+    // if(Accesslable[3].pensionDataUpdate)
+    // {
+    //   isGratuityAmountValid = true;
+    //   isGratuityPensionValid = true;
+    //   isDependentValid = true;
+    // }
     setcommentFile(state,dispatch)
    
   }
@@ -1471,41 +1479,41 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
                 "Please fill all mandatory fields for Pension  Details, then do next !",
               labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
             };
-            if (!isDependentValidDOB)
-          {
-            errorMessage = {
-              labelName:
-                "Date of birth should be less then current date!",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DATE_OF_BIRTH"
-            };
-          }
-          else if(!isGratuityAmountValid)
-          {
-            errorMessage = {
-              labelName:
-                "Total gratuity percentage should not be greater then 100",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
-            };
+          //   if (!isDependentValidDOB)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Date of birth should be less then current date!",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DATE_OF_BIRTH"
+          //   };
+          // }
+          // else if(!isGratuityAmountValid)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Total gratuity percentage should not be greater then 100",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
+          //   };
   
-          }
-          else if(!isGratuityPensionValid)
-          {
-            errorMessage = {
-              labelName:
-                "Please add at lease one valid dependent to get pension amount",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
-            };
+          // }
+          // else if(!isGratuityPensionValid)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Please add at lease one valid dependent to get pension amount",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+          //   };
   
-          }
+          // }
          
-          else{
+          // else{
            
-            errorMessage = {
-              labelName:
-                "Please fill all mandatory fields for Employee Details, then do next !",
-              labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
-            };
-          }
+          //   errorMessage = {
+          //     labelName:
+          //       "Please fill all mandatory fields for Employee Details, then do next !",
+          //     labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
+          //   };
+          // }
             
             break;
           case 3:
@@ -1521,7 +1529,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
             };
             break;
         }
-        if(activeStep <2)
+        if(activeStep <1)
         {
         if (!isDependentValidDOB)
         {
@@ -1654,41 +1662,41 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
               "Please fill all mandatory fields for Pension  Details, then do next !",
             labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
           };
-          if (!isDependentValidDOB)
-          {
-            errorMessage = {
-              labelName:
-                "Date of birth should be less then current date!",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DATE_OF_BIRTH"
-            };
-          }
-          else if(!isGratuityAmountValid)
-          {
-            errorMessage = {
-              labelName:
-                "Total gratuity percentage should not be greater then 100",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
-            };
+          // if (!isDependentValidDOB)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Date of birth should be less then current date!",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DATE_OF_BIRTH"
+          //   };
+          // }
+          // else if(!isGratuityAmountValid)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Total gratuity percentage should not be greater then 100",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
+          //   };
   
-          }
-          else if(!isGratuityPensionValid)
-          {
-            errorMessage = {
-              labelName:
-                "Please add at lease one valid dependent to get pension amount",
-              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
-            };
+          // }
+          // else if(!isGratuityPensionValid)
+          // {
+          //   errorMessage = {
+          //     labelName:
+          //       "Please add at lease one valid dependent to get pension amount",
+          //     labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+          //   };
   
-          }
+          // }
          
-          else{
+          // else{
            
-            errorMessage = {
-              labelName:
-                "Please fill all mandatory fields for Employee Details, then do next !",
-              labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
-            };
-          }
+          //   errorMessage = {
+          //     labelName:
+          //       "Please fill all mandatory fields for Employee Details, then do next !",
+          //     labelKey: "PENSION_ERR_FILL_PENSION_MANDATORY_FIELDS"
+          //   };
+          // }
           break;
         case 3:
           errorMessage = {
@@ -1728,6 +1736,15 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         };
 
       }
+       else if(!isGratuityPensionValid)
+          {
+            errorMessage = {
+              labelName:
+                "Please add at lease one valid dependent to get pension amount",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };
+  
+          }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
@@ -1747,6 +1764,7 @@ const callBackForNext = async (state, dispatch) => {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
   setButtons(details)
   let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
+ 
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)
   else{

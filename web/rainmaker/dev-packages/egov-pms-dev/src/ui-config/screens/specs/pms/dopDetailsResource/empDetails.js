@@ -443,12 +443,12 @@ const dependentUnitcard = {
              
             }),
             beforeFieldChange: (action, state, dispatch) => {
-              
+             
               let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
               DpendentIndex = cardIndex;
               let dependent = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].dependents", [] )
               
-
+             // alert(action.value);
               if(action.value==="SON" )
               {
                 
@@ -1210,8 +1210,8 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         
         const tradeTypeDropdownData =
           relationTypeData &&
-          relationTypeData.relationship &&
-          Object.keys(relationTypeData.relationship).map(item => {
+          relationTypeData.relationType &&
+          Object.keys(relationTypeData.relationType).map(item => {
             
             return { code: item, active: true };
           });
@@ -1219,11 +1219,11 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         multiItemContent[variable].props.data = tradeTypeDropdownData;
         const data = relationTypeData[value];
         
-        //console.log(data)
-        //console.log(multiItemContent["EmployeeLeaveType"].props.data)
-        //alert("relationTypeData")
+        // console.log(data)
+        // console.log(multiItemContent["relationType"].props.data)
+        // alert("relationTypeData")
         if (data) {
-          multiItemContent["EmployeeLeaveType"].props.data = this.objectToDropdown(
+          multiItemContent["relationType"].props.data = this.objectToDropdown(
             data
           );
         }
