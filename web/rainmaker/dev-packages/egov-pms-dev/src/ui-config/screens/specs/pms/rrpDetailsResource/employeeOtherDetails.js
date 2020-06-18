@@ -86,7 +86,7 @@ return getCommonCard({
 
           set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", false);
           set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit", false);
-          set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].isTakenCompensationPensionAndGratuity.dues", false);
+          set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].isTakenCompensationPensionAndGratuity", false);
          
          
         }

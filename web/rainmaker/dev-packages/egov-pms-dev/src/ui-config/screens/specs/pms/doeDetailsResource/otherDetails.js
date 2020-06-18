@@ -105,7 +105,7 @@ export const otherDetails = (data) => {
       props: {
         disabled: false,       
       },
-      pattern: getPMSPattern("Comment"),
+      pattern: getPMSPattern("WFComment"),
       jsonPath: "ProcessInstances[0].comment"
     }),
     dateOfContingent: {
