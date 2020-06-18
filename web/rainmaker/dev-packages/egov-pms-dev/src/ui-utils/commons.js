@@ -409,6 +409,15 @@ export const createUpdateNPApplication = async (state, dispatch, status) => {
     }
     // set reasion for retirement in case of DOP and DOE
     let reasonForRetirement = payload[0].employeeOtherDetails.reasonForRetirement
+    // set default false in case of RRP and reasonForRetirement is not ABOLITION_OF_POST
+  if(reasonForRetirement !== "ABOLITION_OF_POST")
+  {
+    set(payload[0].employeeOtherDetails, "isTakenMonthlyPensionAndGratuity", false);
+    set(payload[0].employeeOtherDetails, "isTakenGratuityCommutationTerminalBenefit", false);
+    set(payload[0].employeeOtherDetails, "isTakenCompensationPensionAndGratuity", false);
+  }
+
+    
     
     if(reasonForRetirement=== null ||reasonForRetirement!== null )
     {

@@ -1248,6 +1248,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   if (activeStep === 1) {
     // wfActionLoad(state, dispatch).then(res=>{   
     // })
+    isGratuityPensionValid = true;
     const documentsRequired = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsContract")
   ); 
@@ -1400,16 +1401,10 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   }
     isFormValid=true
   }
-   
-        
-
-        
-
-      
-     
   }
 
   if (activeStep === 2) {
+    isGratuityPensionValid = true;
     let isPensionCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.pensionDetails.children.cardContent.children.pensionDetailsConatiner.children",
       state,

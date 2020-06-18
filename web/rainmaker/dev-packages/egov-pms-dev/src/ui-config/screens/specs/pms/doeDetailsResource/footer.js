@@ -1247,7 +1247,8 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
 
   if (activeStep === 1) {
     // wfActionLoad(state, dispatch).then(res=>{   
-    // })
+    // })    
+    isGratuityPensionValid = true;    
     const documentsRequired = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsContract")
   ); 
@@ -1410,6 +1411,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   }
 
   if (activeStep === 2) {
+    isGratuityPensionValid = true;
     let isPensionCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.pensionDetails.children.cardContent.children.pensionDetailsConatiner.children",
       state,
@@ -1527,7 +1529,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
             };
             break;
         }
-        if(activeStep <2)
+        if(activeStep <1)
         {
         if (!isDependentValidDOB)
         {
@@ -1762,6 +1764,7 @@ const callBackForNext = async (state, dispatch) => {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
   setButtons(details)
   let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
+ 
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)
   else{
