@@ -62,6 +62,49 @@ export const getReviewOwner = (isEditable = true) => {
                 },
             }
         },
-        viewOne: getCommonContainer({})
+        viewFour: getCommonContainer({
+                ownerName: getLabelWithValue(
+                    {
+                        labelName: "Owner Name",
+                        labelKey: "RP_OWNER_NAME_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].name" }
+                ),
+                ownerMobile: getLabelWithValue(
+                    {
+                        labelName: "Mobile No",
+                        labelKey: "RP_MOBILE_NO_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].phone" }
+                ),
+                ownerDob: getLabelWithValue(
+                    {
+                        labelName: "Date of Birth",
+                        labelKey: "RP_DATE_BIRTH_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].dateOfBirth" }
+                ),
+                ownerGender: getLabelWithValue(
+                    {
+                        labelName: "Gender",
+                        labelKey: "TL_COMMON_GENDER_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].gender" }
+                ),
+                ownerEmail: getLabelWithValue(
+                    {
+                        labelName: "Email",
+                        labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].email" }
+                ),
+                ownerAadhaarNo: getLabelWithValue(
+                    {
+                        labelName: "Aadhar Number",
+                        labelKey: "RP_AADHAR_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].aadhaarNumber" }
+                )
+        })
     })
 }

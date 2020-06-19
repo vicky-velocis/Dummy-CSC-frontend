@@ -43,6 +43,14 @@ const searchResults = async (action, state, dispatch, transitNumber) => {
 
   let payload = await getSearchResults(queryObject);
 
+  console.log(payload);
+
+  if(payload) {
+    console.log(payload);
+    let properties = payload.Properties;
+    dispatch(prepareFinalObject("Properties[0]", properties[0]));
+  }
+
 }
 
 
