@@ -1,10 +1,12 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getRequiredDocData } from "../utils";
+import { getRequiredDocData, checkForRole } from "../utils";
 import {
-  getUserInfo,setOPMSTenantId
+  getUserInfo, setOPMSTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+
+let roles = JSON.parse(getUserInfo()).roles
 const header = getCommonHeader(
   {
     labelName: "OPMS",
@@ -17,7 +19,7 @@ const header = getCommonHeader(
   }
 );
 let cardItems = [];
-if (role_name === 'CITIZEN') {
+if (checkForRole(roles, 'CITIZEN')) {
   const cardlist = [
     {
       label: {
@@ -28,7 +30,7 @@ if (role_name === 'CITIZEN') {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         pets
       </i>,
       route: "citizenMainLanding"
@@ -41,7 +43,7 @@ if (role_name === 'CITIZEN') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         restaurant
       </i>,
       route: "sellMeatLanding"
@@ -54,7 +56,7 @@ if (role_name === 'CITIZEN') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         picture_in_picture
       </i>,
       route: "advertisementLanding"
@@ -67,7 +69,7 @@ if (role_name === 'CITIZEN') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         report_problem
       </i>,
       route: "roadcutLanding"
@@ -76,7 +78,7 @@ if (role_name === 'CITIZEN') {
   ];
   cardItems = cardlist;
 }
-else if (role_name === 'SI' || role_name === 'MOH') {
+else if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
   const cardlist = [
     {
       label: {
@@ -87,7 +89,7 @@ else if (role_name === 'SI' || role_name === 'MOH') {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         pets
       </i>,
       route: "search"
@@ -100,7 +102,7 @@ else if (role_name === 'SI' || role_name === 'MOH') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         restaurant
       </i>,
       route: "sellmeat-search"
@@ -108,7 +110,7 @@ else if (role_name === 'SI' || role_name === 'MOH') {
   ];
   cardItems = cardlist;
 }
-else if (role_name === 'CE' || role_name === 'JE' || role_name === 'SDO' || role_name === 'EE' || role_name === 'SE') {
+else if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')) {
   const cardlist = [
     {
       label: {
@@ -118,7 +120,7 @@ else if (role_name === 'CE' || role_name === 'JE' || role_name === 'SDO' || role
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         report_problem
       </i>,
       route: "roadcut-search"
@@ -126,7 +128,7 @@ else if (role_name === 'CE' || role_name === 'JE' || role_name === 'SDO' || role
   ];
   cardItems = cardlist;
 }
-else if (role_name === 'OSD' || role_name === 'COMMISSIONER' || role_name === 'AD' || role_name === 'JEX') {
+else if (checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER') || checkForRole(roles, 'AD') || checkForRole(roles, 'JEX')) {
   const cardlist = [
     {
       label: {
@@ -136,7 +138,7 @@ else if (role_name === 'OSD' || role_name === 'COMMISSIONER' || role_name === 'A
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         report_problem
       </i>,
       route: "advertisement-search"
@@ -144,7 +146,7 @@ else if (role_name === 'OSD' || role_name === 'COMMISSIONER' || role_name === 'A
   ];
   cardItems = cardlist;
 }
-else if (role_name === 'SUPERINTENDENT') {
+else if (checkForRole(roles, 'SUPERINTENDENT')) {
   const cardlist = [
     {
       label: {
@@ -154,7 +156,7 @@ else if (role_name === 'SUPERINTENDENT') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         restaurant
       </i>,
       route: "sellmeat-search"
@@ -167,7 +169,7 @@ else if (role_name === 'SUPERINTENDENT') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
         picture_in_picture
       </i>,
       route: "advertisement-search"
@@ -181,9 +183,9 @@ const PermissionManagementSearchAndResult = {
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
     let UsertenantInfo = JSON.parse(getUserInfo()).permanentCity;
-   
-   setOPMSTenantId("ch.chandigarh");
-   
+
+    setOPMSTenantId("ch.chandigarh");
+
     return action;
   },
   components: {

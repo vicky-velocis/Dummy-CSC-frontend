@@ -11,7 +11,7 @@ import {
   showHideAdhocPopupopmsReassign,
   showHideAdhocPopupopmsApprove,
   showHideAdhocPopupopmsForward,
-  showHideAdhocPopup
+  showHideAdhocPopup,checkForRole
 } from "../../utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -38,7 +38,8 @@ import {
 import { getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 import { callbackforsummaryaction,callbackforsummaryactionpay } from '../advertisement_summary'
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let tenant = getQueryArg(window.location.href, "tenantId");
 
@@ -337,7 +338,7 @@ export const footer = getCommonApplyFooter({
         showHideAdhocPopupopmsReject(state, dispatch, "advertisementnoc-search-preview", "reject")
       }
     },
-    visible: role_name == "COMMISSIONER" ? true : false
+    visible: checkForRole(roles, 'COMMISSIONER') ? true : false
   },
   reassign: {
     componentPath: "Button",
@@ -409,7 +410,7 @@ export const footer = getCommonApplyFooter({
         showHideAdhocPopupopmsApprove(state, dispatch, "advertisementnoc-search-preview", "reject")
       }
     },
-    visible: role_name == "COMMISSIONER" ? true : false
+    visible: checkForRole(roles, 'COMMISSIONER') ? true : false
   },
   withdrawapprove: {
     componentPath: "Button",

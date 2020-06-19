@@ -17,7 +17,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
+import { getSearchResultsView, updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill, searchdemand } from "../utils/index";
 
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -30,10 +30,10 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { immunizationSummary } from "./summaryResource/immunizationSummary";
-import { getAccessToken, localStorageGet, localStorageSet, getOPMSTenantId, getLocale, getUserInfo,setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, localStorageGet, localStorageSet, getOPMSTenantId, getLocale, getUserInfo, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-import { showHideAdhocPopup, showHideAdhocPopups } from "../utils";
+import { showHideAdhocPopup, showHideAdhocPopups, checkForRole } from "../utils";
 
 export const stepsData = [
   { labelName: "PET NOC Details", labelKey: "Applicant_DETAILS" },
@@ -47,8 +47,8 @@ export const stepper = getStepperObject(
 );
 
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
 
+let roles = JSON.parse(getUserInfo()).roles
 
 const agree_undertaking = async (state, dispatch) => {
   let tenantId = getOPMSTenantId();
@@ -62,7 +62,7 @@ const undertakingButton1 = getCommonContainer({
   addPenaltyRebateButton1: {
     componentPath: "Checkbox",
     props: {
-      checked:false,
+      checked: false,
       variant: "contained",
       color: "primary",
       style: {
@@ -78,16 +78,22 @@ const undertakingButton1 = getCommonContainer({
         labelKey: "NOC_UNDERTAKING"
       }),
     },
-    visible: true,
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "petnoc_summary")
+    },
+    //checked:true,
+    visible: localStorageGet('app_noc_status') === "DRAFT" ? true : false,
   },
   addPenaltyRebateButton: {
     componentPath: "Button",
     props: {
       color: "primary",
       style: {
-        minWidth: "200px",
+        //minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "40px",
+        paddingBottom: "14px"
       }
     },
     children: {
@@ -100,7 +106,7 @@ const undertakingButton1 = getCommonContainer({
       action: "condition",
       callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "petnoc_summary")
     },
-    visible:  true ,
+    visible: true,
   },
   resendButton: {
     componentPath: "Button",
@@ -153,20 +159,20 @@ const titlebar = getCommonContainer({
   },
 });
 
-const routeToPage=(dispatch,type)=>{
+const routeToPage = (dispatch, type) => {
   let tenantId = getOPMSTenantId();
 
   const applicationid = getQueryArg(window.location.href, "applicationNumber");
 
   const appendUrl =
-  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  if(type==="payment"){
-  const reviewUrl = `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`
-  dispatch(setRoute(reviewUrl));
-  }else if(type==="home"){
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  if (type === "payment") {
+    const reviewUrl = `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`
+    dispatch(setRoute(reviewUrl));
+  } else if (type === "home") {
     const reviewUrl = localStorageGet('app_noc_status') === 'REASSIGN' ?
-    `/egov-opms/my-applications` : ''
-  dispatch(setRoute(reviewUrl));
+      `/egov-opms/my-applications` : ''
+    dispatch(setRoute(reviewUrl));
   }
 
 
@@ -180,14 +186,14 @@ export const callbackforsummaryactionpay = async (state, dispatch) => {
     {}
   );
 
-  if (applicationStatus==="DRAFT") {
+  if (applicationStatus === "DRAFT") {
     if (localStorageGet("undertaking") == "accept") {
-      let response=await updateAppStatus(state,dispatch,"INITIATED");
+      let response = await updateAppStatus(state, dispatch, "INITIATED");
       let responseStatus = get(response, "status", "");
       if (responseStatus == "success") {
-        routeToPage(dispatch,"payment")
+        routeToPage(dispatch, "payment")
       }
-      else if(responseStatus == "fail"){
+      else if (responseStatus == "fail") {
         dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
       }
     }
@@ -199,22 +205,22 @@ export const callbackforsummaryactionpay = async (state, dispatch) => {
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-  } 
-  else if (applicationStatus==="INITIATED") {
-        routeToPage(dispatch,"payment")
-  } 
-  else  if (applicationStatus==="REASSIGN") {
-    let response=await updateAppStatus(state,dispatch,"RESENT");
+  }
+  else if (applicationStatus === "INITIATED") {
+    routeToPage(dispatch, "payment")
+  }
+  else if (applicationStatus === "REASSIGN") {
+    let response = await updateAppStatus(state, dispatch, "RESENT");
     let responseStatus = get(response, "status", "");
     if (responseStatus == "success") {
-      routeToPage(dispatch,"home")
+      routeToPage(dispatch, "home")
     }
-    else if(responseStatus == "fail"){
+    else if (responseStatus == "fail") {
       dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
     }
-  } 
+  }
   else {
-    routeToPage(dispatch,"home")
+    routeToPage(dispatch, "home")
   }
 }
 
@@ -516,12 +522,8 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
-    let res=    searchdemand(dispatch, applicationNumber, tenantId);
-    //alert(JSON.stringify(res))
-    if(res!=null){
     searchBill(dispatch, applicationNumber, tenantId);
-    }
-  
+
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
@@ -539,14 +541,14 @@ const screenConfig = {
       getRequiredDocuments()
     );
     set(
-      action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
-      localStorageGet("app_noc_status") !== 'REASSIGN' ?true:false)
-  
-      set(
-        action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
-        localStorageGet("app_noc_status") !== 'REASSIGN' ?true:false)
-  
-  
+      action, "screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
+      localStorageGet("app_noc_status") !== 'REASSIGN' ? true : false)
+
+    set(
+      action, "screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
+      localStorageGet("app_noc_status") !== 'REASSIGN' ? true : false)
+
+
 
     return action;
   },
@@ -584,13 +586,7 @@ const screenConfig = {
             moduleName: "petnoc_summary"
           }
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          estimateSummary: estimateSummary,
-          applicantSummary: applicantSummary,
-          nocSummary: nocSummary,
-          immunizationSummary: immunizationSummary,
-          documentsSummary: documentsSummary
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
 
           estimateSummary: estimateSummary,
           applicantSummary: applicantSummary,
@@ -599,7 +595,14 @@ const screenConfig = {
           documentsSummary: documentsSummary,
           undertakingButton1
           //taskStatusSummary: taskStatusSummary,
-        }),
+        }) : getCommonCard({
+          estimateSummary: estimateSummary,
+          applicantSummary: applicantSummary,
+          nocSummary: nocSummary,
+          immunizationSummary: immunizationSummary,
+          documentsSummary: documentsSummary
+        })
+        ,
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

@@ -26,6 +26,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
+import { checkForRole } from "../utils";
 //import  generatePdf from "../utils/receiptPdf";
 
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -64,8 +65,8 @@ export const stepper = getStepperObject(
   stepsData
 );
 
+let roles = JSON.parse(getUserInfo()).roles
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -499,20 +500,21 @@ const screenConfig = {
             //updateUrl: "/opms-services/v1/_update"
           }
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-         // estimateSummary: estimateSummary,
-          applicantSummary: applicantSummary,
-          nocSummary: nocSummary,
-          // propertySummary: propertySummary,         
-          documentsSummary: documentsSummary
-        }) : getCommonCard({
+        body:  checkForRole(roles, 'CITIZEN') ?  getCommonCard({
           //estimateSummary: estimateSummary,
           applicantSummary: applicantSummary,
           nocSummary: nocSummary,
           documentsSummary: documentsSummary,
           //taskStatusSummary:taskStatusSummary,
           
-        }),
+        }): 
+        getCommonCard({
+          // estimateSummary: estimateSummary,
+           applicantSummary: applicantSummary,
+           nocSummary: nocSummary,
+           // propertySummary: propertySummary,         
+           documentsSummary: documentsSummary
+         }),
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

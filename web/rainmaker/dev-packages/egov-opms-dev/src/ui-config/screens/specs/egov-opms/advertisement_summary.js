@@ -27,6 +27,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { getAccessToken, setapplicationType, getOPMSTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { checkForRole } from "../utils";
 
 export const stepsData = [
   { labelName: "Applicant Details", labelKey: "ADV_APPLICANT_DETAILS_NOC" },
@@ -40,8 +41,8 @@ export const stepper = getStepperObject(
 );
 
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
 
+let roles = JSON.parse(getUserInfo()).roles
 const getMdmsData = async (action, state, dispatch) => {
 
   let tenantId = getOPMSTenantId();
@@ -406,19 +407,20 @@ const screenConfig = {
         },
         stepper,
 
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          estimateSummary: estimateSummary,
-          advertisementapplicantSummary: advertisementapplicantSummary,
-          detailSummary: detailSummary,
-          documentsSummary: documentsSummary
-
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           estimateSummary: estimateSummary,
           advertisementapplicantSummary: advertisementapplicantSummary,
           detailSummary: detailSummary,
           documentsSummary: documentsSummary,
  
-        }),
+        })
+         :getCommonCard({
+          estimateSummary: estimateSummary,
+          advertisementapplicantSummary: advertisementapplicantSummary,
+          detailSummary: detailSummary,
+          documentsSummary: documentsSummary
+
+        }) ,
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

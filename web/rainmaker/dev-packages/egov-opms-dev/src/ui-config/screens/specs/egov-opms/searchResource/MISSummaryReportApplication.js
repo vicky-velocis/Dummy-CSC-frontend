@@ -30,7 +30,7 @@ import {
   //import { getTodaysDateInYMD,getFinancialYearDates} from "../../utils";
   
   
-
+import './index.css'
   
   export const UpdateMaster = async (state, dispatch) => {
 
@@ -506,27 +506,54 @@ disabled:true
            
         
        }),
-       Sector: getSelectField({
-        label: { labelName: "Sector", labelKey: "NOC_SECTOR_LABEL" },
-        optionLabel: "name",
-        optionValue :"name",
-        placeholder: {
-          labelName: "Sector",
-          labelKey: "NOC_SECTOR_PLACEHOLDER"
-        },
-    //    jsonPath: "searchScreen.toDate",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
+    //    Sector: getSelectField({
+    //     label: { labelName: "Sector", labelKey: "NOC_SECTOR_LABEL" },
+    //     optionLabel: "code",
+    //     optionValue :"name",
+    //     placeholder: {
+    //       labelName: "Sector",
+    //       labelKey: "NOC_SECTOR_PLACEHOLDER"
+    //     },
        
-        jsonPath: "reportSectorWise[0].sector"  , 
-       sourceJsonPath:"SectorData",
-        
-      //  pattern: getPattern("Date"),
-     //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: false
-      })
+    // //    jsonPath: "searchScreen.toDate",
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 4
+    //     },
+       
+    //     jsonPath: "reportSectorWise[0].sector"  , 
+    //    sourceJsonPath:"SectorData",
+      
+    //   //  pattern: getPattern("Date"),
+    //  //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     required: false
+    //   })
+    sector: getSelectField({
+      label: { labelName: "Sector", labelKey: "NOC_SECTOR_LABEL" },
+      optionLabel: "code",
+      optionValue :"code",
+      placeholder: {
+        labelName: "Sector",
+             labelKey: "NOC_SECTOR_PLACEHOLDER"
+      },
+      
+  //    jsonPath: "searchScreen.toDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      props: {
+     
+        style: {
+          texttransform: "uppercase"
+        }
+      },
+      jsonPath: "reportSectorWise[0].sector"  , 
+sourceJsonPath:"SectorData",
+    //  pattern: getPattern("Date"),
+   //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: true
+    }),
                             
    }),
     

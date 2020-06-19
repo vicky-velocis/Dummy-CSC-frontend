@@ -16,7 +16,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, createDemandForRoadCutNOC } from "../utils/index";
+import { fetchBill, searchBill, createDemandForRoadCutNOC } from "../utils/index";
 //import  generatePdf from "../utils/receiptPdf";
 
 import { footer } from "./applyResource/employeeRoadCutFooter";
@@ -31,8 +31,8 @@ import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { roadcutapplicantSummary } from "./summaryResource/roadcutapplicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
-import { showHideAdhocPopup } from "../utils";
 
+import { checkForRole } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   localStorageGet, localStorageSet, setapplicationNumber, getOPMSTenantId, setapplicationType,
@@ -45,7 +45,8 @@ import {
 } from "../../../../ui-utils/commons";
 import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
 
 const ReassignButton = getCommonContainer({
   resendButton: {
@@ -88,7 +89,7 @@ const ReassignButton = getCommonContainer({
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  
+
   let tenantId = getOPMSTenantId();
   let mdmsBody = {
     MdmsCriteria: {
@@ -200,7 +201,7 @@ const prepareDocumentsView = async (state, dispatch) => {
 
   let allDocuments = [];
   allDocuments.push(uploadDocuments)
-  
+
   if (uploadDocuments !== '') {
     documentsPreview.push(
       {
@@ -354,17 +355,17 @@ const HideshowEdit = (action, nocStatus, amount) => {
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.roadcutapplicantSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
 
   set(
@@ -376,43 +377,43 @@ const HideshowEdit = (action, nocStatus, amount) => {
   set(
     action,
     "screenConfig.components.div.children.footer.children.approve.visible",
-    amount < 10000 && role_name == 'EE' ? true
-      : role_name == 'CE' ? true : false
+    amount < 10000 && checkForRole(roles, 'EE') ? true
+      : checkForRole(roles, 'CE') ? true : false
   );
 
   set(
     action,
     "screenConfig.components.div.children.footer.children.reject.visible",
-    amount < 10000 && role_name == 'EE' ? true : role_name == 'CE' ? true : false
+    amount < 10000 && checkForRole(roles, 'EE') ? true : checkForRole(roles, 'CE') ? true : false
   );
 
 
   set(
     action,
     "screenConfig.components.div.children.footer.children.MakePayment.visible",
-    (role_name === 'CITIZEN' && nocStatus === "APPROVED") ? true : false
+    (checkForRole(roles, 'CITIZEN') && nocStatus === "APPROVED") ? true : false
   );
 
   set(
     action,
     "screenConfig.components.div.children.footer.children.previousButton.visible",
-    role_name === "CITIZEN" ?
-            nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
-         true
-      :false
-    :false
-    );
-  
-    set(
-      action,
-      "screenConfig.components.div.children.footer.children.submitButton.visible",
-      role_name === "CITIZEN" ?
-              nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
-           true
-        :false
-      :false
-      );
-  
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+        true
+        : false
+      : false
+  );
+
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.submitButton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+        true
+        : false
+      : false
+  );
+
 
 }
 
@@ -433,19 +434,28 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   let performancebankguaranteecharges = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].performancebankguaranteecharges", {});
   let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
   HideshowEdit(action, nocStatus, amount);
-
-  if ( role_name === 'CITIZEN') {
-
-    let res=createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
-    //alert(JSON.stringify(res))
-    if(res!=null){
+  if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
     searchBill(dispatch, applicationNumber, tenantId);
+  } else {
+    if (amount > 0 && performancebankguaranteecharges > 0 && gstamount > 0) {
+      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", amount));
+      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", gstamount));
+      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", performancebankguaranteecharges));
+      if (checkForRole(roles, 'CITIZEN')) {
+        let res = await createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
+        if (res != null) {
+          const response = await fetchBill([
+            { key: "tenantId", value: tenantId },
+            { key: "consumerCode", value: applicationNumber },
+            { key: "businessService", value: "OPMS" }
+          ], dispatch);
+        }
+      }
     }
-
   }
   prepareDocumentsView(state, dispatch);
- 
-  if (role_name == 'CITIZEN')
+
+  if (checkForRole(roles, 'CITIZEN'))
     setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
 
 };
@@ -478,7 +488,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
   if (resPaid.length != 0)
     nocRemark = "PAID";
 
-  //role_name !== 'CITIZEN' ?
+
   if (nocRemark == "PAID") {
     let getCertificateDataForROADCUT = { "applicationType": "ROADCUTNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "certificateData" } };
 
@@ -591,14 +601,14 @@ const screenConfig = {
 
     //setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId)
- 
+
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "ROADCUTNOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    if (role_name == 'JE') {
+    if (checkForRole(roles, 'JE')) {
       set(
         action,
         "screenConfig.components.adhocDialogForward.children.popup",
@@ -653,16 +663,16 @@ const screenConfig = {
           }
 
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          // estimateSummary: estimateSummary,
-          roadcutapplicantSummary: roadcutapplicantSummary,
-          documentsSummary: documentsSummary
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           estimateSummary: estimateSummary,
           roadcutapplicantSummary: roadcutapplicantSummary,
           documentsSummary: documentsSummary,
           taskStatusSummary: taskStatusSummary,
-          ReassignButton
+          //ReassignButton
+        }) : getCommonCard({
+          // estimateSummary: estimateSummary,
+          roadcutapplicantSummary: roadcutapplicantSummary,
+          documentsSummary: documentsSummary
         }),
         // citizenFooter:
         //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

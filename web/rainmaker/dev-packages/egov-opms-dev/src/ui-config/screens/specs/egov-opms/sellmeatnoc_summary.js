@@ -24,7 +24,7 @@ import {
   localStorageGet,
   setapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
-
+import { checkForRole } from "../utils";
 export const stepsData = [
   { labelName: "Sell Meat NOC Details", labelKey: "SELLMEATNOC_APPLICANT_DETAILS_NOC" },
   { labelName: "Documents", labelKey: "SELLMEATNOC_STEP_DOCUMENTS_NOC" },
@@ -36,7 +36,9 @@ export const stepper = getStepperObject(
 );
 
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
+
 //alert('CITIZEN');
 
 const titlebar = getCommonContainer({
@@ -317,15 +319,16 @@ const screenConfig = {
             //updateUrl: "/opms-services/v1/_update"
           }
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          sellmeatapplicantSummary: sellmeatapplicantSummary,
-          documentsSummary: documentsSummary
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ?   getCommonCard({
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary,
           //taskStatusSummary:taskStatusSummary
 
-        }),
+        }) : getCommonCard({
+          sellmeatapplicantSummary: sellmeatapplicantSummary,
+          documentsSummary: documentsSummary
+        })
+      ,
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

@@ -69,7 +69,7 @@ export const validateFields = (
   dispatch,
   screen = "apply"
 ) => {
-  
+
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
@@ -250,7 +250,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     ;
 
 
-	 dispatch(setRoute(applyUrl));
+  dispatch(setRoute(applyUrl));
 };
 export const showHideAdhocPopups = (state, dispatch, screenKey) => {
 
@@ -278,7 +278,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
   dispatch(
     handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
   );
- // window.location='/egov-opms/search-preview';
+  // window.location='/egov-opms/search-preview';
 };
 
 
@@ -334,7 +334,7 @@ export const showHideAdhocPopupopmsReassign = (state, dispatch, screenKey, type)
       false
     );
     dispatch(prepareFinalObject("PetNoc[0].PetNocDetails", {}));
-    
+
     dispatch(
       handleField(screenKey, "components.adhocDialog2", "props.open", !toggle)
     );
@@ -442,6 +442,8 @@ export const getMdmsData = async queryObject => {
       "",
       queryObject
     );
+
+
     return response;
   } catch (error) {
     console.log(error);
@@ -449,13 +451,43 @@ export const getMdmsData = async queryObject => {
   }
 };
 
-export const getBill = async queryObject => {
+export const fetchBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post", "/billing-service/bill/v2/_fetchbill", "",
       queryObject
     );
+
+
+    // If pending payment then get bill else get receipt
+    let billData = get(response, "Bill");
+    if (billData) {
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
+      const estimateData = createEstimateData(billData[0]);
+      estimateData &&
+        estimateData.length &&
+        dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));
+    }
+
     return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post", "/billing-service/bill/v2/_search", "",
+      queryObject
+    );
+
+    let activeBillData = get(response, "Bill");
+    const bills = activeBillData.filter(bill => bill.status === "ACTIVE" || bill.status === "PAID");
+
+
+
+    return bills;
   } catch (error) {
     console.log(error);
   }
@@ -468,7 +500,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     ];
 
     // Get Receipt
-    let payload = await httpRequest("post", "/collection-services/payments/_search", "", queryObject);
+    //    let payload = await httpRequest("post", "/collection-services/payments/_search", "", queryObject);
 
     // Get Bill
     const response = await getBill([
@@ -477,16 +509,20 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
       { key: "businessService", value: "OPMS" }
     ]);
 
+
     // If pending payment then get bill else get receipt
-    let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
+    //Payments[0].paymentDetails[0].bill
+    //   let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
+    let billData = response
+    //|| get(payload, "Payments[0].paymentDetails[0].bill");
     if (billData) {
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
       const estimateData = createEstimateData(billData[0]);
       estimateData &&
         estimateData.length &&
         dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));
-
     }
+    return response;
   } catch (e) {
     console.log(e);
   }
@@ -543,11 +579,18 @@ export const createDemandForRoadCutNOC = async (state, ispatch, applicationNumbe
       queryObject,
       querydemand
     );
+    return payload
   } catch (e) {
     console.log(e);
   }
 };
 
+
+export const checkForRole = (roleList, roleToCheck) => {
+  return roleList.map(role => {
+    return role.code
+  }).includes(roleToCheck)
+}
 
 export const searchdemand = async (dispatch, applicationNumber, tenantId) => {
   try {
@@ -595,33 +638,14 @@ export const searchdemand = async (dispatch, applicationNumber, tenantId) => {
 
 
 
-    // Get Bill
-    // const response = await getBill([
-    // {
-    // key: "tenantId",
-    // value: tenantId
-    // },
-    // {
-    // key: "applicationNumber",
-    // value: applicationNumber
-    // }
-    // ]);
+    //    Get Bill
+    const response = await fetchBill([
+      { key: "tenantId", value: tenantId },
+      { key: "consumerCode", value: applicationNumber },
+      { key: "businessService", value: "OPMS" }
+    ], dispatch);
 
-    // If pending payment then get bill else get receipt
-    // let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
-
-    // if (billData) {
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
-    // const estimateData = createEstimateData(billData[0]);
-    // estimateData &&
-    // estimateData.length &&
-    // dispatch(
-    // prepareFinalObject(
-    // "applyScreenMdmsData.estimateCardData",
-    // estimateData
-    // )
-    // );
-    // }
+    //  If pending payment then get bill else get receipt
   } catch (e) {
     console.log(e);
   }
@@ -657,9 +681,9 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
       ];
       const payload = await getBill(queryObj);
       // let payload = sampleGetBill();
-      if (payload && payload.Bill[0]) {
-        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
-        const estimateData = createEstimateData(payload.Bill[0]);
+      if (payload) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload));
+        const estimateData = createEstimateData(payload);
         estimateData &&
           estimateData.length &&
           dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", estimateData));
@@ -968,7 +992,7 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
-    
+
   }
 };
 
@@ -1039,37 +1063,37 @@ export const showHideAdhocPopupopmsForward = (state, dispatch, screenKey, type) 
 export const getOPMSPattern = type => {
   switch (type) {
     case "cin":
-    return /^([L|U]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/i;
+      return /^([L|U]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/i;
     case "petnocApplicantName":
-    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,50}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,50}$/i;
     case "petnocIdentificationMark":
-    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,100}$/i;
     case "VeterinaryRegistrationNo":
-    return /^[a-zA-Z0-9 \/-]{1,50}$/i;
+      return /^[a-zA-Z0-9 \/-]{1,50}$/i;
     case "DoorHouseNo":
-    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Address":
-    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
     case "Email":
-    return /^(?=^.{1,50}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
+      return /^(?=^.{1,50}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Amount":
-    return /^\d{1,7}(\.\d{1,2})?$/i;               
+      return /^\d{1,7}(\.\d{1,2})?$/i;
     case "Division":
-    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,25}$/i;
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,25}$/i;
     case "ROADCUTFEE":
-    return /^\d{1,12}(\.\d{1,2})?$/i;               
+      return /^\d{1,12}(\.\d{1,2})?$/i;
     case "Remarks":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
+      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,500}$/i;
     case "BadgeNumber":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}&#,\[\]*.:;“”‘’]{1,50}$/i;
-    }
+  }
 };
 
 
 export const createDemandForAdvNOC = async (state, ispatch) => {
   try {
 
-    
+
     let advdetails = get(state.screenConfiguration.preparedFinalObject, "ADVTCALCULATENOC");
 
     let durationAdvertisement = advdetails.duration; // JSON.parse(advdetails).duration;
