@@ -262,7 +262,7 @@ class ComplaintDetails extends Component {
         url: ""
       })
       .then(() => console.log("Successful share"))
-      .catch(error => console.log("Error sharing", error));
+      .catch((error) => console.log("Error sharing", error));
   };
 
   render() {
@@ -295,24 +295,23 @@ class ComplaintDetails extends Component {
         } else if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
-          btnThreeLabel = "ES_COMMON_REASSIGN"
-        }
-        else if (complaint.complaintStatus.toLowerCase() === "escalated") {
+          btnThreeLabel = "ES_COMMON_REASSIGN";
+        } else if (complaint.complaintStatus.toLowerCase() === "escalated") {
           btnOneLabel = "ES_REJECT_BUTTON";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         }
-      } else if(role == "eo"){
-        if (complaint.status.toLowerCase() === "escalatedlevel1pending"||
-        complaint.status.toLowerCase() === "escalatedlevel2pending") {
-        btnOneLabel = "ES_REJECT_BUTTON";
-        btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
-        }
-        else if (complaint.status.toLowerCase() === "assigned") {
+      } else if (role == "eo") {
+        if (
+          complaint.status.toLowerCase() === "escalatedlevel1pending" ||
+          complaint.status.toLowerCase() === "escalatedlevel2pending"
+        ) {
+          btnOneLabel = "ES_REJECT_BUTTON";
+          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+        } else if (complaint.status.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
-          }
-      }     
-      else if (role === "employee") {
+        }
+      } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
@@ -342,6 +341,7 @@ class ComplaintDetails extends Component {
                   redirectToMap={this.redirectToMap}
                   action={action}
                   complaintLoc={complaintLoc}
+                  timeLine={timeLine}
                 />
                 <ComplaintTimeLine
                   status={complaint.status}
@@ -369,11 +369,11 @@ class ComplaintDetails extends Component {
               <div>
                 {(role === "ao" &&
                   complaint.complaintStatus.toLowerCase() !== "closed") ||
-                  (role === "eo" &&
-                  (complaint.status.toLowerCase() === "escalatedlevel1pending"||
-                  complaint.status.toLowerCase() === "escalatedlevel2pending" ||
-                  complaint.status.toLowerCase() === "assigned" )) ||
-                (role === "employee" &&
+                (role === "eo" &&
+                (complaint.status.toLowerCase() === "escalatedlevel1pending"||
+                complaint.status.toLowerCase() === "escalatedlevel2pending" ||
+                complaint.status.toLowerCase() === "assigned" )) ||
+    (role === "employee" &&
                   isAssignedToEmployee &&
                   complaint.complaintStatus.toLowerCase() === "assigned" &&
                   complaint.complaintStatus.toLowerCase() !== "closed") ? (
@@ -456,7 +456,7 @@ const getLatestStatus = status => {
     case "reassignrequested":
       transformedStatus = "REASSIGN";
       break;
-      case "escalatedlevel1pending":
+    case "escalatedlevel1pending":
       transformedStatus = "ESCALATED";
       break;
     case "escalatedlevel2pending":
@@ -513,8 +513,8 @@ const mapStateToProps = (state, ownProps) => {
     roleFromUserInfo(userInfo.roles, "GRO") ||
     roleFromUserInfo(userInfo.roles, "DGRO")
       ? "ao"
-      :roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") ||
-      roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
+      : roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER1") ||
+        roleFromUserInfo(userInfo.roles, "ESCALATION_OFFICER2")
       ? "eo"
       : roleFromUserInfo(userInfo.roles, "CSR")
       ? "csr"
@@ -546,7 +546,7 @@ const mapStateToProps = (state, ownProps) => {
         : {},
       latitude: selectedComplaint.lat,
       longitude: selectedComplaint.long,
-      images: fetchImages(selectedComplaint.actions).filter(imageSource =>
+      images: fetchImages(selectedComplaint.actions).filter((imageSource) =>
         isImage(imageSource)
       ),
       complaintStatus: selectedComplaint.status
@@ -574,15 +574,15 @@ const mapStateToProps = (state, ownProps) => {
           "NA"
         ),
         selectedComplaint.auditDetails.createdTime
-      )
+      ),
     };
 
     let timeLine = [];
     timeLine = selectedComplaint.actions.filter(
-      action => action.status && action.status
+      (action) => action.status && action.status
     );
     isAssignedToEmployee = id == findLatestAssignee(timeLine) ? true : false; //not checking for type equality due to mismatch
-    timeLine.map(action => {
+    timeLine.map((action) => {
       if (action && action.status && action.status === "assigned") {
         let assignee = action.assignee;
         gro = action.by.split(":")[0];
@@ -623,16 +623,21 @@ const mapStateToProps = (state, ownProps) => {
           );
         action.groMobileNumber =
           assignee && getPropertyFromObj(employeeById, gro, "mobileNumber", "");
-      }
-      else if (action && action.status && action.status === "resolved") {
+      } else if (action && action.status && action.status === "resolved") {
         let assignee = action.assignee;
         const empId = action.by.split(":")[0];
         const selectedEmployee = employeeById && empId && employeeById[empId];
         action.employeeDesignation =
-        selectedEmployee && getPropertyFromObj(designationsById, selectedEmployee.assignments[0].designation, "name", "");
-        action.employeeName = empId && getPropertyFromObj(employeeById, empId, "name", "");
-      }
-      else if (
+          selectedEmployee &&
+          getPropertyFromObj(
+            designationsById,
+            selectedEmployee.assignments[0].designation,
+            "name",
+            ""
+          );
+        action.employeeName =
+          empId && getPropertyFromObj(employeeById, empId, "name", "");
+      } else if (
         action &&
         action.status &&
         action.status === "reassignrequested"
@@ -646,7 +651,7 @@ const mapStateToProps = (state, ownProps) => {
 
     let transformedComplaint = {
       complaint: details,
-      timeLine
+      timeLine,
     };
     const { localizationLabels } = state.app;
     const complaintTypeLocalised = getTranslatedLabel(
@@ -661,7 +666,7 @@ const mapStateToProps = (state, ownProps) => {
       serviceRequestId,
       isAssignedToEmployee,
       complaintTypeLocalised,
-      reopenValidChecker
+      reopenValidChecker,
     };
   } else {
     return {
@@ -670,23 +675,20 @@ const mapStateToProps = (state, ownProps) => {
       role,
       serviceRequestId,
       isAssignedToEmployee,
-      reopenValidChecker
+      reopenValidChecker,
     };
   }
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchComplaints: criteria => dispatch(fetchComplaints(criteria)),
-    resetFiles: formKey => dispatch(resetFiles(formKey)),
-    sendMessage: message => dispatch(sendMessage(message)),
-    sendMessageMedia: message => dispatch(sendMessageMedia(message)),
+    fetchComplaints: (criteria) => dispatch(fetchComplaints(criteria)),
+    resetFiles: (formKey) => dispatch(resetFiles(formKey)),
+    sendMessage: (message) => dispatch(sendMessage(message)),
+    sendMessageMedia: (message) => dispatch(sendMessageMedia(message)),
     prepareFormData: (jsonPath, value) =>
-      dispatch(prepareFormData(jsonPath, value))
+      dispatch(prepareFormData(jsonPath, value)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ComplaintDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(ComplaintDetails);

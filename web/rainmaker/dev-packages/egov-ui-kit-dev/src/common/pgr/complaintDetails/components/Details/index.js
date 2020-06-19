@@ -21,12 +21,29 @@ const mapIconStyle = {
   width: "14px",
   borderRadius: "50%",
 };
+const handleLevel1 = (timeline1, timeline2) => {
+  if (timeline1.status === "escalatedlevel1pending") {
+    if (timeline2.status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER";
+    else return "ES_COMPLAINT_ESCALATED_LEVEL1_SLA_BREACH";
+  }
+};
 
+const getEscalatingStatus = (timeline, status) => {
+  if (timeline && timeline.length > 2) {
+    if (timeline[0].status === "escalatedlevel1pending") return handleLevel1(timeline[0], timeline[1]);
+
+    if (timeline[0].status === "escalatedlevel2pending") {
+      if (timeline[1].status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
+      else if (timeline[1].status === "escalatedlevel1pending" && status === "escalatedlevel1pending") return handleLevel1(timeline[1], timeline[2]);
+      else return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
+    }
+  }
+};
 class Details extends Component {
   navigateToComplaintType = () => {
     this.props.history.push("/complaint-type");
   };
-   getImageSource = (imageSource, size) => {
+  getImageSource = (imageSource, size) => {
     const images = imageSource.split(",");
     if (!images.length) {
       return null;
@@ -45,13 +62,26 @@ class Details extends Component {
     return imageSource || images[0];
   };
   onImageClick = (source) => {
-    window.open(this.getImageSource(source,"large"),'Image');
-   // this.props.history.push(`/image?source=${source}`);
+    window.open(this.getImageSource(source, "large"), "Image");
+    // this.props.history.push(`/image?source=${source}`);
   };
 
   render() {
-    const { status, complaint, applicationNo, description, submittedDate, address, addressDetail, mapAction, images, action, role } = this.props;
-    const { houseNoAndStreetName, landmark, mohalla, city, locality ,latitude,longitude} = addressDetail || "";
+    const {
+      status,
+      complaint,
+      applicationNo,
+      description,
+      submittedDate,
+      address,
+      addressDetail,
+      mapAction,
+      images,
+      action,
+      role,
+      timeLine,
+    } = this.props;
+    const { houseNoAndStreetName, landmark, mohalla, city, locality, latitude, longitude } = addressDetail || "";
     const icon = {};
     icon.name = "location";
     icon.style = {
@@ -72,6 +102,8 @@ class Details extends Component {
         } else {
           statusKey = `CS_COMMON_CITIZEN_REQUEST_REASSIGN`;
         }
+      } else if (status === "escalatedlevel1pending" || status === "escalatedlevel2pending") {
+        statusKey = getEscalatingStatus(timeLine, status);
       } else {
         statusKey = `CS_COMMON_${status.toUpperCase()}`;
       }
@@ -159,7 +191,7 @@ class Details extends Component {
                     })}
                 </div>
                 {addressDetail && !isEmpty(addressDetail) && (
-                  <div className="rainmaker-displayInline">                 
+                  <div className="rainmaker-displayInline">
                     <Icon className="map-icon" action="maps" name="place" style={{ marginRight: 13 }} color={"#767676"} />
                     <Label label="CS_COMPLAINT_DETAILS_ADDRESS_DETAILS" labelClassName="dark-heading" />
                   </div>
@@ -231,16 +263,16 @@ class Details extends Component {
                     />
                   </div>
                 )}
-                {latitude && longitude &&
-                   <a href={`http://maps.google.com?q=${latitude},${longitude}`} target="_blank">
-                     <Label
+                {latitude && longitude && (
+                  <a href={`http://maps.google.com?q=${latitude},${longitude}`} target="_blank">
+                    <Label
                       label={"PGR_GMAP_LINK"}
                       className="status-result-color"
                       id="complaint-details-complaint-location-gmap"
                       labelStyle={{ color: "blue", textDecoration: "underline" }}
                     />
-                   </a>
-                }
+                  </a>
+                )}
                 {/* <div style={{ marginTop: 10 }}>
                   {mapAction && complaintLoc.lat && (
                     <Button
