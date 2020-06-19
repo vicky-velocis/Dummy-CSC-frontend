@@ -34,7 +34,6 @@ const header = getCommonContainer({
     labelKey: "PR_GENERATE_PRESS_NOTE"
   })
 });
-//alert('in')
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
   let reduxDocuments = get(
@@ -73,7 +72,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "pressnote-summary",
   beforeInitScreen: (action, state, dispatch) => {
-   // alert(getQueryArg(window.location.href, "eventuuId"))
 
    localStorageSet("ResendInvitelist","");
    localStorageSet("ResendInvitelistAll","");
@@ -95,30 +93,7 @@ const screenConfig = {
             getPressGridDataforview(action, state, dispatch);
 
     getSearchResultsViewPressnote(state, dispatch,payload)
-    //getSearchResultsViewLibrary(state, dispatch,payload)
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap"
-    );
-    if (uomsObject) {
-      for (const [key, value] of Object.entries(uomsObject)) {
-        let labelElement = getLabelWithValue(
-          {
-            labelName: key,
-            labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`
-          },
-          {
-            jsonPath: `PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap.${key}`
-          }
-        );
-        set(
-          action,
-          `screenConfig.components.div.children.body.children.cardContent.children.pressnoteSummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children.${key}`,
-          labelElement
-        );
-        
-      }
-    }
+   
 // Hide edit buttons
 set(
   action,
@@ -131,7 +106,6 @@ set(
   false
 );
 
-    //  generateBill(dispatch, applicationNumber, tenantId);
     prepareDocumentsView(state, dispatch);
     return action;
   },
@@ -155,13 +129,11 @@ set(
                 sm: 10
               },
               ...header,
-             // searchResultsPressListView
             }
           },
         
         },
         body: getCommonCard({
-       // masterGrid,
         pressnoteSummary: pressnoteSummary,
         documentsSummary: documentsPressNoteSummary,
          resendbody: getCommonCard({

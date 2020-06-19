@@ -26,9 +26,8 @@ import {
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { getTenderGridData } from "../../../../../ui-utils/commons";
-//import store from "redux/store";
+import store from "ui-redux/store";
 
-import store from "../../../../../ui-redux/store";
 const state = store.getState();
 
 const getLocalTextFromCode = localCode => {
@@ -37,88 +36,7 @@ const getLocalTextFromCode = localCode => {
   );
 };
 
-export const textToLocalMapping = {
-  "Application No": getLocaleLabels(
-    "Application No",
-    "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Status: getLocaleLabels(
-    "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  INITIATED: getLocaleLabels(
-    "Initiated,",
-    "NOC_INITIATED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPLIED: getLocaleLabels(
-    "Applied",
-    "NOC_APPLIED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  DOCUMENTVERIFY: getLocaleLabels(
-    "Pending for Document Verification",
-    "WF_PublicRelation_DOCUMENTVERIFY",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPROVED: getLocaleLabels(
-    "Approved",
-    "NOC_APPROVED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  REJECTED: getLocaleLabels(
-    "Rejected",
-    "NOC_REJECTED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  CANCELLED: getLocaleLabels(
-    "Cancelled",
-    "NOC_CANCELLED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGAPPROVAL: getLocaleLabels(
-    "Pending for Approval",
-    "WF_PublicRelation_PENDINGAPPROVAL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGPAYMENT: getLocaleLabels(
-    "Pending payment",
-    "WF_PublicRelation_PENDINGPAYMENT",
-    getTransformedLocalStorgaeLabels()
-  ),
-  FIELDINSPECTION: getLocaleLabels(
-    "Pending for Field Inspection",
-    "WF_PublicRelation_FIELDINSPECTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Search Results for PUBLIC-RELATIONS Applications": getLocaleLabels(
-    "Search Results for PUBLIC-RELATIONS Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
-    getTransformedLocalStorgaeLabels()
-  )
-};
+
 export const searchResults = {
   uiFramework: "custom-molecules",
   
@@ -129,7 +47,6 @@ export const searchResults = {
     columns: [
       getTextToLocalMapping("Event Id"),
       getTextToLocalMapping("Event Title"),
-      //getTextToLocalMapping("Organizer Department"),
 	   {
         name: getTextToLocalMapping("Organizer Department"),
         options: {
@@ -140,7 +57,6 @@ export const searchResults = {
         )
         }
       },
-    //  getTextToLocalMapping("Organizer Employee"),
       getTextToLocalMapping("Date & Time"),
       getTextToLocalMapping("Schedule Status"),
       getTextToLocalMapping("Event Status"),
@@ -149,15 +65,10 @@ export const searchResults = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       }
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -203,15 +114,10 @@ export const searchResultsPressList = {
         name: getTextToLocalMapping("Press Note List UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -255,23 +161,14 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 					
 			 let tempdata = localStorageGet("gridobj");
 		 console.log(tempdata);
-			// let tempdata1 = tempdata.split('},{').join('}|');
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
-				tempdata2.map( item => {
-					//console.log("------");
+				tempdata2.map( (item,index) => {
 					console.log((item));
 					let temp = JSON.parse(item) 
 					 let obj={}
-					  // obj['Department']= temp.assignments ? temp.assignments[0].EmpName : "-"
-					  // obj['Designation']=temp.assignments ? temp.assignments[0].DesignationName : "-"
-					  // obj['Employee Name']= temp.user? temp.user.name : "-"
-					  // obj['Mobile No']=temp.user ? temp.user.mobileNumber : "-"
-					  // obj['Email ID']=temp.user ? temp.user.emailId : "-"
-					  // //obj['Department Id']=commiteeMember.departmentUuid
-					  // //obj['Employee ID']=commiteeMember.userUuid
-          //  obj['DepartmentName']=temp.assignments ? temp.assignments[0].department : "-"
+					 
             obj['Publication Name']= temp.publicationName ? temp.publicationName : "-"
 					  obj['Type of the Press']= temp.pressType? temp.pressType : "-"
 					  obj['Personnel Name']=temp.personnelName ? temp.personnelName : "-"
@@ -279,7 +176,8 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 					  obj['Mobile Number']=temp.mobile ? temp.mobile : "-"
 					  obj['Press master UUID']=temp.pressMasterUuid ? temp.pressMasterUuid : "-"
           
-
+					  obj['index']=index
+            
 
 					selectedrows.push(obj)
 					
@@ -297,7 +195,7 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 		}
 } 
 
-const onEmployeeselect = async (type, rowData, allrowdata) => {
+const onEmployeeselect = async (type, rowData, allrowdata,index) => {
 
 	
 	if(type == "cell")
@@ -313,14 +211,14 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
     console.log(type);
     console.log("Current" + rowData);
 		console.log( rowData);
-		debugger;
+		;
     let selectedrows = [];
     let selectedrows1=[];
 		let localinvdata = localStorageGet("PressNoteList");
   	if(localinvdata === null || localinvdata === "undefined" )
  // if(selectedrows1.length===0)
 		{
-      debugger
+      
 
       let tempAll = JSON.parse(localStorageGet("PressNoteListAll"));
       
@@ -335,7 +233,28 @@ if(tempAll!==null)
           checked=true;
           tempAll.splice(index,1)
           localStorageSet("PressNoteList", JSON.stringify(tempAll));	
+          let selIndex1=[]
+          let selIndex= JSON.parse(localStorageGet("PressNoteList"));
+          selIndex.map((item,index)=>{
           
+             selIndex1.push(item['index'])	
+          
+           })
+           console.log('selectedRows1')
+           
+           console.log(selIndex1)
+       
+       console.log('selectedRows1')
+       
+       store.dispatch(
+        handleField(
+          "generatepressNote",
+          "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+          "props.options.rowsSelected",
+          selIndex1
+        )
+      );
+    
         }
         })
 
@@ -352,9 +271,32 @@ if(checked===false){
      obj['Email Id']=rowData[3]
      obj['Mobile Number']=rowData[4]
      obj['Press master UUID']=rowData[5]
-
+     obj['index']=index.rowIndex
    selectedrows1.push(obj)
+   let selIndex1=[]
       localStorageSet("PressNoteList", JSON.stringify(selectedrows1));
+      let selIndex= JSON.parse(localStorageGet("PressNoteList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+   store.dispatch(
+    handleField(
+      "generatepressNote",
+      "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
+
 }
 		}
 		else
@@ -375,22 +317,35 @@ if(checked===false){
           checked=true;
           temp.splice(index,1)
           localStorageSet("PressNoteList", JSON.stringify(temp));	
+          let selIndex1=[]
+          let selIndex= JSON.parse(localStorageGet("PressNoteList"));
+          selIndex.map((item,index)=>{
           
+             selIndex1.push(item['index'])	
+          
+           })
+           console.log('selectedRows1')
+           
+           console.log(selIndex1)
+       
+       console.log('selectedRows1')
+       
+       store.dispatch(
+        handleField(
+          "generatepressNote",
+          "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+          "props.options.rowsSelected",
+          selIndex1
+        )
+       
+      );
+    
         }
         })
 
-
-
         if(checked===false){
 
-
-
-
-
           selectedrows1 = temp;
-
-
-
 
       let obj={}
        obj['Publication Name']=rowData[0]
@@ -399,42 +354,42 @@ if(checked===false){
       obj['Email Id']=rowData[3]
       obj['Mobile Number']=rowData[4]
     obj['Press master UUID']=rowData[5]
-
+    obj['index']=index.rowIndex
     selectedrows1.push(obj)
       localStorageSet("PressNoteList", JSON.stringify(selectedrows1));	
+      let selIndex1=[]
+      let selIndex= JSON.parse(localStorageGet("PressNoteList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+   store.dispatch(
+    handleField(
+      "generatepressNote",
+      "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
+
+
+
+
         }
     selectedrows1=selectedrows2
     console.log('selectedrows2')
     console.log(selectedrows2)
     }	
     let data1=JSON.parse( localStorageGet("PressNoteList"))
-    // let data =data1.map(item => ({
-
-      
-    //   [getTextToLocalMapping("Publication Name")]:
-    //   item['Publication Name'] || "-",
-    //   [ getTextToLocalMapping("Type of the Press")]:
-    //   item['Type of the Press'] || "-",
-    //   [ getTextToLocalMapping("Name")]:
-    //   item['Pesonnel Name'] || "-",
-    //   [ getTextToLocalMapping("Email Id")]:
-    //   item['Email Id'] || "-",
-    //   [getTextToLocalMapping("Mobile Number")]:
-    //   item['Mobile Number'] || "-",
-    //   [getTextToLocalMapping("Press master UUID")]:
-    //   item['Press master UUID'] || "-",
     
-      
-    //  }));
-
-     // store.dispatch(
-      // handleField(
-        // "generatepressNote",
-        // "components.div.children.formwizardSecondStep.children.searchGridSecondstep",
-        // "props.data",
-        // data
-      // ));
-	// 
 	}
   
 };
@@ -456,15 +411,10 @@ export const searchResultsPressMasterList = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
   options: {
     filter: false,
     download: false,
@@ -475,29 +425,21 @@ export const searchResultsPressMasterList = {
     filterType: 'checkbox',
     hover: true,
      selectableRowsHeader : true,
-	// disableToolbarSelect : true,
 	 selectableRowsOnClick : false,
     rowsPerPageOptions: [5, 10, 15, 20],
     onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
     onAllEmployeeselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
-    //onEmployeeselect('cell','')
     },
     onRowClick: (row, index,state,dispatch,action) => {
-    // alert(JSON.stringify(state))
-    onEmployeeselect('rowdata',row,state,dispatch,action)
+    onEmployeeselect('rowdata',row,state,index)
     },
-    // onRowsDelete:(rowsDeleted, data) =>{
-    // onRowDelete(rowsDeleted, data)
-    // },
+   
     selectedRows: {
     text: "row(s) selected",
     delete: "Delete",
     deleteAria: "Delete Selected Rows",
     }
-    // selectableRows: true,
-    // onCellClick: (colData)=>{
-    // void()
-    // },
+    
     },
     },
     customSortColumn: {
@@ -532,13 +474,12 @@ const onAllPressselect = async (rowData, allrowdata,state,dispatch,action) => {
 			let selectedrows1=[];
 					
 			 let tempdata = localStorageGet("gridobj");
-			// console.log(tempdata);
-			// let tempdata1 = tempdata.split('},{').join('}|');
+		
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
-				tempdata2.map( item => {
-					//console.log("------");
+				tempdata2.map( (item,index) => {
+					
 					console.log((item));
 					let temp = JSON.parse(item) 
 					 let obj={}
@@ -548,7 +489,8 @@ const onAllPressselect = async (rowData, allrowdata,state,dispatch,action) => {
 						obj['Email Id']=temp.email
 						obj['Mobile Number']=temp.mobile
 						obj['Press master UUID']=temp.pressMasterUuid
-
+            obj['index']=index
+            
 					selectedrows.push(obj)
 					
 			})
@@ -565,26 +507,24 @@ const onAllPressselect = async (rowData, allrowdata,state,dispatch,action) => {
 		}
 } 
 
-const onEmployeeselect1 = async (type, rowData, allrowdata) => {
+const onEmployeeselect1 = async (type, rowData, allrowdata,index) => {
 
 	
 	if(type == "cell")
 	{
-		//console.log(type);
-		//console.log("Current" + rowData);
-		//console.log("All "+allrowdata);
+	
 	}
 	else
 	{	
     console.log(type);
     console.log("Current" + rowData);
 		console.log( rowData);
-		debugger;
+		;
     let selectedrows = [];
     let selectedrows1=[];
 		let localinvdata = localStorageGet("PressTenderList");
   	if(localinvdata === null || localinvdata === "undefined" )
- // if(selectedrows1.length===0)
+
 		{
       
 
@@ -602,6 +542,29 @@ if(tempAll!==null)
           tempAll.splice(index,1)
           localStorageSet("PressTenderList", JSON.stringify(tempAll));	
           
+      let selIndex1=[]
+      let selIndex= JSON.parse(localStorageGet("PressTenderList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+
+   store.dispatch(
+    handleField(
+      "publishTender",
+      "components.div.children.formwizardFirstStep.children.PressMasterListForTender",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
         }
         })
 
@@ -615,9 +578,34 @@ if(checked===false){
      obj['Email Id']=rowData[3]
      obj['Mobile Number']=rowData[4]
      obj['Press master UUID']=rowData[5]
-
+     obj['index']=index.rowIndex
+     
    selectedrows1.push(obj)
       localStorageSet("PressTenderList", JSON.stringify(selectedrows1));
+
+      let selIndex1=[]
+      let selIndex= JSON.parse(localStorageGet("PressTenderList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+
+   store.dispatch(
+    handleField(
+      "publishTender",
+      "components.div.children.formwizardFirstStep.children.PressMasterListForTender",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
 }
 		}
 		else
@@ -635,6 +623,30 @@ if(checked===false){
           checked=true;
           temp.splice(index,1)
           localStorageSet("PressTenderList", JSON.stringify(temp));	
+
+      let selIndex1=[]
+      let selIndex= JSON.parse(localStorageGet("PressTenderList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+
+   store.dispatch(
+    handleField(
+      "publishTender",
+      "components.div.children.formwizardFirstStep.children.PressMasterListForTender",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
           
         }
         })
@@ -649,9 +661,34 @@ if(checked===false){
       obj['Email Id']=rowData[3]
       obj['Mobile Number']=rowData[4]
     obj['Press master UUID']=rowData[5]
-
+    obj['index']=index.rowIndex
+    
     selectedrows1.push(obj)
       localStorageSet("PressTenderList", JSON.stringify(selectedrows1));	
+
+      let selIndex1=[]
+      let selIndex= JSON.parse(localStorageGet("PressTenderList"));
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+       console.log('selectedRows1')
+       
+       console.log(selIndex1)
+   
+   console.log('selectedRows1')
+   
+
+   store.dispatch(
+    handleField(
+      "publishTender",
+      "components.div.children.formwizardFirstStep.children.PressMasterListForTender",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+   
+  );
   }
     selectedrows1=selectedrows2
     console.log('selectedrows2')
@@ -680,14 +717,7 @@ if(checked===false){
       
      }));
 
-     // store.dispatch(
-      // handleField(
-        // "generatepressNote",
-        // "components.div.children.formwizardSecondStep.children.searchGridSecondstep",
-        // "props.data",
-        // data
-      // ));
-	// 
+    
 	}
   
 };
@@ -709,15 +739,10 @@ export const PressMasterListForTender = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+          
         }
       },
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
   options: {
     filter: false,
     download: false,
@@ -727,29 +752,21 @@ export const PressMasterListForTender = {
     filterSelected: [],
     filterType: 'checkbox',
      selectableRowsHeader : true,
-	// disableToolbarSelect : true,
 	 selectableRowsOnClick : false,
     rowsPerPageOptions: [5, 10, 15, 20],
     onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
 		onAllPressselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
-		//onEmployeeselect('cell','')
    },
     onRowClick: (row, index,state,dispatch,action) => {
-    // alert(JSON.stringify(state))
-    onEmployeeselect1('rowdata',row,state,dispatch,action)
+    onEmployeeselect1('rowdata',row,state,index)
     },
-    // onRowsDelete:(rowsDeleted, data) =>{
-    // onRowDelete(rowsDeleted, data)
-    // },
+    
     selectedRows: {
     text: "row(s) selected",
     delete: "Delete",
     deleteAria: "Delete Selected Rows",
     }
-    // selectableRows: true,
-    // onCellClick: (colData)=>{
-    // void()
-    // },
+    
     },
     },
     customSortColumn: {
@@ -772,7 +789,6 @@ export const PressMasterListForTender = {
 };
 export const searchGridSecondstep = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {
@@ -788,15 +804,10 @@ export const searchGridSecondstep = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
   options: {
     filter: false,
     download: false,
@@ -805,7 +816,6 @@ export const searchGridSecondstep = {
     hover: true,
     rowsPerPageOptions: [10, 15, 20],
     onRowClick: (row, index) => {
-     // onRowClickpressnote(row);
     }
   },
   customSortColumn: {
@@ -830,16 +840,12 @@ export const searchGridSecondstep = {
 const onRowClick = rowData => {
   const page="search"
 
-  // if(rowData[5]==="CANCELLED")
-  // {
   
-  // }
-  // else{
     const reviewUrl = `summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&page=${page}&status=${rowData[4]}&eventstatus=${rowData[5]}&tenantId=`+getTenantId();
     
     
         window.location.href =reviewUrl;
- // }
+ 
      
   
 
@@ -869,20 +875,14 @@ export const searchResultsLibrary = {
       getTextToLocalMapping("Date & Time"),
       getTextToLocalMapping("Schedule Status"),
       getTextToLocalMapping("Event Status"),
-      //getTextToLocalMapping("Event UUID"),
 	   {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       }
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -939,7 +939,6 @@ export const searchInviteGuest = {
       getTextToLocalMapping("Status"),
      
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -947,9 +946,7 @@ export const searchInviteGuest = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+     
     },
     customSortColumn: {
       column: "Application Date",
@@ -985,7 +982,6 @@ export const searchResultsinvitesummary = {
       getTextToLocalMapping("Contact No.")
      
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -993,9 +989,7 @@ export const searchResultsinvitesummary = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      
     },
     customSortColumn: {
       column: "Application Date",
@@ -1027,12 +1021,9 @@ export const tenderSearchResults = {
       getTextToLocalMapping("Date"),
       getTextToLocalMapping("File Number"),
       getTextToLocalMapping("Subject")
-      // getTextToLocalMapping("File Number"),
-      // getTextToLocalMapping("File Number")
-    
+      
 
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -1044,26 +1035,12 @@ export const tenderSearchResults = {
          onTenderRowClick(row);
        }
     },
-    // customSortColumn: {
-    //   column: "Application Date",
-    //   sortingFn: (data, i, sortDateOrder) => {
-    //     const epochDates = data.reduce((acc, curr) => {
-    //       acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-    //       return acc;
-    //     }, []);
-    //     const order = sortDateOrder === "asc" ? true : false;
-    //     const finalData = sortByEpoch(epochDates, !order).map(item => {
-    //       item.pop();
-    //       return item;
-    //     });
-    //     return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-    //   }
-    // }
+   
   }
 };
 
 const onTenderRowClick = rowData => {
-      window.location.href = `/egov-pr/tender-Summary?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`;
+      window.location.href = `tender-Summary?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`;
 };
 
 export const billingSearchResults = {
@@ -1083,7 +1060,6 @@ export const billingSearchResults = {
   
 
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -1091,25 +1067,9 @@ export const billingSearchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      
     },
-    // customSortColumn: {
-    //   column: "Application Date",
-    //   sortingFn: (data, i, sortDateOrder) => {
-    //     const epochDates = data.reduce((acc, curr) => {
-    //       acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-    //       return acc;
-    //     }, []);
-    //     const order = sortDateOrder === "asc" ? true : false;
-    //     const finalData = sortByEpoch(epochDates, !order).map(item => {
-    //       item.pop();
-    //       return item;
-    //     });
-    //     return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-    //   }
-    // }
+    
   }
 };
 
@@ -1143,7 +1103,6 @@ export const publishTenderSearchResults = {
       getTextToLocalMapping("tenderNoticeStatus"),
       
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
     options: {
       filter: false,
       download: false,
@@ -1155,33 +1114,15 @@ export const publishTenderSearchResults = {
         onPubTenderRowClick(row);
       }
     },
-    // customSortColumn: {
-    //   column: "Application Date",
-    //   sortingFn: (data, i, sortDateOrder) => {
-    //     const epochDates = data.reduce((acc, curr) => {
-    //       acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-    //       return acc;
-    //     }, []);
-    //     const order = sortDateOrder === "asc" ? true : false;
-    //     const finalData = sortByEpoch(epochDates, !order).map(item => {
-    //       item.pop();
-    //       return item;
-    //     });
-    //     return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-    //   }
-    // }
+   
   }
 };
 
 const onPubTenderRowClick = rowData => {
-  // if(JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER")
-  // {
-  // window.location.href = `/egov-pr/tender-Summary?tenderId=${rowData[0]}&tenderuuId=${rowData[5]}&tenantId=${getTenantId()}`;
-  // }
-  // else{
-    window.location.href = `/egov-pr/tender-Summary-Publish?tenderId=${rowData[0]}&tenderuuId=${rowData[5]}&Status=${rowData[6]}&tenantId=${getTenantId()}`;
+ 
+    window.location.href = `tender-Summary-Publish?tenderId=${rowData[0]}&tenderuuId=${rowData[5]}&Status=${rowData[6]}&tenantId=${getTenantId()}`;
     
- ////ss }
+ 
 };
 
 
@@ -1198,14 +1139,10 @@ export const pressGrid = {
       getTextToLocalMapping("Publication name"),
       getTextToLocalMapping("Email Id"),
       getTextToLocalMapping("Mobile No"),
-      // getTextToLocalMapping("Event Id"),
-      // getTextToLocalMapping("Date & Time"),
-      // getTextToLocalMapping("Commitiee"),
-      // getTextToLocalMapping("Budjet"),
-      // getTextToLocalMapping("Mobile No"),
+      
      
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
+
     options: {
       filter: false,
       download: false,
@@ -1213,9 +1150,7 @@ export const pressGrid = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      
     },
     customSortColumn: {
       column: "Application Date",
@@ -1256,7 +1191,7 @@ export const masterGrid = {
        }
       }
     ],
-  //  title: getTextToLocalMapping("Search Results for PUBLIC-RELATIONS Applications"),
+  
     options: {
       filter: false,
       download: false,
@@ -1265,7 +1200,7 @@ export const masterGrid = {
       hover: true,
       rowsPerPageOptions: [5, 10, 15],
     onRowClick: (row, index) => {
-   //     onRowClickpressnote(row);
+  
       }
     },
    
@@ -1280,7 +1215,7 @@ export const masterGrid = {
 
 export const TimeSeriessearchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  
   componentPath: "Table",
   visible: true,
   props: {
@@ -1298,7 +1233,7 @@ export const TimeSeriessearchResults = {
    
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+  
     options: {
       filter: false,
       download: true,
@@ -1306,9 +1241,7 @@ export const TimeSeriessearchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      
     },
     customSortColumn: {
       column: "Application Date",
@@ -1330,7 +1263,7 @@ export const TimeSeriessearchResults = {
 
 export const TimeSeriessearchEventResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  
   componentPath: "Table",
   visible: false,
   props: {
@@ -1350,7 +1283,6 @@ export const TimeSeriessearchEventResults = {
    
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: true,
@@ -1358,9 +1290,7 @@ export const TimeSeriessearchEventResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+    
     },
     customSortColumn: {
       column: "Application Date",
@@ -1383,7 +1313,6 @@ export const TimeSeriessearchEventResults = {
 
 export const LocalityReportSearchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {
@@ -1400,7 +1329,7 @@ export const LocalityReportSearchResults = {
 
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+  
     options: {
       filter: false,
       download: true,
@@ -1408,9 +1337,7 @@ export const LocalityReportSearchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      // onRowClick: (row, index) => {
-      //   onRowClick(row);
-      // }
+      
 }}}
 
 
@@ -1418,7 +1345,7 @@ export const LocalityReportSearchResults = {
 
 export const EventReportSearchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+ 
   componentPath: "Table",
   visible: true,
   props: {
@@ -1431,14 +1358,10 @@ export const EventReportSearchResults = {
       getTextToLocalMapping("Closed Events"),
       getTextToLocalMapping("Archived Events"),
       getTextToLocalMapping("Number Uploads"),
-      // getTextToLocalMapping("Event Id"),
-      // getTextToLocalMapping("Date & Time"),
-      // getTextToLocalMapping("Commitiee"),
-      // getTextToLocalMapping("Budjet"),
-      // getTextToLocalMapping("Mobile No"),
+    
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+ 
     options: {
       filter: false,
       download: true,
@@ -1486,7 +1409,7 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
    let tempdata1 = tempdata.split('},{').join('}|{');
    let tempdata2 = tempdata1.split('|')
        
-    tempdata2.map( item => {
+    tempdata2.map( (item,index) => {
       //console.log("------");
       console.log((item));
       let temp = JSON.parse(item) 
@@ -1497,7 +1420,7 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
         obj[3]=temp.email ? temp.email : "-"
         obj[4]=temp.mobile ? temp.mobile : "-"
         obj[5]=temp.pressMasterUuid ? temp.pressMasterUuid : "-"
-       
+        obj[6]=index
       selectedrows.push(obj)
 
   })
@@ -1507,33 +1430,8 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
 
 
 }
-const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , allRowsSelected) => {
+const onPressselect = async (type, rowData,index) => {
 
-			// //localStorageSet("Sendtoall", 0)
-			// //console.log(type);
-			// //console.log(type);
-			// console.log( rowData);
-			
-			// let selectedrows = [];
-			// let localinvdata = localStorageGet("ResendInvitelist");
-			// if(localinvdata === null || localinvdata === "undefined")
-			// {
-				// selectedrows.push(rowData)
-
-				// localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
-			// }
-			// else
-			// {
-				// let temp = JSON.parse(localStorageGet("ResendInvitelist"));
-				// console.log("temppppppppppppp")
-				// console.log(temp)
-				// selectedrows = temp;
-				// selectedrows.push(rowData)
-				// localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));	
-			// }	
-			
-			//localStorageSet("Sendtoall", 0)
-			//console.log(type);
 			console.log("ROwdata");
 			console.log( rowData);
 			
@@ -1544,9 +1442,7 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
 
 
         let tempAll = JSON.parse(localStorageGet("ResendInvitelistAll"));
-			
-		//		let temp2 = rowData
-        //temp2.splice(0, 2,"PRESS");
+		
         let checked=false;
 		if(tempAll!=null)
         {
@@ -1556,25 +1452,79 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
             checked=true;
             tempAll.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            selIndex.map((item,index)=>{
+            
+               selIndex1.push(item[6])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         
+         store.dispatch(
+          handleField(
+            "pressnote-summary",
+            "components.div.children.body.children.cardContent.children.resendbody.children.cardContent.children.guestlist",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+         
+        );
             
           }
           })
 		}
     if(checked===false){
 				let temp = rowData
-				//temp.splice(0, 2,"PRESS");
+        //temp.splice(0, 2,"PRESS");
+        temp.push(index.rowIndex)
+        
 				selectedrows.push(temp)
 				console.log("ROwdata 1");
 				console.log( selectedrows);
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+     store.dispatch(
+      handleField(
+        "pressnote-summary",
+        "components.div.children.body.children.cardContent.children.resendbody.children.cardContent.children.guestlist",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );
     }
 			}
 			else
 			{
 				let temp = JSON.parse(localStorageGet("ResendInvitelist"));
 				console.log(temp)
-				let temp2 = rowData
-        //temp2.splice(0, 2,"PRESS");
+        let temp2 = rowData
+        temp2.push(index.rowIndex)
+     //   temp2=temp2+index
+     console.log('index.rowIndex')
+     
+     console.log(index.rowIndex)
+      //  temp2.splice(6, 2,index.rowIndex);
+        console.log('temp2222222222222222')
+        console.log(temp2)
+       
         let checked=false;
         temp.map((item,index)=>{
           if(item[5] === rowData[5])
@@ -1582,6 +1532,28 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
             checked=true;
             temp.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(temp));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            selIndex.map((item,index)=>{
+            
+               selIndex1.push(item[6])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         
+         store.dispatch(
+          handleField(
+            "pressnote-summary",
+            "components.div.children.body.children.cardContent.children.resendbody.children.cardContent.children.guestlist",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+         
+        );
             
           }
           })
@@ -1590,7 +1562,29 @@ const onPressselect = async (type, rowData, allrowdata, currentRowsSelected , al
         
 				selectedrows = (temp)
 				
-				localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));	
+        localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));	
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[6])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     
+     store.dispatch(
+      handleField(
+        "pressnote-summary",
+        "components.div.children.body.children.cardContent.children.resendbody.children.cardContent.children.guestlist",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+     
+    );
 			}	
     }
 		
@@ -1631,7 +1625,7 @@ export const ResendPressInviteGrid = {
 		onPressselectAll('cell','','resend',currentRowsSelected , allRowsSelected)
 	  },
 	  onRowClick: (row, index) => {
-		onPressselect('row',row);
+		onPressselect('row',row,index);
       }
     },
    

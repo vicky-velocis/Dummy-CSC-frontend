@@ -10,6 +10,8 @@ import { convertDateToEpoch, getCheckBoxJsonpath, getCurrentFinancialYear, getHy
 import { httpRequest } from "./api";
 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 
 const role_name = JSON.parse(getUserInfo()).roles[0].code
@@ -615,13 +617,11 @@ export const createUpdateEvent = async (state, dispatch, status) => {
   let response = '';
   let response_updatestatus = '';
   let uuId = getQueryArg(window.location.href, "eventuuId") === 'null' ? '' : getQueryArg(window.location.href, "eventuuId") // get(state, "screenConfiguration.preparedFinalObject.PRSCP.applicationId");
- // let method = nocId ? "UPDATE" : "CREATE";
- //alert(uuId )
+
  let method =  "CREATE";
   try {
     let data=[]
-    let payload = get(state.screenConfiguration.preparedFinalObject, "PublicRealation[0].CreateEventDetails", []);
-    //let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    let payload = get(state.screenConfiguration.preparedFinalObject, "PublicRelation[0].CreateEventDetails", []);
 	
 	let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.EventDocuments", {});
 
@@ -633,40 +633,35 @@ export const createUpdateEvent = async (state, dispatch, status) => {
     let ownerDocuments = [];
     let otherDocuments = [];
     let Remarks = "";
-   let startdate1=get(state,"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startDate1")
-   let endDate1=get(state,"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endDate1")
-  debugger;
+   let startdate1=get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1")
+   let endDate1=get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1")
+ 
    startdate1=startdate1.split('-')
    endDate1=endDate1.split('-')
-  //  alert(startdate1)
-  //  alert(endDate1)
+  
    let moduleCode=localStorageGet("modulecode")
     set(payload, "eventStatus", "PUBLISHED");
     set(payload, "startDate",startdate1[2]+'/'+startdate1[1]+'/'+startdate1[0]);
     set(payload, "endDate", endDate1[2]+'/'+endDate1[1]+'/'+endDate1[0]);
     set(payload, "tenantId", getTenantId());
     set(payload, "moduleCode",moduleCode);
-  // data=payload
-  // data.push(startDate,startdate1)
-//payload.push("eventStatus","CREATE")
+ 
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
         if (doc.documentCode === "EVENT.EVENT_FILE_DOCUMENT") {
           ownerDocuments = [
             ...ownerDocuments,
             {
-              //tenantId: 'ch',
-              //documentType: doc.documentSubCode ? doc.documentSubCode : doc.documentCode,
+              
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
         } else if (!doc.documentSubCode) {
-          // SKIP BUILDING PLAN DOCS
+        
           otherDocuments = [
             ...otherDocuments,
             {
-              //tenantId: 'ch',
-              //documentType: doc.documentCode,
+              
               fileStoreId: doc.documents[0].fileStoreId
             }
           ];
@@ -678,7 +673,7 @@ export const createUpdateEvent = async (state, dispatch, status) => {
 	  }
     });
 
-   // set(payload, "eventImage", ownerDocuments);
+   
     set(payload, "eventImage", event_documents);
   
     console.log('payload : ', payload)
@@ -687,14 +682,11 @@ export const createUpdateEvent = async (state, dispatch, status) => {
     if (uuId==='' || uuId===null) {
       response = await httpRequest("post", "/prscp-services/v1/event/_create", "", [], { requestBody: payload });
       console.log('event response : ', response)
-      //   "eventStatus":""
-      //.applicationId !== 'null' || response.applicationId !== ''
-     // seteventuuid(response.ResponseBody.eventDetailUuid);
-     // seteventid(response.ResponseBody.eventId);
+     
      
       if (response.ResponseBody.eventDetailUuid!=='null' || response.ResponseBody.eventDetailUuid!=='') {
         dispatch(prepareFinalObject("EVENT", response));
-        dispatch(prepareFinalObject("PublicRealation[0].CreateEventDetails", {}));
+        dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
         
        setApplicationNumberBox(state, dispatch);
 
@@ -708,13 +700,8 @@ export const createUpdateEvent = async (state, dispatch, status) => {
       response = await httpRequest("post", "/prscp-services/v1/event/_update", "", [], { requestBody: payload });
       dispatch(prepareFinalObject("EVENT", response));
       dispatch(prepareFinalObject("EventDocuments",[]));
-      dispatch(prepareFinalObject("PublicRealation[0].CreateEventDetails", {}));
-      // if (status === 'RESENT') {
-      //   response_updatestatus = await httpRequest("post", "/egov-opmsService/noc/_updateappstatus", "", [], { dataPayload: {} });
-      // }
-   //   setapplicationNumber(response.applicationId);
-   //  response = furnishNocResponse(response);
-      //dispatch(prepareFinalObject("PRSCP", response));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
+      
       return { status: "success", message: response };
     }
 
@@ -727,7 +714,6 @@ export const createUpdateEvent = async (state, dispatch, status) => {
       "screenConfiguration.preparedFinalObject.PRSCP",
       []
     );
-    // PublicRelationData = furnishNocResponse({ PublicRelations: PublicRelationData });
     dispatch(prepareFinalObject("PRSCP", PublicRelationData));
 
     return { status: "failure", message: error };
@@ -825,19 +811,12 @@ export const isFileValid = (file, acceptedFiles) => {
   );
 };
 
-export const furnishNocResponsePressNote = response => {
-  // Handle applicant ownership dependent dropdowns
+export const furnishResponsePressNote = response => {
   let refurnishresponse = {};
- // let applicationdetail = response.ResponseBody.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
- //ResponseBody[""0""].eventTitle
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
+ 
   if(response.ResponseBody[0]!==null && response.ResponseBody[0]!=='')
   {
-    // let startdate=response.ResponseBody[0].startDate
-    // startdate= startdate.split(' ');
-    // let enddate=response.ResponseBody[0].endDate
-    // enddate= enddate.split(' ');
-   // alert(endDate)
+    
   set(refurnishresponse, "date", response.ResponseBody[0].pressNoteDate);
   set(refurnishresponse,"fileNumber", response.ResponseBody[0].fileNumber);
 
@@ -851,10 +830,10 @@ export const furnishNocResponsePressNote = response => {
   return refurnishresponse;
   }
 };
-export const furnishNocResponse = response => {
+export const furnishResponse = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
-  debugger
+  
  
   if(response.ResponseBody[0]!==null && response.ResponseBody[0]!=='')
   {
@@ -900,7 +879,6 @@ export const furnishSellMeatNocResponse = response => {
 
   let applicationdetail = response.nocApplicationDetail[0].applicationdetail.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
 
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
   set(refurnishresponse, "applicantName", response.nocApplicationDetail[0].applicantname);
   set(refurnishresponse, "houseNo", response.nocApplicationDetail[0].housenumber);
   set(refurnishresponse, "sector", response.nocApplicationDetail[0].sector);
@@ -923,7 +901,6 @@ export const furnishRoadcutNocResponse = response => {
 
   let applicationdetail = response.nocApplicationDetail[0].applicationdetail.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
 
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
   set(refurnishresponse, "applicantName", response.nocApplicationDetail[0].applicantname);
   set(refurnishresponse, "sector", response.nocApplicationDetail[0].sector);
 
@@ -1017,7 +994,6 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
 
 
 export const getOPMSCards = async () => {
-  // //alert('aaaaaaaaaa')
   let queryObject = [];
   var requestBody = {
     "RequestInfo": {
@@ -1102,7 +1078,6 @@ export const getGridData1 = async () => {
     );
     return payload;
   } catch (error) {
-  //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 
 
@@ -1124,7 +1099,6 @@ export const getSearchResultsForNocCretificate = async queryObject => {
       )
     );
   }
-  //alert(JSON.stringify(response));
 };
 
 export const getSearchResultsForNocCretificateDownload = async queryObject => {
@@ -1141,7 +1115,6 @@ export const getSearchResultsForNocCretificateDownload = async queryObject => {
     return response;
 
   } catch (error) {
-    //alert("rrrrr")
     store.dispatch(
       toggleSnackbar(
         true,
@@ -1150,7 +1123,6 @@ export const getSearchResultsForNocCretificateDownload = async queryObject => {
       )
     );
   }
-  //alert(JSON.stringify(response));
 };
 
 
@@ -1200,7 +1172,6 @@ export const getGridDataAdvertisement1 = async () => {
     );
     return payload;
   } catch (error) {
-  //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
 
@@ -1251,7 +1222,6 @@ export const getGridDataRoadcut1 = async () => {
     );
     return payload;
   } catch (error) {
-  //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
 
@@ -1316,8 +1286,7 @@ export const UpdateMasterPrice
       const response = await httpRequest("post", "/egov-opmsService/noc/_updatepricebook", "", [], code);
 
       if (response.ResposneInfo.status === 'SUCCESS') {
-        //alert("Price Updated Successfully")
-        //  window.location.reload(false);
+       
         store.dispatch(
           toggleSnackbar(
             true,
@@ -1335,27 +1304,20 @@ export const UpdateMasterPrice
         );
       }
     } catch (error) {
-      // store.dispatch(
-      //   toggleSnackbar(
-      //     true,
-      //     { labelName: error.message, labelCode: error.message },
-      //     "error"
-      //   )
-     // );
+      
     }
   };
 
 export const createUpdateSellMeatNocApplication = async (state, dispatch, status) => {
   let response = '';
   let response_updatestatus = '';
-  let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber(); // get(state, "screenConfiguration.preparedFinalObject.SELLMEATNOC.applicationId");
+  let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber(); 
   let method = nocId ? "UPDATE" : "CREATE";
 
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "SELLMEATNOC", []);
     let tenantId = get(state.screenConfiguration.preparedFinalObject, "", getTenantId());
 
-    //let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
     let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.EventDocuments", {});
 
 	console.log("reduxDocuments");
@@ -1401,7 +1363,6 @@ export const createUpdateSellMeatNocApplication = async (state, dispatch, status
       if (status === 'RESENT') {
         response_updatestatus = await httpRequest("post", "/egov-opmsService/noc/_updateappstatus", "", [], { dataPayload: {} });
       }
-      // response = furnishNocResponse(response);
       setapplicationNumber(response.applicationId);
       dispatch(prepareFinalObject("SELLMEATNOC", response));
       return { status: "success", message: response };
@@ -1416,7 +1377,6 @@ export const createUpdateSellMeatNocApplication = async (state, dispatch, status
       "screenConfiguration.preparedFinalObject.SELLMEATNOC",
       []
     );
-    // PublicRelationData = furnishNocResponse({ PublicRelations: PublicRelationData });
     dispatch(prepareFinalObject("SELLMEATNOC", PublicRelationData));
 
     return { status: "failure", message: error };
@@ -1428,7 +1388,6 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
   let response = '';
   let response_updatestatus = '';
   let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber();
-  //  get(state, "screenConfiguration.preparedFinalObject.ROADCUTNOC.applicationId");
   let method = nocId ? "UPDATE" : "CREATE";
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "ROADCUTNOC", []);
@@ -1479,7 +1438,6 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
       }
     } else if (method === "UPDATE") {
       response = await httpRequest("post", "/egov-opmsService/noc/_update", "", [], { dataPayload: payload });
-      // response = furnishNocResponse(response);
       if (status === 'RESENT') {
         response_updatestatus = await httpRequest("post", "/egov-opmsService/noc/_updateappstatus", "", [], { dataPayload: payload });
       }
@@ -1493,7 +1451,6 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
 
     // Revert the changed pfo in case of request failure
     let PublicRelationData = get(state, "screenConfiguration.preparedFinalObject.ROADCUTNOC", []);
-    // PublicRelationData = furnishNocResponse({ PublicRelations: PublicRelationData });
     dispatch(prepareFinalObject("ROADCUTNOC", PublicRelationData));
 
     return { status: "failure", message: error };
@@ -1505,7 +1462,7 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
   let response_updatestatus = '';
   let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber();
   let method = nocId ? "UPDATE" : "CREATE";
-  //let method = "CREATE";
+ 
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "ADVERTISEMENTNOC", []);
     let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
@@ -1526,14 +1483,7 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
     });
     set(payload, "uploadDocuments", ownerDocuments);
     set(payload, "remarks", Remarks);
-    //set(payload, "exemptedCategory", 0)
-
-    // payload.hasOwnProperty("exemptedCategory") ?
-      // localStorageGet(`exemptedCategory`) === null ?
-        // set(payload, "exemptedCategory", 0)
-        // : set(payload, "exemptedCategory", localStorageGet(`exemptedCategory`)) :
-      // set(payload, "exemptedCategory", 0);
-
+    
     setapplicationMode(status);
     let responsecreateDemand = '';
     if (method === "CREATE") {
@@ -1559,7 +1509,7 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
       }
     } else if (method === "UPDATE") {
       response = await httpRequest("post", "/egov-opmsService/noc/_update", "", [], { dataPayload: payload });
-      // response = furnishNocResponse(response);
+     
       if (status === 'RESENT') {
         response_updatestatus = await httpRequest("post", "/egov-opmsService/noc/_updateappstatus", "", [], { dataPayload: {} });
       }
@@ -1571,10 +1521,6 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
-    // Revert the changed pfo in case of request failure
-    //let PublicRelationData = get(state, "screenConfiguration.preparedFinalObject.ADVERTISEMENTNOC", []);
-    //PublicRelationData = furnishAdvertisementNocResponse({ PublicRelations: PublicRelationData });
-    //dispatch(prepareFinalObject("ADVERTISEMENTNOC", PublicRelationData));
     return { status: "failure", message: error };
   }
 };
@@ -1593,8 +1539,7 @@ export const getUpdatePriceBook1 = async (pricebookid) => {
       "msgId": "20170310130900|en_IN",
       "authToken": "2c472bb8-c6a9-4467-8657-16066f72f559",
       "userInfo": {
-       // "emailId": "jyoti.magdum@extrapreneursindia.com",
-        //JSON.parse(getUserInfo()).emailId
+       
         "roles": [
 
           {
@@ -1714,8 +1659,7 @@ export const getMasterGridData1 = async () => {
       "msgId": "20170310130900|en_IN",
       "authToken": "2c472bb8-c6a9-4467-8657-16066f72f559",
       "userInfo": {
-      //  "emailId": "jyoti.magdum@extrapreneursindia.com",
-        //JSON.parse(getUserInfo()).emailId
+     
         "roles": [
 
           {
@@ -1772,7 +1716,6 @@ export const getMISSummaryReport = async data => {
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -1800,7 +1743,6 @@ export const getMISApplicationTypeReport = async data => {
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -1826,7 +1768,6 @@ export const getMISSectorReport = async data => {
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -1856,59 +1797,12 @@ export const getSectordata1 = async () => {
       "msgId": "20170310130900|en_IN",
       "authToken": "d21b7506-31be-4280-a94d-6c89b0805392",
       "correlationId": "",
-      "userInfo": {
-        "id": 167,
-        "userName": "9876567890",
-        "salutation": null,
-        "name": "Tushar",
-        "gender": null,
-        "mobileNumber": "9876567890",
-        "emailId": null,
-        "altContactNumber": null,
-        "pan": null,
-        "aadhaarNumber": null,
-        "permanentAddress": null,
-        "permanentCity": null,
-        "permanentPinCode": null,
-        "correspondenceAddress": null,
-        "correspondenceCity": null,
-        "correspondencePinCode": null,
-        "active": true,
-        "locale": null,
-        "type": "CITIZEN",
-        "accountLocked": false,
-        "accountLockedDate": 0,
-        "fatherOrHusbandName": null,
-        "signature": null,
-        "bloodGroup": null,
-        "photo": null,
-        "identificationMark": null,
-        "createdBy": 0,
-        "lastModifiedBy": 1,
-        "tenantId": getTenantId(),
-        "roles": [
-          {
-            "code": "CITIZEN",
-            "name": "Citizen",
-            "tenantId": getTenantId()
-          }
-        ],
-        "uuid": "87f10bd8-d8e5-4f02-a67f-db94c0df9f1f",
-        "createdDate": "30-01-2020 06:07:52",
-        "lastModifiedDate": "02-03-2020 06:01:05",
-        "dob": null,
-        "pwdExpiryDate": "29-04-2020 06:07:52"
-      }
+      
     },
     "applicationType": "PRSCP",
     "applicationStatus": "Create",
     "tenantId": getTenantId(),
-    "auditDetails": {
-      "createdBy": 1,
-      "lastModifiedBy": 1,
-      "createdTime": 1578894136873,
-      "lastModifiedTime": 1578894136873
-    },
+    
     "MdmsCriteria": {
       "tenantId": getTenantId(),
       "moduleDetails": [
@@ -1966,7 +1860,6 @@ export const getrepotforproccessingTime1 = async () => {
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -2112,12 +2005,12 @@ export const UpdateStatus = async (dispatch, url, queryObject, code) => {
           { labelName: 'Success', labelCode: 'Success' },
           "success"
         ));
-        //getPressMasterGridData1
+       
       dispatch(setRoute(url))
     }
     else {
       dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-      //dispatch(setRoute(url))
+     
     }
   } catch (error) {
     store.dispatch(
@@ -2158,7 +2051,6 @@ export const getEventGridData = async () => {
     );
     return payload;
   } catch (error) {
-    //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
   
   };
@@ -2189,7 +2081,6 @@ export const getEventGridData = async () => {
       );
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
     }
     
     };
@@ -2220,7 +2111,6 @@ export const getEventGridData = async () => {
         );
         return payload;
       } catch (error) {
-        //  store.dispatch(toggleSnackbar(true, error.message, "error"));
       }
       
       };  
@@ -2249,7 +2139,6 @@ export const getInviteGuestGridData = async () => {
       );
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
     }
   
   
@@ -2272,14 +2161,13 @@ export const getInviteGuestGridData = async () => {
     try {
       const payload = await httpRequest(
         "post",
-        "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
+        "/prscp-services/v1/tender/_get",
         "",
         queryObject,
         requestBody
       );
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
     }
   };
 
@@ -2302,7 +2190,6 @@ export const getInviteGuestGridData = async () => {
       );
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
     }
   };
 
@@ -2313,7 +2200,7 @@ export const getInviteGuestGridData = async () => {
       "tenantId": getTenantId(),
       "moduleCode": localStorageGet("modulecode"),
       "tenderNoticeUuid":"",
-      "tenderNoticeStatus": JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER"?"CREATED":"",
+      "tenderNoticeStatus": checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER')?"CREATED":"",
      }}
   
     try {
@@ -2326,7 +2213,6 @@ export const getInviteGuestGridData = async () => {
       );
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
     }
   };
 
@@ -2341,8 +2227,7 @@ export const getInviteGuestGridData = async () => {
           [],
           data
         );
-        //alert(JSON.stringify(response));
-        //tenderNotice
+        
        dispatch(prepareFinalObject("tenderNotice", {}));
        dispatch(prepareFinalObject("documentsUploadRedux[0]",{}));
        
@@ -2393,12 +2278,11 @@ export const getInviteGuestGridData = async () => {
         try {
           const response = await httpRequest(
             "post",
-            "http://192.168.12.132:8079/prscp-services/v1/tender/_forward",
+            "/prscp-services/v1/tender/_forward",
             "",
             [],
             data
           );
-          //alert(JSON.stringify(response));
           return response;
       
         } catch (error) {
@@ -2427,7 +2311,6 @@ export const getInviteGuestGridData = async () => {
            [],
            data
          );
-       //  alert(JSON.stringify(response));
          return response;
      
        } catch (error) {
@@ -2452,7 +2335,6 @@ export const getInviteGuestGridData = async () => {
              [],
              data
            );
-         //  alert(JSON.stringify(response));
            return response;
        
          } catch (error) {
@@ -2477,7 +2359,6 @@ export const getInviteGuestGridData = async () => {
             [],
             data
           );
-        //  alert(JSON.stringify(response));
           return response;
       
         } catch (error) {
@@ -2502,7 +2383,6 @@ export const getInviteGuestGridData = async () => {
             [],
             data
           );
-        //  alert(JSON.stringify(response));
           return response;
       
         } catch (error) {
@@ -2517,7 +2397,6 @@ export const getInviteGuestGridData = async () => {
       
       };
 	  
-	  //  /prscp-services/v1/tender/_get
        export const getSearchResultsForTenderSummary = async data => {
         try {
           debugger
@@ -2528,9 +2407,9 @@ export const getInviteGuestGridData = async () => {
             [],
             data
           );
-        //  alert(JSON.stringify(response));
+       
           return response;
-          //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
+         
       
         } catch (error) {
           store.dispatch(
@@ -2572,7 +2451,7 @@ export const getEventeelistGridData = async () => {
     );
     return payload;
   } catch (error) {
-    //  store.dispatch(toggleSnackbar(true, error.message, "error"));
+    
   }
   
   };
@@ -2606,15 +2485,8 @@ export const getsampleemailtemplate = async () => {
       data
     );
    
-	console.log("Sampleeeeeeeeeeeeeeeeee");
-	console.log(payload);
-	console.log(payload.ResponseBody.emailContent);
-	console.log(payload.ResponseBody.smsContent);
   let resultdata = JSON.parse(payload.ResponseBody.emailContent);
- // console.log(resultdata);
- // console.log("Sampleeeeeeeeeeeeeeeeee");
-//	console.log(resultdata[0].emailBody);
-//	console.log(resultdata[0].emailSubject);
+ 
 	localStorageSet("EmailTemplate", resultdata[0].emailBody)
 	localStorageSet("EmailTemplatesubject", resultdata[0].emailSubject)
   localStorageSet("smsTemplate", payload.ResponseBody.smsContent)
@@ -2622,7 +2494,6 @@ export const getsampleemailtemplate = async () => {
   localStorageSet("sms", payload.ResponseBody.smsContent)
    return payload;
   } catch (error) {
-    //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
   
   };   
@@ -2639,9 +2510,7 @@ export const invitationtoguests = async (state, dispatch) => {
   );
   
   let queryObject = [];
-  // let subject = localStorage.getItem('subject')
-  // subject = subject.replace("<p>", "");
-  // subject = subject.replace("</p>", "");
+  
   var data = {
     "tenantId": `${getTenantId()}`,
     "RequestBody": {
@@ -2688,7 +2557,12 @@ export const invitationtoguests = async (state, dispatch) => {
                 "success"
               ));
 		
-		setTimeout(function(){ window.location = "/egov-pr/eventList"; }, 700);
+		setTimeout(function(){ 
+      
+      
+      dispatch(setRoute("/egov-pr/eventList"));
+      //window.location = "/egov-pr/eventList"; 
+    }, 700);
 	}
 	
    return payload;
@@ -2710,8 +2584,10 @@ export const invitationtoguests = async (state, dispatch) => {
   };   
       
       export const createPressmaster = async   (state,dispatch,data) => {
+        dispatch(toggleSpinner());
+        
         try {
-          debugger
+         
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/press/_create",
@@ -2719,35 +2595,34 @@ export const invitationtoguests = async (state, dispatch) => {
             [],
             data
           );
-         // return response
-      //    alert(JSON.stringify(response))
+          
+          
           if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
+            dispatch(toggleSpinner());
+            
             store.dispatch(
               toggleSnackbar(
                 true,
                 { labelName: 'Success', labelCode: 'Success' },
                 "success"
               ));
-            //screenConfiguration.preparedFinalObject.PRESSDETAILS
-              // set(
-              //   state,
-              //  "screenConfiguration.preparedFinalObject.PRESSDETAILS",
-              //  {}
-              // )
+          
               dispatch(prepareFinalObject("PRESSDETAILS", {}));
               
-             // getPressMasterGridData1
              setTimeout(function(){  dispatch(setRoute(`masterSubMenu`)); }, 700);
              
            
             return response
           }
           else {
+            dispatch(toggleSpinner());
+            
             dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-            //dispatch(setRoute(url))
+          
           }
 
         } catch (error) {
+          dispatch(toggleSpinner());
           store.dispatch(
             toggleSnackbar(
               true,
@@ -2769,8 +2644,7 @@ export const invitationtoguests = async (state, dispatch) => {
             [],
             data
           );
-         // return response
-      //    alert(JSON.stringify(response))
+        
           if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
             store.dispatch(
               toggleSnackbar(
@@ -2778,7 +2652,7 @@ export const invitationtoguests = async (state, dispatch) => {
                 { labelName: 'Success', labelCode: 'Success' },
                 "success"
               ));
-             // getPressMasterGridData1
+             
              dispatch(prepareFinalObject("pressnote", {}));
              dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
              
@@ -2787,7 +2661,7 @@ export const invitationtoguests = async (state, dispatch) => {
           }
           else {
             dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-            //dispatch(setRoute(url))
+           
           }
 
         } catch (error) {
@@ -2811,8 +2685,7 @@ export const invitationtoguests = async (state, dispatch) => {
             [],
             data
           );
-         // return response
-      //    alert(JSON.stringify(response))
+         
           if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
             store.dispatch(
               toggleSnackbar(
@@ -2820,13 +2693,13 @@ export const invitationtoguests = async (state, dispatch) => {
                 { labelName: 'Success', labelCode: 'Success' },
                 "success"
               ));
-             // getPressMasterGridData1
+           
             dispatch(setRoute(`TenderSearch`))
             return response
           }
           else {
             dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-            //dispatch(setRoute(url))
+            
           }
 
         } catch (error) {
@@ -2852,8 +2725,7 @@ export const updatePressNote = async   (dispatch,data) => {
       [],
       data
     );
-   // return response
-//    alert(JSON.stringify(response))
+  
     if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
       store.dispatch(
         toggleSnackbar(
@@ -2861,7 +2733,6 @@ export const updatePressNote = async   (dispatch,data) => {
           { labelName: 'Success', labelCode: 'Success' },
           "success"
         ));
-       // getPressMasterGridData1
        dispatch(prepareFinalObject("pressnote", {}));
      dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
        
@@ -2870,7 +2741,6 @@ export const updatePressNote = async   (dispatch,data) => {
     }
     else {
       dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-      //dispatch(setRoute(url))
     }
 
   } catch (error) {
@@ -2889,87 +2759,6 @@ export const updatePressNote = async   (dispatch,data) => {
 
 
 
-       
-      // export const getPressMasterGridData1 = async data => {
-        // try {
-          // let data={
-           // "requestBody": {
-            // "tenantId":getTenantId(),
-            // "pressMasterUuid": "",
-            // "moduleCode":localStorageGet("modulecode")
-              
-          // }
-          // }
-          // const response = await httpRequest(
-            // "post",
-            // "/prscp-services/v1/press/_get",
-            // "",
-            // [],
-            // data
-          // );
-        // //  alert(JSON.stringify(response));
-        // return response;
-          
-          
-          // //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
-      
-        // } catch (error) {
-          // store.dispatch(
-            // toggleSnackbar(
-              // true,
-              // { labelName: error.message, labelCode: error.message },
-              // "error"
-            // )
-          // );
-        // }
-      
-      // };
-
-       
-	   
-	   
-	   //pressMasterUuid
-	   
-  
-      // export const createPressmaster = async   (dispatch,data) => {
-        // try {
-          // debugger
-          // const response = await httpRequest(
-            // "post",
-            // "/prscp-services/v1/press/_create",
-            // "",
-            // [],
-            // data
-          // );
-         // // return response
-      // //    alert(JSON.stringify(response))
-          // if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
-            // store.dispatch(
-              // toggleSnackbar(
-                // true,
-                // { labelName: 'Success', labelCode: 'Success' },
-                // "success"
-              // ));
-             // // getPressMasterGridData1
-            // dispatch(setRoute(`pressGrid`))
-            // return response
-          // }
-          // else {
-            // dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-            // //dispatch(setRoute(url))
-          // }
-
-        // } catch (error) {
-          // store.dispatch(
-            // toggleSnackbar(
-              // true,
-              // { labelName: error.message, labelCode: error.message },
-              // "error"
-            // )
-          // );
-        // }
-      
-      // };
 
       export const updatePressmaster = async   (dispatch,data) => {
         try {
@@ -2991,13 +2780,12 @@ export const updatePressNote = async   (dispatch,data) => {
               ));
               dispatch(prepareFinalObject("PRESSDETAILS", {}));
               setTimeout(function(){  dispatch(setRoute(`masterSubMenu`)); }, 700);
-              
-         //   dispatch(setRoute(`masterHome`))
+       
             return response
           }
           else {
             dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-            //dispatch(setRoute(url))
+           
           }
 
         } catch (error) {
@@ -3071,11 +2859,9 @@ export const updatePressNote = async   (dispatch,data) => {
             [],
             data
           );
-        //  alert(JSON.stringify(response));
         return response;
           
           
-          //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
       
         } catch (error) {
           store.dispatch(
@@ -3101,7 +2887,6 @@ export const updatePressNote = async   (dispatch,data) => {
                [],
                data
              );
-           //  alert(JSON.stringify(response));
              return response;
          
            } catch (error) {
@@ -3121,13 +2906,10 @@ export const updatePressNote = async   (dispatch,data) => {
 		 export const furnishNocResponse_PressMaster = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
- // let applicationdetail = response.ResponseBody.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
- //ResponseBody[""0""].eventTitle
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
+ 
   if(response.ResponseBody[0]!==null && response.ResponseBody[0]!=='')
   {
    
-   // alert(endDate)
   set(refurnishresponse, "name", response.ResponseBody[0].personnelName);
   set(refurnishresponse,"typeOfThePress", response.ResponseBody[0].pressType);
   set(refurnishresponse,"publicationName", response.ResponseBody[0].publicationName);
@@ -3153,12 +2935,11 @@ export const getSearchResultsTender = async queryObject => {
     debugger
     const response = await httpRequest(
       "post",
-      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
+      "/prscp-services/v1/tender/_get",
       "",
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -3173,7 +2954,7 @@ export const getSearchResultsTender = async queryObject => {
 
 };
 
-export const furnishNocResponseTender = response => {
+export const furnishResponseTender = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
  
@@ -3181,15 +2962,13 @@ export const furnishNocResponseTender = response => {
   {
      let startdate=response.ResponseBody[0].tenderDate
      startdate= startdate.split(' ');
-    // let enddate=response.ResponseBody[0].endDate
-    // enddate= enddate.split(' ');
-   // alert(endDate)
+   
   set(refurnishresponse, "tenderDate", startdate);
   set(refurnishresponse, "fileNumber", response.ResponseBody[0].fileNumber);
 
   set(refurnishresponse, "tenderSubject", response.ResponseBody[0].tenderSubject);
   set(refurnishresponse, "noteContent", response.ResponseBody[0].noteContent);
-  //set(refurnishresponse, "tenderDocument", response.ResponseBody[0].tenderDocument);
+  
 localStorageSet('tendernote',response.ResponseBody[0].noteContent)
   return refurnishresponse;
   }
@@ -3219,11 +2998,10 @@ export const createCommitteemaster = async   (dispatch,data) => {
           { labelName: 'Success', labelCode: 'Success' },
           "success"
         ));
-       // getPressMasterGridData1
-      // PublicRealation[0].CreateMasterCommitee
+      
 
-      dispatch(prepareFinalObject("PublicRealation[0].CreateCommitteeDetails", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].CreateMasterCommitee", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
       
       dispatch(setRoute(`committeeMaster`))
       return response
@@ -3247,7 +3025,6 @@ export const createCommitteemaster = async   (dispatch,data) => {
               };
 		}				
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      //dispatch(setRoute(url))
     }
 
   } catch (error) {
@@ -3313,8 +3090,7 @@ export const updateCommitteemaster = async   (dispatch,data) => {
       [],
       data
     );
-   // return response
-//    alert(JSON.stringify(response))
+ 
     if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
       store.dispatch(
         toggleSnackbar(
@@ -3324,14 +3100,14 @@ export const updateCommitteemaster = async   (dispatch,data) => {
         ));
        // getPressMasterGridData1
 
-      dispatch(prepareFinalObject("PublicRealation[0].CreateCommitteeDetails", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].CreateMasterCommitee", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
       dispatch(setRoute(`committeeMaster`))
       return response
     }
     else {
       dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
-      //dispatch(setRoute(url))
+     
     }
 
   } catch (error) {
@@ -3358,7 +3134,6 @@ export const getEmployeeByUUidHRMS = async data => {
       []
     );
    return response
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3385,7 +3160,6 @@ export const getEmployeeByUUid = async data => {
       data
     );
    return response
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3400,23 +3174,16 @@ export const getEmployeeByUUid = async data => {
 
 };
 
-export const furnishNocResponse_Committee = response => {
+export const furnishResponse_Committee = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
- // let applicationdetail = response.ResponseBody.length > 0 ? JSON.parse(response.nocApplicationDetail[0].applicationdetail) : '';
- //ResponseBody[""0""].eventTitle
-  //set(refurnishresponse, "applicationId", response.nocApplicationDetail[0].nocnumber);
+ 
   if(response.ResponseBody[0]!==null && response.ResponseBody[0]!=='')
   {
-    //ResponseBody[0].committeeMember[0].departmentName
-   // alert(endDate)
-   //PublicRealation[0].CreateCommitteeDetails.committeename
+   
   set(refurnishresponse, "committeename", response.ResponseBody[0].committeeName);
   set(refurnishresponse,"organizerDepartmentName", response.ResponseBody[0].committeeMember[0].departmentName);
-  // set(refurnishresponse,"publicationName", response.ResponseBody[0].publicationName);
   
-  // set(refurnishresponse, "emailId", response.ResponseBody[0].email);
-  // set(refurnishresponse, "mobileNo", response.ResponseBody[0].mobile);
  
   return refurnishresponse;
   }
@@ -3446,9 +3213,7 @@ export const cancelEventApplication = async (state,dispatch,data) => {
       dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
      
     }
- //  return response
-//    alert(JSON.stringify(response))
-   
+ 
 
   } catch (error) {
     store.dispatch(
@@ -3481,7 +3246,6 @@ export const getEventFilterResults = async (data) => {
    return response
 
 
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3514,7 +3278,6 @@ export const getPressFilterResults = async (data) => {
    return response
 
    
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3549,7 +3312,6 @@ export const getTenderFilterResults = async (data) => {
    return response
 
    
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3584,7 +3346,6 @@ export const getPressMasterFilterResults = async (data) => {
    return response
 
    
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3599,7 +3360,6 @@ export const getPressMasterFilterResults = async (data) => {
 
 };
 
-//http://192.168.12.115:8093
 
 
 export const getLocaliyReportData = async (data) => {
@@ -3618,7 +3378,6 @@ export const getLocaliyReportData = async (data) => {
    return response
 
    
-//    alert(JSON.stringify(response))
    
 
   } catch (error) {
@@ -3633,88 +3392,8 @@ export const getLocaliyReportData = async (data) => {
 
 };
 
-// // Multiple file uploads 
-// export const acceptedFiles = acceptedExt => {
-  // console.log("acceptttttttttttt");
-  // console.log(acceptedExt);
-  // const splitExtByName = acceptedExt.split(",");
 
-  // console.log(splitExtByName);
-  // const acceptedFileTypes = splitExtByName.reduce((result, curr) => {
-    // if (curr.includes("image")) {
-      // result.push("image");
-    // }
-    // else if (curr.includes("audio")) {
-      // result.push("audio");
-    // }
-    // else if (curr.includes("video")) {
-      // result.push("video");
-    // } else {
-      // result.push(curr.split(".")[1]);
-    // }
-    // return result;
-  // }, []);
-
-  // console.log("acceptedFileTypes");
-  // console.log(acceptedFileTypes);
-  // return acceptedFileTypes;
-// };
-
-// export const handleFileUpload = (event, handleDocument, props) => {
- 
-  // const S3_BUCKET = {
-    // endPoint: "filestore/v1/files"
-  // };
-  // let uploadDocument = true;
-  // const { inputProps, maxFileSize, moduleName } = props;
-
-  // //console.log("propssssss");
-  
-  // const input = event.target;
-  // if (input.files && input.files.length > 0) {
-    // const files = input.files;
-    // Object.keys(files).forEach(async (key, index) => {
-      // const file = files[key];
-      // const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
-      // const isSizeValid = getFileSize(file) <= maxFileSize;
-     // // console.log("fileeeeeeeeee"); 
-     // // console.log(file);
-     // // console.log(fileValid);
-     // // console.log(isSizeValid);
-     
-      // if (!fileValid) {
-       
-        // alert(`Only image or pdf files can be uploaded`);
-        // uploadDocument = false;
-      // }
-      // if (!isSizeValid) {
-        // alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
-        // uploadDocument = false;
-      // }
-      // if (uploadDocument) {
-        // if (file.type.match(/^image\//)) {
-          // const fileStoreId = await uploadFile(
-            // S3_BUCKET.endPoint,
-            // moduleName,
-            // file,
-            // commonConfig.tenantId
-          // );
-          // handleDocument(file, fileStoreId);
-        // } else {
-          // const fileStoreId = await uploadFile(
-            // S3_BUCKET.endPoint,
-            // moduleName,
-            // file,
-            // commonConfig.tenantId
-          // );
-          // handleDocument(file, fileStoreId);
-        // }
-      // }
-    // });
-  // }
-// };
-
-
+    
 
 
 
@@ -3728,12 +3407,10 @@ export const getSearchResultsForTenderSummary1 = async (dispatch,data)  => {
       [],
       data
     );
-  //  alert(JSON.stringify(response));
 
 
     return response;
-    //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
-
+   
   } catch (error) {
     store.dispatch(
       toggleSnackbar(
@@ -3745,3 +3422,11 @@ export const getSearchResultsForTenderSummary1 = async (dispatch,data)  => {
   }
 
 };
+
+
+ 
+export const checkForRole = (roleList, roleToCheck) => {
+  return roleList.map(role => {
+    return role.code
+  }).includes(roleToCheck)
+}

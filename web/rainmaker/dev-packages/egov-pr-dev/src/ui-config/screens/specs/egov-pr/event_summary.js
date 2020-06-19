@@ -15,7 +15,6 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { applicantSummary } from "./summaryResource/applicantSummary";
 import { documentsSummary,documentsEventSummary } from "./summaryResource/documentsSummary";
 import { footer } from "./summaryResource/footer";
 import { propertySummary } from "./summaryResource/propertySummary";
@@ -29,6 +28,8 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Manage Event",
@@ -55,14 +56,18 @@ const header = getCommonContainer({
 });
 
 
-const setcreateinviteroute = () => {
+const setcreateinviteroute = (state, dispatch,payload) => {
 		const reviewUrl = `createInvite?id=`+getQueryArg(window.location.href, "eventuuId");
-		window.location.href =reviewUrl;
+  //	window.location.href =reviewUrl;
+  dispatch(setRoute(reviewUrl));
+  
  }
  
- const setcancelinviteroute = () => {
+ const setcancelinviteroute = (state, dispatch,payload) => {
 		const reviewUrl = `eventList`
-		window.location.href =reviewUrl;
+  //	window.location.href =reviewUrl;
+  dispatch(setRoute(reviewUrl));
+  
  }
  
 

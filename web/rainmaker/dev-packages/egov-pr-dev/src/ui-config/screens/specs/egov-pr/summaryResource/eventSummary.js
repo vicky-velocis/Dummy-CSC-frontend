@@ -34,163 +34,9 @@ const getHeader = label => {
   };
 };
 
-const propertyDetails = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
-  props: {
-    className: "noc-summary",
-    scheama: getCommonGrayCard({
-      propertyContainer: getCommonContainer({
-        propertyType: getLabelWithValue(
-          {
-            labelName: "Property Type",
-            labelKey: "NOC_PROPERTY_TYPE_LABEL"
-          },
-          {
-            jsonPath: "PublicRelations[0].PublicRelationDetails.noOfBuildings"
-          }
-        ),
-        buildingName: getLabelWithValue(
-          {
-            labelName: "Name Of Building",
-            labelKey: "NOC_NAME_OF_BUILDING_LABEL"
-          },
-          {
-            jsonPath: "PublicRelations[0].PublicRelationDetails.buildings[0].name"
-          }
-        ),
-        buildingUsageType: getLabelWithValue(
-          {
-            labelName: "Building Usage Type",
-            labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_TYPE_LABEL"
-          },
-          {
-            jsonPath: "PublicRelations[0].PublicRelationDetails.buildings[0].usageType",
-            callBack: test,
-            localePrefix: {
-              moduleName: "PublicRelation",
-              masterName: "BuildingType"
-            }
-          }
-        ),
-        buildingUsageSubType: getLabelWithValue(
-          {
-            labelName: "Building Usage Subtype",
-            labelKey: "NOC_PROPERTY_DETAILS_BUILDING_USAGE_SUBTYPE_LABEL"
-          },
-          {
-            jsonPath: "PublicRelations[0].PublicRelationDetails.buildings[0].usageType",
-            localePrefix: {
-              moduleName: "PublicRelation",
-              masterName: "BuildingType"
-            }
-          }
-        )
-      })
-    }),
-    items: [],
-    hasAddItem: false,
-    isReviewPage: true,
-    sourceJsonPath: "PublicRelations[0].PublicRelationDetails.buildings",
-    prefixSourceJsonPath:
-      "children.cardContent.children.propertyContainer.children",
-    afterPrefixJsonPath: "children.value.children.key"
-  },
-  type: "array"
-};
 
-const propertyLocationDetails = getCommonGrayCard({
-  propertyLocationContainer: getCommonContainer({
-    propertyId: getLabelWithValue(
-      {
-        labelName: "Property ID",
-        labelKey: "NOC_PROPERTY_ID_LABEL"
-      },
-      { jsonPath: "PublicRelations[0].PublicRelationDetails.propertyDetails.propertyId" }
-    ),
-    city: getLabelWithValue(
-      {
-        labelName: "City",
-        labelKey: "NOC_PROPERTY_CITY_LABEL"
-      },
-      {
-        jsonPath: "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city",
-        localePrefix: {
-          moduleName: "TENANT",
-          masterName: "TENANTS"
-        }
-      }
-    ),
-    doorHouseNo: getLabelWithValue(
-      {
-        labelName: "Door/House No.",
-        labelKey: "NOC_SUMMARY_PROPERTY__LOCATION_DOOR_HOUSE_NO_LABEL"
-      },
-      { jsonPath: "PublicRelations[0].PublicRelationDetails.propertyDetails.address.doorNo" }
-    ),
-    buildingCompanyName: getLabelWithValue(
-      {
-        labelName: "Building/Company Name",
-        labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
-      },
-      {
-        jsonPath:
-          "PublicRelations[0].PublicRelationDetails.propertyDetails.address.buildingName"
-      }
-    ),
-    streetName: getLabelWithValue(
-      {
-        labelName: "Street Name",
-        labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
-      },
-      { jsonPath: "PublicRelations[0].PublicRelationDetails.propertyDetails.address.street" }
-    ),
-    mohalla: getLabelWithValue(
-      {
-        labelName: "Mohalla",
-        labelKey: "NOC_PROPERTY_DETAILS_MOHALLA_LABEL"
-      },
-      {
-        jsonPath:
-          "PublicRelations[0].PublicRelationDetails.propertyDetails.address.locality.code",
-        callBack: value => {
-          return `${getTransformedLocale(tenantId)}_REVENUE_${value}`;
-        }
-      }
-    ),
-    pincode: getLabelWithValue(
-      {
-        labelName: "Pincode",
-        labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
-      },
-      { jsonPath: "PublicRelations[0].PublicRelationDetails.propertyDetails.address.pincode" }
-    ),
-    locationOnMap: getLabelWithValue(
-      {
-        labelName: "Location On Map",
-        labelKey: "NOC_PROPERTY_DETAILS_GIS_CORD_LABEL"
-      },
-      {
-        jsonPath:
-          "PublicRelations[0].PublicRelationDetails.propertyDetails.address.locality.latitude"
-      }
-    ),
-    applicablePRStation: getLabelWithValue(
-      {
-        labelName: "Applicable PR Station",
-        labelKey: "NOC_PROPERTY_DETAILS_PRSTATION_LABEL"
-      },
-      {
-        jsonPath: "PublicRelations[0].PublicRelationDetails.PRstationId",
-        localePrefix: {
-          moduleName: "PublicRelation",
-          masterName: "PRStations"
-        }
-      }
-    )
-  })
 
-});
+
 
 const EventDetails =  getCommonContainer({
   eventType: getLabelWithValue(
@@ -199,10 +45,7 @@ const EventDetails =  getCommonContainer({
       labelKey: "NOC_EVENT_TITLE_LABEL"
     },
     {
-   //   jsonPath: "PublicRelations[0].PublicRelationDetails.PublicRelationType"
-      // callBack: value => {
-      //   return value.split(".")[0];
-      // }
+  
     }
   ),
   eventLocation: getLabelWithValue(
@@ -212,9 +55,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   ),
   sector: getLabelWithValue(
@@ -224,9 +65,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   organizationDetails: getLabelWithValue(
@@ -236,9 +75,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   TypeOfEvent: getLabelWithValue(
@@ -248,9 +85,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   ),
   EventBudjet: getLabelWithValue(
@@ -260,9 +95,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   committiee: getLabelWithValue(
@@ -272,9 +105,7 @@ const EventDetails =  getCommonContainer({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   eventDescription: getLabelWithValue(
@@ -284,9 +115,7 @@ const EventDetails =  getCommonContainer({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+  
 }
 )
 
@@ -326,9 +155,7 @@ const EventDataAndTime = getCommonContainer({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+  
 }
 )
 , endTime: getLabelWithValue(
@@ -338,9 +165,7 @@ const EventDataAndTime = getCommonContainer({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+ 
 }
 )
 
@@ -357,9 +182,7 @@ const EventSocialMediaLinks = getCommonContainer({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            
           }
           ), eventTwitterUrl: getLabelWithValue(
           {
@@ -368,9 +191,7 @@ const EventSocialMediaLinks = getCommonContainer({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            
           }
           ), eventInstagram: getLabelWithValue(
           {
@@ -379,9 +200,7 @@ const EventSocialMediaLinks = getCommonContainer({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            
           }
           )
 
@@ -398,9 +217,7 @@ const EventDescription = getCommonContainer({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            
           }
           )
 })

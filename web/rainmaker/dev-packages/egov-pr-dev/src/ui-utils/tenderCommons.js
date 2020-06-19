@@ -169,9 +169,8 @@ export const getSearchResultsForTenderSummary = async data => {
       [],
       data
     );
-    //  alert(JSON.stringify(response));
+   
     return response;
-    //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
 
   } catch (error) {
     store.dispatch(
@@ -197,7 +196,6 @@ export const getSearchResultsTender = async queryObject => {
       [],
       data
     );
-    //alert(JSON.stringify(response));
     return response;
 
   } catch (error) {
@@ -219,9 +217,7 @@ export const furnishNocResponseTender = response => {
   if (response.ResponseBody[0] !== null && response.ResponseBody[0] !== '') {
     let startdate = response.ResponseBody[0].tenderDate
     startdate = startdate.split(' ');
-    // let enddate=response.ResponseBody[0].endDate
-    // enddate= enddate.split(' ');
-    // alert(endDate)
+   
     set(refurnishresponse, "tenderDate", startdate);
     set(refurnishresponse, "fileNumber", response.ResponseBody[0].fileNumber);
 

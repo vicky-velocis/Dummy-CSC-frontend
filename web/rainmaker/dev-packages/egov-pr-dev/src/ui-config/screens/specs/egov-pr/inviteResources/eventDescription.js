@@ -41,7 +41,7 @@ import {
           labelKey: "NOC_DESCRIPTION_OF_EVENT_PLACEHOLDER"
         },
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.DescriptionOfEvent"
+        jsonPath: "PublicRelation[0].CreateEventDetails.DescriptionOfEvent"
       }),
      
     })

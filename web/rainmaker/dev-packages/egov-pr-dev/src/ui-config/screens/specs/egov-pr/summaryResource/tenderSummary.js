@@ -60,7 +60,6 @@ export const tenderSummary = getCommonGrayCard({
           action: "condition",
           callBack: (state, dispatch) => {
             gotoApplyWithTender(state, dispatch, 0);
-            //alert("edit clicked") ;
           }
         }
       }
@@ -100,9 +99,7 @@ export const tenderSummary = getCommonGrayCard({
       hasAddItem: false,
       isReviewPage: true,
       sourceJsonPath: "ResponseBody",
-      // prefixSourceJsonPath:
-      //   "children.cardContent.children.applicantContainer.children",
-      // afterPrefixJsonPath: "children.value.children.key"
+     
     },
     type: "array"
   },
@@ -133,9 +130,7 @@ export const tenderSummary = getCommonGrayCard({
         sm: 12,
         md: 12
       }
-      // prefixSourceJsonPath:
-      //   "children.cardContent.children.applicantContainer.children",
-      // afterPrefixJsonPath: "children.value.children.key"
+     
     },
     type: "array"
   },
@@ -185,9 +180,7 @@ export const tenderSummary = getCommonGrayCard({
         sm: 12,
         md: 12
       }
-      // prefixSourceJsonPath:
-      //   "children.cardContent.children.applicantContainer.children",
-      // afterPrefixJsonPath: "children.value.children.key"
+    
     },
     type: "array"
   }
@@ -240,7 +233,7 @@ export const tenderPublishSummary = getCommonGrayCard({
           action: "condition",
           callBack: (state, dispatch) => {
             gotoApplyWithTender(state, dispatch, 0);
-            //alert("edit clicked") ;
+           
           }
         }
         
@@ -292,9 +285,7 @@ export const tenderPublishSummary = getCommonGrayCard({
       hasAddItem: false,
       isReviewPage: true,
       sourceJsonPath: "ResponseBody",
-      // prefixSourceJsonPath:
-      //   "children.cardContent.children.applicantContainer.children",
-      // afterPrefixJsonPath: "children.value.children.key"
+    
     },
     type: "array"
   },

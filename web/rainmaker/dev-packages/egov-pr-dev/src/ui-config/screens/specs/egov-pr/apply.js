@@ -30,7 +30,7 @@ import get from "lodash/get";
 import {
   prepareDocumentsUploadData,
   getSearchResults,
-  furnishNocResponse,
+  furnishResponse,
   setApplicationNumberBox,
   getSearchResultsViewEvent
 } from "../../../../ui-utils/commons";
@@ -102,7 +102,6 @@ export const formwizardSecondStep = {
 
 
 const getMdmsData = async (action, state, dispatch) => {
- // let tenantId = getTenantId();
 
   let mdmsBody = {
     MdmsCriteria: {
@@ -150,7 +149,7 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    debugger
+  
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -195,7 +194,7 @@ export const prepareEditFlow = async (
  
  if(response.ResponseBody.length>0)
  {
-   debugger
+  
 	
    try {
      let payload1 = null;
@@ -267,11 +266,11 @@ export const prepareEditFlow = async (
     }
   }
         dispatch(prepareFinalObject("EventDocuments", documentsPreview));
-  let Refurbishresponse = furnishNocResponse(response);
+  let Refurbishresponse = furnishResponse(response);
   let startdate= response.ResponseBody[0].startDate
   startdate=startdate.split(" ")[0]
  
-  dispatch(prepareFinalObject("PublicRealation[0].CreateEventDetails", Refurbishresponse));
+  dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", Refurbishresponse));
   dispatch(
     handleField(
       "apply",
@@ -311,7 +310,6 @@ const screenConfig = {
       
     });
 
-    // Search in case of EDIT flow
     let payload_committie={
       "tenantId": getTenantId(),
       "RequestBody":{
@@ -328,7 +326,6 @@ const screenConfig = {
       setCommittiee(action, state, dispatch,payload_committie);
     
 
-    // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
       let intStep = parseInt(step);
       set(
@@ -354,7 +351,6 @@ const screenConfig = {
       }
     }
 
-    // Set defaultValues of radiobuttons and selectors
     return action;
   },
   components: {

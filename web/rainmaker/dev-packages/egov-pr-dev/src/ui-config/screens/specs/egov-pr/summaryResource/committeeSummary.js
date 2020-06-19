@@ -11,7 +11,6 @@ import {
   import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
   import { searchDepartmentEmployeesResults_committeeSummary,searchDepartmentEmployeesResults,searchDepartmentEmployeesResults_committee,searchDepartmentEmployeesResults1, searchInvitedEmployeesResults } from "../committeeResource/searchResults";
   
- // alert("committeeSummary")
   
   export const committeeSummary = getCommonGrayCard({
     header: {

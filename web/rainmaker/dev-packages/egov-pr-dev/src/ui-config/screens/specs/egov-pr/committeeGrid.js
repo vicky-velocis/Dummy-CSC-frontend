@@ -3,7 +3,6 @@ import {
     getLabel,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { NOCApplication } from "./searchResource/fireNocApplication";
   import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { pendingApprovals } from "./searchResource/pendingApprovals";
@@ -32,12 +31,7 @@ import {
     labelKey: "PR_COMMITTEE_LIST"
   });
   
-  const pageResetAndChange = (state, dispatch) => {
-    dispatch(
-      prepareFinalObject("FireNOCs", [{ "fireNOCDetails.fireNOCType": "NEW" }])
-    );
-    // dispatch(setRoute("/tradelicence/apply"));
-  };
+ 
   
   const NOCSearchAndResult = {
     uiFramework: "material-ui",
@@ -83,7 +77,7 @@ import {
       },
       adhocDialog: {
         uiFramework: "custom-containers-local",
-        moduleName: "egov-noc",
+        moduleName: "egov-pr",
         componentPath: "DialogContainer",
         props: {
           open: false,

@@ -46,7 +46,7 @@ export const callBackForNext = async (state, dispatch) => {
   let response = await createUpdateNocApplication(state, dispatch, "pressdetails_summary");
   if (get(response, "status", "") === "success") {
  
-    debugger
+    
     const acknowledgementUrl =
       process.env.REACT_APP_SELF_RUNNING === "true"
         ? `/egov-ui-framework/pressdetails_summary/acknowledgement?purpose=pressdetails_summary&status=success&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
@@ -104,12 +104,8 @@ export const presssummaryfooter = getCommonApplyFooter({
       action: "condition",
       callBack: DeletePresmaterData
     },
-    //visible: getButtonVisibility(status, "CANCEL Public Relation"),
     visible: true,
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   roles: ["TL_APPROVER"]
-    // }
+   
   },
  
 });

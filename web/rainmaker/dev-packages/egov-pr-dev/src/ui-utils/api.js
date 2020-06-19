@@ -15,11 +15,12 @@ import {
   getapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
 
-export const baserequestURL  = window.location.origin;
-export const  baseURL = window.location.origin;
+export const baserequestURL = window.location.origin;
+
 const instance = axios.create({
   baseURL: window.location.origin,
   
+
   headers: {
     "Content-Type": "application/json"
   }

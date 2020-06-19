@@ -18,14 +18,7 @@ import {
   
   
   export const TimeSeriesReport = getCommonCard({
-    // subHeader: getCommonTitle({
-    //   labelName: "Search NOC Application",
-    //   labelKey: "PR_HOME_SEARCH_RESULTS_HEADING"
-    // }),
-    // subParagraph: getCommonParagraph({
-    //   labelName: "Provide at least one parameter to search for an application",
-    //   labelKey: "PR_HOME_SEARCH_RESULTS_DESC"
-    // }),
+    
     
     TimeseriesReportContainer: getCommonContainer({
       Year: getSelectField({

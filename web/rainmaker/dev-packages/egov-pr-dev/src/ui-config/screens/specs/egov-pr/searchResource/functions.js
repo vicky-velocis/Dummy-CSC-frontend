@@ -29,7 +29,7 @@ const showHidesearchDepartmentEmployeesResults = (booleanHideOrShow, dispatch) =
 
 
 export const TimeSeriesReportSearch = async (state, dispatch) => {
-  let monthdata=["1","2","3","4","5","6","7","8","9","10","11","12"]
+  let monthdata=[1,2,3,4,5,6,7,8,9,10,11,12]
 let month=get(
   state.screenConfiguration.preparedFinalObject,
   "TimeseriesReport.Month"
@@ -57,14 +57,14 @@ let data={
     },
     {
       "name":"year",
-      "input":get(
+      "input":parseInt(get(
         state.screenConfiguration.preparedFinalObject,
         "TimeseriesReport.Year"
-      )
+      ))
     },
     {
       "name":"month",
-      "input":month===undefined?monthdata:month==="ALL"?monthdata:[month]
+      "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
     }
   ]
  
@@ -191,14 +191,14 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
           },
           {
             "name":"year",
-            "input":get(
+            "input":parseInt(get(
               state.screenConfiguration.preparedFinalObject,
               "TimeseriesReport.Year"
-            )
+            ))
           },
           {
             "name":"month",
-            "input":month===undefined?monthdata:month==="ALL"?monthdata:[month]
+            "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
           }
         ]
        
@@ -438,7 +438,6 @@ export const LocalityReportSearch = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "LocalityReport.localityname"
   )
-  console.log(fromDate)
   if(fromDate!==undefined && todate!==undefined && localityName!==undefined)
   {
     var date1 = new Date(fromDate);

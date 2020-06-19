@@ -1279,21 +1279,7 @@ export const getTextToLocalMapping = label => {
         "applicantName",
         localisationLabels
       );
-    case "NOC No":
-      return getLocaleLabels(
-        "NOC No",
-        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-        localisationLabels
-      );
-
-    case "NOC Type":
-      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
-    case "Owner Name":
-      return getLocaleLabels(
-        "Owner Name",
-        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-        localisationLabels
-      );
+   
 
     case "Application Date":
       return getLocaleLabels(
@@ -2030,22 +2016,18 @@ export const getsocialmediaLabelWithValue = (label, value, props = {}) => {
 };
 
 export const gotoApplyWithStepCommitteeMaster = (state, dispatch, step) => {
-  //alert("edit clicked") ;
-  const CommiteeId=getQueryArg(window.location.href, "commiteeUUID");
-  // alert(presstId)
- //  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-   const applicationNumberQueryString = CommiteeId ? `&commiteeUUID=${CommiteeId}` : ``;
-   const tetantQueryString = CommiteeId ? `&tenantId=${getTenantId()}` : ``;
-//   const applicationTpye = getapplicationType();
+  
+  const CommitteeId=getQueryArg(window.location.href, "committeeUUID");
+  
+   const applicationNumberQueryString = CommitteeId ? `&committeeUUID=${CommitteeId}` : ``;
+   const tetantQueryString = CommitteeId ? `&tenantId=${getTenantId()}` : ``;
    let applyUrl = ''
 
-  /// alert(applicationNumberQueryString)
               
  applyUrl = process.env.REACT_APP_SELF_RUNNING === "true"
     ? `/egov-ui-framework/egov-opms/pressDetailsMasterCreate?step=${step}${applicationNumberQueryString}`
     :
       `/egov-pr/createCommitteeMaster?step=${step}${applicationNumberQueryString}${tetantQueryString}` 
-   //   `/egov-pr/apply?step=${step}${applicationNumberQueryString}${tetantQueryString}` 
       
 
 

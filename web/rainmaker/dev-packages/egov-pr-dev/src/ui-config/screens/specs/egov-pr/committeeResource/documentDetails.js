@@ -69,7 +69,7 @@ export const documentDetails = getCommonCard({
           jsonPath: "Trade[0].businessProof"
         },
         {
-          name: "Copy of Provisional fire NoC ",
+          name: "Copy of Provisional  ",
           jsonPath: "Trade[0].businessProof"
         }
       ],
@@ -119,7 +119,6 @@ export const documentDetails = getCommonCard({
 			},
 			onClickDefination: {
 			  action: "condition",
-			  //callBack: (state, dispatch) => {GetEmployees(state, dispatch) }
 			}
 		}
 });

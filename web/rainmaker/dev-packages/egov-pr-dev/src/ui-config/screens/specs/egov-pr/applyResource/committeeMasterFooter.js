@@ -12,7 +12,6 @@ import "./index.css";
 import { createUpdateNocApplication } from "../../../../../ui-utils/commons";
 
 export const callBackForNext = async (state, dispatch) => {
-  console.log("pressDetailsMasterCreate", state);
   let response = await createUpdateNocApplication(state, dispatch, "pressdetails_summary");
   if (get(response, "status", "") === "success") {
      const acknowledgementUrl =
