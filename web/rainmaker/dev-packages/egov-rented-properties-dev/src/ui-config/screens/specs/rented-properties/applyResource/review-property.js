@@ -35,7 +35,36 @@ export const getReviewProperty = () => {
                 }
             }
         },
-        viewOne: getCommonContainer({})
+        viewFour: getCommonContainer({
+            propertyColony: getLabelWithValue(
+                {
+                    labelName: "Colony",
+                    labelKey: "RP_COLONY_LABEL"
+                },
+                { jsonPath: "Properties[0].colony" }
+            ),
+            propertyTransitNumber: getLabelWithValue(
+                {
+                    labelName: "Transit Site/Plot number",
+                    labelKey: "RP_SITE_PLOT_LABEL"
+                },
+                { jsonPath: "Properties[0].transitNumber" }
+            ),
+            propertyArea: getLabelWithValue(
+                {
+                    labelName: "Area of the property",
+                    labelKey: "RP_AREA_PROPERTY_LABEL"
+                },
+                { jsonPath: "Properties[0].propertyDetails.area" }
+            ),
+            propertyRentedSqYrd: getLabelWithValue(
+                {
+                    labelName: "Rented Per Sq yard",
+                    labelKey: "RP_RENT_AREA_PROPERTY_SQYRD"
+                },
+                { jsonPath: "Properties[0].propertyDetails.rentPerSqyd" }
+            ),
+        })
     })
 }
 
