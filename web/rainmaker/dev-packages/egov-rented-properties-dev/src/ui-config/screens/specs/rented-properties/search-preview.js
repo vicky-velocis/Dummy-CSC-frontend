@@ -13,9 +13,11 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getReviewProperty } from "./applyResource/review-property";
+import { getSearchResults, organizeLicenseData } from "../../../../ui-utils/commons";
 
-import { getReviewOwner } from "./applyResource/review-property";
+import { getReviewOwner, getReviewProperty } from "./applyResource/review-property";
+
+let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
 
 const headerrow = getCommonContainer({
@@ -24,17 +26,50 @@ const headerrow = getCommonContainer({
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
   })
 });
-const reviewOwnerDetails = getReviewOwner(false);
+const reviewOwnerDetails = getReviewOwner();
+const reviewPropertyDetails = getReviewProperty();
+
 
 
 export const propertyReviewDetails = getCommonCard({
+  reviewPropertyDetails,
   reviewOwnerDetails,
 });
+
+const searchResults = async (action, state, dispatch, transitNumber) => {
+  let queryObject = [
+    { key: "transitNumber", value: transitNumber }
+  ];
+
+  let payload = await getSearchResults(queryObject);
+
+  console.log(payload);
+
+  if(payload) {
+    console.log(payload);
+    let properties = payload.Properties;
+    dispatch(prepareFinalObject("Properties[0]", properties[0]));
+  }
+
+}
+
+
+const beforeInitFn = async (action, state, dispatch, transitNumber) => {
+
+  if(transitNumber){
+    await searchResults(action, state, dispatch, transitNumber)
+  }
+
+}
+
 
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
+    transitNumber = getQueryArg(window.location.href, "transitNumber");
+
+    beforeInitFn(action, state, dispatch, transitNumber);
     return action;
   },
   components: {
