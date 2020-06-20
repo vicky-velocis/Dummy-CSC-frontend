@@ -8,7 +8,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
+import { getSearchResultsView, updateAppStatus } from "../../../../ui-utils/commons";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { citizenFooter } from "./searchResource/citizenFooter";
@@ -24,6 +24,8 @@ import {
   localStorageGet,
   setapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { checkForRole } from "../utils";
 export const stepsData = [
   { labelName: "Sell Meat NOC Details", labelKey: "SELLMEATNOC_APPLICANT_DETAILS_NOC" },
@@ -56,48 +58,59 @@ const titlebar = getCommonContainer({
   },
 });
 
-const routePage=(dispatch)=>{
+const routePage = (dispatch) => {
   const appendUrl =
-  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/sellmeatnoc-my-applications`;
+  dispatch(toggleSpinner());
   dispatch(setRoute(reviewUrl));
 
 }
 
 // REdirect to home page on submit 
 export const callBackForNexthome = async (state, dispatch) => {
-  let applicationStatus = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
-    {}
-  );
+  try {
+    dispatch(toggleSpinner());
 
-  if(applicationStatus==="DRAFT"){
-        let response=await updateAppStatus(state,dispatch,"INITIATED");
-        let responseStatus = get(response, "status", "");
-        if (responseStatus == "success") {
-          routePage(dispatch);
-        }
-        else if(responseStatus == "fail" || responseStatus == "Fail"){
-          dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
-        }
-  } else if(applicationStatus==="REASSIGN"){
-    let response=await updateAppStatus(state,dispatch,"RESENT");
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == "success") {
+    let applicationStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+      {}
+    );
+
+    if (applicationStatus === "DRAFT") {
+      let response = await updateAppStatus(state, dispatch, "INITIATED");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routePage(dispatch);
+      }
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
+    } else if (applicationStatus === "REASSIGN") {
+      let response = await updateAppStatus(state, dispatch, "RESENT");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routePage(dispatch);
+      }
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
+    }
+    else {
       routePage(dispatch);
     }
-    else if(responseStatus == "fail" || responseStatus == "Fail"){
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
-    }
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.log(error);
   }
-  else{
-    routePage(dispatch);
-  }
+
 };
 
 export const callBackForCancel = async (state, dispatch) => {
-    const appendUrl =
+  const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/sellmeatnoc-my-applications`;
   dispatch(setRoute(reviewUrl));
@@ -253,7 +266,7 @@ const setSearchResponse = async (
   ]);
 
   dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-  
+
   prepareDocumentsView(state, dispatch);
 };
 
@@ -271,7 +284,7 @@ const screenConfig = {
 
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
- 
+
 
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
@@ -319,7 +332,7 @@ const screenConfig = {
             //updateUrl: "/opms-services/v1/_update"
           }
         },
-        body: checkForRole(roles, 'CITIZEN') ?   getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary,
           //taskStatusSummary:taskStatusSummary
@@ -328,7 +341,7 @@ const screenConfig = {
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary
         })
-      ,
+        ,
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

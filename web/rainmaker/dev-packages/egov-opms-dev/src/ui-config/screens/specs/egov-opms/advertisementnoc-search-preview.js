@@ -224,7 +224,7 @@ const setDownloadMenu = (state, dispatch) => {
 
 const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
   let showEdit = false;
-  
+
   if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
     showEdit = true;
   }
@@ -328,10 +328,12 @@ const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
     action,
     "screenConfig.components.div.children.footer.children.submitButton.visible",
     checkForRole(roles, 'CITIZEN') ?
-      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC" ?  exemptedcategory == 0 ?
-        true
+      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"
+        ? exemptedcategory == 0
+          ? true
+          : false
         : false
-      : false:true
+      : false
   );
 }
 

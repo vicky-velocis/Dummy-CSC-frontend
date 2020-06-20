@@ -24,10 +24,10 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView,updateAppStatus } from "../../../../ui-utils/commons";
+import { getSearchResultsView, updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
 import { checkForRole } from "../utils";
-//import  generatePdf from "../utils/receiptPdf";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { citizenFooter } from "./searchResource/citizenFooter";
 import {
@@ -58,7 +58,7 @@ export const stepsData = [
   { labelName: "Documents", labelKey: "ROADCUT_STEP_DOCUMENTS_NOC" },
   { labelName: "Summary", labelKey: "SELLMEATNOC_SUMMARY" }
   //{ labelName: "Applicant Details", labelKey: "ROADCUT_STEP_APPLICANT_DETAILS_NOC" }
-  
+
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 2 } },
@@ -83,45 +83,55 @@ const titlebar = getCommonContainer({
   },
 });
 
-const routePage=(dispatch)=>{
+const routePage = (dispatch) => {
   const appendUrl = process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-opms/roadcutnoc-my-applications`;
+  dispatch(toggleSpinner());
   dispatch(setRoute(reviewUrl));
 
 
 }
 
 export const callbackforSummaryActionSubmit = async (state, dispatch) => {
-  let applicationStatus = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
-    {}
-  );
+  try {
+    dispatch(toggleSpinner());
 
-  if(applicationStatus==="DRAFT"){
-    
-    let response=await updateAppStatus(state,dispatch,"INITIATED");
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == "success") {
+    let applicationStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+      {}
+    );
+
+    if (applicationStatus === "DRAFT") {
+
+      let response = await updateAppStatus(state, dispatch, "INITIATED");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routePage(dispatch)
+      }
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
+    } else if (applicationStatus === "REASSIGN") {
+      let response = await updateAppStatus(state, dispatch, "RESENT");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routePage(dispatch)
+      }
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
+    }
+    else {
       routePage(dispatch)
     }
-    else if(responseStatus == "fail" || responseStatus == "Fail"){
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
-    }
-  }else if(applicationStatus==="REASSIGN"){
-    let response=await updateAppStatus(state,dispatch,"RESENT");
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == "success") {
-      routePage(dispatch)
-    }
-    else if(responseStatus == "fail" || responseStatus == "Fail"){
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
-    }
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.log(error)
   }
-  else
-  {
-    routePage(dispatch)
-  }
+
 };
 
 export const callbackforSummaryActionCancel = async (state, dispatch) => {
@@ -133,54 +143,10 @@ export const callbackforSummaryActionCancel = async (state, dispatch) => {
 
 };
 
-const callbackforSummaryActionDraft = async (state, dispatch) => {
-  //localStorage.setItem('btnType','DRAFT') 
-  let response = await createUpdateRoadCutNocApplication(state, dispatch, "INITIATED");
-  // alert("Submmited PP : "+JSON.stringify(response));  
-
-};
-
 const callbackforSummaryActionResend = async (state, dispatch) => {
-
-  //localStorage.setItem('btnType','INITIATED')
-
   let response = await createUpdateRoadCutNocApplication(state, dispatch, "INITIATED");
-  //alert("Submmited PP : "+JSON.stringify(response));  
-
 };
 
-// const callbackforSummaryAction = async (state, dispatch, action) => {
-
-//     if(action == 'SUBMIT')
-//     {
-//      // tenantId = getOPMSTenantId;
-//       const appendUrl =
-//       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//       const reviewUrl = `${appendUrl}/egov-opms/home`;
-//       dispatch(setRoute(reviewUrl));
-//     }
-//     else if(action == 'DRAFT')
-//     {
-//       const appendUrl =
-//       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//       const reviewUrl = `${appendUrl}/egov-opms/home`;
-//       dispatch(setRoute(reviewUrl));
-//     } else if(action == 'RESEND')
-//     {
-//       const appendUrl =
-//       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//       const reviewUrl = `${appendUrl}/egov-opms/home`;
-//       dispatch(setRoute(reviewUrl));
-//     }
-//     else
-//     {
-//       //tenantId = getOPMSTenantId;
-//       const appendUrl =
-//       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//       const reviewUrl = `${appendUrl}/egov-opms/home`;
-//       dispatch(setRoute(reviewUrl));
-//     }
-//   };
 
 var titlebarfooter = getCommonContainer({
   previousButton: {
@@ -450,7 +416,7 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
-    
+
     setSearchResponse(state, dispatch, applicationNumber, tenantId);
 
     localStorage.setItem("applicationNumber", applicationNumber);
@@ -500,21 +466,21 @@ const screenConfig = {
             //updateUrl: "/opms-services/v1/_update"
           }
         },
-        body:  checkForRole(roles, 'CITIZEN') ?  getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           //estimateSummary: estimateSummary,
           applicantSummary: applicantSummary,
           nocSummary: nocSummary,
           documentsSummary: documentsSummary,
           //taskStatusSummary:taskStatusSummary,
-          
-        }): 
-        getCommonCard({
-          // estimateSummary: estimateSummary,
-           applicantSummary: applicantSummary,
-           nocSummary: nocSummary,
-           // propertySummary: propertySummary,         
-           documentsSummary: documentsSummary
-         }),
+
+        }) :
+          getCommonCard({
+            // estimateSummary: estimateSummary,
+            applicantSummary: applicantSummary,
+            nocSummary: nocSummary,
+            // propertySummary: propertySummary,         
+            documentsSummary: documentsSummary
+          }),
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

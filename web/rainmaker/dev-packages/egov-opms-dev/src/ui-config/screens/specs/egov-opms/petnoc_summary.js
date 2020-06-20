@@ -35,6 +35,7 @@ import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { showHideAdhocPopup, showHideAdhocPopups, checkForRole } from "../utils";
 
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const stepsData = [
   { labelName: "PET NOC Details", labelKey: "Applicant_DETAILS" },
   { labelName: "Verternariy Details", labelKey: "STEP_PET_NOC_VETERINARY_DETAILS" },
@@ -168,10 +169,12 @@ const routeToPage = (dispatch, type) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   if (type === "payment") {
     const reviewUrl = `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`
+    dispatch(toggleSpinner());
     dispatch(setRoute(reviewUrl));
   } else if (type === "home") {
     const reviewUrl = localStorageGet('app_noc_status') === 'REASSIGN' ?
       `/egov-opms/my-applications` : ''
+    dispatch(toggleSpinner());
     dispatch(setRoute(reviewUrl));
   }
 
@@ -180,47 +183,56 @@ const routeToPage = (dispatch, type) => {
 
 
 export const callbackforsummaryactionpay = async (state, dispatch) => {
-  let applicationStatus = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
-    {}
-  );
+  try {
+    dispatch(toggleSpinner());
+    let applicationStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+      {}
+    );
 
-  if (applicationStatus === "DRAFT") {
-    if (localStorageGet("undertaking") == "accept") {
-      let response = await updateAppStatus(state, dispatch, "INITIATED");
+    if (applicationStatus === "DRAFT") {
+      if (localStorageGet("undertaking") == "accept") {
+        let response = await updateAppStatus(state, dispatch, "INITIATED");
+        let responseStatus = get(response, "status", "");
+        if (responseStatus == "success") {
+          routeToPage(dispatch, "payment")
+        }
+        else if (responseStatus == "fail" || responseStatus == "Fail") {
+          dispatch(toggleSpinner());
+          dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+        }
+      }
+      else {
+        dispatch(toggleSpinner());
+        let errorMessage = {
+          labelName:
+            "Please Check Undertaking box!",
+          labelKey: ""
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      }
+    }
+    else if (applicationStatus === "INITIATED") {
+      routeToPage(dispatch, "payment")
+    }
+    else if (applicationStatus === "REASSIGN") {
+      let response = await updateAppStatus(state, dispatch, "RESENT");
       let responseStatus = get(response, "status", "");
       if (responseStatus == "success") {
-        routeToPage(dispatch, "payment")
+        routeToPage(dispatch, "home")
       }
-      else if (responseStatus == "fail") {
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
         dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
       }
     }
     else {
-      let errorMessage = {
-        labelName:
-          "Please Check Undertaking box!",
-        labelKey: ""
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    }
-  }
-  else if (applicationStatus === "INITIATED") {
-    routeToPage(dispatch, "payment")
-  }
-  else if (applicationStatus === "REASSIGN") {
-    let response = await updateAppStatus(state, dispatch, "RESENT");
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == "success") {
       routeToPage(dispatch, "home")
     }
-    else if (responseStatus == "fail") {
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
-    }
-  }
-  else {
-    routeToPage(dispatch, "home")
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.log(error)
   }
 }
 

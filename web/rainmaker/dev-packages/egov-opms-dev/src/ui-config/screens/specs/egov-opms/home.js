@@ -18,6 +18,8 @@ const header = getCommonHeader(
     }
   }
 );
+
+var finalCardList = []
 let cardItems = [];
 if (checkForRole(roles, 'CITIZEN')) {
   const cardlist = [
@@ -30,7 +32,7 @@ if (checkForRole(roles, 'CITIZEN')) {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         pets
       </i>,
       route: "citizenMainLanding"
@@ -43,7 +45,7 @@ if (checkForRole(roles, 'CITIZEN')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         restaurant
       </i>,
       route: "sellMeatLanding"
@@ -56,7 +58,7 @@ if (checkForRole(roles, 'CITIZEN')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         picture_in_picture
       </i>,
       route: "advertisementLanding"
@@ -69,16 +71,17 @@ if (checkForRole(roles, 'CITIZEN')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         report_problem
       </i>,
       route: "roadcutLanding"
     }
 
   ];
+  finalCardList = cardlist;
   cardItems = cardlist;
 }
-else if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
+if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
   const cardlist = [
     {
       label: {
@@ -89,7 +92,7 @@ else if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         pets
       </i>,
       route: "search"
@@ -102,15 +105,16 @@ else if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         restaurant
       </i>,
       route: "sellmeat-search"
     }
   ];
+  finalCardList = finalCardList.concat(cardlist)
   cardItems = cardlist;
 }
-else if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')) {
+if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')) {
   const cardlist = [
     {
       label: {
@@ -120,15 +124,16 @@ else if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         report_problem
       </i>,
       route: "roadcut-search"
     }
   ];
+  finalCardList = finalCardList.concat(cardlist)
   cardItems = cardlist;
 }
-else if (checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER') || checkForRole(roles, 'AD') || checkForRole(roles, 'JEX')) {
+if (checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER') || checkForRole(roles, 'AD') || checkForRole(roles, 'JEX')) {
   const cardlist = [
     {
       label: {
@@ -138,15 +143,17 @@ else if (checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER') || ch
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
-        report_problem
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
+        picture_in_picture
       </i>,
       route: "advertisement-search"
     }
   ];
+  finalCardList = finalCardList.concat(cardlist)
+
   cardItems = cardlist;
 }
-else if (checkForRole(roles, 'SUPERINTENDENT')) {
+if (checkForRole(roles, 'SUPERINTENDENT')) {
   const cardlist = [
     {
       label: {
@@ -156,7 +163,7 @@ else if (checkForRole(roles, 'SUPERINTENDENT')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         restaurant
       </i>,
       route: "sellmeat-search"
@@ -169,12 +176,13 @@ else if (checkForRole(roles, 'SUPERINTENDENT')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize: "42px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         picture_in_picture
       </i>,
       route: "advertisement-search"
     }
   ];
+  finalCardList = finalCardList.concat(cardlist)
   cardItems = cardlist;
 }
 
@@ -198,7 +206,7 @@ const PermissionManagementSearchAndResult = {
           uiFramework: "custom-molecules",
           componentPath: "LandingPage",
           props: {
-            items: cardItems,
+            items: finalCardList,
             history: {}
           }
         },
