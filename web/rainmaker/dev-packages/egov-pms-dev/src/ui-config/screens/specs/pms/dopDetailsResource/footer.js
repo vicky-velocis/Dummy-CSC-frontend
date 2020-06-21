@@ -1079,38 +1079,24 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
       }
        
     }
-    if(fields.dues!==undefined 
-      &&fields.miscellaneous!==undefined 
-      &&fields.medicalRelief!==undefined 
-      &&fields.fma!==undefined       
-      &&fields.pensionArrear!==undefined       
-      &&fields.lpd!==undefined 
+    if(fields.lpd!==undefined 
+      &&fields.fma!==undefined 
       &&fields.cess!==undefined 
       &&fields.incomeTax!==undefined 
       &&fields.overPayment!==undefined 
-      &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
-      // &&fields.accountNumber!==undefined 
-      // &&fields.bankAddress!==undefined
       && fields.totalNoPayLeaves!==undefined) 
       {
         
-        if(fields.dues.isFieldValid ===false 
-          ||fields.miscellaneous.isFieldValid ===false 
-          ||fields.medicalRelief.isFieldValid ===false 
-          ||fields.fma.isFieldValid ===false           
-          ||fields.pensionArrear.isFieldValid ===false           
-          ||fields.lpd.isFieldValid ===false 
+        if(fields.lpd.isFieldValid ===false 
+          ||fields.fma.isFieldValid ===false 
           ||fields.cess.isFieldValid ===false 
           ||fields.incomeTax.isFieldValid ===false 
           ||fields.overPayment.isFieldValid ===false 
-          ||fields.ltc.isFieldValid ===false 
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
-          // ||fields.accountNumber.isFieldValid ===false
-          // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
             isFormValid = false
@@ -1734,6 +1720,15 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
               labelName:
                 "Please add at lease one valid dependent to get pension amount",
               labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };
+  
+          }
+          else if(!isGratuityAmountValid)
+          {
+            errorMessage = {
+              labelName:
+                "Total gratuity percentage should not be greater then 100",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
             };
   
           }

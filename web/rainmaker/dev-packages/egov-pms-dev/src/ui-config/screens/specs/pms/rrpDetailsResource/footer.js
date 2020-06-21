@@ -1243,6 +1243,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         };
 
       }
+      //alert(errorMessage.labelKey);
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
@@ -1260,6 +1261,7 @@ const callBackForNext = async (state, dispatch) => {
  {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
  // setButtons(details)
+ alert(activeStep)
  let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)
