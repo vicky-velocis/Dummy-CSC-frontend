@@ -68,6 +68,10 @@ const DocUploadComponents = Loadable({
   loader: () => import("./DocUploadComponents"),
   loading: () => <Loading />
 });
+const SwitchWithLabel = Loadable({
+  loader: () => import("./SwitchWithLabel"),
+  loading: () => <Loading />
+});
 
 
 export {
@@ -84,5 +88,6 @@ export {
 TaskStatusComponents,
 DocUploadComponents,
 TaskDialog,
-DocumentDialog
+DocumentDialog,
+SwitchWithLabel
 };

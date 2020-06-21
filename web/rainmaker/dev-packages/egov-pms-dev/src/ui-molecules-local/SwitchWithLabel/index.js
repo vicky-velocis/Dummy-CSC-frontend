@@ -24,14 +24,16 @@ class SwitchWithLabel extends Component {
         for (var i = 0; i < multiItems.length; i++) {
           handleField(
             screenKey,
-            `${compJPath}[${i}].item${i}.children.cardContent.children.asmtDetailsCardContainer.children.currentAssignment`,
+            `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.currentAssignment`,
             "props.value",
+            // `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.${componentname}`,
+            // "props.value",
             false
           );
         }
       }
     }
-   // this.props.onChange({ target: { value: event.target.checked } });
+    this.props.onChange({ target: { value: event.target.checked } });
     // prepareFinalObject(jsonPath, event.target.checked);
   };
 
