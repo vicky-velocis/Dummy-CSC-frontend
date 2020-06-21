@@ -7,7 +7,7 @@ import Switch from "../../ui-atoms-local/Switch";
 import get from "lodash/get";
 import { connect } from "react-redux";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import "./index.css";
+//import "./index.css";//
 
 class SwitchWithLabel extends Component {
   onSwitchChange = (event, checked) => {
