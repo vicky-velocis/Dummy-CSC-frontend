@@ -41,7 +41,6 @@ import {
   import {  getCommitieeGridByIdData  } from "../egov-pr/searchResource/citizenSearchFunctions"
   
   export const callBackForDelete = async (state, dispatch) => {
-    console.log("Delete clicked", state);
     changeStep(state, dispatch, "previous");
   };
   
@@ -55,7 +54,7 @@ import {
                 "tenantId": getTenantId(),
                 "RequestBody":{
                 
-                "committeeUuid": getQueryArg(window.location.href, "commiteeUUID"),
+                "committeeUuid": getQueryArg(window.location.href, "committeeUUID"),
                 "committeeName": "",
                 "committeeDescription": "",
                 "isActive": true,

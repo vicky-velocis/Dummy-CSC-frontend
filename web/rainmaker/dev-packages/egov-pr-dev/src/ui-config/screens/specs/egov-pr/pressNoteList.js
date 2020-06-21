@@ -40,16 +40,16 @@ const pageResetAndChange = (state, dispatch) => {
   
 };
 
-const NOCSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "pressNoteList",
   beforeInitScreen: (action, state, dispatch) => {
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-  //  dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+  //  dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
     dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
     dispatch(prepareFinalObject("eventReport", {}));
@@ -58,29 +58,7 @@ const NOCSearchAndResult = {
 
 
     const tenantId = getTenantId();
-    // const BSqueryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessServices", value: "PRSCP" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-    // const businessServiceData = JSON.parse(
-    //   localStorageGet("businessServiceData")
-    // );
-    // const data = find(businessServiceData, { businessService: "PRSCP" });
-    // const { states } = data || [];
-    // if (states && states.length > 0) {
-    //   const status = states.map((item, index) => {
-    //     return {
-    //       code: item.state
-    //     };
-    //   });
-    //   dispatch(
-    //     prepareFinalObject(
-    //       "applyScreenMdmsData.searchScreen.status",
-    //       status.filter(item => item.code != null)
-    //     )
-    //   );
-    // }
+    
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
@@ -119,10 +97,8 @@ const NOCSearchAndResult = {
           }
         
         },
-        // pendingApprovals,
         PressNoteFilter,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResultsPressList
       }
     },
@@ -142,4 +118,4 @@ const NOCSearchAndResult = {
   }
 };
 
-export default NOCSearchAndResult;
+export default PRSearchAndResult;

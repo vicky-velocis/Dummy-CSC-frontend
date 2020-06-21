@@ -183,9 +183,7 @@ if(flag){
       }
     });
 
-          console.log('payload : ', payload1)
         response = await httpRequest("post", "/prscp-services/v1/library/_upload", "", [], { RequestBody: data });
-      console.log('api response : ', response)
       if (response.ResponseInfo.status==="Success" || response.ResponseInfo.status==="success") {
 
 

@@ -28,7 +28,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const header = getCommonHeader({
-  labelName: "PR NOC",
+  labelName: "PR ",
   labelKey: "NOC_COMMON_NOC"
 });
 
@@ -97,74 +97,18 @@ const NOCSearchAndResult = {
           uiFramework: "custom-atoms",
           componentPath: "Container",
 
-          // children: {
-          //   header: {
-          //     gridDefination: {
-          //       xs: 12,
-          //       sm: 6
-          //     },
-          //     ...header
-          //   },
-          //   newApplicationButton: {
-          //     componentPath: "Button",
-          //     gridDefination: {
-          //       xs: 12,
-          //       sm: 6,
-          //       align: "right"
-          //     },
-          //     visible: enableButton,
-          //     props: {
-          //       variant: "contained",
-          //       color: "primary",
-          //       style: {
-          //         color: "white",
-          //         borderRadius: "2px",
-          //         width: "250px",
-          //         height: "48px"
-          //       }
-          //     },
-
-          //     children: {
-          //       plusIconInsideButton: {
-          //         uiFramework: "custom-atoms",
-          //         componentPath: "Icon",
-          //         props: {
-          //           iconName: "add",
-          //           style: {
-          //             fontSize: "24px"
-          //           }
-          //         }
-          //       },
-
-          //       buttonLabel: getLabel({
-          //         labelName: "NEW APPLICATION",
-          //         labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-          //       })
-          //     },
-          //     onClickDefination: {
-          //       action: "condition",
-          //       callBack: (state, dispatch) => {
-          //         pageResetAndChange(state, dispatch);
-          //         showHideAdhocPopup(state, dispatch, "search");
-          //       }
-          //     },
-          //     roleDefination: {
-          //       rolePath: "user-info.roles",
-          //       roles: ["NOC_CEMP", "SUPERUSER"]
-          //     }
-          //   }
-          // }
+         
         },
-        // pendingApprovals,
+      
       
         breakAfterSearch: getBreak(),
-        // progressStatus,
+     
         searchResults
       }
     },
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

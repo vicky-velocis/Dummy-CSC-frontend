@@ -36,7 +36,7 @@ export const fetchData = async (action, state, dispatch) => {
  
 const convertTime =(time)=> {
   // Check correct time format and split into components
-  debugger
+  
   //time=time+":00"
   time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)?$/) || [time];
   
@@ -113,9 +113,7 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
       }
 
     }
-   // console.log(response.ResponseBody)
-  //  debugger
- //   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  
 
     let data = response.ResponseBody.map(item => ({
 
@@ -156,7 +154,7 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
   }
 };
 export const getlibraryGridData = async (action, state, dispatch) => {
-  debugger
+  
   const response = await getLibraryGridData();
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
@@ -222,9 +220,7 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
       }
 
     }
-   // console.log(response.ResponseBody)
-  //  debugger
- //   dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+ 
 
     let data = response.ResponseBody.map(item => ({
       [getTextToLocalMapping("Event Id")]:
@@ -257,7 +253,6 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
        )
      );
     
-    // showHideTable(true, dispatch);
   
 
 
@@ -267,7 +262,7 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
   }
 };
 export const getPressGridData = async (action, state, dispatch) => {
-  debugger
+  
   const response = await getPressNoteGridData();
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
@@ -294,7 +289,6 @@ export const getPressGridData = async (action, state, dispatch) => {
        )
      );
     
-    // showHideTable(true, dispatch);
   
 
 
@@ -305,7 +299,7 @@ export const getPressGridData = async (action, state, dispatch) => {
 };
 
 export const getPressGridDatanote = async (action, state, dispatch) => {
-  debugger
+  
   const response = await getPressMasterGridData1();
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
@@ -339,7 +333,6 @@ export const getPressGridDatanote = async (action, state, dispatch) => {
      }));
 
 
-   //  screenConfiguration.screenConfig.generatepressNote.components.div.children.formwizardFirstStep.children.searchResultsPressMasterList
  
      dispatch(
        handleField(
@@ -349,9 +342,7 @@ export const getPressGridDatanote = async (action, state, dispatch) => {
          data
        )
      );
-		//localStorageSet("gridobj",gridobj);
- 
-    // showHideTable(true, dispatch);
+		
   
 return response.ResponseBody;
     }
@@ -394,7 +385,6 @@ export const getPressGridDatatender = async (action, state, dispatch) => {
      }));
 
 
-   //  screenConfiguration.screenConfig.generatepressNote.components.div.children.formwizardFirstStep.children.searchResultsPressMasterList
   
      dispatch(
        handleField(
@@ -405,7 +395,6 @@ export const getPressGridDatatender = async (action, state, dispatch) => {
        )
      );
     
-      // showHideTable(true, dispatch);
   
 return response.ResponseBody;
     }
@@ -416,61 +405,12 @@ return response.ResponseBody;
 
 
 export const getPressGridDataforview = async (action, state, dispatch) => {
-  debugger
+  
   const response = await getPressNoteGridData();
   
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
 
-
-    //   let fileStoreIds1 = response.ResponseBody[0].documentAttachment
-    //   documentsPreview.push({
-    //     title: "PRESSNOTE_DOCUMENT",
-    //     fileStoreId: doc,
-    //     linkText: "View"
-    //   })
-    //   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-    //   let fileUrls =
-    //     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-    //   documentsPreview = documentsPreview.map(function (doc, index) {
-    
-    // doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-    // doc['fileUrl']=fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-    
-    //   //  doc["name"] = `Document - ${index + 1}`
-    //     doc["name"] =
-    //       (fileUrls[doc.fileStoreId] &&
-    //         decodeURIComponent(
-    //           fileUrls[doc.fileStoreId]
-    //             .split(",")[0]
-    //             .split("?")[0]
-    //             .split("/")
-    //             .pop()
-    //             .slice(13)
-    //         )) ||
-    //       `Document - ${index + 1}`;
-  
-  
-    //       doc['fileName']=(fileUrls[doc.fileStoreId] &&
-    //         decodeURIComponent(
-    //           fileUrls[doc.fileStoreId]
-    //             .split(",")[0]
-    //             .split("?")[0]
-    //             .split("/")
-    //             .pop()
-    //             .slice(13)
-    //         )) ||
-    //       `Document - ${index + 1}`;
-    //     return doc;
-    //   });
-    
-
-    // dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-    // dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
-    
-
-      debugger
-      console.log(response.ResponseBody[0].publicationList)
 
 
     let selectedrows = []
@@ -594,7 +534,6 @@ export const getInviateGuestGridData = async (action, state, dispatch) => {
        )
      );
     
-   //  showHideTable(true, dispatch);
   
 
 
@@ -606,7 +545,7 @@ export const getInviateGuestGridData = async (action, state, dispatch) => {
 
 export const getGridDataTender = async (action, state, dispatch) => {
   const response = await getTenderGridData();
-  debugger
+  
   try {
     if (response && response.ResponseBody  && response.ResponseBody.length > 0) {
     let data = response.ResponseBody.map(item => ({
@@ -616,7 +555,7 @@ export const getGridDataTender = async (action, state, dispatch) => {
        [getTextToLocalMapping("Date")]:item.tenderDate || "-",
        [getTextToLocalMapping("File Number")]:item.fileNumber || "-"
      }));
-    debugger
+    
      dispatch(
        handleField(
          "tenderSearch",
@@ -634,7 +573,7 @@ export const getGridDataTender = async (action, state, dispatch) => {
 
 export const getGridDataBilling = async (action, state, dispatch) => {
   const response = await getBillingGrid();
-  debugger
+  
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
     let data = response.ResponseBody.map(item => ({
@@ -644,7 +583,7 @@ export const getGridDataBilling = async (action, state, dispatch) => {
       [getTextToLocalMapping("Subject")]:item.tenderSubject || "-",
       [getTextToLocalMapping("Size of Publication")]:item.publicationSize || "-"
      }));
-    debugger
+    
      dispatch(
        handleField(
          "billingSearch",
@@ -662,7 +601,7 @@ export const getGridDataBilling = async (action, state, dispatch) => {
 
 export const getGridDataPublishTender = async (action, state, dispatch) => {
   const response = await getPublishTenderGrid();
-  debugger
+  
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
 
@@ -677,7 +616,7 @@ export const getGridDataPublishTender = async (action, state, dispatch) => {
        [getTextToLocalMapping("tenderNoticeStatus")]:item.tenderNoticeStatus || "-"
        
      }));
-    debugger
+    
      dispatch(
        handleField(
          "TenderSearch",
@@ -704,8 +643,8 @@ export const GetEmployees = async (state, dispatch) => {
    let departments = [];
    let departments_query = [];
    var fetchflag = true;
-   lSRemoveItem("Invitelist");
-	lSRemoveItemlocal("Invitelist");
+  //  lSRemoveItem("Invitelist");
+	// lSRemoveItemlocal("Invitelist");
 	
 	departments = localStorageGet('selectedDepartmentsInvite') ? JSON.parse(localStorageGet('selectedDepartmentsInvite')) : "";
   if(departments.length > 0 )	
@@ -764,9 +703,7 @@ export const GetEmployees = async (state, dispatch) => {
   };
   try {
     let payload = null;
-	 // const queryStr = [
-        // { key: "departments", value: departments_query.join() },
-      // ]
+	 
 	   const queryStr = [
         { key: "departments", value: departments_query.join() },
         { key: "names", value: empname },
@@ -782,13 +719,11 @@ export const GetEmployees = async (state, dispatch) => {
       queryStr,
       {}
     );
-	console.log("payloaddddddddddddd");
-	console.log(payload)
+	
    let response = payload.Employees;
 	
     if (response) {
-     console.log("employee dataaaaaaaaaaaaaaaaaaaaa");
-     console.log(response);
+    
 	 
 	 // get department name 
 	 let mdmsBody = {
@@ -860,14 +795,31 @@ export const GetEmployees = async (state, dispatch) => {
 			
         }
   
-	let selectedrows = []
+  let selectedrows = []
+  let selectedIndexRows=[]
 	let allrows = response;
 	localStorageSet("gridobjlength", allrows.length)
 	allrows.map(item => {
 			selectedrows.push(JSON.stringify(item))
-	})
+  })
+  debugger
 	localStorageSet("gridobj",selectedrows);
+	let preSelectedRows =JSON.parse(localStorageGet("Invitelist"));
+  if(preSelectedRows!==null)
+  {
+  console.log('departments_query')
+
+  console.log(departments_query)
 	
+//   preSelectedRows = preSelectedRows.filter((el) => {
+//      return departments_query.includes(el.DepartmentName)
+
+ 
+// });	
+  
+console.log('preSelectedRows')
+console.log(preSelectedRows)
+  }
 	
     let data = response.map(item => ({
       [getTextToLocalMapping("Department")]:
@@ -878,7 +830,29 @@ export const GetEmployees = async (state, dispatch) => {
        [getTextToLocalMapping("Employee ID")]: (item.user !== null ? item.user.uuid : "-") || "-",
       
      }));
-    	  
+     if(preSelectedRows!==null){
+    
+      console.log(typeof(preSelectedRows))
+      response.map(function (item, index) {
+        if(item.user!=null && item.user.uuid){
+      
+          preSelectedRows.map(function (commiteeMember,index1) {
+          if(commiteeMember[4]===item.user.uuid){
+           
+            selectedIndexRows.push(index)
+            commiteeMember[5]=index
+         
+            
+            
+          }
+        });
+
+      }
+        });
+ localStorageSet("Invitelist",JSON.stringify(preSelectedRows))
+  
+    }
+	 
 	  dispatch(
        handleField(
          "createInvite",	
@@ -887,9 +861,14 @@ export const GetEmployees = async (state, dispatch) => {
          data
        )
      );
-	 // screenConfiguration.screenConfig.createInvite.components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid
-	 // screenConfiguration.screenConfig.createInvite.components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults.children.cardContent.children.invireselgrid
-	 //showHidesearchDepartmentEmployeesResults(true, dispatch)
+     dispatch(
+      handleField(
+        "createInvite",
+        "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+        "props.options.rowsSelected",
+        selectedIndexRows
+      )
+    );
   }
   else
   {
@@ -914,9 +893,7 @@ export const GetEmployees = async (state, dispatch) => {
   try {
     if (response) {
 
-     // let obj={}
-    //  obj['name']=response.ResponseBody
-     // obj['code']=response.ResponseBody
+     
       dispatch(prepareFinalObject("committieeData", response.ResponseBody));
       
     }
@@ -928,23 +905,9 @@ export const GetEmployees = async (state, dispatch) => {
 
 export const showinvitelist = async (state, dispatch) => {
 	
-	debugger;
+	;
 	 let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("InvitelistAll") :  localStorageGet("Invitelist") ;
 	 selectedrows = JSON.parse(selectedrows);
-	 // //dispatch(state, "applyScreenMdmsData.selectedemployeestoinvite",selectedrows,[]);
-	 
-	  // let data = selectedrows.map(item => ({
-      // [getTextToLocalMapping("Guest Type")]:"Internal",
-       // [getTextToLocalMapping("Guest Name")]: (item[1] !== null ? item[1] : "-") || "-",
-       // [getTextToLocalMapping("Guest Email")]: (item[3] !== null ? item[3] : "-") || "-",
-       // [getTextToLocalMapping("Guest Mobile Number")]: (item[2] !== null ? item[2] : "-") || "-",
-       // [getTextToLocalMapping("Status")]: "Upcoming",
-	   // [getTextToLocalMapping("Action")]: "X",
-	   
-       
-      
-     // }));
-    
 	
 	// Create Payload to Save Internal Guest List
 	let tenantId = getTenantId();
@@ -977,13 +940,10 @@ export const showinvitelist = async (state, dispatch) => {
 	 console.log(mdmsBody)
 	try {
     let payload = null;
-	//payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_save", [], { RequestBody: mdmsBody });
-//	payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_add", [], { RequestBody: mdmsBody });
+	
   payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_add", [], { RequestBody: mdmsBody });
   
-  //dispatch(prepareFinalObject("applyScreenMdmsData.departments", payload));
-	console.log("Payloadddddddddddddddd");
-	console.log(payload);
+
 	
 	if(payload.ResponseInfo.status === "Success")
 	{
@@ -1022,8 +982,8 @@ export const showinvitelist = async (state, dispatch) => {
 			false
 		)
       );
-	   //screenConfiguration.screenConfig.createInvite.components.adhocDialoginternal
-	 
+	   lSRemoveItem("Invitelist");
+	lSRemoveItemlocal("Invitelist");
 }	
 
 export const SearchEmployees = async (state, dispatch) => {
@@ -1141,14 +1101,12 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
 
 
 
-//dispatch(state, "screenConfiguration.preparedFinalObject.eventDetails",response.ResponseBody);
 dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
 
   let documentsPreview = [];
   
       // Get all documents from response
       let PublicRelation = get(state, "screenConfiguration.preparedFinalObject.eventDetails[0]", {});
-    debugger;
       let doc=JSON.parse(PublicRelation.eventString)
       console.log("uploaded docccccccccccccccccc");
       console.log(doc);
@@ -1176,27 +1134,14 @@ dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
               console.log("mappppppppppp");
               console.log(doc)
       doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-       //   doc["name"] = `Document - ${index + 1}`;
-          //doc["title"] = doctitle[index] ?  doctitle[index] : `Document - ${index + 1}`
-         // doc["name"] = doctitle[index];
-            // (fileUrls[doc.fileStoreId] &&
-              // decodeURIComponent(
-                // fileUrls[doc.fileStoreId]
-                  // .split(",")[0]
-                  // .split("?")[0]
-                  // .split("/")
-                  // .pop()
-                  // .slice(13)
-              // )) ||
-            // `Document - ${index + 1}`;
+      
           return doc;
         });
       }
       }
     }
 
-      console.log("documentspreviewwwwwwwwwwwwwwwwwwwwwwwww");
-      console.log(documentsPreview);
+    
         dispatch(prepareFinalObject("documentsPreview", documentsPreview));
     
 
@@ -1205,10 +1150,9 @@ dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
 	
 }	
 export const getSearchResultsViewLibrary= async (state, dispatch,data) => {
-  debugger
+  
   const response = await getSearchResultsViewLI(data);
   
-//dispatch(state, "screenConfiguration.preparedFinalObject.eventDetails",response.ResponseBody);
 dispatch(prepareFinalObject("library", response.ResponseBody));
 
   
@@ -1219,12 +1163,11 @@ let documentsPreview4=[];
 let documentsPreview5=[]
 let documentsPreview6 =[];
 
-      debugger
+      
         // Get all documents from response
         let PublicRelation = get(state, "screenConfiguration.preparedFinalObject.library[0]", {});
     
-      // let doc=JSON.parse(PublicRelation.documentId)
-      // let eventDoc =  PublicRelation.hasOwnProperty('documentId')?doc[0]['fileStoreId']:''
+    
 
       let buildingDocuments = jp.query(
         PublicRelation,
@@ -1326,7 +1269,6 @@ export const getSearchResultsViewPressnote= async (state, dispatch,data) => {
   
  
   
-//dispatch(state, "screenConfiguration.preparedFinalObject.eventDetails",response.ResponseBody);
 dispatch(prepareFinalObject("ResponseBody", response.ResponseBody));
 
   
@@ -1425,12 +1367,7 @@ dispatch(prepareFinalObject("documentsPreview"+count, documentsPreview1));
 
 // Delete a guest from invitation list grid
 export const deleteguestbyid = async (data, state, dispatch) => {
-  // const response = await getSearchResultsViewEvent(data);
-  
-// //dispatch(state, "screenConfiguration.preparedFinalObject.eventDetails",response.ResponseBody);
-// dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
-	//console.log("dataaaaaaaaaaaaaaaaa");
-	//console.log(data);
+ 
 	if(confirm("Are you sure you want to remove this guest?"))
 	{
 		let tenantId = getTenantId();
@@ -1451,11 +1388,9 @@ export const deleteguestbyid = async (data, state, dispatch) => {
 		 console.log(mdmsBody)
 		try {
 		let payload = null;
-		//payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_save", [], { RequestBody: mdmsBody });
-	//	payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_delete", "_delete", [], { RequestBody: mdmsBody });
+		
 		payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_delete", "_delete", [], { RequestBody: mdmsBody });
     
-    //dispatch(prepareFinalObject("applyScreenMdmsData.departments", payload));
 		console.log("Payloadddddddddddddddd");
 		console.log(payload);
 		
@@ -1522,13 +1457,9 @@ export const InvitePress = async (state, dispatch) => {
 	 console.log(mdmsBody)
 	try {
     let payload = null;
-	//payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_save", [], { RequestBody: mdmsBody });
-//	payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_add", [], { RequestBody: mdmsBody });
+	
 	payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_add", "_add", [], { RequestBody: mdmsBody });
-  
-  //dispatch(prepareFinalObject("applyScreenMdmsData.departments", payload));
-	console.log("Payloadddddddddddddddd");
-	console.log(payload);
+ 
 	
 	if(payload.ResponseInfo.status === "Success")
 	{
@@ -1566,7 +1497,6 @@ export const InvitePress = async (state, dispatch) => {
 			false
 		)
       );
-	   //screenConfiguration.screenConfig.createInvite.components.adhocDialoginternal
 	 
 }	
 
@@ -1702,11 +1632,10 @@ export const getEventInviteeList = async (action, state, dispatch) => {
 		   [getTextToLocalMapping("Guest Email")]:item["guestEmail"] !== null ? item["guestEmail"] : "-",
 		   [getTextToLocalMapping("Guest Mobile Number")]:item["guestMobile"] !== null ? item["guestMobile"] : "-",
 		   [getTextToLocalMapping("Status")]: "Upcoming",	   
-		   //[getTextToLocalMapping("Guest Action")]: "X",
 		   [getTextToLocalMapping("Guest ID")]:  item["eventGuestUuid"] !== null ? item["eventGuestUuid"] : "-"
 		   
 		  
-		 // }));
+		 
 			
 		
 			}));
@@ -1738,8 +1667,6 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
 
   let documentsPreview = [];
   
-  // Get all documents from response
- // let PublicRelation = get(state, "screenConfiguration.preparedFinalObject.tenderDetails[0]", {});
   let doc=response.ResponseBody[0].tenderDocument[0]['fileStoreId']
  
   if (doc !== '') {
@@ -1756,7 +1683,6 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
   doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
   doc['fileUrl']=fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
   
-    //  doc["name"] = `Document - ${index + 1}`
       doc["name"] =
         (fileUrls[doc.fileStoreId] &&
           decodeURIComponent(
@@ -1823,8 +1749,7 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
       item.pressMasterUuid || "-",
       
      }));
-    //screenConfiguration.screenConfig["tender-Summary-Publish"].
-	// resend grid data bind
+   
 	 dispatch(
        handleField(
          "tender-Summary-Publish",
@@ -1887,13 +1812,11 @@ export const GetEmployeebyName = async (state, dispatch,empname) => {
       queryStr,
       {}
     );
-	console.log("payloaddddddddddddd");
-	console.log(payload)
+
    let response = payload.Employees;
 	
     if (response) {
-     console.log("employee dataaaaaaaaaaaaaaaaaaaaa");
-     console.log(response);
+    
 	 
     let data = response.map(item => ({
       
@@ -2000,7 +1923,6 @@ export const getPressMasterGridData = async (action, state, dispatch) => {
 export const getPressMasterSearchResultsView= async (state, dispatch,data) => {
   const response = await getPressMasterSearchResultsViewMain(data);
   
-//dispatch(state, "screenConfiguration.preparedFinalObject.eventDetails",response.ResponseBody);
 dispatch(prepareFinalObject("pressMasterDetails", response.ResponseBody));
 }
 
@@ -2009,7 +1931,6 @@ export const getSearchResultsforTenderViewBilling= async (state, dispatch,data) 
   
   set(state, "screenConfiguration.preparedFinalObject.tenderDetails",response.ResponseBody);
 
-  //dispatch(prepareFinalObject("tenderDetails", response.ResponseBody));
   
 }	
 
@@ -2046,7 +1967,6 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 	 const queryStr = [
     
       { key: "departments", value: departments_query.join() },
-       //{ key: "departments", value:"PHS01" },
         { key: "names", value: empname },
 		{ key: "tenantId", value: getTenantId() },
       ]
@@ -2057,13 +1977,11 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
       queryStr,
       {}
     );
-	console.log("payloaddddddddddddd");
-	console.log(payload)
+	
    let response = payload.Employees;
 	
     if (response) {
-    //  console.log("employee dataaaaaaaaaaaaaaaaaaaaa");
-    //  console.log(response);
+    
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -2157,10 +2075,21 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 	})
 	localStorageSet("gridobj",selectedrows);
   let preSelectedRows = 	JSON.parse(localStorageGet("committeelist"));
-  
+  if(preSelectedRows!==null)
+  {
+  console.log('departments_query')
+
+  console.log(departments_query)
 	
-   
-	  
+  preSelectedRows = preSelectedRows.filter((el) => {
+     return departments_query.includes(el.DepartmentName)
+
+ 
+});	
+  
+console.log('preSelectedRows')
+console.log(preSelectedRows)
+  }
 	  
     let data = response.map(item => ({
      
@@ -2186,16 +2115,16 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
           if(commiteeMember['Employee ID']===item.user.uuid){
            
             selectedIndexRows.push(index)
-            //localStorageSet("committeelist", JSON.stringify(selectedrowslocal));
-            
+            commiteeMember['index']=index
+          //  localStorageSet("committeelist")
             
             
           }
         });
+
       }
         });
-     
-  
+ localStorageSet("committeelist",JSON.stringify(preSelectedRows))
   
     }
 	 
@@ -2302,7 +2231,6 @@ export const GetCommiteeEmployeebyName = async (state, dispatch,empname) => {
 
 export const getCommitieeGridByIdData = async (action, state, dispatch,payload_committie) => {
   
-    // setCommittiee(action, state, dispatch,payload_committie);
    const response = await getCommittiee(payload_committie);
  
  for(let i=0;i<response.ResponseBody[0].committeeMember.length;i++)
@@ -2459,7 +2387,6 @@ export const getCommitieeGridData = async (action, state, dispatch) => {
     "committeeMember": [ ]
     }
     }
-   // setCommittiee(action, state, dispatch,payload_committie);
   const response = await getCommittiee(payload_committie);
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
@@ -2482,7 +2409,7 @@ export const getCommitieeGridData = async (action, state, dispatch) => {
 
 
      
-  //  alert(JSON.stringify(data))
+  
      dispatch(
        handleField(
          "committeeGrid",
@@ -2550,21 +2477,8 @@ export const InviteExternalEmployees = async (state, dispatch, excelid) => {
 export const resendinvitationpress = async (state, dispatch, type) => {
   let data1=localStorageGet("ResendInvitelist")
   let data2=localStorageGet("ResendInvitelistAll")
-  console.log("data")
-//console.log(Object.keys(data1).length)
-  
-  
+ 
 
-  
-  // console.log(typeof data1)
-  // console.log(data1)
-  // if(data1!=="[]")
-  // {
-  //   alert('in right')
-  // }
-  // else{
-  //   alert('in wrong')
-  // }
   
   if(localStorageGet("ResendInvitelist") !==  null || localStorageGet("ResendInvitelistAll") !==  null)
   {
@@ -2585,7 +2499,7 @@ export const resendinvitationpress = async (state, dispatch, type) => {
 }
 
 export const resendinvitationtender = async (state, dispatch, type) => {
-  debugger
+  
  if(localStorageGet("ResendInvitelist") !==  null || localStorageGet("ResendInvitelistAll") !==  null  )
     {
 		let response = resendinvitation(state, dispatch, type="tender")
@@ -2656,11 +2570,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
     
 		let invitedGuest = selectedrows.map((item , index)=>{
 		   invitedGuestlist[index] = {
-							// "receiverUuid":item[4],
-							// "receiverName":item[1],
-							// "receiverEmail":item[3],
-              // "receiverMobile":item[2],
-              
+					
 
               "receiverUuid":item[5],
 							"receiverName":item[2],
@@ -2702,20 +2612,20 @@ export const resendinvitation = async (state, dispatch, type="event") => {
       if(localStorageGet("resendmodule") === "EVENT")
       {
 
-        window.location.href= "/egov-pr/eventList";
-    //dispatch(setRoute(`eventList`))
+    //    window.location.href= "/egov-pr/eventList";
+    dispatch(setRoute(`eventList`))
     
     
 	  }	
 	  else if(localStorageGet("resendmodule") == "PRESSNOTE")
       {
-        window.location.href = "/egov-pr/pressNoteList";
-	//	dispatch(setRoute(`pressNoteList`))
+//        window.location.href = "/egov-pr/pressNoteList";
+	dispatch(setRoute(`pressNoteList`))
 	  }	
 	  else
 	  {
-      window.location.href= "/egov-pr/TenderSearch";
-		//dispatch(setRoute(`TenderSearch`))
+      //window.location.href= "/egov-pr/TenderSearch";
+		dispatch(setRoute(`TenderSearch`))
 	  }	
       
    

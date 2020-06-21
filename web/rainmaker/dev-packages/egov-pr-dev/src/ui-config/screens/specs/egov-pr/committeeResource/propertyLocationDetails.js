@@ -34,14 +34,7 @@ const showHideMapPopup = (state, dispatch) => {
   );
 };
 
-const getMapLocator = textSchema => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-noc",
-    componentPath: "MapLocator",
-    props: {}
-  };
-};
+
 
 const getDetailsFromProperty = async (state, dispatch) => {
   try {
@@ -157,7 +150,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventTitle"
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventTitle"
       }),
       EventLocation: getTextField({
         label: {
@@ -170,7 +163,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventLocation"
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventLocation"
       }),
       sector: getTextField({
         label: {
@@ -183,7 +176,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.sector"
+        jsonPath: "PublicRelation[0].CreateEventDetails.sector"
       }),
       organizationDetail: {
         ...getSelectField({
@@ -198,7 +191,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_ORGANIZATION_DETAIL_PLACEHOLDER"
           },
           //sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "PublicRealation[0].CreateEventDetails.organizationDetail",
+          jsonPath: "PublicRelation[0].CreateEventDetails.organizationDetail",
           required: false,
           props: {
             className:"applicant-details-error",
@@ -221,7 +214,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_TYPE_OF_EVENT_PLACEHOLDER"
           },
           //sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "PublicRealation[0].CreateEventDetails.typeOfEvent",
+          jsonPath: "PublicRelation[0].CreateEventDetails.typeOfEvent",
           required: false,
           props: {
             className:"applicant-details-error",
@@ -242,7 +235,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.budjet"
+        jsonPath: "PublicRelation[0].CreateEventDetails.budjet"
       }),
       commitiee: {
         ...getSelectField({
@@ -257,7 +250,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "NOC_COMMITIEE_PLACEHOLDER"
           },
           //sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
-          jsonPath: "PublicRealation[0].CreateEventDetails.commitiee",
+          jsonPath: "PublicRelation[0].CreateEventDetails.commitiee",
           required: false,
           props: {
             className:"applicant-details-error",
@@ -269,20 +262,7 @@ export const propertyLocationDetails = getCommonCard(
       },
       
     }),
-    mapsDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          children: {
-            popup: getMapLocator()
-          }
-        }
-      }
-    }
+    
   },
   {
     style: { overflow: "visible" }

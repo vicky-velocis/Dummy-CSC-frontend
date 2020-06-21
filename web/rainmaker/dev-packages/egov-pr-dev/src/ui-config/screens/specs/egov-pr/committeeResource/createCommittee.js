@@ -47,7 +47,7 @@ import {
           
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           
-        jsonPath: "PublicRealation[0].CreateCommitteeDetails.committeename",
+        jsonPath: "PublicRelation[0].CreateCommitteeDetails.committeename",
 		 required: true,
       }),
 

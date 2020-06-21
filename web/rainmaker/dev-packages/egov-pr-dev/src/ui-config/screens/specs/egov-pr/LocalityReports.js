@@ -45,7 +45,7 @@ import {
     
   };
   const getMdmsData = async (action, state, dispatch) => {
-    debugger
+    
     let tenantId =commonConfig.tenantId;
      
   
@@ -97,12 +97,12 @@ import {
     beforeInitScreen: (action, state, dispatch) => {
       dispatch(prepareFinalObject("eventReport", {}));
       dispatch(prepareFinalObject("TimeseriesReport", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-      dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
  
   
   

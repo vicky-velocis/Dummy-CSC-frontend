@@ -1,6 +1,5 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import TodayIcon from "../../../../ui-atoms-local/Icons/TodayIcon";
 import LibraryIcon from "../../../../ui-atoms-local/Icons/LibraryIcon"
@@ -8,7 +7,6 @@ import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-import { pbkdf2 } from "crypto";
 import {
   getFileUrlFromAPI,
   getQueryArg,
@@ -23,6 +21,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+import { checkForRole } from "../../../../ui-utils/commons";
 
 
 
@@ -42,11 +41,10 @@ const header = getCommonHeader(
     }
   }
 )
- 
 
 
 let cardItems=[]
-if(JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER")
+if(checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER'))
 {
 const cardList = [
   
@@ -62,7 +60,6 @@ const cardList = [
     class="material-icons module-page-icon" style={{fontSize:"50px"}}>
    local_library
   </i>, 
-    // icon: <LibraryIcon />,
     route: "library-search"
   },
 
@@ -84,7 +81,6 @@ else{
       class="material-icons module-page-icon" style={{fontSize:"50px"}}>
      event
     </i>,
-    // icon: <TodayIcon />,
       route: "apply"
     },
     {
@@ -101,7 +97,6 @@ else{
     </i>,
    
     
-      // icon: <MyApplicationIcon />,
       route: "search"
     },
     {
@@ -130,7 +125,6 @@ else{
       class="material-icons module-page-icon" style={{fontSize:"50px"}}>
      local_library
     </i>, 
-      // icon: <LibraryIcon />,
       route: "library-search"
     },
   

@@ -1,6 +1,5 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import TodayIcon from "../../../../ui-atoms-local/Icons/TodayIcon";
 import LibraryIcon from "../../../../ui-atoms-local/Icons/LibraryIcon"
@@ -54,7 +53,7 @@ const cardItems = [
 
 ];
 
-const tradeLicenseSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "eventHome",
   beforeInitScreen: (action, state, dispatch) => {
@@ -95,4 +94,4 @@ const tradeLicenseSearchAndResult = {
   }
 };
 
-export default tradeLicenseSearchAndResult;
+export default PRSearchAndResult;

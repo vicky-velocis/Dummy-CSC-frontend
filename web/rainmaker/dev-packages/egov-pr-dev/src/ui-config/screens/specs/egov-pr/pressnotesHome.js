@@ -19,7 +19,6 @@ const header = getCommonHeader(
     }
   }
 );
-//alert("HOME")
 const cardItems = [
   {
     label: {
@@ -43,15 +42,7 @@ const cardItems = [
     icon: <MyApplicationIcon />,
     route: "pressNoteList"
   },
-  
-//   {
-//     label: {
-//       labelKey: "Committee Master",
-//       labelName: "COMMITTEE_MASTER"
-//     },
-//     icon: <MyApplicationIcon />,
-//     route: "my-applications-committee"
-//   }
+
 ];
 
 const PRSCPSearchAndResult = {
@@ -89,27 +80,10 @@ const PRSCPSearchAndResult = {
         
       }
     },
-    // cityPickerDialog: {
-    //   componentPath: "Dialog",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md"
-    //   },
-    //   children: {
-    //     dialogContent: {
-    //       componentPath: "DialogContent",
-    //       props: {
-    //         style: { minHeight: "180px", minWidth: "365px" }
-    //       },
-    //       children: {
-    //         popup: cityPicker
-    //       }
-    //     }
-    //   }
-    // }
+  
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

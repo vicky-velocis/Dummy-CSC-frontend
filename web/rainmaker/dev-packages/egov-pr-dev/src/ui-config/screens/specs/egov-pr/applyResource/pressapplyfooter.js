@@ -78,7 +78,6 @@ const callBackForSubmit = async (state, dispatch) => {
     "pressMasterUuid":pressdata[i]['Press master UUID'],  
   
   }
-  // console.log(obj)
   arr.push(obj)
   }
   let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -117,11 +116,10 @@ const callBackForSubmit = async (state, dispatch) => {
   
   
   else{
-    debugger
+    
     if(get(state.screenConfiguration.preparedFinalObject, "pressnote.subjectemail") !==  undefined && get(state.screenConfiguration.preparedFinalObject, "pressnote.subjectemail") !==  "")
     {
   
-  console.log(localStorageGet("PressNoteList")) 
   
   let pressdata='';
   if(localStorageGet("PressNoteList")!== null){
@@ -131,7 +129,6 @@ const callBackForSubmit = async (state, dispatch) => {
 	pressdata=JSON.parse(localStorageGet("PressNoteListAll"))
   
   }
-  console.log(pressdata)
   let arr=[]
   for(let i=0;i<pressdata.length;i++)
   {
@@ -140,7 +137,6 @@ const callBackForSubmit = async (state, dispatch) => {
       
       
       }
-    console.log(obj)
       arr.push(obj)
       }
       let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -184,7 +180,7 @@ const callBackForSubmit = async (state, dispatch) => {
   };
   
 const moveToReview = (state, dispatch) => {
-  debugger
+  
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -263,8 +259,8 @@ const getMdmsData = async (state, dispatch) => {
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.PR.Documents",
+        payload.MdmsRes.PR.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -358,7 +354,7 @@ const callBackForNext = async (state, dispatch) => {
 	}
  }
 
-debugger
+
   if (activeStep !== 2) {
     if (get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", "")=="") {
       hasFieldToaster=true;

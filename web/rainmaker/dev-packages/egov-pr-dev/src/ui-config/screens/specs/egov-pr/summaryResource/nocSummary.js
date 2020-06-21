@@ -81,9 +81,7 @@ export const nocSummary = getCommonGrayCard({
   eventDateTime: getHeader("Event Date & Time"),
   cardTwo: EventDataAndTime,
   eventSocialMediaLinks: getHeader("Event Social Media Link"),
-  // cardThree: EventSocialMediaLinks,
-  // eventDescription: getHeader("Event Description"),
-  // cardFour: EventDescription
+  
 });
 
 
@@ -96,9 +94,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].PublicRelationDetails.PublicRelationType"
-      // callBack: value => {
-      //   return value.split(".")[0];
-      // }
+     
     }
   ),
   eventLocation: getLabelWithValue(
@@ -108,9 +104,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   sector: getLabelWithValue(
@@ -120,9 +114,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   organizationDetails: getLabelWithValue(
@@ -132,9 +124,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   ),
   TypeOfEvent: getLabelWithValue(
@@ -144,9 +134,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   EventBudjet: getLabelWithValue(
@@ -156,9 +144,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   ),
   committiee: getLabelWithValue(
@@ -168,9 +154,7 @@ const EventDetails =getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   ),
   eventDescription: getLabelWithValue(
@@ -180,9 +164,7 @@ const EventDetails =getCommonGrayCard({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+  
 }
 )
 
@@ -199,9 +181,7 @@ const EventDataAndTime = getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+      
     }
   ),
   endDate: getLabelWithValue(
@@ -211,9 +191,7 @@ const EventDataAndTime = getCommonGrayCard({
     },
     {
       jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-      // callBack: value => {
-      //   return value.split(".")[1];
-      // }
+     
     }
   )
 , startTime: getLabelWithValue(
@@ -223,9 +201,7 @@ const EventDataAndTime = getCommonGrayCard({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+  
 }
 )
 , endTime: getLabelWithValue(
@@ -235,9 +211,7 @@ const EventDataAndTime = getCommonGrayCard({
 },
 {
   jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-  // callBack: value => {
-  //   return value.split(".")[1];
-  // }
+  
 }
 )
 
@@ -254,9 +228,7 @@ const EventSocialMediaLinks = getCommonGrayCard({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+           
           }
           ), eventTwitterUrl: getLabelWithValue(
           {
@@ -265,9 +237,7 @@ const EventSocialMediaLinks = getCommonGrayCard({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+            
           }
           ), eventInstagram: getLabelWithValue(
           {
@@ -276,9 +246,7 @@ const EventSocialMediaLinks = getCommonGrayCard({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+           
           }
           )
 
@@ -296,9 +264,7 @@ const EventDescription = getCommonGrayCard({
           },
           {
             jsonPath: "PublicRelations[0].provisionPublicRelationNumber"
-            // callBack: value => {
-            //   return value.split(".")[1];
-            // }
+          
           }
           )
 })

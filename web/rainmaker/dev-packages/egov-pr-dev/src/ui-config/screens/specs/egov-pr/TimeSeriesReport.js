@@ -45,7 +45,7 @@ const pageResetAndChange = (state, dispatch) => {
   
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
+  
   let tenantId = commonConfig.tenantId;
     
   let mdmsBody = {
@@ -91,18 +91,18 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
-const NOCSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "TimeSeriesReport",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("eventReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
   //getGridData(action, state, dispatch);
 
 
@@ -178,4 +178,4 @@ const NOCSearchAndResult = {
   }
 };
 
-export default NOCSearchAndResult;
+export default PRSearchAndResult;

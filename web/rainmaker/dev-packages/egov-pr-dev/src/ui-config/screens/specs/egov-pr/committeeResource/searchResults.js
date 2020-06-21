@@ -34,7 +34,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import store from "redux/store";
+import store from "ui-redux/store";
 const getLocalTextFromCode = localCode => {
   return JSON.parse(getLocalization("localization_en_IN")).find(
     item => item.code === localCode
@@ -47,39 +47,32 @@ import {showinvitelist, deleteguestbyid} from "../searchResource/citizenSearchFu
 
 const onRowDelete = async (rowData, allrowdata) => {
 
-	//console.log("Deleteeeeeeeeeeeeeeeeeee");
-	//console.log(rowData)
-	//console.log(allrowdata)
 	
 	deleteguestbyid(rowData)
 }
 
-// const load_invite_summary(row)= async (rowData, allrowdata) => {
 
 const load_invite_summary = rowData => {
 		const reviewUrl = `event_summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&tenantId=`+getTenantId();
-		window.location.href =reviewUrl;
+    window.location.href =reviewUrl;
+   // dispatch(setRoute(load_invite_summary));
  }
 
 const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) => {
 
-	console.log("SELCT ALL CLICKKKKKKKKKKKKKKKKK Employee");
-	console.log(rowData)
-	console.log(allrowdata)
 	
 		if(rowData.length == localStorageGet("gridobjlength") && allrowdata.length == localStorageGet("gridobjlength"))
 		{
 			let selectedrows = [];
-		//	let selectedrows1=[];
-					
+	
 			 let tempdata = localStorageGet("gridobj");
 			 console.log(tempdata);
-			// let tempdata1 = tempdata.split('},{').join('}|');
+		
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
-				tempdata2.map( item => {
-					//console.log("------");
+				tempdata2.map( (item,index)=> {
+				
 					console.log((item));
 					let temp = JSON.parse(item) 
 					 let obj={}
@@ -90,7 +83,8 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 					  obj['Email ID']=temp.user ? temp.user.emailId : "-"
 					  obj['Department Id']=temp.assignments ? temp.assignments[0].id:"-"
 					  obj['Employee ID']=temp.user ? temp.user.uuid : "-"
-					  obj['DepartmentName']=temp.assignments ? temp.assignments[0].department : "-"
+            obj['DepartmentName']=temp.assignments ? temp.assignments[0].department : "-"
+            obj['index']=index
 					selectedrows.push(obj)
 					
 			})
@@ -106,22 +100,23 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 			
 		}
 } 
-const onEmployeeselect = async (type, rowData, state,dispatch,action) => {
+const onEmployeeselect = async (type, rowData, state,dispatch,action,index,allRowsSelected) => {
 
-//	alert('******************************')
 	if(type == "cell")
 	{
-	
+    console.log('cellindex')
+    console.log(allRowsSelected)
 	}
 	else
 	{	
-    
-		console.log(type);
-		console.log( rowData);
-	//	debugger;
+    console.log('index')
+    console.log(index.rowIndex)
+    console.log(allRowsSelected)
+		
 		let selectedrows = [];
     let localinvdata = localStorageGet("committeelist");
      
+var selectedRows1=[]
 		console.log("committeelist");
 		console.log( localinvdata);
 		if(localinvdata === null || localinvdata === "undefined")
@@ -139,7 +134,23 @@ if(tempAll!==null)
           checked=true;
           tempAll.splice(index,1)
           localStorageSet("committeelist", JSON.stringify(tempAll));	
+          let selIndex1=[]
+          let selIndex= JSON.parse(localStorageGet("committeelist"));
+          selIndex.map((item,index)=>{
           
+             selIndex1.push(item['index'])	
+             
+          
+           })
+           
+       store.dispatch(
+         handleField(
+           "createCommitteeMaster",
+           "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
+           "props.options.rowsSelected",
+           selIndex1
+         )
+       );
         }
         })
 
@@ -154,12 +165,32 @@ if(checked===false){
       obj['Employee ID']=rowData[6]
       obj['Designation']=rowData[1]
       obj['DepartmentName']=rowData[7]
-    //  selectedrows.push(rowData)
+      obj['index']=index.rowIndex
       selectedrows.push(obj)
       
-      localStorageSet("committeelist", JSON.stringify(selectedrows));
+    localStorageSet("committeelist", JSON.stringify(selectedrows));
+let selIndex1=[]
+   let selIndex= JSON.parse(localStorageGet("committeelist"));
+   selIndex.map((item,index)=>{
+  
+      selIndex1.push(item['index'])	
+      
+   
+    })
+    
+store.dispatch(
+  handleField(
+    "createCommitteeMaster",
+    "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
+    "props.options.rowsSelected",
+    selIndex1
+  )
+);
+    
+
+
       let data = selectedrows.map(item => ({
-        // alert(item)
+        
         [getTextToLocalMapping("Department")]:
         item.Department || "-",
          [getTextToLocalMapping("Name")]: item['Employee Name'] || "-",
@@ -176,20 +207,17 @@ if(checked===false){
        }));
      
       }  
-      // store.dispatch(
-        // handleField(
-          // "createCommitteeMaster",
-          // "components.div.children.formwizardSecondStep.children.searchDepartmentEmployeesResults_committee1",
-          // "props.data",
-          // data
-        // )
-      // );
+
+
+
+
+      
     
       
 		}
 		else
 		{
-    //  alert('bb')
+   
       
 console.log('in else')
       let temp = JSON.parse(localStorageGet("committeelist"));
@@ -200,11 +228,8 @@ console.log('in else')
   let flag=false;
 
 
-    //   debugger
-    //   let filteredPeople = temp.filter((item) => 
-    //   item['Employee ID'] !== rowData[6]
-    // );
-    debugger
+    
+    
       let checked =false;
     temp.map((item,index)=>{
       if(item['Employee ID'] === rowData[6])
@@ -212,7 +237,23 @@ console.log('in else')
         checked=true;
         temp.splice(index,1)
         localStorageSet("committeelist", JSON.stringify(temp));	
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("committeelist"));
+        selIndex.map((item,index)=>{
         
+           selIndex1.push(item['index'])	
+           
+        
+         })
+         
+     store.dispatch(
+       handleField(
+         "createCommitteeMaster",
+         "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
+         "props.options.rowsSelected",
+         selIndex1
+       )
+     );
       }
       })
 if(checked===false){
@@ -227,38 +268,39 @@ if(checked===false){
   obj['Employee ID']=rowData[6]
   obj['Designation']=rowData[1]
   obj['DepartmentName']=rowData[7]
-  
+  obj['index']=index.rowIndex
   selectedrows.push(obj)
   localStorageSet("committeelist", JSON.stringify(selectedrows));	
   
+
+  let selIndex1=[]
+     let selIndex= JSON.parse(localStorageGet("committeelist"));
+     selIndex.map((item,index)=>{
+     
+        selIndex1.push(item['index'])	
+        
+     
+      })
+      
+  store.dispatch(
+    handleField(
+      "createCommitteeMaster",
+      "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+  );
+      
+
+
 }
 
-// if(flag===false)
-// {
-   
-// selectedrows = filteredPeople;
-// let obj={}
 
-// obj['Department']=rowData[0]
-// obj['Employee Name']=rowData[2]
-// obj['Mobile No']=rowData[3]
-// obj['Email ID']=rowData[4]
-// obj['Department Id']=rowData[5]
-// obj['Employee ID']=rowData[6]
-// obj['Designation']=rowData[1]
-// obj['DepartmentName']=rowData[7]
-
-// selectedrows.push(obj)
-
- 
-
-//    localStorageSet("committeelist", JSON.stringify(selectedrows));	
-// }
    console.log(localStorageGet("committeelist"))
     
 
       let data = selectedrows.map(item => ({
-        // alert(item)
+      
         [getTextToLocalMapping("Department")]:
         item.Department || "-",
          [getTextToLocalMapping("Employee Name")]: item['Employee Name'] || "-",
@@ -272,14 +314,7 @@ if(checked===false){
        }));
      
       
-      // store.dispatch(
-        // handleField(
-          // "createCommitteeMaster",
-          // "components.div.children.formwizardSecondStep.children.searchDepartmentEmployeesResults_committee1",
-          // "props.data",
-          // data
-        // )
-      // );
+     
     
     }	
 	}
@@ -287,120 +322,12 @@ if(checked===false){
 };
 
  
-    
-export const textToLocalMapping = {
-  "Guest Type": getLocaleLabels(
-    "Guest Type",
-    "PR_INVITE_GUEST_TYPR",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Name": getLocaleLabels(
-    "Guest Name",
-    "PR_INVITE_NAME_TYPR",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Email": getLocaleLabels(
-    "Guest Email",
-    "PR_INVITE_GUEST_EMAIL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Mobile Number": getLocaleLabels(
-    "Guest Mobile Number",
-    "PR_INVITE_GUEST_CONTACT",
-    getTransformedLocalStorgaeLabels()
-  ),
-   "Guest Action": getLocaleLabels(
-    "Guest Action",
-    "PR_INVITE_GUEST_ACTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-   "Guest ID": getLocaleLabels(
-    "Guest ID",
-    "PR_INVITE_GUEST_ID",
-    getTransformedLocalStorgaeLabels()
-  ),
- 
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Status: getLocaleLabels(
-    "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  INITIATED: getLocaleLabels(
-    "Initiated,",
-    "NOC_INITIATED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPLIED: getLocaleLabels(
-    "Applied",
-    "NOC_APPLIED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  DOCUMENTVERIFY: getLocaleLabels(
-    "Pending for Document Verification",
-    "WF_FIRENOC_DOCUMENTVERIFY",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPROVED: getLocaleLabels(
-    "Approved",
-    "NOC_APPROVED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  REJECTED: getLocaleLabels(
-    "Rejected",
-    "NOC_REJECTED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  CANCELLED: getLocaleLabels(
-    "Cancelled",
-    "NOC_CANCELLED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGAPPROVAL: getLocaleLabels(
-    "Pending for Approval",
-    "WF_FIRENOC_PENDINGAPPROVAL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGPAYMENT: getLocaleLabels(
-    "Pending payment",
-    "WF_FIRENOC_PENDINGPAYMENT",
-    getTransformedLocalStorgaeLabels()
-  ),
-  FIELDINSPECTION: getLocaleLabels(
-    "Pending for Field Inspection",
-    "WF_FIRENOC_FIELDINSPECTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Search Results for Fire-NOC Applications": getLocaleLabels(
-    "Search Results for Fire-NOC Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
-    getTransformedLocalStorgaeLabels()
-  )
-};
+
 
 export const searchDepartmentEmployeesResults = getCommonCard({
    invireselgrid : {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+ 
   componentPath: "Table",
   visible: true,
   props: {
@@ -413,7 +340,6 @@ export const searchDepartmentEmployeesResults = getCommonCard({
       
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
@@ -430,18 +356,14 @@ export const searchDepartmentEmployeesResults = getCommonCard({
      
         onEmployeeselect('rowdata',row,dispatch)
       },
-	  // onRowsDelete:(rowsDeleted, data) =>{
-		// onRowDelete(rowsDeleted, data)
-	  // },
+	  
 	  selectedRows: {
       text: "row(s) selected",
       delete: "Delete",
       deleteAria: "Delete Selected Rows",
     }
 	  
-	  // onCellClick: (colData)=>{
-		// void()
-	  // },
+	  
     },
     customSortColumn: {
       column: "Application Date",
@@ -494,7 +416,6 @@ Invite: {
 
 export const searchInvitedEmployeesResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {
@@ -509,7 +430,6 @@ export const searchInvitedEmployeesResults = {
 		getTextToLocalMapping("Guest ID"),
 		
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
@@ -519,13 +439,7 @@ export const searchInvitedEmployeesResults = {
 	  disableToolbarSelect : false,
 	  selectableRows: false,
       rowsPerPageOptions: [5, 10, 15, 20],
-	  // onRowsSelect:(current , all) =>{
-		// alert("Seelected Row")
-		// console.log("currenttttttttttt");
-		// console.log(current);
-		// console.log("allllllllllllllllllllllllll");
-		// console.log(all);
-	  // }
+	 
       onRowClick: (rowsDeleted, data) => {
         onRowDelete(rowsDeleted, data);
       }
@@ -568,7 +482,6 @@ export const eventlistforinvitation = {
       getTextToLocalMapping("Event Status"),
       getTextToLocalMapping("Event UUID")
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
@@ -600,12 +513,11 @@ export const eventlistforinvitation = {
 
 export const searchDepartmentEmployeesResults_committee = getCommonCard({
   gridtitle :  getCommonHeader({
-      labelName: `Select Employee`, //later use getFinancialYearDates
+      labelName: `Select Employee`, 
       labelKey: "PR_SELECT_EMPLOYEE"
     }),
   committieegrid : {
  uiFramework: "custom-molecules",
- // moduleName: "egov-tradelicence",
  componentPath: "Table",
  visible: true,
  props: {
@@ -620,21 +532,13 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
       name: getTextToLocalMapping("Department Id"),
       options: {
         display: false,
-        // customBodyRender: value => (
-          // <span>
-            // {value.eventDetailUuid}
-          // </span>
-        // )
+        
       }
     },{
       name: getTextToLocalMapping("Employee ID"),
       options: {
         display: false,
-        // customBodyRender: value => (
-          // <span>
-            // {value.eventDetailUuid}
-          // </span>
-        // )
+        
       }
     },
    
@@ -642,17 +546,13 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
       name: getTextToLocalMapping("DepartmentName"),
       options: {
         display: false,
-        // customBodyRender: value => (
-          // <span>
-            // {value.eventDetailUuid}
-          // </span>
-        // )
+      
       }
     },
 
     
    ],
-   title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+  
    options: {
      filter: false,
      download: false,
@@ -662,28 +562,16 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
      filterType: 'checkbox',
      hover: true,
 	 selectableRowsHeader : true,
-	// disableToolbarSelect : true,
 	 selectableRowsOnClick : false,
      rowsPerPageOptions: [5, 10, 15, 20],
 	onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
-		onAllEmployeeselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
-		//onEmployeeselect('cell','')
+    onAllEmployeeselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
+  
    },
-     onRowClick: (row, index,state,dispatch,action) => {
-         onEmployeeselect('rowdata',row,state,dispatch,action)
+     onRowClick: (row, index,state,dispatch,action,allRowsSelected) => {
+         onEmployeeselect('rowdata',row,state,dispatch,action,index,allRowsSelected)
      },
-   // onRowsDelete:(rowsDeleted, data) =>{
-   // onRowDelete(rowsDeleted, data)
-   // },
-   // selectedRows: {
-     // text: "row(s) selected",
-     // delete: "Delete",
-     // deleteAria: "Delete Selected Rows",
-   // }
-  // selectableRows: true,
-      // onCellClick: (colData)=>{
-   // void()
-   // },
+  
    },
    customSortColumn: {
      column: "Application Date",
@@ -730,7 +618,7 @@ committiee_btn: {
      },
      onClickDefination: {
        action: "condition",
-     //  callBack: (action, state, dispatch) => { showinvitelist(action, state, dispatch) }
+    
      }
    }
 
@@ -740,11 +628,10 @@ committiee_btn: {
 
 export const searchDepartmentEmployeesResults_committee1 = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  
   componentPath: "Table",
   visible: true,
   props: {
-   // data:localStorage.getItem('committeelist')===null ||localStorage.getItem('committeelist')===""?[]:JSON.parse(localStorage.getItem('committeelist')),
    data:[],
     columns: [
       getTextToLocalMapping("Department"),
@@ -757,21 +644,13 @@ export const searchDepartmentEmployeesResults_committee1 = {
         name: getTextToLocalMapping("Department Id"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+          
         }
       },{
         name: getTextToLocalMapping("Employee ID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
       
@@ -779,7 +658,7 @@ export const searchDepartmentEmployeesResults_committee1 = {
    
     
     ],
-  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
+  
     options: {
       filter: false,
       download: false,
@@ -787,9 +666,7 @@ export const searchDepartmentEmployeesResults_committee1 = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => {
-       // load_invite_summary(row);
-      }
+     
     },
     customSortColumn: {
       column: "Application Date",
@@ -810,7 +687,7 @@ export const searchDepartmentEmployeesResults_committee1 = {
 };
 export const searchDepartmentEmployeesResults_committeeSummary = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
+  
   componentPath: "Table",
   visible: true,
   props: {
@@ -828,26 +705,17 @@ export const searchDepartmentEmployeesResults_committeeSummary = {
         name: getTextToLocalMapping("Department Id"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+          
         }
       },{
         name: getTextToLocalMapping("Employee ID"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+         
         }
       },
       
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
@@ -856,7 +724,7 @@ export const searchDepartmentEmployeesResults_committeeSummary = {
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
-       // load_invite_summary(row);
+       
       }
     },
     customSortColumn: {

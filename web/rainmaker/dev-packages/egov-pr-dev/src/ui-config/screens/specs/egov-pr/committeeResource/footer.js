@@ -23,8 +23,8 @@ const state = store.getState();
 export const cancelCommittee  = (
   state, dispatch
 ) => {
-  dispatch(prepareFinalObject("PublicRealation[0].CreateCommitteeDetails", {}));
-  dispatch(prepareFinalObject("PublicRealation[0].CreateMasterCommitee", {}));
+  dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
+  dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
   const appendUrl =
   process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
 const reviewUrl = `${appendUrl}/egov-pr/committeeMaster`;
@@ -34,9 +34,9 @@ dispatch(setRoute(reviewUrl));
 const CommitteeSubmit = (state, dispatch) => {
 
 
-  let commiteeUUID=getQueryArg(window.location.href, "commiteeUUID");
+  let committeeUUID=getQueryArg(window.location.href, "committeeUUID");
   let committeeData=''
-  if(commiteeUUID){
+  if(committeeUUID){
 	if(localStorageGet("committeelist")!==null){
 		committeeData=JSON.parse(localStorageGet("committeelist"))
 	}
@@ -44,13 +44,11 @@ const CommitteeSubmit = (state, dispatch) => {
 		committeeData=JSON.parse(localStorageGet("committeelistAll"))
 	}
 	
-  //alert(committeeData.length)
-  console.log(committeeData)
   let arr=[]
   for(let i=0;i<committeeData.length;i++)
   {
   let obj= {
-      "committeeMemberUuid":commiteeUUID,
+      "committeeMemberUuid":committeeUUID,
       "userUuid":committeeData[i]['Employee ID'],
       "departmentUuid": committeeData[i]['Department Id'],
       "departmentName":committeeData[i]['DepartmentName'],
@@ -65,10 +63,10 @@ const CommitteeSubmit = (state, dispatch) => {
   
         let payload={
           "RequestBody":{
-            "committeeUuid":commiteeUUID,
+            "committeeUuid":committeeUUID,
             "committeeName":get(
               state.screenConfiguration.preparedFinalObject,
-              "PublicRealation[0].CreateCommitteeDetails.committeename"
+              "PublicRelation[0].CreateCommitteeDetails.committeename"
             ),
             "committeeDescription": "",
             "isActive": true,
@@ -85,9 +83,8 @@ const CommitteeSubmit = (state, dispatch) => {
       }
  
   else{
-  debugger
+  
  let committeeData=''
- console.log(localStorageGet("committeelist"))
 	if(localStorageGet("committeelist")!==null){
 		 committeeData=JSON.parse(localStorageGet("committeelist"))
 	}
@@ -117,7 +114,7 @@ let obj= {
           "committeeUuid": "",
           "committeeName":get(
             state.screenConfiguration.preparedFinalObject,
-            "PublicRealation[0].CreateCommitteeDetails.committeename"
+            "PublicRelation[0].CreateCommitteeDetails.committeename"
           ),
           "committeeDescription": "",
           "isActive": true,
@@ -143,7 +140,7 @@ const callBackForNext = async (state, dispatch) => {
   );
   let committedept=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].CreateCommitteeDetails.organizerDepartmentName"
+  "PublicRelation[0].CreateCommitteeDetails.organizerDepartmentName"
 )
 let checkboxcheck=localStorageGet("committeelist")
    activeStepforbtn = activeStep;
@@ -167,11 +164,9 @@ let checkboxcheck=localStorageGet("committeelist")
     if(localStorageGet("committeelist")!==null || localStorageGet("committeelistAll") !== null)
     {
 			
-			console.log("Footerrrrrrrrrrr");
-			console.log(localStorageGet("committeelist"));
+			
 			let selectedrows = localStorageGet("committeelist") === null ? JSON.parse(localStorageGet("committeelistAll")) : JSON.parse(localStorageGet("committeelist"));
 			
-			console.log(selectedrows);
 			let data = selectedrows.map(item => ({
 			// alert(item)
 			[getTextToLocalMapping("Department")]:
@@ -185,8 +180,7 @@ let checkboxcheck=localStorageGet("committeelist")
      
 			}));
 			
-			console.log("dataaaaaaaaaaaaaaaaaaaaaa");
-			console.log(data);
+		
 			dispatch(
 			handleField(
 			"createCommitteeMaster",

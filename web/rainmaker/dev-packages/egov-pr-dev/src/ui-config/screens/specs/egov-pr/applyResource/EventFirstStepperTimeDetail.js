@@ -89,11 +89,8 @@ const prepareTextField = uom => {
       },
       pattern: /^\d{0,10}$/i,
       
-    //   onInput:(e)=>{ 
-    //     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
-    // },
+    
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      // required: true,
       jsonPath: `PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap.${uom}`,
       gridDefination: {
         xs: 12,
@@ -169,11 +166,7 @@ const commonBuildingData = buildingType => {
         pattern: getPattern("TradeName"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "PublicRelations[0].PublicRelationDetails.buildings[0].name",
-        // props: {
-        //   style: {
-        //     maxWidth: "400px"
-        //   }
-        // },
+       
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -346,15 +339,14 @@ export const EventFirstStepperTimeDetail = getCommonCard({
       required: true,
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].CreateEventDetails.startDate1",
+      jsonPath: "PublicRelation[0].CreateEventDetails.startDate1",
       props: {
         inputProps: {
           min: getTodaysDateInYMD()
         }
       },
   beforeFieldChange: (action, state, dispatch) => {
-       // debugger
-       // alert(action.value)
+       
         dispatch(
           handleField(
             "apply",
@@ -385,9 +377,8 @@ export const EventFirstStepperTimeDetail = getCommonCard({
         labelKey: "PR_EVENT_START_TIME_PLACEHOLDER"
       },
       required: true,
-     // pattern: getPattern("Name"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].CreateEventDetails.startTime",
+      jsonPath: "PublicRelation[0].CreateEventDetails.startTime",
 	  beforeFieldChange: (action, state, dispatch) => {
 			starttimevalidation(action, state, dispatch)
 	   
@@ -408,7 +399,7 @@ export const EventFirstStepperTimeDetail = getCommonCard({
       required: true,
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].CreateEventDetails.endDate1",
+      jsonPath: "PublicRelation[0].CreateEventDetails.endDate1",
       props: {
         inputProps: {
           min: ''
@@ -432,9 +423,9 @@ export const EventFirstStepperTimeDetail = getCommonCard({
         labelKey: "PR_EVENT_END_TIME_PLACEHOLDER"
       },
       required: true,
-   //    pattern: getPattern("Name"),
+   
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].CreateEventDetails.endTime",
+      jsonPath: "PublicRelation[0].CreateEventDetails.endTime",
 	   beforeFieldChange: (action, state, dispatch) => {
 			timevalidation(action, state, dispatch)
 	   
@@ -452,19 +443,19 @@ export const EventFirstStepperTimeDetail = getCommonCard({
 // Time validation
 export const timevalidation =(action, state, dispatch) =>
 {
-	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startDate1",
+	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
 								{}
 							);
 							
-	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endDate1",
+	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1",
 								{}
 							);		
 			
-		 let starttime = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startTime",
+		 let starttime = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startTime",
 								{}
 							);		
 
-		debugger
+		
        // alert(startdate +" , "+ enddate +" , "+ starttime)
 		localStorageSet("EventTimeINvalid","no");
 		if(startdate == enddate && starttime >= action.value)
@@ -488,7 +479,7 @@ export const timevalidation =(action, state, dispatch) =>
 			);
 			 }, 1000);
 			 
-			 //set(state, "screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endTime", "" )
+			 //set(state, "screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endTime", "" )
     }
    
 }
@@ -497,20 +488,18 @@ export const timevalidation =(action, state, dispatch) =>
 
 export const starttimevalidation =(action, state, dispatch) =>
 {
-	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startDate1",
+	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
 								{}
 							);
 							
-	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endDate1",
+	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1",
 								{}
 							);		
 			
-		 let endtime = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endTime",
+		 let endtime = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endTime",
 								{}
 							);		
 
-		debugger
-       // alert(startdate +" , "+ enddate +" , "+ starttime)
 		localStorageSet("EventTimeINvalid","no");
 		if(startdate == enddate && action.value >= endtime)
 		{
@@ -533,29 +522,22 @@ export const starttimevalidation =(action, state, dispatch) =>
 			);
 			 }, 1000);
 			 
-			 //set(state, "screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endTime", "" )
     }
    
 }
 
 export const datevalidation =(action, state, dispatch) =>
 {
-	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.startDate1",
+	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
 								{}
 							);
 							
-	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRealation[0].CreateEventDetails.endDate1",
+	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1",
 								{}
 							);		
 			
 		
-
-		
-       // alert(startdate +" , "+ enddate +" , "+ starttime)
-		//localStorageSet("EventTimeINvalid","no");
-		
     if(startdate > enddate){
-      //alert('innnnn')
       dispatch(
         handleField(
           "apply",

@@ -7,7 +7,7 @@ import { tenderDocumentDetails } from "./applyResource/tenderDocumentDetails";
 import jp from "jsonpath";
 import { getFileUrlFromAPI, getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import {  furnishNocResponseTender,getSearchResultsForTenderSummary,getSearchResultsForTenderSummary1 } from "../../../../ui-utils/commons";
+import {  furnishResponseTender,getSearchResultsForTenderSummary,getSearchResultsForTenderSummary1 } from "../../../../ui-utils/commons";
 import { prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import "./publishtender.css";
 import commonConfig from '../../../../config/common';
@@ -49,7 +49,6 @@ export const prepareEditFlow = async (
     }
 
     let response = await getSearchResultsForTenderSummary(payload);
-   debugger
     if (response.ResponseBody.length > 0) {
       let documentsPreview = [];
       
@@ -87,9 +86,8 @@ export const prepareEditFlow = async (
       
     dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
       
-   //   dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
       
-      let Refurbishresponse = furnishNocResponseTender(response);
+      let Refurbishresponse = furnishResponseTender(response);
       dispatch(prepareFinalObject("tenderNotice", Refurbishresponse));
     }
 
@@ -145,7 +143,6 @@ const tenderMaster = {
   uiFramework: "material-ui",
   name: "tenderMaster",
   beforeInitScreen: (action, state, dispatch) => {
-   // const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
     const tenantId = getTenantId()
     localStorageSet("tendernote", "");

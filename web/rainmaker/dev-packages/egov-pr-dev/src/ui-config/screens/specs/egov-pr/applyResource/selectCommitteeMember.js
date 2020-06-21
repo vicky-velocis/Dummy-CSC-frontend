@@ -138,7 +138,7 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
           action: "condition",
           callBack: (state, dispatch) => {
             
-         //  alert(localStorage.getItem('dept')) 
+        
             
             GetCommiteeEmployees(state, dispatch,localStorage.getItem('selectedDepartmentsInvite')) }
         }
@@ -147,37 +147,6 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
       }
 
 
-
-
-
-      
-      // organizerEmployee: {
-      //   ...getSelectField({
-      //     label: { labelName: "Organizer Employee", labelKey: "ORGANIZER_EMPLOYEE_LABEL" },
-      //     // localePrefix: {
-      //     //   moduleName: "TENANT",
-      //     //   masterName: "TENANTS"
-      //     // },
-      //     optionLabel: "name",
-      //     optionValue: "code",
-      //     placeholder: {
-      //       labelName: "Select Organizer Employee",
-      //       labelKey: "NOC_ORGANIZER_EMPLOYEE_PLACEHOLDER"
-      //     },
-      //     sourceJsonPath: "applyScreenMdmsData.employees.Employees",
-      //    required: true,
-          
-      //     jsonPath: "PublicRealation[0].CreateMasterCommitee.organizerUsernName",
-      //     props: {
-      //       className:"applicant-details-error",
-      //      required: true
-      //       // disabled: true
-      //     },
-         
-      
-      //   }),
-      
-      // },
       
      
     })

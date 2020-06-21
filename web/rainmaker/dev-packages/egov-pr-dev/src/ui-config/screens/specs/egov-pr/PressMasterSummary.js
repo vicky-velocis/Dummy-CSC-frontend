@@ -67,7 +67,7 @@ import {
     uiFramework: "material-ui",
     name: "PressMasterSummary",
     beforeInitScreen: (action, state, dispatch) => {
-     // alert(getQueryArg(window.location.href, "eventuuId"))
+   
       let payload={
         "RequestBody":{ 
             "tenantId":getTenantId(),
@@ -100,7 +100,7 @@ import {
         }
       }
   
-      // Set Institution/Applicant info card visibility
+     
       if (
         get(
           state.screenConfiguration.preparedFinalObject,

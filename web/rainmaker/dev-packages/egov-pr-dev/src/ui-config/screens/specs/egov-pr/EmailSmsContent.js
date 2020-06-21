@@ -55,7 +55,7 @@ const PRSCPSearchAndResult = {
   
   adhocDialog: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pr",
     componentPath: "DialogContainer",
     props: {
       open: false,
