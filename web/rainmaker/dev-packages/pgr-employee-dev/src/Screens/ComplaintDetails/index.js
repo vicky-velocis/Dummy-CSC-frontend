@@ -179,6 +179,9 @@ class ComplaintDetails extends Component {
       case "ES_RESOLVE_MARK_RESOLVED":
         history.push(`/complaint-resolved/${complaintNo}`);
         break;
+        case "ES_REJECT_BUTTON":
+        history.push(`/reject-complaint/${complaintNo}`);
+        break;
     }
   };
   btnThreeOnClick = (complaintNo, label) => {
@@ -314,8 +317,9 @@ class ComplaintDetails extends Component {
       } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
-          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
-        }
+          btnTwoLabel = "ES_REJECT_BUTTON";
+          btnThreeLabel="ES_RESOLVE_MARK_RESOLVED";
+       }
       }
     }
     if (timeLine && timeLine[0]) {
@@ -323,6 +327,16 @@ class ComplaintDetails extends Component {
     }
     return (
       <div>
+                <div style={{marginTop:30}}>
+          <Icon onClick={() => 
+          {
+          const  {tabValue} = this.props.history.location.state;
+
+          window.localStorage.setItem('tabValue', tabValue);
+            this.props.history.goBack();
+          }
+         } className="banner-back-button" style={{fill : "black"}} action="navigation" name="arrow-back" />
+       </div>
         <Screen>
           {complaint && !openMap && (
             <div>
