@@ -13,8 +13,7 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults, organizeLicenseData } from "../../../../ui-utils/commons";
-
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { getReviewOwner, getReviewProperty } from "./applyResource/review-property";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
@@ -62,13 +61,11 @@ const beforeInitFn = async (action, state, dispatch, transitNumber) => {
 
 }
 
-
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
     transitNumber = getQueryArg(window.location.href, "transitNumber");
-
     beforeInitFn(action, state, dispatch, transitNumber);
     return action;
   },
