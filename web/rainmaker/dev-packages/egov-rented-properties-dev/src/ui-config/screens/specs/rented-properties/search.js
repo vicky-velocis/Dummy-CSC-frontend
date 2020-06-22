@@ -11,14 +11,9 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";
   import get from "lodash/get";
-
   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
   import { searchApiCall } from "./searchResource/functions"
   import { searchResults } from "./searchResource/searchResults";
-
-  const addMaster = (state, dispatch) => {
-    dispatch(setRoute(`/rented-properties/add-update?`));
-  }
 
   const header = getCommonHeader({
     labelName: "Rented Properties",
@@ -28,7 +23,6 @@ import {
     uiFramework: "material-ui",
     name: "rented-search",
     beforeInitScreen: (action, state, dispatch) => {
-      console.log("test");
       searchApiCall(state, dispatch, true)
       return action
     },
@@ -79,7 +73,7 @@ import {
                     onClickDefination: {
                       action: "condition",
                       callBack: (state, dispatch) => {
-                        addMaster(state, dispatch);
+                        dispatch(setRoute(`/rented-properties/apply?tenantId=${getTenantId()}`));
                       }
                     }
                   }

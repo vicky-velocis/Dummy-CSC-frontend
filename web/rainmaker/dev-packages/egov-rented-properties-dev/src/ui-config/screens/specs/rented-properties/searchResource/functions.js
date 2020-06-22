@@ -209,34 +209,24 @@ const getMdmsData = async (dispatch, body) => {
       [],
       mdmsBody
     );
-
     return payload;
   } catch (e) {
     console.log(e);
   }
 };
 
-export const getTradeTypes = async(action, state, dispatch) => {
-  const tradeTypePayload = [{
-    moduleName: "TradeLicense",
-    masterDetails: [{name: "TradeType"}]
+export const getColonyTypes = async(action, state, dispatch) => {
+  const colonyTypePayload = [{
+    moduleName: "PropertyServices",
+    masterDetails: [{name: "colonies"}]
   }]
-
-  const tradeRes = await getMdmsData(dispatch, tradeTypePayload);
-  const {TradeLicense} = tradeRes.MdmsRes || {}
-  const tradeTypes = TradeLicense.TradeType || [] 
-
-  let data = tradeTypes.map((item,index) => {
-    return {
-      code : item.code
-    }
-  });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.searchScreen.tradeType",
-      data
-    )
-  );
-
-  set(action, "screenConfig.components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.tradeName.props.data", data)
+  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
+  const {PropertyServices = []} = colonyRes.MdmsRes || {}
+  dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", PropertyServices.colonies))
+  const propertyTypes = PropertyServices.colonies.map(item => ({
+    code: item.code,
+    label: item.code
+  }))
+  dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
 }
+

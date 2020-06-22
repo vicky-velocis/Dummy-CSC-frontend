@@ -12,22 +12,17 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
-  
-
 
 const header = getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
 });
 
-const transitNumber = null;
-
 const rentedPropertiesDetailPreview = {
     uiFramework: "material-ui",
     name: "rented-search",
     beforeInitScreen: (action, state, dispatch) => {
-        transitNumber = getQueryArg(window.location.href, "transitNumber");
-        console.log(transitNumber);
+        const transitNumber = getQueryArg(window.location.href, "transitNumber");
         return action;
       },
     components: {
