@@ -18,7 +18,7 @@ import { getOPMSTenantId, localStorageGet, getUserInfo, setapplicationType, lSRe
 import { UpdateStatus } from "../../../../../ui-utils/commons";
 ///import { getAccessToken, getLocale, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+let roles = JSON.parse(getUserInfo()).roles
 const setReviewPageRoute = (state, dispatch, applnid) => {
   let tenantId = getOPMSTenantId();
   const applicationNumber = get(

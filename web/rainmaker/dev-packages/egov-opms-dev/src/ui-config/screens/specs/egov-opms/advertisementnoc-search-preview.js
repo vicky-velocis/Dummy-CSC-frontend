@@ -33,12 +33,13 @@ import {
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { taskStatusSummary } from "./summaryResource/taskStatusSummary";
-import { showHideAdhocPopup } from "../utils";
+import { showHideAdhocPopup, checkForRole } from "../utils";
 
 import { getAccessToken, getOPMSTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationType, setapplicationNumber, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload } from "../../../../ui-utils/commons";
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
 
 const undertakingButton = getCommonContainer({
   addPenaltyRebateButton: {
@@ -67,7 +68,7 @@ const undertakingButton = getCommonContainer({
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  
+
   let tenantId = getOPMSTenantId();
   let mdmsBody = {
     MdmsCriteria: {
@@ -102,7 +103,7 @@ const getMdmsData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    
+
 
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
@@ -221,8 +222,9 @@ const setDownloadMenu = (state, dispatch) => {
   /** END */
 };
 
-const HideshowEdit = (action, nocStatus, exemptedcategory,dispatch) => {
+const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
   let showEdit = false;
+
   if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
     showEdit = true;
   }
@@ -230,22 +232,22 @@ const HideshowEdit = (action, nocStatus, exemptedcategory,dispatch) => {
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.advertisementapplicantSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
 
   set(
@@ -253,85 +255,85 @@ const HideshowEdit = (action, nocStatus, exemptedcategory,dispatch) => {
     "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
     false);
 
-  
+
   set(
     action,
     "screenConfig.components.div.children.footer.children.withdrawapprove.visible",
-    role_name == "OSD" || role_name == "JEX"
-      ? localStorageGet('pms_iswithdrawn')==="yes"
+    checkForRole(roles, 'OSD') || checkForRole(roles, 'JEX')
+      ? localStorageGet('pms_iswithdrawn') === "yes"
         ? exemptedcategory == 0
           ? true
           : false
         : false
       : false);
 
-      
+
   set(
     action,
     "screenConfig.components.div.children.footer.children.withdraw.visible",
-    role_name === "CITIZEN" ?
+    checkForRole(roles, 'CITIZEN') ?
       nocStatus != "INITIATED" ?
-        nocStatus != "DRAFT"?
-          localStorageGet('pms_iswithdrawn')!=="yes"?
-              exemptedcategory === 0
-            ? true
+        nocStatus != "DRAFT" ?
+          localStorageGet('pms_iswithdrawn') !== "yes" ?
+            exemptedcategory === 0
+              ? true
+              : false
             : false
           : false
         : false
-      :false
-    :false
+      : false
   );
 
-	set(
-        action,
-        "screenConfig.components.div.children.footer.children.nextButton.visible",
-        role_name == "JEX" ||  role_name == "OSD"
-              ?localStorageGet('pms_iswithdrawn')!=="yes"
-              ? true
-              : false
-              :role_name == "SUPERINTENDENT"
-              ? true
-              :false
-          );
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.nextButton.visible",
+    checkForRole(roles, 'JEX') || checkForRole(roles, 'OSD')
+      ? localStorageGet('pms_iswithdrawn') !== "yes"
+        ? true
+        : false
+      : checkForRole(roles, 'SUPERINTENDENT')
+        ? true
+        : false
+  );
 
-		set(
-            action,
-            "screenConfig.components.div.children.footer.children.reassign.visible",
-             role_name == "SUPERINTENDENT" || role_name == "OSD" || role_name == "COMMISSIONER"
-                ? true
-                  : role_name == "JEX"
-                   ?localStorageGet('pms_iswithdrawn')!=="yes"
-                    ?true
-                    :false
-                :false
-        );
- 
-	set(
-		action,
-		"screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.body.children.withdrawapprovalamount.visible",
-		localStorageGet('pms_iswithdrawn')==="yes" ? true : false
-	  );
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.reassign.visible",
+    checkForRole(roles, 'SUPERINTENDENT') || checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER')
+      ? true
+      : checkForRole(roles, 'JEX')
+        ? localStorageGet('pms_iswithdrawn') !== "yes"
+          ? true
+          : false
+        : false
+  );
 
-    set(
-      action,
-      "screenConfig.components.div.children.footer.children.previousButton.visible",
-      role_name === "CITIZEN" ?
-              nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"?
-           true
-        :false
-      :false
-      );
-    
-      set(
-        action,
-        "screenConfig.components.div.children.footer.children.submitButton.visible",
-        role_name === "CITIZEN" ?
-                nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"?
-             true
-          :false
-        :false
-        );
-  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.body.children.withdrawapprovalamount.visible",
+    localStorageGet('pms_iswithdrawn') === "yes" ? true : false
+  );
+
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.previousButton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC" ?
+        true
+        : false
+      : false
+  );
+
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.submitButton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"
+          ? true
+        : false
+      : false
+  );
+}
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResultsView([
@@ -344,18 +346,21 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   localStorageSet("app_noc_status", nocStatus);
   let remarksData = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", []);
-  
+
   remarksData.forEach(doc => {
-    if(doc.applicationstatus=='WITHDRAWAFTERAPRROVAL' || doc.applicationstatus=='WITHDRAW'){
-    localStorageSet("pms_iswithdrawn","yes");
-  }
+    if (doc.applicationstatus == 'WITHDRAWAFTERAPRROVAL' || doc.applicationstatus == 'WITHDRAW') {
+      localStorageSet("pms_iswithdrawn", "yes");
+    }
   });
 
   let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
   localStorageSet("footerApplicationStatus", applicationStatus);
   let exampted = get(state.screenConfiguration.preparedFinalObject, 'nocApplicationDetail[0].applicationdetail');
   let exemptedcategory = JSON.parse(exampted)['exemptedCategory'];
-  HideshowEdit(action, nocStatus, exemptedcategory,dispatch);
+  HideshowEdit(action, nocStatus, exemptedcategory, dispatch);
+
+  if (JSON.parse(exampted).hasOwnProperty('withdrawapprovalamount'))
+    dispatch(prepareFinalObject("advertisement[0].WithdraApproval.Amount", JSON.parse(exampted)['withdrawapprovalamount']));
 
   dispatch(
     handleField(
@@ -377,7 +382,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
 
 
   prepareDocumentsView(state, dispatch);
-  if (role_name === 'CITIZEN')
+  if (checkForRole(roles, 'CITIZEN'))
     setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
 
 
@@ -394,7 +399,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
     if (advt !== null && advt !== '' && advt !== 'undefined') {
       advertisementtypeselected = JSON.parse(advt).typeOfAdvertisement;
       advertisementsubtypeselected = JSON.parse(advt).subTypeOfAdvertisement;
-  
+
       let advertisementtypeid = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement",
         []
       );
@@ -444,7 +449,7 @@ const setSearchResponseForNocCretificate = async (
   let certificateDownloadObjectADVERTISEMENT = {};
   //let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   let nocRemarks = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", {});
-  
+
   let nocRemark = "";
   let nocStatus = "";
 
@@ -465,8 +470,8 @@ const setSearchResponseForNocCretificate = async (
   if (resPaid.length != 0)
     nocRemark = "PAID";
 
-  //role_name !== 'CITIZEN' ?
-  if (nocStatus == "APPROVED" && resWITHDRAWAPPROVAL.length==0) {
+
+  if (nocStatus == "APPROVED" && resWITHDRAWAPPROVAL.length == 0) {
     let getCertificateDataForADVERTISEMENT = { "applicationType": "ADVERTISEMENTNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "certificateData" } };
 
     //ADVERTISEMENTNOC
@@ -479,7 +484,7 @@ const setSearchResponseForNocCretificate = async (
 
     let getFileStoreIdForADVERTISEMENT = { "nocApplicationDetail": [get(response0ADVERTISEMENT, "nocApplicationDetail[0]", "")] }
     //dispatch(prepareFinalObject("nocApplicationCertificateDetail", get(response, "nocApplicationDetail", [])));
-    
+
     const response1ADVERTISEMENT = await getSearchResultsForNocCretificate([
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
@@ -491,7 +496,7 @@ const setSearchResponseForNocCretificate = async (
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
       { key: "filestoreIds", value: get(response1ADVERTISEMENT, "filestoreIds[0]", "") },
-      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
+      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
     ]);
     httpLinkADVERTISEMENT = get(response2ADVERTISEMENT, get(response1ADVERTISEMENT, "filestoreIds[0]", ""), "")
 
@@ -507,7 +512,7 @@ const setSearchResponseForNocCretificate = async (
     };
 
   }
-   if (nocRemark == "PAID" && resWITHDRAWAPPROVAL.length==0) {
+  if (nocRemark == "PAID" && resWITHDRAWAPPROVAL.length == 0) {
     //Receipts
     let getCertificateDataForADVERTISEMENT_RECEIPT = { "applicationType": "ADVERTISEMENTNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "receiptData" } };
 
@@ -532,7 +537,7 @@ const setSearchResponseForNocCretificate = async (
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
       { key: "filestoreIds", value: get(response1ADVERTISEMENT_RECEIPT, "filestoreIds[0]", "") },
-      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
+      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
     ]);
     httpLinkADVERTISEMENT_RECEIPT = get(response2ADVERTISEMENT_RECEIPT, get(response1ADVERTISEMENT_RECEIPT, "filestoreIds[0]", ""), "")
 
@@ -548,22 +553,22 @@ const setSearchResponseForNocCretificate = async (
     };
 
   }
-  
-  if (nocStatus == "APPROVED" && nocRemark == "PAID" && resWITHDRAWAPPROVAL.length==0) {
+
+  if (nocStatus == "APPROVED" && nocRemark == "PAID" && resWITHDRAWAPPROVAL.length == 0) {
     downloadMenu = [
       certificateDownloadObjectADVERTISEMENT,
       certificateDownloadObjectADVERTISEMENT_RECEIPT
     ];
-  } else if (nocStatus == "APPROVED" && resWITHDRAWAPPROVAL.length==0) {
+  } else if (nocStatus == "APPROVED" && resWITHDRAWAPPROVAL.length == 0) {
     downloadMenu = [
       certificateDownloadObjectADVERTISEMENT
     ];
-  } else if (nocRemark == "PAID" && resWITHDRAWAPPROVAL.length==0) {
+  } else if (nocRemark == "PAID" && resWITHDRAWAPPROVAL.length == 0) {
     downloadMenu = [
       certificateDownloadObjectADVERTISEMENT_RECEIPT
     ];
   }
-  
+
   dispatch(
     handleField(
       "advertisementnoc-search-preview",
@@ -588,13 +593,13 @@ const screenConfig = {
     //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
     // localStorage.setItem('applicationType', 'ADVERTISEMENTNOC')
     setapplicationType('ADVERTISEMENTNOC');
-    
-    if (role_name == 'CITIZEN') {
+
+    if (checkForRole(roles, 'CITIZEN')) {
       set(action, "screenConfig.components.adhocDialog.children.popup", adhocPopupAdvertisementWithdraw);
-      }
+    }
 
 
-    localStorageSet("pms_iswithdrawn","no")
+    localStorageSet("pms_iswithdrawn", "no")
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId);
 
     const queryObject = [
@@ -606,7 +611,7 @@ const screenConfig = {
 
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'popup_adv');
-  
+
     });
 
     // Set Documents Data (TEMP)
@@ -638,27 +643,28 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,  
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
             dataPath: "Licenses",
             moduleName: "ADVERTISEMENTNOC",
           }
-      
+
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
+          estimateSummary: estimateSummary,
+          advertisementapplicantSummary: advertisementapplicantSummary,
+          detailSummary: detailSummary,
+          documentsSummary: documentsSummary,
+          taskStatusSummary: taskStatusSummary,
+        }) : getCommonCard({
           //taskStatusSummary: taskStatusSummary,
           estimateSummary: estimateSummary,
           advertisementapplicantSummary: advertisementapplicantSummary,
           detailSummary: detailSummary,
           documentsSummary: documentsSummary
 
-        }) : getCommonCard({
-          estimateSummary: estimateSummary,
-          advertisementapplicantSummary: advertisementapplicantSummary,
-          detailSummary: detailSummary,
-          documentsSummary: documentsSummary,
-          taskStatusSummary: taskStatusSummary,
-        }),
+        })
+        ,
         break: getBreak(),
         //undertakingButton,
         // citizenFooter:

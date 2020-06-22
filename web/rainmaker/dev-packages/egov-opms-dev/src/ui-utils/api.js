@@ -13,19 +13,20 @@ import {
   getUserInfo,
   getapplicationMode,
   getapplicationNumber,
-  getOPMSTenantId  
+  getOPMSTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
   baseURL: window.location.origin,
-	headers: {
+
+  headers: {
     "Content-Type": "application/json"
   }
 });
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
-  
-  let  applicationnumber = getapplicationNumber();
+
+  let applicationnumber = getapplicationNumber();
   let RequestInfo = {
     apiId: "Rainmaker",
     ver: ".01",
@@ -92,7 +93,7 @@ export const httpRequest = async (
           endPoint,
           wrapRequestBody(requestBody, action, customRequestInfo)
         );
-        
+
         break;
       default:
         response = await instance.get(endPoint);
