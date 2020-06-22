@@ -20,6 +20,11 @@ const labelStyle = {
   margin: "0 auto",
   width: "75px",
 };
+const inlineLabelStyle = {
+  letterSpacing: "0.6px",
+  lineHeight: 1,
+  margin: "0 auto",
+};
 
 const Placeholder = ({ className, onFilePicked, inputProps, hide }) => {
   return (
@@ -98,6 +103,7 @@ class ImageUpload extends Component {
           </div>
           </div>
         )}
+        <Label label="ERR_FILE_MORE_THAN_FIVEMB" labelStyle={inlineLabelStyle} fontSize="12px" />
       </div>
       
     );
