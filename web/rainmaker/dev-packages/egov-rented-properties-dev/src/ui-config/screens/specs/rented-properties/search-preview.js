@@ -14,7 +14,7 @@ import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { getReviewOwner, getReviewProperty } from "./applyResource/review-property";
+import { getReviewOwner, getReviewProperty, getReviewOwnerAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
@@ -26,12 +26,22 @@ const headerrow = getCommonContainer({
 });
 const reviewOwnerDetails = getReviewOwner(false);
 const reviewPropertyDetails = getReviewProperty(false);
+const reviewAddressDetails = getReviewOwnerAddress(false);
+const reviewRentDetails = getReviewRentDetails(false);
+const reviewPaymentDetails = getReviewPaymentDetails(false);
+
+
+
+
 
 
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
   reviewOwnerDetails,
+  reviewAddressDetails,
+  reviewRentDetails,
+  reviewPaymentDetails,
 });
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {
