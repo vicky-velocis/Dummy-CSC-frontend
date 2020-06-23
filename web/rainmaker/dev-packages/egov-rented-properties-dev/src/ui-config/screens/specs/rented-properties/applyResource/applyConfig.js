@@ -7,6 +7,7 @@ import {addressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
+import {rentedReviewDetails} from './reviewDetails'
 
 export const rentedDocumentsDetails = getCommonCard({
   header: getCommonTitle(
@@ -66,3 +67,14 @@ export const stepper = getStepperObject(
     visible: false
   };
 
+export const formwizardThirdStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    rentedReviewDetails
+  },
+  visible: false
+}

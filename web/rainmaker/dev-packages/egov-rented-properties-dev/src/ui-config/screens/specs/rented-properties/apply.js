@@ -1,11 +1,16 @@
 import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardFirstStep, formwizardSecondStep} from './applyResource/applyConfig'
+import {stepper, formwizardFirstStep, formwizardSecondStep, formwizardThirdStep} from './applyResource/applyConfig'
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import {footer} from './applyResource/footer';
+import { searchResults } from "./search-preview";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+const transitNumber = getQueryArg(window.location.href, "transitNumber");
+
 
 const getMdmsData = async (dispatch, body) => {
     let mdmsBody = {
@@ -28,7 +33,7 @@ const getMdmsData = async (dispatch, body) => {
     }
   };
   
-const getColonyTypes = async(action, state, dispatch) => {
+export const getColonyTypes = async(action, state, dispatch) => {
     const colonyTypePayload = [{
       moduleName: "PropertyServices",
       masterDetails: [{name: "colonies"}]
@@ -49,11 +54,18 @@ const header = getCommonHeader({
     labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD_UPDATE"
   });
 
+const getData = async(action, state, dispatch) => {
+  getColonyTypes(action, state, dispatch);
+  if(transitNumber) {
+    searchResults(action, state, dispatch, transitNumber)
+  }
+}
+
 const applyRentedProperties = {
     uiFramework: "material-ui",
     name: "apply",
     beforeInitScreen: (action, state, dispatch) => {
-        getColonyTypes(action, state, dispatch);
+        getData(action, state, dispatch)
         return action;
       },
     components: {
@@ -80,6 +92,7 @@ const applyRentedProperties = {
                 stepper,
                 formwizardFirstStep,
                 formwizardSecondStep,
+                formwizardThirdStep,
                 footer
             }
         }

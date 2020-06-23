@@ -5,6 +5,8 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import { searchApiCall } from "./functions";
+import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const _searchResults = {
   uiFramework: "custom-containers-local",
@@ -36,6 +38,12 @@ export const searchResults = {
       getTextToLocalMapping("Colony"),
       getTextToLocalMapping("Owner"),
       getTextToLocalMapping("Status"),
+      {
+        name: "id",
+        options: {
+          display: false
+        }
+      }
     ],
     options: {
       filter: false,
@@ -67,5 +75,9 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-      window.location.href = `search-preview?transitNumber=${rowData[0]}`;
+  if(rowData[3] === "INITIATED") {
+    window.location.href = `/rented-properties/apply?tenantId=${getTenantId()}&transitNumber=${rowData[0]}`
+  } else {
+    window.location.href = `search-preview?transitNumber=${rowData[0]}`;
+  }
 };

@@ -11,10 +11,11 @@ import { convertEpochToDate, calculateAge, getLicensePeriod } from "../../utils"
 import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICENSE_DHOBI_GHAT, RENEWAL_RENT_DEED_SHOP } from "../../../../../ui-constants";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+import { changeStep } from "./footer";
 
 
 
-export const getReviewProperty = () => {
+export const getReviewProperty = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
             uiFramework: "custom-atoms",
@@ -32,6 +33,37 @@ export const getReviewProperty = () => {
                         labelName: "Property Details",
                         labelKey: "TL_PROPERTY_DETAILS_HEADER"
                     })
+                },
+                editSection: {
+                    componentPath: "Button",
+                    props: {
+                        color: "primary"
+                    },
+                    visible: isEditable,
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "TL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
+                    }
                 }
             }
         },
@@ -89,6 +121,37 @@ export const getReviewOwner = (isEditable = true) => {
                         labelKey: "TL_OWNER_DETAILS_HEADER"
                     })
                 },
+                editSection: {
+                    componentPath: "Button",
+                    props: {
+                        color: "primary"
+                    },
+                    visible: isEditable,
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "TL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
+                    }
+                }
             }
         },
         viewFour: getCommonContainer({
