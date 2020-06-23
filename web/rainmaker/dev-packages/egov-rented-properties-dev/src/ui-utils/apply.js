@@ -68,7 +68,7 @@ import {
           );
         } else {
           if(activeIndex === 0) {
-            set(queryObject[0], "masterDataAction", "REINITIATE")
+            set(queryObject[0], "masterDataAction", "MODIFY")
           } else {
             set(queryObject[0], "masterDataAction", "SUBMIT")
           }
@@ -82,6 +82,7 @@ import {
         }
         const {Properties} = response
         dispatch(prepareFinalObject("Properties", Properties));
+        return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
         console.log(error);

@@ -58,6 +58,13 @@ const getData = async(action, state, dispatch) => {
   getColonyTypes(action, state, dispatch);
   if(transitNumber) {
     searchResults(action, state, dispatch, transitNumber)
+  } else {
+    dispatch(
+      prepareFinalObject(
+        "Properties",
+        []
+      )
+    )
   }
 }
 
