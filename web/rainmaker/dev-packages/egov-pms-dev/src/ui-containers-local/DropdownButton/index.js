@@ -950,6 +950,19 @@ else{
   wef = convertDateToEpoch(wef);
   set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef", wef);
 
+  let familyPensionIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified",0) 
+  familyPensionIStartDateVerified = convertDateToEpoch(familyPensionIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified", familyPensionIStartDateVerified);
+  let familyPensionIEndDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified",0) 
+  familyPensionIEndDateVerified = convertDateToEpoch(familyPensionIEndDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified", familyPensionIEndDateVerified);  
+  let familyPensionIIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified",0) 
+  familyPensionIIStartDateVerified = convertDateToEpoch(familyPensionIIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified", familyPensionIIStartDateVerified);
+
   // im case of AOP 
   let TakenMonthlyPensionAndGratuity = ''
     let isTakenMonthlyPensionAndGratuity = false;

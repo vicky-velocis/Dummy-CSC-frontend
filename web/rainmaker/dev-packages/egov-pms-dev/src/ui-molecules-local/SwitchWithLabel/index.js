@@ -7,7 +7,7 @@ import Switch from "../../ui-atoms-local/Switch";
 import get from "lodash/get";
 import { connect } from "react-redux";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import "./index.css";
+//import "./index.css";//
 
 class SwitchWithLabel extends Component {
   onSwitchChange = (event, checked) => {
@@ -24,14 +24,16 @@ class SwitchWithLabel extends Component {
         for (var i = 0; i < multiItems.length; i++) {
           handleField(
             screenKey,
-            `${compJPath}[${i}].item${i}.children.cardContent.children.asmtDetailsCardContainer.children.currentAssignment`,
+            `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.currentAssignment`,
             "props.value",
+            // `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.${componentname}`,
+            // "props.value",
             false
           );
         }
       }
     }
-   // this.props.onChange({ target: { value: event.target.checked } });
+    this.props.onChange({ target: { value: event.target.checked } });
     // prepareFinalObject(jsonPath, event.target.checked);
   };
 

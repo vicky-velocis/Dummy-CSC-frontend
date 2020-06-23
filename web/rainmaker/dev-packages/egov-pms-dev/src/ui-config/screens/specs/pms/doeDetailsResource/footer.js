@@ -738,6 +738,18 @@ const wfActionSubmit= async (state, dispatch) => {
     
     setcommentFile(state,dispatch);
   }
+  let familyPensionIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified",0) 
+  familyPensionIStartDateVerified = convertDateToEpoch(familyPensionIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified", familyPensionIStartDateVerified);
+  let familyPensionIEndDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified",0) 
+  familyPensionIEndDateVerified = convertDateToEpoch(familyPensionIEndDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified", familyPensionIEndDateVerified);  
+  let familyPensionIIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified",0) 
+  familyPensionIIStartDateVerified = convertDateToEpoch(familyPensionIIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified", familyPensionIIStartDateVerified);
   let response = await createUpdateNPApplication(
     state,
     dispatch,
@@ -1075,20 +1087,21 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         
       }
       else{
-        isFormValid = false;
+       // alert('no need to check')
+       // isFormValid = false;
       }
        
     }
     if(fields.dues!==undefined 
       &&fields.miscellaneous!==undefined 
-      &&fields.medicalRelief!==undefined 
-      &&fields.fma!==undefined       
-      &&fields.pensionArrear!==undefined       
+      // &&fields.medicalRelief!==undefined 
+       &&fields.fma!==undefined       
+      // &&fields.pensionArrear!==undefined       
       &&fields.lpd!==undefined 
       &&fields.cess!==undefined 
       &&fields.incomeTax!==undefined 
       &&fields.overPayment!==undefined 
-      &&fields.ltc!==undefined 
+     // &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
       // &&fields.accountNumber!==undefined 
@@ -1098,14 +1111,14 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         
         if(fields.dues.isFieldValid ===false 
           ||fields.miscellaneous.isFieldValid ===false 
-          ||fields.medicalRelief.isFieldValid ===false 
+         // ||fields.medicalRelief.isFieldValid ===false 
           ||fields.fma.isFieldValid ===false           
-          ||fields.pensionArrear.isFieldValid ===false           
+         // ||fields.pensionArrear.isFieldValid ===false           
           ||fields.lpd.isFieldValid ===false 
           ||fields.cess.isFieldValid ===false 
           ||fields.incomeTax.isFieldValid ===false 
           ||fields.overPayment.isFieldValid ===false 
-          ||fields.ltc.isFieldValid ===false 
+         // ||fields.ltc.isFieldValid ===false 
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
@@ -1113,18 +1126,23 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
+           
             isFormValid = false
           }
         else{
-          
+         
           isFormValid = true
         }
         
-      }
+      }     
      if(!isDependentValid)
      {
        isFormValid = false;
      }
+    //  else{
+    //    alert('why')
+    //   isFormValid = true;
+    //  }
      if(isFormValid)
      { 
     if(isDependentValid)
@@ -1567,6 +1585,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   
           }
         }
+       
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
    
@@ -1742,13 +1761,21 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
               labelName:
                 "Please add at lease one valid dependent to get pension amount",
               labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };  
+          }
+          else if(!isGratuityAmountValid)
+          {
+            errorMessage = {
+              labelName:
+                "Total gratuity percentage should not be greater then 100",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
             };
   
           }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
- // validate doc upload
+
   
 return isFormValid
 }
@@ -1764,7 +1791,7 @@ const callBackForNext = async (state, dispatch) => {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
   setButtons(details)
   let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
- 
+
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)
   else{

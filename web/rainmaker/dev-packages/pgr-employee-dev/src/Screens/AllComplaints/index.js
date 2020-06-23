@@ -22,7 +22,7 @@ class AllComplaints extends Component {
     mobileNo: "",
     complaints: [],
     search: false,
-    value: 0,
+    value: window.localStorage.getItem('tabValue')?parseInt(window.localStorage.getItem('tabValue')):0,
     sortPopOpen: false,
     errorText: ""
   };
@@ -42,6 +42,12 @@ class AllComplaints extends Component {
       renderCustomTitle,
       prepareFinalObject
     } = this.props;
+
+if(window.localStorage.getItem('tabValue')){
+ // this.onChange(parseInt(window.localStorage.getItem('tabValue')));
+  window.localStorage.removeItem('tabValue');
+}
+
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
@@ -195,7 +201,10 @@ class AllComplaints extends Component {
   };
 
   onComplaintClick = complaintNo => {
-    this.props.history.push(`/complaint-details/${complaintNo}`);
+    this.props.history.push({
+      pathname: `/complaint-details/${complaintNo}`,
+      state: { tabValue: this.state.value }
+    })
   };
 
   onComplaintChange = e => {
@@ -343,6 +352,7 @@ class AllComplaints extends Component {
         <Tabs
           className="employee-complaints-tab"
           onChange={this.onChange}
+          value = {this.state.value}
           tabs={[
             {
               label: (

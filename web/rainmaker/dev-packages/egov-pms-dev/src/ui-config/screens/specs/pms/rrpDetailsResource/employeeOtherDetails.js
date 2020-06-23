@@ -610,6 +610,13 @@ return getCommonCard({
               )
             );  
             set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isAnyMisconductInsolvencyInefficiency", false);           
+            set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted", false);           
+            dispatch(
+              pfo(
+                "ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted",
+                false
+              )
+            );
                      
           } 
           else {
