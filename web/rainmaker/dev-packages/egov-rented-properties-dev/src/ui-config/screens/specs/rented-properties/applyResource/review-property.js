@@ -89,12 +89,26 @@ export const getReviewProperty = (isEditable = true) => {
                 },
                 { jsonPath: "Properties[0].propertyDetails.area" }
             ),
-            propertyRentedSqYrd: getLabelWithValue(
+            allotementDate: getLabelWithValue(
                 {
-                    labelName: "Rented Per Sq yard",
-                    labelKey: "RP_RENT_AREA_PROPERTY_SQYRD"
+                    labelName: "Date of Allotment",
+                    labelKey: "RP_ALLOTMENT_DATE_LABEL"
                 },
-                { jsonPath: "Properties[0].propertyDetails.rentPerSqyd" }
+                { jsonPath: "Properties[0].owners[0].allotmentStartdate" }
+            ),
+            allotementNumber: getLabelWithValue(
+                {
+                    labelName: "Allotment Number",
+                    labelKey: "RP_ALLOTMENT_NUMBER_LABEL"
+                },
+                { jsonPath: "Properties[0].owners[0].allotmenNumber" }
+            ),
+            possessionDate: getLabelWithValue(
+                {
+                    labelName: "Date of Possession",
+                    labelKey: "RP_POSSESSION_DATE_LABEL"
+                },
+                { jsonPath: "Properties[0].owners[0].posessionStartdate" }
             ),
         })
     })
@@ -197,6 +211,265 @@ export const getReviewOwner = (isEditable = true) => {
                     },
                     { jsonPath: "Properties[0].owners[0].aadhaarNumber" }
                 )
+        })
+    })
+}
+
+
+export const getReviewOwnerAddress = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+                style: { marginBottom: "10px" }
+            },
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Address Details",
+                        labelKey: "RP_ADDRESS_DETAILS_HEADER"
+                    })
+                },
+                editSection: {
+                    componentPath: "Button",
+                    props: {
+                        color: "primary"
+                    },
+                    visible: isEditable,
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "TL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
+                    }
+                }
+            }
+        },
+        viewFour: getCommonContainer({
+                area: getLabelWithValue(
+                    {
+                        labelName: "Area",
+                        labelKey: "RP_AREA_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.area" }
+                ),
+                district: getLabelWithValue(
+                    {
+                        labelName: "District",
+                        labelKey: "RP_DISTRICT_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.district" }
+                ),
+                state: getLabelWithValue(
+                    {
+                        labelName: "State",
+                        labelKey: "RP_STATE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.state" }
+                ),
+                country: getLabelWithValue(
+                    {
+                        labelName: "Country",
+                        labelKey: "RP_COUNTRY_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.country" }
+                ),
+                pincode: getLabelWithValue(
+                    {
+                        labelName: "Pincode",
+                        labelKey: "RP_PINCODE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.pincode" }
+                ),
+                landmark: getLabelWithValue(
+                    {
+                        labelName: "Landmark",
+                        labelKey: "RP_LANDMARK_LABEL"
+                    },
+                    { jsonPath: "Properties[0].propertyDetails.address.landmark" }
+                ),
+        })
+    })
+}
+
+
+export const getReviewRentDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+                style: { marginBottom: "10px" }
+            },
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Rent Details",
+                        labelKey: "RP_RENT_DETAILS_HEADER"
+                    })
+                },
+                editSection: {
+                    componentPath: "Button",
+                    props: {
+                        color: "primary"
+                    },
+                    visible: isEditable,
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "TL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
+                    }
+                }
+            }
+        },
+        viewFour: getCommonContainer({
+                monthlyRentAmount: getLabelWithValue(
+                    {
+                        labelName: "Monthly Rent Amount",
+                        labelKey: "RP_MONTHLY_RENT_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].monthlyRent" }
+                ),
+                revisionPeriod: getLabelWithValue(
+                    {
+                        labelName: "Rent Amount Revised Period",
+                        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].revisionPeriod" }
+                ),
+                monthlyRentAmount: getLabelWithValue(
+                    {
+                        labelName: "Rent Amount Revision Percentage",
+                        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].revisionPercentage" }
+                ),
+        })
+    })
+}
+
+
+
+export const getReviewPaymentDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+                style: { marginBottom: "10px" }
+            },
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Payment Details",
+                        labelKey: "RP_PAYMENT_DETAILS_HEADER"
+                    })
+                },
+                editSection: {
+                    componentPath: "Button",
+                    props: {
+                        color: "primary"
+                    },
+                    visible: isEditable,
+                    gridDefination: {
+                        xs: 12,
+                        sm: 2,
+                        align: "right"
+                    },
+                    children: {
+                        editIcon: {
+                            uiFramework: "custom-atoms",
+                            componentPath: "Icon",
+                            props: {
+                                iconName: "edit"
+                            }
+                        },
+                        buttonLabel: getLabel({
+                            labelName: "Edit",
+                            labelKey: "TL_SUMMARY_EDIT"
+                        })
+                    },
+                    onClickDefination: {
+                        action: "condition",
+                        callBack: (state, dispatch) => {
+                            changeStep(state, dispatch, "", 0);
+                        }
+                    }
+                }
+            }
+        },
+        viewFour: getCommonContainer({
+                amountPaid: getLabelWithValue(
+                    {
+                        labelName: "Payment Amount",
+                        labelKey: "RP_PAYMENT_AMOUNT_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].payment[0].amountPaid" }
+                ),
+                paymentDate: getLabelWithValue(
+                    {
+                        labelName: "Date of Payment",
+                        labelKey: "RP_DATE_PAYMENT_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].payment[0].paymentDate" }
+                ),
+                paymentMode: getLabelWithValue(
+                    {
+                        labelName: "Payment Mode",
+                        labelKey: "RP_PAYMENT_MODE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].owners[0].payment[0].paymentMode" }
+                ),
         })
     })
 }
