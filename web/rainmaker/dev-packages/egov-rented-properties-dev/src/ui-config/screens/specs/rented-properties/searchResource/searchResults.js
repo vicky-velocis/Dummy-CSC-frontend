@@ -8,25 +8,6 @@ import { searchApiCall } from "./functions";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
-export const _searchResults = {
-  uiFramework: "custom-containers-local",
-  moduleName: "egov-tradelicence",
-  componentPath: "TableContainer",
-  visible: true,
-  props: {
-    columnData: [
-      {label: getTextToLocalMapping("Transit No")},
-      {label: getTextToLocalMapping("Colony")},
-      {label: getTextToLocalMapping("Owner")},
-      {label: getTextToLocalMapping("Status")},
-    ],
-    onRowClick: (row) => onRowClick(row),
-    onPageChanged: (state, dispatch, offset = 0, limit = 10, hideTable) => searchApiCall(state, dispatch, true, offset, limit, hideTable)
-  }
-}
-
-
-
 export const searchResults = {
   uiFramework: "custom-molecules",
   // moduleName: "egov-tradelicence",

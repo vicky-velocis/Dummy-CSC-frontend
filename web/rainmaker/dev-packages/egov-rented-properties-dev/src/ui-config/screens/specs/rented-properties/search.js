@@ -18,7 +18,7 @@ import { getColonyTypes } from "./apply";
 
   const header = getCommonHeader({
     labelName: "Rented Properties",
-    labelKey: "TL_COMMON_RENTED_PROPERTIES"
+    labelKey: "RP_COMMON_RENTED_PROPERTIES"
   });
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
@@ -69,8 +69,8 @@ import { getColonyTypes } from "./apply";
                     },
                     children: {
                       buttonLabel: getLabel({
-                        labelName: "MASTER ADD/UPDATE",
-                        labelKey: "RP_HOME_SEARCH_ADD_UPDATE_BUTTON"
+                        labelName: "MASTER ADD",
+                        labelKey: "RP_HOME_ADD_BUTTON"
                       })
                     },
                     onClickDefination: {

@@ -50,8 +50,8 @@ export const getColonyTypes = async(action, state, dispatch) => {
 
 
 const header = getCommonHeader({
-    labelName: "Rented Properties Add Update",
-    labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD_UPDATE"
+    labelName: "Add Rented Properties",
+    labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD"
   });
 
 const getData = async(action, state, dispatch) => {

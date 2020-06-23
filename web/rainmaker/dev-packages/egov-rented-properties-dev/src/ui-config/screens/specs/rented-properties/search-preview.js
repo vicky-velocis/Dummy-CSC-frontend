@@ -21,7 +21,7 @@ let transitNumber = getQueryArg(window.location.href, "transitNumber");
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
-    labelKey: "TL_COMMON_RENTED_PROPERTIES"
+    labelKey: "RP_COMMON_RENTED_PROPERTIES"
   })
 });
 const reviewOwnerDetails = getReviewOwner(false);
