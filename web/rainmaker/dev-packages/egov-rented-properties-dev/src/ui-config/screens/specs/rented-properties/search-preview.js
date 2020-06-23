@@ -30,12 +30,6 @@ const reviewAddressDetails = getReviewOwnerAddress(false);
 const reviewRentDetails = getReviewRentDetails(false);
 const reviewPaymentDetails = getReviewPaymentDetails(false);
 
-
-
-
-
-
-
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
   reviewOwnerDetails,

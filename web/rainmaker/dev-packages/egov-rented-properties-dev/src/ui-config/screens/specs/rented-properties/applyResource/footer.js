@@ -3,11 +3,25 @@ import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/u
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { applyRentedProperties } from "../../../../../ui-utils/apply";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const DEFAULT_STEP = -1;
 const DETAILS_STEP = 0;
 const DOCUMENT_UPLOAD_STEP = 1;
 const SUMMARY_STEP = 2;
+
+const moveToSuccess = (rentedData, dispatch) => {
+  const id = get(rentedData, "id");
+  const transitNumber = get(rentedData, "transitNumber")
+  const tenantId = get(rentedData, "tenantId");
+  const purpose = "apply";
+  const status = "success";
+  dispatch(
+    setRoute(
+      `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
+    )
+  );
+};
 
 
 const callBackForNext = async(state, dispatch) => {
@@ -57,7 +71,14 @@ const callBackForNext = async(state, dispatch) => {
     }
 
     if(activeStep === SUMMARY_STEP) {
-
+      const rentedData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Properties[0]"
+    );
+    isFormValid = await applyRentedProperties(state, dispatch);
+      if (isFormValid) {
+          moveToSuccess(rentedData, dispatch);
+      }
     }
 
     if(activeStep !== SUMMARY_STEP) {
@@ -300,10 +321,10 @@ export const footer = getCommonApplyFooter({
           }
         }
       },
-    //   onClickDefination: {
-    //     action: "condition",
-    //     callBack: callBackForNext
-    //   },
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForNext
+      },
       visible: false
     }
   });

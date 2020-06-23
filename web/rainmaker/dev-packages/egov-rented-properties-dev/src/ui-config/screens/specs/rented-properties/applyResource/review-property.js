@@ -13,8 +13,6 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import { changeStep } from "./footer";
 
-
-
 export const getReviewProperty = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -113,8 +111,6 @@ export const getReviewProperty = (isEditable = true) => {
         })
     })
 }
-
-
 
 export const getReviewOwner = (isEditable = true) => {
     return getCommonGrayCard({
@@ -215,7 +211,6 @@ export const getReviewOwner = (isEditable = true) => {
     })
 }
 
-
 export const getReviewOwnerAddress = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -315,7 +310,6 @@ export const getReviewOwnerAddress = (isEditable = true) => {
     })
 }
 
-
 export const getReviewRentDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -393,8 +387,6 @@ export const getReviewRentDetails = (isEditable = true) => {
         })
     })
 }
-
-
 
 export const getReviewPaymentDetails = (isEditable = true) => {
     return getCommonGrayCard({
