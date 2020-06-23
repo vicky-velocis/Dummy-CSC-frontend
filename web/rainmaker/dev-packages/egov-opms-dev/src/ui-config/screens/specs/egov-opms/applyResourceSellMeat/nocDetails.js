@@ -3,6 +3,7 @@ import {  handleScreenConfigurationFieldChange as handleField,  prepareFinalObje
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  furnishNocResponse,  getSearchResults} from "../../../../../ui-utils/commons";
+import { getOPMSPattern } from "../../utils/index"
 
 export const nocDetails = getCommonCard({
   header: getCommonTitle(
@@ -28,7 +29,7 @@ export const nocDetails = getCommonCard({
         labelName: "Enter Applicant Name",
         labelKey: "SELLMEAT_APPLICANT_NAME_PLACEHOLDER"
       },
-      pattern: getPattern("VillageName"),
+      pattern: getOPMSPattern("petnocApplicantName"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,      
       jsonPath:"SELLMEATNOC.applicantName"
@@ -45,7 +46,7 @@ export const nocDetails = getCommonCard({
           labelKey:"SELLMEAT_FATHERHUSBANDNAME_PLACEHOLDER"
        },
        required:true,
-       pattern:getPattern("VillageName"),
+       pattern:getOPMSPattern("petnocApplicantName"),
        errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
        jsonPath:"SELLMEATNOC.fatherHusbandName"
     })
@@ -61,7 +62,7 @@ export const nocDetails = getCommonCard({
           labelKey:"SELLMEAT_HOUSENO_PLACEHOLDER"
        },
        required:true,
-       pattern:getPattern("DoorHouseNo"),
+       pattern:getOPMSPattern("DoorHouseNo"),
        errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
        jsonPath:"SELLMEATNOC.houseNo"
     })

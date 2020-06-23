@@ -188,7 +188,7 @@ export const tradeLicenseApplication = getCommonCard({
     }
     }),
     beforeFieldChange:(action, state, dispatch) => {
-      setServiceType(action, state, dispatch, action.value, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.serviceType.props")
+      setServiceType(action, state, dispatch, action.value, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.serviceType.props", "searchScreen.businessService")
     }
   },
     serviceType: getSelectField(

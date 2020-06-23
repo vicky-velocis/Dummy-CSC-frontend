@@ -13,7 +13,7 @@ import { immunizationDetails } from "./advApplyResource/immunization";
 import { documentDetails } from "./advApplyResource/documentDetails";
 import {  prepareFinalObject,  handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getOPMSTenantId, getUserInfo, setapplicationType,lSRemoveItem, lSRemoveItemlocal, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { getOPMSTenantId, getUserInfo, setapplicationType,lSRemoveItem, lSRemoveItemlocal, setapplicationNumber,localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import jp from "jsonpath";
 import set from "lodash/set";
@@ -149,7 +149,8 @@ const getMdmsData = async (action, state, dispatch) => {
               name: "sector"
             },
             {
-              name: "typeOfAdvertisement"
+              name: "typeOfAdvertisement",
+              "filter":"$.[?(@.active==true)]"
             },
             {
               name: "subTypeOfAdvertisement"
@@ -204,13 +205,63 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       setapplicationNumber(applicationNumber);
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
+    let typecateID =
+    get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
+      item => item.name === Refurbishresponse.typeOfAdvertisement
+      );
 
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new",typecateID[0].subTypeOfAdvertisement
+    )
+  );
+
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.egpm.duration-new",typecateID[0].durationDropdown
+    )
+  );
     // Set sample docs upload
     // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
     let documentsPreview = [];
 
     // Get all documents from response
     let advtnocdetail = get(state, "screenConfiguration.preparedFinalObject.ADVERTISEMENTNOC", {});
+    let applicationStatus = response.nocApplicationDetail[0].applicationstatus
+    
+    localStorageSet("advertisementStatus", applicationStatus);
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.typeOfAdvertisement",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.subTypeOfAdvertisement",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.toDatePeriodOfDisplay",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.fromDatePeriodOfDisplay",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.duration",
+        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+
+
     let uploadVaccinationCertificate = advtnocdetail.hasOwnProperty('uploadDocuments') ?
       advtnocdetail.uploadDocuments[0]['fileStoreId'] : '';
     
@@ -238,9 +289,26 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
                 .slice(13)
             )) ||
           `Document - ${index + 1}`;
+
+
+        doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+        //doc["name"] = doc.fileStoreId;
+        doc["fileName"] =
+          (fileUrls[doc.fileStoreId] &&
+            decodeURIComponent(
+              fileUrls[doc.fileStoreId]
+                .split(",")[0]
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`;
         return doc;
       });
       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+     dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+
     }
 
   }
@@ -250,6 +318,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "advertisementApply",
   beforeInitScreen: (action, state, dispatch) => {
+    localStorageSet("advertisementStatus", "");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     !applicationNumber ? clearlocalstorageAppDetails(state) : ''
     
@@ -279,6 +348,7 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
+    
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {

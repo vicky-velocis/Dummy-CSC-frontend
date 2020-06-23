@@ -14,7 +14,9 @@ import {prepareDocumentsUploadData, furnishNocResponsePressNote,getSearchResults
 import {getPressGridDatatender} from "./searchResource/citizenSearchFunctions";
 import { PressMasterListForTender,searchGridSecondstep } from "./searchResource/searchResults";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import './publishtender.css'
+import './publishtender.css';
+import commonConfig from '../../../../config/common';
+
 export const stepsData = [
   { labelName: "PUBLISH TENDER DETAILS", labelKey: "PR_PUBLISH_TENDER_DETAILS" },
   { labelName: "PUBLICATION NAME LISXT", labelKey: "PR_PUBLICATION_NAME_LIST" },
@@ -28,7 +30,7 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Publish Tender Notice Details`, //later use getFinancialYearDates
+    labelName: `Publish Tender Notice Details`, 
     labelKey: "PR_PUBLISH_TENDER_NOTICE_DETAILS"
   }),
  
@@ -81,7 +83,7 @@ export const formwizardThirdStep = {
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+  let tenantId =commonConfig.tenantId;
 
   
   let mdmsBody = {
@@ -159,7 +161,7 @@ export const prepareEditFlow = async (
  let selectedrowslocal=[];
  let selectedRows=[];
  empdata.map(function (item, index) {
-   debugger
+   
    if(item.pressMasterUuid){
    response.ResponseBody[0].publicationList.map(function (commiteeMember,index1) {
      if(commiteeMember.pressMasterUuid===item.pressMasterUuid){
@@ -207,7 +209,7 @@ export const prepareEditFlow = async (
 
 
   let documentsPreview = [];
-  debugger
+  
   let fileStoreIds1 = response.ResponseBody[0].documentAttachment
   documentsPreview.push({
     
@@ -248,40 +250,7 @@ dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPrevie
  }
  let documentsPreview = [];
  
-     // Get all documents from response
-     let firenoc = get(state, "screenConfiguration.preparedFinalObject.PublicRealation", {});
-     let uploadVaccinationCertificate = firenoc.hasOwnProperty('eventImage') ?
-       firenoc[0].CreateEventDetails.eventImage[0]['fileStoreId'] : '';
-
- 
-     if (uploadVaccinationCertificate !== '') {
-       documentsPreview.push({
-         title: "PRESS_NOTE_DOCUMENT",
-         fileStoreId: uploadVaccinationCertificate,
-         linkText: "View"
-       })
-       let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-       let fileUrls =
-         fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-       documentsPreview = documentsPreview.map(function (doc, index) {
- 
-         doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-         //doc["name"] = doc.fileStoreId;
-         doc["name"] =
-           (fileUrls[doc.fileStoreId] &&
-             decodeURIComponent(
-               fileUrls[doc.fileStoreId]
-                 .split(",")[0]
-                 .split("?")[0]
-                 .split("/")
-                 .pop()
-                 .slice(13)
-             )) ||
-           `Document - ${index + 1}`;
-         return doc;
-       });
-       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-     }
+   
   
 
 };
@@ -394,11 +363,11 @@ const screenConfig = {
           }
         },
         stepper,
-       // searchResultsPressMasterList,
+      
         formwizardFirstStep,
         formwizardSecondStep,
        formwizardThirdStep,
-        // formwizardFourthStep,
+       
         tenderApplyfooter
       }
     }

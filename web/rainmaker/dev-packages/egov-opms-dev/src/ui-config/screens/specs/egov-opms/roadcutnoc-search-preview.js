@@ -348,7 +348,7 @@ const setDownloadMenu = (state, dispatch) => {
 const HideshowEdit = (action, nocStatus, amount) => {
   // Hide edit buttons
   let showEdit = false;
-  if (nocStatus === "REASSIGN") {
+  if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
     showEdit = true;
   }
   set(
@@ -393,6 +393,26 @@ const HideshowEdit = (action, nocStatus, amount) => {
     (role_name === 'CITIZEN' && nocStatus === "APPROVED") ? true : false
   );
 
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.previousButton.visible",
+    role_name === "CITIZEN" ?
+            nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
+         true
+      :false
+    :false
+    );
+  
+    set(
+      action,
+      "screenConfig.components.div.children.footer.children.submitButton.visible",
+      role_name === "CITIZEN" ?
+              nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
+           true
+        :false
+      :false
+      );
+  
 
 }
 
@@ -414,10 +434,13 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
   HideshowEdit(action, nocStatus, amount);
 
-  if (amount > 0 && performancebankguaranteecharges > 0 && gstamount > 0 && role_name == 'CITIZEN') {
+  if ( role_name === 'CITIZEN') {
 
-    createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
+    let res=createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
+    //alert(JSON.stringify(res))
+    if(res!=null){
     searchBill(dispatch, applicationNumber, tenantId);
+    }
 
   }
   prepareDocumentsView(state, dispatch);
@@ -568,7 +591,7 @@ const screenConfig = {
 
     //setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId)
-    // searchBill(dispatch, applicationNumber, tenantId);
+ 
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "ROADCUTNOC" }

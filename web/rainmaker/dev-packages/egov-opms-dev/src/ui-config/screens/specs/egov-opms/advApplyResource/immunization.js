@@ -11,6 +11,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getOPMSPattern } from "../../utils/index"
+
 let previousUoms = [];
 
 var applicationNumberId = getQueryArg(window.location.href, "applicationNumber");
@@ -74,8 +76,8 @@ const commonBuildingData = buildingType => {
         labelsFromLocalisation: true,
         props: {
           className: "applicant-details-error",
-          required: true
-          // disabled: true
+          required: true,
+           disabled: false
         },
         beforeFieldChange: (action, state, dispatch) => {
           try {
@@ -125,8 +127,8 @@ const commonBuildingData = buildingType => {
         required: true,
         props: {
           className: "applicant-details-error",
-          required: true
-          // disabled: true
+          required: true,
+          disabled:false
         },
         beforeFieldChange: (action, state, dispatch) => { 
           try {
@@ -160,6 +162,9 @@ const commonBuildingData = buildingType => {
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
+      props:{
+        disabled:false,
+      },
       afterFieldChange: (action, state, dispatch) => {
         let today = getTodaysDateInYMD();
         let FromDate = get(state.screenConfiguration.preparedFinalObject, `ADVERTISEMENTNOC.fromDateToDisplay`, []);
@@ -188,6 +193,9 @@ const commonBuildingData = buildingType => {
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
+      props:{
+        disabled:false,
+      },
       afterFieldChange: (action, state, dispatch) => {
         let FromDate = get(state.screenConfiguration.preparedFinalObject, `ADVERTISEMENTNOC.fromDateToDisplay`, []);
         let ToDate = get(state.screenConfiguration.preparedFinalObject, `ADVERTISEMENTNOC.toDateToDisplay`, []);
@@ -347,7 +355,10 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_ENTER_SPACE_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Amount"),
+        props: {
+          disabled: false,
+        },
+        pattern: getOPMSPattern("Amount"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.space",
       })

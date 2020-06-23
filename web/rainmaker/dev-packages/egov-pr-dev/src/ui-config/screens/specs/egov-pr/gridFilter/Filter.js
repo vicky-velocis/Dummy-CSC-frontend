@@ -37,7 +37,7 @@ export const EventFilter = getCommonCard({
       required: false,
      // pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterEvent.eventId"
+      jsonPath: "PublicRelation[0].filterEvent.eventId"
     }),
   
     eventTitle: getTextField({
@@ -56,7 +56,7 @@ export const EventFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterEvent.eventTitle",
+      jsonPath: "PublicRelation[0].filterEvent.eventTitle",
      
     }),
 
@@ -66,7 +66,7 @@ export const EventFilter = getCommonCard({
         labelName: "From Date",
         labelKey: "PR_FROM_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterEvent.fromDate",
+      jsonPath: "PublicRelation[0].filterEvent.fromDate",
       
       gridDefination: {
         xs: 12,
@@ -76,7 +76,7 @@ export const EventFilter = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false,
       afterFieldChange: (action, state, dispatch) => {
-        // debugger
+        // 
         // alert(action.value)
  
  
@@ -101,7 +101,7 @@ export const EventFilter = getCommonCard({
         labelName: "To Date",
         labelKey: "PR_TO_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterEvent.toDate",
+      jsonPath: "PublicRelation[0].filterEvent.toDate",
       pattern: getPattern("Date"),
       gridDefination: {
         xs: 12,
@@ -124,7 +124,7 @@ export const EventFilter = getCommonCard({
       optionLabel:"name"
  ,   
      
-      jsonPath: "PublicRealation[0].filterEvent.Scedulestatus",
+      jsonPath: "PublicRelation[0].filterEvent.Scedulestatus",
       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventScheduledStatus",
       required: false,
       gridDefination: {
@@ -146,7 +146,7 @@ export const EventFilter = getCommonCard({
       optionLabel:"name"
  ,   
  
-      jsonPath: "PublicRealation[0].filterEvent.Eventstatus",
+      jsonPath: "PublicRelation[0].filterEvent.Eventstatus",
       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventStatus",
       required: false,
       gridDefination: {
@@ -216,7 +216,7 @@ export const InviteGuestFilter = getCommonCard({
       required: false,
    //   pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterInviteEvent.eventId"
+      jsonPath: "PublicRelation[0].filterInviteEvent.eventId"
     }),
   
   
@@ -236,7 +236,7 @@ export const InviteGuestFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterInviteEvent.eventTitle"
+      jsonPath: "PublicRelation[0].filterInviteEvent.eventTitle"
     }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "PR_FROM_DATE_LABEL" },
@@ -244,7 +244,7 @@ export const InviteGuestFilter = getCommonCard({
         labelName: "From Date",
         labelKey: "PR_FROM_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterEvent.fromDate",
+      jsonPath: "PublicRelation[0].filterEvent.fromDate",
     
       gridDefination: {
         xs: 12,
@@ -255,7 +255,7 @@ export const InviteGuestFilter = getCommonCard({
       required: false,
       
   afterFieldChange: (action, state, dispatch) => {
-       // debugger
+       // 
        // alert(action.value)
 
 
@@ -278,7 +278,7 @@ export const InviteGuestFilter = getCommonCard({
         labelName: "To Date",
         labelKey: "PR_TO_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterInviteEvent.toDate",
+      jsonPath: "PublicRelation[0].filterInviteEvent.toDate",
       props: {
         inputProps: {
           min: ''
@@ -305,7 +305,7 @@ export const InviteGuestFilter = getCommonCard({
      optionValue:"name",
      optionLabel:"name"
 ,     
-      jsonPath: "PublicRealation[0].filterInviteEvent.Scedulestatus",
+      jsonPath: "PublicRelation[0].filterInviteEvent.Scedulestatus",
       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventScheduledStatus",
       required: false,
       gridDefination: {
@@ -327,7 +327,7 @@ export const InviteGuestFilter = getCommonCard({
       optionValue:"name",
       optionLabel:"name"
  ,   
-      jsonPath: "PublicRealation[0].filterInviteEvent.Eventstatus",
+      jsonPath: "PublicRelation[0].filterInviteEvent.Eventstatus",
       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventStatus",
       required: false,
       gridDefination: {
@@ -395,7 +395,7 @@ export const LibraryFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterLibraryEvent.eventId"
+      jsonPath: "PublicRelation[0].filterLibraryEvent.eventId"
     }),
   
     eventTitle: getTextField({
@@ -414,7 +414,7 @@ export const LibraryFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterLibraryEvent.eventTitle"
+      jsonPath: "PublicRelation[0].filterLibraryEvent.eventTitle"
     }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "PR_FROM_DATE_LABEL" },
@@ -422,7 +422,7 @@ export const LibraryFilter = getCommonCard({
         labelName: "From Date",
         labelKey: "PR_FROM_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterLibraryEvent.fromDate",
+      jsonPath: "PublicRelation[0].filterLibraryEvent.fromDate",
      
       gridDefination: {
         xs: 12,
@@ -452,7 +452,7 @@ export const LibraryFilter = getCommonCard({
         labelName: "To Date",
         labelKey: "PR_TO_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterLibraryEvent.toDate",
+      jsonPath: "PublicRelation[0].filterLibraryEvent.toDate",
       props: {
         inputProps: {
           min: getTodaysDateInYMD()
@@ -479,7 +479,7 @@ export const LibraryFilter = getCommonCard({
 //      optionValue:"name",
 //      optionLabel:"name"
 // ,     
-//       jsonPath: "PublicRealation[0].filterEvent.Scedulestatus",
+//       jsonPath: "PublicRelation[0].filterEvent.Scedulestatus",
 //       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventScheduledStatus",
 //       required: false,
 //       gridDefination: {
@@ -501,7 +501,7 @@ export const LibraryFilter = getCommonCard({
 //       optionValue:"name",
 //       optionLabel:"name"
 //  ,   
-//       jsonPath: "PublicRealation[0].filterEvent.Eventstatus",
+//       jsonPath: "PublicRelation[0].filterEvent.Eventstatus",
 //       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventStatus",
 //       required: false,
 //       gridDefination: {
@@ -571,7 +571,7 @@ export const PressNoteFilter = getCommonCard({
       required: false,
      // pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterpress.fileNumber"
+      jsonPath: "PublicRelation[0].filterpress.fileNumber"
     }),
     Subject: getTextField({
       label: {
@@ -589,7 +589,7 @@ export const PressNoteFilter = getCommonCard({
       required: false,
       //pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterpress.subject"
+      jsonPath: "PublicRelation[0].filterpress.subject"
     }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "PR_PRESS_FROM_DATE_LABEL" },
@@ -597,7 +597,7 @@ export const PressNoteFilter = getCommonCard({
         labelName: "From Date",
         labelKey: "PR_PRESS_FROM_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterpress.fromDate",
+      jsonPath: "PublicRelation[0].filterpress.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -613,7 +613,7 @@ export const PressNoteFilter = getCommonCard({
         labelName: "To Date",
         labelKey: "PR_PRESS_TO_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filterpress.toDate",
+      jsonPath: "PublicRelation[0].filterpress.toDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -685,7 +685,7 @@ export const TenderFilter = getCommonCard({
       required: false,
      // pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filtertender.tenderId"
+      jsonPath: "PublicRelation[0].filtertender.tenderId"
     }),
 
   
@@ -705,7 +705,7 @@ export const TenderFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filtertender.fileNumber"
+      jsonPath: "PublicRelation[0].filtertender.fileNumber"
     }),
     Subject: getTextField({
       label: {
@@ -723,7 +723,7 @@ export const TenderFilter = getCommonCard({
       required: false,
      // pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filtertender.subject"
+      jsonPath: "PublicRelation[0].filtertender.subject"
     }),
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "PR_PRESS_FROM_DATE_LABEL" },
@@ -731,7 +731,7 @@ export const TenderFilter = getCommonCard({
         labelName: "From Date",
         labelKey: "PR_PRESS_FROM_DATE_LABEL"
       },
-      jsonPath: "PublicRealation[0].filtertender.fromDate",
+      jsonPath: "PublicRelation[0].filtertender.fromDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -747,7 +747,7 @@ export const TenderFilter = getCommonCard({
         labelName: "To Date",
         labelKey: "PR_PRESS_TO_DATE_PLACEHOLDER"
       },
-      jsonPath: "PublicRealation[0].filtertender.toDate",
+      jsonPath: "PublicRelation[0].filtertender.toDate",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -823,7 +823,7 @@ export const pressMasterFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterpressMaster.publicationname"
+      jsonPath: "PublicRelation[0].filterpressMaster.publicationname"
     }),
     typeOfPress: getSelectField({
       label: {
@@ -838,7 +838,7 @@ export const pressMasterFilter = getCommonCard({
       optionLabel:"name"
  ,   
  
-      jsonPath: "PublicRealation[0].filterpressMaster.typeofpress",
+      jsonPath: "PublicRelation[0].filterpressMaster.typeofpress",
       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].pressType",
       required: false,
       gridDefination: {
@@ -863,7 +863,7 @@ export const pressMasterFilter = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "PublicRealation[0].filterpressMaster.personnelname"
+      jsonPath: "PublicRelation[0].filterpressMaster.personnelname"
     }),
    
     

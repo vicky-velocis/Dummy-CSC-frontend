@@ -553,24 +553,25 @@ export const getPattern = type => {
   return /^[a-zA-Z. ]*$/i;
   case "BadageNumber":
   return /^[a-zA-Z0-9]*$/i;
-  case "Amountopms":
+   case "Amountopms":
       return /^[0-9.]{0,20}$/i;
       case "validUrl":
       return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
-      case "TextValidation":
-      return /^[a-zA-Z ]{1,180}$/i;
+        case "TextValidation":
+      return /^[a-zA-Z ]{1,180}$/;
      case "AlphaNumValidation":
       return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
-      
       case "EventDescription":
-      return /^(?![0-9.]*$)[a-zA-Z0-9. ]{1,500}$/i;
-      
+      return /^(?![0-9-/,&]*$)[a-zA-Z0-9!@#$&()\\-`.+,/\" ]{1,500}$/i;
       case "EventTitle":
       return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
       
+      case "subjectvalidation":
+      return /^[a-zA-Z ]{1,180}$/i;
       case "AlphaNumValidationLocation":
       return /^(?![0-9-/,&]*$)[a-zA-Z0-9-/,& ]{1,180}$/i;
-
+      case "AlphaNumValidationsms":
+      return /^(?![0-9-/,&]*$)[a-zA-Z0-9!@#$&()\\-`.+,/\" ]{1,180}$/i;
       case "sizeofpublication":
       return /^[0-9]{1,50}$/i;
       
@@ -580,6 +581,8 @@ export const getPattern = type => {
       return /^[a-zA-Z]{1,180}$/i;
 	  case "budget":
       return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
+      case "AlphaNumSubjectSMS":
+      return /^(?![0-9-/,&]*$)[a-zA-Z0-9~!@#$%^&*(){}[]\/.,<>:;" ]{1,180}$/i;
     case "age":
       return /^[1-9][0-9]$/i;
     case "familyMonthlyIncome":

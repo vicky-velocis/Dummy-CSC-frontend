@@ -3,13 +3,31 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getSearchResults ,getEventFilterResults,getPressMasterFilterResults,getPressFilterResults,getTenderFilterResults} from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-//import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getGridData } from "../searchResource/citizenSearchFunctions";
 import { httpRequest } from "../../../../../ui-utils";
 import { localStorageGet, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {  getUserInfo  } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../../config/common';
 
+
+import { checkForRole } from "../../../../../ui-utils/commons";
+
+
+ 
+const convertTime =(time)=> {
+  // Check correct time format and split into components
+  
+  //time=time+":00"
+  time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)?$/) || [time];
+  
+  if (time.length > 1) { // If time format correct
+  time = time.slice(1); // Remove full string match value
+  time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+  time[0] = +time[0] % 12 || 12; // Adjust hours
+  }
+  return time.join(''); // return adjusted time or original string
+  }
 
 ///eventFilter
 
@@ -18,11 +36,11 @@ export const searchEventApiCall = async (state, dispatch) => {
   let tenantId = getTenantId();
   let startDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.fromDate"
+    "PublicRelation[0].filterEvent.fromDate"
   )
   let endDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.toDate"
+    "PublicRelation[0].filterEvent.toDate"
   )
   if(endDate<startDate)
   {
@@ -44,34 +62,34 @@ let data= {"requestBody":{
  "eventDetailUuid":"",
   "eventTitle":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterEvent.eventTitle"
+  "PublicRelation[0].filterEvent.eventTitle"
 ) || "",
  
   "eventStatus":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.Eventstatus"
+    "PublicRelation[0].filterEvent.Eventstatus"
   )==="ALL"?"":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.Eventstatus"
+    "PublicRelation[0].filterEvent.Eventstatus"
   ) || "",
   "status":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.Scedulestatus"
+    "PublicRelation[0].filterEvent.Scedulestatus"
   )==="ALL"?"":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.Scedulestatus"
+    "PublicRelation[0].filterEvent.Scedulestatus"
   ) || "",
   "startDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.fromDate"
+    "PublicRelation[0].filterEvent.fromDate"
   )|| "",
   "endDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.toDate"
+    "PublicRelation[0].filterEvent.toDate"
   ) || "",
   "eventId":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterEvent.eventId"
+    "PublicRelation[0].filterEvent.eventId"
   ) || "",
   "defaultGrid":false
 }}
@@ -80,7 +98,7 @@ const response = await getEventFilterResults(data);
 //alert(JSON.stringify(response))
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId: commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -150,7 +168,7 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
           [item.EmpName, item.organizerUsernName]|| "-",
           [getTextToLocalMapping("Organizer Employee")]:
           item.organizerUsernName || "-",
-        [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+        [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
        [getTextToLocalMapping("Schedule Status")]:
           item.status || "-",
           [getTextToLocalMapping("Event Status")]:
@@ -180,11 +198,11 @@ export const searchLibraryApiCall = async (state, dispatch) => {
   let tenantId = getTenantId();
   let startDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterLibraryEvent.fromDate"
+    "PublicRelation[0].filterLibraryEvent.fromDate"
   )
   let endDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterLibraryEvent.toDate"
+    "PublicRelation[0].filterLibraryEvent.toDate"
   )
   if(endDate<startDate)
   {
@@ -211,33 +229,26 @@ export const searchLibraryApiCall = async (state, dispatch) => {
    
    "eventId":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterLibraryEvent.eventId"
+    "PublicRelation[0].filterLibraryEvent.eventId"
   ) || "",
     "eventTitle":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterLibraryEvent.eventTitle"
+    "PublicRelation[0].filterLibraryEvent.eventTitle"
   ) || "",
-    // "scheduledStatus":get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "PublicRealation[0].filterEvent.Scedulestatus"
-    // ),
+    
     "eventStatus":"PUBLISHED",
     
-    // "status":get(
-    //   state.screenConfiguration.preparedFinalObject,
-    //   "PublicRealation[0].CreateCommitteeDetails.committeename"
-    // ),
     "startDate":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterLibraryEvent.fromDate"
+      "PublicRelation[0].filterLibraryEvent.fromDate"
     ) || "",
     "endDate":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterLibraryEvent.toDate"
+      "PublicRelation[0].filterLibraryEvent.toDate"
     ) || "",
     "eventId":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterLibraryEvent.eventId"
+      "PublicRelation[0].filterLibraryEvent.eventId"
     ) || "",
   }}
   
@@ -245,7 +256,7 @@ export const searchLibraryApiCall = async (state, dispatch) => {
   //alert(JSON.stringify(response))
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: getTenantId(),
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -313,7 +324,7 @@ export const searchLibraryApiCall = async (state, dispatch) => {
         [item.EmpName, item.organizerUsernName]|| "-",
         [getTextToLocalMapping("Organizer Employee")]:
         item.organizerUsernName || "-",
-     [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+     [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
        [  getTextToLocalMapping("Schedule Status")]:
         item.status || "-",
         [getTextToLocalMapping("Event Status")]:
@@ -346,17 +357,17 @@ export const searchInviteApiCall = async (state, dispatch) => {
   
   let scheduledStatus=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.Scedulestatus"
+    "PublicRelation[0].filterInviteEvent.Scedulestatus"
   )
 
   let tenantId = getTenantId();
   let startDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.fromDate"
+    "PublicRelation[0].filterInviteEvent.fromDate"
   )
   let endDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.toDate"
+    "PublicRelation[0].filterInviteEvent.toDate"
   )
   if(endDate<startDate)
   {
@@ -378,40 +389,40 @@ let data= {"requestBody":{
  "eventDetailUuid":"",
   "eventTitle":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterInviteEvent.eventTitle"
+  "PublicRelation[0].filterInviteEvent.eventTitle"
 ),
   
 "eventStatus":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterInviteEvent.Eventstatus"
+  "PublicRelation[0].filterInviteEvent.Eventstatus"
 )==="ALL"?"":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterInviteEvent.Eventstatus"
+  "PublicRelation[0].filterInviteEvent.Eventstatus"
 ),
 "status":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterInviteEvent.Scedulestatus"
+  "PublicRelation[0].filterInviteEvent.Scedulestatus"
 )==="ALL"?"":get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterInviteEvent.Scedulestatus"
+  "PublicRelation[0].filterInviteEvent.Scedulestatus"
 ),
   "startDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.fromDate"
+    "PublicRelation[0].filterInviteEvent.fromDate"
   ),
   "endDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.toDate"
+    "PublicRelation[0].filterInviteEvent.toDate"
   ),
   "eventId":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterInviteEvent.eventId"
+    "PublicRelation[0].filterInviteEvent.eventId"
   ),
 }}
 const response = await getEventFilterResults(data);
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId: commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -483,7 +494,7 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
    [item.EmpName, item.organizerUsernName]|| "-",
    [getTextToLocalMapping("Organizer Employee")]:
    item.organizerUsernName || "-",
- [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+item.startTime+" "+"To"+" "+item.endDate.split(" ")[0] +" "+item.endTime || "-",
+ [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
 [getTextToLocalMapping("Schedule Status")]:
    item.status || "-",
    [getTextToLocalMapping("Event Status")]:
@@ -507,40 +518,40 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
 
 
 export const searchPressApiCall = async (state, dispatch) => {
-  alert('aaa')
+ // alert('aaa')
 let data= {"RequestBody":{ 
   "tenantId":getTenantId(),
   "pressNoteUuid":"",
   "moduleCode":localStorageGet("modulecode"),
   "filenumber":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterpress.fileNumber"
+    "PublicRelation[0].filterpress.fileNumber"
   ),
   "pressNoteSubject":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterpress.subject"
+    "PublicRelation[0].filterpress.subject"
   ),
   "fromDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterpress.fromDate"
+    "PublicRelation[0].filterpress.fromDate"
   ),
    "toDate":get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filterpress.toDate"
+    "PublicRelation[0].filterpress.toDate"
   )
   ,
   "defaultGrid":false
  }}
  let fromDate=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterpress.fromDate"
+  "PublicRelation[0].filterpress.fromDate"
 );
 let toDate=get(
   state.screenConfiguration.preparedFinalObject,
-  "PublicRealation[0].filterpress.toDate"
+  "PublicRelation[0].filterpress.toDate"
 );
 
- debugger
+ 
  if(fromDate!==undefined && toDate!==undefined)
  {
   var date1 = new Date(fromDate);
@@ -560,7 +571,6 @@ let data1 = response.ResponseBody.map(item => ({
   
     
    }));
-//  alert(JSON.stringify(data))
    dispatch(
      handleField(
        "pressNoteList",
@@ -598,7 +608,6 @@ let data1 = response.ResponseBody.map(item => ({
   
     
    }));
-//  alert(JSON.stringify(data))
    dispatch(
      handleField(
        "pressNoteList",
@@ -623,11 +632,11 @@ let data1 = response.ResponseBody.map(item => ({
 export const searchTenderApiCall = async (state, dispatch) => {
   let startDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filtertender.fromDate"
+    "PublicRelation[0].filtertender.fromDate"
   )
   let endDate=get(
     state.screenConfiguration.preparedFinalObject,
-    "PublicRealation[0].filtertender.toDate"
+    "PublicRelation[0].filtertender.toDate"
   )
   if(endDate<startDate)
   {
@@ -649,33 +658,32 @@ export const searchTenderApiCall = async (state, dispatch) => {
     "moduleCode":localStorageGet("modulecode"),
     "filenumber":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filtertender.fileNumber"
+      "PublicRelation[0].filtertender.fileNumber"
     ) ||"",
     "tenderSubject":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filtertender.subject"
+      "PublicRelation[0].filtertender.subject"
     ) ||"",
     "fromDate":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filtertender.fromDate"
+      "PublicRelation[0].filtertender.fromDate"
     ) ||"",
      "toDate":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filtertender.toDate"
+      "PublicRelation[0].filtertender.toDate"
     ) ||"",
    
-    "tenderNoticeStatus":JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER"?"CREATED":"",
+    "tenderNoticeStatus":checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER')?"CREATED":"",
     "tenderNoticeUuid":"",
     "tenderNoticeId":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filtertender.tenderId"
+      "PublicRelation[0].filtertender.tenderId"
     ) ||"",
     
   
    }}
   
   const response = await getTenderFilterResults(data);
-  //alert(JSON.stringify(response))
   
     
   
@@ -692,7 +700,7 @@ export const searchTenderApiCall = async (state, dispatch) => {
     
     
   }));
- debugger
+ 
   dispatch(
     handleField(
       "TenderSearch",
@@ -718,18 +726,18 @@ let data= {
     "pressMasterUuid": "",
     "personnelName":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterpressMaster.personnelname"
+      "PublicRelation[0].filterpressMaster.personnelname"
     ),
     "publicationName":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterpressMaster.publicationname"
+      "PublicRelation[0].filterpressMaster.publicationname"
     ),
     "pressType": get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterpressMaster.typeofpress"
+      "PublicRelation[0].filterpressMaster.typeofpress"
     )==="ALL"?"":get(
       state.screenConfiguration.preparedFinalObject,
-      "PublicRealation[0].filterpressMaster.typeofpress"
+      "PublicRelation[0].filterpressMaster.typeofpress"
     ),
     "moduleCode":localStorageGet("modulecode")
    },
@@ -780,53 +788,3 @@ let data1 = response.ResponseBody.map(item => ({
 
 
 
-
-
-export const validatestepform = (scheduledStatus,eventStatus,isFormValid, hasFieldToaster) => {
-  // alert(activeStep)
-  let activeStep=1
-   let allAreFilled = true;
-   if (activeStep == 1) {
-     document.getElementById("search").querySelectorAll("[required]").forEach(function (i) {
-    //  alert(i+"::::"+i.value)
-     //  alert(i.getAttribute("aria-invalid"))
-       if (!i.value) {
-         i.focus();
-         allAreFilled = false;
-         i.parentNode.classList.add("MuiInput-error-853");
-         i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-       }
-       if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-         i.parentNode.classList.add("MuiInput-error-853");
-         i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-         allAreFilled = false;
-         isFormValid = false;
-         hasFieldToaster = true;
-       }
-     })
-    // ,
- //alert(area)
- if(scheduledStatus===undefined || eventStatus===undefined )
- {
-     allAreFilled = false;
-    // scheduledStatus.parentNode.classList.add("MuiInput-error-853");
-  //   eventStatus.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-         allAreFilled = false;
-         isFormValid = false;
-         hasFieldToaster = true;
- 
- 
- }
-    
-   } 
-   if (allAreFilled == false) {
-   //  alert('Fill all fields')
-     isFormValid = false;
-     hasFieldToaster = true;
-   }
-   else {
-     isFormValid = true;
-     hasFieldToaster = false;
-   }
-   return [isFormValid, hasFieldToaster]
- };

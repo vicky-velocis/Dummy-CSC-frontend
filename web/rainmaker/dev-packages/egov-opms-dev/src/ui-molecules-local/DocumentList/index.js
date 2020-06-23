@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { UploadSingleFile } from "../../ui-molecules-local";
+import {  prepareFinalObject1 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const themeStyles = theme => ({
   documentContainer: {
@@ -125,11 +126,18 @@ class DocumentList extends Component {
   };
 
   componentDidMount = () => {
+   // alert(JSON.stringify(documentsUploadRedux))
+    
     const {
       documentsList,
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
+    if(documentsUploadRedux)
+    {
+
+    }
+    else{
     let index = 0;
     documentsList.forEach(docType => {
       docType.cards &&
@@ -184,7 +192,17 @@ class DocumentList extends Component {
           }
         });
     });
+// 
+// alert(JSON.stringify(documentsUploadRedux))
+//    let file=get(prepareFinalObject1, "documentsUploadRedux[0].documents");
+//   // prepareFinalObject("documentsUploadRedux[0].documents[0]", documentsUploadRedux);
+//    alert(file)
+//   //  // screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0]
+//    if(file===undefined)
+//    {
     prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+  // }
+  }
   };
 
   onUploadClick = uploadedDocIndex => {

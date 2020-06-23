@@ -6,6 +6,7 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResultsMaser } from "./searchResource/searchResults";
 import { getMasterGridData, getSubCategory, getCategory } from "./searchResource/citizenSearchFunctions";
+import "./masteradv.css"
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;

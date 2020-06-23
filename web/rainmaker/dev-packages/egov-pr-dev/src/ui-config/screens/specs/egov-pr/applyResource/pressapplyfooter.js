@@ -18,6 +18,8 @@ import { prepareFinalObject,  handleScreenConfigurationFieldChange as handleFiel
 import { getTenantId } from "../../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import {  localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import store from "../../../../../ui-redux/store";
+import commonConfig from '../../../../../config/common';
+
 const state = store.getState();
 
 
@@ -76,7 +78,6 @@ const callBackForSubmit = async (state, dispatch) => {
     "pressMasterUuid":pressdata[i]['Press master UUID'],  
   
   }
-  // console.log(obj)
   arr.push(obj)
   }
   let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -107,7 +108,6 @@ const callBackForSubmit = async (state, dispatch) => {
   }
   }
 
- // updateCommitteemaster(dispatch,payload);
  updatePressNote(dispatch,payload);
  
   }
@@ -116,11 +116,10 @@ const callBackForSubmit = async (state, dispatch) => {
   
   
   else{
-    debugger
-    if(get(state.screenConfiguration.preparedFinalObject, "pressnote.subjectemail") !==  undefined)
+    
+    if(get(state.screenConfiguration.preparedFinalObject, "pressnote.subjectemail") !==  undefined && get(state.screenConfiguration.preparedFinalObject, "pressnote.subjectemail") !==  "")
     {
   
-  console.log(localStorageGet("PressNoteList")) 
   
   let pressdata='';
   if(localStorageGet("PressNoteList")!== null){
@@ -130,7 +129,6 @@ const callBackForSubmit = async (state, dispatch) => {
 	pressdata=JSON.parse(localStorageGet("PressNoteListAll"))
   
   }
-  console.log(pressdata)
   let arr=[]
   for(let i=0;i<pressdata.length;i++)
   {
@@ -139,7 +137,6 @@ const callBackForSubmit = async (state, dispatch) => {
       
       
       }
-    console.log(obj)
       arr.push(obj)
       }
       let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -183,7 +180,7 @@ const callBackForSubmit = async (state, dispatch) => {
   };
   
 const moveToReview = (state, dispatch) => {
-  debugger
+  
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -239,14 +236,10 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId =
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  ) || getTenantId();
+  
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -266,8 +259,8 @@ const getMdmsData = async (state, dispatch) => {
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.PR.Documents",
+        payload.MdmsRes.PR.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -303,11 +296,11 @@ const callBackForNext = async (state, dispatch) => {
      );
   
 		let data1= localStorageGet("PressNoteList") === null ? JSON.parse( localStorageGet("PressNoteListAll")) : JSON.parse( localStorageGet("PressNoteList"))
-		debugger
+		
 		if( isFormValid === true && hasFieldToaster === false && (localStorageGet("PressNoteList") !== null || localStorageGet("PressNoteListAll") !== null))
 	{	
-    debugger
- //   let data1=JSON.parse( localStorageGet("PressNoteList"))
+    
+ 
     
 
     let data1='';
@@ -361,7 +354,7 @@ const callBackForNext = async (state, dispatch) => {
 	}
  }
 
-debugger
+
   if (activeStep !== 2) {
     if (get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", "")=="") {
       hasFieldToaster=true;
@@ -425,8 +418,7 @@ export const changeStep = (
     activeStep = defaultActiveStep;
   }
 
-debugger
- // const isPreviousButtonVisible =  activeStep === 1  ? true : false;
+
   const isNextButtonVisible = activeStep < 2 ? true : false;
   const isPayButtonVisible = activeStep === 2 ? true : false;
   const iscancleButtonVisible = activeStep === 2 ? true : false; 
@@ -437,11 +429,7 @@ debugger
       property: "activeStep",
       value: activeStep
     },
-    // {
-    //   path: "components.div.children.pressapplyfooter.children.previousButton",
-    //   property: "visible",
-    //   value: isPreviousButtonVisible
-    // },
+    
     {
       path: "components.div.children.pressapplyfooter.children.nextButton",
       property: "visible",

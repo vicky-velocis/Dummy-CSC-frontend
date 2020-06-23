@@ -14,11 +14,6 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getOPMSTenantId, setapplicationType, lSRemoveItem, lSRemoveItemlocal, setapplicationNumber, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 
@@ -235,10 +230,29 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
                 .slice(13)
             )) ||
           `Document - ${index + 1}`;
+
+          doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+          doc["fileName"] =
+            (fileUrls[doc.fileStoreId] &&
+              decodeURIComponent(
+                fileUrls[doc.fileStoreId]
+                  .split(",")[0]
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`;
+
         return doc;
       });
       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+
+    dispatch(prepareFinalObject("documentsUploadRedux[0].documents[0]", documentsPreview[1]));    
+    dispatch(prepareFinalObject("documentsUploadRedux[1].documents[0]", documentsPreview[0]));    
+    
     }
+
 
   }
 };
@@ -254,7 +268,6 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     dispatch(prepareFinalObject("PETNOC.applicantName", JSON.parse(getUserInfo()).name));
-    dispatch(prepareFinalObject("PETNOC.houseNo", JSON.parse(getUserInfo()).permanentAddress));
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "opms");
@@ -263,8 +276,8 @@ const screenConfig = {
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'apply_pet');
     });
-
     // Search in case of EDIT flow
+
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
 
 

@@ -89,36 +89,7 @@ export const  pressnoteFooter = getCommonApplyFooter({
     },
     visible: true
   },
-  // submitButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //       minWidth: "180px",
-  //       height: "48px",
-  //       marginRight: "45px"
-  //     }
-  //   },
-  //   children: {
-  //     submitButtonLabel: getLabel({
-  //       labelName: "SUBMIT",
-  //       labelKey: "PR_SUBMIT_BUTTON"
-  //     }),
-  //     submitButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_right"
-  //       }
-  //     }
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack: redirectpressnotehome
-  //   },
-  //   visible: true
-  // } 
+  
 });
 
 

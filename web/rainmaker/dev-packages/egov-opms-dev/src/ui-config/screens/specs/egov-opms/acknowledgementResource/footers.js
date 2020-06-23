@@ -286,7 +286,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
       },
       onClickDefination: {
         action: "page_change",
-        path: `/egov-opms/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+        path: `/egov-opms/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
       }
     }
   });

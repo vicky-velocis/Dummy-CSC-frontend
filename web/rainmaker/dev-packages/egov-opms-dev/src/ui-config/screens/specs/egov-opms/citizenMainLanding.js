@@ -35,7 +35,7 @@ if(role_name === 'CITIZEN'){
       viewBox="0 -8 35 42"
       color="primary"
       font-size="40px"
-      class="material-icons module-page-icon">
+      class="material-icons module-page-icon" style={{fontSize:"48px"}}>
       pets
       </i>,
       route: "apply"

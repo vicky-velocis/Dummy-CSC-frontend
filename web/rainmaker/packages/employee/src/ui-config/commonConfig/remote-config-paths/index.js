@@ -3,6 +3,7 @@ const remoteConfigPath = (path, screenKey) => {
   switch (path) {
     case "tradelicence":
     case "tradelicense-citizen":
+    case "fine-master":
       config = require(`egov-tradelicence/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "rented-properties":
@@ -44,7 +45,10 @@ const remoteConfigPath = (path, screenKey) => {
       break;
       	case "egov-pr":
       config = require(`egov-pr/ui-config/screens/specs/${path}/${screenKey}`).default;
-	  break;   
+    break; 
+    case "pms":
+      config = require(`egov-pms/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;   
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

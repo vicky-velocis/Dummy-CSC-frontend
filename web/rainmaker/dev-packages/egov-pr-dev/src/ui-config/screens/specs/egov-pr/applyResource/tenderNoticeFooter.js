@@ -17,8 +17,10 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../../config/common';
+
 const setReviewPageRoute = (state, dispatch) => {
-	             let id=getQueryArg(window.location.href, "eventuuId")            
+let id=getQueryArg(window.location.href, "eventuuId")            
 
 	if(id){
 		  let tenantId = getTenantId()
@@ -35,14 +37,10 @@ const setReviewPageRoute = (state, dispatch) => {
     state,
     "screenConfiguration.preparedFinalObject.EVENT.ResponseBody.eventId"
   );
-  //screenConfiguration.preparedFinalObject.
   const eventuuId = get(
     state,
     "screenConfiguration.preparedFinalObject.EVENT.ResponseBody.eventDetailUuid"
   );
-  //localStorage.setItem('eventuuId',eventuuId)
-  // alert(eventId)
-  // alert(eventuuId)
   
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -54,23 +52,17 @@ const setReviewPageRoute = (state, dispatch) => {
 
 const callBackForSubmit = async (state, dispatch) => {
 
- // alert('aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-  debugger
+ 
   let pressnoteuuId=getQueryArg(window.location.href, "pressnoteuuId");
   let pressdata=''
   if(pressnoteuuId){
- // alert(localStorageGet("PressNoteList"))
   if(localStorageGet("PressNoteList")===''||localStorageGet("PressNoteList")===null){
-  // committeeData=[]
-  // //screenConfiguration.preparedFinalObject.CommiteeGetData[0].committeeMember
-  // let data= get(state.screenConfiguration.preparedFinalObject, "[0].committeeMemCommiteeGetDataber")
-  // alert(JSON.stringify(data))
+ 
   }
   else{
   pressdata=JSON.parse(localStorageGet("PressNoteList"))
   
   }
-  //alert(committeeData.length)
   let arr=[]
   for(let i=0;i<pressdata.length;i++)
   {
@@ -78,7 +70,6 @@ const callBackForSubmit = async (state, dispatch) => {
     "pressMasterUuid":pressdata[i]['Press master UUID'],  
   
   }
-  // console.log(obj)
   arr.push(obj)
   }
   
@@ -103,7 +94,6 @@ const callBackForSubmit = async (state, dispatch) => {
   "publicationList":arr
   }
   }
- // updateCommitteemaster(dispatch,payload);
  updatePressNote(dispatch,payload);
  
   }
@@ -114,10 +104,8 @@ const callBackForSubmit = async (state, dispatch) => {
   else{
   
   
-  console.log(localStorageGet("PressNoteList")) 
   
   let pressdata=JSON.parse(localStorageGet("PressNoteList"))
-  console.log(pressdata)
   let arr=[]
   for(let i=0;i<pressdata.length;i++)
   {
@@ -126,7 +114,6 @@ const callBackForSubmit = async (state, dispatch) => {
       
       
       }
-    console.log(obj)
       arr.push(obj)
       }
       let pressnotedate=get(state.screenConfiguration.preparedFinalObject, "pressnote.date")
@@ -159,7 +146,7 @@ const callBackForSubmit = async (state, dispatch) => {
   }
   };
 const moveToReview = (state, dispatch) => {
-  debugger
+  
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -215,14 +202,10 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId =
-  get(
-    state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
-  ) || getTenantId();
+ 
   let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId:  commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -242,8 +225,8 @@ const getMdmsData = async (state, dispatch) => {
 
     dispatch(
       prepareFinalObject(
-        "applyScreenMdmsData.FireNoc.Documents",
-        payload.MdmsRes.FireNoc.Documents
+        "applyScreenMdmsData.PR.Documents",
+        payload.MdmsRes.PR.Documents
       )
     );
     prepareDocumentsUploadData(state, dispatch);
@@ -258,8 +241,7 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
- console.log(activeStep);
- debugger
+ 
   let isFormValid = true;
   let hasFieldToaster = false;
 
@@ -271,75 +253,22 @@ const callBackForNext = async (state, dispatch) => {
 
 
 
-    // let isPropertyLocationCardValid = validateFields(
-    //   "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
-    //   state,
-    //   dispatch
-    // );
-    // let isSinglePropertyCardValid = validateFields(
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
-    //   state,
-    //   dispatch
-    // );
+   
 
-    // Multiple buildings cards validations
-    // let multiplePropertyCardPath =
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.children.multipleBuilding.props.items";
-    // let multiplePropertyCardItems = get(
-    //   state.screenConfiguration.screenConfig.generatepressNote,
-    //   multiplePropertyCardPath,
-    //   []
-    // );
-    // let isMultiplePropertyCardValid = true;
-    // for (var j = 0; j < multiplePropertyCardItems.length; j++) {
-    //   if (
-    //     (multiplePropertyCardItems[j].isDeleted === undefined ||
-    //       multiplePropertyCardItems[j].isDeleted !== false) &&
-    //     !validateFields(
-    //       `${multiplePropertyCardPath}[${j}].item${j}.children.cardContent.children.multipleBuildingCard.children`,
-    //       state,
-    //       dispatch,
-    //       "generatepressNote"
-    //     )
-    //   )
-    //     isMultiplePropertyCardValid = false;
-    // }
-
-    // let noOfBuildings = get(
-    //   state,
-    //   "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings"
-    // );
-    // if (noOfBuildings === "SINGLE") {
-    //   isMultiplePropertyCardValid = true;
-    // } else {
-    //   isSinglePropertyCardValid = true;
-    // }
-
-  //   if (
-  //     !isSinglePropertyCardValid ||
-  //     !isPropertyLocationCardValid ||
-  //     !isMultiplePropertyCardValid
-  //   ) {
-  //     isFormValid = false;
-  //     hasFieldToaster = true;
-  //   }
  }
 
 
 
   if (activeStep === 1) {
- //   moveToReview(state, dispatch);
-
-   // setReviewPageRoute(state, dispatch);
+ 
   }
 
   if (activeStep !== 2) {
-    debugger
+    
 
     if (isFormValid) {
       let responseStatus = "success";
       if (activeStep === 1) {
-      //  prepareDocumentsUploadData(state, dispatch, 'create_pressnote');
         
         
       }
@@ -351,24 +280,6 @@ const callBackForNext = async (state, dispatch) => {
       
 
 
-     // V
-      // if (activeStep === 2) {
-      //   prepareDocumentsUploadData(state, dispatch, 'create_pressnote');
-        
-      // //  getMdmsData(state, dispatch);
-      //   let response = await createUpdateNocApplication(
-      //     state,
-      //     dispatch,
-      //     "CREATE"
-      //   );
-      //   responseStatus = get(response, "status", "");
-      //  // alert(responseStatus)
-      //   if(responseStatus === "success")
-      //   {
-          
-      //  setReviewPageRoute(state, dispatch);
-      //   }
-      // }
       responseStatus === "success" && changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
@@ -410,25 +321,16 @@ export const changeStep = (
     0
   );
   if (defaultActiveStep === -1) {
-    // if (activeStep === 2 && mode === "next") {
-    //   const isDocsUploaded = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "LicensesTemp[0].reviewDocData",
-    //     null
-    //   );
-    //   activeStep = isDocsUploaded ? 3 : 2;
-    // } else {
+   
     activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     // }
   } else {
     activeStep = defaultActiveStep;
   }
-//alert(activeStep)
-debugger
+
   const isPreviousButtonVisible = activeStep ===1 ? true : false;
   const isNextButtonVisible = activeStep < 2 ? true : false;
   const isPayButtonVisible = activeStep === 2 ? true : false;
- // alert(isPreviousButtonVisible)
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -634,12 +536,10 @@ visible:false
 
 
 export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
- // alert(activeStep)
   let allAreFilled = true;
   if (activeStep == 1) {
     document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
-   //  alert(i+"::::"+i.value)
-    //  alert(i.getAttribute("aria-invalid"))
+  
       if (!i.value) {
         i.focus();
         allAreFilled = false;
@@ -657,23 +557,11 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
 
 
     document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
-      // alert("hidden "+i+"::::"+i.value)
-      //  alert(i.getAttribute("aria-invalid"))
-      // if (i.value == i.placeholder) {
-      // 	 alert(" inside hidden "+i+"::"+i.placeholder+"::"+i.value)
-      //   i.focus();
-      //   allAreFilled = false;
-      //   i.parentNode.classList.add("MuiInput-error-853");
-      //   i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      //   allAreFilled = false;
-      //   isFormValid = false;
-      //   hasFieldToaster = true;
-      // }
+     
 
     })
   } 
   if (allAreFilled == false) {
-  //  alert('Fill all fields')
     isFormValid = false;
     hasFieldToaster = true;
   }

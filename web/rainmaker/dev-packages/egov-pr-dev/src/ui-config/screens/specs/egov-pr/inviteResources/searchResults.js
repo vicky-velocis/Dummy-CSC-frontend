@@ -37,8 +37,10 @@ const getLocalTextFromCode = localCode => {
   );
 };
 import {showinvitelist, deleteguestbyid} from "../searchResource/citizenSearchFunctions"
+import {  handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
+import store from "ui-redux/store";
 
 
 const onRowDelete = async (rowData, allrowdata) => {
@@ -73,7 +75,7 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
-				tempdata2.map( item => {
+				tempdata2.map( (item,index) => {
 					//console.log("------");
 					console.log((item));
 					let temp = JSON.parse(item) 
@@ -83,6 +85,7 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 					  obj[2]=temp.user ? temp.user.mobileNumber : "-"
             obj[3]=temp.user ? temp.user.emailId : "-"
             obj[4]=temp.user ? temp.user.uuid : "-"
+            obj[5]=index
 					  //obj['Department Id']=commiteeMember.departmentUuid
 					  //obj['Employee ID']=commiteeMember.userUuid
 					  //obj['DepartmentName']=temp.assignments ? temp.assignments[0].department : "-"
@@ -127,7 +130,7 @@ let selectedrows1=[];
  },
 
 
-  tempdata2.map( item => {
+  tempdata2.map( (item,index) => {
     //console.log("------");
     console.log((item));
     let temp = JSON.parse(item) 
@@ -137,7 +140,8 @@ let selectedrows1=[];
       obj[2]=temp.guestMobile ? temp.guestMobile : "-"
       obj[3]=temp.guestEmail ? temp.guestEmail : "-"
       obj[4]=temp.eventGuestUuid ? temp.eventGuestUuid : "-"
-     
+      obj[5]=index
+
      
     selectedrows.push(obj)
 
@@ -149,7 +153,7 @@ localStorageSet("ResendInvitelistAll", JSON.stringify(selectedrows));
 
 }
  
-const onEmployeeselect = async (type, rowData, allrowdata) => {
+const onEmployeeselect = async (type, rowData, allrowdata,index) => {
 
 	if(allrowdata == "resend")
 	{
@@ -161,17 +165,14 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
 		}
 		else
 		{	
-			console.log(type);
-			console.log( rowData);
-			debugger;
+			
 			let selectedrows = [];
 			let localinvdata = localStorageGet("ResendInvitelist");
 			if(localinvdata === null || localinvdata === "undefined")
 			{
 
         let tempAll= JSON.parse(localStorageGet("ResendInvitelistAll"));
-				console.log("temppppppppppppp")
-        console.log(tempAll)
+			
        let checked =false;
        if(tempAll!=null)
        {
@@ -182,20 +183,67 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
             tempAll.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
             localStorageSet("ResendInvitelistAll", "");
+            let selIndex1=[]
+              let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+              selIndex.map((item,index)=>{
+              
+                 selIndex1.push(item[5])	
+              
+               })
+               console.log('selectedRows1')
+               
+               console.log(selIndex1)
+           
+           console.log('selectedRows1')
+           store.dispatch(
+            handleField(
+              "event_summary",
+              "components.div.children.resendbody.children.cardContent.children.guestlist",
+              "props.options.rowsSelected",
+              selIndex1
+            )
+          );
           }
           })
           if(checked===false){
-				selectedrows.push(rowData)
+
+
+            let temp=rowData
+            temp.push(index.rowIndex)
+				selectedrows.push(temp)
 
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+              let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+              selIndex.map((item,index)=>{
+              
+                 selIndex1.push(item[5])	
+              
+               })
+               console.log('selectedRows1')
+               
+               console.log(selIndex1)
+           
+           console.log('selectedRows1')
+           store.dispatch(
+            handleField(
+              "event_summary",
+              "components.div.children.resendbody.children.cardContent.children.guestlist",
+              "props.options.rowsSelected",
+              selIndex1
+            )
+          );
           }
         }
 			}
 			else
 			{
 				let temp = JSON.parse(localStorageGet("ResendInvitelist"));
-				console.log("temppppppppppppp")
-        console.log(temp)
+			
+        let temp2=rowData
+        temp2.push(index.rowIndex)
+    selectedrows.push(temp)
+
        let checked =false;
        temp.map((item,index)=>{
           if(item[4] === rowData[4])
@@ -204,12 +252,57 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
             temp.splice(index,1)
             localStorageSet("ResendInvitelist", JSON.stringify(temp));	
             localStorageSet("ResendInvitelistAll", "");
+            let selIndex1=[]
+              let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+              selIndex.map((item,index)=>{
+              
+                 selIndex1.push(item[5])	
+              
+               })
+               console.log('selectedRows1')
+               
+               console.log(selIndex1)
+           
+           console.log('selectedRows1')
+           store.dispatch(
+            handleField(
+              "event_summary",
+              "components.div.children.resendbody.children.cardContent.children.guestlist",
+              "props.options.rowsSelected",
+              selIndex1
+            )
+          );
           }
           })
           if(checked===false){
-				selectedrows = temp;
-				selectedrows.push(rowData)
+				// selectedrows = temp;
+        // selectedrows.push(rowData)
+        
+        temp.push(temp2)
+        
+      selectedrows = (temp)
+
         localStorageSet("ResendInvitelist", JSON.stringify(selectedrows));	
+        let selIndex1=[]
+              let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+              selIndex.map((item,index)=>{
+              
+                 selIndex1.push(item[5])	
+              
+               })
+               console.log('selectedRows1')
+               
+               console.log(selIndex1)
+           
+           console.log('selectedRows1')
+           store.dispatch(
+            handleField(
+              "event_summary",
+              "components.div.children.resendbody.children.cardContent.children.guestlist",
+              "props.options.rowsSelected",
+              selIndex1
+            )
+          );
           }
 			}	
 		}
@@ -218,15 +311,15 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
 	{
 		if(type == "cell")
 		{
-			//console.log(type);
-			//console.log("Current" + rowData);
-			//console.log("All "+allrowdata);
+		
 		}
 		else
 		{	
+
+     // alert('aaaaaaa')
 			console.log(type);
 			console.log( rowData);
-			debugger;
+			;
 			let selectedrows = [];
 			let localinvdata = localStorageGet("Invitelist");
 			if(localinvdata === null || localinvdata === "undefined")
@@ -245,23 +338,65 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
               checked=true;
               tempAll.splice(index,1)
               localStorageSet("Invitelist", JSON.stringify(tempAll));	
+              let selIndex1=[]
+              let selIndex= JSON.parse(localStorageGet("Invitelist"));
+              selIndex.map((item,index)=>{
               
+                 selIndex1.push(item[5])	
+              
+               })
+               console.log('selectedRows1')
+               
+               console.log(selIndex1)
+           
+           console.log('selectedRows1')
+           store.dispatch(
+            handleField(
+              "createInvite",
+              "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+              "props.options.rowsSelected",
+              selIndex1
+            )
+          );
             }
             })
     
           }
     if(checked===false){
-				selectedrows.push(rowData)
+      debugger
+      let temp = rowData
+      temp.push(index.rowIndex)
+				selectedrows.push(temp)
 
-				localStorageSet("Invitelist", JSON.stringify(selectedrows));
+        localStorageSet("Invitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("Invitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[5])	
+        
+         })
+         console.log('selectedRows1')
+         
+         console.log(selIndex1)
+     
+     console.log('selectedRows1')
+     store.dispatch(
+      handleField(
+        "createInvite",
+        "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+        "props.options.rowsSelected",
+        selIndex1
+      )
+    );
       }
     }
 			else
 			{
 				let temp = JSON.parse(localStorageGet("Invitelist"));
-				console.log("temppppppppppppp")
-        console.log(temp)
-        
+			
+        let temp2 = rowData
+        temp2.push(index.rowIndex)
         let checked =false;
         temp.map((item,index)=>{
           if(item[4] === rowData[4])
@@ -269,13 +404,53 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
             checked=true;
             temp.splice(index,1)
             localStorageSet("Invitelist", JSON.stringify(temp));	
+            let selIndex1=[]
+            let selIndex= JSON.parse(localStorageGet("Invitelist"));
+            selIndex.map((item,index)=>{
             
+               selIndex1.push(item[5])	
+            
+             })
+             console.log('selectedRows1')
+             
+             console.log(selIndex1)
+         
+         console.log('selectedRows1')
+         store.dispatch(
+          handleField(
+            "createInvite",
+            "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+        );
           }
           })
     if(checked===false){
-				selectedrows = temp;
-				selectedrows.push(rowData)
-        localStorageSet("Invitelist", JSON.stringify(selectedrows));	
+      temp.push(temp2)
+        
+      selectedrows = (temp)
+
+			//	selectedrows = temp;
+			//	selectedrows.push(rowData)
+        localStorageSet("Invitelist", JSON.stringify(selectedrows));
+        let selIndex1=[]
+        let selIndex= JSON.parse(localStorageGet("Invitelist"));
+        selIndex.map((item,index)=>{
+        
+           selIndex1.push(item[5])	
+        
+         })
+         
+     
+         store.dispatch(
+          handleField(
+            "createInvite",
+            "components.adhocDialoginternal.children.grid.children.cardContent.children.invireselgrid",
+            "props.options.rowsSelected",
+            selIndex1
+          )
+        );
     }
 			}	
 		}
@@ -284,114 +459,7 @@ const onEmployeeselect = async (type, rowData, allrowdata) => {
 
  
     
-export const textToLocalMapping = {
-  "Guest Type": getLocaleLabels(
-    "Guest Type",
-    "PR_INVITE_GUEST_TYPR",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Name": getLocaleLabels(
-    "Guest Name",
-    "PR_INVITE_NAME_TYPR",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Email": getLocaleLabels(
-    "Guest Email",
-    "PR_INVITE_GUEST_EMAIL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Guest Mobile Number": getLocaleLabels(
-    "Guest Mobile Number",
-    "PR_INVITE_GUEST_CONTACT",
-    getTransformedLocalStorgaeLabels()
-  ),
-   "Guest Action": getLocaleLabels(
-    "Guest Action",
-    "PR_INVITE_GUEST_ACTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-   "Guest ID": getLocaleLabels(
-    "Guest ID",
-    "PR_INVITE_GUEST_ID",
-    getTransformedLocalStorgaeLabels()
-  ),
- 
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Status: getLocaleLabels(
-    "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  INITIATED: getLocaleLabels(
-    "Initiated,",
-    "NOC_INITIATED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPLIED: getLocaleLabels(
-    "Applied",
-    "NOC_APPLIED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  DOCUMENTVERIFY: getLocaleLabels(
-    "Pending for Document Verification",
-    "WF_PublicRelation_DOCUMENTVERIFY",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPROVED: getLocaleLabels(
-    "Approved",
-    "NOC_APPROVED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  REJECTED: getLocaleLabels(
-    "Rejected",
-    "NOC_REJECTED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  CANCELLED: getLocaleLabels(
-    "Cancelled",
-    "NOC_CANCELLED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGAPPROVAL: getLocaleLabels(
-    "Pending for Approval",
-    "WF_PublicRelation_PENDINGAPPROVAL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGPAYMENT: getLocaleLabels(
-    "Pending payment",
-    "WF_PublicRelation_PENDINGPAYMENT",
-    getTransformedLocalStorgaeLabels()
-  ),
-  FIELDINSPECTION: getLocaleLabels(
-    "Pending for Field Inspection",
-    "WF_PublicRelation_FIELDINSPECTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Search Results for PUBLIC-RELATIONS Applications": getLocaleLabels(
-    "Search Results for PUBLIC-RELATIONS Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
-    getTransformedLocalStorgaeLabels()
-  )
-};
+
 
 export const searchDepartmentEmployeesResults = getCommonCard({
    invireselgrid : {
@@ -431,7 +499,7 @@ export const searchDepartmentEmployeesResults = getCommonCard({
     //onEmployeeselect('cell','')
     },
       onRowClick: (row, index) => {
-        onEmployeeselect('rowdata',row)
+        onEmployeeselect('rowdata',row,'',index)
       },
 	  // onRowsDelete:(rowsDeleted, data) =>{
 		// onRowDelete(rowsDeleted, data)
@@ -678,7 +746,7 @@ export const ResendInvitedEmployeesResults = {
       onPressselectAll('cell','','resend',currentRowsSelected , allRowsSelected)
 	  },
       onRowClick: (row, index) => {
-        onEmployeeselect('rowdata',row,'resend')
+        onEmployeeselect('rowdata',row,'resend',index)
       },
 	  selectedRows: {
       text: "row(s) selected",

@@ -3,10 +3,24 @@ import {
   getBreak,
   getCommonTitle,
   getCommonParagraph,
-  getCommonContainer
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonGrayCard, getLabelOnlyValue,showHideAdhocPopups } from "../../utils";
+import store from "../../../../../ui-redux/store";
+
+import {
+  localStorageGet, localStorageSet, setapplicationNumber, getOPMSTenantId, setapplicationType,
+  getAccessToken, getLocale, getUserInfo, getapplicationType, getapplicationNumber
+} from "egov-ui-kit/utils/localStorageUtils";
+
 import { footer } from "./footer";
+import set from "lodash/set";
+
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 const styles = {
   header: {
@@ -122,6 +136,45 @@ const generateDocument = item => {
     subParagraph: subParagraph
   });
 };
+
+
+const setvalueCancel = async (state,dispatch) => {
+  
+  
+  dispatch(
+        handleField(
+          "petnoc_summary",
+          "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
+          "props.checked",
+          false
+        )
+      );
+      localStorageSet("undertaking", "") 
+  showHideAdhocPopups(state, dispatch, "petnoc_summary")
+  
+  
+  
+  }
+  
+
+const setvalue = async (state,dispatch) => {
+
+
+dispatch(
+      handleField(
+        "petnoc_summary",
+        "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
+        "props.checked",
+        true
+      )
+    );
+    localStorageSet("undertaking", "accept") 
+showHideAdhocPopups(state, dispatch, "petnoc_summary")
+
+
+
+}
+
 export const getRequiredDocuments = () => {
    return getCommonContainer(
     {
@@ -223,10 +276,78 @@ export const getRequiredDocuments = () => {
 		subText12: getCommonParagraph({
 		labelName: "UNDERTAKING12",
 		labelKey: "UNDERTAKING_POINT12"
-		})
+    }),
+    
       }
-      }  
-    },
+      
+      }  ,
+      nextButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            // minWidth: "200px",
+            height: "48px",
+            marginRight: "45px"
+          }
+        },
+        children: {
+          nextButtonLabel: getLabel({
+            labelName: "OK I Agree",
+            labelKey: "PM_COMMON_OK_I_AGREE_BUTTON"
+          }),
+          nextButtonIcon: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+            // props: {
+            //   iconName: "keyboard_arrow_right"
+            // }
+          }
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            //// generatePdf(state, dispatch, "receipt_download");
+            setvalue( state, dispatch);
+            
+          }
+        }
+      },
+      cancelButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            // minWidth: "200px",
+            height: "48px",
+            marginRight: "45px"
+          }
+        },
+        children: {
+          cancelButtonLabel: getLabel({
+            labelName: "Cancel",
+            labelKey: "PM_COMMON_CANCEL"
+          }),
+          cancelButtonIcon: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+            // props: {
+            //   iconName: "keyboard_arrow_right"
+            // }
+          }
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            //// generatePdf(state, dispatch, "receipt_download");
+            setvalueCancel( state, dispatch);
+            
+          }
+        }
+      },
+  },
     {
       style: {
         padding: "0px 10px"

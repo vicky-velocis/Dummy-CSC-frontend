@@ -20,92 +20,9 @@ const getLocalTextFromCode = localCode => {
   );
 };
 
-export const textToLocalMapping = {
-  "Application No": getLocaleLabels(
-    "Application No",
-    "NOC_COMMON_TABLE_COL_APP_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC No": getLocaleLabels(
-    "NOC No",
-    "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "NOC Type": getLocaleLabels(
-    "NOC Type",
-    "NOC_TYPE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Application Date": getLocaleLabels(
-    "Application Date",
-    "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Status: getLocaleLabels(
-    "Status",
-    "NOC_COMMON_TABLE_COL_STATUS_LABEL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  INITIATED: getLocaleLabels(
-    "Initiated,",
-    "NOC_INITIATED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPLIED: getLocaleLabels(
-    "Applied",
-    "NOC_APPLIED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  DOCUMENTVERIFY: getLocaleLabels(
-    "Pending for Document Verification",
-    "WF_FIRENOC_DOCUMENTVERIFY",
-    getTransformedLocalStorgaeLabels()
-  ),
-  APPROVED: getLocaleLabels(
-    "Approved",
-    "NOC_APPROVED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  REJECTED: getLocaleLabels(
-    "Rejected",
-    "NOC_REJECTED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  CANCELLED: getLocaleLabels(
-    "Cancelled",
-    "NOC_CANCELLED",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGAPPROVAL: getLocaleLabels(
-    "Pending for Approval",
-    "WF_FIRENOC_PENDINGAPPROVAL",
-    getTransformedLocalStorgaeLabels()
-  ),
-  PENDINGPAYMENT: getLocaleLabels(
-    "Pending payment",
-    "WF_FIRENOC_PENDINGPAYMENT",
-    getTransformedLocalStorgaeLabels()
-  ),
-  FIELDINSPECTION: getLocaleLabels(
-    "Pending for Field Inspection",
-    "WF_FIRENOC_FIELDINSPECTION",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Search Results for Fire-NOC Applications": getLocaleLabels(
-    "Search Results for Fire-NOC Applications",
-    "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
-    getTransformedLocalStorgaeLabels()
-  )
-};
 
 export const committeeMasterGrid = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {
@@ -116,11 +33,7 @@ export const committeeMasterGrid = {
         name: getTextToLocalMapping("Committee Id"),
         options: {
           display: false,
-          // customBodyRender: value => (
-            // <span>
-              // {value.eventDetailUuid}
-            // </span>
-          // )
+          
         }
       },
       getTextToLocalMapping("Committee Name"),
@@ -130,7 +43,6 @@ export const committeeMasterGrid = {
       
      
     ],
-  //  title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,
@@ -161,34 +73,9 @@ export const committeeMasterGrid = {
 };
 const onRowClick = rowData => {
   
-	      window.location.href = `committee_summary?commiteeUUID=${
+	      window.location.href = `committee_summary?committeeUUID=${
         rowData[0]
        }`;
     
  };
 
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/fire-noc/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/fire-noc/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/fire-noc/search`;
-//   }
-// };

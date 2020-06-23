@@ -35,7 +35,7 @@ if (role_name === 'CITIZEN') {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon">
+        class="material-icons module-page-icon" style={{fontSize:"48px"}}>
         picture_in_picture
       </i>,
       route: "advertisementApply"

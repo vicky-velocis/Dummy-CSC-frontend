@@ -16,8 +16,27 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { invitationtoguests } from "../../../../../ui-utils/commons.js"
 import {localStorageGet, localStorageSet, lSRemoveItemlocal, lSRemoveItem} from "egov-ui-kit/utils/localStorageUtils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import commonConfig from '../../../../../config/common';
 
+import { watch } from "fs";
 let activeStepforbtn = 0;
+
+
+// toggleactionmenu
+const toggleactionmenu = (state, dispatch) => {
+	
+  var x = document.getElementById("custom-atoms-footer");
+ 	 // if (x.style.display === "none") {
+   if(window.getComputedStyle(x).display === "none") {   
+    x.style.display = "block";
+    x.classList.add("addpadding");
+	  } else {
+    x.style.display = "none";
+    x.classList.remove("addpadding");
+	  }
+}
+
 const setReviewPageRoute = (state, dispatch) => {
   let tenantId = get(
     state,
@@ -97,10 +116,7 @@ const moveToReview = (state, dispatch) => {
 };
 
 const getMdmsData = async (state, dispatch) => {
-  let tenantId = get(
-    state.screenConfiguration.preparedFinalObject,
-    "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-  );
+  let tenantId =  commonConfig.tenantId;
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -131,6 +147,12 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  
+  dispatch(prepareFinalObject("documentsUploadRedux", {}));
+
+  var x = document.getElementById("custom-atoms-footer");
+  x.classList.remove("addpadding");
+
   let activeStep = get(
     state.screenConfiguration.screenConfig["createInvite"],
     "components.div.children.stepper.props.activeStep",
@@ -140,8 +162,18 @@ const callBackForNext = async (state, dispatch) => {
   
   let isFormValid = true;
   let hasFieldToaster = false;
-
+  dispatch(
+    handleField(
+      "createInvite",
+      "components.div.children.formwizardSecondStep.children.EmailSmsContent.children.cardContent.children.SMSContent",
+      "props.value",
+      localStorageGet("smsTemplate")
+    )
+  );
   if (activeStep === 1) {
+
+   
+
     let isPropertyLocationCardValid = validateFields(
       "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
       state,
@@ -196,7 +228,7 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  debugger;
+ 
   if(activeStep === 0){
 		 
 	if(localStorageGet("InviteeCount") > 0)
@@ -316,7 +348,7 @@ export const changeStep = (
   const isPayButtonVisible = activeStep === 2 ? true : false;
   const isinviteVisible = activeStep === 0 ? true : false;
   const sendinviteVisible = activeStep === 1 ? true : false;
-  
+  const isactionButtonVisible = activeStep === 1 ? false : true;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -363,6 +395,13 @@ export const changeStep = (
       property: "visible",
       value: sendinviteVisible
     },
+
+    {
+      path: "components.div.children.takeactionfooter",
+      property: "visible",
+      value: isactionButtonVisible
+    },
+
   ];
   dispatchMultipleFieldChangeAction("createInvite", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
@@ -447,6 +486,8 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  var x = document.getElementById("custom-atoms-footer");
+  x.classList.add("addpadding");
   changeStep(state, dispatch, "previous");
 };
 
@@ -459,8 +500,14 @@ export const footer = getCommonApplyFooter({
       color: "primary",
       style: {
         height: "48px",
-        marginRight: "16px" 
+        marginRight: "16px",
+        width: "30%"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
     },
     children: {
        
@@ -491,8 +538,14 @@ export const footer = getCommonApplyFooter({
       color: "primary",
       style: {
         height: "48px",
-        marginRight: "16px" 
+        marginRight: "16px",
+        width: "30%"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
     },
     children: {
        
@@ -523,11 +576,17 @@ export const footer = getCommonApplyFooter({
       color: "primary",
       style: {
         height: "48px",
-        marginRight: "16px" 
+        marginRight: "16px",
+        width: "30%"
       }
     },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
+    },
     children: {
-      
+     
       internalguestbuttonLabel: getLabel({
         labelName: "ADD INTERNAL GUEST",
         labelKey: "PR_ADD_INTERNAL__BTN_"
@@ -584,10 +643,17 @@ export const footer = getCommonApplyFooter({
       color: "primary",
       style: {
         height: "48px",
-        marginRight: "45px"
+        marginRight: "16px",
+        width: "30%"
       }
     },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
+    },
     children: {
+      
       nextButtonLabel: getLabel({
         labelName: "Next Step",
         labelKey: "PR_COMMON_BTN_NXT_STEP"
@@ -615,6 +681,7 @@ export const footer = getCommonApplyFooter({
         marginRight: "45px"
       }
     },
+   
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
@@ -643,8 +710,9 @@ export const footer = getCommonApplyFooter({
 			  height: "48px",
 				marginRight: "45px"
 			  }
-			},
+      },
 			children: {
+       
 			  nextButtonLabel: getLabel({
 				labelName: "Send Invitation",
 				labelKey: "PR_INVITATION_BUTTON"
@@ -662,6 +730,42 @@ export const footer = getCommonApplyFooter({
 			  callBack: (state, dispatch) => {invitationtoguests(state, dispatch) }
 			},
 			visible : false
-		}
-  
+		},
+		
 });
+
+
+export const takeactionfooter = getCommonApplyFooter({
+  actionbutton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "16px" 
+      }
+    },
+    children: {
+       
+      pressguestbuttonLabel: getLabel({
+        labelName: "Take Action",
+        labelKey: "PR_TAKE_ACTION"
+      }),
+	  nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_up"
+        }
+      },
+    },
+    onClickDefination: {
+      action: "condition",
+       callBack: (state, dispatch) =>{
+           toggleactionmenu(state, dispatch)
+    }
+    },
+    visible: true
+  }
+});  

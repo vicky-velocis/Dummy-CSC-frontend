@@ -33,7 +33,6 @@ import {
 import { presssummaryfooter } from './applyResource/presssummaryfooter'
 
 export const callBackForDelete = async (state, dispatch) => {
-  console.log("Delete clicked", state);
   changeStep(state, dispatch, "previous");
 };
 

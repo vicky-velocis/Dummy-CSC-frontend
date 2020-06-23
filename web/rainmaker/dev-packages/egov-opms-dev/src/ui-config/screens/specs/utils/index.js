@@ -69,6 +69,7 @@ export const validateFields = (
   dispatch,
   screen = "apply"
 ) => {
+  
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
     objectJsonPath,
@@ -249,8 +250,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     ;
 
 
-
-  dispatch(setRoute(applyUrl));
+	 dispatch(setRoute(applyUrl));
 };
 export const showHideAdhocPopups = (state, dispatch, screenKey) => {
 
@@ -278,6 +278,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
   dispatch(
     handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
   );
+ // window.location='/egov-opms/search-preview';
 };
 
 
@@ -332,6 +333,8 @@ export const showHideAdhocPopupopmsReassign = (state, dispatch, screenKey, type)
       "components.adhocDialog2.props.open",
       false
     );
+    dispatch(prepareFinalObject("PetNoc[0].PetNocDetails", {}));
+    
     dispatch(
       handleField(screenKey, "components.adhocDialog2", "props.open", !toggle)
     );
@@ -1036,14 +1039,37 @@ export const showHideAdhocPopupopmsForward = (state, dispatch, screenKey, type) 
 export const getOPMSPattern = type => {
   switch (type) {
     case "cin":
-      return /^([L|U]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/i;
-  }
+    return /^([L|U]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/i;
+    case "petnocApplicantName":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,50}$/i;
+    case "petnocIdentificationMark":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,100}$/i;
+    case "VeterinaryRegistrationNo":
+    return /^[a-zA-Z0-9 \/-]{1,50}$/i;
+    case "DoorHouseNo":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+    case "Address":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+    case "Email":
+    return /^(?=^.{1,50}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
+    case "Amount":
+    return /^\d{1,7}(\.\d{1,2})?$/i;               
+    case "Division":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,25}$/i;
+    case "ROADCUTFEE":
+    return /^\d{1,12}(\.\d{1,2})?$/i;               
+    case "Remarks":
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
+    case "BadgeNumber":
+      return /^[^\$\"'<>?\\\\~`!@$%^()+={}&#,\[\]*.:;“”‘’]{1,50}$/i;
+    }
 };
 
 
 export const createDemandForAdvNOC = async (state, ispatch) => {
   try {
 
+    
     let advdetails = get(state.screenConfiguration.preparedFinalObject, "ADVTCALCULATENOC");
 
     let durationAdvertisement = advdetails.duration; // JSON.parse(advdetails).duration;

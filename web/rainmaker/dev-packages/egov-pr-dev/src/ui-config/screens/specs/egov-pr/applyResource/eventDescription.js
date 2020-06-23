@@ -338,7 +338,7 @@ import {
         required: true,
         pattern: getPattern("EventDescription"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventDescription"
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventDescription"
       }),
      
     })

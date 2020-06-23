@@ -5,7 +5,7 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { footer } from "./inviteResources/footer";
+import { footer, takeactionfooter } from "./inviteResources/footer";
 import { eventDetails } from "./applyResource/eventDetails";
 import { eventDescription } from "./applyResource/eventDescription";
 import { propertyDetails } from "./applyResource/propertyDetails";
@@ -22,6 +22,7 @@ import {
 import { getTenantId, localStorageGet, localStorageSet,lSRemoveItemlocal,lSRemoveItem } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import "../../../../customstyle.css";
+  import commonConfig from '../../../../config/common';
 
 import {
   sampleSearch,
@@ -118,14 +119,10 @@ export const formwizardSecondStep = {
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-    ) || getTenantId();
+  
    let mdmsBody = {
     MdmsCriteria: {
-      tenantId: tenantId,
+      tenantId: commonConfig.tenantId,
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
@@ -332,7 +329,15 @@ const screenConfig = {
 	lSRemoveItem("selectedDepartmentsInvite");
 	lSRemoveItemlocal("selectedPressList");
 	lSRemoveItem("selectedPressList");
-	// Get Invitee List
+  // Get Invitee List
+  localStorageSet("EmailTemplate", "")
+	localStorageSet("EmailTemplatesubject", "")
+  localStorageSet("smsTemplate", "")
+  localStorageSet("email", "")
+  localStorageSet("sms", "")
+
+
+
 	getEventInviteeList(action, state, dispatch);
 	
 	// Get Sample email tmplate for event 
@@ -408,6 +413,9 @@ const screenConfig = {
         localStorageGet("smsTemplate")
     );
 	
+	
+     
+      
     return action;
   },
   components: {
@@ -434,7 +442,8 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        footer
+        footer,
+		takeactionfooter
       }
     },
 	 adhocDialogpress: {

@@ -77,8 +77,7 @@ class MultiSelect extends Component {
   componentDidMount(){
 		this.GetDepartments().then(response => {
 		//	alert("Get employees in module")
-			console.log("responsssssssssssssssss");
-			console.log(response);
+		
 		
 	  });
 		
@@ -134,7 +133,7 @@ class MultiSelect extends Component {
 		objectArray : optionvalues
 	  })
 	  
-	  let id=getQueryArg(window.location.href, "commiteeUUID")
+	  let id=getQueryArg(window.location.href, "committeeUUID")
 		if (id) {	
 				this.addItem(payload.MdmsRes["common-masters"].Department);
 			}	

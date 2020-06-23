@@ -37,6 +37,22 @@ export const getWFConfig = (module,businessService) => {
           DEFAULT: "/pt-mutation/search-preview",
         }; 
       }
+      // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE":
+      case "RRP_SERVICE":
+        return {
+          INITIATED: "/pms/pmsmap",
+          DEFAULT: "/pms/pmsmap",
+        };
+        case "DOE_SERVICE":
+          return {
+            INITIATED: "/pms/pmsmap",
+            DEFAULT: "/pms/pmsmap",
+          };
+          case "DOP_SERVICE":
+          return {
+            INITIATED: "/pms/pmsmap",
+            DEFAULT: "/pms/pmsmap",
+          };
       
     }
 };

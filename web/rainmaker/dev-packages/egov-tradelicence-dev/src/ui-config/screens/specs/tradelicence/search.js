@@ -77,26 +77,6 @@ const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
-
-    // const businessServiceData = JSON.parse(
-    //   localStorageGet("businessServiceData")
-    // );
-    // const data = find(businessServiceData, { businessService: "NewTL" });
-    // const { states } = data || [];
-
-    // if (states && states.length > 0) {
-    //   const status = states.map((item, index) => {
-    //     return {
-    //       code: item.state
-    //     };
-    //   });
-    //   dispatch(
-    //     prepareFinalObject(
-    //       "applyScreenMdmsData.searchScreen.status",
-    //       status.filter(item => item.code != null)
-    //     )
-    //   );
-    // }
     dispatch(prepareFinalObject("searchScreen", {}))
     getMdmsData(dispatch);
     getStatusList(state, dispatch, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo")

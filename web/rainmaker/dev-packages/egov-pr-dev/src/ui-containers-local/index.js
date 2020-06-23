@@ -86,6 +86,10 @@ const DownloadDeleteFileContainer = Loadable({
   loader: () => import("./DownloadDeleteFileContainer"),
   loading: () => <Loading />
 });
+const DocumentListTenderContainer = Loadable({
+  loader: () => import("./DocumentListTenderContainer"),
+  loading: () => <Loading />
+});
 
 export {
   CustomTabContainer,
@@ -106,6 +110,7 @@ export {
   ExternalInviteContainer,
   PressInviteContainer,
   InternalInviteContainer,
-  DownloadDeleteFileContainer
+  DownloadDeleteFileContainer,
+  DocumentListTenderContainer
   
 };

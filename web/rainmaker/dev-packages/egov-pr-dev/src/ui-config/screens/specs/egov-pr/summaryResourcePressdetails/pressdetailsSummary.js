@@ -14,7 +14,7 @@ import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 const getHeader = label => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pr",
     componentPath: "DividerWithLabel",
     props: {
       className: "hr-generic-divider-label",
@@ -159,9 +159,7 @@ export const pressdetailsSummary = getCommonGrayCard({
       hasAddItem: false,
       isReviewPage: true,
       sourceJsonPath: "nocApplicationDetail",
-      // prefixSourceJsonPath:
-      //   "children.cardContent.children.applicantContainer.children",
-      // afterPrefixJsonPath: "children.value.children.key"
+     
     },
     type: "array"
   }
