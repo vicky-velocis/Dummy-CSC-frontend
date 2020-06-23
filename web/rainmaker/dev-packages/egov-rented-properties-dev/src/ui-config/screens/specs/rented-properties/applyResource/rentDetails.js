@@ -57,7 +57,7 @@ const revisedPercentageField = {
         labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
     },
     placeholder: {
-        labelName: "Enter Rent Amount Revised Period",
+        labelName: "Enter Rent Amount Revised Percentage",
         labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_PLACEHOLDER"
     },
     gridDefination: {

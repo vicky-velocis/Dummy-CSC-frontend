@@ -90,7 +90,7 @@ const phoneNumberField = {
 
 export const rentedPropertyApplication = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Searc Rented Property Application",
+    labelName: "Search Rented Property Application",
     labelKey: "RP_HOME_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({

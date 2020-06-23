@@ -31,7 +31,7 @@ export const getReviewProperty = (isEditable = true) => {
                     },
                     ...getCommonSubHeader({
                         labelName: "Property Details",
-                        labelKey: "TL_PROPERTY_DETAILS_HEADER"
+                        labelKey: "RP_PROPERTY_DETAILS_HEADER"
                     })
                 },
                 editSection: {

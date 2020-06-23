@@ -59,7 +59,7 @@ const paymentModeField = {
     },
     placeholder: {
         labelName: "Enter Payment Mode",
-        labelKey: "RP_PAYMENT_MODE"
+        labelKey: "RP_PAYMENT_MODE_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
