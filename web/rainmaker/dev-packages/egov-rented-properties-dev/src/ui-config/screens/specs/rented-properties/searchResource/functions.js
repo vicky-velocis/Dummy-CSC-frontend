@@ -48,22 +48,15 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
     {}
   );
 
-  var cFromDate = new Date(searchScreenObject["fromDate"]); 
-  var ctoDate = new Date(searchScreenObject["toDate"]); 
-  // if (cFromDate > ctoDate ) {
-  //   dispatch((0, _actions.toggleSnackbar)(true, { labelName: "From date is greater than to date", labelKey: "From date is greater than to date"}, "warning"));
-  //   _context.next = 22;
-  // }
-
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.rentedPropertyApplication.children.cardContent.children.colonyContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    "components.div.children.rentedPropertyApplication.children.cardContent.children.transitNumberContainer.children",
     state,
     dispatch,
     "search"
@@ -94,71 +87,15 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         "warning"
       )
     );
-  } else if (
-    (searchScreenObject["fromDate"] === undefined ||
-      searchScreenObject["fromDate"].length === 0) &&
-    searchScreenObject["toDate"] !== undefined &&
-    searchScreenObject["toDate"].length !== 0 && typeof onInit != "boolean"
-  ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
-        "warning"
-      )
-    );
-  } else if (cFromDate > ctoDate) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: "From date is greater than to date", labelKey: "From date is greater than to date" },
-        "warning"
-      )
-    );
   } else {
       for (var key in searchScreenObject) {
         if (
           searchScreenObject.hasOwnProperty(key) &&
           searchScreenObject[key].trim() !== ""
         ) {
-          if (key === "fromDate") {
-            queryObject.push({
-              key: key,
-              value: convertDateToEpoch(searchScreenObject[key], "daystart")
-            });
-          } else if (key === "toDate") {
-            queryObject.push({
-              key: key,
-              value: convertDateToEpoch(searchScreenObject[key], "dayend")
-            });
-          } else {
             queryObject.push({ key: key, value: searchScreenObject[key].trim() });
-          }
         }
     }
-
-    const {licensesCount = 0} = await getCount(queryObject) || {};
-
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.count",
-        licensesCount
-      )
-    );
-
-    dispatch(
-      handleField(
-        "search",
-        "components.div.children.searchResults",
-        "props.title",
-        `${getTextToLocalMapping(
-          "Search Results for Trade License Applications"
-        )} (${licensesCount})`
-      )
-    );
-
     const response = await getSearchResults(queryObject);
     try {
       let data = response.Properties.map(item => ({
@@ -166,8 +103,8 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         [getTextToLocalMapping("Colony")]: item.colony || "-",
         [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
         [getTextToLocalMapping("Status")]: item.masterDataState || "-",
+        ["id"]: item.id
       }));
-
       dispatch(
         handleField(
           "search",

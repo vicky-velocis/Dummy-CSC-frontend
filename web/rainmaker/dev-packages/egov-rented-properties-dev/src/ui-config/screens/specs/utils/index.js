@@ -589,6 +589,17 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   }
 };
 
+export const addYears = (dateString, years) => {
+  try {
+    const date = new Date(Number(dateString))
+    const fullYear = date.getFullYear();
+    const addYearsDate = date.setFullYear(fullYear + years);
+    return addYearsDate
+  } catch (error) {
+    return dateString
+  }
+}
+
 export const convertDateTimeToEpoch = dateTimeString => {
   //example input format : "26-07-2018 17:43:21"
   try {

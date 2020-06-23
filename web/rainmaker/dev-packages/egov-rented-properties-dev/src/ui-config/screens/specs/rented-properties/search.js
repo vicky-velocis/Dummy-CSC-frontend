@@ -14,6 +14,7 @@ import {
   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
   import { searchApiCall } from "./searchResource/functions"
   import { searchResults } from "./searchResource/searchResults";
+import { getColonyTypes } from "./apply";
 
   const header = getCommonHeader({
     labelName: "Rented Properties",
@@ -21,8 +22,10 @@ import {
   });
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
-    name: "rented-search",
+    name: "search",
     beforeInitScreen: (action, state, dispatch) => {
+      dispatch(prepareFinalObject("searchScreen", {}))
+      getColonyTypes(action, state, dispatch)
       searchApiCall(state, dispatch, true)
       return action
     },

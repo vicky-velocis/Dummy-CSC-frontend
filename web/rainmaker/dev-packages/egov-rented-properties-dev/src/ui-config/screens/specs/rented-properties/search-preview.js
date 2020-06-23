@@ -18,15 +18,14 @@ import { getReviewOwner, getReviewProperty } from "./applyResource/review-proper
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
-
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "TL_COMMON_RENTED_PROPERTIES"
   })
 });
-const reviewOwnerDetails = getReviewOwner();
-const reviewPropertyDetails = getReviewProperty();
+const reviewOwnerDetails = getReviewOwner(false);
+const reviewPropertyDetails = getReviewProperty(false);
 
 
 
@@ -35,30 +34,21 @@ export const propertyReviewDetails = getCommonCard({
   reviewOwnerDetails,
 });
 
-const searchResults = async (action, state, dispatch, transitNumber) => {
+export const searchResults = async (action, state, dispatch, transitNumber) => {
   let queryObject = [
     { key: "transitNumber", value: transitNumber }
   ];
-
   let payload = await getSearchResults(queryObject);
-
-  console.log(payload);
-
   if(payload) {
-    console.log(payload);
     let properties = payload.Properties;
     dispatch(prepareFinalObject("Properties[0]", properties[0]));
   }
-
 }
 
-
 const beforeInitFn = async (action, state, dispatch, transitNumber) => {
-
   if(transitNumber){
     await searchResults(action, state, dispatch, transitNumber)
   }
-
 }
 
 const rentedPropertiesDetailPreview = {

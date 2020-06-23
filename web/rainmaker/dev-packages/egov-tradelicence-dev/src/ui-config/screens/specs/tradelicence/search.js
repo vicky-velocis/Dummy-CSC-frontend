@@ -97,6 +97,7 @@ const tradeLicenseSearchAndResult = {
     //     )
     //   );
     // }
+    dispatch(prepareFinalObject("searchScreen", {}))
     getMdmsData(dispatch);
     getStatusList(state, dispatch, "search", "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo")
     searchApiCall(state, dispatch, true)
