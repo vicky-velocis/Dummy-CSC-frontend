@@ -778,6 +778,8 @@ else{
     let TakenMonthlyPensionAndGratuity =  "NA";
     let TakenGratuityCommutationTerminalBenefit = "NA";
     let TakenCompensationPensionAndGratuity = "NA";
+    let bankAddress =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankAddress", 0 );
+    let accountNumber =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.accountNumber", 0 );
     if(reasonForRetirement === "ABOLITION_OF_POST")
     {
       TakenMonthlyPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", false)=== true? "YES" : "NO";
@@ -786,6 +788,19 @@ else{
     }
     if(businessService === WFConfig().businessServiceRRP)
     reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
+
+    if(businessService === WFConfig().businessServiceDOE || businessService === WFConfig().businessServiceDOP)
+    {
+      let dependents =
+      get(state.screenConfiguration.preparedFinalObject, "ProcessInstances[0].dependents",[]) 
+      for (let index = 0; index < dependents.length; index++) {
+        if(dependents[index].isEligibleForPension && dependents[index].isEligibleForGratuity)
+        {         
+          bankAddress= dependents[index].bankDetails;
+          accountNumber= dependents[index].bankAccountNumber;
+        }
+      }
+    }
     // else
     // {
     //   TakenMonthlyPensionAndGratuity="NA"
@@ -827,8 +842,8 @@ else{
       totalNoPayLeavesDays: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.totalNoPayLeavesDays", 0 ),
       totalNoPayLeavesMonths: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.totalNoPayLeavesMonths", 0 ),
       totalNoPayLeavesYears: get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.totalNoPayLeavesYears", 0 ),
-      accountNumber:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.accountNumber", 0 ),
-      bankAddress:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankAddress", 0 ),
+      accountNumber:accountNumber,
+      bankAddress:bankAddress,
       isEligibleForPension:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isEligibleForPension", false )=== true? "YES" : "NO",
       isCommutationOpted:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isCommutationOpted", false )=== true? "YES" : "NO",
       isCompassionatePensionGranted:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted", false )=== true? "YES" : "NO",

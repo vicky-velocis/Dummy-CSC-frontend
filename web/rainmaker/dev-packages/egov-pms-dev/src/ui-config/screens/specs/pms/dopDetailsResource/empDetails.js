@@ -215,12 +215,16 @@ if(validDependent && isDependentValidDOB)
     {  
        
       console.log(dependentstemp[index]);
+      let isDisabled =  get(state.screenConfiguration.screenConfig.dopDetails,
+        "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.IsDisableOption.children.isDisabled.props.value"
+        ,false)
+       // alert(isDisabled);
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].dob`, convertDateToEpoch(element.dob, "dob"));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].name`, (element.name));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].address`, (element.address));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].mobileNumber`, Number(element.mobileNumber));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].relationship`, (element.relationship));
-      set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isDisabled`, Boolean(element.isDisabled));
+      set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isDisabled`, Boolean(isDisabled));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForGratuity`, Boolean(element.isEligibleForGratuity));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForPension`, Boolean(element.isEligibleForPension));
       set(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isGrandChildFromDeceasedSon`, Boolean(element.isGrandChildFromDeceasedSon));
@@ -1067,7 +1071,7 @@ const dependentUnitcard = {
           // },
           IsDisableOption:getCommonContainer(
             {
-              isDisabled: {
+               isDisabled: {
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-pms",
                componentPath: "CheckboxContainer",
@@ -1125,9 +1129,9 @@ const dependentUnitcard = {
               //  // );
               //      }
         
-            
+                 }
               },
-            }
+            
           ),         
           IsmaritalStatusOption:getCommonContainer(
             { 
