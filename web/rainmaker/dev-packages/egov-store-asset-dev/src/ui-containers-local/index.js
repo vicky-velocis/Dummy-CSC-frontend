@@ -67,6 +67,10 @@ const UnderTakingContainer = Loadable({
   loading: () => <Loading />
 });
 
+const DynamicTableContainer = Loadable({
+  loader: () => import("./DynamicTableContainer"),
+  loading: () => <Loading />
+})
 
 export {
   CustomTabContainer,
@@ -83,5 +87,6 @@ export {
   RejectContainer,
   ReassignContainer,
   ForwardContainer,
-  UnderTakingContainer
+  UnderTakingContainer,
+  DynamicTableContainer
 };

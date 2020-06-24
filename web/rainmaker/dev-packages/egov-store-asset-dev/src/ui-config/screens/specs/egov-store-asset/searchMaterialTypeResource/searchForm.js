@@ -15,14 +15,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["storeName", "department", "active"];
+  const textFields = ["materialTypeName","parentMaterialType","storeName", "storeMappingInfo", "active"];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-store.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-material-type.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-store",
+          "search-material-type",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -35,7 +35,7 @@ const resetFields = (state, dispatch) => {
 
 export const searchForm = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Store",
+    labelName: "Search Criteria",
     labelKey: "STORE_SEARCH_RESULTS_HEADING",
   }),
   subParagraph: getCommonParagraph({
@@ -43,6 +43,54 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
+    materialTypeName: getSelectField({
+      label: { labelName: "Material Type Name", labelKey: "MATERIAL_TYPE_NAME" },
+      placeholder: {
+        labelName: "Select Materila Type Name",
+        labelKey: "MATERIAL_TYPE_NAME_SELECT",
+      },
+      required: false,
+      jsonPath: "searchScreen.designations",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
+      props: {
+        optionValue: "code",
+        optionLabel: "name",
+      },
+      localePrefix: {
+        moduleName: "common-masters",
+        masterName: "Designation",
+      },
+    }),
+    parentMaterialType: getSelectField({
+      label: {
+        labelName: "Parent Material Type",
+        labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME",
+      },
+      placeholder: {
+        labelName: "Select Parent Material Type",
+        labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME_SELECT",
+      },
+      required: false,
+      jsonPath: "searchScreen.departments",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      props: {
+        optionLabel: "name",
+        optionValue: "code",
+        // hasLocalization: false
+      },
+      localePrefix: {
+        moduleName: "common-masters",
+        masterName: "Department",
+      },
+    }),
     storeName: getSelectField({
       label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
       placeholder: {
@@ -65,47 +113,40 @@ export const searchForm = getCommonCard({
         masterName: "Designation",
       },
     }),
-    department: getSelectField({
-      label: {
-        labelName: "Department",
-        labelKey: "STORE_DETAILS_DEPARTMENT_NAME",
-      },
-      placeholder: {
-        labelName: "Select Department",
-        labelKey: "STORE_DETAILS_DEPARTMENT_NAME_PLACEHOLDER",
-      },
-      required: false,
-      jsonPath: "searchScreen.departments",
+    storeMappingInfo: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-store-asset",
+      componentPath: "CheckboxContainer",
+      jsonPath: "searchScreen.active",
       gridDefination: {
-        xs: 12,
-        sm: 4,
+        xs: 6,
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      isFieldValid: true,
+      required: false,
+
       props: {
-        optionLabel: "name",
-        optionValue: "code",
-        // hasLocalization: false
+        content: "MATERIAL_TYPE_STORE_MAP",
+        jsonPath: "searchScreen.active",
+        screenName: "search-material-type",
+        checkBoxPath:
+          "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.storeMappingInfo",
       },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Department",
-      },
-    }),
+    },
     active: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-store-asset",
       componentPath: "CheckboxContainer",
       jsonPath: "searchScreen.active",
       gridDefination: {
-        xs: 12,
+        xs: 6,
       },
       isFieldValid: true,
       required: false,
 
       props: {
-        content: "STORE_DETAILS_ACTIVE",
+        content: "MATERIAL_TYPE_ACTIVE",
         jsonPath: "searchScreen.active",
-        screenName: "search-store",
+        screenName: "search-material-type",
         checkBoxPath:
           "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.active",
       },
@@ -136,7 +177,7 @@ export const searchForm = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Reset",
-            labelKey: "STORE_DETAILS_RESET_BUTTON",
+            labelKey: "STORE_COMMON_RESET_BUTTON",
           }),
         },
         onClickDefination: {
@@ -165,7 +206,7 @@ export const searchForm = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "STORE_DETAILS_SEARCH_BUTTON",
+            labelKey: "STORE_COMMON_SEARCH_BUTTON",
           }),
         },
         onClickDefination: {
