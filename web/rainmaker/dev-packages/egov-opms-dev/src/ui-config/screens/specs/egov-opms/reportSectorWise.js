@@ -45,7 +45,15 @@ import {
             "pricebookid"
           );
 
-  
+          
+          dispatch(
+            handleField(
+              "reportSectorWise",
+              "components.div.children.NOCReport3.children.cardContent.children.masterContainer.children.sector",
+              "props.value",""
+              
+            )
+          );
       getSectordata(action, state, dispatch);
       set(
         state,

@@ -124,17 +124,45 @@ const handleLevel1 = (timeline1, timeline2) => {
   }
 };
 
-const getEscalatingStatus = (timeline, status) => {
-  if (timeline && timeline.length > 2) {
-    if (timeline[0].status === "escalatedlevel1pending") return handleLevel1(timeline[0], timeline[1]);
+// const getEscalatingStatus = (timeline, status) => {
+//   if (timeline && timeline.length > 2) {
+//     if (timeline[0].status === "escalatedlevel1pending") return handleLevel1(timeline[0], timeline[1]);
 
-    if (timeline[0].status === "escalatedlevel2pending") {
-      if (timeline[1].status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
-      else if (timeline[1].status === "escalatedlevel1pending" && status === "escalatedlevel1pending") return handleLevel1(timeline[1], timeline[2]);
-      else return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
-    }
+//     if (timeline[0].status === "escalatedlevel2pending") {
+//       if (timeline[1].status === "resolved") return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
+//       else if (timeline[1].status === "escalatedlevel1pending" && status === "escalatedlevel1pending") return handleLevel1(timeline[1], timeline[2]);
+//       else return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
+//     }
+//   }
+// };
+
+const getEscalatingStatus = (timeline, status) => {
+
+  if(timeline && timeline.length > 0){
+	if(status === "escalatedlevel1pending"){
+			let statusIndex = timeline.findIndex( action => action.status === status);
+			const action = timeline.filter( (action,index) =>  index === (statusIndex+1));
+			
+			if(action[0].status ==="resolved")
+				return "ES_COMPLAINT_ESCALATED_LEVEL1_HEADER";
+			else 
+				return "ES_COMPLAINT_ESCALATED_LEVEL1_SLA_BREACH";
+	}
+	
+	if(status === "escalatedlevel2pending"){
+				let statusIndex = timeline.findIndex( action => action.status === status);
+			const action = timeline.filter( (action,index) =>  index === (statusIndex+1));
+			
+			if(action[0].status ==="resolved")
+				return "ES_COMPLAINT_ESCALATED_LEVEL2_HEADER";
+			else 
+				return "ES_COMPLAINT_ESCALATED_LEVEL2_SLA_BREACH";
   }
+}
+return;
 };
+
+
 const StatusContent = ({
   stepData,
   currentStatus,

@@ -36,7 +36,7 @@ import {
 } from "./summaryResource/sellmeatapplicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { taskStatusSummary } from "./summaryResource/taskStatusSummary";
-import { showHideAdhocPopup } from "../utils";
+import { showHideAdhocPopup ,checkForRole} from "../utils";
 import { SellMeatReassign, SellMeatReject, SellMeatForward, SellMeatApprove } from "./payResource/adhocPopup";
 import {
   getAccessToken,
@@ -48,7 +48,8 @@ import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResul
 import { preparepopupDocumentsSellMeatUploadData, prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
  let nocStatus = '';
 
 
@@ -268,12 +269,12 @@ if (nocStatus === "REASSIGN" || nocStatus === "DRAFT")  {
 set(
   action,
   "screenConfig.components.div.children.body.children.cardContent.children.sellmeatapplicantSummary.children.cardContent.children.header.children.editSection.visible",
-  role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+  checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
 );
 set(
   action,
   "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-  role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+  checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
 );
 
 set(
@@ -285,7 +286,7 @@ set(
 set(
   action,
   "screenConfig.components.div.children.footer.children.previousButton.visible",
-  role_name === "CITIZEN" ?
+  checkForRole(roles, 'CITIZEN') ?
           nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
        true
     :false
@@ -295,7 +296,7 @@ set(
   set(
     action,
     "screenConfig.components.div.children.footer.children.submitButton.visible",
-    role_name === "CITIZEN" ?
+    checkForRole(roles, 'CITIZEN') ?
             nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
          true
       :false
@@ -322,7 +323,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
 
   prepareDocumentsView(state, dispatch);
 
-  if (role_name == 'CITIZEN')
+  if (checkForRole(roles, 'CITIZEN'))
     setSearchResponseForNocCretificate(state,  dispatch, applicationNumber, tenantId);
   //setDownloadMenu(state, dispatch);
 };
@@ -472,15 +473,16 @@ const screenConfig = {
           }
         },
 
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          sellmeatapplicantSummary: sellmeatapplicantSummary,
-          documentsSummary: documentsSummary
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
          
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary,
 		  taskStatusSummary: taskStatusSummary,
           undertakingButton1
+        }) : 
+        getCommonCard({
+          sellmeatapplicantSummary: sellmeatapplicantSummary,
+          documentsSummary: documentsSummary
         }),
         break: getBreak(),
 		

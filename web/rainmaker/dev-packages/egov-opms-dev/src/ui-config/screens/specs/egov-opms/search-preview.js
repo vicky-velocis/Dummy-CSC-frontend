@@ -31,7 +31,7 @@ import { searchBill } from "../utils/index";
 
 import { footer } from "./applyResource/employeeFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
-import { showHideAdhocPopup, showHideAdhocPopups } from "../utils";
+import { showHideAdhocPopup, showHideAdhocPopups,checkForRole } from "../utils";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocsPreview";
 import { adhocPopup5, adhocPopup1, adhocPopup2, adhocPopup3, adhocPopup4 } from "./payResource/adhocPopup";
 import {
@@ -48,7 +48,8 @@ import {
 } from "../../../../ui-utils/commons";
 import { citizenFooter } from "./searchResource/citizenFooter";
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
+let roles = JSON.parse(getUserInfo()).roles
 
 
 const agree_undertaking = async (state, dispatch) => {
@@ -79,10 +80,10 @@ const undertakingButton1 = getCommonContainer({
         labelKey: "NOC_UNDERTAKING"
       }),
     },
-    // onClickDefination: {
-    //   action: "condition",
-    //   callBack: (state, dispatch) => agree_undertaking(state, dispatch)
-    // },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
+    },
     //checked:true,
     visible: localStorageGet('app_noc_status') === "DRAFT" ? true : false,
   },
@@ -91,9 +92,10 @@ const undertakingButton1 = getCommonContainer({
     props: {
       color: "primary",
       style: {
-        minWidth: "200px",
+     //   minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "40px",
+        paddingBottom: "14px"
       }
     },
     children: {
@@ -308,7 +310,7 @@ const setSearchResponse = async (state, dispatch, action, applicationNumber, ten
 
   prepareDocumentsView(state, dispatch);
   
-  if (role_name == 'CITIZEN') {
+  if (checkForRole(roles, 'CITIZEN')) {
     
     setSearchResponseForNocCretificate(state, dispatch, action, applicationNumber, tenantId);
   }
@@ -329,23 +331,23 @@ const HideshowEdit
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
 
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN')? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.immunizationSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-    role_name === 'CITIZEN' ? showEdit === true ? true : false : false
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
   );
 
   set(
@@ -357,7 +359,7 @@ const HideshowEdit
   set(
     action,
     "screenConfig.components.div.children.footer.children.previousButton.visible",
-    role_name === "CITIZEN" ?
+    checkForRole(roles, 'CITIZEN') ?
             nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
          true
       :false
@@ -373,7 +375,7 @@ const HideshowEdit
     set(
       action,
       "screenConfig.components.div.children.footer.children.submitButton.visible",
-      role_name === "CITIZEN" ?
+      checkForRole(roles, 'CITIZEN') ?
               nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
            true
         :false
@@ -406,7 +408,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
   if (resPaid.length != 0)
     nocRemark = "PAID";
 
-  //role_name !== 'CITIZEN' ?
+
   if (nocStatus == "APPROVED") {
     let getCertificateDataForPET = { "applicationType": "PETNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "certificateData" } };
 
@@ -581,24 +583,25 @@ const screenConfig = {
           }
 
         },
-        body: role_name !== 'CITIZEN' ? getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           estimateSummary: estimateSummary,
           applicantSummary: applicantSummary,
           nocSummary: nocSummary,
           immunizationSummary: immunizationSummary,
-          documentsSummary: documentsSummary
-
+          documentsSummary: documentsSummary,
+          taskStatusSummary: taskStatusSummary,
+          undertakingButton1
         })
-          : getCommonCard({
+
+          :
+          getCommonCard({
             estimateSummary: estimateSummary,
             applicantSummary: applicantSummary,
             nocSummary: nocSummary,
             immunizationSummary: immunizationSummary,
-            documentsSummary: documentsSummary,
-            taskStatusSummary: taskStatusSummary,
-            undertakingButton1
-          }),
-
+            documentsSummary: documentsSummary
+  
+          }) ,
         // citizenFooter:
         //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
         footer: footer

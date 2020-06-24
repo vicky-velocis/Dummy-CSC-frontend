@@ -2,12 +2,14 @@
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getMultiUnits, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { getapplicationNumber, getapplicationType, getOPMSTenantId, getUserInfo, setapplicationNumber, lSRemoveItemlocal, lSRemoveItem, localStorageGet, setapplicationMode, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getCheckBoxJsonpath, getCurrentFinancialYear, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTradeTypeDropdownData, getTranslatedLabel, ifUserRoleExists, setFilteredTradeTypes, updateDropDowns, searchBill, createDemandForAdvNOC } from "../ui-config/screens/specs/utils";
+import { convertDateToEpoch, getCheckBoxJsonpath, getCurrentFinancialYear, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTradeTypeDropdownData, getTranslatedLabel, ifUserRoleExists, setFilteredTradeTypes, updateDropDowns, searchBill, fetchBill, searchdemand, createDemandForAdvNOC } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
@@ -621,10 +623,10 @@ export const updateAppStatus = async (state, dispatch, status) => {
     response_updatestatus = await httpRequest("post", "/pm-services/noc/_updateappstatus", "", [], { dataPayload: {} });
     if (response_updatestatus.ResponseInfo.status == "success") {
       return { status: "success" };
-      } else {
-        return { status: "fail" };
-      }
-   } catch (error) {
+    } else {
+      return { status: "fail" };
+    }
+  } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
   }
 };
@@ -635,117 +637,117 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
   let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber(); // get(state, "screenConfiguration.preparedFinalObject.PETNOC.applicationId");
   let method = nocId ? "UPDATE" : "CREATE";
   try {
-  let payload = get(state.screenConfiguration.preparedFinalObject, "PETNOC", []);
-  let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
-  // Set owners & other documents
-  let ownerDocuments = [];
-  let otherDocuments = [];
-  let Remarks = "";
-  
-  payload.hasOwnProperty("immunizationClinicNo")===false?set(payload, "immunizationClinicNo", ""):''
-  payload.hasOwnProperty("immunizationContactDetail")===false?set(payload, "immunizationContactDetail", ""):''
-  payload.hasOwnProperty("veterinaryCouncilRegistrationNo")===false?set(payload, "veterinaryCouncilRegistrationNo", ""):''
-  payload.hasOwnProperty("immunizationNameVeterinaryDoctor")===false?set(payload, "immunizationNameVeterinaryDoctor", ""):''
-  payload.hasOwnProperty("immunizationSector")===false?set(payload, "immunizationSector", ""):''
-  
-  
-  set(payload, "remarks", Remarks);
-  console.log('payload : ', payload)
-  setapplicationMode(status);
-  
-  if (method === "CREATE") {
-  let otherDocuments_pet = [
-  ...otherDocuments,
-  {
-  
-  fileStoreId: reduxDocuments[0].documents[0].fileStoreId
-  }
-  ];
-  let otherDocuments_Vaccine = [
-  ...otherDocuments,
-  {
-  fileStoreId: reduxDocuments[1].documents[0].fileStoreId
-  }
-  ];
-  set(payload, "uploadVaccinationCertificate", otherDocuments_Vaccine);
-  set(payload, "uploadPetPicture",otherDocuments_pet );
-  
-  response = await httpRequest("post", "/pm-services/noc/_create", "", [], { dataPayload: payload });
-  console.log('pet response : ', response)
-  if (response.applicationId !== 'null' || response.applicationId !== '') {
-  setapplicationNumber(response.applicationId);
-  dispatch(prepareFinalObject("PETNOC", response));
-  setApplicationNumberBox(state, dispatch);
-  return { status: "success", message: response };
-  } else {
-  return { status: "fail", message: response };
-  }
-  } else if (method === "UPDATE") {
-  let otherDocuments_pet =[]
-  let otherDocuments_Vaccine =[]
-  jp.query(reduxDocuments, "$.*").forEach(doc => {
-  if (doc.documents && doc.documents.length > 0) {
-  
-  if (doc.documents[0].title === "VACCINATION_CERTIFIACTE") {
-  ownerDocuments = [
-  ...ownerDocuments,
-  {
-  fileStoreId: doc.documents[0].fileStoreId
-  }
-  ];
-  
-  set(payload, "uploadVaccinationCertificate", ownerDocuments);
-  } 
-  else if (doc.documents[0].title==="PET_PICTURE") {
-  // SKIP BUILDING PLAN DOCS
-  otherDocuments = [
-  ...otherDocuments,
-  {
-  fileStoreId: doc.documents[0].fileStoreId
-  }
-  ];
-  set(payload, "uploadPetPicture", otherDocuments);
-  }
-  else{
-  otherDocuments_pet = [
-  {
-  
-  fileStoreId: reduxDocuments[0].documents[0].fileStoreId
-  }
-  ];
-  otherDocuments_Vaccine = [
-  {
-  fileStoreId: reduxDocuments[1].documents[0].fileStoreId
-  }
-  ];
-  set(payload, "uploadVaccinationCertificate", otherDocuments_Vaccine);
-  set(payload, "uploadPetPicture",otherDocuments_pet );
-  
-  
-  
-  }
-  }
-  });
-  response = await httpRequest("post", "/pm-services/noc/_update", "", [], { dataPayload: payload });
-  setapplicationNumber(response.applicationId);
-  dispatch(prepareFinalObject("PETNOC", response));
-  return { status: "success", message: response };
-  }
-  
+    let payload = get(state.screenConfiguration.preparedFinalObject, "PETNOC", []);
+    let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    // Set owners & other documents
+    let ownerDocuments = [];
+    let otherDocuments = [];
+    let Remarks = "";
+
+    payload.hasOwnProperty("immunizationClinicNo") === false ? set(payload, "immunizationClinicNo", "") : ''
+    payload.hasOwnProperty("immunizationContactDetail") === false ? set(payload, "immunizationContactDetail", "") : ''
+    payload.hasOwnProperty("veterinaryCouncilRegistrationNo") === false ? set(payload, "veterinaryCouncilRegistrationNo", "") : ''
+    payload.hasOwnProperty("immunizationNameVeterinaryDoctor") === false ? set(payload, "immunizationNameVeterinaryDoctor", "") : ''
+    payload.hasOwnProperty("immunizationSector") === false ? set(payload, "immunizationSector", "") : ''
+
+
+    set(payload, "remarks", Remarks);
+    console.log('payload : ', payload)
+    setapplicationMode(status);
+
+    if (method === "CREATE") {
+      let otherDocuments_pet = [
+        ...otherDocuments,
+        {
+
+          fileStoreId: reduxDocuments[0].documents[0].fileStoreId
+        }
+      ];
+      let otherDocuments_Vaccine = [
+        ...otherDocuments,
+        {
+          fileStoreId: reduxDocuments[1].documents[0].fileStoreId
+        }
+      ];
+      set(payload, "uploadVaccinationCertificate", otherDocuments_Vaccine);
+      set(payload, "uploadPetPicture", otherDocuments_pet);
+
+      response = await httpRequest("post", "/pm-services/noc/_create", "", [], { dataPayload: payload });
+      console.log('pet response : ', response)
+
+      if (response.applicationId !== 'null' || response.applicationId !== '') {
+        setapplicationNumber(response.applicationId);
+        dispatch(prepareFinalObject("PETNOC", response));
+        setApplicationNumberBox(state, dispatch);
+        await searchdemand(dispatch, response.applicationId, getOPMSTenantId());
+        return { status: "success", message: response };
+      } else {
+        return { status: "fail", message: response };
+      }
+    } else if (method === "UPDATE") {
+      let otherDocuments_pet = []
+      let otherDocuments_Vaccine = []
+      jp.query(reduxDocuments, "$.*").forEach(doc => {
+        if (doc.documents && doc.documents.length > 0) {
+
+          if (doc.documents[0].title === "VACCINATION_CERTIFIACTE") {
+            ownerDocuments = [
+              ...ownerDocuments,
+              {
+                fileStoreId: doc.documents[0].fileStoreId
+              }
+            ];
+
+            set(payload, "uploadVaccinationCertificate", ownerDocuments);
+          }
+          else if (doc.documents[0].title === "PET_PICTURE") {
+            // SKIP BUILDING PLAN DOCS
+            otherDocuments = [
+              ...otherDocuments,
+              {
+                fileStoreId: doc.documents[0].fileStoreId
+              }
+            ];
+            set(payload, "uploadPetPicture", otherDocuments);
+          }
+          else {
+            otherDocuments_pet = [
+              {
+
+                fileStoreId: reduxDocuments[0].documents[0].fileStoreId
+              }
+            ];
+            otherDocuments_Vaccine = [
+              {
+                fileStoreId: reduxDocuments[1].documents[0].fileStoreId
+              }
+            ];
+            set(payload, "uploadVaccinationCertificate", otherDocuments_Vaccine);
+            set(payload, "uploadPetPicture", otherDocuments_pet);
+
+          }
+        }
+      });
+      response = await httpRequest("post", "/pm-services/noc/_update", "", [], { dataPayload: payload });
+      setapplicationNumber(response.applicationId);
+      dispatch(prepareFinalObject("PETNOC", response));
+      return { status: "success", message: response };
+    }
+
   } catch (error) {
-  dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
-  
-  // Revert the changed pfo in case of request failure
-  let NocData = get(
-  state,
-  "screenConfiguration.preparedFinalObject.PETNOC",
-  []
-  );
-  dispatch(prepareFinalObject("PetNOC", NocData));
-  
-  return { status: "failure", message: error };
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+
+    // Revert the changed pfo in case of request failure
+    let NocData = get(
+      state,
+      "screenConfiguration.preparedFinalObject.PETNOC",
+      []
+    );
+    dispatch(prepareFinalObject("PetNOC", NocData));
+
+    return { status: "failure", message: error };
   }
-  };
+};
 
 export const setDocsForEditFlow = async (state, dispatch) => {
 
@@ -1194,13 +1196,13 @@ export const createUpdateSellMeatNocApplication = async (state, dispatch, status
 
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.documents[0].fileStoreId
-            }
-          ];
-        }
+        ownerDocuments = [
+          ...ownerDocuments,
+          {
+            fileStoreId: doc.documents[0].fileStoreId
+          }
+        ];
+      }
     });
     set(payload, "uploadDocuments", ownerDocuments);
     set(payload, "remarks", Remarks);
@@ -1247,7 +1249,7 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
   let response = '';
   let response_updatestatus = '';
   let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber();
-  
+
   let method = nocId ? "UPDATE" : "CREATE";
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "ROADCUTNOC", []);
@@ -1260,12 +1262,12 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
 
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.documents[0].fileStoreId
-            }
-          ];
+        ownerDocuments = [
+          ...ownerDocuments,
+          {
+            fileStoreId: doc.documents[0].fileStoreId
+          }
+        ];
       }
     });
 
@@ -1317,15 +1319,15 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
     let Remarks = "";
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
-       
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.documents[0].fileStoreId
-            }
-          ];
-        }
-     // }
+
+        ownerDocuments = [
+          ...ownerDocuments,
+          {
+            fileStoreId: doc.documents[0].fileStoreId
+          }
+        ];
+      }
+      // }
     });
     set(payload, "uploadDocuments", ownerDocuments);
     set(payload, "remarks", Remarks);
@@ -1343,8 +1345,13 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
         //calculate service called
         responsecreateDemand = await createDemandForAdvNOC(state, dispatch);
         //calculate search Bill called
+
         responsecreateDemand.Calculations[0].taxHeadEstimates[0].estimateAmount > 0 ?
-          await searchBill(dispatch, response.applicationId, getOPMSTenantId()) : '';
+          await fetchBill([
+            { key: "tenantId", value: getOPMSTenantId() },
+            { key: "consumerCode", value: getapplicationNumber() },
+            { key: "businessService", value: "OPMS" }
+          ], dispatch) : '';
 
         lSRemoveItem(`exemptedCategory`);
         lSRemoveItemlocal(`exemptedCategory`);
@@ -1355,13 +1362,18 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
     } else if (method === "UPDATE") {
       dispatch(prepareFinalObject("ADVTCALCULATENOC", payload));
 
-    
+
       response = await httpRequest("post", "/pm-services/noc/_update", "", [], { dataPayload: payload });
       if (status !== 'REASSIGN') {
         responsecreateDemand = await createDemandForAdvNOC(state, dispatch);
+        await fetchBill([
+          { key: "tenantId", value: getOPMSTenantId() },
+          { key: "consumerCode", value: getapplicationNumber() },
+          { key: "businessService", value: "OPMS" }
+        ], dispatch)
       }
 
-     setapplicationNumber(response.applicationId);
+      setapplicationNumber(response.applicationId);
       setApplicationNumberBox(state, dispatch);
       dispatch(prepareFinalObject("ADVERTISEMENTNOC", response));
       return { status: "success", message: response };
@@ -1715,25 +1727,28 @@ export const callBackForRefund = async data => {
 
 export const UpdateStatus = async (dispatch, url, queryObject, code) => {
   try {
+    //    dispatch(toggleSpinner());
     const response = await httpRequest(
       "post", "/pm-services/noc/_updateappstatus", "", [], code
     );
     // return response;
     if (response.ResponseInfo.status == "success") {
+      dispatch(toggleSpinner());
       store.dispatch(
         toggleSnackbar(
           true,
           { labelName: 'Success', labelCode: 'Success' },
           "success"
         ));
+
       dispatch(setRoute(url))
       if (code.applicationStatus == "APPROVEFORWITHDRAW" || code.applicationStatus == "WITHDRAW") {
         callBackForRefund(code);
       }
-
     }
     else {
-      dispatch( toggleSnackbar(
+      dispatch(toggleSpinner());
+      dispatch(toggleSnackbar(
         true,
         { labelName: response.ResponseInfo.msgId, labelCode: response.ResponseInfo.msgId },
         "warning"
@@ -1741,6 +1756,8 @@ export const UpdateStatus = async (dispatch, url, queryObject, code) => {
 
     }
   } catch (error) {
+    dispatch(toggleSpinner());
+
     store.dispatch(
       toggleSnackbar(
         true,

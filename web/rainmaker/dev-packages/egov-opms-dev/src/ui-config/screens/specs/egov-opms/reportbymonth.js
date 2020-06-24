@@ -47,7 +47,23 @@ import {
 
           getYear(action, state, dispatch);
           getMonth(action, state, dispatch);
-   
+          dispatch(
+            handleField(
+              "reportbymonth",
+              "components.div.children.NOCReport4.children.cardContent.children.masterContainer.children.Year",
+              "props.value",""
+              
+            )
+          );
+          dispatch(
+            handleField(
+              "reportbymonth",
+              "components.div.children.NOCReport4.children.cardContent.children.masterContainer.children.Month",
+              "props.value",""
+              
+            )
+          );
+          
       return action;
     },
     components: {

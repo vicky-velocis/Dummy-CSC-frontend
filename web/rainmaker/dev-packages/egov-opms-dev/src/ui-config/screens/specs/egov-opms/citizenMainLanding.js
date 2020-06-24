@@ -1,7 +1,7 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
-import { getRequiredDocData, clearlocalstorageAppDetails } from "../utils";
+import { getRequiredDocData, clearlocalstorageAppDetails ,checkForRole} from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -11,7 +11,8 @@ import {
   getUserInfo,
   setapplicationType
 } from "egov-ui-kit/utils/localStorageUtils";
-let role_name=JSON.parse(getUserInfo()).roles[0].code
+let roles = JSON.parse(getUserInfo()).roles
+
 const header = getCommonHeader(
   {
     labelName: "OPMS",
@@ -24,7 +25,7 @@ const header = getCommonHeader(
   }
 );
 let cardItems = [];
-if(role_name === 'CITIZEN'){
+if(checkForRole(roles, 'CITIZEN')){
   const cardlist = [
     {
       label: {

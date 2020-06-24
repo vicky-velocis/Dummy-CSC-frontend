@@ -16,6 +16,8 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { checkForRole } from "../../utils";
+
 // const buildings = get(
 //     state,
 //     "screenConfiguration.preparedFinalObject.gridData",
@@ -390,15 +392,15 @@ export const searchResultsMaser = {
     // data: [{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"},{"PM_COMMON_TABLE_COL_APP_NO":"Frozen yoghurt","PM_COMMON_TABLE_COL_APP_Status":"abc"}],
 
     columns: [
-    //  getTextToLocalMapping("Price Book Id"),
+      //  getTextToLocalMapping("Price Book Id"),
       {
-        
+
         name: getTextToLocalMapping("Price Book Id"),
         options: {
           display: false,
-        
+
         }
-        },
+      },
       getTextToLocalMapping("categoryId"),
       getTextToLocalMapping("subCategoryId"),
       getTextToLocalMapping("perDayPrice"),
@@ -457,7 +459,7 @@ export const searchResultsMaser = {
 const onMasterRowClick = rowData => {
   // alert('aa')
   // 
-  if (JSON.parse(getUserInfo()).roles[0].code == "OSD") {
+  if (checkForRole(JSON.parse(getUserInfo()).roles, 'OSD')) {
     window.location.href = `masterUpdateRate?pricebookid=${rowData[0]}`;
 
   }
