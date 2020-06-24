@@ -7,7 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { fileUpload, removeFile } from "egov-ui-kit/redux/form/actions";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import "./index.css";
-
+import { getapplicationType } from "../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils";
 const iconStyle = {
   width: "19px",
   height: "19px",
@@ -42,8 +42,16 @@ const Placeholder = ({ className, onFilePicked, inputProps, hide }) => {
 class ImageUpload extends Component {
   fillPlaceholder = (images, onFilePicked, inputProps) => {
     const placeholders = [];
-    for (let i = 0; i < 3 - images.length; i++) {
-      placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+    if(getapplicationType() === "HORTICULTURE")
+    {
+      for (let i = 0; i < 5 - images.length; i++) {
+        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+      }
+    }
+    else{
+      for (let i = 0; i < 3 - images.length; i++) {
+        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+      }
     }
     return placeholders;
   };
@@ -63,7 +71,7 @@ class ImageUpload extends Component {
     } else if (fileSize > MAX_IMAGE_SIZE) {
       toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: "ERR_FILE_MORE_THAN_FIVEMB" },"error");
     } else {
-      if (images.length < 3) {
+      if (images.length < 5) {
         fileUpload(formKey, fieldKey, { module, file, imageUri });
       }
     }
@@ -72,8 +80,11 @@ class ImageUpload extends Component {
   render() {
     const { onFilePicked, removeImage } = this;
     const { images, loading } = this.props;
-    // file Size in kb
-    const inputProps = { accept: "image/*", maxFiles: 3, multiple: true };
+    let imageLength = 3 ;
+    if(getapplicationType() === "HORTICULTURE"){
+      imageLength = 5 ;
+    }
+    const inputProps = { accept: "image/*", maxFiles: imageLength, multiple: true };
 
     return (
       <div >

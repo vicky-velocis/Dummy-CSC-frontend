@@ -23,5 +23,8 @@ const TaskStatusComponents = Loadable({
   loader: () => import("./TaskStatusComponents"),
   loading: () => <Loading />
 });
-
-export { Footer, ActionDialog, TaskDialog, TaskStatusComponents };
+const HCActionDialog = Loadable({
+  loader: () => import("./HCActionDialog"),
+  loading: () => <Loading />
+});
+export { Footer, ActionDialog, TaskDialog, TaskStatusComponents, HCActionDialog };

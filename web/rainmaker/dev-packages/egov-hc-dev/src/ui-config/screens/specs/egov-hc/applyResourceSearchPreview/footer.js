@@ -1,0 +1,270 @@
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { downloadAcknowledgementForm } from "../../utils";
+import "./index.css";
+import { getSLADays, getServiceRequestStatus } from "egov-ui-kit/utils/localStorageUtils";
+
+
+export const generatePdfFromDiv = (action, applicationNumber) => {
+  
+  let target = document.querySelector("#custom-atoms-div");
+  html2canvas(target, {
+    onclone: function (clonedDoc) {
+
+    }
+  }).then(canvas => {
+    var data = canvas.toDataURL("image/jpeg", 1);
+    var imgWidth = 200;
+    var pageHeight = 295;
+    var imgHeight = (canvas.height * imgWidth) / canvas.width;
+    var heightLeft = imgHeight;
+    var doc = new jsPDF("p", "mm");
+    var position = 0;
+
+    doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      doc.addPage();
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+    if (action === "download") {
+      doc.save(`preview-${applicationNumber}.pdf`);
+    } else if (action === "print") {
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    }
+  });
+
+  
+      
+};
+export const footerReviewTop = (
+  action,
+  state,
+  dispatch,
+  serviceRequestId,
+  tenantId,
+) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let printMenu = [];
+  let serviceRequestDownloadObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
+      myRequestDetails["SLADays"] = getSLADays();
+      myRequestDetails["Status"] = getServiceRequestStatus();
+      const data= [myRequestDetails];
+      downloadAcknowledgementForm(myRequestDetails,'print');
+    },
+    leftIcon: "assignment"
+  };
+  let serviceRequestPrintObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
+      myRequestDetails["SLADays"] = getSLADays();
+      myRequestDetails["Status"] = getServiceRequestStatus();
+      const data= [myRequestDetails];
+      downloadAcknowledgementForm(myRequestDetails,'print');
+    },
+    leftIcon: "assignment"
+  };
+  downloadMenu = [serviceRequestDownloadObject];
+  printMenu = [serviceRequestPrintObject];
+  /** END */
+
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-hc",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
+          }
+        },
+        printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-hc",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              menu: printMenu
+            }
+          }
+        }
+
+      },
+      
+      
+      
+      
+    }
+  }
+      
+  
+};
+export const downloadPrintContainer = (
+  state,
+) => {
+  
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let printMenu = [];
+  
+
+  let serviceRequestDownloadObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      
+      var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
+      myRequestDetails["SLADays"] = getSLADays()
+      const data= [myRequestDetails];
+      downloadAcknowledgementForm(data);
+    },
+    leftIcon: "assignment"
+  };
+  let serviceRequestPrintObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
+      myRequestDetails["SLADays"] = getSLADays()
+      const data= [myRequestDetails];
+      downloadAcknowledgementForm(data,'print');
+    },
+    leftIcon: "assignment"
+  };
+  downloadMenu = [serviceRequestDownloadObject];
+  printMenu = [serviceRequestPrintObject];
+  /** END */
+
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
+          }
+        },
+        printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              menu: printMenu
+            }
+          }
+        }
+
+      },
+      
+      
+      
+      
+    }
+  }
+};
+
+export const downloadPrintContainerScreenDownload= (serviceRequestId)=>{
+  let downloadMenu = [];
+  let printMenu = [];
+  let applicationDownloadObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      generatePdfFromDiv("download", serviceRequestId);
+    },
+    leftIcon: "assignment"
+  };
+  let applicationPrintObject = {
+    label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
+    link: () => {
+      generatePdfFromDiv("print", serviceRequestId);
+    },
+    leftIcon: "assignment"
+  };
+  downloadMenu = [applicationDownloadObject];
+  printMenu = [applicationPrintObject];
+  return {
+    rightdiv: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: { textAlign: "right", display: "flex" }
+      },
+      children: {
+        downloadMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
+               leftIcon: "cloud_download",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              menu: downloadMenu
+            }
+          }
+        },
+        printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              menu: printMenu
+            }
+          }
+        }
+
+      },
+      
+      
+      
+      
+    }
+  }
+}

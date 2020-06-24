@@ -553,6 +553,16 @@ export const getPattern = type => {
   return /^[a-zA-Z. ]*$/i;
   case "BadageNumber":
   return /^[a-zA-Z0-9]*$/i;
+  case "NoOfTree":
+    return /^[0-9][0-9]{0,1}$/i;
+  case "HCOwnerName":
+    return /^[a-zA-Z\s\\/\-]{1,256}$/i;
+ case "serviceRequestDescription":
+      return /^[a-zA-Z 0-9.,'"?]{1,256}$/i;
+    case "HCEmail":
+      return /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
+case "HCMobileNo":
+    return /^[0-9]{10}$/i;
    case "Amountopms":
       return /^[0-9.]{0,20}$/i;
       case "validUrl":
