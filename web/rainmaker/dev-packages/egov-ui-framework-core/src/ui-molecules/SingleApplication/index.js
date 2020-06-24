@@ -126,7 +126,14 @@ class SingleApplication extends React.Component {
         default:
           setRoute(`/egov-opms/sellmeatnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
-    } else if (moduleName === "ADVERTISEMENT-NOC") {
+    } else if (moduleName === "HC") { 
+      switch (item.status){
+      case "INITIATED":
+          setRoute (`/egov-hc/search-preview?applicationNumber=${item.serviceRequestId}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+       default:
+          setRoute (`/egov-hc/search-preview?applicationNumber=${item.service_request_id}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+     }
+    }else if (moduleName === "ADVERTISEMENT-NOC") {
       switch (item.status) {
         case "INITIATED":
           setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);

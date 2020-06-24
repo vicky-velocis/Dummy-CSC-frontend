@@ -14,6 +14,7 @@
     "dev-packages/egov-abg-dev",
     "dev-packages/egov-noc-dev",
     "dev-packages/egov-opms-dev",
+    "dev-packages/egov-hc-dev",
     "dev-packages/egov-pms-dev",
     "dev-packages/egov-bpa-dev", 
     "dev-packages/egov-pr-dev",
