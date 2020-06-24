@@ -6,7 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getCommonApplyFooter, validateFields,convertDateToEpoch } from "../../utils";
+import { getCommonApplyFooter, validateFields,convertDateToEpoch,epochToYmd } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { downloadAcknowledgementLetter , downloadAcknowledgementForm} from "../../utils";;
@@ -938,6 +938,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   let  ischeckboxfield= false;
  let isGratuityAmountValid = true;
  let isGratuityPensionValid = true;
+ let isValidwef = true;
   if (activeStep === 0) {
   
    
@@ -1101,10 +1102,43 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           {
             isFormValid = false
           }
-        else{
-          
-          isFormValid = true
-        }
+          else{
+            // wef validation
+                      if(!Accesslable[0].employeeOtherDetailsUpdate)
+                      {
+                        
+                      let dateOfDeath = get(
+                        state.screenConfiguration.preparedFinalObject,
+                        "ProcessInstances[0].employee.dateOfDeath",//dateOfDeath
+                        0
+                      );
+                      if(Number(dateOfDeath))
+                      {
+                        //alert('i am number')
+                        dateOfDeath = epochToYmd(dateOfDeath)
+                      }
+                      let wef =
+                      get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef",0) 
+                      //wef = convertDateToEpoch(wef);
+                      if(wef)
+                     {
+                      const  wef_ = new Date(wef)
+                      const  dateOfRetirement_ = new Date(dateOfDeath)
+                      if(wef_ < dateOfRetirement_ )
+                      {
+                        isFormValid = false;
+                        isValidwef = false;
+                      }
+                      else
+                      {
+                        isFormValid = true;
+                        isValidwef = true;
+            
+                      } 
+                    } 
+                    }       
+                      
+                    }
         
       }
      if(!isDependentValid)
@@ -1731,6 +1765,15 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
               labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
             };
   
+          }
+          else if(!isValidwef)
+          {
+            errorMessage = {
+              labelName:
+                " Date of Commencement is greater then Date of Death of a employee!",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_WEF_DOD"
+            };
+    
           }
       
       dispatch(toggleSnackbar(true, errorMessage, "warning"));

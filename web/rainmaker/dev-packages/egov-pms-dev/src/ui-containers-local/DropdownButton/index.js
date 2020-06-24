@@ -774,9 +774,7 @@ else{
     let Group = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.employeeGroup", '' );
     Group = getLocalizationCodeValue(`EGOV_PENSION_EMPLOYEEGROUP_${Group}`);
     let reasonForRetirement = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.reasonForRetirement", '' );
-    let businessService = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessService", '' )
-    if(businessService === WFConfig().businessServiceRRP)
-    reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
+    let businessService = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].businessService", '' )   
     let TakenMonthlyPensionAndGratuity =  "NA";
     let TakenGratuityCommutationTerminalBenefit = "NA";
     let TakenCompensationPensionAndGratuity = "NA";
@@ -784,8 +782,10 @@ else{
     {
       TakenMonthlyPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity", false)=== true? "YES" : "NO";
       TakenGratuityCommutationTerminalBenefit=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenGratuityCommutationTerminalBenefit", false)=== true? "YES" : "NO";
-      isTakenCompensationPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity", false)=== true? "YES" : "NO";
+      TakenCompensationPensionAndGratuity=get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.isTakenCompensationPensionAndGratuity", false)=== true? "YES" : "NO";
     }
+    if(businessService === WFConfig().businessServiceRRP)
+    reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
     // else
     // {
     //   TakenMonthlyPensionAndGratuity="NA"

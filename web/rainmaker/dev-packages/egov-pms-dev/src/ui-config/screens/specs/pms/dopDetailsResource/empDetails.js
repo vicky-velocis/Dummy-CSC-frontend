@@ -39,9 +39,51 @@ import {
   prepareFinalObject as pFO,
   
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { 
+  ActionStepDop,
+  } from "../../../../../ui-utils/sampleResponses";
 let DpendentIndex = 0;
 let MsSelect =''
+let employeeOtherDetailsUpdate = true;
+let employeeLeaveUpdate = true;
+let pensionCalculation = true;
+let pensionDataUpdate = true;
+let IsCalculate = false;
+let Isletter =false;
+let IswfClose = false
+let cindex =0;
+//const Accesslable = [];
+let activeStep_= ActionStepDop()
+const step = getQueryArg(window.location.href, "step");
+let responce = get
+switch(step.toUpperCase())
+{
+ case activeStep_.INITIATED:
+   employeeOtherDetailsUpdate = false;   
+   employeeLeaveUpdate= false;    
+   break;   
+   case activeStep_.PENDING_FOR_CALCULATION:  
+   pensionCalculation = false;  
+   pensionDataUpdate= false;
+   IsCalculate = true;
+   case activeStep_.PENDING_FOR_AUDIT:  
+   Isletter = true; 
+   break;
+   case activeStep_.CLOSE:
+     IswfClose = true
+     break;
+      
+}
+ const data =[
+ {employeeOtherDetailsUpdate:employeeOtherDetailsUpdate},
+ {pensionCalculation:pensionCalculation},
+ {employeeLeaveUpdate:employeeLeaveUpdate},
+ {pensionDataUpdate:pensionDataUpdate},
+ {IsCalculate:IsCalculate},
+ {Isletter:Isletter},
+ {IswfClose:IswfClose},
+
+]
 const ActionCalculateDependentPension = async (state, dispatch) => {
 
   let validDependent = true;
@@ -393,8 +435,6 @@ if(validDependent && isDependentValidDOB)
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 }
-
-export const empDetails = (data) => {
 const dependentUnitcard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -445,6 +485,8 @@ const dependentUnitcard = {
             beforeFieldChange: (action, state, dispatch) => {
              
               let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+
+              dispatch(prepareFinalObject("DpendentIndex", cardIndex));
               DpendentIndex = cardIndex;
               let dependent = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].dependents", [] )
               
@@ -456,7 +498,7 @@ const dependentUnitcard = {
                 dispatch(
                   handleField(
                     "dopDetails",
-                    "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + cardIndex + "].item" + cardIndex + ".children.cardContent.children.dependentUnitcardContainer.children.IsDisableOption",
+                    "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + cardIndex + "].item" + cardIndex + ".children.cardContent.children.dependentUnitcardContainer.children.IsDisableOption",//IsDisableOption",
                     "props.style",
                     { display: "inline-block" }
                   )
@@ -960,6 +1002,69 @@ const dependentUnitcard = {
             }),
             
           },
+          // isDisableds: {
+          //   uiFramework: "custom-molecules-local",
+          //   moduleName: "egov-pms",
+          //   componentPath: "SwitchWithLabel",
+          //   props: {
+          //     items: [
+          //       {
+          //         label: {
+          //           labelName: "Currently Assigned Here",
+          //           labelKey: "HR_CURRENTLY_ASSIGNED_HERE_SWITCH_LABEL"
+          //         }
+          //       }
+          //     ],
+          //     SwitchProps: {
+          //       color: "primary"
+          //     },
+          //     jsonPath: "ProcessInstances[0].dependents[0].isDisabled",
+          //     index:DpendentIndex,
+          //     name:"isDisableds",
+          //     compJPath:
+          //       "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items",
+          //     screenKey: "dopDetails"
+          //   },
+          //   beforeFieldChange: (action, state, dispatch) => {
+              
+          //   }
+          // },
+          // isHollyDependents: {
+          //   uiFramework: "custom-molecules-local",
+          //   moduleName: "egov-pms",
+          //   componentPath: "SwitchWithLabel",
+          //   props: {
+          //     items: [
+          //       {
+          //         label: {
+          //           labelName: "Currently Assigned Here",
+          //           labelKey: "HR_CURRENTLY_ASSIGNED_HERE_SWITCH_LABEL"
+          //         }
+          //       }
+          //     ],
+          //     SwitchProps: {
+          //       color: "primary"
+          //     },
+          //     jsonPath: "ProcessInstances[0].dependents[0].isHollyDependent",
+          //     index:DpendentIndex,
+          //     name:"isHollyDependents",
+          //     compJPath:
+          //       "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items",
+          //     screenKey: "dopDetails"
+          //   },
+          //   beforeFieldChange: (action, state, dispatch) => {
+          // //alert(action.value)
+          //     // let assignToComponentPath = action.componentJsonpath
+          //     // dispatch(
+          //     //   handleField(
+          //     //     "dopDetails",
+          //     //     assignToComponentPath,
+          //     //     "props.value",
+          //     //     action.value
+          //     //   )
+          //     // );
+          //   }
+          // },
           IsDisableOption:getCommonContainer(
             {
               isDisabled: {
@@ -979,7 +1084,46 @@ const dependentUnitcard = {
                  style:{
                   display:'none',
                   } 
-                }
+                },
+              // uiFramework: "custom-molecules-local",
+              // moduleName: "egov-pms",
+              // componentPath: "SwitchWithLabel",
+              // props: {
+              //   items: [
+              //     {
+              //       label: {
+              //         labelName: "Currently Assigned Here",
+              //         labelKey: "PENSION_EMPLOYEE_DEPENDENT_DISABLED"
+              //       }
+              //     }
+              //   ],
+              //   SwitchProps: {
+              //     color: "primary"
+              //   },
+              //   jsonPath: "ProcessInstances[0].dependents[0].isDisabled",
+              //   index:DpendentIndex,
+              //   name:"IsDisableOption.children.isDisabled",
+              //   compJPath:
+              //     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items",
+              //   screenKey: "dopDetails"
+              // },
+              // beforeFieldChange: (action, state, dispatch) => {
+              //   //alert(action.value)
+              //   let i = get(state.screenConfiguration.preparedFinalObject,"DpendentIndex", 0 )
+              //   //alert(action.componentJsonpath)
+              //   i = action.componentJsonpath.split("items[")[1].split("]")[0];
+              //  // alert(i)
+              //  // dispatch(
+              //   // handleField(
+              //   //   "dopDetails",
+              //   //   `components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.IsDisableOption.children.isDisabled`,//.children.${name}`,
+              //   //   "props.value",
+              //   //   // `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.${componentname}`,
+              //   //   // "props.value",
+              //   //   action.value
+              //   // );
+              //  // );
+              //      }
         
             
               },
@@ -1268,6 +1412,8 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
   }
   return multiItemContent;
 };
+export const empDetails = (data) => {
+
 return getCommonCard({
   header: getCommonTitle(
     {
