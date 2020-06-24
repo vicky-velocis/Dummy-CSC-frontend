@@ -115,8 +115,8 @@ if(isGetMethod){
       erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "-" + subdomainurl ;
     } else {
       subdomainurl = hostname.substring(hostname.indexOf(".") + 1);
-      erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl ;
-      
+     // erp_url = loc.protocol + "//" + getTenantId().split(".")[1] + "." + subdomainurl ;
+     erp_url = loc.protocol+ "//mcc.chandigarhsmartcity.in";
     }
 
     

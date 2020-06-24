@@ -13,18 +13,12 @@ import {
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { applicantSummary } from "./summaryResource/applicantSummary";
-import { institutionSummary } from "./summaryResource/applicantSummary";
 import { documentsEventSummary } from "./summaryResource/documentsSummary";
-import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer,ApplySummaryfooter } from "./summaryResource/footer";
-import { nocSummary } from "./summaryResource/nocSummary";
 import { eventdetailsSummary } from "./summaryResource/eventdetailsSummary";
-import { generateBill } from "../utils/index";
-import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import {getSearchResultsView} from "../egov-pr/searchResource/citizenSearchFunctions"
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { debug } from "util";
+import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -53,7 +47,7 @@ const header = getCommonContainer({
 });
 
 const prepareDocumentsView = async (state, dispatch) => {
-  debugger
+  
   let documentsPreview = [];
   let reduxDocuments = get(
     state,
@@ -85,21 +79,12 @@ const prepareDocumentsView = async (state, dispatch) => {
     
 }
 const HideshowEdit = (action, Status, ) => {
-  //alert('in hide show')
   set(
     action,
     "screenConfig.components.div.children.footer.children.testButton.visible",
     Status === 'UPCOMING' ?  true  : false 
   );
-        // set(
-        // action,
-        // "screenConfig.components.div.children.footer.children.cancelButton.visible",
-        // response.ResponseBody[0].status==="UPCOMING"? true : false );
-       
-        // set(
-        //   action,
-        //   "screenConfig.components.div.children.footer.children.testButton.visible",
-        //   response.ResponseBody[0].status==="UPCOMING"? true : false );
+        
       
 }
 const setSearchResponse = async (state, action, dispatch, tenantId,payload) => {
@@ -109,80 +94,53 @@ const setSearchResponse = async (state, action, dispatch, tenantId,payload) => {
   
 
   dispatch(prepareFinalObject("EventSummary", get(response, "ResponseBody", [])));
-  // Set Institution/Applicant info card visibility
+  
   let Status = get(state, "screenConfiguration.preparedFinalObject.EventSummary[0].status", {});
-  // localStorageSet("app_noc_status", nocStatus);
+  
   debugger
- // alert(localStorageGet("shoWHideCancel"))
+
+
 localStorageGet("shoWHideCancel")==="apply"?'':HideshowEdit(action, Status);
+
+
 
 }  
 const screenConfig = {
   uiFramework: "material-ui",
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
-   // alert(getQueryArg(window.location.href, "eventuuId"))
+
+
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.eventdetailsSummary.children.cardContent.children.header.children.editSection.visible",
+    (getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED")===true ?false:true )
+
+    
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?false:true )
     let payload={
       "requestBody":{
               "tenantId":getTenantId(),
               "eventDetailUuid":getQueryArg(window.location.href, "eventuuId")            ,
               "scheduledStatus":"",
-              "eventStatus":"PUBLISHED",
+              "eventStatus":getQueryArg(window.location.href, "eventstatus"),
               "moduleCode":localStorageGet("modulecode"),
               
       }
       
             }
-//HideShoeEdit(state, dispatch,payload,action);
+
     let uomsObject = get(
       state.screenConfiguration.preparedFinalObject,
       "PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap"
     );
-   // getSearchResultsView(state, dispatch,payload)
+   
+
     setSearchResponse(state, action, dispatch, getTenantId(),payload);
     
-    // if (uomsObject) {
-    //   for (const [key, value] of Object.entries(uomsObject)) {
-    //     let labelElement = getLabelWithValue(
-    //       {
-    //         labelName: key,
-    //         labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`
-    //       },
-    //       {
-    //         jsonPath: `PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap.${key}`
-    //       }
-    //     );
-    //     set(
-    //       action,
-    //       `screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children.${key}`,
-    //       labelElement
-    //     );
-    //   }
-    // }
-
-    // Set Institution/Applicant info card visibility
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "PublicRelations[0].PublicRelationDetails.applicantDetails.ownerShipType",
-        ""
-      ).startsWith("INSTITUTION")
-    ) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
-        false
-      );
-    } else {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
-        false
-      );
-    }
-
-  //  generateBill(dispatch, applicationNumber, tenantId);
-   // prepareDocumentsView(state, dispatch);
     return action;
   },
   components: {

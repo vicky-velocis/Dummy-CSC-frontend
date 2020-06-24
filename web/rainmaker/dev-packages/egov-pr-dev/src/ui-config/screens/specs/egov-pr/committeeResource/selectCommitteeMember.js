@@ -150,7 +150,7 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
           callBack: (state, dispatch) => {
            
             
-               GetCommiteeEmployees(state, dispatch,localStorage.getItem('selectedDepartmentsInvite'),getQueryArg(window.location.href, "commiteeUUID")) }
+               GetCommiteeEmployees(state, dispatch,localStorage.getItem('selectedDepartmentsInvite'),getQueryArg(window.location.href, "committeeUUID")) }
         }
 
        

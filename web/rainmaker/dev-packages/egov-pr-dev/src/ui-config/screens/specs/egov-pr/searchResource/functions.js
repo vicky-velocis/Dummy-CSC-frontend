@@ -7,6 +7,7 @@ import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import commonConfig from '../../../../../config/common';
 
 import { httpRequest } from "../../../../../ui-utils";
 
@@ -28,12 +29,11 @@ const showHidesearchDepartmentEmployeesResults = (booleanHideOrShow, dispatch) =
 
 
 export const TimeSeriesReportSearch = async (state, dispatch) => {
-  let monthdata=["1","2","3","4","5","6","7","8","9","10","11","12"]
+  let monthdata=[1,2,3,4,5,6,7,8,9,10,11,12]
 let month=get(
   state.screenConfiguration.preparedFinalObject,
   "TimeseriesReport.Month"
 )
-//alert(month)
 let year=get(
   state.screenConfiguration.preparedFinalObject,
   "TimeseriesReport.Year"
@@ -57,29 +57,23 @@ let data={
     },
     {
       "name":"year",
-      "input":get(
+      "input":parseInt(get(
         state.screenConfiguration.preparedFinalObject,
         "TimeseriesReport.Year"
-      )
+      ))
     },
     {
       "name":"month",
-      "input":month===undefined?monthdata:month==="ALL"?monthdata:[month]
+      "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
     }
   ]
  
 }
-//get(
-//   state.screenConfiguration.preparedFinalObject,
-//   "LocalityReport.localityname"
-// )
-
-
 
 const response = await getLocaliyReportData(data);
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId: commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -138,11 +132,9 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
 
   }
   
-//alert(JSON.stringify(response))
     try {
      
       let data1 = response.reportData.map(item => ({
-        // alert(item)
          [getTextToLocalMapping("Aggregate By Department")]:
            item[0] || "-",
            [getTextToLocalMapping("Year")]:
@@ -152,7 +144,6 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
          [getTextToLocalMapping("New Events")]:
          item[5] || "-",
          
-        // [getTextToLocalMapping("New Events")]: item[1] || "-",
          [getTextToLocalMapping("Ongoing Events")]:
            item[4] || "-",
          [getTextToLocalMapping("Closed Events")]:
@@ -173,10 +164,8 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
       showHideTimeseriesEventTable(false, dispatch);
       
       showHideTimeseriesDeptTable(true, dispatch);
-      //showHideProgress(false, dispatch);
-  //  showHideTable(true, dispatch);
+     
     } catch (error) {
-      //showHideProgress(false, dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -202,24 +191,23 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
           },
           {
             "name":"year",
-            "input":get(
+            "input":parseInt(get(
               state.screenConfiguration.preparedFinalObject,
               "TimeseriesReport.Year"
-            )
+            ))
           },
           {
             "name":"month",
-            "input":month===undefined?monthdata:month==="ALL"?monthdata:[month]
+            "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
           }
         ]
        
       }
       const response = await getLocaliyReportData(data);
-     // alert(JSON.stringify(response))
           try {
            
             let data1 = response.reportData.map(item => ({
-              // alert(item)
+              
                [getTextToLocalMapping("Aggregate By Event Type")]:
                  item[0] || "-",
                  [getTextToLocalMapping("Year")]:
@@ -229,7 +217,7 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
                [getTextToLocalMapping("New Events")]:
                item[5] || "-",
                
-              // [getTextToLocalMapping("New Events")]: item[1] || "-",
+             
                [getTextToLocalMapping("Ongoing Events")]:
                  item[4] || "-",
                [getTextToLocalMapping("Closed Events")]:
@@ -246,12 +234,11 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
                 data1
               )
             );
-            //showHideProgress(false, dispatch);
+            
             showHideTimeseriesDeptTable(false, dispatch);
             showHideTimeseriesEventTable(true, dispatch);
             
           } catch (error) {
-            //showHideProgress(false, dispatch);
             dispatch(
               toggleSnackbar(
                 true,
@@ -326,15 +313,11 @@ let data={
   ]
  
 }
-//get(
-//   state.screenConfiguration.preparedFinalObject,
-//   "LocalityReport.localityname"
-// )
+
 const response = await getLocaliyReportData(data);
-//alert(JSON.stringify(response))
 let mdmsBody = {
   MdmsCriteria: {
-    tenantId: getTenantId(),
+    tenantId:commonConfig.tenantId,
     moduleDetails: [
       {
         moduleName: "RAINMAKER-PR",
@@ -416,10 +399,8 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
           data1
         )
       );
-      //showHideProgress(false, dispatch);
-  //  showHideTable(true, dispatch);
+      
     } catch (error) {
-      //showHideProgress(false, dispatch);
       dispatch(
         toggleSnackbar(
           true,
@@ -457,17 +438,11 @@ export const LocalityReportSearch = async (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "LocalityReport.localityname"
   )
-  console.log(fromDate)
   if(fromDate!==undefined && todate!==undefined && localityName!==undefined)
   {
     var date1 = new Date(fromDate);
     var date2 = new Date(todate);
-    // const diffTime = Math.abs(date2 - date1);
-    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    // let FromDate=convertEpochToDate(fromdate).split('/')
-    // FromDate=FromDate[2]+'-'+FromDate[1]+'-'+FromDate[0]
-    // let ToDate=convertEpochToDate(Todate).split('/')
-    // ToDate=ToDate[2]+'-'+ToDate[1]+'-'+ToDate[0]
+   
     if(fromDate<=todate)
     {
 let data={
@@ -506,16 +481,11 @@ let data={
   ]
 }
 
-//get(
-//   state.screenConfiguration.preparedFinalObject,
-//   "LocalityReport.localityname"
-// )
+
 const response = await getLocaliyReportData(data);
-//alert(JSON.stringify(response))
     try {
      
       let data1 = response.reportData.map(item => ({
-        // alert(item)
          [getTextToLocalMapping("Locality Name")]:
            item[0] || "-",
         [getTextToLocalMapping("New Events")]: item[3] || "-",
@@ -535,10 +505,8 @@ const response = await getLocaliyReportData(data);
           data1
         )
       );
-      //showHideProgress(false, dispatch);
-  //  showHideTable(true, dispatch);
+      
     } catch (error) {
-      //showHideProgress(false, dispatch);
       dispatch(
         toggleSnackbar(
           true,

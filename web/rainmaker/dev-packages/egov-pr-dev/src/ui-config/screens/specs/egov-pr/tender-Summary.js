@@ -19,7 +19,6 @@ import { documentsSummary } from "./summaryResource/tenderDocumentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { footer } from "./summaryResource/footer";
 import { nocSummary } from "./summaryResource/nocSummary";
-//import { generateBill } from "../utils/index";
 import { tenderPublishSummary } from "./summaryResource/tenderSummary";
 
 import {
@@ -71,7 +70,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "tender-Summary",
   beforeInitScreen: (action, state, dispatch) => {
-   // alert(getQueryArg(window.location.href, "eventuuId"))
     let payload={
       "RequestBody": {
         "tenantId": getTenantId(),
@@ -87,9 +85,7 @@ const screenConfig = {
          "defaultGrid":true
     }}
     getSearchResultsforTenderView(state, dispatch,payload)
-    
-    debugger
-    //prepareDocumentsView(state, dispatch);
+  
     return action;
   },
   components: {

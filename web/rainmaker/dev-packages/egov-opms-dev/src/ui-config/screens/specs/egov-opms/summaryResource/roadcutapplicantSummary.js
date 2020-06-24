@@ -213,7 +213,7 @@ export const roadcutapplicantSummary = getCommonGrayCard({
           length: getLabelWithValue(
             {
               labelName: "landmark",
-              labelKey: "NOC_ROADCUT_LENGTH"
+              labelKey: "ROADCUT_LENGTH_LABEL_NOC"
             },
             {
               jsonPath:
@@ -231,7 +231,7 @@ export const roadcutapplicantSummary = getCommonGrayCard({
           width: getLabelWithValue(
             {
               labelName: "landmark",
-              labelKey: "NOC_ROADCUT_WIDTH"
+              labelKey: "ROADCUT_WIDTH_NOC"
             },
             {
               jsonPath:

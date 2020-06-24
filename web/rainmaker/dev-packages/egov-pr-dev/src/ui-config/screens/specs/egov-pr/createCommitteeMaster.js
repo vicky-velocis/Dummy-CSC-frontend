@@ -25,7 +25,7 @@ import {
   import {
     prepareDocumentsUploadData,
     getSearchResults,
-    furnishNocResponse_Committee,
+    furnishResponse_Committee,
     setApplicationNumberBox,
     getsampleemailtemplate,
     getCommittiee
@@ -33,6 +33,7 @@ import {
   import { createCommittee } from "./committeeResource/createCommittee";
   import { selectCommitteeMember } from "./committeeResource/selectCommitteeMember"
   
+  import commonConfig from '../../../../config/common';
   
   export const stepsData = [
     { labelName: "Create Commitee Details", labelKey: "PR_CREATE_COMMITTEE" },
@@ -85,7 +86,7 @@ import {
   };
   
   const getMdmsData = async (action, state, dispatch) => {
-    let tenantId = getTenantId();
+    let tenantId = commonConfig.tenantId;
      let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenantId,
@@ -196,14 +197,14 @@ import {
   
     tenantId
   ) => {
-  debugger
-    let id=getQueryArg(window.location.href, "commiteeUUID")
+  
+    let id=getQueryArg(window.location.href, "committeeUUID")
     if (id) {
       let payload={
         "tenantId": getTenantId(),
         "RequestBody":{
         
-        "committeeUuid": getQueryArg(window.location.href, "commiteeUUID"),
+        "committeeUuid": getQueryArg(window.location.href, "committeeUUID"),
         "committeeName": "",
         "committeeDescription": "",
         "isActive": true,
@@ -228,12 +229,11 @@ import {
 		
 		
 		localStorageSet("selectedDepartmentsInvite",JSON.stringify(temparray));
-  let Refurbishresponse = furnishNocResponse_Committee(response);
+  let Refurbishresponse = furnishResponse_Committee(response);
   let empdata=await GetCommiteeEmployees(state, dispatch,response.ResponseBody[0].committeeMember[0].departmentName
   )
 
 let selectedrowslocal=[];
-//alert(JSON.stringify(empdata))
 let selectedRows=[];
 empdata.map(function (item, index) {
   if(item.user!=null && item.user.uuid){
@@ -250,6 +250,8 @@ empdata.map(function (item, index) {
       obj['Department Id']=commiteeMember.departmentUuid
       obj['Employee ID']=commiteeMember.userUuid
       obj['DepartmentName']=item.assignments[0].department
+      obj['index']=index
+      
       selectedrowslocal.push(obj)
       selectedRows.push(index)
       localStorageSet("committeelist", JSON.stringify(selectedrowslocal));
@@ -292,9 +294,9 @@ dispatch(
 );
 
 
-      dispatch(prepareFinalObject("PublicRealation[0].CreateCommitteeDetails", Refurbishresponse));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", Refurbishresponse));
 
-      dispatch(prepareFinalObject("PublicRealation[0].CreateMasterCommitee", Refurbishresponse));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", Refurbishresponse));
       
          }
   };
@@ -321,7 +323,7 @@ dispatch(
       });
    
         GetDepartments(action, state, dispatch).then(response => {
-             // alert("Get Depaartemnts")
+          
               
         });
         

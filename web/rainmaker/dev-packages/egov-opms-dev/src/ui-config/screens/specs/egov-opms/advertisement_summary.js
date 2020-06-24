@@ -14,9 +14,8 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResultsView, UpdateStatus } from "../../../../ui-utils/commons";
+import { getSearchResultsView, updateAppStatus } from "../../../../ui-utils/commons";
 import { searchBill, createDemandForAdvNOC } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { httpRequest } from "../../../../ui-utils";
 import {
@@ -27,6 +26,7 @@ import { taskStatusSummary } from "./summaryResource/taskStatusSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { getAccessToken, setapplicationType, getOPMSTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const stepsData = [
   { labelName: "Applicant Details", labelKey: "ADV_APPLICANT_DETAILS_NOC" },
@@ -41,7 +41,6 @@ export const stepper = getStepperObject(
 
 
 let role_name = JSON.parse(getUserInfo()).roles[0].code
-//alert('CITIZEN');
 
 const getMdmsData = async (action, state, dispatch) => {
 
@@ -72,7 +71,6 @@ const getMdmsData = async (action, state, dispatch) => {
   };
   try {
     let payload = null;
-    //alert('in payload')
     payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",
@@ -107,7 +105,7 @@ const titlebar = getCommonContainer({
 
 
 
-const callbackforsummaryaction = async (state, dispatch) => {
+export const callbackforsummaryaction = async (state, dispatch) => {
   let tenantId = getOPMSTenantId();
   let action = "submit";
   if (action == 'submit') {
@@ -130,29 +128,59 @@ const callbackforsummaryaction = async (state, dispatch) => {
   }
 };
 
-const callbackforsummaryactionpay = async (state, dispatch) => {
+const routeToPaymentPage=(exempted,dispatch)=>{
   let tenantId = getOPMSTenantId();
-  //alert("enter here")
-  //Logic implemented as per the discussion that if exempted selected then redirect to my-application page
   const applicationid = getQueryArg(window.location.href, "applicationNumber");
 
+  const appendUrl =
+  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const reviewUrl = parseInt(exempted) === 1 ? `/egov-opms/advertisementnoc-my-applications`
+  :
+  localStorageGet('app_noc_status') === 'REASSIGN' ? `/egov-opms/advertisementnoc-my-applications` 
+  : `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`;
+     dispatch(setRoute(reviewUrl));
+}
+
+export const callbackforsummaryactionpay = async (state, dispatch) => {
   let applicantdetail = get(
     state,
     "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationdetail",
     {}
   );
+  let applicationStatus = get(
+    state,
+    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+    {}
+  );
+
   let exempted = JSON.parse(applicantdetail).exemptedCategory;
-  const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = parseInt(exempted) === 1 ? `/egov-opms/advertisementnoc-my-applications`
-    :
-    localStorageGet('app_noc_status') === 'REASSIGN' ? `/egov-opms/advertisementnoc-my-applications` 
-    : `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`;
-  dispatch(setRoute(reviewUrl));
-
+  if(applicationStatus==="DRAFT"){
+    let response=await updateAppStatus(state,dispatch,parseInt(exempted) === 1?"INITIATEDEXC":"INITIATED");
+    let responseStatus = get(response, "status", "");
+    if(responseStatus === "success"){
+        routeToPaymentPage(exempted,dispatch)
+    }
+    else if(responseStatus === "fail" || responseStatus==="Fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  }
+  else if (applicationStatus==="INITIATED") {
+    routeToPaymentPage(exempted,dispatch)
+} 
+ else  if (applicationStatus==="REASSIGN") {
+    let response=await updateAppStatus(state,dispatch,"RESENT");
+    let responseStatus = get(response, "status", "");
+    if (responseStatus == "success") {
+      routeToPaymentPage(exempted,dispatch)
+    }
+    else if(responseStatus == "fail"){
+      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    }
+  } 
+  else{
+    routeToPaymentPage(exempted,dispatch)
+  }
 }
-
-
 
 var titlebarfooter = getCommonContainer({
   previousButton: {
@@ -191,7 +219,6 @@ var titlebarfooter = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
@@ -221,7 +248,6 @@ var titlebarfooter = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
@@ -341,6 +367,7 @@ const screenConfig = {
   name: "advertisement_summary",
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    setapplicationNumber(applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setapplicationType('ADVERTISEMENTNOC');
@@ -354,22 +381,6 @@ const screenConfig = {
 
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    // Hide edit buttons
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.advertisementapplicantSummary.children.cardContent.children.header.children.editSection.visible",
-      status === 'INITIATED' ? true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.header.children.editSection.visible",
-      status === 'INITIATED' ? true : false
-    );
-    set(
-      action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      status === 'INITIATED' ? true : false
-    );
     return action;
   },
   components: {
@@ -403,12 +414,10 @@ const screenConfig = {
 
         }) : getCommonCard({
           estimateSummary: estimateSummary,
-          //estimateSummary: get(state,'screenConfiguration.preparedFinalObject.nocApplicationDetail[0].ReceiptTemp') ?  estimateSummary : {},
           advertisementapplicantSummary: advertisementapplicantSummary,
           detailSummary: detailSummary,
           documentsSummary: documentsSummary,
-          //taskStatusSummary: taskStatusSummary,
-
+ 
         }),
         break: getBreak(),
         titlebarfooter,

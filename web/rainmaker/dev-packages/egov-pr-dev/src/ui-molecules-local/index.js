@@ -87,7 +87,10 @@ const HTMLContent = Loadable({
   loader: () => import("./HTMLContent"),
   loading: () => <Loading />
 });
-
+const DocumentTenderList = Loadable({
+  loader: () => import("./DocumentTenderList"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -105,5 +108,6 @@ export {
   MultiSelectPress,
   UploadExternalGuests,
   UploadMultipleFiles,
-  HTMLContent
+  HTMLContent,
+  DocumentTenderList
 };

@@ -27,7 +27,8 @@ import {EventFilter} from "./gridFilter/Filter";
 import { TimeSeriesReport } from "./searchResource/Report";
 import { TimeSeriessearchResults,TimeSeriessearchEventResults } from "./searchResource/searchResults";
 import {  localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
-
+import "./publishtender.css";
+import commonConfig from '../../../../config/common';
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
@@ -44,14 +45,9 @@ const pageResetAndChange = (state, dispatch) => {
   
 };
 const getMdmsData = async (action, state, dispatch) => {
-  debugger
-  let tenantId =
-    get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.address.city"
-    ) || getTenantId();
-
-    //let tenantId =    
+  
+  let tenantId = commonConfig.tenantId;
+    
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -60,11 +56,7 @@ const getMdmsData = async (action, state, dispatch) => {
           moduleName: "RAINMAKER-PR",
           masterDetails: [{ name: "eventReportYear" },{ name: "eventReportMonth" }, { name: "eventReportAggregatedBy" }]
         },
-       
-        //, { name: "eventStatus" }, { name: "localityAreaName" }
-       
-
-
+  
         {
           moduleName: "tenant",
           masterDetails: [
@@ -91,7 +83,6 @@ const getMdmsData = async (action, state, dispatch) => {
     let obj={}
     obj['name']="ALL"
     obj['code']="ALL"
-   //  let len=payload.MdmsRes["RAINMAKER-PR"].localityAreaName.length
      payload.MdmsRes["RAINMAKER-PR"].eventReportMonth.unshift(obj)
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
 
@@ -100,18 +91,18 @@ const getMdmsData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
-const NOCSearchAndResult = {
+const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "TimeSeriesReport",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("eventReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterInviteEvent", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpress", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filtertender", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterpressMaster", {}));
-    dispatch(prepareFinalObject("PublicRealation[0].filterLibraryEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
   //getGridData(action, state, dispatch);
 
 
@@ -119,29 +110,6 @@ const NOCSearchAndResult = {
 
     getMdmsData(action, state, dispatch)
 
-    // const BSqueryObject = [
-    //   { key: "tenantId", value: tenantId },
-    //   { key: "businessServices", value: "PRSCP" }
-    // ];
-    // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-    // const businessServiceData = JSON.parse(
-    //   localStorageGet("businessServiceData")
-    // );
-    // const data = find(businessServiceData, { businessService: "PRSCP" });
-    // const { states } = data || [];
-    // if (states && states.length > 0) {
-    //   const status = states.map((item, index) => {
-    //     return {
-    //       code: item.state
-    //     };
-    //   });
-    //   dispatch(
-    //     prepareFinalObject(
-    //       "applyScreenMdmsData.searchScreen.status",
-    //       status.filter(item => item.code != null)
-    //     )
-    //   );
-    // }
     getRequiredDocData(action, state, dispatch).then(() => {
       let documents = get(
         state,
@@ -170,7 +138,7 @@ const NOCSearchAndResult = {
       componentPath: "Form",
       props: {
         className: "common-div-css",
-       // id: "TimeSeriesReport"
+       id: "TimeSeriesReport"
       },
       children: {
         headerDiv: {
@@ -185,68 +153,18 @@ const NOCSearchAndResult = {
               },
               ...header
             }}
-          //   newApplicationButton: {
-          //     componentPath: "Button",
-          //     gridDefination: {
-          //       xs: 12,
-          //       sm: 6,
-          //       align: "right"
-          //     },
-          //     visible: enableButton,
-          //     props: {
-          //       variant: "contained",
-          //       color: "primary",
-          //       style: {
-          //         color: "white",
-          //         borderRadius: "2px",
-          //         width: "250px",
-          //         height: "48px"
-          //       }
-          //     },
-
-          //     children: {
-          //       plusIconInsideButton: {
-          //         uiFramework: "custom-atoms",
-          //         componentPath: "Icon",
-          //         props: {
-          //           iconName: "add",
-          //           style: {
-          //             fontSize: "24px"
-          //           }
-          //         }
-          //       },
-
-          //       buttonLabel: getLabel({
-          //         labelName: "NEW APPLICATION",
-          //         labelKey: "NOC_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-          //       })
-          //     },
-          //     onClickDefination: {
-          //       action: "condition",
-          //       callBack: (state, dispatch) => {
-          //         pageResetAndChange(state, dispatch);
-          //         showHideAdhocPopup(state, dispatch, "search");
-          //       }
-          //     },
-          //     roleDefination: {
-          //       rolePath: "user-info.roles",
-          //       roles: ["NOC_CEMP", "SUPERUSER"]
-          //     }
-          //   }
-          // }
+         
         },
-        // pendingApprovals,
         TimeSeriesReport,
        
         breakAfterSearch: getBreak(),
-        // progressStatus,
         TimeSeriessearchResults,
         TimeSeriessearchEventResults
       }
     },
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,
@@ -260,4 +178,4 @@ const NOCSearchAndResult = {
   }
 };
 
-export default NOCSearchAndResult;
+export default PRSearchAndResult;

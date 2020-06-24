@@ -960,12 +960,12 @@ const getStatementForDocType = docType => {
 
 export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   const queryStr = [
-    { key: "key", value: "tlapplication" },
+    { key: "key", value: `tlapplication_${Licenses[0].businessService}` },
     { key: "tenantId", value: "ch" }
   ]
   let {documents} = Licenses[0].additionalDetails;
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
-  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : "https://egov.transerve.com/media/silhoutte-bust.png"};
+  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
   const length = documents.length % 4
   documents = [...documents, ...new Array(length > 2 ? 4 - length : length).fill({title: "", name: ""})]
@@ -1010,7 +1010,7 @@ export const downloadCertificateForm = (Licenses, data, mode='download') => {
   ]
   let {documents} = Licenses[0].additionalDetails;
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
-  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : "https://egov.transerve.com/media/silhoutte-bust.png"};
+  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   let licenses = Licenses[0];
   licenses = {...licenses, ownerDocument}
   const DOWNLOADRECEIPT = {

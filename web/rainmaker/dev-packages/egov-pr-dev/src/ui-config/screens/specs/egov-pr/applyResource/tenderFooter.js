@@ -19,26 +19,26 @@ import { getFileUrlFromAPI, getQueryArg } from "egov-ui-framework/ui-utils/commo
 
 import {resendinvitationtender} from "../../egov-pr/searchResource/citizenSearchFunctions"
  
+import { checkForRole } from "../../../../../ui-utils/commons";
 
 
 const RouteToPage = async (state, dispatch) => {
   
-//   const acknowledgementUrl ='publishTender'
+   const acknowledgementUrl =`/egov-pr/publishTender?tenderId=${getQueryArg(window.location.href, "tenderId")}&tenderuuId=${getQueryArg(window.location.href, "tenderuuId")}&tenantId=${getTenantId()}`;
   
-//  dispatch(setRoute(acknowledgementUrl));
- window.location.href = `/egov-pr/publishTender?tenderId=${getQueryArg(window.location.href, "tenderId")}&tenderuuId=${getQueryArg(window.location.href, "tenderuuId")}&tenantId=${getTenantId()}`;
+  dispatch(setRoute(acknowledgementUrl));
+// window.location.href = `/egov-pr/publishTender?tenderId=${getQueryArg(window.location.href, "tenderId")}&tenderuuId=${getQueryArg(window.location.href, "tenderuuId")}&tenantId=${getTenantId()}`;
     //}
   };
 export const callBackForCreateTender = async (state, dispatch) => {
 //alert(localStorageGet("tendernote"))
-  debugger
+  
   let tenderNoticeUuid=getQueryArg(window.location.href, "tenderUuId")
   let tenderNoticeId=getQueryArg(window.location.href, "tenderId")
 let date=get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")
 
 if(tenderNoticeUuid!==null)
 {
-  console.log( get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId"))
   
   if( get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", "")=="" ||
   get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")=="" ||
@@ -57,7 +57,7 @@ if(tenderNoticeUuid!==null)
     );
     
   }else{
-
+//alert( get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId"))
     let data = {
       "RequestBody": {
         "tenantId": getTenantId(),
@@ -66,14 +66,19 @@ if(tenderNoticeUuid!==null)
         "moduleCode": localStorageGet("modulecode"),
         "tenderSubject": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", ""),
         "tenderDate":date[0],
-        "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", ""),
+        "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber"),
+        
        // "noteContent": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", ""),
        "tenderNoticeUuid": tenderNoticeUuid,
        "tenderNoticeId": tenderNoticeId,
         "noteContent": localStorageGet("tendernote"),
         "moduleCode":localStorageGet("modulecode"),
-        "tenderDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", {}) }]
+        "tenderDocument":get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")===undefined?[{ "fileStoreId":localStorageGet('tenderFilStore') }]: [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId") }],
+        ///===""?localStorageGet('tenderFilStore'): get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber")
 
+
+
+        
         
 
 
@@ -81,7 +86,6 @@ if(tenderNoticeUuid!==null)
       userInfo: JSON.parse(getUserInfo()),
     }
    
-    console.log("tender", state);
     let response = await UpdateMasterTender(dispatch,data);
     if (get(response.ResponseInfo, "status", "") === "Success") {
   
@@ -89,18 +93,14 @@ if(tenderNoticeUuid!==null)
        
       dispatch(setRoute(acknowledgementUrl));
     }
-    //dispatch(setRoute(`/egov-pr/tender-Summary`));
   }
   }
 
 else{
-//   alert('in btn')
-//get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", "")=="" ||
-console.log( get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId"))
+
 if( get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", "")=="" ||
-//get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")==""
 )
 {
@@ -117,13 +117,12 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
   let data = {
     "RequestBody": {
       "tenantId": getTenantId(),
-    //  "tenantId1": `${getTenantId()}`,
       "tenderNoticeStatus": "CREATED",
       "moduleCode": localStorageGet("modulecode"),
       "tenderSubject": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", ""),
       "tenderDate": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", ""),
       "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", ""),
-   //   "noteContent": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", ""),
+   
      "noteContent": localStorageGet("tendernote"),
       "moduleCode":localStorageGet("modulecode"),
       "tenderDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", {}) }]
@@ -131,21 +130,18 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
     userInfo: JSON.parse(getUserInfo()),
   }
  
-  console.log("tender", state);
   let response = await createMasterTender(dispatch,data);
   if (get(response.ResponseInfo, "status", "") === "Success") {
 
     const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
-   // const acknowledgementUrl =`home?modulecode=`+localStorageGet("modulecode");
     dispatch(setRoute(acknowledgementUrl));
   }
-  //dispatch(setRoute(`/egov-pr/tender-Summary`));
 }
 };
 }
 const gotoHome = async (state, dispatch) => {
   const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
-  // const acknowledgementUrl =`home?modulecode=`+localStorageGet("modulecode");
+ 
    dispatch(setRoute(acknowledgementUrl));
 }
  
@@ -212,7 +208,7 @@ export const tenderSummaryfooter = getCommonApplyFooter({
       action: "condition",
       callBack: resendinvitationtender
     },
-    visible:JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER" || getQueryArg(window.location.href, "Status")=="CREATED"?false:true
+    visible:checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') || getQueryArg(window.location.href, "Status")=="CREATED"?false:true
   },
 publishedButton: {
     componentPath: "Button",
@@ -235,11 +231,8 @@ publishedButton: {
       action: "condition",
       callBack: RouteToPage
     },
-     visible:JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER" ||  getQueryArg(window.location.href, "Status")=="PUBLISHED" ?false: true,
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   roles: ["TL_APPROVER"]
-    // }
+     visible:checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') ||  getQueryArg(window.location.href, "Status")=="PUBLISHED" ?false: true,
+   
   },
   cancelButton: {
     componentPath: "Button",
@@ -263,42 +256,9 @@ publishedButton: {
       callBack: gotoHome
     },
      visible: true,
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   roles: ["TL_APPROVER"]
-    // }
+    
   },
 
-  // payButton: {
-  //   componentPath: "Button",
-  //   props: {
-  //     variant: "contained",
-  //     color: "primary",
-  //     style: {
-  //       minWidth: "180px",
-  //       height: "48px",
-  //       marginRight: "45px"
-  //     }
-  //   },
-  //   children: {
-  //     submitButtonLabel: getLabel({
-  //       labelName: "SUBMIT",
-  //       labelKey: "PR_SUBMIT_BUTTON"
-  //     }),
-  //     submitButtonIcon: {
-  //       uiFramework: "custom-atoms",
-  //       componentPath: "Icon",
-  //       props: {
-  //         iconName: "keyboard_arrow_right"
-  //       }
-  //     }
-  //   },
-  //   onClickDefination: {
-  //     action: "condition",
-  //     callBack:gotoHome
-  //   },
-  //   visible: getQueryArg(window.location.href, "Status")=="PUBLISHED"?false:true
-  // }
 });
 
 
@@ -317,7 +277,6 @@ export const callBackForUpdateTender = async (state, dispatch) => {
       "billDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", {}) }]
     }
   }
-  console.log("tender", state);
   let response = await forwardMasterTender(data);
   if (get(response.ResponseInfo, "status", "") === "Success") {
     const acknowledgementUrl =
@@ -326,7 +285,6 @@ export const callBackForUpdateTender = async (state, dispatch) => {
         : `/egov-pr/tender-Summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
     dispatch(setRoute(acknowledgementUrl));
   }
-  //dispatch(setRoute(`/egov-pr/tender-Summary`));
 };
 
 

@@ -40,18 +40,7 @@ export const callPGService = async (state, dispatch) => {
         billId : get(billPayload, "Bill[0].id")
       }
     })
-    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-    //   item => {        
-        // if (item.businessService === "PublicRelation") {
-        //   item.amountPaid = get(
-        //     billPayload,
-        //     "Bill[0].billDetails[0].totalAmount"
-        //   );
-        //   item.billId = get(billPayload, "Bill[0].id")
-        // }
-        // return item;
-    //   }
-    // );
+   
     try {
       const userMobileNumber = get(state,"auth.userInfo.mobileNumber")
       const userName = get(state,"auth.userInfo.name")
@@ -81,7 +70,7 @@ export const callPGService = async (state, dispatch) => {
         requestBody
       );
       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
-      window.location = redirectionUrl;
+      window.location.href = redirectionUrl;
     } catch (e) {
       console.log(e);
     }
@@ -307,7 +296,6 @@ const callBackForPay = async (state, dispatch) => {
 
   ReceiptBody.Receipt.push(finalReceiptData);
 
-  // console.log(ReceiptBody);
 
   //---------------- Create Receipt ------------------//
   if (isFormValid) {

@@ -34,18 +34,11 @@ const showHideMapPopup = (state, dispatch) => {
   );
 };
 
-const getMapLocator = textSchema => {
-  return {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-noc",
-    componentPath: "MapLocator",
-    props: {}
-  };
-};
+
 
 // GET EMPLOYEES
 const GetEmployees = async (action, state, dispatch,deptvalue) => {
-  //alert(deptvalue)
+  
   try {
     let payload = null;
     let user=[]
@@ -59,7 +52,7 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
       queryStr,
       {}
     );
- //  console.log()
+ 
     for(let i=0;i<payload.Employees.length;i++)
     {
       if(payload.Employees[i].user!==null)
@@ -73,93 +66,7 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
     console.log(e);
   }
 };
-const getDetailsFromProperty = async (state, dispatch) => {
-  try {
-    const propertyId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.propertyDetails.propertyId",
-      ""
-    );
 
-    const tenantId = getTenantId();
-    if (!tenantId) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Please select city to search by property id !!",
-            labelKey: "ERR_SELECT_CITY_TO_SEARCH_PROPERTY_ID"
-          },
-          "warning"
-        )
-      );
-      return;
-    }
-    if (propertyId) {
-      let payload = await httpRequest(
-        "post",
-        `/pt-services-v2/property/_search?tenantId=${tenantId}&ids=${propertyId}`,
-        "_search",
-        [],
-        {}
-      );
-      if (
-        payload &&
-        payload.Properties &&
-        payload.Properties.hasOwnProperty("length")
-      ) {
-        if (payload.Properties.length === 0) {
-          dispatch(
-            toggleSnackbar(
-              true,
-              {
-                labelName: "Property is not found with this Property Id",
-                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
-              },
-              "info"
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPropertyID",
-              "props.value",
-              ""
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children.propertyMohalla",
-              "props.value",
-              {
-                value: payload.Properties[0].address.locality.code,
-                label: payload.Properties[0].address.locality.name
-              }
-            )
-          );
-          dispatch(
-            prepareFinalObject(
-              "PublicRelations[0].PublicRelationDetails.propertyDetails.address",
-              payload.Properties[0].address
-            )
-          );
-          // dispatch(
-          //   handleField(
-          //     "apply",
-          //     "components.div.children.formwizardSecondStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.children.cityDropdown",
-          //     "props.value",
-          //     payload.Properties[0].address.tenantId
-          //   )
-          // );
-        }
-      }
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 export const propertyLocationDetails = getCommonCard(
   {
@@ -187,7 +94,7 @@ export const propertyLocationDetails = getCommonCard(
         },
         
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventTitle",
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventTitle",
         required: true,
         pattern: getPattern("AlphaNumValidation"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -195,10 +102,7 @@ export const propertyLocationDetails = getCommonCard(
       area: {
         ...getSelectField({
           label: { labelName: "Area", labelKey: "PR_AREA_LABEL" },
-          // localePrefix: {
-          //   moduleName: "TENANT",
-          //   masterName: "TENANTS"
-          // },
+         
           optionLabel: "name",
           optionValue: "name",
           placeholder: {
@@ -206,13 +110,13 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "PR_AREA_PLACEHOLDER"
           },
           sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].localityAreaName",
-          jsonPath: "PublicRealation[0].CreateEventDetails.area",
+          jsonPath: "PublicRelation[0].CreateEventDetails.area",
           required: true,
           
           props: {
             className:"applicant-details-error",
            required: true
-            // disabled: true
+           
           }
         }),
       
@@ -229,7 +133,7 @@ export const propertyLocationDetails = getCommonCard(
           labelKey: "PR_EVENT_LOCATION_PLACEHOLDER"
         },
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventLocation",
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventLocation",
         required: true,
         pattern: getPattern("TextValidation"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
@@ -237,10 +141,7 @@ export const propertyLocationDetails = getCommonCard(
       typeOfEvent: {
         ...getSelectField({
           label: { labelName: "Type Of Event", labelKey: "PR_TYPE_OF_EVENT_LABEL" },
-          // localePrefix: {
-          //   moduleName: "TENANT",
-          //   masterName: "TENANTS"
-          // },
+          
           optionLabel: "name",
           optionValue: "name",
           placeholder: {
@@ -248,7 +149,7 @@ export const propertyLocationDetails = getCommonCard(
             labelKey: "PR_TYPE_OF_EVENT_PLACEHOLDER"
           },
           sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventType",
-          jsonPath: "PublicRealation[0].CreateEventDetails.eventType",
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventType",
           required: true,
           
           props: {
@@ -274,21 +175,17 @@ export const propertyLocationDetails = getCommonCard(
        required: false,
        props: {
          className:"applicant-details-error",
-      //   required: true
-         // disabled: true
+      
        },
       sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventSector",
 
-        jsonPath: "PublicRealation[0].CreateEventDetails.sector"
+        jsonPath: "PublicRelation[0].CreateEventDetails.sector"
       })
     },
     committiee: {
       ...getSelectField({
         label: { labelName: "Committiee", labelKey: "PR_COMMITTEE_LABEL" },
-        // localePrefix: {
-        //   moduleName: "TENANT",
-        //   masterName: "TENANTS"
-        // },
+        
         optionLabel: "committeeName",
         optionValue:"committeeUuid",
         placeholder: {
@@ -296,7 +193,7 @@ export const propertyLocationDetails = getCommonCard(
           labelKey: "PR_COMMITTEE_PLACEHOLDER"
         },
         sourceJsonPath: "committieeData",
-        jsonPath: "PublicRealation[0].CreateEventDetails.committeeUuid",
+        jsonPath: "PublicRelation[0].CreateEventDetails.committeeUuid",
         required: false,
         props: {
           className:"applicant-details-error",
@@ -309,10 +206,7 @@ export const propertyLocationDetails = getCommonCard(
     organizerDetail: {
         ...getSelectField({
           label: { labelName: "Organizer Department", labelKey: "PR_ORGANIZER_DETAILS_LABEL" },
-          // localePrefix: {
-          //   moduleName: "TENANT",
-          //   masterName: "TENANTS"
-          // },
+          
           optionLabel: "name",
           optionValue: "code",
           placeholder: {
@@ -322,7 +216,7 @@ export const propertyLocationDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData[common-masters].Department",
          required: true,
           id:'dept',
-          jsonPath: "PublicRealation[0].CreateEventDetails.organizerDepartmentName",
+          jsonPath: "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
           props: {
             className:"applicant-details-error",
            required: true
@@ -330,8 +224,7 @@ export const propertyLocationDetails = getCommonCard(
           },
          
           afterFieldChange: (action, state, dispatch) => {
-         //   alert(JSON.stringify(action.value))
-
+        
              
           
             GetEmployees(action, state, dispatch,action.value)            
@@ -342,11 +235,7 @@ export const propertyLocationDetails = getCommonCard(
       organizerEmployee: {
         ...getSelectField({
           label: { labelName: "Organizer Employee", labelKey: "PR_ORGANIZER_EMPLOYEE_LABEL" },
-          // localePrefix: {
-          //   moduleName: "TENANT",
-          //   masterName: "TENANTS"
-          // },
-       //   screenConfiguration.preparedFinalObject.applyScreenMdmsData.employees.Employees[2].user.name
+         
           optionLabel: "name",
           optionValue: "name",
           placeholder: {
@@ -356,7 +245,7 @@ export const propertyLocationDetails = getCommonCard(
           sourceJsonPath: "applyScreenMdmsData.employees",
          required: false,
           
-          jsonPath: "PublicRealation[0].CreateEventDetails.organizerUsernName",
+          jsonPath: "PublicRelation[0].CreateEventDetails.organizerUsernName",
           props: {
             className:"applicant-details-error",
            required: false
@@ -382,26 +271,13 @@ export const propertyLocationDetails = getCommonCard(
       //  required: true,
         pattern: getPattern("Amountopms"),
        
-        jsonPath: "PublicRealation[0].CreateEventDetails.eventBudget"
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventBudget"
       }),
       
       
     }),
     
-    mapsDialog: {
-      componentPath: "Dialog",
-      props: {
-        open: false
-      },
-      children: {
-        dialogContent: {
-          componentPath: "DialogContent",
-          children: {
-            popup: getMapLocator()
-          }
-        }
-      }
-    }
+    
   },
   {
     style: { overflow: "visible" }

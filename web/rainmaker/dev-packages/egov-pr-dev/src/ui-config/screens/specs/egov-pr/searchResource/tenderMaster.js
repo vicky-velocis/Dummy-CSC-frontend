@@ -72,7 +72,7 @@ export const tenderMSWordTemplate = getCommonCard({
           labelName: "Subject",
           labelKey: "PR_TENDER_DETAILS_SUBJECT_PLACEHOLDER"
         },
-        pattern: getPattern("TextValidation"),
+        pattern: getPattern("subjectvalidation"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true,
         jsonPath: "tenderNotice.tenderSubject",
@@ -115,33 +115,4 @@ subHeader: getCommonTitle({
   
 });
 
-export const tenderBillingDetail = getCommonCard({
 
-  appStatusAndToFromDateContainer: getCommonContainer({
-    subHeader: getCommonTitle({
-      labelName: "Billing Amount",
-      labelKey: "TENDER_BILLING_AMOUNT"
-    }),
-    billAmount: {
-      ...getTextField({
-        label: {
-          labelName: "Bill Amount",
-          labelKey: "TENDER_BILL_AMOUNT"
-        },
-        placeholder: {
-          labelName: "Bill Amount",
-          labelKey: "TENDER_BILL_AMOUNT_PLACEHOLDER"
-        },
-        //pattern: getPattern("VillageName"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: true,
-        jsonPath: "tenderNotice.billAmount",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 12
-        }
-      })
-    }
-  })
-});

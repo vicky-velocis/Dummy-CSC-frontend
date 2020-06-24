@@ -216,9 +216,24 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
                 .slice(13)
             )) ||
           `Document - ${index + 1}`;
+
+          doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+          doc["fileName"] =
+            (fileUrls[doc.fileStoreId] &&
+              decodeURIComponent(
+                fileUrls[doc.fileStoreId]
+                  .split(",")[0]
+                  .split("?")[0]
+                  .split("/")
+                  .pop()
+                  .slice(13)
+              )) ||
+            `Document - ${index + 1}`;
         return doc;
       });
       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+      dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+      
     }
 
   }

@@ -16,6 +16,7 @@ import {
 import set from "lodash/set";
 import "../../../../customstyle.css";
 import "./publishtender.css";
+import { checkForRole } from "../../../../ui-utils/commons";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -40,7 +41,6 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "tender-Summary-Publish",
   beforeInitScreen: (action, state, dispatch) => {
-    // alert(getQueryArg(window.location.href, "eventuuId"))
 	localStorageSet("resendmodule", "TENDER");
   localStorageSet("eventifforinvitatoin",getQueryArg(window.location.href, "tenderuuId"));
   localStorageSet("ResendInvitelist", []);	
@@ -69,7 +69,7 @@ const screenConfig = {
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.tenderPublishSummary.children.cardContent.children.header.children.editSection.visible",
-      JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER" ||  getQueryArg(window.location.href, "Status")=="PUBLISHED"  ? false : true
+      checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') ||  getQueryArg(window.location.href, "Status")=="PUBLISHED"  ? false : true
     );
     
 
@@ -100,12 +100,12 @@ const screenConfig = {
           tenderPublishSummary: tenderPublishSummary,
           documentsSummary: documentsSummary,
         }),
-		Resendbody:JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER" || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: getCommonCard({
+		Resendbody:checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: getCommonCard({
 		   headerresend: getCommonHeader({
 					labelName: "Invited Press List",
 					labelKey: "PR_INVITED_PRESS_LIST"
 			}),	
-          ResendTenderInviteGrid:JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER" || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: ResendTenderInviteGrid,
+          ResendTenderInviteGrid:checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: ResendTenderInviteGrid,
          
         }),
         

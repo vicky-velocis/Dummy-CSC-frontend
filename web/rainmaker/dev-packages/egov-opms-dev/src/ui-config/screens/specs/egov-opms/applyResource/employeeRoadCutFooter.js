@@ -24,7 +24,7 @@ import {
     localStorageGet
   } from "egov-ui-kit/utils/localStorageUtils";
   import { getapplicationType  } from "egov-ui-kit/utils/localStorageUtils";
-  
+  import { callbackforSummaryActionCancel,callbackforSummaryActionSubmit } from '../roadcutnoc_summary'
   let role_name=JSON.parse(getUserInfo()).roles[0].code
 
   const callbackforsummaryactionpay = async (dispatch) => {
@@ -211,6 +211,65 @@ import {
         }
       },
       visible: false
+    },
+    previousButton: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+        color: "primary",
+        style: {
+          height: "48px",
+          marginRight: "16px",
+  
+        }
+      },
+      children: {
+        cancelButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "keyboard_arrow_left"
+          }
+        },
+        previousButtonLabel: getLabel({
+          labelName: "Previous Step",
+          labelKey: "NOC_CANCEL_BUTTON"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: callbackforSummaryActionCancel
+      },
+      visible: false
+    },
+    submitButton: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          // minWidth: "200px",
+          height: "48px",
+          marginRight: "16px"
+        }
+      },
+      children: {
+        nextButtonLabel: getLabel({
+          labelName: "SEND",
+          labelKey: "NOC_SUBMIT_BUTTON"
+        }),
+        nextButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "keyboard_arrow_right"
+          }
+        }
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: callbackforSummaryActionSubmit
+      }
     }
     
   });

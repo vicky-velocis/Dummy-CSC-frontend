@@ -35,8 +35,7 @@ import get from "lodash/get";
 import {
   prepareDocumentsUploadData,
   getSearchResults,
-  furnishNocResponse,
-  furnishNocResponsePressNote,
+  furnishResponsePressNote,
 
   getSearchResultsViewPressnotedata,
     getsampleemailtemplate,
@@ -47,6 +46,8 @@ import {getPressGridDatanote} from "../egov-pr/searchResource/citizenSearchFunct
 import { searchResultsPressMasterList,searchGridSecondstep } from "./searchResource/searchResults";
 import { getPressGridData } from "./searchResource/citizenSearchFunctions";
 import "./publishtender.css";
+import commonConfig from '../../../../config/common';
+
 export const stepsData = [
   { labelName: "PRESS NOTE DETAILS", labelKey: "PR_GENERATE_PRESS_NOTE_DETAILS" },
   { labelName: "PUBLICATION NAME LISXT", labelKey: "PR_PUBLICATION_NAME_LIST" },
@@ -60,7 +61,7 @@ export const stepper = getStepperObject(
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Generate press note`, //later use getFinancialYearDates
+    labelName: `Generate press note`, 
     labelKey: "PR_GENERATE_PRESS_NOTE"
   }),
  
@@ -121,7 +122,7 @@ export const formwizardThirdStep = {
 };
 
 const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId();
+  let tenantId =  commonConfig.tenantId;
 
   
   let mdmsBody = {
@@ -209,8 +210,7 @@ export const prepareEditFlow = async (
     return (el.notifyStatus !== true);
 });	
 
-console.log('guestarray')
-console.log(guestarray)
+
 
    let empdata=await getPressGridDatanote(action, state, dispatch);
    
@@ -219,12 +219,11 @@ console.log(guestarray)
  let selectedRows=[];
  let selectedrows1=[];
  empdata.map(function (item, index) {
-   debugger
+   
    if(item.pressMasterUuid){
    response.ResponseBody[0].publicationList.map(function (commiteeMember,index1) {
      if(commiteeMember.pressMasterUuid===item.pressMasterUuid){
       let obj={}
-     // alert(item.publicationName)
       obj['Publication Name']=item.publicationName
      obj['Type of the Press']= item.pressType
      obj['Personnel Name']=item.personnelName
@@ -277,7 +276,7 @@ console.log(guestarray)
 
 
   let documentsPreview = [];
-  debugger
+  
   let fileStoreIds1 = response.ResponseBody[0].documentAttachment
   documentsPreview.push({
     
@@ -312,47 +311,11 @@ doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStore
 dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
 
 
-  let Refurbishresponse = furnishNocResponsePressNote(response);
+  let Refurbishresponse = furnishResponsePressNote(response);
   dispatch(prepareFinalObject("pressnote", Refurbishresponse));
 }
  }
-/* let documentsPreview = [];
- 
-     // Get all documents from response
-     let firenoc = get(state, "screenConfiguration.preparedFinalObject.PublicRealation", {});
-     let uploadVaccinationCertificate = firenoc.hasOwnProperty('eventImage') ?
-       firenoc[0].CreateEventDetails.eventImage[0]['fileStoreId'] : '';
 
- 
-     if (uploadVaccinationCertificate !== '') {
-       documentsPreview.push({
-         title: "PRESS_NOTE_DOCUMENT",
-         fileStoreId: uploadVaccinationCertificate,
-         linkText: "View"
-       })
-       let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-       let fileUrls =
-         fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-       documentsPreview = documentsPreview.map(function (doc, index) {
- 
-         doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-         //doc["name"] = doc.fileStoreId;
-         doc["name"] =
-           (fileUrls[doc.fileStoreId] &&
-             decodeURIComponent(
-               fileUrls[doc.fileStoreId]
-                 .split(",")[0]
-                 .split("?")[0]
-                 .split("/")
-                 .pop()
-                 .slice(13)
-             )) ||
-           `Document - ${index + 1}`;
-         return doc;
-       });
-       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-     }
-  */
 
 };
 
@@ -367,7 +330,6 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
     localStorageSet("pressnote", "");
-	 // Get Sample email tmplate for event 
       localStorageSet("eventifforinvitatoin", "");
       localStorageSet("templateMappedUuid", "");
       localStorageSet("templateType", "PRESS_RELEASE");
@@ -379,7 +341,6 @@ const screenConfig = {
       localStorageSet("EmailTemplate", "");
       localStorageSet("smsTemplate", "");
      getsampleemailtemplate(action, state, dispatch);
-    //localStorage.setItem("PressNoteList",[])
     localStorageSet("PressNoteList", []);	
     localStorageSet("PressNoteListAll", []);	
 
@@ -425,10 +386,6 @@ const screenConfig = {
     }
 
    
-     // set(
-		// action.screenConfig,  "components.div.children.formwizardThirdStep.children.EmailSmsContent.children.cardContent.children.SMSContent.props.value",		
-        // localStorageGet("smsTemplate")
-    // );
 
 	 set(
 		action.screenConfig,  "components.div.children.formwizardThirdStep.children.EmailSmsContent.children.cardContent.children.SMSContent.props.value",
@@ -470,11 +427,9 @@ const screenConfig = {
           }
         },
         stepper,
-       // searchResultsPressMasterList,
         formwizardFirstStep,
         formwizardSecondStep,
        formwizardThirdStep,
-        // formwizardFourthStep,
         pressapplyfooter
       }
     }

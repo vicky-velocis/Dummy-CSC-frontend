@@ -1,6 +1,5 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import TodayIcon from "../../../../ui-atoms-local/Icons/TodayIcon";
 import LibraryIcon from "../../../../ui-atoms-local/Icons/LibraryIcon"
@@ -16,6 +15,7 @@ import {
   getUserInfo
 ,localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
+import { checkForRole } from "../../../../ui-utils/commons";
 
 const header = getCommonHeader(
   {
@@ -35,7 +35,7 @@ const header = getCommonHeader(
   }
 );
 let cardItems=[]
-if(JSON.parse(getUserInfo()).roles[0].code=="DEPARTMENTUSER")
+if(checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER'))
 {
 const cardList = [
   
@@ -155,27 +155,10 @@ const PRSCPSearchAndResult = {
         
       }
     },
-    // cityPickerDialog: {
-    //   componentPath: "Dialog",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md"
-    //   },
-    //   children: {
-    //     dialogContent: {
-    //       componentPath: "DialogContent",
-    //       props: {
-    //         style: { minHeight: "180px", minWidth: "365px" }
-    //       },
-    //       children: {
-    //         popup: cityPicker
-    //       }
-    //     }
-    //   }
-    // }
+   
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

@@ -113,7 +113,6 @@ class SingleApplication extends React.Component {
         }
       }
     } else if (moduleName === "PET-NOC") {
-      //debugger
       switch (item.status) {
         case "INITIATED":
           setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);

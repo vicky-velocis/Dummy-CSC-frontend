@@ -1,10 +1,8 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import TodayIcon from "../../../../ui-atoms-local/Icons/TodayIcon";
 import LibraryIcon from "../../../../ui-atoms-local/Icons/LibraryIcon"
-import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
@@ -61,32 +59,14 @@ const cardItems = [
     icon: <LibraryIcon />,
     route: "committeeMaster"
   },
-//   {
-//     label: {
-//       labelKey: "Committee Master",
-//       labelName: "COMMITTEE_MASTER"
-//     },
-//     icon: <MyApplicationIcon />,
-//     route: "my-applications-committee"
-//   }
+
 ];
 
 const PRSCPSearchAndResult = {
   uiFramework: "material-ui",
   name: "eventHome",
   beforeInitScreen: (action, state, dispatch) => {
-    getRequiredDocData(action, state, dispatch).then(() => {
-      let documents = get(
-        state,
-        "screenConfiguration.preparedFinalObject.searchScreenMdmsData.PublicRelation.Documents",
-        []
-      );
-      set(
-        action,
-        "screenConfig.components.adhocDialog.children.popup",
-        getRequiredDocuments(documents)
-      );
-    });
+   
     return action;
   },
   components: {
@@ -106,27 +86,10 @@ const PRSCPSearchAndResult = {
         
       }
     },
-    // cityPickerDialog: {
-    //   componentPath: "Dialog",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md"
-    //   },
-    //   children: {
-    //     dialogContent: {
-    //       componentPath: "DialogContent",
-    //       props: {
-    //         style: { minHeight: "180px", minWidth: "365px" }
-    //       },
-    //       children: {
-    //         popup: cityPicker
-    //       }
-    //     }
-    //   }
-    // }
+  
     adhocDialog: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-pr",
       componentPath: "DialogContainer",
       props: {
         open: false,

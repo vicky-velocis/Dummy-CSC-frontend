@@ -1,6 +1,5 @@
 import React from "react";
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FireNocIcon from "../../../../ui-atoms-local/Icons/FireNocIcon";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
 import { getRequiredDocData } from "../utils";
 import get from "lodash/get";
@@ -56,7 +55,7 @@ const PRSCPSearchAndResult = {
   
   adhocDialog: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-pr",
     componentPath: "DialogContainer",
     props: {
       open: false,

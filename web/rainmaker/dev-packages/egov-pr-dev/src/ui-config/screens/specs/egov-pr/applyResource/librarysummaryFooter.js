@@ -17,6 +17,8 @@ import {
   } from "egov-ui-kit/utils/localStorageUtils"
 import "./index.css";
 import {role } from "../../../../../ui-utils/commonConfig";
+import { checkForRole } from "../../../../../ui-utils/commons";
+
 let role_name=JSON.parse(getUserInfo()).roles[0].code;
 let roles=role[0];
 
@@ -109,7 +111,8 @@ export const  librarysummaryFooter = getCommonApplyFooter({
       action: "condition",
       callBack: uploadlibraryDocument
     },
-    visible:role_name==roles?true:false
+   // visible:role_name==roles?true:false
+   visible:checkForRole(JSON.parse(getUserInfo()).roles, 'APRO')?true:false
   } 
 });
 
