@@ -95,8 +95,18 @@ const rentedPropertiesDetailPreview = {
                 align: "right"
               }
             }
-          }
-        },
+            }
+          },
+          taskStatus: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-rented-properties",
+            componentPath: "WorkFlowContainer",
+            props: {
+              dataPath: "Properties",
+              moduleName: "MasterRP",
+              updateUrl: "/csp/property/_update"
+            }
+          },
         propertyReviewDetails
       }
     }

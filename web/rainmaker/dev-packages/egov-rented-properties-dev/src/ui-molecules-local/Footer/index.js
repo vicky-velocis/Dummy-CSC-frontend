@@ -64,7 +64,7 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     const {preparedFinalObject} = this.props.state.screenConfiguration;
-    const {workflow: {ProcessInstances = []}} = preparedFinalObject || {}
+    const {workflow: {ProcessInstances = []}, Properties} = preparedFinalObject || {}
     let employeeList = [];
     if (dataPath === "BPA") {
       handleFieldChange(`${dataPath}.comment`, "");
@@ -72,22 +72,14 @@ class Footer extends React.Component {
     } else {
       let action = ""
       switch(item.buttonLabel) {
-        case "SENDBACK2": {
-          action = "VERFIYANDFORWARD1"
-          break
-        }
-        case "SENDBACK3": {
-          action = "VERFIYANDFORWARD2"
-          break
-        }
-        case "SENDBACK4": {
-          action = "VERFIYANDFORWARD3"
+        case "SENDBACK": {
+          action = "FORWARD"
           break
         }
         default : action = ""
       }
       let assignee = [];
-      if(!!action) {
+      if(!!action && Properties[0].masterDataState !== "PENDINGJAVERIFICATION") {
         const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
         assignee = !!assigner.uuid ? [assigner.uuid] : []
       }
@@ -186,27 +178,19 @@ class Footer extends React.Component {
     const { open, data, employeeList } = this.state;
     const status = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].status`
+      `Properties[0].status`
     );
-    const applicationType = get(
+    const id = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].applicationType`
-    );
-    const applicationNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].applicationNumber`
+      `Properties[0].id`
     );
     const tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].tenantId`
+      `Properties[0].tenantId`
     );
-    const financialYear = get(
+    const transitNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].financialYear`
-    );
-    const licenseNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Licenses[0].licenseNumber`
+      `Properties[0].transitNumber`
     );
 
     const downloadMenu =
@@ -221,38 +205,38 @@ class Footer extends React.Component {
           }
         };
       });
-      if(moduleName === "NewTL"){
-        const responseLength = get(
-          state.screenConfiguration.preparedFinalObject,
-          `licenseCount`,
-          1
-        );
-      const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
-          if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
-          return true;
-        })
-       const rolecheck= rolearray.length>0? true: false;
-    if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
-      const editButton = {
-        label: "Edit",
-        labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-        link: () => {
-          this.props.setRoute(
-            `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-          );
-        }
-      };
-      downloadMenu && downloadMenu.push(editButton);
-      const submitButton = {
-        label: "Submit",
-        labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
-        link: () => {
-          this.renewTradelicence(financialYear, tenantId);
-        }
-      };
-      downloadMenu && downloadMenu.push(submitButton);
-    }
-  }
+  //     if(moduleName === "NewTL"){
+  //       const responseLength = get(
+  //         state.screenConfiguration.preparedFinalObject,
+  //         `licenseCount`,
+  //         1
+  //       );
+  //     const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
+  //         if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
+  //         return true;
+  //       })
+  //      const rolecheck= rolearray.length>0? true: false;
+  //   if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
+  //     const editButton = {
+  //       label: "Edit",
+  //       labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
+  //       link: () => {
+  //         this.props.setRoute(
+  //           `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
+  //         );
+  //       }
+  //     };
+  //     downloadMenu && downloadMenu.push(editButton);
+  //     const submitButton = {
+  //       label: "Submit",
+  //       labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
+  //       link: () => {
+  //         this.renewTradelicence(financialYear, tenantId);
+  //       }
+  //     };
+  //     downloadMenu && downloadMenu.push(submitButton);
+  //   }
+  // }
 
     
     const buttonItems = {

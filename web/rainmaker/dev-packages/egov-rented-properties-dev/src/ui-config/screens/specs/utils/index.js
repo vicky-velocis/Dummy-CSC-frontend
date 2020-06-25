@@ -2556,6 +2556,12 @@ export const getTextToLocalMapping = label => {
             "RP_COMMON_TABLE_COL_TRANSIT_NO",
             localisationLabels
           );
+      case "Property Id": 
+            return getLocaleLabels(
+              "Property Id",
+              "RP_COMMON_TABLE_COL_PROPERTY_ID",
+              localisationLabels
+            )
 
       case "Colony":
         return getLocaleLabels(

@@ -24,6 +24,12 @@ export const searchResults = {
         options: {
           display: false
         }
+      },
+      {
+        name: "propertyId",
+        options: {
+          display: false
+        }
       }
     ],
     options: {
@@ -59,6 +65,6 @@ const onRowClick = rowData => {
   if(rowData[3] === "INITIATED") {
     window.location.href = `/rented-properties/apply?tenantId=${getTenantId()}&transitNumber=${rowData[0]}`
   } else {
-    window.location.href = `search-preview?transitNumber=${rowData[0]}`;
+    window.location.href = `search-preview?transitNumber=${rowData[0]}&tenantId=${getTenantId()}&propertyId=${rowData[5]}`;
   }
 };
