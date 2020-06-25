@@ -45,7 +45,6 @@ const moveToReview = (state, dispatch, applnid) => {
     );
 
     let validateDocumentField = false;
-    debugger
     for (let i = 0; i < 2; i++) {
       let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
       let isDocumentTypeRequired = get(

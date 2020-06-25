@@ -101,8 +101,7 @@ const commonBuildingData = buildingType => {
                 "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
               )
             );
-            debugger
-            // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+
             if (typecateID[0].id === "10010" || typecateID[0].id === "10012") {
               dispatch(
                 handleField(
