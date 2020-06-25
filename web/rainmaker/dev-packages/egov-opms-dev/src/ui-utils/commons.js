@@ -1350,7 +1350,7 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
           await fetchBill([
             { key: "tenantId", value: getOPMSTenantId() },
             { key: "consumerCode", value: getapplicationNumber() },
-            { key: "businessService", value: "OPMS" }
+            { key: "businessService", value: "OPMS.ADVERTISEMENTNOC" }
           ], dispatch) : '';
 
         lSRemoveItem(`exemptedCategory`);
@@ -1369,7 +1369,7 @@ export const createUpdateADVNocApplication = async (state, dispatch, status) => 
         await fetchBill([
           { key: "tenantId", value: getOPMSTenantId() },
           { key: "consumerCode", value: getapplicationNumber() },
-          { key: "businessService", value: "OPMS" }
+          { key: "businessService", value: "OPMS.ADVERTISEMENTNOC" }
         ], dispatch)
       }
 

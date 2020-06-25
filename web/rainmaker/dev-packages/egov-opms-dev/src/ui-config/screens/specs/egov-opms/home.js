@@ -2,7 +2,7 @@ import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getRequiredDocData, checkForRole } from "../utils";
 import {
-  getUserInfo, setOPMSTenantId
+  getUserInfo, setOPMSTenantId, getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 
 
@@ -191,9 +191,10 @@ const PermissionManagementSearchAndResult = {
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
     let UsertenantInfo = JSON.parse(getUserInfo()).permanentCity;
-
-    setOPMSTenantId("ch.chandigarh");
-
+    if (JSON.parse(getUserInfo()).type === "CITIZEN")
+      setOPMSTenantId(UsertenantInfo);
+    else
+      setOPMSTenantId(getTenantId());
     return action;
   },
   components: {

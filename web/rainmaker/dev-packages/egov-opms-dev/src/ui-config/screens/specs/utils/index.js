@@ -506,7 +506,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     const response = await getBill([
       { key: "tenantId", value: tenantId },
       { key: "consumerCode", value: applicationNumber },
-      { key: "businessService", value: "OPMS" }
+      { key: "businessService", value: `OPMS.${getapplicationType()}` }
     ]);
 
 
@@ -642,7 +642,7 @@ export const searchdemand = async (dispatch, applicationNumber, tenantId) => {
     const response = await fetchBill([
       { key: "tenantId", value: tenantId },
       { key: "consumerCode", value: applicationNumber },
-      { key: "businessService", value: "OPMS" }
+      { key: "businessService", value: `OPMS.${getapplicationType()}` }
     ], dispatch);
 
     //  If pending payment then get bill else get receipt
@@ -677,7 +677,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
       const queryObj = [
         { key: "tenantId", value: tenantId },
         { key: "consumerCode", value: applicationNumber },
-        { key: "businessService", value: "OPMS" }
+        { key: "businessService", value: `OPMS.${getapplicationType()}` }
       ];
       const payload = await getBill(queryObj);
       // let payload = sampleGetBill();

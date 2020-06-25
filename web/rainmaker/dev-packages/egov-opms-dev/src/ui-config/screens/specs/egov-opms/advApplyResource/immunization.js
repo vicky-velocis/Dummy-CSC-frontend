@@ -101,6 +101,7 @@ const commonBuildingData = buildingType => {
                 "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
               )
             );
+            debugger
             // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
             if (typecateID[0].id === "10010" || typecateID[0].id === "10012") {
               dispatch(
@@ -137,7 +138,6 @@ const commonBuildingData = buildingType => {
                     "props.disabled", false));
               }
             }
-
           } catch (e) {
             console.log(e);
           }
@@ -303,7 +303,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_LOCATION_OF_ADVERTISEMENT_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.locationOfAdvertisement",
       })
@@ -319,7 +319,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_LANDMARK_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementLandmark",
       })
@@ -362,7 +362,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_SUB_SECTOR_VILLAGE_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementVillageSubSector",
       })
@@ -378,7 +378,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
       })
@@ -413,7 +413,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
       })
