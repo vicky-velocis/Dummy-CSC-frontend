@@ -328,12 +328,10 @@ const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
     action,
     "screenConfig.components.div.children.footer.children.submitButton.visible",
     checkForRole(roles, 'CITIZEN') ?
-      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" || nocStatus === "INITIATEDEXC"
-        ? exemptedcategory == 0
+      nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"
           ? true
           : false
         : false
-      : false
   );
 }
 
