@@ -138,7 +138,7 @@ export const callbackforSummaryActionCancel = async (state, dispatch) => {
 
   const appendUrl = process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-opms/home`;
+  const reviewUrl = `${appendUrl}/egov-opms/roadcutnoc-my-applications`;
   dispatch(setRoute(reviewUrl));
 
 };

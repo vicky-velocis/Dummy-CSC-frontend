@@ -447,7 +447,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
           const response = await fetchBill([
             { key: "tenantId", value: tenantId },
             { key: "consumerCode", value: applicationNumber },
-            { key: "businessService", value: "OPMS" }
+            { key: "businessService", value: "OPMS.ROADCUTNOC" }
           ], dispatch);
         }
       }

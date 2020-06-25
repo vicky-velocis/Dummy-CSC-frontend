@@ -677,7 +677,7 @@ export const getTextForPetNoc = label => {
     case "PAID":
       return 'Paid'
     case "REASSIGNTOSI":
-      return 'Application Reassignd To SI'
+      return 'Application Reassigned To SI'
     case "RESENT":
       return 'Resent'
     case "APPROVED":

@@ -330,8 +330,8 @@ const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
     checkForRole(roles, 'CITIZEN') ?
       nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"
           ? true
+          : false
         : false
-      : false
   );
 }
 

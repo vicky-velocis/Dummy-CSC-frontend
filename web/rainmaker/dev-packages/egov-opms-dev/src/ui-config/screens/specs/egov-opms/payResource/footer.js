@@ -38,12 +38,16 @@ const getPaymentGatwayList = async (dispatch) => {
   }
 };
 export const selectPG = async (state, dispatch) => {
-  dispatch(toggleSpinner());
-  await getPaymentGatwayList(dispatch).then(response => {
+  try {
     dispatch(toggleSpinner());
-    showHideAdhocPopup(state, dispatch, "pay")
-  });
-
+    await getPaymentGatwayList(dispatch).then(response => {
+      dispatch(toggleSpinner());
+      showHideAdhocPopup(state, dispatch, "pay")
+    });
+  } catch (e) {
+    dispatch(toggleSpinner());
+    console.log(e);
+  }
 };
 export const callPGService = async (state, dispatch) => {
 
@@ -71,11 +75,6 @@ export const callPGService = async (state, dispatch) => {
         { key: "businessService", value: "OPMS" }
         //value: applicationNumber
       ];
-
-
-      // const billPayload = await getBill(queryObj);
-      // const taxAmount = get(billPayload, "Bill[0].totalAmount")
-      // const billId = get(billPayload, "Bill[0].id")
 
       const taxAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
       const billId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].id");
@@ -115,16 +114,15 @@ export const callPGService = async (state, dispatch) => {
             tenantId,
             billId: billId, // get(billPayload, "Bill[0].id"),
             txnAmount: taxAmount, //get(billPayload, "Bill[0].totalAmount"),
-            module: "OPMS",
+            module: `OPMS.${getapplicationType()}`,
             taxAndPayments,
             consumerCode: consumerCode, // get(billPayload, "Bill[0].consumerCode"),
-            productInfo: getapplicationType(), // "Property Tax Payment",
+            productInfo: getapplicationType(),
             gateway: gateway,
             user: {
               mobileNumber: userMobileNumber,
               name: userName,
               tenantId: getOPMSTenantId(),
-              // process.env.REACT_APP_NAME === "Employee" ? getOPMSTenantId() : get(state,"auth.userInfo.permanentCity")
             },
             callbackUrl
           }

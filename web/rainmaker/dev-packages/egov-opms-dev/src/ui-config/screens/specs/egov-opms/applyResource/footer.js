@@ -18,7 +18,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 
 const setReviewPageRoute = (state, dispatch, applnid) => {
   const applicationNumber = getapplicationNumber(); //get(state, "screenConfiguration.preparedFinalObject.PETNOC.applicationId");
-  
+
   if (applicationNumber) {
     let tenantId = getOPMSTenantId();
     const appendUrl =
@@ -38,23 +38,21 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
 
 const moveToReview = (state, dispatch, applnid) => {
 
-  
-//alert(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"))
-if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
-{
-  const documentsFormat = Object.values(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
 
-  let validateDocumentField = false;
+  //alert(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"))
+  if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
+    const documentsFormat = Object.values(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+    );
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i], "isDocumentTypeRequired");
+    let validateDocumentField = false;
+    for (let i = 0; i < 2; i++) {
+      let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+      let isDocumentTypeRequired = get(
+        documentsFormat[i], "isDocumentTypeRequired");
 
-    let documents = get(documentsFormat[i], "documents");
-   // if (isDocumentRequired) {
-      if (documents && documents.length >0) {
+      let documents = get(documentsFormat[i], "documents");
+      // if (isDocumentRequired) {
+      if (documents && documents.length > 0) {
         if (isDocumentTypeRequired) {
           if (get(documentsFormat[i], "dropdown.value")) {
             validateDocumentField = true;
@@ -83,23 +81,23 @@ if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==
         validateDocumentField = false;
         break;
       }
-    // } else {
-    //   validateDocumentField = true;
-    // }
+      // } else {
+      //   validateDocumentField = true;
+      // }
+    }
+
+    //validateDocumentField = true;
+
+    return validateDocumentField;
   }
-
-  //validateDocumentField = true;
-
-  return validateDocumentField;
-}
-else{
-  dispatch(
-    toggleSnackbar(
-      true,
-      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-      "warning"
-    ))
-}
+  else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+        "warning"
+      ))
+  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -137,7 +135,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
-  
+
   let errorMessage = '';
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
@@ -148,12 +146,12 @@ const callBackForNext = async (state, dispatch) => {
   // console.log(activeStep);
   let isFormValid = false;
   let hasFieldToaster = true;
-  let immunizationSector= get(
+  let immunizationSector = get(
     state,
-  "screenConfiguration.preparedFinalObject.PETNOC.immunizationSector"
+    "screenConfiguration.preparedFinalObject.PETNOC.immunizationSector"
   );
   //screenConfiguration.preparedFinalObject.PETNOC.immunizationSector
-  let validatestepformflag = validatestepform(activeStep + 1,immunizationSector)
+  let validatestepformflag = validatestepform(activeStep + 1, immunizationSector)
 
   isFormValid = validatestepformflag[0];
   hasFieldToaster = validatestepformflag[1];
@@ -165,7 +163,7 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === 2 && isFormValid != false) {
     isFormValid = moveToReview(state, dispatch);
   }
-  
+
 
   if (activeStep !== 3) {
 
@@ -192,7 +190,7 @@ const callBackForNext = async (state, dispatch) => {
             labelKey: "" //UPLOAD_FILE_TOAST
           };
           dispatch(toggleSnackbar(true, errorMessage, "success"));
-         
+
         }
         else {
           let errorMessage = {
@@ -466,7 +464,7 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const validatestepform = (activeStep,immunizationSector, isFormValid, hasFieldToaster) => {
+export const validatestepform = (activeStep, immunizationSector, isFormValid, hasFieldToaster) => {
   let allAreFilled = true;
 
   document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
@@ -484,46 +482,45 @@ export const validatestepform = (activeStep,immunizationSector, isFormValid, has
       hasFieldToaster = true;
     }
   });
-  
-  if(activeStep!=2)
-  {
-  document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
-    
-    if (i.value == i.placeholder) {
-      
-      i.focus();
-      allAreFilled = false;
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  });
+
+  if (activeStep != 2) {
+    document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+
+      if (i.value == i.placeholder) {
+
+        i.focus();
+        allAreFilled = false;
+        i.parentNode.classList.add("MuiInput-error-853");
+        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+        allAreFilled = false;
+        isFormValid = false;
+        hasFieldToaster = true;
+      }
+    });
 
 
 
 
-  // 
-}
+    // 
+  }
 
 
 
 
-// else{
+  // else{
 
-//   document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
-//     if (i.value == i.placeholder) {
-//       i.focus();
-//       allAreFilled = false;
-//       i.parentNode.classList.add("MuiInput-error-853");
-//       i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-//       allAreFilled = false;
-//       isFormValid = false;
-//       hasFieldToaster = true;
-//     }
-//   });
-// }
+  //   document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+  //     if (i.value == i.placeholder) {
+  //       i.focus();
+  //       allAreFilled = false;
+  //       i.parentNode.classList.add("MuiInput-error-853");
+  //       i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+  //       allAreFilled = false;
+  //       isFormValid = false;
+  //       hasFieldToaster = true;
+  //     }
+  //   });
+  // }
   if (allAreFilled == false) {
     isFormValid = false;
     hasFieldToaster = true;

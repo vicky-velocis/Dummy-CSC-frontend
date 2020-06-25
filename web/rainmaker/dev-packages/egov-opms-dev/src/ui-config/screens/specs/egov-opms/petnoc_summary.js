@@ -242,7 +242,7 @@ export const callbackforsummaryaction = async (state, dispatch) => {
 
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/egov-opms/home`;
+    const reviewUrl = `${appendUrl}/egov-opms/my-applications`;
     dispatch(setRoute(reviewUrl));
   }
   else if (action == 'draft') {
