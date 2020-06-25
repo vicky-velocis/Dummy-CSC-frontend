@@ -515,7 +515,7 @@ export const prepareEditFlow = async (
         "rrpDetails",
         "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer",
         "props.style",
-        { display: "contents" }
+        { display: "inline-block" }
         
       )
     );
@@ -682,7 +682,7 @@ export const prepareEditFlow = async (
         "rrpDetails",
         "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeOtherDetailsConatiner.children.dues",
         "props.style",
-        { display: "inline-block" }
+        { display: "flex" }
       )
     ); 
 

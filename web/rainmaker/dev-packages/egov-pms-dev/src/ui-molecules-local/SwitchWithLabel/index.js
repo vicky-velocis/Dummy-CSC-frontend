@@ -16,25 +16,34 @@ class SwitchWithLabel extends Component {
       compJPath,
       multiItems,
       screenKey,
-      handleField
+      handleField,
+      index,
+     // pname,
+      name,
+      state
     } = this.props;
 
     if (compJPath) {
       if (multiItems.length > 0) {
         for (var i = 0; i < multiItems.length; i++) {
+          let Idx = get(state.screenConfiguration.preparedFinalObject,"DpendentIndex", 0 ) 
+          if(i === Number(Idx))//i === Number(Idx)
+          {
           handleField(
             screenKey,
-            `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.currentAssignment`,
+            `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.${name}`,//.children.${name}`,
             "props.value",
             // `${compJPath}[${i}].item${i}.children.cardContent.children.dependentUnitcardContainer.children.${componentname}`,
             // "props.value",
-            false
+            event.target.checked
+           // false
           );
+        }
         }
       }
     }
-    this.props.onChange({ target: { value: event.target.checked } });
-    // prepareFinalObject(jsonPath, event.target.checked);
+   // this.props.onChange({ target: { value: event.target.checked } });
+    //prepareFinalObject(jsonPath, event.target.checked);
   };
 
   render() {
@@ -87,7 +96,7 @@ const mapStateToProps = (state, ownprops) => {
   const valueFromAPI = get(preparedFinalObject, jsonPath);
   const multiItems = get(screenConfig[screenKey], compJPath, []);
   const { localizationLabels } = app;
-  return { multiItems, screenConfig, valueFromAPI, localizationLabels };
+  return { multiItems, screenConfig, valueFromAPI, localizationLabels,state };
 };
 
 const mapDispatchToProps = dispatch => {

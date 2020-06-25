@@ -14,6 +14,7 @@ const formConfig = {
     },
     phonenumber: {
       id: "profile-form-phonenumber",
+      required:true,
       floatingLabelText: "CORE_COMMON_PHONE_NUMBER",
       errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
       hintText: "CORE_COMMON_PHONE_NUMBER_PLACEHOLDER",
