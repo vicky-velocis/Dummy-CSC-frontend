@@ -2,7 +2,7 @@ import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {propertyDetails} from './propertyDetails';
-import {rentHolderDetails} from './rentHolderDetails';
+import {rentHolderDetails, applicantDetails} from './rentHolderDetails';
 import {addressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
@@ -78,3 +78,14 @@ export const formwizardThirdStep = {
   },
   visible: false
 }
+
+export const formwizardLicenseFirstStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_fresh_licence"
+  },
+  children: {
+    applicantDetails
+  }
+};

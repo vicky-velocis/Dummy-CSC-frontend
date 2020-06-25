@@ -68,7 +68,7 @@ const ownerNameField = {
     jsonPath: "Properties[0].owners[0].name"
   }
 
-const phoneNumberField = {
+const phoneNumberConfig = {
     label: {
         labelName: "Mobile No.",
         labelKey: "RP_MOBILE_NO_LABEL"
@@ -85,10 +85,14 @@ const phoneNumberField = {
     maxLength: 100,
     required: true,
     pattern: getPattern("MobileNo"),
+}  
+
+const phoneNumberField = {
+    ...phoneNumberConfig,
     jsonPath: "Properties[0].owners[0].phone"
   }
 
-const dobField = {
+const dobFieldConfig = {
     label: {
         labelName: "Date of Birth",
         labelKey: "RP_DATE_BIRTH_LABEL"
@@ -99,15 +103,19 @@ const dobField = {
     },
     required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].dateOfBirth",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
         }
     }
+}  
+
+const dobField = {
+    ...dobFieldConfig,
+    jsonPath: "Properties[0].owners[0].dateOfBirth",
 }
 
-const emailField = {
+const emailConfig = {
     label: {
         labelName: "Email",
       labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
@@ -124,10 +132,14 @@ const emailField = {
     maxLength: 100,
     required: true,
     pattern: getPattern("Email"),
+}
+
+const emailField = {
+    ...emailConfig,
     jsonPath: "Properties[0].owners[0].email"
   }
 
-const aadharField = {
+const aadharFieldConfig = {
     label: {
         labelName: "Aadhar Number",
         labelKey: "RP_AADHAR_LABEL"
@@ -143,6 +155,10 @@ const aadharField = {
     minLength: 1,
     maxLength: 100,
     required: true,
+}
+
+const aadharField = {
+   ...aadharFieldConfig,
     jsonPath: "Properties[0].owners[0].aadhaarNumber"
 }
 
@@ -159,5 +175,116 @@ const getRentHolderDetails = () => {
         })
     }
 }
+
+const applicantNameField = {
+    label: {
+        labelName: "Applicant Name",
+        labelKey: "RP_APPLICANT_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Applicant Name",
+        labelKey: "RP_APPLICANT_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true,
+    jsonPath: "Licenses[0].owners[0].name"
+}
+
+
+const applicantphoneNumberField = {
+    ...phoneNumberConfig,
+    jsonPath: "Licenses[0].owners[0].phone"
+}
+
+const applicantDobField = {
+    ...dobFieldConfig,
+    jsonPath: "Licenses[0].owners[0].phone"
+}
+
+export const  applicantGenderLabel = {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "Licenses[0].owners[0].gender",
+    props: {
+      label: {
+        name: "Gender",
+        key: "TL_COMMON_GENDER_LABEL"
+      },
+      buttons: [
+        {
+            labelName: "Male",
+            labelKey: "COMMON_MALE",
+            value: "MALE"
+        },
+        {
+            label: "Female",
+            labelKey: "COMMON_FEMALE",
+            value: "FEMALE"
+        }
+      ],
+      jsonPath:"Licenses[0].owners[0].gender",
+      required: true
+    },
+    required: true,
+    type: "array"
+};
+
+const applicantEmailField = {
+    ...emailConfig,
+    jsonPath: "Licenses[0].owners[0].email"
+}
+
+const applicantAadharField = {
+    ...aadharFieldConfig,
+     jsonPath: "Licenses[0].owners[0].aadhaarNumber"
+}
+
+const applicantAddressField = {
+    label: {
+        labelName: "Applicant Correspondence Address",
+        labelKey: "RP_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Applicant Correspondence Address",
+        labelKey: "RP_APPLICANT_CORRESPONDENCE_ADDRESS_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true,
+    jsonPath: "Licenses[0].owners[0].correspondenceAddress"
+}
+
+const getApplicantDetails = () => {
+    return {
+        header: rentHolderHeader,
+        detailsContainer: getCommonContainer({
+            ownerName: getTextField(applicantNameField),
+            phone: getTextField(applicantphoneNumberField),
+            dob: getDateField(applicantDobField),
+            gender: applicantGenderLabel,
+            email: getTextField(applicantEmailField),
+            aadhar: getTextField(applicantAadharField),
+            aadhar: getTextField(applicantAddressField)
+        })
+    }
+}
+
+
+export const applicantDetails = getCommonCard(getApplicantDetails())
+
 
 export const rentHolderDetails = getCommonCard(getRentHolderDetails())
