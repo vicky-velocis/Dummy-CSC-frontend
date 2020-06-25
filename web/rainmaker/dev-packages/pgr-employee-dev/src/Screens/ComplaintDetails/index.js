@@ -585,7 +585,7 @@ const mapStateToProps = (state, ownProps) => {
           categoriesById,
           selectedComplaint.serviceCode,
           "slaHours",
-          "NA"
+          0
         ),
         selectedComplaint.auditDetails.createdTime
       ),
