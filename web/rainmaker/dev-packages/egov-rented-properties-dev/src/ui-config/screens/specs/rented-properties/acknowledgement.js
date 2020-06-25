@@ -16,7 +16,24 @@ const getAcknowledgementCard = (
     tenant,
     transitNumber
   ) => {
-    if (purpose === "apply" && status === "success") {
+    if ((purpose === "apply" || purpose === "forward" || purpose === "sendback" || purpose ==="reject" || purpose === "approve") && status === "success") {
+      const header =  purpose === "apply" ? {
+        labelName: "Rented Property Master Entry Submitted Successfully",
+        labelKey: "RP_MASTER_ENTRY_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "forward" ? {
+        labelName: "Rented Property Master Entry Forwarded Successfully",
+        labelKey: "RP_FORWARD_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "sendback" ? {
+        labelName: "Rented Property Master Entry is sent back Successfully",
+        labelKey: "RP_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+      } : purpose ==="reject" ? {
+        labelName: "Rented Property Master Entry is Rejected",
+        labelKey: "RP_APPROVAL_REJ_MESSAGE_HEAD"
+      } : {
+        labelName: "Rented Property Master Entry is Approved Successfully",
+        labelKey: "RP_APPROVAL_SUCCESS_MESSAGE_HEAD"
+      }
+
       return {
         header: getCommonHeader({
           labelName: `Rented Properties Master Entry`,
@@ -35,10 +52,7 @@ const getAcknowledgementCard = (
             card: acknowledgementCard({
               icon: "done",
               backgroundColor: "#39CB74",
-              header: {
-                labelName: "Rented Property Master Entry Submitted Successfully",
-                labelKey: "RP_MASTER_ENTRY_SUCCESS_MESSAGE_MAIN"
-              },
+              header,
             //   body: {
             //     labelName:
             //       "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",

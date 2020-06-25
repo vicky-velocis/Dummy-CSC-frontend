@@ -118,6 +118,8 @@ class InboxData extends React.Component {
     }
     else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
+    } else if(row[0].subtext === "MasterRP") {
+      queryParams = `transitNumber=${taskId}&tenantId=${tenantId}`
     }
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };

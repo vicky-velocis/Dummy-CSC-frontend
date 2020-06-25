@@ -32,14 +32,15 @@ class WorkFlowContainer extends React.Component {
   };
 
   componentDidMount = async () => {
-    const { prepareFinalObject, toggleSnackbar } = this.props;
-    const applicationNumber = getQueryArg(
+    const { prepareFinalObject, toggleSnackbar, preparedFinalObject } = this.props;
+    const transitNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "transitNumber"
     );
+    let data = get(preparedFinalObject, this.props.dataPath, []);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryObject = [
-      { key: "businessIds", value: applicationNumber },
+      { key: "businessIds", value: transitNumber },
       { key: "history", value: true },
       { key: "tenantId", value: tenantId }
     ];
@@ -95,7 +96,7 @@ class WorkFlowContainer extends React.Component {
       case "VERIFY":
         return "purpose=verify&status=success";
       case "REJECT":
-        return "purpose=application&status=rejected";
+        return "purpose=reject&status=success";
       case "CANCEL":
         return "purpose=application&status=cancelled";
       case "APPROVE":
@@ -121,115 +122,20 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    if (moduleName === "NewTL") {
-      if (getQueryArg(window.location.href, "edited")) {
-        const removedDocs = get(
-          preparedFinalObject,
-          "LicensesTemp[0].removedDocs",
-          []
-        );
-        if (data[0] && data[0].commencementDate) {
-          data[0].commencementDate = convertDateToEpoch(
-            data[0].commencementDate,
-            "dayend"
-          );
-        }
-        let owners = get(data[0], "tradeLicenseDetail.owners");
-        owners = (owners && this.convertOwnerDobToEpoch(owners)) || [];
-        set(data[0], "tradeLicenseDetail.owners", owners);
-        set(data[0], "tradeLicenseDetail.applicationDocuments", [
-          ...get(data[0], "tradeLicenseDetail.applicationDocuments", []),
-          ...removedDocs
-        ]);
-
-        // Accessories issue fix by Gyan
-        let accessories = get(data[0], "tradeLicenseDetail.accessories");
-        let tradeUnits = get(data[0], "tradeLicenseDetail.tradeUnits");
-        set(
-          data[0],
-          "tradeLicenseDetail.tradeUnits",
-          getMultiUnits(tradeUnits)
-        );
-        set(
-          data[0],
-          "tradeLicenseDetail.accessories",
-          getMultiUnits(accessories)
-        );
-      }
-    }
-    if (dataPath === "BPA") {
-      data.assignees = [];
-      if (data.assignee) {
-        data.assignee.forEach(assigne => {
-          data.assignees.push({
-            uuid: assigne
-          });
-        });
-      }
-      if (data.wfDocuments) {
-        for (let i = 0; i < data.wfDocuments.length; i++) {
-          data.wfDocuments[i].fileStore = data.wfDocuments[i].fileStoreId
-        }
-      }
-    }
-
-    const applicationNumber = getQueryArg(
-      window.location.href,
-      "applicationNumber"
-    );
-
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      data = data[0];
-    }
-
-    if (moduleName === "NewSW1") {
-      dataPath = "SewerageConnection";
-    }
-
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
-
       this.setState({
         open: false
       });
-
       if (payload) {
         let path = "";
-
-        if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
-          this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
-            label
-          )}&moduleName=${moduleName}&applicationNumber=${get(payload, 'Properties[0].acknowldgementNumber', "")}&tenantId=${get(payload, 'Properties[0].tenantId', "")}`);
-          return;
-        }
-
-        if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
-        else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
-        else path = "Licenses[0].licenseNumber";
-        const licenseNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
-
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-          window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
-        }
-
+        )}&transitNumber=${data[0].transitNumber}&tenantId=${tenant}`;
       }
     } catch (e) {
-      if (moduleName === "BPA") {
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Documents Required",
-            labelKey: e.message
-          },
-          "error"
-        );
-      } else {
-
         if (e.message) {
           toggleSnackbar(
             true,
@@ -250,33 +156,16 @@ class WorkFlowContainer extends React.Component {
             "error"
           );
         }
-      }
     }
   };
 
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = {};
-
-    if (dataPath == "BPA" || dataPath == "Assessment" || dataPath == "Property") {
-
-      data = get(preparedFinalObject, dataPath, {})
-    } else {
       data = get(preparedFinalObject, dataPath, [])
       data = data[0];
-    }
     //setting the action to send in RequestInfo
-    let appendToPath = ""
-    if (dataPath === "FireNOCs") {
-      appendToPath = "fireNOCDetails."
-    } else if (dataPath === "Assessment" || dataPath === "Property") {
-      appendToPath = "workflow."
-    } else {
-      appendToPath = ""
-    }
-
-
-    set(data, `${appendToPath}action`, label);
+    set(data, `masterDataAction`, label);
 
     if (isDocRequired) {
       const documents = get(data, "wfDocuments");
@@ -303,18 +192,8 @@ class WorkFlowContainer extends React.Component {
     if (ProcessInstances && ProcessInstances.length > 0) {
       applicationStatus = get(ProcessInstances[ProcessInstances.length - 1], "state.applicationStatus");
     }
-    let baseUrl = "";
+    let baseUrl = "rented-properties";
     let bservice = "";
-    if (moduleName === "FIRENOC") {
-      baseUrl = "fire-noc";
-    } else if (moduleName === "BPA") {
-      baseUrl = "egov-bpa";
-      bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
-      baseUrl = "wns"
-    } else {
-      baseUrl = "tradelicence";
-    }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
@@ -423,8 +302,9 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
-    let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = get(data[data.length - 1], "businessId");
+    let businessService = moduleName
+    // let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
+    let businessId = get(data[data.length - 1], "propertyDetails.propertyId");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
@@ -485,11 +365,7 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
      let showFooter;
-      if(moduleName==='NewWS1'||moduleName==='NewSW1'){
-         showFooter=true;
-      }else{
-         showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
-      }
+     showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (

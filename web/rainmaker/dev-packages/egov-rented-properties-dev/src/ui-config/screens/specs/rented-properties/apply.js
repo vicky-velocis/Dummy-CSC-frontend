@@ -9,8 +9,7 @@ import {footer} from './applyResource/footer';
 import { searchResults } from "./search-preview";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-const transitNumber = getQueryArg(window.location.href, "transitNumber");
-
+const propertyId = getQueryArg(window.location.href, "propertyId")
 
 const getMdmsData = async (dispatch, body) => {
     let mdmsBody = {
@@ -56,6 +55,7 @@ const header = getCommonHeader({
 
 const getData = async(action, state, dispatch) => {
   getColonyTypes(action, state, dispatch);
+  const transitNumber = getQueryArg(window.location.href, "transitNumber");
   if(transitNumber) {
     searchResults(action, state, dispatch, transitNumber)
   } else {

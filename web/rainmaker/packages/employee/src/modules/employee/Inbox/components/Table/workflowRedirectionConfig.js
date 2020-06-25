@@ -1,11 +1,24 @@
 export const getWFConfig = (module,businessService) => {
-  console.log("module", module);
+  console.log("module", module, module.toUpperCase(),businessService);
   switch (module.toUpperCase()) {
     case "TL-SERVICES":
+      if(businessService === "MasterRP") {
+        return {
+          INITIATED: "/rented-properties/apply",
+          DEFAULT: "/rented-properties/search-preview",
+        };
+      } else {
+        return {
+          INITIATED: "/tradelicence/apply",
+          DEFAULT: "/tradelicence/search-preview",
+        };
+      }
+    case "RENTEDPROPERTIES": {
       return {
-        INITIATED: "/tradelicence/apply",
-        DEFAULT: "/tradelicence/search-preview",
+        INITIATED: "/rented-properties/apply",
+        DEFAULT: "/rented-properties/search-preview",
       };
+    }
     case "FIRENOC":
       return {
         INITIATED: "/fire-noc/apply",

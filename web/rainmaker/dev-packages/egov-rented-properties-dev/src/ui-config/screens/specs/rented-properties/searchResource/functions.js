@@ -103,7 +103,8 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         [getTextToLocalMapping("Colony")]: item.colony || "-",
         [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
         [getTextToLocalMapping("Status")]: item.masterDataState || "-",
-        ["id"]: item.id
+        ["id"]: item.id,
+        ["propertyId"]: item.propertyDetails.propertyId
       }));
       dispatch(
         handleField(

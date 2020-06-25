@@ -377,7 +377,7 @@ export const getReviewRentDetails = (isEditable = true) => {
                     },
                     { jsonPath: "Properties[0].owners[0].revisionPeriod" }
                 ),
-                monthlyRentAmount: getLabelWithValue(
+                revisionPercentage: getLabelWithValue(
                     {
                         labelName: "Rent Amount Revision Percentage",
                         labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"

@@ -65,7 +65,7 @@ class ServiceList extends React.Component {
     }else{
       list = menu && menu.filter((item) => item.url === "card");
     }
-    list = [...list, { 
+    list = process.env.REACT_APP_NAME === "Citizen" ? list : [...list, { 
       displayName: "Rented Properties",
       enabled: true,
       id: 1775,
