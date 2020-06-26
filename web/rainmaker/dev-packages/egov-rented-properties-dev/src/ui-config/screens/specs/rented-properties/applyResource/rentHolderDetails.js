@@ -192,18 +192,18 @@ const applicantNameField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Licenses[0].owners[0].name"
+    jsonPath: "OwnerShipLicenses[0].owners[0].name"
 }
 
 
 const applicantphoneNumberField = {
     ...phoneNumberConfig,
-    jsonPath: "Licenses[0].owners[0].phone"
+    jsonPath: "OwnerShipLicenses[0].owners[0].phone"
 }
 
 const applicantDobField = {
     ...dobFieldConfig,
-    jsonPath: "Licenses[0].owners[0].phone"
+    jsonPath: "OwnerShipLicenses[0].owners[0].phone"
 }
 
 export const  applicantGenderLabel = {
@@ -214,7 +214,7 @@ export const  applicantGenderLabel = {
       sm: 12,
       md: 6
     },
-    jsonPath: "Licenses[0].owners[0].gender",
+    jsonPath: "OwnerShipLicenses[0].owners[0].gender",
     props: {
       label: {
         name: "Gender",
@@ -232,7 +232,7 @@ export const  applicantGenderLabel = {
             value: "FEMALE"
         }
       ],
-      jsonPath:"Licenses[0].owners[0].gender",
+      jsonPath:"OwnerShipLicenses[0].owners[0].gender",
       required: true
     },
     required: true,
@@ -241,12 +241,12 @@ export const  applicantGenderLabel = {
 
 const applicantEmailField = {
     ...emailConfig,
-    jsonPath: "Licenses[0].owners[0].email"
+    jsonPath: "OwnerShipLicenses[0].owners[0].email"
 }
 
 const applicantAadharField = {
     ...aadharFieldConfig,
-     jsonPath: "Licenses[0].owners[0].aadhaarNumber"
+     jsonPath: "OwnerShipLicenses[0].owners[0].aadhaarNumber"
 }
 
 const applicantAddressField = {
@@ -265,7 +265,7 @@ const applicantAddressField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Licenses[0].owners[0].correspondenceAddress"
+    jsonPath: "OwnerShipLicenses[0].owners[0].correspondenceAddress"
 }
 
 const getApplicantDetails = () => {

@@ -1,7 +1,7 @@
 import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardLicenseFirstStep } from '../rented-properties/applyResource/applyConfig';
+import {stepper, formwizardOwnershipFirstStep } from '../rented-properties/applyResource/applyConfig';
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
@@ -97,7 +97,7 @@ const applyLicense = {
                     }
                 },
                 stepper,
-                formwizardLicenseFirstStep,
+                formwizardOwnershipFirstStep,
             }
         }
     }

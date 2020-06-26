@@ -2,6 +2,7 @@ import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTit
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
+import { transitNumberConfig } from '../applyResource/propertyDetails'
 
 const addressHeader = getCommonTitle(
     {
@@ -129,7 +130,7 @@ const pincodeField = {
     required: true,
     jsonPath: "Properties[0].propertyDetails.address.pincode"
   }
- 
+
 const getAddressDetails = () => {
     return {
         header: addressHeader,
@@ -144,4 +145,45 @@ const getAddressDetails = () => {
     }
 }
 
+const areaNameField = {
+    label: {
+        labelName: "Area Name",
+        labelKey: "RP_AREA_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Area Name",
+        labelKey: "RP_AREA_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true,
+    jsonPath: "OwnerShipLicenses[0].propertyDetails.address.areaName"
+}
+
+const ownershipTransitNumberField = {
+    ...transitNumberConfig,
+    jsonPath: "OwnerShipLicenses[0].propertyDetails.address.ownershipTransitNumber"
+}
+
+const getOwnershipAddressDetails = () => {
+    return {
+        header: addressHeader,
+        detailsContainer: getCommonContainer({
+            areaName: getTextField(areaNameField),
+            ownershipTransitNumber: getTextField(ownershipTransitNumberField),
+        })
+    }
+}
+
+
+
+
+ 
+
+
 export const addressDetails = getCommonCard(getAddressDetails())
+export const ownershipAddressDetails = getCommonCard(getOwnershipAddressDetails())
