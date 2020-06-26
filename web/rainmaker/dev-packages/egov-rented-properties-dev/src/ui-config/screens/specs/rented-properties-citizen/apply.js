@@ -1,11 +1,11 @@
 import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardOwnershipFirstStep } from '../rented-properties/applyResource/applyConfig';
+import {stepper, formwizardOwnershipFirstStep, formwizardOwnershipSecondStep } from '../rented-properties/applyResource/applyConfig';
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
-// import {footer} from './applyResource/footer';
+import {footer} from './footer';
 // import { searchResults } from "./search-preview";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -98,6 +98,8 @@ const applyLicense = {
                 },
                 stepper,
                 formwizardOwnershipFirstStep,
+                formwizardOwnershipSecondStep,
+                footer
             }
         }
     }
