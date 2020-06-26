@@ -191,7 +191,7 @@ export const getCurrentAddress = async () => {
 };
 
 export const mapCompIDToName = (IDObj, compID) => {
-  return IDObj[compID] ? IDObj[compID].serviceCode : "Default";
+  return IDObj[compID] ? IDObj[compID].serviceCode : compID;
 };
 
 export const getDateFromEpoch = (epoch) => {
@@ -476,7 +476,7 @@ export const transformComplaintForComponent = (complaints, role, employeeById, c
       complaintDetail.actions[complaintDetail.actions.length - 1].by.split(":")[1] &&
       complaintDetail.actions[complaintDetail.actions.length - 1].by.split(":")[1] === "Citizen Service Representative";
     return {
-      header: getPropertyFromObj(complaints.categoriesById, complaintDetail.serviceCode, "serviceCode", "NA"),
+      header: getPropertyFromObj(complaints.categoriesById, complaintDetail.serviceCode, "serviceCode", `${complaintDetail.serviceCode}`),
       date: complaintDetail.auditDetails.createdTime,
       latestCreationTime: getLatestCreationTime(complaintDetail),
       complaintNo: complaintDetail.serviceRequestId,
@@ -507,11 +507,11 @@ export const transformComplaintForComponent = (complaints, role, employeeById, c
             : displayStatus(complaintDetail.actions[0].status)
           : displayStatus(
               returnSLAStatus(
-                getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", "NA"),
+                getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", 0),
                 getLatestCreationTime(complaintDetail)
               ).slaStatement
             ),
-      SLA: returnSLAStatus(getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", "NA"), getLatestCreationTime(complaintDetail))
+      SLA: returnSLAStatus(getPropertyFromObj(categoriesById, complaintDetail.serviceCode, "slaHours", 0), getLatestCreationTime(complaintDetail))
         .daysCount,
     };
   });
