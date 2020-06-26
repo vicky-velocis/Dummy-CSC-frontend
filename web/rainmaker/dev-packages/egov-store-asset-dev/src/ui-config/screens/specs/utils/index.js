@@ -265,7 +265,19 @@ export const showHideAdhocPopups = (state, dispatch, screenKey) => {
     handleField(screenKey, "components.undertakingdialog", "props.open", !toggle)
   );
 };
+export const epochToYmdDate = et => {
+  if (!et) return null;
+  if (typeof et === "string") return et;
+  let d = new Date(et),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
 
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
 export const showHideAdhocPopup = (state, dispatch, screenKey) => {
 
   //alert(JSON.stringify( state.screenConfiguration.screenConfig[screenKey]))
