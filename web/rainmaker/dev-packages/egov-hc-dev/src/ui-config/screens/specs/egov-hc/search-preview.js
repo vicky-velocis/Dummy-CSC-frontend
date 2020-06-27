@@ -6,7 +6,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import "../../../../customstyle.css";
-import { getSearchResultsView , getCurrentAssigneeUserNameAndRole} from "../../../../ui-utils/commons";
+import { getSearchResultsView, getCurrentAssigneeUserNameAndRole } from "../../../../ui-utils/commons";
 import { downloadPrintContainerScreenDownload, downloadPrintContainer } from "./applyResourceSearchPreview/footer";
 import { documentsSummary } from "./myRequestSearchPreview/documentsSummary";
 import { ownerDetails } from "./myRequestSearchPreview/ownerDetails";
@@ -30,13 +30,11 @@ const titlebar = getCommonContainer({
     moduleName: "egov-hc",
     componentPath: "SLADays",
   },
-
   Status: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-hc",
     componentPath: "Status",
   },
-
   CurrentAssignee: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-hc",
@@ -51,6 +49,7 @@ const titlebar = getCommonContainer({
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
   
+  let document_list = []
   
   let hcUploadedDocs = get(
   state,
@@ -96,10 +95,12 @@ const prepareDocumentsView = async (state, dispatch) => {
                 .slice(13)
             )) ||
           `Document - ${index + 1}`;
+          document_list.push(doc["name"]);
           
         return doc;
       });
       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+      dispatch(prepareFinalObject("documents_list", document_list));
 
 };
 
@@ -130,9 +131,7 @@ const setSearchResponse = async (state, dispatch, action, serviceRequestId, tena
   catch(e){
     console.log("Error in setting businessServiceSla ")
   }
-  // try{  
-    // debugger
-    var CurrentAssignee = response.ResponseBody[0].current_assignee
+  var CurrentAssignee = response.ResponseBody[0].current_assignee
      var userData = parseInt(CurrentAssignee);
      if(isNaN(userData))
      {
@@ -144,12 +143,11 @@ const setSearchResponse = async (state, dispatch, action, serviceRequestId, tena
       setCurrentAssignee(current_Assignee)
       
      }
- 
+
 
     const printCont = downloadPrintContainer(
       state,
     );
-    
     process.env.REACT_APP_NAME === "Citizen"
       ? set(
           action,
@@ -161,11 +159,27 @@ const setSearchResponse = async (state, dispatch, action, serviceRequestId, tena
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-    //   printCont
-    // )
+    
+        //keep this code commented till client's confirmation 
+        // const printCont = downloadPrintContainerScreenDownload(
+        //   serviceRequestId,
+        // );
+        // const CitizenprintCont=downloadPrintContainerScreenDownload(
+        //   serviceRequestId, 
+        // );
+        
+        
+        // process.env.REACT_APP_NAME === "Citizen"
+        //   ? set(
+        //       action,
+        //       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+        //       CitizenprintCont
+        //     )
+        //   : set(
+        //       action,
+        //       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+        //       printCont
+        //     );
 };
 
 
@@ -189,11 +203,6 @@ const screenConfig = {
       { key: "businessServices", value: serviceType.toUpperCase().trim()}
     ];
      setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    
-
-    
-    
-    
     return action;
   },
   components: {
@@ -256,9 +265,6 @@ const screenConfig = {
             ownerDetails: ownerDetails,
             documentsSummary: documentsSummary
           }),
-
-        
- 
       }
     }
   }

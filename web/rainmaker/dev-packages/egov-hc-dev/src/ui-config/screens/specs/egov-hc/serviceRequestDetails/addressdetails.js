@@ -128,7 +128,7 @@ export const addressdetails =  getCommonCard({
     //         ...getTextField({
     //           label: {
     //             labelName: "Locate on Map",
-    //             labelKey: "EC_VIOLATION_DETAILS_GIS_CORD_LABEL"
+    //             labelKey: "HC_VIOLATION_DETAILS_GIS_CORD_LABEL"
     //           },
     //           placeholder: {
     //             labelName: "Select your property location on map",

@@ -32,7 +32,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     userInfo: JSON.parse(getUserInfo()), // For live purpose
 
   };
-  let ExtraPayload ={
+  let ExtraPayload = {
 
     tenantId: getTenantId(),
 
