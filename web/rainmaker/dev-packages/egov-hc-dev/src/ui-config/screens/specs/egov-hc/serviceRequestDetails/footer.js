@@ -220,9 +220,10 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
   
 
   let error= false;
+ 
 
    document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
-    
+   
     if (!i.value) {
       if(error==false)
       {
@@ -246,7 +247,6 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
 
   document.getElementById("apply_form2").querySelectorAll("input[type='hidden']").forEach(function (i) {
     
-    
     if (i.value == i.placeholder) {
       i.focus();
       allAreFilled = false;
@@ -257,12 +257,13 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
       hasFieldToaster = true;
     }
   })
+    
 
     if(!error)
     {
 
   let error_owner = false;
-  
+
   document.getElementById("apply_form3").querySelectorAll("[required]").forEach(function (i) {
     
     if (!i.value) {
@@ -270,9 +271,11 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
       {
         error_owner=true;
       i.focus();
-      allAreFilled = false;
       i.parentNode.classList.add("MuiInput-error-853");
       i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+      allAreFilled = false;
+      isFormValid = false;
+      hasFieldToaster = true;
     }
     if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
       i.parentNode.classList.add("MuiInput-error-853");
@@ -288,10 +291,8 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
 
   document.getElementById("apply_form3").querySelectorAll("input[type='hidden']").forEach(function (i) {
     
-    
     if (i.value == i.placeholder) {
       i.focus();
-      allAreFilled = false;
       i.parentNode.classList.add("MuiInput-error-853");
       i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
       allAreFilled = false;
@@ -301,13 +302,15 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
   })
     }
 
+  
+  
   if (allAreFilled == false) {
     
     isFormValid = false;
     hasFieldToaster = true;
   }
   else {
-
+    isFormValid = true;
     hasFieldToaster = false;
   }
   return [isFormValid, hasFieldToaster]

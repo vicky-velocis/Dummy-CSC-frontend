@@ -5,6 +5,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { ServiceRequestFilterFormForEmployee } from "./searchResource/EmployeeServiceRequestsSearchForm";
 import { searchResultsServiceRequest } from "./searchResource/searchResults";
+import { resetFieldsForEmployeeFilter } from "./searchResource/citizenSearchFunctions";
   
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
@@ -80,12 +81,11 @@ import { searchResultsServiceRequest } from "./searchResource/searchResults";
     name: "employeeServiceRequestsFilter",
     beforeInitScreen: (action, state, dispatch) => {
       
+      resetFieldsForEmployeeFilter(state, dispatch);
+      dispatch(prepareFinalObject("serviceRequests", {}));
       getMdmsData(dispatch).then(response => {  
       }) 
 
-      
-      
-      
       return action;
     },
     components: {

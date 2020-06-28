@@ -86,7 +86,6 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
   else if (
     (parseInt(fromDateNumeric) > parseInt(toDateNumeric)) 
   ) {
-    // alert("%%%%%%%%%")
     flag_for_api_call = false
     dispatch(
       toggleSnackbar(
@@ -102,7 +101,6 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
     serviceRequestsObject["toDate"] !== undefined &&
     serviceRequestsObject["toDate"].length !== 0
   ) {
-    // alert("^^^^^^^^^^^^^^^")
     flag_for_api_call = false
     dispatch(
       toggleSnackbar(
@@ -122,7 +120,6 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
     serviceRequestsObject["fromDate"] !== undefined &&
     serviceRequestsObject["fromDate"].length !== 0
   ) {
-    // alert("77777777777777777777")
     flag_for_api_call = false
     dispatch(
       toggleSnackbar(
@@ -135,12 +132,37 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
   
   else {
     if(flag_for_api_call = true){
-    const response = await getSearchResultsEmployeeRequestFilter(queryObject, state, dispatch);
-    // console.log("SAvita**************8")
-    // console.log(response)
+          
+    let fromDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.fromDate")
+    let toDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.toDate")
+    let servicerequestid = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicerequestid")
+    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype")
+    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus")
+    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla")
+    let contactNumber = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.contactNumber")
+    var dateFromObject = new Date(fromDate);
+    var dateToObject = new Date(toDate);
+    let fromDateNumeric = dateFromObject.getTime() 
+    let toDateNumeric = dateToObject.getTime()
+    var oneDayDifference = 60 * 60 * 24 * 1000
+    if (fromDateNumeric === toDateNumeric){
+      toDateNumeric = toDateNumeric + oneDayDifference
+    }
+      var data = 
+        {"fromDate":fromDateNumeric,
+        "toDate": toDateNumeric,
+        "service_request_id":servicerequestid,
+        "serviceType":servicetype,
+        "serviceRequestStatus":servicestatus,
+        "streetName":mohalla,
+        "ownerContactNumber":contactNumber}
+    
+    // debugger
+    const response = await getSearchResultsEmployeeRequestFilter(data);
+
     try {
       if (response.services.length >0 ){
-      let data = response.services.map(item => ({
+      let data_response = response.services.map(item => ({
         [getTextToLocalMapping("Service Request Id")]:
           item.service_request_id || "-",
         [getTextToLocalMapping("Service Request Date")]: item.createdtime || "-",
@@ -153,24 +175,31 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
       }));
     
     // console.log("data",data)
-
+    dispatch(
+      handleField(
+        "employeeServiceRequestsFilter",
+        "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+        "props.value",
+        servicestatus
+      )
+    );
       dispatch(
         handleField(
           "employeeServiceRequestsFilter",
           "components.div.children.searchResultsServiceRequest",
           "props.data",
-          data
+          data_response
         )
       );
         }
         else {
-          var data= []
+          var data_empty= []
           dispatch(
             handleField(
               "employeeServiceRequestsFilter",
               "components.div.children.searchResultsServiceRequest",
               "props.data",
-              data
+              data_empty
             )
           );
 

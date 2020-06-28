@@ -2,6 +2,7 @@ import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/s
 import get from "lodash/get";
 import { getSearchResults, getSearchResultsForFilters } from "../../../../../ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { set } from "lodash";
 
 //useful
 export const fetchData = async (action, state, dispatch) => {
@@ -199,7 +200,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
       "props.value",
-      ""
+      null
     )
   );
 
@@ -230,4 +231,6 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
+
+  set(state, "screenConfiguration.preparedFinalObject.serviceRequests", {});
 };

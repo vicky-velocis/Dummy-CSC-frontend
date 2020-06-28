@@ -32,7 +32,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   componentDidMount = async () => {
-    // debugger
+    
     const { prepareFinalObject, toggleSnackbar } = this.props;
     const applicationNumber = getQueryArg(
       window.location.href,
@@ -361,7 +361,8 @@ class WorkFlowContainer extends React.Component {
 
 
   getRedirectUrl = (action, businessId, moduleName) => {
-    // debugger
+    // alert("$$$$$$$inside getRedirectUrl"+moduleName.toUpperCase().trim())
+    // console.log("modulenamewater", moduleName);
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -563,17 +564,14 @@ class WorkFlowContainer extends React.Component {
     // debugger
      if(moduleName=== 'HORTICULTURE')
      {      
-      // debugger
-      //get assigned role
+      // alert("inside"+moduleName)
       const roleData = getQueryArg(window.location.href, "role");
-      //get current user role
       const userRolesForHC = JSON.parse(getUserInfo()).roles;
-      //get current userinfo
       const userForHC = JSON.parse(getUserInfo());
       //  debugger;
 
       // const userForHC = JSON.parse(getUserInfo());
-      // console.log(JSON.stringify(userForHC))
+      console.log(JSON.stringify(userForHC))
       for (var index = 0; index < userRolesForHC.length; ++index)
        {
         var newUserRoleCode = userRolesForHC[index];
@@ -597,9 +595,8 @@ class WorkFlowContainer extends React.Component {
 
       if(userRoleFound)
       //  alert("inside showfooter")
-        {showFooter=true; }  
-        // alert("showFooter"+showFooter) 
-      }
+        showFooter=true;   
+       }
      else
      {    
       if(moduleName==='NewWS1'||moduleName==='NewSW1'){
@@ -607,7 +604,9 @@ class WorkFlowContainer extends React.Component {
       } else if( moduleName==='ROADCUTNOC'||moduleName==='PETNOC'||moduleName==='ADVERTISEMENTNOC'||moduleName==='SELLMEATNOC'){
         showFooter=true;
      }    
-     
+    //  else{     
+    //      showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : false;
+    //   }
 
     }
     return (
