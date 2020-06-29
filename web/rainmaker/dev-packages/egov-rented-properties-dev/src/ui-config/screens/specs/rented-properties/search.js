@@ -5,8 +5,9 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+  import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import find from "lodash/find";
@@ -14,12 +15,35 @@ import {
   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
   import { searchApiCall } from "./searchResource/functions"
   import { searchResults } from "./searchResource/searchResults";
-import { getColonyTypes } from "./apply";
+  import { getColonyTypes } from "./apply";
+  import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+  const userInfo = JSON.parse(getUserInfo());
+  const {roles = []} = userInfo
+  const findItem = roles.find(item => item.code === "CTL_CLERK");
   const header = getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES"
   });
+
+  const getStatusList = async (action, state, dispatch) => {
+    const queryObject = [{ key: "tenantId", value: getTenantId() }, 
+                      { key: "businessServices", value: "MasterRP" }]
+    await setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+    const businessServices = JSON.parse(localStorageGet("businessServiceData"));
+    if(!!businessServices) {
+      const status = businessServices[0].states.filter(item => !!item.state).map(({state}) => ({code: state}))
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.rentedPropertyApplication.children.cardContent.children.colonyContainer.children.status",
+          "props.data",
+          status
+        )
+      );
+    }  
+  }
+
   const rentedPropertiesSearchAndResult = {
     uiFramework: "material-ui",
     name: "search",
@@ -27,6 +51,7 @@ import { getColonyTypes } from "./apply";
       dispatch(prepareFinalObject("searchScreen", {}))
       getColonyTypes(action, state, dispatch)
       searchApiCall(state, dispatch, true)
+      getStatusList(action, state, dispatch)
       return action
     },
     components: {
@@ -45,43 +70,42 @@ import { getColonyTypes } from "./apply";
               header: {
                 gridDefination: {
                   xs: 12,
-                  sm: 6
+                  sm: 8
                 },
                 ...header
               },
-              addButton: getCommonContainer({
-                buttonContainer: getCommonContainer({
-                  searchButton: {
-                    componentPath: "Button",
-                    gridDefination: {
-                      xs: 12,
-                      sm: 6
-                    },
-                    props: {
-                      variant: "contained",
-                      style: {
-                        color: "white",
-                        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
-                        borderRadius: "2px",
-                        width: "50%",
-                        height: "48px"
-                      }
-                    },
-                    children: {
-                      buttonLabel: getLabel({
-                        labelName: "MASTER ADD",
-                        labelKey: "RP_HOME_ADD_BUTTON"
-                      })
-                    },
-                    onClickDefination: {
-                      action: "condition",
-                      callBack: (state, dispatch) => {
-                        dispatch(setRoute(`/rented-properties/apply?tenantId=${getTenantId()}`));
-                      }
-                    }
+              searchButton: {
+                componentPath: "Button",
+                visible: !!findItem,
+                gridDefination: {
+                  xs: 12,
+                  sm: 4,
+                  align: "right"
+                },
+                props: {
+                  variant: "contained",
+                  style: {
+                    color: "white",
+                    backgroundColor: "#fe7a51",
+                    borderColor:"#fe7a51",
+                    borderRadius: "2px",
+                    width: "50%",
+                    height: "48px",
                   }
-                })
-              })
+                },
+                children: {
+                  buttonLabel: getLabel({
+                    labelName: "MASTER ADD",
+                    labelKey: "RP_HOME_ADD_BUTTON"
+                  })
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: (state, dispatch) => {
+                    dispatch(setRoute(`/rented-properties/apply?tenantId=${getTenantId()}`));
+                  }
+                }
+              }
             }
           },
           rentedPropertyApplication,

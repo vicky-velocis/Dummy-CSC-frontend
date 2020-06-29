@@ -100,9 +100,9 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
     try {
       let data = response.Properties.map(item => ({
         [getTextToLocalMapping("Transit No")]: item.transitNumber || "-",
-        [getTextToLocalMapping("Colony")]: item.colony || "-",
+        [getTextToLocalMapping("Colony")]: getLocaleLabels(item.colony, item.colony) || "-",
         [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
-        [getTextToLocalMapping("Status")]: item.masterDataState || "-",
+        [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
         ["id"]: item.id,
         ["propertyId"]: item.propertyDetails.propertyId
       }));

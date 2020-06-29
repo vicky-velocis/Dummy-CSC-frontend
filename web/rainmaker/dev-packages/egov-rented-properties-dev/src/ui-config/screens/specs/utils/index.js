@@ -570,7 +570,7 @@ export const convertEpochToDate = dateEpoch => {
   let year = dateFromApi.getFullYear();
   month = (month > 9 ? "" : "0") + month;
   day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+  return !!dateEpoch ? `${day}/${month}/${year}` : "";
 };
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
@@ -1047,12 +1047,6 @@ export const downloadCertificateForm = (Licenses, data, mode='download') => {
   }
 }
 
-
-
-
-
-
-
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
@@ -1060,7 +1054,7 @@ export const prepareDocumentTypeObj = documents => {
         documentsArr.push({
           name: item.code,
           required: item.required,
-          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          jsonPath: `Properties[0].propertyDetails.applicationDocuments[${ind}]`,
           statement: item.description
         });
         return documentsArr;
@@ -1068,8 +1062,6 @@ export const prepareDocumentTypeObj = documents => {
       : [];
   return documentsArr;
 };
-
-//Common functions for Estimate card
 
 const getTaxValue = item => {
   return item

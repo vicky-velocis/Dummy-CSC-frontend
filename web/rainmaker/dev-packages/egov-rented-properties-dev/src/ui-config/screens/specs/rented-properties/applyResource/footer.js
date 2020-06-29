@@ -1,9 +1,10 @@
 import { getCommonApplyFooter, validateFields } from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { applyRentedProperties } from "../../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { some } from "lodash";
 
 const DEFAULT_STEP = -1;
 const DETAILS_STEP = 0;
@@ -67,7 +68,41 @@ const callBackForNext = async(state, dispatch) => {
     }
 
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
+      const uploadedDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Properties[0].propertyDetails.applicationDocuments",
+        []
+    );
 
+    const uploadedTempDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "PropertiesTemp[0].applicationDocuments",
+        []
+    );
+
+    for (var y = 0; y < uploadedTempDocData.length; y++) {
+      if (
+          uploadedTempDocData[y].required &&
+          !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+      ) {
+          isFormValid = false;
+      }
+    }
+    if(isFormValid) {
+      const reviewDocData =
+              uploadedDocData &&
+              uploadedDocData.map(item => {
+                  return {
+                      title: `RP_${item.documentType}`,
+                      link: item.fileUrl && item.fileUrl.split(",")[0],
+                      linkText: "View",
+                      name: item.fileName
+                  };
+              });
+              dispatch(
+                prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
+            );
+    }
     }
 
     if(activeStep === SUMMARY_STEP) {

@@ -103,14 +103,14 @@ class DocumentList extends Component {
         uploadedDocuments: uploadedDocumentsArranged,
         uploadedIndex
       });
-      prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
+      prepareFinalObject("PropertiesTemp[0].uploadedDocsInRedux", {
         ...uploadedDocumentsArranged
       });
     }
     getQueryArg(window.location.href, "action") !== "edit" &&
       Object.values(uploadedDocumentsArranged).forEach((item, index) => {
         prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
+          `Properties[0].propertyDetails.applicationDocuments[${index}]`,
           { ...item[0] }
         );
       });
@@ -137,8 +137,7 @@ class DocumentList extends Component {
         }
       ]
     };
-
-    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
+    prepareFinalObject("PropertiesTemp[0].uploadedDocsInRedux", {
       ...uploadedDocuments
     });
     prepareFinalObject(jsonPath, {
@@ -168,8 +167,8 @@ class DocumentList extends Component {
     const jsonPath = documents[remDocIndex].jsonPath;
    (getQueryArg(window.location.href, "action") === "edit"||getQueryArg(window.location.href, "action") === "EDITRENEWAL" || !!getQueryArg(window.location.href, "applicationNumber") )&&
       uploadedDocuments[remDocIndex][0].id &&
-      prepareFinalObject("LicensesTemp[0].removedDocs", [
-        ...get(preparedFinalObject, "LicensesTemp[0].removedDocs", []),
+      prepareFinalObject("PropertiesTemp[0].removedDocs", [
+        ...get(preparedFinalObject, "PropertiesTemp[0].removedDocs", []),
         {
           ...uploadedDocuments[remDocIndex][0],
           active: false
@@ -178,7 +177,7 @@ class DocumentList extends Component {
     uploadedDocuments[remDocIndex] = [];
     prepareFinalObject(jsonPath, uploadedDocuments[remDocIndex]);
     prepareFinalObject(
-      "LicensesTemp[0].uploadedDocsInRedux",
+      "PropertiesTemp[0].uploadedDocsInRedux",
       uploadedDocuments
     );
     this.setState({ uploadedDocuments });

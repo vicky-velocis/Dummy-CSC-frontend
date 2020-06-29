@@ -30,7 +30,7 @@ const paymentAmountField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].payment[0].amountPaid"
+    jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid"
   }
 
 const paymentDateField = {
@@ -44,7 +44,7 @@ const paymentDateField = {
     },
     required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].payment[0].paymentDate",
+    jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentDate",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
@@ -68,7 +68,7 @@ const paymentModeField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].payment[0].paymentMode"
+    jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentMode"
   }
 
 const getPaymentDetails = () => {

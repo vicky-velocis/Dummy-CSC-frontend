@@ -2,6 +2,7 @@ import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTit
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
+import { areaField, districtField, stateField, countryField, pincodeField, landmarkField } from "./addressDetails";
 
 const rentHolderHeader = getCommonTitle(
     {
@@ -24,7 +25,7 @@ export const getGenderLabel = {
       sm: 12,
       md: 6
     },
-    jsonPath: "Properties[0].owners[0].gender",
+    jsonPath: "Properties[0].owners[0].ownerDetails.gender",
     props: {
       label: {
         name: "Gender",
@@ -42,12 +43,65 @@ export const getGenderLabel = {
             value: "FEMALE"
         }
       ],
-      jsonPath:"Properties[0].owners[0].gender",
+      jsonPath:"Properties[0].owners[0].ownerDetails.gender",
       required: true
     },
     required: true,
     type: "array"
   };
+
+
+export const getRelationshipRadioButton = {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "Properties[0].owners[0].ownerDetails.relationship",
+    props: {
+      label: {
+        name: "Relationship",
+        key: "TL_COMMON_RELATIONSHIP_LABEL"
+      },
+      buttons: [
+        {
+          labelName: "Father",
+          labelKey: "COMMON_RELATION_FATHER",
+          value: "FATHER"
+        },
+        {
+          label: "Husband",
+          labelKey: "COMMON_RELATION_HUSBAND",
+          value: "HUSBAND"
+        }
+      ],
+      jsonPath:"Properties[0].owners[0].ownerDetails.relationship",
+      required: true
+    },
+    required: true,
+    type: "array"
+  };
+
+const fatherOrHusbandsNameField = {
+    label: {
+        labelName: "Father/ Husband's Name",
+        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Father/ Husband's Name",
+        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusbandName"
+}
 
 const ownerNameField = {
     label: {
@@ -65,7 +119,7 @@ const ownerNameField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].name"
+    jsonPath: "Properties[0].owners[0].ownerDetails.name"
   }
 
 const phoneNumberField = {
@@ -85,7 +139,7 @@ const phoneNumberField = {
     maxLength: 100,
     required: true,
     pattern: getPattern("MobileNo"),
-    jsonPath: "Properties[0].owners[0].phone"
+    jsonPath: "Properties[0].owners[0].ownerDetails.phone"
   }
 
 const dobField = {
@@ -99,7 +153,7 @@ const dobField = {
     },
     required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].dateOfBirth",
+    jsonPath: "Properties[0].owners[0].ownerDetails.dateOfBirth",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
@@ -124,7 +178,7 @@ const emailField = {
     maxLength: 100,
     required: true,
     pattern: getPattern("Email"),
-    jsonPath: "Properties[0].owners[0].email"
+    jsonPath: "Properties[0].owners[0].ownerDetails.email"
   }
 
 const aadharField = {
@@ -140,10 +194,30 @@ const aadharField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    // minLength: 1,
+    // maxLength: 100,
+    // required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber"
+}
+
+const colonyField = {
+    label: {
+        labelName: "Colony",
+        labelKey: "RP_COLONY_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Colony",
+        labelKey: "RP_COLONY_PLACEHOLDER"
+    },
     required: true,
-    jsonPath: "Properties[0].owners[0].aadhaarNumber"
+    jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.colony",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    }
 }
 
 const getRentHolderDetails = () => {
@@ -154,8 +228,17 @@ const getRentHolderDetails = () => {
             phone: getTextField(phoneNumberField),
             dob: getDateField(dobField),
             gender: getGenderLabel,
+            fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
+            relationShip: getRelationshipRadioButton,
             email: getTextField(emailField),
-            aadhar: getTextField(aadharField)
+            aadhar: getTextField(aadharField),
+            colony: getSelectField(colonyField),
+            area: getTextField({...areaField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.area"}),
+            district: getTextField({...districtField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.district"}),
+            state: getTextField({...stateField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.state"}),
+            country: getTextField({...countryField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.country"}),
+            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.pincode"}),
+            landmark: getTextField({...landmarkField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.landmark"})
         })
     }
 }
