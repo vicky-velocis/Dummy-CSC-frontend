@@ -48,8 +48,8 @@ export const stepper = getStepperObject(
     },
     children: {
       propertyDetails,
-      rentHolderDetails,
       addressDetails,
+      rentHolderDetails,
       rentDetails,
       paymentDetails
     }

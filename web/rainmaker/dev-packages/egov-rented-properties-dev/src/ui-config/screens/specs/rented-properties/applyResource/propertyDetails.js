@@ -3,7 +3,6 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
 
-
 const propertyHeader = getCommonTitle(
         {
             labelName: "Property Details",
@@ -36,7 +35,7 @@ const colonyField = {
         sm: 6
     },
     beforeFieldChange: (action, state, dispatch) => {
-        const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies")
+        const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
         const findItem = rentedPropertyColonies.find(item => item.code === action.value)
         const propertyAreas = !!findItem ? findItem.area.map(item => ({
           code: item.code,
@@ -78,7 +77,7 @@ const transitNumberField = {
     },
     required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].allotmentStartdate",
+    jsonPath: "Properties[0].owners[0].ownerDetails.allotmentStartdate",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
@@ -136,7 +135,7 @@ const transitNumberField = {
     },
     required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].posessionStartdate",
+    jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()

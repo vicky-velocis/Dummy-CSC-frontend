@@ -6,12 +6,43 @@ import {
     getDivider,
     getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertEpochToDate, calculateAge, getLicensePeriod } from "../../utils";
-import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICENSE_DHOBI_GHAT, RENEWAL_RENT_DEED_SHOP } from "../../../../../ui-constants";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import set from "lodash/set";
+import { convertEpochToDate, } from "../../utils";
 import { changeStep } from "./footer";
+
+const areaLabel = {
+    labelName: "Area",
+    labelKey: "RP_AREA_LABEL"
+}
+
+const districtLabel = {
+    labelName: "District",
+    labelKey: "RP_DISTRICT_LABEL"
+}
+
+const stateLabel = {
+    labelName: "State",
+    labelKey: "RP_STATE_LABEL"
+}
+
+const countryLabel = {
+    labelName: "Country",
+    labelKey: "RP_COUNTRY_LABEL"
+}
+
+const pincodeLabel = {
+    labelName: "Pincode",
+    labelKey: "RP_PINCODE_LABEL"
+}
+
+const landmarkLabel = {
+    labelName: "Landmark",
+    labelKey: "RP_LANDMARK_LABEL"
+}
+
+const colonyLabel = {
+    labelName: "Colony",
+    labelKey: "RP_COLONY_LABEL"
+}
 
 export const getReviewProperty = (isEditable = true) => {
     return getCommonGrayCard({
@@ -67,10 +98,7 @@ export const getReviewProperty = (isEditable = true) => {
         },
         viewFour: getCommonContainer({
             propertyColony: getLabelWithValue(
-                {
-                    labelName: "Colony",
-                    labelKey: "RP_COLONY_LABEL"
-                },
+                colonyLabel,
                 { jsonPath: "Properties[0].colony" }
             ),
             propertyTransitNumber: getLabelWithValue(
@@ -92,7 +120,9 @@ export const getReviewProperty = (isEditable = true) => {
                     labelName: "Date of Allotment",
                     labelKey: "RP_ALLOTMENT_DATE_LABEL"
                 },
-                { jsonPath: "Properties[0].owners[0].allotmentStartdate" }
+                { jsonPath: "Properties[0].owners[0].ownerDetails.allotmentStartdate", 
+                callBack: convertEpochToDate
+            }
             ),
             allotementNumber: getLabelWithValue(
                 {
@@ -106,7 +136,9 @@ export const getReviewProperty = (isEditable = true) => {
                     labelName: "Date of Possession",
                     labelKey: "RP_POSSESSION_DATE_LABEL"
                 },
-                { jsonPath: "Properties[0].owners[0].posessionStartdate" }
+                { jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
+                callBack: convertEpochToDate
+            }
             ),
         })
     })
@@ -170,48 +202,77 @@ export const getReviewOwner = (isEditable = true) => {
                         labelName: "Owner Name",
                         labelKey: "RP_OWNER_NAME_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].name" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.name" }
                 ),
                 ownerMobile: getLabelWithValue(
                     {
                         labelName: "Mobile No",
                         labelKey: "RP_MOBILE_NO_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].phone" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.phone" }
                 ),
                 ownerDob: getLabelWithValue(
                     {
                         labelName: "Date of Birth",
                         labelKey: "RP_DATE_BIRTH_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].dateOfBirth" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.dateOfBirth",callBack: convertEpochToDate }
                 ),
                 ownerGender: getLabelWithValue(
                     {
                         labelName: "Gender",
                         labelKey: "TL_COMMON_GENDER_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].gender" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.gender" }
                 ),
                 ownerEmail: getLabelWithValue(
                     {
                         labelName: "Email",
                         labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].email" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.email" }
                 ),
                 ownerAadhaarNo: getLabelWithValue(
                     {
                         labelName: "Aadhar Number",
                         labelKey: "RP_AADHAR_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].aadhaarNumber" }
-                )
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber" }
+                ),
+                ownerColony: getLabelWithValue(
+                    colonyLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.colony"}
+                ),
+                ownerArea: getLabelWithValue(
+                    areaLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.area"}
+                ),
+                ownerDistrict: getLabelWithValue(
+                    districtLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.district"}
+                ),
+                ownerState: getLabelWithValue(
+                    stateLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.state"}
+                ),
+                ownerCountry: getLabelWithValue(
+                    countryLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.country"}
+                ),
+                ownerPincode: getLabelWithValue(
+                    pincodeLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.pincode"}
+                ),
+                ownerLandmark: getLabelWithValue(
+                    landmarkLabel,
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.landmark"}
+                ),
+                
         })
     })
 }
 
-export const getReviewOwnerAddress = (isEditable = true) => {
+export const getReviewAddress = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
             uiFramework: "custom-atoms",
@@ -265,45 +326,27 @@ export const getReviewOwnerAddress = (isEditable = true) => {
         },
         viewFour: getCommonContainer({
                 area: getLabelWithValue(
-                    {
-                        labelName: "Area",
-                        labelKey: "RP_AREA_LABEL"
-                    },
+                    areaLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.area" }
                 ),
                 district: getLabelWithValue(
-                    {
-                        labelName: "District",
-                        labelKey: "RP_DISTRICT_LABEL"
-                    },
+                    districtLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.district" }
                 ),
                 state: getLabelWithValue(
-                    {
-                        labelName: "State",
-                        labelKey: "RP_STATE_LABEL"
-                    },
+                    stateLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.state" }
                 ),
                 country: getLabelWithValue(
-                    {
-                        labelName: "Country",
-                        labelKey: "RP_COUNTRY_LABEL"
-                    },
+                    countryLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.country" }
                 ),
                 pincode: getLabelWithValue(
-                    {
-                        labelName: "Pincode",
-                        labelKey: "RP_PINCODE_LABEL"
-                    },
+                    pincodeLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
                 ),
                 landmark: getLabelWithValue(
-                    {
-                        labelName: "Landmark",
-                        labelKey: "RP_LANDMARK_LABEL"
-                    },
+                    landmarkLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.landmark" }
                 ),
         })
@@ -368,21 +411,21 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelName: "Monthly Rent Amount",
                         labelKey: "RP_MONTHLY_RENT_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].monthlyRent" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.monthlyRent" }
                 ),
                 revisionPeriod: getLabelWithValue(
                     {
                         labelName: "Rent Amount Revised Period",
                         labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].revisionPeriod" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.revisionPeriod" }
                 ),
                 revisionPercentage: getLabelWithValue(
                     {
                         labelName: "Rent Amount Revision Percentage",
                         labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].revisionPercentage" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.revisionPercentage" }
                 ),
         })
     })
@@ -446,21 +489,21 @@ export const getReviewPaymentDetails = (isEditable = true) => {
                         labelName: "Payment Amount",
                         labelKey: "RP_PAYMENT_AMOUNT_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].payment[0].amountPaid" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid" }
                 ),
                 paymentDate: getLabelWithValue(
                     {
                         labelName: "Date of Payment",
                         labelKey: "RP_DATE_PAYMENT_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].payment[0].paymentDate" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentDate", callBack: convertEpochToDate }
                 ),
                 paymentMode: getLabelWithValue(
                     {
                         labelName: "Payment Mode",
                         labelKey: "RP_PAYMENT_MODE_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].payment[0].paymentMode" }
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentMode" }
                 ),
         })
     })

@@ -7,6 +7,9 @@ import {
 import { searchApiCall } from "./functions";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+const userInfo = JSON.parse(getUserInfo());
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -62,8 +65,10 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  if(rowData[3] === "INITIATED") {
-    window.location.href = `/rented-properties/apply?tenantId=${getTenantId()}&transitNumber=${rowData[0]}`
+  const {roles = []} = userInfo
+  const findItem = roles.find(item => item.code === "CTL_CLERK");
+  if(rowData[3].toUpperCase() === "INITIATED" && !!findItem) {
+    window.location.href = `apply?tenantId=${getTenantId()}&transitNumber=${rowData[0]}`
   } else {
     window.location.href = `search-preview?transitNumber=${rowData[0]}&tenantId=${getTenantId()}&propertyId=${rowData[5]}`;
   }

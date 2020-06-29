@@ -83,7 +83,7 @@ class ServiceList extends React.Component {
       id: 1775,
       leftIcon: "action:announcement",
       name: "rainmaker-common-rented-properties",
-      navigationURL: "rented-properties/search",
+      navigationURL: "rented-properties/home",
       orderNumber: 2,
       tenantId: "ch",
       url: "card"
