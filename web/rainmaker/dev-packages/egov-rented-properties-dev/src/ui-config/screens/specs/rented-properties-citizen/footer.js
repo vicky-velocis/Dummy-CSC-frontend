@@ -2,7 +2,7 @@ import { getCommonApplyFooter, validateFields } from "../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyRentedProperties } from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer } from "../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const DEFAULT_STEP = -1;
@@ -64,7 +64,7 @@ const callBackForNext = async(state, dispatch) => {
         )
         if(!!isPropertyDetailsValid && !!isRentHolderValid && !!isRentValid && !!isPaymentValid && !!isAddressValid
             ) {
-            applyRentedProperties(state, dispatch, activeStep)
+                applyOwnershipTransfer(state, dispatch, activeStep)
         } else {
             isFormValid = false;
         }
@@ -79,7 +79,7 @@ const callBackForNext = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Properties[0]"
     );
-    isFormValid = await applyRentedProperties(state, dispatch);
+    isFormValid = await applyOwnershipTransfer(state, dispatch);
       if (isFormValid) {
           moveToSuccess(rentedData, dispatch);
       }
