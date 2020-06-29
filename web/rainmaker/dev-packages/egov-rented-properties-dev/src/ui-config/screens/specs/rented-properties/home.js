@@ -30,7 +30,7 @@ const cardItems = [
             labelName: "Transfer Properties"
         },
         icon: <TradeLicenseIcon />,
-        route: `search`
+        route: `search-transfer-properties`
     },
 ]
 
