@@ -31,7 +31,7 @@ class SwitchWithLabel extends Component {
         }
       }
     }
-   // this.props.onChange({ target: { value: event.target.checked } });
+    this.props.onChange({ target: { value: event.target.checked } });
     // prepareFinalObject(jsonPath, event.target.checked);
   };
 
