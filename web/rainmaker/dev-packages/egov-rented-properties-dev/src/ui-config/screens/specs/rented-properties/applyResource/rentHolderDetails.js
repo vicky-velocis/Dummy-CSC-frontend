@@ -139,8 +139,14 @@ const phoneNumberConfig = {
     maxLength: 100,
     required: true,
     pattern: getPattern("MobileNo"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.phone"
+   
   }
+
+  const phoneNumberField = {
+    jsonPath: "Properties[0].owners[0].ownerDetails.phone",
+    ...phoneNumberConfig,
+
+}
 
 const dobFieldConfig = {
     label: {
@@ -183,8 +189,13 @@ const emailConfig = {
     maxLength: 100,
     required: true,
     pattern: getPattern("Email"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.email"
   }
+
+const emailField = {
+    ...emailConfig,
+    jsonPath: "Properties[0].owners[0].ownerDetails.email"
+
+}
 
 const aadharFieldConfig = {
     label: {
@@ -202,6 +213,10 @@ const aadharFieldConfig = {
     // minLength: 1,
     // maxLength: 100,
     // required: true,
+}
+
+const aadharField = {
+    ...aadharFieldConfig,
     jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber"
 }
 

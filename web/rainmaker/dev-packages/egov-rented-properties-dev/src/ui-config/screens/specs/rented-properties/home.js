@@ -29,7 +29,7 @@ const header = getCommonHeader(
         labelName: "Ownership Transfer"
     },
     icon: <FormIcon />,
-    route: "search"
+    route: "search-transfer-properties"
   }
 ]
 
