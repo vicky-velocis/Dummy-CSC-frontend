@@ -47,7 +47,7 @@ const colonyField = {
       }
 }
 
-const transitNumberField = {
+export const transitNumberConfig = {
     label: {
         labelName: "Transit Site/Plot number",
         labelKey: "RP_SITE_PLOT_LABEL"
@@ -63,6 +63,10 @@ const transitNumberField = {
     minLength: 1,
     maxLength: 100,
     required: true,
+}
+
+const transitNumberField = {
+    ...transitNumberConfig,
     jsonPath: "Properties[0].transitNumber"
   }
 

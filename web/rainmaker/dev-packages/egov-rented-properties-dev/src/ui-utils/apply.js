@@ -104,3 +104,24 @@ import {
         return false;
     }
   }
+
+
+
+  export const applyOwnershipTransfer = async (state, dispatch, activeIndex) => {
+    try {
+        let queryObject = JSON.parse(
+            JSON.stringify(
+              get(state.screenConfiguration.preparedFinalObject, "OwnerShipLicenses", [])
+            )
+          );
+
+        console.log(queryObject);
+        
+      
+        return true;
+    } catch (error) {
+        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+        console.log(error);
+        return false;
+    }
+  }
