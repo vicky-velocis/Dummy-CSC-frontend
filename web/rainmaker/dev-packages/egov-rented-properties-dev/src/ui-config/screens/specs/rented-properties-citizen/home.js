@@ -1,12 +1,12 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
+
 const header = getCommonHeader(
   {
-    labelName: "License",
-    labelKey: "RP_COMMON_L"
+    labelName: "Rented Properties",
+    labelKey: "RP_COMMON_RENTED_PROPERTIES"
   },
   {
     classes: {
@@ -14,29 +14,45 @@ const header = getCommonHeader(
     }
   }
 );
-const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
+
 const cardItems = [{
-    label: {
-        labelKey: "Apply",
-        labelName: "Apply"
-    },
-    icon: <TradeLicenseIcon />,
-    route: `apply?tenantId=${tenantId}`
+  label: {
+    labelKey: "Transfer of Transit site In case of Legal Heir (Ownership Transfer)",
+    labelName: "OWNER_SHIP_TRANSFER_HEADER"
+  },
+  icon: <TradeLicenseIcon />,
+  route: `ownership-transfer`
   },
   {
     label: {
-        labelKey: "RP_MY_APPLICATIONS",
-        labelName: "My Applications"
+      labelKey: "Duplicate copy of Allotment letter",
+      labelName: "DUPLICATE_COPY_HEADER"
     },
-    icon: <FormIcon />,
-    route: "my-applications"
-  }
+    icon: <TradeLicenseIcon />,
+    route: `duplicate-copy`
+    },
+    {
+      label: {
+        labelKey: "Mortgage",
+        labelName: "MORTAGE_HEADER"
+      },
+      icon: <TradeLicenseIcon />,
+      route: `mortage`
+      },
+      {
+        label: {
+          labelKey: "Account Statement Generation",
+          labelName: "ACCOUNT_STATEMENT_GENERATION_HEADER"
+        },
+        icon: <TradeLicenseIcon />,
+        route: `account-statement`
+        }
 ]
+
 const rentedPropertyHome = {
     uiFramework: "material-ui",
     name: "home",
     beforeInitScreen: (action, state, dispatch) => {
-
       return action;
     },
     components: {
