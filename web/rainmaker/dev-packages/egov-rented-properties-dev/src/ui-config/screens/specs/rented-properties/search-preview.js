@@ -6,7 +6,7 @@ import {
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -14,7 +14,8 @@ import find from "lodash/find";
 import get from "lodash/get";
 import set from "lodash/set";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { getReviewOwner, getReviewProperty, getReviewOwnerAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
+import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
+import { getReviewDocuments } from "./applyResource/review-documents";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
@@ -26,16 +27,18 @@ const headerrow = getCommonContainer({
 });
 const reviewOwnerDetails = getReviewOwner(false);
 const reviewPropertyDetails = getReviewProperty(false);
-const reviewAddressDetails = getReviewOwnerAddress(false);
+const reviewAddressDetails = getReviewAddress(false);
 const reviewRentDetails = getReviewRentDetails(false);
 const reviewPaymentDetails = getReviewPaymentDetails(false);
+const reviewDocumentDetails = getReviewDocuments(false)
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
-  reviewOwnerDetails,
   reviewAddressDetails,
+  reviewOwnerDetails,
   reviewRentDetails,
   reviewPaymentDetails,
+  reviewDocumentDetails
 });
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {
@@ -45,7 +48,24 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
+
+    let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
+    const removedDocs = applicationDocuments.filter(item => !item.active)
+    applicationDocuments = applicationDocuments.filter(item => !!item.active)
+    properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
     dispatch(prepareFinalObject("Properties[0]", properties[0]));
+    dispatch(
+      prepareFinalObject(
+        "PropertiesTemp[0].removedDocs",
+        removedDocs
+      )
+    );
+    await setDocuments(
+      payload,
+      "Properties[0].propertyDetails.applicationDocuments",
+      "PropertiesTemp[0].reviewDocData",
+      dispatch,'TL'
+    );
   }
 }
 

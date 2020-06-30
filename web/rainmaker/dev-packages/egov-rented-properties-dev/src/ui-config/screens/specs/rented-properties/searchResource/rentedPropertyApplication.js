@@ -11,7 +11,6 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 
-
 const colonyField = {
   label: {
       labelName: "Colony",
@@ -19,7 +18,7 @@ const colonyField = {
   },
   placeholder: {
       labelName: "Enter Colony",
-      labelKey: "RP_COLONY_PLACEHOLDER"
+      labelKey: "TL_COMMON_TABLE_COL_COLONY_PLACEHOLDER"
   },
   required: false,
   jsonPath: "searchScreen.colony",
@@ -88,6 +87,24 @@ const phoneNumberField = {
   jsonPath: "searchScreen.phone"
 }
 
+const statusField = {
+  label: {
+    labelName: "Status",
+    labelKey: "TL_COMMON_TABLE_COL_STATUS"
+  },
+  placeholder: {
+    labelName: "Select Status",
+    labelKey: "TL_COMMON_TABLE_COL_STATUS_PLACEHOLDER"
+  },
+  required: false,
+  jsonPath: "searchScreen.state",
+  data:[],
+  gridDefination: {
+    xs: 12,
+    sm: 6
+  }
+}
+
 export const rentedPropertyApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Rented Property Application",
@@ -99,7 +116,8 @@ export const rentedPropertyApplication = getCommonCard({
   }),
   colonyContainer: getCommonContainer({
     colony: getSelectField(colonyField),
-    allotmentNumber: getTextField(allotmentNumberField)
+    status: getSelectField(statusField)
+    // allotmentNumber: getTextField(allotmentNumberField)
   }),
   transitNumberContainer: getCommonContainer({
     transitNumber: getTextField(transitNumberField),

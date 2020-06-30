@@ -1,67 +1,64 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
+import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 
 const header = getCommonHeader(
-  {
-    labelName: "Trade License",
-    labelKey: "TL_COMMON_TL"
-  },
-  {
-    classes: {
-      root: "common-header-cont"
-    }
-  }
-);
-
-const cardItems = [
     {
-        label: {
-            labelKey: "RP_MASTER_PROPERTY_SEARCH",
-            labelName: "Master Properties"
-        },
-        icon: <TradeLicenseIcon />,
-        route: `search`
+      labelName: "Rented Properties",
+      labelKey: "RP_COMMON_RP"
     },
     {
-        label: {
-            labelKey: "RP_TRANSFER_PROPERTY",
-            labelName: "Transfer Properties"
-        },
-        icon: <TradeLicenseIcon />,
-        route: `search-transfer-properties`
-    },
-]
-
-const rentedPropertyHome = {
-  uiFramework: "material-ui",
-  name: "home",
-  beforeInitScreen: (action, state, dispatch) => {
-    return action;
-  },
-  components: {
-    div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      children: {
-        header: header,
-        applyCard: {
-          uiFramework: "custom-molecules",
-          componentPath: "LandingPage",
-          props: {
-            items: cardItems,
-            history: {}
-          }
-        },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "HowItWorks"
-        }
+      classes: {
+        root: "common-header-cont"
       }
     }
-  }
-};
+  );
 
-export default rentedPropertyHome;
+  const cardItems = [{
+    label: {
+        labelKey: "MASTER_ENTRY",
+        labelName: "Master Entry"
+    },
+    icon: <FormIcon />,
+    route: "search"
+  },
+  {
+    label: {
+        labelKey: "OWNERSHIP_TRANSFER",
+        labelName: "Ownership Transfer"
+    },
+    icon: <FormIcon />,
+    route: "search"
+  }
+]
+
+
+  const home = {
+    uiFramework: "material-ui",
+    name: "home",
+    components: {
+      div: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          header: header,
+          applyCard: {
+            uiFramework: "custom-molecules",
+            componentPath: "LandingPage",
+            props: {
+              items: cardItems,
+              history: {}
+            }
+          },
+        //   listCard: {
+        //     uiFramework: "custom-molecules-local",
+        //     moduleName: "egov-tradelicence",
+        //     componentPath: "HowItWorks"
+        //   }
+        }
+      }
+      }
+    }
+  
+  export default home;

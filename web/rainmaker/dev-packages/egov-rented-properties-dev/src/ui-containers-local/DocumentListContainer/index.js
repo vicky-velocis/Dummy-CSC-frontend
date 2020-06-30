@@ -28,17 +28,17 @@ const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const documents = get(
     screenConfiguration.preparedFinalObject,
-    "LicensesTemp[0].applicationDocuments",
+    "PropertiesTemp[0].applicationDocuments",
     []
   );
   const uploadedDocuments = get(
     screenConfiguration.preparedFinalObject,
-    "LicensesTemp[0].uploadedDocsInRedux",
+    "PropertiesTemp[0].uploadedDocsInRedux",
     {}
   );
   const tenantId = get(
     screenConfiguration.preparedFinalObject,
-    "Licenses[0].tenantId",
+    "Properties[0].tenantId",
     ""
   );
   const { preparedFinalObject } = screenConfiguration || {};

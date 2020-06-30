@@ -44,19 +44,19 @@ import {
         const id = get(queryObject[0], "id");
         let response;
         set(queryObject[0], "tenantId", tenantId);
-        set(queryObject[0], "owners[0].allotmentStartdate", convertDateToEpoch(queryObject[0].owners[0].allotmentStartdate))
-        set(queryObject[0], "owners[0].posessionStartdate", convertDateToEpoch(queryObject[0].owners[0].posessionStartdate))
-        set(queryObject[0], "owners[0].dateOfBirth", convertDateToEpoch(queryObject[0].owners[0].dateOfBirth))
-        set(queryObject[0], "owners[0].payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].payment[0].paymentDate))
-        set(queryObject[0], "owners[0].allotmentEnddate", addYears(queryObject[0].owners[0].allotmentStartdate, 5))
-        set(queryObject[0], "owners[0].posessionEnddate", addYears(queryObject[0].owners[0].posessionStartdate, 5))
+        set(queryObject[0], "owners[0].ownerDetails.allotmentStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.allotmentStartdate))
+        set(queryObject[0], "owners[0].ownerDetails.posessionStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.posessionStartdate))
+        set(queryObject[0], "owners[0].ownerDetails.dateOfBirth", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.dateOfBirth))
+        set(queryObject[0], "owners[0].ownerDetails.payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.payment[0].paymentDate))
+        set(queryObject[0], "owners[0].ownerDetails.allotmentEnddate", addYears(queryObject[0].owners[0].ownerDetails.allotmentStartdate, 5))
+        set(queryObject[0], "owners[0].ownerDetails.posessionEnddate", addYears(queryObject[0].owners[0].ownerDetails.posessionStartdate, 5))
         set(queryObject[0], "propertyDetails.floors", "")
         set(queryObject[0], "propertyDetails.additionalDetails", "")
         set(queryObject[0], "owners[0].applicationStatus", "")
         set(queryObject[0], "owners[0].activeState", true)
         set(queryObject[0], "owners[0].isPrimaryOwner", true)
-        set(queryObject[0], "owners[0].payment.amountDue", "")
-        set(queryObject[0], "owners[0].payment.receiptNumber", "")
+        set(queryObject[0], "owners[0].ownerDetails.payment[0].amountDue", "")
+        set(queryObject[0], "owners[0].ownerDetails.payment[0].receiptNumber", "")
         if(!id) {
           set(queryObject[0], "masterDataAction", "INITIATE");
           response = await httpRequest(
@@ -72,6 +72,11 @@ import {
           } else {
             set(queryObject[0], "masterDataAction", "SUBMIT")
           }
+          let applicationDocuments = get(queryObject[0], "propertyDetails.applicationDocuments") || [];
+          applicationDocuments = applicationDocuments.map(item => ({...item, active: true}))
+          const removedDocs = get(state.screenConfiguration.preparedFinalObject, "PropertiesTemp[0].removedDocs") || [];
+          applicationDocuments = [...applicationDocuments, ...removedDocs]
+          set(queryObject[0], "propertyDetails.applicationDocuments", applicationDocuments)
           response = await httpRequest(
             "post",
             "/csp/property/_update",
@@ -80,8 +85,18 @@ import {
             { Properties: queryObject }
           );
         }
-        const {Properties} = response
+        let {Properties} = response
+        let applicationDocuments = Properties[0].propertyDetails.applicationDocuments || [];
+        const removedDocs = applicationDocuments.filter(item => !item.active)
+        applicationDocuments = applicationDocuments.filter(item => !!item.active)
+        Properties = [{...Properties[0], propertyDetails: {...Properties[0].propertyDetails, applicationDocuments}}]
         dispatch(prepareFinalObject("Properties", Properties));
+        dispatch(
+          prepareFinalObject(
+            "PropertiesTemp[0].removedDocs",
+            removedDocs
+          )
+        );
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

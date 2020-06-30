@@ -29,7 +29,7 @@ const rentAmountField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].monthlyRent"
+    jsonPath: "Properties[0].owners[0].ownerDetails.monthlyRent"
   }
 
 const revisedPeriodField = {
@@ -48,7 +48,7 @@ const revisedPeriodField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].revisionPeriod"
+    jsonPath: "Properties[0].owners[0].ownerDetails.revisionPeriod"
   }
 
 const revisedPercentageField = {
@@ -67,7 +67,7 @@ const revisedPercentageField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].revisionPercentage"
+    jsonPath: "Properties[0].owners[0].ownerDetails.revisionPercentage"
   }
 
 const getRentDetails = () => {
