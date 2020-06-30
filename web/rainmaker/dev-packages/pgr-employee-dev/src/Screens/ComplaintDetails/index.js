@@ -330,7 +330,7 @@ class ComplaintDetails extends Component {
                 <div style={{marginTop:30}}>
           <Icon onClick={() => 
           {
-          const  {tabValue} = this.props.history.location.state;
+          const  {tabValue} = this.props.history.location.state || 0;
 
           window.localStorage.setItem('tabValue', tabValue);
             this.props.history.goBack();
