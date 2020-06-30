@@ -578,22 +578,24 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9-]{1,50}$/i;
       case "TextValidationWithoutSpace":
       return /^[a-zA-Z]{1,180}$/i;
-	  case "budget":
+	   case "budget":
       return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
-    case "age":
+     case "age":
       return /^[1-9][0-9]$/i;
-    case "familyMonthlyIncome":
+     case "familyMonthlyIncome":
       return /^[1-9][0-9]\d*$/i;
-        case "alpha-numeric-with-space":
+     case "alpha-numeric-with-space":
       return /^[a-z0-9 ]*$/i;
-      case "alpha-numeric-with-space-and-newline":
+     case "alpha-numeric-with-space-and-newline":
       return /^[a-z0-9 \n]*$/i;
-  case "alpha-numeric":
-    return /^[a-z0-9]*$/i;
-  case "non-empty-alpha-numeric":
-      return /^[a-z0-9]+$/i;
-case "alpha-only":
-  return  /^[a-z]+$/i;
+     case "alpha-numeric":
+       return /^[a-z0-9]*$/i;
+     case "non-empty-alpha-numeric":
+       return /^[a-z0-9]+$/i;
+     case "alpha-only":
+       return  /^[a-z]+$/i;
+     case "numeric-only":
+       return  /^[0-9]*$/i;
   }
   };
 

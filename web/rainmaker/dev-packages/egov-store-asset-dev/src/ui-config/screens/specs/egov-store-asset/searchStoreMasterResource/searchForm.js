@@ -15,7 +15,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["storeName", "department", "active"];
+  const textFields = ["name", "department", "active"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-store.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -43,27 +43,22 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    storeName: getSelectField({
-      label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
-      placeholder: {
-        labelName: "Select Store Name",
-        labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
+    name: getTextField({
+      label: {
+        labelName: "Store Name",
+        labelKey: "STORE_DETAILS_STORE_NAME",
       },
-      required: false,
-      jsonPath: "searchScreen.designations",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
       props: {
-        optionValue: "code",
-        optionLabel: "name",
+        className: "applicant-details-error",
       },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Designation",
+      placeholder: {
+        labelName: "Enter Store Name",
+        labelKey: "STORE_DETAILS_STORE_NAME_PLACEHOLDER",
       },
+      pattern: getPattern("alpha-only"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+
+      jsonPath: "searchScreen.name",
     }),
     department: getSelectField({
       label: {
@@ -75,20 +70,16 @@ export const searchForm = getCommonCard({
         labelKey: "STORE_DETAILS_DEPARTMENT_NAME_PLACEHOLDER",
       },
       required: false,
-      jsonPath: "searchScreen.departments",
+      jsonPath: "searchScreen.department",
       gridDefination: {
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      sourceJsonPath: "searchScreenMdmsData.store-asset.Department",
       props: {
         optionLabel: "name",
         optionValue: "code",
         // hasLocalization: false
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Department",
       },
     }),
     active: {

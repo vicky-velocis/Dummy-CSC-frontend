@@ -14,6 +14,11 @@ import {
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonApplyFooter, validateFields } from "../utils";
+import { getStoreSearchResults } from "../../../../ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+const storeName = getQueryArg(window.location.href, "name");
+const tenantId = getQueryArg(window.location.href, "tenantId");
 const headerrow = getCommonContainer({
   header: getCommonHeader({ labelKey: "STORE_COMMON_STORE_MASTER" }),
   connectionNumber: {
@@ -48,7 +53,7 @@ export const getLabelWithValue = (label, value, props = {}) => {
 };
 //Edit Button
 const callBackForEdit = async (state, dispatch) => {
-  window.location.href = `/egov-store-asset/createStore?edited=true`;
+  window.location.href = `/egov-store-asset/createStore?tenantId=${tenantId}&name=${storeName}&edited=true`;
 };
 export const footer = getCommonApplyFooter({
   editButton: {
@@ -76,23 +81,23 @@ export const footer = getCommonApplyFooter({
 });
 export const renderService = () => {
   return getCommonContainer({
-    storeCode: getLabelWithValue(
+    code: getLabelWithValue(
       { labelKey: "STORE_DETAILS_STORE_CODE" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].code" }
     ),
-    storeName: getLabelWithValue(
+    name: getLabelWithValue(
       { labelKey: "STORE_DETAILS_STORE_NAME" },
       {
-        jsonPath: "WaterConnection[0].waterSubSource",
+        jsonPath: "stores[0].name",
       }
     ),
-    departmentName: getLabelWithValue(
+    department: getLabelWithValue(
       { labelKey: "STORE_DETAILS_DEPARTMENT_NAME" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].department.name" }
     ),
-    storeDescription: getLabelWithValue(
+    description: getLabelWithValue(
       { labelKey: "STORE_DETAILS_STORE_DESCRIPTION" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].description" }
     ),
     isCentralStore: {
       uiFramework: "custom-containers-local",
@@ -117,38 +122,38 @@ export const renderService = () => {
     },
     billingAddress: getLabelWithValue(
       { labelKey: "STORE_DETAILS_BILLING_ADDRESS" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].billingAddress" }
     ),
     deliveryAddress: getLabelWithValue(
       { labelKey: "STORE_DETAILS_DELIVERY_ADDRESS" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].deliveryAddress" }
     ),
-    inChargeEmployee: getLabelWithValue(
+    storeInCharge: getLabelWithValue(
       { labelKey: "STORE_DETAILS_IN_CHARGE_EMPLOYEE" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].storeInCharge.name" }
     ),
-    contactNumber1: getLabelWithValue(
+    contactNo1: getLabelWithValue(
       { labelKey: "STORE_DETAILS_CONTACT_NUMBER_1" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].contactNo1" }
     ),
-    contactNumber2: getLabelWithValue(
+    contactNo2: getLabelWithValue(
       { labelKey: "STORE_DETAILS_CONTACT_NUMBER_2" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].contactNo2" }
     ),
     email: getLabelWithValue(
       { labelKey: "STORE_DETAILS_EMAIL" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].email" }
     ),
 
     officeLocation: getLabelWithValue(
       { labelKey: "STORE_DETAILS_OFFICE_LOCATION" },
-      { jsonPath: "WaterConnection[0].waterSubSource" }
+      { jsonPath: "stores[0].officeLocation.name" }
     ),
     active: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-store-asset",
       componentPath: "CheckboxContainer",
-      jsonPath: "stores[0].isCentralStore",
+      jsonPath: "stores[0].active",
       gridDefination: {
         xs: 12,
       },
@@ -157,7 +162,7 @@ export const renderService = () => {
 
       props: {
         content: "STORE_DETAILS_ACTIVE",
-        jsonPath: "stores[0].isCentralStore",
+        jsonPath: "stores[0].active",
         id: "central-store",
         disabled: true,
         screenName: "view-store",
@@ -212,12 +217,14 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-store",
   beforeInitScreen: (action, state, dispatch) => {
-    //  beforeInitFn(action, state, dispatch, connectionNumber);
-    //dispatch(prepareFinalObject("stores", [{ isCentralStore: false }]));
-    dispatch(
-      prepareFinalObject("WaterConnection", [{ waterSubSource: "hello" }])
-    );
-    return action;
+
+    const queryObject = [{ key: "name", value: storeName  },{ key: "tenantId", value: tenantId  }];
+
+    getStoreSearchResults(queryObject, dispatch)
+    .then(response =>{
+      dispatch(prepareFinalObject("stores", [...response.stores]));
+    });
+     return action;
   },
   components: {
     div: {

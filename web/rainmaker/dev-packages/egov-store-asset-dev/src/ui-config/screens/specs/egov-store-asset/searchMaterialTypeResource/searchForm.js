@@ -15,7 +15,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["materialTypeName","parentMaterialType","storeName", "storeMappingInfo", "active"];
+  const textFields = ["code","store", "storeMappingInfo", "active"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-material-type.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -43,81 +43,47 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    materialTypeName: getSelectField({
-      label: { labelName: "Material Type Name", labelKey: "MATERIAL_TYPE_NAME" },
+    code: getSelectField({
+      label: { labelName: "Material Type Name", labelKey: "STORE_MATERIAL_TYPE_NAME" },
       placeholder: {
         labelName: "Select Materila Type Name",
-        labelKey: "MATERIAL_TYPE_NAME_SELECT",
+        labelKey: "STORE_MATERIAL_TYPE_NAME_SELECT",
       },
       required: false,
-      jsonPath: "searchScreen.designations",
+      jsonPath: "searchScreen.code",
       gridDefination: {
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
+      sourceJsonPath: "searchScreenMdmsData.store-asset.MaterialType",
       props: {
         optionValue: "code",
         optionLabel: "name",
       },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Designation",
-      },
     }),
-    parentMaterialType: getSelectField({
-      label: {
-        labelName: "Parent Material Type",
-        labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME",
-      },
-      placeholder: {
-        labelName: "Select Parent Material Type",
-        labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME_SELECT",
-      },
-      required: false,
-      jsonPath: "searchScreen.departments",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
-      props: {
-        optionLabel: "name",
-        optionValue: "code",
-        // hasLocalization: false
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Department",
-      },
-    }),
-    storeName: getSelectField({
+    store: getSelectField({
       label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
       placeholder: {
         labelName: "Select Store Name",
         labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
       },
       required: false,
-      jsonPath: "searchScreen.designations",
+      jsonPath: "searchScreen.store",
       gridDefination: {
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Designation",
+      sourceJsonPath: "searchScreenMdmsData.material-type.stores",
       props: {
         optionValue: "code",
         optionLabel: "name",
-      },
-      localePrefix: {
-        moduleName: "common-masters",
-        masterName: "Designation",
       },
     }),
     storeMappingInfo: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-store-asset",
       componentPath: "CheckboxContainer",
-      jsonPath: "searchScreen.active",
+      jsonPath: "searchScreen.storeMappingInfo",
       gridDefination: {
         xs: 6,
       },
@@ -125,8 +91,8 @@ export const searchForm = getCommonCard({
       required: false,
 
       props: {
-        content: "MATERIAL_TYPE_STORE_MAP",
-        jsonPath: "searchScreen.active",
+        content: "STORE_MATERIAL_TYPE_STORE_MAP",
+        jsonPath: "searchScreen.storeMappingInfo",
         screenName: "search-material-type",
         checkBoxPath:
           "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.storeMappingInfo",
@@ -144,7 +110,7 @@ export const searchForm = getCommonCard({
       required: false,
 
       props: {
-        content: "MATERIAL_TYPE_ACTIVE",
+        content: "STORE_MATERIAL_TYPE_ACTIVE",
         jsonPath: "searchScreen.active",
         screenName: "search-material-type",
         checkBoxPath:

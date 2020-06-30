@@ -134,7 +134,7 @@ import {
           disabled: true,
           screenName: "create-material-type",
           checkBoxPath:
-            "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.active",
+          "components.div.children.materialTypeStoreMapView.children.cardContent.children.viewOne.props.items[0].item0.children.cardContent.children.active",
        },
       },
   
@@ -190,7 +190,7 @@ import {
         prepareFinalObject("WaterConnection", [{ waterSubSource: "hello" }])
       );
       dispatch(
-        prepareFinalObject("Employee[0].jurisdictions[0]", [{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"},{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"}])
+        prepareFinalObject("Employee[0].jurisdictions", [{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"},{ active: false,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"}])
       );
       return action;
     },

@@ -57,10 +57,10 @@ import {
               content: "MATERIAL_TYPE_ACTIVE",
               jsonPath: "Employee[0].jurisdictions[0].active",
               disabled: true,
-              screenName: "create-material-type",
+              screenName: "view-material-type",
               checkBoxPath:
-                "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.active",
-           },
+              "components.div.children.materialTypeStoreMapView.children.cardContent.children.viewOne.props.items[0].item0.children.cardContent.children.active",
+            },
           },
       }),
   

@@ -2,7 +2,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels,
 } from "egov-ui-framework/ui-utils/commons";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils"; 
 export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
@@ -27,7 +27,7 @@ export const getTextToLocalMapping = (label) => {
     case "Central Store":
       return getLocaleLabels(
         "Central Store",
-        "HR_COMMON_TABLE_COL_CENTRAL_STORE",
+        "STORE_COMMON_TABLE_COL_CENTRAL_STORE",
         localisationLabels
       );
     case "Search Results for Store Master":
@@ -42,7 +42,7 @@ export const getTextToLocalMapping = (label) => {
 export const searchResults = {
   uiFramework: "custom-molecules",
   componentPath: "Table",
-  visible: true,
+  visible: false,
   props: {
     columns: [
       getTextToLocalMapping("Store Name"),
@@ -66,15 +66,6 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`;
+  window.location.href = `view-store?tenantId=${getTenantId()}&name=${rowData[0]}`;
 };
 
-// const onRowClick = rowData => {
-//   let viewEmployeeUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? "/egov-ui-framework/hrms/view"
-//       : "/hrms/view";
-//   return `${viewEmployeeUrl}?employeeID=${
-//     rowData[get(textToLocalMapping, "Employee ID")]
-//   }&tenantId=${rowData[get(textToLocalMapping, "Tenant ID")]}`;
-// };

@@ -18,18 +18,6 @@ export const getTextToLocalMapping = (label) => {
         "STORE_COMMON_TABLE_COL_MATERIAL_DESC",
         localisationLabels
       );
-      case "Parent Material Type Name":
-        return getLocaleLabels(
-          "Parent Material Type Name",
-          "HR_COMMON_TABLE_COL_PRNT_MATERIAL_NAME",
-          localisationLabels
-        );
-        case "Store Name":
-          return getLocaleLabels(
-            "Store Name",
-            "STORE_COMMON_TABLE_COL_STORE_NAME",
-            localisationLabels
-          );
     case "Active":
       return getLocaleLabels(
         "Active",
@@ -53,8 +41,6 @@ export const searchResults = {
     columns: [
       getTextToLocalMapping("Material Type Name"),
       getTextToLocalMapping("Material Type Description"),
-      getTextToLocalMapping("Parent Material Type Name"),
-      getTextToLocalMapping("Store Name"),
       getTextToLocalMapping("Active"),
     ],
     title: getTextToLocalMapping("Search Results for Material Type"),
@@ -76,12 +62,4 @@ const onRowClick = (rowData) => {
   window.location.href = `view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`;
 };
 
-// const onRowClick = rowData => {
-//   let viewEmployeeUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true"
-//       ? "/egov-ui-framework/hrms/view"
-//       : "/hrms/view";
-//   return `${viewEmployeeUrl}?employeeID=${
-//     rowData[get(textToLocalMapping, "Employee ID")]
-//   }&tenantId=${rowData[get(textToLocalMapping, "Tenant ID")]}`;
-// };
+

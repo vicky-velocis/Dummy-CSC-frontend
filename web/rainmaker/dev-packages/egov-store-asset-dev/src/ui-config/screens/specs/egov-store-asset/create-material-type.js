@@ -21,12 +21,14 @@ import {
   import { getCommonApplyFooter, validateFields } from "../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { getStoreSearchResults , handleCardDelete} from "../../../../ui-utils/commons";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import commonConfig from '../../../../config/common';
   import get from "lodash/get";
-  //import { httpRequest } from "../../../../../ui-utils/api";
+  import { httpRequest } from "../../../../ui-utils/api";
   import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
   import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTableContainer/constant";
+
   
   const isEditMode = getQueryArg(window.location.href, "edited");
   const MaterialTypeRelationDetailsCard = {
@@ -44,18 +46,25 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
                   labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
                 },
                 required: true,
-                jsonPath: "Employee[0].jurisdictions[0].storeName",
-                sourceJsonPath: "createScreenMdmsData.hierarchyList",
-                localePrefix :{
-                  moduleName : "EGOV_LOCATION",
-                  masterName : "TENANTBOUNDARY"
-                },
+                jsonPath: "materialTypes[0].storeMapping[0].store.code",
+                sourceJsonPath: "createScreenMdmsData.material-type.stores",
                 props: {
                   className: "hr-generic-selectfield",
                   optionValue: "code",
                   optionLabel: "name"
                 }
               }),
+              beforeFieldChange: (action, state, dispatch) => {
+                if(action.value){  
+                  const {stores} = state.screenConfiguration.preparedFinalObject.createScreenMdmsData['material-type'];
+  
+                  const storeObj = stores.filter(item => item.code === action.value);
+  
+                let  materialDeptPath = action.componentJsonpath.replace(".storeName",".department");
+                //  dispatch(handleField("create-material-type", materialDeptPath,"props.value", storeObj[0].department));
+               
+                }
+              }
             },
             departmentName: getTextField({
               label: {
@@ -64,16 +73,13 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
               },
               props: {
                 className: "applicant-details-error",
+                disabled : true
               },
-              // placeholder: {
-              //   labelName: "Enter Material Type Code",
-              //   labelKey: "MATERIAL_TYPE_CODE_PLACEHOLDER",
-              // },
-              pattern: getPattern("non-empty-alpha-numeric"),
+              //pattern: getPattern("non-empty-alpha-numeric"),
               errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-              jsonPath: "Employee[0].jurisdictions[0].departmentName",
+              jsonPath: "materialTypes[0].storeMapping[0].department",
             }),
-            stckInHand: {
+            chartofAccount: {
               ...getSelectField({
                 label: {
                   labelName: "Stock-In-Hand Code",
@@ -83,16 +89,20 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
                   labelName: "Select Stock-In-Hand Code",
                   labelKey: "STORE_DETAILS_STORE_STCK_HAND_SELECT"
                 },
-                required: true,
-                jsonPath: "Employee[0].jurisdictions[0].stckInHand",
-                localePrefix :{
-                  moduleName : "EGOV_LOCATION",
-                  masterName : "BOUNDARYTYPE"
-                },
+               // required: true,
+                jsonPath: "materialTypes[0].storeMapping[0].chartofAccount.glcode",
+                sourceJsonPath: "createScreenMdmsData.store-asset.Location",
                 props: {
                   className: "hr-generic-selectfield",
                   optionValue: "value",
                   optionLabel: "label",
+                  data: [
+                    {
+                      value: "46130",
+                      label: "46130"
+                    },
+                   
+                  ],
                 }
               }),
             },
@@ -100,7 +110,7 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
               uiFramework: "custom-containers-local",
               moduleName: "egov-store-asset",
               componentPath: "CheckboxContainer",
-              jsonPath: "stores[0].active",
+              jsonPath: "materialTypes[0].active",
               gridDefination: {
                 xs: 6,
               },
@@ -109,18 +119,16 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
     
               props: {
                 content: "STORE_DETAILS_ACTIVE",
-                jsonPath: "Employee[0].jurisdictions[0].active",
+                jsonPath: "materialTypes[0].storeMapping[0].active",
                 screenName: "create-material-type",
                 checkBoxPath:"components.div.children.addMaterialTypeTable.children.cardContent.children.MaterialTypeRelationDetailsCard.props.items[1].item1.children.cardContent.children.rltnDetailsCardContainer",
               },
               beforeFieldChange: (action, state, dispatch) => {
-                let tenantBoundary = get(
-                  state.screenConfiguration.preparedFinalObject,
-                  `createScreenMdmsData.egov-location.TenantBoundary`,
-                  []
-                );
+                if(!action.value){
+                     dispatch(handleField("create-material-type", action.componentJsonpath,"props.value", false));      
+                }
               }
-            },
+            }
           },
           {
             style: {
@@ -137,7 +145,7 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
       headerName: "Map Material Type to Store",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
-      sourceJsonPath: "Employee[0].jurisdictions",
+      sourceJsonPath: "materialTypes[0].storeMapping",
       prefixSourceJsonPath:
         "children.cardContent.children.rltnDetailsCardContainer.children"
     },
@@ -209,20 +217,60 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     } else {
       //trigger api for create store
-      dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+      const {screenConfiguration} = state;
+      const {materialTypes} = screenConfiguration.preparedFinalObject;
+      const tenantId = getTenantId();
+      materialTypes[0].tenantId = tenantId;
+
+  
+      const queryObject = [
+        {
+          key: "tenantId",
+          value: tenantId
+        }
+      ];
+  
+  
+
+      const requestBody =  handleCardDelete(materialTypes, "storeMapping",true);
+
+
+      console.log("requestbody", requestBody);
+      try {
+        // const response = await httpRequest(
+        //   "post",
+        //   "store-asset-services/materialtypes/_create",
+        //   "",
+        //   queryObject,
+        //   requestBody
+        // );
+        //  if(response){
+        //   dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+        //  }
+    
+      } catch (error) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: error.message, labelCode: error.message },
+            "error"
+          )
+        );
+      }
+  
     }
   };
-  
+
   // Reset Button
   const callBackForReset = async (state, dispatch) => {
     console.log("reset");
   
-    const checkBoxButton = [ "isParentType", "active"];
+    const checkBoxButton = [ "isParent", "active"];
     const textFields = [
-      "materialTypeCode",
-      "materialTypeName",
-      "materialTypeDescription",
-      "parentMaterialTypeName",
+      "code",
+      "name",
+      "description",
+      "parent",
     ];
     for (let i = 0; i < checkBoxButton.length; i++) {
       if (checkBoxButton[i]) {
@@ -252,7 +300,7 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
       }
     }
   
-    dispatch(prepareFinalObject("stores", []));
+    dispatch(prepareFinalObject("materialTypes", []));
   };
   
   export const buttonController = () => {
@@ -360,102 +408,80 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
         break: getBreak(),
   
         addMaterialTypeDetails: getCommonContainer({
-          materialTypeCode: getTextField({
+          code :getSelectField({
             label: {
               labelName: "Material Type Code",
-              labelKey: "MATERIAL_TYPE_CODE",
+              labelKey: "STORE_MATERIAL_TYPE_CODE",
             },
             props: {
               className: "applicant-details-error",
             },
             placeholder: {
-              labelName: "Enter Material Type Code",
-              labelKey: "MATERIAL_TYPE_CODE_PLACEHOLDER",
+              labelName: "Select Material Type Code",
+              labelKey: "STORE_MATERIAL_TYPE_CODE_PLACEHOLDER",
             },
+            jsonPath: "materialTypes[0].code",
+            sourceJsonPath: "createScreenMdmsData.store-asset.MaterialType",
             required: true,
-            pattern: getPattern("non-empty-alpha-numeric"),
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "stores[0].code",
+            beforeFieldChange: (action, state, dispatch) => {
+              if(action.value){
+                const {MaterialType} = state.screenConfiguration.preparedFinalObject.createScreenMdmsData['store-asset'];
+
+                const materialObj = MaterialType.filter(item => item.code === action.value);
+
+              let  materialNamePath = action.componentJsonpath.replace(".code",".name");
+              let  materialDescPath = action.componentJsonpath.replace(".code",".description");
+                dispatch(handleField("create-material-type", materialNamePath,"props.value", materialObj[0].name));
+                dispatch(handleField("create-material-type", materialDescPath,"props.value", materialObj[0].description));
+              //  dispatch(prepareFinalObject("materialTypes[0].name",materialObj.name));
+              //  dispatch(prepareFinalObject("materialTypes[0].description",materialObj.description));
+              }
+            }
           }),
-          materialTypeName: getTextField({
+          name: getTextField({
             label: {
               labelName: "Material Type Name",
-              labelKey: "MATERIAL_TYPE_NAME",
+              labelKey: "STORE_MATERIAL_TYPE_NAME",
             },
             props: {
               className: "applicant-details-error",
+              disabled:true,
             },
             placeholder: {
               labelName: "Enter Material Type Name",
-              labelKey: "MATERIAL_TYPE_NAME_PLACEHOLDER",
+              labelKey: "STORE_MATERIAL_TYPE_NAME_PLACEHOLDER",
             },
             required: true,
-            pattern: getPattern("alpha-only"),
+         //   pattern: getPattern("alpha-only"),
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
   
-            jsonPath: "stores[0].name",
+            jsonPath: "materialTypes[0].name",
           }),
-          materialTypeDescription: getTextField({
+          description: getTextField({
             label: {
               labelName: "Material Type Description",
-              labelKey: "MATERIAL_TYPE_DESCRIPTION",
+              labelKey: "STORE_MATERIAL_TYPE_DESCRIPTION",
             },
             props: {
               className: "applicant-details-error",
               multiline: "multiline",
               rowsMax: 2,
+              disabled:true,
             },
             placeholder: {
               labelName: "Enter Material Type Description",
-              labelKey: "MATERIAL_TYPE_DESCRIPTION_PLACEHOLDER",
+              labelKey: "STORE_MATERIAL_TYPE_DESCRIPTION_PLACEHOLDER",
             },
             required: true,
-            pattern: getPattern("alpha-numeric-with-space-and-newline"),
+          //  pattern: getPattern("alpha-numeric-with-space-and-newline"),
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "stores[0].description",
-          }),
-          isParentType: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-store-asset",
-            componentPath: "CheckboxContainer",
-            jsonPath: "stores[0].isCentralStore",
-            gridDefination: {
-              xs: 6,
-            },
-            isFieldValid: true,
-            required: false,
-  
-            props: {
-              content: "MATERIAL_TYPE_PARENT_TYPE",
-              jsonPath: "stores[0].isCentralStore",
-              screenName: "create-material-type",
-              checkBoxPath:
-                "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.isParentType",
-            },
-          },
-          parentMaterialTypeName: getSelectField({
-            label: {
-              labelName: "Parent materila type Name",
-              labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME",
-            },
-            props: {
-              className: "applicant-details-error",
-            },
-            placeholder: {
-              labelName: "select Parent material type Name",
-              labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME_PLACEHOLDER",
-            },
-            jsonPath: "stores[0].storeInCharge",
-            localePrefix: {
-              moduleName: "firenoc",
-              masterName: "FireStations",
-            },
+            jsonPath: "materialTypes[0].description",
           }),
           active: {
             uiFramework: "custom-containers-local",
             moduleName: "egov-store-asset",
             componentPath: "CheckboxContainer",
-            jsonPath: "stores[0].active",
+            jsonPath: "materialTypes[0].active",
             gridDefination: {
               xs: 6,
             },
@@ -463,12 +489,17 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
             required: false,
   
             props: {
-              content: "MATERIAL_TYPE_ACTIVE",
-              jsonPath: "stores[0].active",
+              content: "STORE_MATERIAL_TYPE_ACTIVE",
+              jsonPath: "materialTypes[0].active",
               screenName: "create-material-type",
               checkBoxPath:
                 "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.active",
             },
+            beforeFieldChange: (action, state, dispatch) => {
+              if(!action.value){
+                   dispatch(handleField("create-material-type", action.componentJsonpath,"props.value", false));      
+              }
+            }
           },
           inActiveDate: {
             ...getDateField({
@@ -481,7 +512,7 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
                 labelKey: "STORE_DETAILS_IN_ACTIVE_DATE_PLACEHOLDER",
               },
               pattern: getPattern("Date"),
-              jsonPath: "stores[0].inActiveDate",
+              jsonPath: "materialTypes[0].inActiveDate",
               props: {
                 style: {
                   //visibility: 'hidden'  -----    this will hide the field but space will be allocated
@@ -499,13 +530,78 @@ import { TEXT,CHECKBOX,LABEL } from "../../../../ui-containers-local/DynamicTabl
   export const footer = getCommonApplyFooter({
     ...buttonController(),
   });
+  const getMDMSData = async (action, state, dispatch) => {
+
+    const tenantId = getTenantId();
   
+    let mdmsBody = {
+      MdmsCriteria: {
+         tenantId: commonConfig.tenantId,
+         moduleDetails: [
+          {
+            moduleName: "store-asset",
+            masterDetails: [
+              { name: "MaterialType", filter: "[?(@.active == true)]" }
+            ],
+  
+          },
+          {
+            moduleName: "tenant",
+            masterDetails: [{ name: "tenants" }],
+          },
+        ],
+      },
+    };
+  
+    try {
+      const payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      dispatch(prepareFinalObject("createScreenMdmsData", payload.MdmsRes));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getData = async (action, state, dispatch) => {
+    await getMDMSData(action, state, dispatch);
+  };
   const screenConfig = {
     uiFramework: "material-ui",
     name: "create-material-type",
     beforeInitScreen: (action, state, dispatch) => {
+      // fetching store name for populating dropdown
+      const queryObject = [{ key: "tenantId", value: getTenantId()  }];
+
+      getStoreSearchResults(queryObject, dispatch)
+      .then(response =>{ 
+        const storeName =    response.stores.map((store,index) => {
+            let name = store.name;
+            let code = store.code;
+            let department = store.department;
+            return{
+              id:index,
+                name,
+                code,
+                department
+            }
+        })
+
+        dispatch(prepareFinalObject("createScreenMdmsData.material-type.stores", storeName));
+      });
+      getData(action, state, dispatch);
+
+
+
       if (isEditMode) {
-     //   dispatch(prepareFinalObject("stores", [{ code: "hello" }]));
+     //   dispatch(prepareFinalObject("materialTypes", [{ code: "hello" }]));
+     dispatch(
+      prepareFinalObject("materialTypes[0].storeMapping", [{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"},{ active: false,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"},{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"}])
+    );
       }
   
       return action;

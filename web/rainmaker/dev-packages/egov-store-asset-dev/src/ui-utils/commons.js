@@ -14,9 +14,27 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const role_name = JSON.parse(getUserInfo()).roles[0].code
 
+export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = false) => {
+  let arrayToModify =[]
+    if(Array.isArray(prepareFinalObject)) {
+      arrayToModify = get(prepareFinalObject[0], arrayPath, []);
+    }
+  else {
+       arrayToModify = get(prepareFinalObject, arrayPath, []);
+  }
+ const finalArray = arrayToModify.filter((item,index) =>{
+       if(!item.hasOwnProperty("isDeleted")){
+         if(isActive){
+           item.active = item.active ? item.active : false
+         }
+         return item;
+       }
+ });
+ set(prepareFinalObject,arrayPath, finalArray);
+  return prepareFinalObject;
+  }
 
-
-export const getSearchResults = async queryObject => {
+export const getStoreSearchResults = async queryObject => {
 
   let data = {
     "tenantId": getOPMSTenantId(),
@@ -30,10 +48,10 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/pm-services/noc/_get",
+      "/store-asset-services/stores/_search",
       "",
-      [],
-      data
+      queryObject,
+      {}
     );
     //alert(JSON.stringify(response));
     return response;
@@ -49,6 +67,34 @@ export const getSearchResults = async queryObject => {
   }
 
 };
+
+// serach for material type
+export const getMaterialTypeSearchResults =async queryObject => {
+
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "store-asset-services/materialtypes/_search",
+      "",
+      queryObject,
+      {}
+    );
+    //alert(JSON.stringify(response));
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
 
 //view
 export const getSearchResultsView = async queryObject => {

@@ -11,7 +11,7 @@ import { searchForm } from "./searchStoreMasterResource/searchForm";
 import { searchResults } from "./searchStoreMasterResource/searchResults";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import commonConfig from '../../../../config/common';
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 //enableButton = hasButton && hasButton === "false" ? false : true;
@@ -28,44 +28,17 @@ const createStoreHandle = async (state, dispatch) => {
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let mdmsBody = {
+
     MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
+       tenantId: commonConfig.tenantId,
+       moduleDetails: [
         {
-          moduleName: "common-masters",
+          moduleName: "store-asset",
           masterDetails: [
             { name: "Department", filter: "[?(@.active == true)]" },
-            { name: "Designation", filter: "[?(@.active == true)]" },
+            { name: "Location", filter: "[?(@.active == true)]" },
           ],
-        },
-        {
-          moduleName: "egov-hrms",
-          masterDetails: [
-            {
-              name: "Degree",
-              filter: "[?(@.active == true)]",
-            },
-            {
-              name: "EmployeeStatus",
-              filter: "[?(@.active == true)]",
-            },
-            {
-              name: "EmployeeType",
-              filter: "[?(@.active == true)]",
-            },
-            {
-              name: "DeactivationReason",
-              filter: "[?(@.active == true)]",
-            },
-            {
-              name: "EmploymentTest",
-              filter: "[?(@.active == true)]",
-            },
-            {
-              name: "Specalization",
-              filter: "[?(@.active == true)]",
-            },
-          ],
+
         },
         {
           moduleName: "tenant",

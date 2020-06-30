@@ -58,7 +58,6 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     {},
     {
       RequestInfo,
-      ...ExtraPayload,
       ...customRequestInfo,
       ...requestBody
     },

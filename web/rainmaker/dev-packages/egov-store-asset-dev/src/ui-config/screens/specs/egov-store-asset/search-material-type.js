@@ -11,7 +11,8 @@ import {
   import { searchResults } from "./searchMaterialTypeResource/searchResults";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-  
+  import { getStoreSearchResults } from "../../../../ui-utils/commons";
+  import commonConfig from '../../../../config/common';
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
   //enableButton = hasButton && hasButton === "false" ? false : true;
@@ -26,46 +27,19 @@ import {
   };
   
   const getMDMSData = async (action, state, dispatch) => {
+
     const tenantId = getTenantId();
+  
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
+         tenantId: commonConfig.tenantId,
+         moduleDetails: [
           {
-            moduleName: "common-masters",
+            moduleName: "store-asset",
             masterDetails: [
-              { name: "Department", filter: "[?(@.active == true)]" },
-              { name: "Designation", filter: "[?(@.active == true)]" },
+              { name: "MaterialType", filter: "[?(@.active == true)]" }
             ],
-          },
-          {
-            moduleName: "egov-hrms",
-            masterDetails: [
-              {
-                name: "Degree",
-                filter: "[?(@.active == true)]",
-              },
-              {
-                name: "EmployeeStatus",
-                filter: "[?(@.active == true)]",
-              },
-              {
-                name: "EmployeeType",
-                filter: "[?(@.active == true)]",
-              },
-              {
-                name: "DeactivationReason",
-                filter: "[?(@.active == true)]",
-              },
-              {
-                name: "EmploymentTest",
-                filter: "[?(@.active == true)]",
-              },
-              {
-                name: "Specalization",
-                filter: "[?(@.active == true)]",
-              },
-            ],
+  
           },
           {
             moduleName: "tenant",
@@ -74,6 +48,7 @@ import {
         ],
       },
     };
+  
     try {
       const payload = await httpRequest(
         "post",
@@ -87,7 +62,7 @@ import {
       console.log(e);
     }
   };
-  
+
   const getData = async (action, state, dispatch) => {
     await getMDMSData(action, state, dispatch);
   };
@@ -96,6 +71,27 @@ import {
     uiFramework: "material-ui",
     name: "search-material-type",
     beforeInitScreen: (action, state, dispatch) => {
+            // fetching store name for populating dropdown
+            const queryObject = [{ key: "tenantId", value: getTenantId()  }];
+
+            getStoreSearchResults(queryObject, dispatch)
+            .then(response =>{ 
+              const storeName =    response.stores.map((store,index) => {
+                  let name = store.name;
+                  let code = store.code;
+                  let department = store.department;
+                  return{
+                    id:index,
+                      name,
+                      code,
+                      department
+                  }
+              })
+      
+              dispatch(prepareFinalObject("searchScreenMdmsData.material-type.stores", storeName));
+            });
+      
+            // fetching MDMS data
       getData(action, state, dispatch);
       return action;
     },
