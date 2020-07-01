@@ -1,7 +1,7 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {propertyDetails} from './propertyDetails';
+import {propertyDetails, transitSiteDetails} from './propertyDetails';
 import {rentHolderDetails, applicantDetails} from './rentHolderDetails';
 import {addressDetails, ownershipAddressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
@@ -127,3 +127,17 @@ export const formwizardOwnershipThirdStep = {
   },
   visible: false
 }
+
+
+export const formwizardDuplicateCopyFirstStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    transitSiteDetails,
+    applicantDetails,
+    ownershipAddressDetails
+  }
+};
