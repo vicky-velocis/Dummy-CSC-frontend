@@ -17,32 +17,32 @@ const header = getCommonHeader(
 
 const cardItems = [{
   label: {
-    labelKey: "Transfer of Transit site In case of Legal Heir (Ownership Transfer)",
-    labelName: "OWNER_SHIP_TRANSFER_HEADER"
+    labelName: "Transfer of Transit site In case of Legal Heir (Ownership Transfer)",
+    labelKey: "OWNER_SHIP_TRANSFER_HEADER"
   },
   icon: <TradeLicenseIcon />,
   route: `ownership-transfer`
   },
   {
     label: {
-      labelKey: "Duplicate copy of Allotment letter",
-      labelName: "DUPLICATE_COPY_HEADER"
+      labelName: "Duplicate copy of Allotment letter",
+      labelKey: "DUPLICATE_COPY_HEADER"
     },
     icon: <TradeLicenseIcon />,
     route: `duplicate-copy`
     },
     {
       label: {
-        labelKey: "Mortgage",
-        labelName: "MORTAGE_HEADER"
+        labelName: "Mortgage",
+        labelKey: "MORTAGE_HEADER"
       },
       icon: <TradeLicenseIcon />,
       route: `mortage`
       },
       {
         label: {
-          labelKey: "Account Statement Generation",
-          labelName: "ACCOUNT_STATEMENT_GENERATION_HEADER"
+          labelName: "Account Statement Generation",
+          labelKey: "ACCOUNT_STATEMENT_GENERATION_HEADER"
         },
         icon: <TradeLicenseIcon />,
         route: `account-statement`

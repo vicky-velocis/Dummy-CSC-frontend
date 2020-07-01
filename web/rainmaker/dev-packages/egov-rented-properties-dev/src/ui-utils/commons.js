@@ -70,8 +70,6 @@ export const getPaymentGateways = async () => {
   }
 }
 
-
-
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
     let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
@@ -128,7 +126,7 @@ export const getCount = async queryObject => {
 const setDocsForEditFlow = async (state, dispatch) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
-    "Licenses[0].tradeLicenseDetail.applicationDocuments",
+    "Properties[0].propertyDetails.applicationDocuments",
     []
   ) || []
   applicationDocuments = applicationDocuments.filter(item => !!item.active)
@@ -162,7 +160,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
       ];
     });
   dispatch(
-    prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+    prepareFinalObject("PropertiesTemp[0].uploadedDocsInRedux", uploadedDocuments)
   );
 };
 
@@ -188,105 +186,19 @@ export const updatePFOforSearchResults = async (
   action,
   state,
   dispatch,
-  queryValue,
-  queryValuePurpose,
-  tenantId
+  transitNumber
 ) => {
+
   let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId ? tenantId : getTenantId()
-    },
-    { key: "applicationNumber", value: queryValue }
+    { key: "transitNumber", value: transitNumber }
   ];
-  const isPreviouslyEdited = getQueryArg(window.location.href, "edited");
-  const payload = !isPreviouslyEdited
-    ? await getSearchResults(queryObject)
-    : {
-      Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
-    };
-  // const payload = await getSearchResults(queryObject)
-  // getQueryArg(window.location.href, "action") === "edit" &&
-  //   (await setDocsForEditFlow(state, dispatch));
 
-  const dob = get(
-    payload,
-    "Licenses[0].tradeLicenseDetail.owners[0].dob", 
-    null
-    );
-  
-  if (dob) {
-    const dobConverted = (convertEpochToDate(dob).replace(/\//g, "-")).split("-").reverse().join("-");
+  const payload = await getSearchResults(queryObject)
 
-    set(
-      payload,
-      "Licenses[0].tradeLicenseDetail.owners[0].age",
-      calculateAge(dobConverted)
-    )
-
-    const age = get(
-      payload,
-      "Licenses[0].tradeLicenseDetail.owners[0].age",
-      ""
-    )
-
-    // disable license period dropdown if age exceeds 50
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.detailsContainer.children.licensePeriod.props",
-        "disabled",
-        age > 50
-      )
-    );
+  if (payload && payload.Properties) {
+    dispatch(prepareFinalObject("Properties", payload.Properties));
   }
-
-  if (payload && payload.Licenses) {
-    const licenses = organizeLicenseData(payload.Licenses);
-    dispatch(prepareFinalObject("Licenses[0]", licenses[0]));
-  }
-
-  const isEditRenewal = getQueryArg(window.location.href, "action") === "EDITRENEWAL";
-  if (isEditRenewal) {
-    const currentFY = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].financialYear"
-    );
-    const nextYear = await getNextFinancialYearForRenewal(currentFY)
-    // const nextYear = generateNextFinancialYear(state);
-    dispatch(
-      prepareFinalObject("Licenses[0].financialYear", nextYear));
-  }
-
-  const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
-  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-  tradeTypeDdData &&
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        tradeTypeDdData
-      )
-    );
   setDocsForEditFlow(state, dispatch);
-  updateDropDowns(payload, action, state, dispatch, queryValue);
-  if (queryValuePurpose !== "cancel") {
-    set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
-    set(payload, getHygeneLevelJson(queryValuePurpose), "yes");
-    set(payload, getLocalityHarmedJson(queryValuePurpose), "No");
-  }
-  set(payload, getCheckBoxJsonpath(queryValuePurpose), true);
-
-  setApplicationNumberBox(state, dispatch);
-
-  createOwnersBackup(dispatch, payload);
 };
 
 export const getBoundaryData = async (

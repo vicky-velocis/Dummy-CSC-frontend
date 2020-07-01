@@ -1,8 +1,5 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
-import get from "lodash/get";
-import { areaField, districtField, stateField, countryField, pincodeField, landmarkField } from "./addressDetails";
 
 const rentHolderHeader = getCommonTitle(
     {
@@ -59,7 +56,7 @@ export const getRelationshipRadioButton = {
       sm: 12,
       md: 6
     },
-    jsonPath: "Properties[0].owners[0].ownerDetails.relationship",
+    jsonPath: "Properties[0].owners[0].ownerDetails.relation",
     props: {
       label: {
         name: "Relationship",
@@ -77,12 +74,31 @@ export const getRelationshipRadioButton = {
           value: "HUSBAND"
         }
       ],
-      jsonPath:"Properties[0].owners[0].ownerDetails.relationship",
+      jsonPath:"Properties[0].owners[0].ownerDetails.relation",
       required: true
     },
     required: true,
     type: "array"
   };
+
+  const ownerShipRelationShip = {
+      ...getRelationshipRadioButton,
+      props: {
+          ...getRelationshipRadioButton.props,
+          buttons: [
+            {
+              labelName: "Legal Heir",
+              labelKey: "COMMON_RELATION_LEGAL_HEIR",
+              value: "LEGAL_HEIR"
+            },
+            {
+              label: "Spouse",
+              labelKey: "COMMON_RELATION_SPOUSE",
+              value: "SPOUSE"
+            }
+          ],
+      }
+  }
 
 const fatherOrHusbandsNameField = {
     label: {
@@ -100,7 +116,7 @@ const fatherOrHusbandsNameField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusbandName"
+    jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
 
 const ownerNameField = {
@@ -169,7 +185,7 @@ const dobFieldConfig = {
 
 const dobField = {
     ...dobFieldConfig,
-    jsonPath: "Properties[0].owners[0].dateOfBirth",
+    jsonPath: "Properties[0].owners[0].ownerDetails.dateOfBirth",
 }
 
 const emailConfig = {
@@ -185,16 +201,16 @@ const emailConfig = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
-    required: true,
+    // minLength: 1,
+    // maxLength: 100,
+    // required: false,
     pattern: getPattern("Email"),
   }
 
 const emailField = {
     ...emailConfig,
-    jsonPath: "Properties[0].owners[0].ownerDetails.email"
-
+    jsonPath: "Properties[0].owners[0].ownerDetails.email",
+    required: false
 }
 
 const aadharFieldConfig = {
@@ -246,19 +262,10 @@ const getRentHolderDetails = () => {
         detailsContainer: getCommonContainer({
             ownerName: getTextField(ownerNameField),
             phone: getTextField(phoneNumberField),
-            dob: getDateField(dobField),
-            gender: getGenderLabel,
             fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
             relationShip: getRelationshipRadioButton,
             email: getTextField(emailField),
-            aadhar: getTextField(aadharField),
-            colony: getSelectField(colonyField),
-            area: getTextField({...areaField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.area"}),
-            district: getTextField({...districtField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.district"}),
-            state: getTextField({...stateField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.state"}),
-            country: getTextField({...countryField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.country"}),
-            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.pincode"}),
-            landmark: getTextField({...landmarkField, jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.landmark"})
+            aadhar: getTextField(aadharField)
         })
     }
 }
@@ -279,19 +286,15 @@ const applicantNameField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "OwnerShipLicenses[0].owners[0].name"
+    jsonPath: "Properties[0].owners[0].ownerDetails.name"
 }
 
 
 const applicantphoneNumberField = {
     ...phoneNumberConfig,
-    jsonPath: "OwnerShipLicenses[0].owners[0].phone"
+    jsonPath: "Properties[0].owners[0].ownerDetails.phone"
 }
 
-const applicantDobField = {
-    ...dobFieldConfig,
-    jsonPath: "OwnerShipLicenses[0].owners[0].phone"
-}
 
 export const  applicantGenderLabel = {
     uiFramework: "custom-containers",
@@ -328,12 +331,13 @@ export const  applicantGenderLabel = {
 
 const applicantEmailField = {
     ...emailConfig,
-    jsonPath: "OwnerShipLicenses[0].owners[0].email"
+    jsonPath: "Properties[0].owners[0].ownerDetails.email",
+    required: false
 }
 
 const applicantAadharField = {
     ...aadharFieldConfig,
-     jsonPath: "OwnerShipLicenses[0].owners[0].aadhaarNumber"
+     jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber"
 }
 
 const applicantAddressField = {
@@ -360,12 +364,10 @@ const getApplicantDetails = () => {
         header: rentHolderHeader,
         detailsContainer: getCommonContainer({
             ownerName: getTextField(applicantNameField),
+            relationShip: ownerShipRelationShip,
             phone: getTextField(applicantphoneNumberField),
-            dob: getDateField(applicantDobField),
-            gender: applicantGenderLabel,
             email: getTextField(applicantEmailField),
             aadhar: getTextField(applicantAadharField),
-            aadhar: getTextField(applicantAddressField)
         })
     }
 }

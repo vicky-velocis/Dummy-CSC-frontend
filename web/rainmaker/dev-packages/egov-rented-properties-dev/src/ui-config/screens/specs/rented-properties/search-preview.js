@@ -64,7 +64,7 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
       payload,
       "Properties[0].propertyDetails.applicationDocuments",
       "PropertiesTemp[0].reviewDocData",
-      dispatch,'TL'
+      dispatch,'RP'
     );
   }
 }

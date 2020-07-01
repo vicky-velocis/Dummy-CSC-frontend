@@ -87,7 +87,7 @@ export const loadApplicationData = async (applicationNumber, tenant, state, disp
       response,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
       "LicensesTemp[0].reviewDocData",
-      dispatch,'TL'
+      dispatch,'RP'
     );
 
     data.applicationNumber = nullToNa(

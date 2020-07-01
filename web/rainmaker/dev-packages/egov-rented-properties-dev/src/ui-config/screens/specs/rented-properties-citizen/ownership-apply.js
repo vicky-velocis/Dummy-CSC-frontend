@@ -1,7 +1,7 @@
 import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardOwnershipFirstStep, formwizardOwnershipSecondStep } from '../rented-properties/applyResource/applyConfig';
+import {stepper, formwizardOwnershipFirstStep, formwizardOwnershipSecondStep, formwizardOwnershipThirdStep } from '../rented-properties/applyResource/applyConfig';
 import {footer} from './footer';
 
 const header = getCommonHeader({
@@ -37,8 +37,9 @@ const applyLicense = {
                     }
                 },
                 stepper,
-                formwizardOwnershipFirstStep,
-                formwizardOwnershipSecondStep,
+                formwizardFirstStep: formwizardOwnershipFirstStep,
+                formwizardSecondStep: formwizardOwnershipSecondStep,
+                formwizardThirdStep: formwizardOwnershipThirdStep,
                 footer
             }
         }

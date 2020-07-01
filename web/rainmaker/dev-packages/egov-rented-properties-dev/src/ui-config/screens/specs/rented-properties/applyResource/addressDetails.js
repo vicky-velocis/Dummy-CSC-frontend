@@ -1,7 +1,4 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTodaysDateInYMD } from "../../utils";
-import get from "lodash/get";
 import { transitNumberConfig } from '../applyResource/propertyDetails'
 
 const addressHeader = getCommonTitle(
@@ -130,54 +127,34 @@ const getAddressDetails = () => {
         header: addressHeader,
         detailsContainer: getCommonContainer({
             area: getTextField({...areaField, jsonPath: "Properties[0].propertyDetails.address.area"}),
-            district: getTextField({...districtField, jsonPath: "Properties[0].propertyDetails.address.district"}),
-            state: getTextField({...stateField, jsonPath: "Properties[0].propertyDetails.address.state"}),
-            country: getTextField({...countryField, jsonPath: "Properties[0].propertyDetails.address.country"}),
             pincode: getTextField({...pincodeField, jsonPath: "Properties[0].propertyDetails.address.pincode"}),
-            landmark: getTextField({...landmarkField, jsonPath: "Properties[0].propertyDetails.address.landmark",})
         })
     }
 }
 
 const areaNameField = {
-    label: {
-        labelName: "Area Name",
-        labelKey: "RP_AREA_NAME_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Area Name",
-        labelKey: "RP_AREA_NAME_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
+    ...areaField,
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "OwnerShipLicenses[0].propertyDetails.address.areaName"
+    jsonPath: "Properties[0].propertyDetails.address.areaName"
 }
 
 const ownershipTransitNumberField = {
     ...transitNumberConfig,
-    jsonPath: "OwnerShipLicenses[0].propertyDetails.address.ownershipTransitNumber"
+    jsonPath: "Properties[0].propertyDetails.address.transitNumber"
 }
 
 const getOwnershipAddressDetails = () => {
     return {
         header: addressHeader,
         detailsContainer: getCommonContainer({
-            areaName: getTextField(areaNameField),
             ownershipTransitNumber: getTextField(ownershipTransitNumberField),
+            areaName: getTextField(areaNameField),
+            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].propertyDetails.address.pincode"}),
         })
     }
 }
-
-
-
-
- 
-
 
 export const addressDetails = getCommonCard(getAddressDetails())
 export const ownershipAddressDetails = getCommonCard(getOwnershipAddressDetails())

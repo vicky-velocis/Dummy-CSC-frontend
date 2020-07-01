@@ -7,7 +7,7 @@ import {addressDetails, ownershipAddressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
-import {rentedReviewDetails} from './reviewDetails'
+import {rentedReviewDetails, ownerShipReviewDetails} from './reviewDetails'
 
 
 const documentCardConfig = {
@@ -95,7 +95,7 @@ export const formwizardOwnershipFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
-    id: "apply_fresh_licence"
+    id: "apply_form1"
   },
   children: {
     applicantDetails,
@@ -115,3 +115,15 @@ export const formwizardOwnershipSecondStep = {
   },
   visible: false
 };
+
+export const formwizardOwnershipThirdStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    ownerShipReviewDetails
+  },
+  visible: false
+}

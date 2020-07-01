@@ -3,8 +3,9 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
+const tenantId = getTenantId();
 
 const header = getCommonHeader(
     {
