@@ -49,7 +49,7 @@ import {
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) => {
-                changeStep(state, dispatch, "", 1);
+                changeStep(state, dispatch, "apply", "", 1);
               }
             }
           },

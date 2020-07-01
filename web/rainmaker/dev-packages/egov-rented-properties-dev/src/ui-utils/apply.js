@@ -111,13 +111,10 @@ import {
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
-              get(state.screenConfiguration.preparedFinalObject, "OwnerShipLicenses", [])
+              get(state.screenConfiguration.preparedFinalObject, "Properties", [])
             )
           );
-
         console.log(queryObject);
-        
-      
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

@@ -12,6 +12,6 @@ export const documentList = {
         labelKey: "TL_BUTTON_DOWNLOAD_FILE"
       },
       inputProps : [],
-      documentTypePrefix: "TL_",
+      documentTypePrefix: "RP_",
     }
   };

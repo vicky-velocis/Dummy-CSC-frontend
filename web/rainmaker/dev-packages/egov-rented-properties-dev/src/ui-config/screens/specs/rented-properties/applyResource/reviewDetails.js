@@ -1,5 +1,6 @@
 import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getReviewProperty, getReviewOwner, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./review-property";
+import {getReviewApplicantDetails, getreviewPropertyAddressDetails} from './review-applications'
 import { getReviewDocuments } from "./review-documents";
 
 const reviewPropertyDetails = getReviewProperty();
@@ -8,16 +9,26 @@ const reviewAddressDetails = getReviewAddress();
 const reviewRentDetails = getReviewRentDetails();
 const reviewPaymentDetails = getReviewPaymentDetails();
 const reviewDocuments = getReviewDocuments();
+const reviewApplicantDetails = getReviewApplicantDetails();
+const reviewPropertyAddressDetails = getreviewPropertyAddressDetails()
+
+const header = getCommonTitle({
+  labelName: "Please review your Application and Submit",
+  labelKey: "TL_SUMMARY_HEADER"
+})
 
 export const rentedReviewDetails = getCommonCard({
-    header: getCommonTitle({
-        labelName: "Please review your Application and Submit",
-        labelKey: "TL_SUMMARY_HEADER"
-      }),
+      header,
       reviewPropertyDetails,
       reviewOwnerDetails,
       reviewAddressDetails,
       reviewRentDetails,
       reviewPaymentDetails,
       reviewDocuments
+})
+
+export const ownerShipReviewDetails = getCommonCard({
+    header,
+    reviewApplicantDetails,
+    reviewPropertyAddressDetails
 })
