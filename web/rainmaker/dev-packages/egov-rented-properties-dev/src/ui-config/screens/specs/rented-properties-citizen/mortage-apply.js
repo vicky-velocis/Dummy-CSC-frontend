@@ -2,6 +2,9 @@ import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
+  import {stepper, formwizardMortgageFirstStep } from '../rented-properties/applyResource/applyConfig';
+
+
 const header = getCommonHeader({
     labelName: "Apply Mortage License",
     labelKey: "RP_COMMON_MORTAGE_LICENSE_APPLY"
@@ -33,7 +36,9 @@ const applyLicense = {
                             ...header
                           }
                     }
-                }
+                },
+                stepper,
+                formwizardMortgageFirstStep
             }
         }
     }
