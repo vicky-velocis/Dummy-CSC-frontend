@@ -249,8 +249,15 @@ class AllComplaints extends Component {
 
   onSearch = () => {
     const { complaintNo, mobileNo } = this.state;
-    const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
+    const { fetchComplaints, toggleSnackbarAndSetText,role } = this.props;
     let queryObj = [];
+
+    if(role === "eo"){
+      queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending" });
+    }
+    else if (role === "employee"){
+      queryObj.push({ key: "status", value: "open,reassignrequested" });
+    }
     if (complaintNo) {
       queryObj.push({ key: "serviceRequestId", value: complaintNo });
     }
