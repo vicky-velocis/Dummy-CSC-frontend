@@ -15,6 +15,10 @@ import {
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getCommonApplyFooter, validateFields } from "../utils";
   import {materialTypeStoreMapView} from './viewResource/materialTypeStoreMap'
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { getMaterialTypeSearchResults } from "../../../../ui-utils/commons";
+const materialTypeCode = getQueryArg(window.location.href, "code");
+const tenantId = getQueryArg(window.location.href, "tenantId");
   const headerrow = getCommonContainer({
     header: getCommonHeader({ labelKey: "STORE_COMMON_MATERIAL_TYPE" }),
     connectionNumber: {
@@ -77,49 +81,23 @@ import {
   });
   export const renderService = () => {
     return getCommonContainer({
-        materialTypeCode: getLabelWithValue(
-        { labelKey: "MATERIAL_TYPE_CODE" },
-        { jsonPath: "WaterConnection[0].waterSubSource" }
+        code: getLabelWithValue(
+        { labelKey: "STORE_MATERIAL_TYPE_CODE" },
+        { jsonPath: "materialTypes[0].code" }
       ),
       materialTypeName: getLabelWithValue(
-        { labelKey: "MATERIAL_TYPE_NAME" },
-        { jsonPath: "WaterConnection[0].waterSubSource" }
+        { labelKey: "STORE_MATERIAL_TYPE_NAME" },
+        { jsonPath: "materialTypes[0].name" }
       ),
-      materialTypeDescription: getLabelWithValue(
-        { labelKey: "MATERIAL_TYPE_DESCRIPTION" },
-        { jsonPath: "WaterConnection[0].waterSubSource" }
-      ),
-      isParentType: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-store-asset",
-        componentPath: "CheckboxContainer",
-        jsonPath: "stores[0].isCentralStore",
-        gridDefination: {
-          xs: 12,
-          sm:6,
-        },
-        isFieldValid: true,
-        required: false,
-  
-        props: {
-          content: "MATERIAL_TYPE_PARENT_TYPE",
-          jsonPath: "stores[0].isCentralStore",
-          id: "central-store",
-          disabled: true,
-          screenName: "create-material-type",
-          checkBoxPath:
-            "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.isParentType",
-        },
-      },
-      parentMaterialTypeName: getLabelWithValue(
-        { labelKey: "MATERIAL_TYPE_PARENT_TYPE_NAME" },
-        { jsonPath: "WaterConnection[0].waterSubSource" }
+      description: getLabelWithValue(
+        { labelKey: "STORE_MATERIAL_TYPE_DESCRIPTION" },
+        { jsonPath: "materialTypes[0].description" }
       ),
       active: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-store-asset",
         componentPath: "CheckboxContainer",
-        jsonPath: "stores[0].isCentralStore",
+        jsonPath: "materialTypes[0].active",
         gridDefination: {
           xs: 12,
           sm:6
@@ -129,10 +107,9 @@ import {
   
         props: {
           content: "MATERIAL_TYPE_ACTIVE",
-          jsonPath: "stores[0].isCentralStore",
-          id: "central-store",
+          jsonPath: "materialTypes[0].active",
           disabled: true,
-          screenName: "create-material-type",
+          screenName: "view-material-type",
           checkBoxPath:
           "components.div.children.materialTypeStoreMapView.children.cardContent.children.viewOne.props.items[0].item0.children.cardContent.children.active",
        },
@@ -184,14 +161,13 @@ import {
     uiFramework: "material-ui",
     name: "view-material-type",
     beforeInitScreen: (action, state, dispatch) => {
-      //  beforeInitFn(action, state, dispatch, connectionNumber);
-      //dispatch(prepareFinalObject("stores", [{ isCentralStore: false }]));
-      dispatch(
-        prepareFinalObject("WaterConnection", [{ waterSubSource: "hello" }])
-      );
-      dispatch(
-        prepareFinalObject("Employee[0].jurisdictions", [{ active: true,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"},{ active: false,stckInHand:"yes", departmentName:"ABC" ,storeName:"xyz"}])
-      );
+     
+      const queryObject = [{ key: "code", value: materialTypeCode  },{ key: "tenantId", value: tenantId  }];
+
+      getMaterialTypeSearchResults(queryObject, dispatch)
+      .then(response =>{
+        dispatch(prepareFinalObject("materialTypes", [...response.materialTypes]));
+      });
       return action;
     },
     components: {

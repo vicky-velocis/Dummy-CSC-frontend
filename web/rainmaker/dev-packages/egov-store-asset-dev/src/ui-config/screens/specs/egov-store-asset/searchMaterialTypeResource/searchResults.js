@@ -2,7 +2,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels,
 } from "egov-ui-framework/ui-utils/commons";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils"; 
 export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
@@ -24,6 +24,12 @@ export const getTextToLocalMapping = (label) => {
         "STORE_COMMON_TABLE_COL_ACTIVE",
         localisationLabels
       );
+      case "Code":
+        return getLocaleLabels(
+          "Code",
+          "STORE_MATERIAL_TYPE_CODE",
+          localisationLabels
+        );
     case "Search Results for Material Type":
       return getLocaleLabels(
         "Search Results for Material Type",
@@ -42,6 +48,12 @@ export const searchResults = {
       getTextToLocalMapping("Material Type Name"),
       getTextToLocalMapping("Material Type Description"),
       getTextToLocalMapping("Active"),
+      {
+        name: "code",
+        options: {
+          display: false
+        }
+      }
     ],
     title: getTextToLocalMapping("Search Results for Material Type"),
     options: {
@@ -59,7 +71,7 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view?employeeID=${rowData[0]}&tenantId=${rowData[5]}`;
+  window.location.href = `view-material-type?tenantId=${getTenantId()}&code=${rowData[3]}`;
 };
 
 

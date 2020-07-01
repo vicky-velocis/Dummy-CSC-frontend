@@ -73,7 +73,7 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "searchScreenMdmsData.material-type.stores",
+      sourceJsonPath: "searchScreenMdmsData1.material-type.stores",
       props: {
         optionValue: "code",
         optionLabel: "name",

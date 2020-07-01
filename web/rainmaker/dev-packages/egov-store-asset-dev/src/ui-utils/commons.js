@@ -25,19 +25,22 @@ export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = fal
  const finalArray = arrayToModify.filter((item,index) =>{
        if(!item.hasOwnProperty("isDeleted")){
          if(isActive){
-           item.active = item.active ? item.active : false
+           item.active = item.active ? item.active : true
          }
          return item;
        }
  });
- set(prepareFinalObject,arrayPath, finalArray);
+ if(Array.isArray(prepareFinalObject))
+    set(prepareFinalObject[0],arrayPath, finalArray);
+  else
+  set(prepareFinalObject,arrayPath, finalArray);
   return prepareFinalObject;
   }
 
 export const getStoreSearchResults = async queryObject => {
 
   let data = {
-    "tenantId": getOPMSTenantId(),
+    "tenantId": getOPMSTenantId(), 
     "applicationType": getapplicationType(),
     "applicationStatus": "INITIATED",
     "dataPayload": {

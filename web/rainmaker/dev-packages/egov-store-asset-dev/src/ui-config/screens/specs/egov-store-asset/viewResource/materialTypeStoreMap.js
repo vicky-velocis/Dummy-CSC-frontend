@@ -20,54 +20,30 @@ import {
               labelName: "Store Name",
               labelKey: "STORE_DETAILS_STORE_NAME"
             },
-            { jsonPath: "Employee[0].jurisdictions[0].storeName",
-            localePrefix :{
-              moduleName : "EGOV_LOCATION",
-              masterName : "TENANTBOUNDARY"
-            }, }
+            { jsonPath: "materialTypes[0].storeMapping[0].store.code",
+            }
           ),
           departmentName: getLabelWithValue(
             {
               labelName: "Department Name",
               labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
             },
-            { jsonPath: "Employee[0].jurisdictions[0].departmentName",
+            { jsonPath: "materialTypes[0].storeMapping[0].department",
             }
           ),
           stckInHand: getLabelWithValue(
             { labelName: "Stock-In-Hand Code", labelKey: "STORE_DETAILS_STORE_STCK_HAND" },
             {
-              jsonPath: "Employee[0].jurisdictions[0].stckInHand",
+              jsonPath: "materialTypes[0].storeMapping[0].chartofAccount.glcode",
             }
           ),
         }),
-        active: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-store-asset",
-            componentPath: "CheckboxContainer",
-            jsonPath: "Employee[0].jurisdictions[0].active",
-            gridDefination: {
-              xs: 12,
-              sm:6
-            },
-            isFieldValid: true,
-            required: false,
-      
-            props: {
-              content: "MATERIAL_TYPE_ACTIVE",
-              jsonPath: "Employee[0].jurisdictions[0].active",
-              disabled: true,
-              screenName: "view-material-type",
-              checkBoxPath:
-              "components.div.children.materialTypeStoreMapView.children.cardContent.children.viewOne.props.items[0].item0.children.cardContent.children.active",
-            },
-          },
       }),
   
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "Employee[0].jurisdictions",
+      sourceJsonPath: "materialTypes[0].storeMapping",
       prefixSourceJsonPath:
         "children.cardContent.children.materialTypeMapCardContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

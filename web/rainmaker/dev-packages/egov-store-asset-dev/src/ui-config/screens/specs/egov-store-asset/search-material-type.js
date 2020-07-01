@@ -88,7 +88,7 @@ import {
                   }
               })
       
-              dispatch(prepareFinalObject("searchScreenMdmsData.material-type.stores", storeName));
+              dispatch(prepareFinalObject("searchScreenMdmsData1.material-type.stores", storeName));
             });
       
             // fetching MDMS data

@@ -102,6 +102,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Material Type Name")]: get(item, "name", "-") || "-",
           [getTextToLocalMapping("Material Type Description")]: get(item, "description", "-") || "-",
           [getTextToLocalMapping("Active")]: get(item, "active",false) ? "Yes": "No",
+          ["code"]: get(item, "code", "-")
         };
       });
 
