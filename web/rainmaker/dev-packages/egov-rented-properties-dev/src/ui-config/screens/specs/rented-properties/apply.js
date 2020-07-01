@@ -15,7 +15,7 @@ import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 
 const propertyId = getQueryArg(window.location.href, "propertyId")
 
-const getMdmsData = async (dispatch, body) => {
+export const getMdmsData = async (dispatch, body) => {
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,

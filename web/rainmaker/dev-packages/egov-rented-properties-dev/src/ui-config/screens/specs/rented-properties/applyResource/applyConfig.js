@@ -37,7 +37,12 @@ export const rentedDocumentsDetails = getCommonCard({
 
 export const ownershipTransferDocumentsDetails = getCommonCard({
   ...documentCardConfig,
-  documentList
+  documentList: {
+    ...documentList,
+    props: {...documentList.props,
+      documentTypePrefix: "",
+    }
+  }
 });
 
 

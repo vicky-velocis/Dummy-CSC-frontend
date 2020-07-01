@@ -14,12 +14,16 @@ const callBackForNext = async(state, dispatch) => {
     let hasFieldToaster = true;
     if(activeStep === DETAILS_STEP) {
         const isOwnerDetailsValid = validateFields(
-          "components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer.children",            state,
-            dispatch
+          "components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer.children",            
+          state,
+          dispatch,
+          "ownership-apply"
         )
         const isAddressDetailsValid = validateFields(
-          "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children",            state,
-            dispatch
+          "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children",            
+          state,
+          dispatch,
+          "ownership-apply"
         )
         if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
                 applyOwnershipTransfer(state, dispatch, activeStep)
