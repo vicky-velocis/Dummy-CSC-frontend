@@ -39,7 +39,14 @@ const cardItems = [{
       icon: <TradeLicenseIcon />,
       route: `mortage`
       },
-     
+      {
+        label: {
+          labelKey: "Account Statement Generation",
+          labelName: "ACCOUNT_STATEMENT_GENERATION_HEADER"
+        },
+        icon: <TradeLicenseIcon />,
+        route: `account-statement`
+        }
 ]
 
 const rentedPropertyHome = {
