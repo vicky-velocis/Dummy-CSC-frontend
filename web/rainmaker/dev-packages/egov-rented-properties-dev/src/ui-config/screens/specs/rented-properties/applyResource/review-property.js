@@ -9,34 +9,14 @@ import {
 import { convertEpochToDate, } from "../../utils";
 import { changeStep } from "./footer";
 
-const areaLabel = {
+export const areaLabel = {
     labelName: "Area",
     labelKey: "RP_AREA_LABEL"
 }
 
-const districtLabel = {
-    labelName: "District",
-    labelKey: "RP_DISTRICT_LABEL"
-}
-
-const stateLabel = {
-    labelName: "State",
-    labelKey: "RP_STATE_LABEL"
-}
-
-const countryLabel = {
-    labelName: "Country",
-    labelKey: "RP_COUNTRY_LABEL"
-}
-
-const pincodeLabel = {
+export const pincodeLabel = {
     labelName: "Pincode",
     labelKey: "RP_PINCODE_LABEL"
-}
-
-const landmarkLabel = {
-    labelName: "Landmark",
-    labelKey: "RP_LANDMARK_LABEL"
 }
 
 const colonyLabel = {
@@ -44,14 +24,54 @@ const colonyLabel = {
     labelKey: "RP_COLONY_LABEL"
 }
 
+export const editSection = {
+    componentPath: "Button",
+    props: {
+        color: "primary"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 2,
+        align: "right"
+    },
+    children: {
+        editIcon: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+            props: {
+                iconName: "edit"
+            }
+        },
+        buttonLabel: getLabel({
+            labelName: "Edit",
+            labelKey: "TL_SUMMARY_EDIT"
+        })
+    }
+}
+
+const masterEntryEditSection = (isEditable) => ({
+    ...editSection,
+    visible: isEditable,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            changeStep(state, dispatch, "apply", "", 0);
+        }
+    }
+})
+
+export const headerDiv = {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+        style: { marginBottom: "10px" }
+    }
+}
+
 export const getReviewProperty = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            props: {
-                style: { marginBottom: "10px" }
-            },
+            ...headerDiv,
             children: {
                 header: {
                     gridDefination: {
@@ -63,37 +83,7 @@ export const getReviewProperty = (isEditable = true) => {
                         labelKey: "RP_PROPERTY_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                        callBack: (state, dispatch) => {
-                            changeStep(state, dispatch, "", 0);
-                        }
-                    }
-                }
+                editSection: masterEntryEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -147,11 +137,7 @@ export const getReviewProperty = (isEditable = true) => {
 export const getReviewOwner = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            props: {
-                style: { marginBottom: "10px" }
-            },
+            ...headerDiv,
             children: {
                 header: {
                     gridDefination: {
@@ -163,37 +149,7 @@ export const getReviewOwner = (isEditable = true) => {
                         labelKey: "TL_OWNER_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                        callBack: (state, dispatch) => {
-                            changeStep(state, dispatch, "", 0);
-                        }
-                    }
-                }
+                editSection: masterEntryEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -211,19 +167,21 @@ export const getReviewOwner = (isEditable = true) => {
                     },
                     { jsonPath: "Properties[0].owners[0].ownerDetails.phone" }
                 ),
-                ownerDob: getLabelWithValue(
+                ownerFatherOrHusband: getLabelWithValue(
                     {
-                        labelName: "Date of Birth",
-                        labelKey: "RP_DATE_BIRTH_LABEL"
+                        labelName: "Father/ Husband's Name",
+                        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.dateOfBirth",callBack: convertEpochToDate }
+                    {jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"}
                 ),
-                ownerGender: getLabelWithValue(
+                ownerRelationShip: getLabelWithValue(
                     {
-                        labelName: "Gender",
-                        labelKey: "TL_COMMON_GENDER_LABEL"
+                        labelName: "Relationship",
+                        labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.gender" }
+                    {
+                        jsonPath:"Properties[0].owners[0].ownerDetails.relation"
+                    }
                 ),
                 ownerEmail: getLabelWithValue(
                     {
@@ -238,36 +196,7 @@ export const getReviewOwner = (isEditable = true) => {
                         labelKey: "RP_AADHAR_LABEL"
                     },
                     { jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber" }
-                ),
-                ownerColony: getLabelWithValue(
-                    colonyLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.colony"}
-                ),
-                ownerArea: getLabelWithValue(
-                    areaLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.area"}
-                ),
-                ownerDistrict: getLabelWithValue(
-                    districtLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.district"}
-                ),
-                ownerState: getLabelWithValue(
-                    stateLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.state"}
-                ),
-                ownerCountry: getLabelWithValue(
-                    countryLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.country"}
-                ),
-                ownerPincode: getLabelWithValue(
-                    pincodeLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.pincode"}
-                ),
-                ownerLandmark: getLabelWithValue(
-                    landmarkLabel,
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.correspondenceAddress.landmark"}
-                ),
-                
+                )
         })
     })
 }
@@ -275,11 +204,7 @@ export const getReviewOwner = (isEditable = true) => {
 export const getReviewAddress = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            props: {
-                style: { marginBottom: "10px" }
-            },
+            ...headerDiv,
             children: {
                 header: {
                     gridDefination: {
@@ -291,37 +216,7 @@ export const getReviewAddress = (isEditable = true) => {
                         labelKey: "RP_ADDRESS_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                        callBack: (state, dispatch) => {
-                            changeStep(state, dispatch, "", 0);
-                        }
-                    }
-                }
+                editSection: masterEntryEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -329,25 +224,9 @@ export const getReviewAddress = (isEditable = true) => {
                     areaLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.area" }
                 ),
-                district: getLabelWithValue(
-                    districtLabel,
-                    { jsonPath: "Properties[0].propertyDetails.address.district" }
-                ),
-                state: getLabelWithValue(
-                    stateLabel,
-                    { jsonPath: "Properties[0].propertyDetails.address.state" }
-                ),
-                country: getLabelWithValue(
-                    countryLabel,
-                    { jsonPath: "Properties[0].propertyDetails.address.country" }
-                ),
                 pincode: getLabelWithValue(
                     pincodeLabel,
                     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
-                ),
-                landmark: getLabelWithValue(
-                    landmarkLabel,
-                    { jsonPath: "Properties[0].propertyDetails.address.landmark" }
                 ),
         })
     })
@@ -356,11 +235,7 @@ export const getReviewAddress = (isEditable = true) => {
 export const getReviewRentDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            props: {
-                style: { marginBottom: "10px" }
-            },
+            ...headerDiv,
             children: {
                 header: {
                     gridDefination: {
@@ -372,37 +247,7 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelKey: "RP_RENT_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                        callBack: (state, dispatch) => {
-                            changeStep(state, dispatch, "", 0);
-                        }
-                    }
-                }
+                editSection: masterEntryEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -434,11 +279,7 @@ export const getReviewRentDetails = (isEditable = true) => {
 export const getReviewPaymentDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
-            uiFramework: "custom-atoms",
-            componentPath: "Container",
-            props: {
-                style: { marginBottom: "10px" }
-            },
+            ...headerDiv,
             children: {
                 header: {
                     gridDefination: {
@@ -450,37 +291,7 @@ export const getReviewPaymentDetails = (isEditable = true) => {
                         labelKey: "RP_PAYMENT_DETAILS_HEADER"
                     })
                 },
-                editSection: {
-                    componentPath: "Button",
-                    props: {
-                        color: "primary"
-                    },
-                    visible: isEditable,
-                    gridDefination: {
-                        xs: 12,
-                        sm: 2,
-                        align: "right"
-                    },
-                    children: {
-                        editIcon: {
-                            uiFramework: "custom-atoms",
-                            componentPath: "Icon",
-                            props: {
-                                iconName: "edit"
-                            }
-                        },
-                        buttonLabel: getLabel({
-                            labelName: "Edit",
-                            labelKey: "TL_SUMMARY_EDIT"
-                        })
-                    },
-                    onClickDefination: {
-                        action: "condition",
-                        callBack: (state, dispatch) => {
-                            changeStep(state, dispatch, "", 0);
-                        }
-                    }
-                }
+                editSection: masterEntryEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({

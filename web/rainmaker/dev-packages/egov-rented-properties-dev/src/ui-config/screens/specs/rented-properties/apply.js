@@ -11,6 +11,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
+import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 
 const propertyId = getQueryArg(window.location.href, "propertyId")
 
@@ -125,7 +126,7 @@ const getData = async(action, state, dispatch) => {
   const transitNumber = getQueryArg(window.location.href, "transitNumber");
   getColonyTypes(action, state, dispatch);
   if(transitNumber) {
-    await searchResults(action, state, dispatch, transitNumber)
+    await updatePFOforSearchResults(action, state, dispatch, transitNumber)
   } else {
     dispatch(
       prepareFinalObject(

@@ -2,16 +2,16 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer } from "../../../../../ui-utils/apply";
+import { applyRentedProperties } from "../../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 
-const DEFAULT_STEP = -1;
-const DETAILS_STEP = 0;
-const DOCUMENT_UPLOAD_STEP = 1;
-const SUMMARY_STEP = 2;
+export const DEFAULT_STEP = -1;
+export const DETAILS_STEP = 0;
+export const DOCUMENT_UPLOAD_STEP = 1;
+export const SUMMARY_STEP = 2;
 
-const moveToSuccess = (rentedData, dispatch) => {
+export const moveToSuccess = (rentedData, dispatch) => {
   const id = get(rentedData, "id");
   const transitNumber = get(rentedData, "transitNumber")
   const tenantId = get(rentedData, "tenantId");
@@ -61,7 +61,7 @@ const callBackForNext = async(state, dispatch) => {
         )
         if(!!isPropertyDetailsValid && !!isRentHolderValid && !!isRentValid && !!isPaymentValid && !!isAddressValid
             ) {
-              applyOwnershipTransfer(state, dispatch, activeStep)
+              applyRentedProperties(state, dispatch, activeStep)
         } else {
             isFormValid = false;
         }
@@ -110,7 +110,7 @@ const callBackForNext = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Properties[0]"
     );
-    isFormValid = await applyOwnershipTransfer(state, dispatch);
+    isFormValid = await applyRentedProperties(state, dispatch);
       if (isFormValid) {
           moveToSuccess(rentedData, dispatch);
       }
@@ -118,7 +118,8 @@ const callBackForNext = async(state, dispatch) => {
 
     if(activeStep !== SUMMARY_STEP) {
         if (isFormValid) {
-            changeStep(state, dispatch);
+          
+            changeStep(state, dispatch, "apply");
         } else if (hasFieldToaster) {
             let errorMessage = {
                 labelName:
@@ -148,11 +149,12 @@ const callBackForNext = async(state, dispatch) => {
 export const changeStep = (
     state,
     dispatch,
+    screenName,
     mode = "next",
     defaultActiveStep = -1
   ) => {
     let activeStep = get(
-        state.screenConfiguration.screenConfig["apply"],
+        state.screenConfiguration.screenConfig[screenName],
         "components.div.children.stepper.props.activeStep",
         0
     );
@@ -197,15 +199,15 @@ export const changeStep = (
             value: isSubmitButtonVisible
         }
     ];
-    dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
-    renderSteps(activeStep, dispatch);
+    dispatchMultipleFieldChangeAction(screenName, actionDefination, dispatch);
+    renderSteps(activeStep, dispatch, screenName);
   };
   
-  export const renderSteps = (activeStep, dispatch) => {
+  export const renderSteps = (activeStep, dispatch, screenName) => {
     switch (activeStep) {
         case DETAILS_STEP:
             dispatchMultipleFieldChangeAction(
-                "apply",
+                screenName,
                 getActionDefinationForStepper(
                     "components.div.children.formwizardFirstStep"
                 ),
@@ -214,7 +216,7 @@ export const changeStep = (
             break;
         case DOCUMENT_UPLOAD_STEP:
             dispatchMultipleFieldChangeAction(
-                "apply",
+                screenName,
                 getActionDefinationForStepper(
                     "components.div.children.formwizardSecondStep"
                 ),
@@ -223,7 +225,7 @@ export const changeStep = (
             break;
         default:
             dispatchMultipleFieldChangeAction(
-                "apply",
+                screenName,
                 getActionDefinationForStepper(
                     "components.div.children.formwizardThirdStep"
                 ),
@@ -266,12 +268,12 @@ export const changeStep = (
   };
   
   export const callBackForPrevious = (state, dispatch) => {
-    changeStep(state, dispatch, "previous");
+    changeStep(state, dispatch, "apply", "previous");
   };
 
-export const footer = getCommonApplyFooter({
-    previousButton: {
-      componentPath: "Button",
+
+export const previousButton = {
+  componentPath: "Button",
       props: {
         variant: "outlined",
         color: "primary",
@@ -295,44 +297,38 @@ export const footer = getCommonApplyFooter({
           labelKey: "TL_COMMON_BUTTON_PREV_STEP"
         })
       },
-      onClickDefination: {
-        action: "condition",
-        callBack: callBackForPrevious
-      },
       visible: false
-    },
-    nextButton: {
-      componentPath: "Button",
+}
+
+export const nextButton = {
+  componentPath: "Button",
+  props: {
+    variant: "contained",
+    color: "primary",
+    style: {
+      minWidth: "180px",
+      height: "48px",
+      marginRight: "45px",
+      borderRadius: "inherit"
+    }
+  },
+  children: {
+    nextButtonLabel: getLabel({
+      labelName: "Next Step",
+      labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+    }),
+    nextButtonIcon: {
+      uiFramework: "custom-atoms",
+      componentPath: "Icon",
       props: {
-        variant: "contained",
-        color: "primary",
-        style: {
-          minWidth: "180px",
-          height: "48px",
-          marginRight: "45px",
-          borderRadius: "inherit"
-        }
-      },
-      children: {
-        nextButtonLabel: getLabel({
-          labelName: "Next Step",
-          labelKey: "TL_COMMON_BUTTON_NXT_STEP"
-        }),
-        nextButtonIcon: {
-          uiFramework: "custom-atoms",
-          componentPath: "Icon",
-          props: {
-            iconName: "keyboard_arrow_right"
-          }
-        }
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: callBackForNext
+        iconName: "keyboard_arrow_right"
       }
-    },
-    submitButton: {
-      componentPath: "Button",
+    }
+  },
+}
+
+export const submitButton = {
+  componentPath: "Button",
       props: {
         variant: "contained",
         color: "primary",
@@ -356,10 +352,29 @@ export const footer = getCommonApplyFooter({
           }
         }
       },
+      visible: false,
+}
+
+export const footer = getCommonApplyFooter({
+    previousButton: {
+      ...previousButton, 
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForPrevious
+      },
+    },
+    nextButton: {
+      ...nextButton,
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForNext
+      }
+    },
+    submitButton: {
+      ...submitButton,
       onClickDefination: {
         action: "condition",
         callBack: callBackForNext
       },
-      visible: false
     }
   });
