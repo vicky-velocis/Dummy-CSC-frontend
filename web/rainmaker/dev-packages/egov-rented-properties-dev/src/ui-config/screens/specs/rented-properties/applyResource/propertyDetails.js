@@ -162,4 +162,69 @@ const getPropertyDetails = () => {
     }
 }
 
+
+
+const dCcolonyField = {
+    label: {
+        labelName: "Colony",
+        labelKey: "RP_COLONY_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Colony",
+        labelKey: "RP_COLONY_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "Duplicateletter[0].colony",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    beforeFieldChange: (action, state, dispatch) => {
+        const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+        const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+        const propertyAreas = !!findItem ? findItem.area.map(item => ({
+          code: item.code,
+          label: item.sqyd
+        })) : [];
+      }
+}
+
+const dCtransitNumberField = {
+    ...transitNumberConfig,
+    jsonPath: "Properties[0].transitNumber"
+}
+
+const transitSiteHeader = getCommonTitle(
+    {
+        labelName: "Transit Site Details",
+        labelKey: "RP_TRANSIT_SITE_DETAILS_HEADER"
+    },
+    {
+        style: {
+                marginBottom: 18,
+                marginTop: 18
+        }
+    }
+  )
+
+
+const getTransitSiteDetails = () => {
+    return {
+        header: transitSiteHeader,
+        detailsContainer: getCommonContainer({
+            transitNumber: getTextField(transitNumberField),
+            colony: getSelectField(colonyField),
+        })
+    }
+}
+
+
+
+
+
+
 export const propertyDetails = getCommonCard(getPropertyDetails())
+export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
