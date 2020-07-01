@@ -103,7 +103,6 @@ export const formwizardOwnershipFirstStep = {
   }
 };
 
-
 export const formwizardOwnershipSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -128,6 +127,16 @@ export const formwizardOwnershipThirdStep = {
   visible: false
 }
 
+export const formwizardMortgageFirstStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form5"
+  },
+  children: {
+    applicantDetails
+  }
+}
 
 export const formwizardDuplicateCopyFirstStep = {
   uiFramework: "custom-atoms",
