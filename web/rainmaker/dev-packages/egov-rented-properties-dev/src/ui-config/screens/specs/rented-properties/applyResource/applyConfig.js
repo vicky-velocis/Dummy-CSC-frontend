@@ -139,7 +139,8 @@ export const formwizardMortgageFirstStep = {
     id: "apply_form5"
   },
   children: {
-    applicantDetails
+    applicantDetails,
+    ownershipAddressDetails
   }
 }
 
