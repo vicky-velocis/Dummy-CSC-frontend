@@ -37,7 +37,7 @@ const header = getCommonHeader(
         labelName: "Duplicate copy of Allotment letter"
     },
     icon: <FormIcon />,
-    route: "search-transfer-properties"
+    route: "search-duplicate-copy"
   },
   {
     label: {
@@ -45,7 +45,7 @@ const header = getCommonHeader(
         labelName: "Mortgage"
     },
     icon: <FormIcon />,
-    route: "search-transfer-properties"
+    route: "search-mortgage"
   },
 
 ]
