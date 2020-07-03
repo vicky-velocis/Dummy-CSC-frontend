@@ -8,8 +8,8 @@ import {
   import set from "lodash/set";
   import { httpRequest,getsto } from "../../../../ui-utils";
   import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
-  import { searchForm } from "./searchMaterialMasterResource/searchForm";
-  import { searchResults } from "./searchMaterialMasterResource/searchResults";
+  import { searchForm } from "./searchPriceListResource/searchForm";
+  import { searchResults } from "./searchPriceListResource/searchResults";
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   
@@ -18,12 +18,12 @@ import {
   //enableButton = hasButton && hasButton === "false" ? false : true;
   
   const header = getCommonHeader({
-    labelName: "Material Master",
-    labelKey: "STORE_COMMON_MATERIAL_MASTER",
+    labelName: "Price List",
+    labelKey: "STORE_VIEW_PRICE_LIST",
   });
   
-  const createMaterialMasterHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-store-asset/create-material-master`));
+  const createPriceListHandle = async (state, dispatch) => {
+    dispatch(setRoute(`/egov-store-asset/create-price-list`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
@@ -77,12 +77,12 @@ import {
   
   const getData = async (action, state, dispatch) => {
     await getMDMSData(action, state, dispatch);
-    await getstoreData(action,state, dispatch);
+   // await getstoreData(action,state, dispatch);
   };
   
   const materialMasterSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search-material-master",
+    name: "search-price-list",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
       return action;
@@ -140,13 +140,13 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add Material Master",
-                    labelKey: "STORE_ADD_NEW_MATERIAL_MASTER_BUTTON",
+                    labelName: "Add Price List",
+                    labelKey: "STORE_ADD_NEW_PRICE_LIST_BUTTON",
                   }),
                 },
                 onClickDefination: {
                   action: "condition",
-                  callBack: createMaterialMasterHandle,
+                  callBack: createPriceListHandle,
                 },
               },
             },

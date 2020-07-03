@@ -54,7 +54,7 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-material-master"
+    "search-opening-balence"
   );
 
   if (!isSearchFormValid) {
@@ -94,7 +94,19 @@ export const searchApiCall = async (state, dispatch) => {
     }
     let response = await getMaterialMasterSearchResults(queryObject, dispatch);
     try {
-      let data = response.materials.map((item) => {
+      if(response.materialReceipt.length===0)
+      {
+        dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "No Records found for Input parameter", labelKey: "STORE_NO_RECORDS_FOUND" },
+                "warning"
+              )
+            );
+          
+      }
+      else{
+      let data = response.materialReceipt.map((item) => {
        
 
         return {
@@ -109,7 +121,7 @@ export const searchApiCall = async (state, dispatch) => {
 
       dispatch(
         handleField(
-          "search-material-master",
+          "search-opening-balence",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -117,15 +129,16 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-material-master",
+          "search-opening-balence",
           "components.div.children.searchResults",
           "props.title",
           `${getTextToLocalMapping("Search Results for Material Master")} (${
-            response.materials.length
+            response.materialReceipt.length
           })`
         )
       );
       showHideTable(true, dispatch);
+        }
     } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -141,7 +154,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-material-master",
+      "search-opening-balence",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

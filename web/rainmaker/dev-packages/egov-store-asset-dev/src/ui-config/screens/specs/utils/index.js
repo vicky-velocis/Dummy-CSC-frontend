@@ -1149,3 +1149,12 @@ export const clearlocalstorageAppDetails = (state) => {
   lSRemoveItem('this_sub_adv_id');
   lSRemoveItem('undertaking');
 }
+
+
+export const getTodaysDateInYMD = () => {
+  let date = new Date();
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  return date;
+};

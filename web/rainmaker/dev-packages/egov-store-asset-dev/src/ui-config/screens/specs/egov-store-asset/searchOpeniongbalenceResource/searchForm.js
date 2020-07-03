@@ -15,14 +15,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["materialTypeName","materialName","storeName", "storeMappingInfo", "active"];
+  const textFields = ["financialYear","storeName",];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-material-master.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-opening-balence.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-material-master",
+          "search-opening-balence",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -43,36 +43,15 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    materialName: getTextField({
-      label: { labelName: "Material  Name", labelKey: "STORE_MATERIAL_NAME" },
-      placeholder: {
-        labelName: "Select Materila  Name",
-        labelKey: "STORE_MATERIAL_NAME_SELECT",
-      },
-      required: false,
-      jsonPath: "searchScreen.code",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      // sourceJsonPath: "searchScreenMdmsData.common-masters.materialName",
-      // props: {
-      //   optionValue: "code",
-      //   optionLabel: "name",
-      // },
-      // localePrefix: {
-      //   moduleName: "common-store",
-      //   masterName: "materialName",
-      // },
-    }),
-    materialType: getSelectField({
+
+    financialYear: getSelectField({
       label: { labelName: "Material Type Name", labelKey: "STORE_MATERIAL_TYPE_NAME" },
       placeholder: {
         labelName: "Select Materila Type Name",
         labelKey: "STORE_MATERIAL_TYPE_NAME_SELECT",
       },
       required: false,
-      jsonPath: "searchScreen.materialType",
+      jsonPath: "searchScreen.financialYear",
       gridDefination: {
         xs: 12,
         sm: 4,
@@ -87,14 +66,14 @@ export const searchForm = getCommonCard({
       //   masterName: "Designation",
       // },
     }),
-    store: getSelectField({
+    storeName: getSelectField({
       label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
       placeholder: {
         labelName: "Select Store Name",
         labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
       },
       required: false,
-      jsonPath: "searchScreen.store",
+      jsonPath: "searchScreen.storeName",
       gridDefination: {
         xs: 12,
         sm: 4,
@@ -106,44 +85,7 @@ export const searchForm = getCommonCard({
       },
       
     }),
-    storeMappingInfo: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-store-asset",
-      componentPath: "CheckboxContainer",
-      jsonPath: "searchScreen.storeMappingInfo",
-      gridDefination: {
-        xs: 4,
-      },
-      isFieldValid: true,
-      required: false,
-
-      props: {
-        content: "MATERIAL_TYPE_STORE_MAP",
-        jsonPath: "searchScreen.storeMappingInfo",
-        screenName: "search-material-master",
-        checkBoxPath:
-          "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.storeMappingInfo",
-      },
-    },
-    active: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-store-asset",
-      componentPath: "CheckboxContainer",
-      jsonPath: "searchScreen.active",
-      gridDefination: {
-        xs: 4,
-      },
-      isFieldValid: true,
-      required: false,
-
-      props: {
-        content: "MATERIAL_TYPE_ACTIVE",
-        jsonPath: "searchScreen.active",
-        screenName: "search-material-master",
-        checkBoxPath:
-          "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.active",
-      },
-    },
+    
   }),
 
   button: getCommonContainer({

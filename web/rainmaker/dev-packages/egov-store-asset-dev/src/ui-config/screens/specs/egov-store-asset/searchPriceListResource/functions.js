@@ -4,7 +4,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMaterialMasterSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getPriceListSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
 import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -54,7 +54,7 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-material-master"
+    "search-price-list"
   );
 
   if (!isSearchFormValid) {
@@ -92,15 +92,28 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getMaterialMasterSearchResults(queryObject, dispatch);
+    let response = await getPriceListSearchResults(queryObject, dispatch);
     try {
-      let data = response.materials.map((item) => {
+
+      if(response.priceLists.length===0)
+      {
+        dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "No Records found for Input parameter", labelKey: "STORE_NO_RECORDS_FOUND" },
+                "warning"
+              )
+            );
+           
+      }
+      else{
+      let data = response.priceLists.map((item) => {
        
 
         return {
-          [getTextToLocalMapping("Material Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Material Type Name")]: get(item, "materialType.name", "-") || "-", 
-          [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
+          [getTextToLocalMapping("Suplier Name")]: get(item, "name", "-") || "-",
+          [getTextToLocalMapping("rate Type")]: get(item, "rateType", "-") || "-", 
+        //  [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
           [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
           code: item.code,       
          
@@ -109,7 +122,7 @@ export const searchApiCall = async (state, dispatch) => {
 
       dispatch(
         handleField(
-          "search-material-master",
+          "search-price-list",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -117,15 +130,16 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-material-master",
+          "search-price-list",
           "components.div.children.searchResults",
           "props.title",
           `${getTextToLocalMapping("Search Results for Material Master")} (${
-            response.materials.length
+            response.priceLists.length
           })`
         )
       );
       showHideTable(true, dispatch);
+        }
     } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -141,7 +155,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-material-master",
+      "search-price-list",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

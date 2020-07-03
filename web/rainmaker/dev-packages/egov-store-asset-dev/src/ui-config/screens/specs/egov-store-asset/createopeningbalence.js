@@ -7,9 +7,9 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import set from "lodash/set";
   import { httpRequest,getsto } from "../../../../ui-utils";
-  import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
-  import { searchForm } from "./searchMaterialMasterResource/searchForm";
-  import { searchResults } from "./searchMaterialMasterResource/searchResults";
+  import { getstoreTenantId,getMaterialMasterSearchResults,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
+  import { OpeningBalanceDetails } from "./createopeningbalenceResource/OpeningBalance-Details";
+  import { footer } from "./createopeningbalenceResource/footer";
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   
@@ -36,13 +36,11 @@ import {
             moduleName: "store-asset",
             masterDetails: [
               { name: "Material" },
-              { name: "MaterialType"},
             ],
           },
-         
           {
-            moduleName: "tenant",
-            masterDetails: [{ name: "tenants" }],
+            moduleName: "egf-master",
+            masterDetails: [{ name: "FinancialYear" }]
           },
         ],
       },
@@ -68,8 +66,11 @@ import {
         value: tenantId
       }];
     try {
-      let response = await getStoresSearchResults(queryObject, dispatch);
-      dispatch(prepareFinalObject("store", response));
+      let response = await getMaterialMasterSearchResults(queryObject, dispatch);      
+      dispatch(prepareFinalObject("material", response));
+
+       let response1 = await getStoresSearchResults(queryObject, dispatch);      
+      dispatch(prepareFinalObject("store", response1));
     } catch (e) {
       console.log(e);
     }
@@ -82,7 +83,7 @@ import {
   
   const materialMasterSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search-material-master",
+    name: "createopeningbalence",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
       return action;
@@ -100,60 +101,11 @@ import {
             uiFramework: "custom-atoms",
             componentPath: "Container",
   
-            children: {
-              header: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 6,
-                },
-                ...header,
-              },
-              newApplicationButton: {
-                componentPath: "Button",
-                gridDefination: {
-                  xs: 12,
-                  sm: 6,
-                  align: "right",
-                },
-                visible: enableButton,
-                props: {
-                  variant: "contained",
-                  color: "primary",
-                  style: {
-                    color: "white",
-                    borderRadius: "2px",
-                    width: "250px",
-                    height: "48px",
-                  },
-                },
-  
-                children: {
-                  plusIconInsideButton: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Icon",
-                    props: {
-                      iconName: "add",
-                      style: {
-                        fontSize: "24px",
-                      },
-                    },
-                  },
-  
-                  buttonLabel: getLabel({
-                    labelName: "Add Material Master",
-                    labelKey: "STORE_ADD_NEW_MATERIAL_MASTER_BUTTON",
-                  }),
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: createMaterialMasterHandle,
-                },
-              },
-            },
+            
           },
-          searchForm,
+          OpeningBalanceDetails,         
           breakAfterSearch: getBreak(),
-          searchResults,
+          footer:footer(),
         },
       },
     },

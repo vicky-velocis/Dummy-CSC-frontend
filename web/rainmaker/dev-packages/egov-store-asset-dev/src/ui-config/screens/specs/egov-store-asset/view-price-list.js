@@ -3,9 +3,9 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import { MasterReviewDetails } from "./viewMasterResource/master-review";
-import { masterViewFooter } from "./viewMasterResource/footer";
-import { getMaterialmasterData } from "./viewMasterResource/functions";
+import { MasterReviewDetails } from "./viewMaterialMasterResource/master-review";
+import { masterViewFooter } from "./viewMaterialMasterResource/footer";
+import { getMaterialmasterData } from "./viewMaterialMasterResource/functions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";  
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -14,8 +14,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `View Material Master`,
-    labelKey: "STORE_VIEW_MATERIAL_MASTER"
+    labelName: `View Price List`,
+    labelKey: "STORE_VIEW_PRICE_LIST"
   })
 });
 const masterView = MasterReviewDetails(false);

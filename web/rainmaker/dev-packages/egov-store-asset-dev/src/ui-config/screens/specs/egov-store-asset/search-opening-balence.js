@@ -18,8 +18,8 @@ import {
   //enableButton = hasButton && hasButton === "false" ? false : true;
   
   const header = getCommonHeader({
-    labelName: "Material Master",
-    labelKey: "STORE_COMMON_MATERIAL_MASTER",
+    labelName: "Opening Balance",
+    labelKey: "STORE_OPENING_BALANCE",
   });
   
   const createMaterialMasterHandle = async (state, dispatch) => {
