@@ -884,7 +884,8 @@ const mapStateToProps = state => {
         complaint =>
           complaint.rawStatus === "escalatedlevel1pending" ||
           complaint.rawStatus === "escalatedlevel2pending" ||
-          complaint.rawStatus === "assigned" 
+          complaint.rawStatus === "assigned" ||
+          complaint.rawStatus === "reassignrequested"
       );  
     }else{
       filteredEmployeeComplaints = transformedComplaints.filter(
@@ -902,7 +903,8 @@ const mapStateToProps = state => {
       complaint =>
         complaint.rawStatus === "escalatedlevel1pending" ||
         complaint.rawStatus === "escalatedlevel2pending" ||
-        complaint.rawStatus === "assigned" 
+        complaint.rawStatus === "assigned" ||
+        complaint.rawStatus === "reassignrequested"
     );  
   }
   else{
