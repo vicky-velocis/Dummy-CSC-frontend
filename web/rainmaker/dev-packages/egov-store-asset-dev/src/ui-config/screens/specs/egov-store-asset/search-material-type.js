@@ -11,7 +11,7 @@ import {
   import { searchResults } from "./searchMaterialTypeResource/searchResults";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-  import { getStoreSearchResults } from "../../../../ui-utils/commons";
+  import { getSearchResults } from "../../../../ui-utils/commons";
   import commonConfig from '../../../../config/common';
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
@@ -74,7 +74,7 @@ import {
             // fetching store name for populating dropdown
             const queryObject = [{ key: "tenantId", value: getTenantId()  }];
 
-            getStoreSearchResults(queryObject, dispatch)
+            getSearchResults(queryObject, dispatch,"storeMaster")
             .then(response =>{ 
               const storeName =    response.stores.map((store,index) => {
                   let name = store.name;

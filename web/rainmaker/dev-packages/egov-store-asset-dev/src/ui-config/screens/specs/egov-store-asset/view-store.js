@@ -14,7 +14,7 @@ import {
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonApplyFooter, validateFields } from "../utils";
-import { getStoreSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const storeName = getQueryArg(window.location.href, "name");
@@ -220,7 +220,7 @@ const screenConfig = {
 
     const queryObject = [{ key: "name", value: storeName  },{ key: "tenantId", value: tenantId  }];
 
-    getStoreSearchResults(queryObject, dispatch)
+    getSearchResults(queryObject, dispatch,"storeMaster")
     .then(response =>{
       dispatch(prepareFinalObject("stores", [...response.stores]));
     });

@@ -595,7 +595,13 @@ export const getPattern = type => {
      case "alpha-only":
        return  /^[a-z]+$/i;
      case "numeric-only":
-       return  /^[0-9]*$/i;
+       return  /^[0-9]*$/i;   
+       case "VATNo":
+       return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{8}[V]{1}$/i;
+       case "CSTNo":
+        return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{8}[C]{1}$/i;
+        case "TINNo":
+          return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{9}$/i;
   }
   };
 

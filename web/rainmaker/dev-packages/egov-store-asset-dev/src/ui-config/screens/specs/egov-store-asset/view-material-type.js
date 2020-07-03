@@ -16,7 +16,7 @@ import {
   import { getCommonApplyFooter, validateFields } from "../utils";
   import {materialTypeStoreMapView} from './viewResource/materialTypeStoreMap'
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-  import { getMaterialTypeSearchResults } from "../../../../ui-utils/commons";
+  import { getSearchResults } from "../../../../ui-utils/commons";
 const materialTypeCode = getQueryArg(window.location.href, "code");
 const tenantId = getQueryArg(window.location.href, "tenantId");
   const headerrow = getCommonContainer({
@@ -53,7 +53,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
   };
   //Edit Button
   const callBackForEdit = async (state, dispatch) => {
-    window.location.href = `/egov-store-asset/create-material-type?edited=true`;
+    window.location.href = `/egov-store-asset/create-material-type?tenantId=${tenantId}&code=${materialTypeCode}&edited=true`;
   };
   export const footer = getCommonApplyFooter({
     editButton: {
@@ -164,7 +164,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
      
       const queryObject = [{ key: "code", value: materialTypeCode  },{ key: "tenantId", value: tenantId  }];
 
-      getMaterialTypeSearchResults(queryObject, dispatch)
+      getSearchResults(queryObject, dispatch,"materialType")
       .then(response =>{
         dispatch(prepareFinalObject("materialTypes", [...response.materialTypes]));
       });

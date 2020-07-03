@@ -4,41 +4,16 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMaterialMasterSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
-import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-export const getDeptName = (state, codes) => {
-  let deptMdmsData = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreenMdmsData.common-masters.Department",
-    []
-  );
-  let codeNames = codes.map((code) => {
-    return get(find(deptMdmsData, { code: code }), "name", "");
-  });
-  return codeNames.join();
-};
 
-export const getDesigName = (state, codes) => {
-  let desigMdmsData = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreenMdmsData.common-masters.Designation",
-    []
-  );
-  let codeNames = codes.map((code) => {
-    return get(find(desigMdmsData, { code: code }), "name", "");
-  });
-  return codeNames.join();
-};
 
 export const searchApiCall = async (state, dispatch) => {
-  let { localisationLabels } = state.app || {};
   showHideTable(false, dispatch);
-  const tenantId =
-    get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
-    getTenantId();
+  const tenantId =   getTenantId();
   let queryObject = [
     {
       key: "tenantId",
@@ -54,7 +29,7 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-material-master"
+    "search-store"
   );
 
   if (!isSearchFormValid) {
@@ -70,7 +45,7 @@ export const searchApiCall = async (state, dispatch) => {
     );
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
-    Object.values(searchScreenObject).every(x => x === "")
+    Object.values(searchScreenObject).every((x) => x.trim() === "")
   ) {
     dispatch(
       toggleSnackbar(
@@ -85,31 +60,31 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     // Add selected search fields to queryobject
     for (var key in searchScreenObject) {
-      if (
+     
+      if(searchScreenObject.hasOwnProperty(key) && typeof searchScreenObject[key] === "boolean"){
+        queryObject.push({ key: key, value: searchScreenObject[key] });
+      }
+      else  if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getMaterialMasterSearchResults(queryObject, dispatch);
+    let response = await getSearchResults(queryObject, dispatch,"supplier");
     try {
-      let data = response.materials.map((item) => {
-       
-
+      let data = response.suppliers.map((item) => {
+    
         return {
-          [getTextToLocalMapping("Material Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Material Type Name")]: get(item, "materialType.name", "-") || "-", 
-          [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
-          [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
-          code: item.code,       
-         
+          [getTextToLocalMapping("Supplier Name")]: get(item, "name", "-") || "-",
+          [getTextToLocalMapping("Supplier Type")]: get(item, "type", "-") || "-",
+          [getTextToLocalMapping("Active")]: get(item, "active",false) ? "Yes": "No",
         };
       });
 
       dispatch(
         handleField(
-          "search-material-master",
+          "search-supplier-master",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -117,11 +92,11 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-material-master",
+          "search-supplier-master",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Master")} (${
-            response.materials.length
+          `${getTextToLocalMapping("Search Results for Supplier Details")} (${
+            response.suppliers.length
           })`
         )
       );
@@ -141,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-material-master",
+      "search-supplier-master",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

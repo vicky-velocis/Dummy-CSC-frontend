@@ -2,11 +2,7 @@ import {
   getCommonHeader,
   getCommonContainer,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { applicationSuccessFooter } from "./acknowledgementResource/applicationSuccessFooter";
-// import { paymentSuccessFooter } from "./acknowledgementResource/paymentSuccessFooter";
-// import { approvalSuccessFooter } from "./acknowledgementResource/approvalSuccessFooter";
 import { gotoHomeFooter } from "./acknowledgementResource/footers";
-// import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
@@ -14,7 +10,9 @@ import set from "lodash/set";
 import { Icon } from "egov-ui-framework/ui-atoms";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+const screenName = getQueryArg(window.location.href, "screen").toUpperCase();
+const mode = getQueryArg(window.location.href, "mode").toUpperCase();
+const code = getQueryArg(window.location.href, "code");
 const getHeader = (applicationNumber) => {
   return getCommonContainer({
     header: getCommonHeader({
@@ -33,9 +31,36 @@ const getHeader = (applicationNumber) => {
   });
 };
 
+const getLabelForStoreAsset = () => {
+let labelValue = "";
+  switch(screenName){
+    case "STOREMASTER": labelValue = {
+      labelName: "Store Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    case "MATERIALTYPE": labelValue = {
+      labelName: "Store Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    break;
+    case "SUPPLIERMASTER": labelValue = {
+      labelName: "Store Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    break;
+    default :  labelValue = {
+      labelName: "Submitted Successfully",
+      labelKey: "",
+    }
+
+  }
+ return labelValue;
+}
+
+
 const getAcknowledgementCard = (state, dispatch, applicationNumber) => {
   return {
-    header: getHeader(applicationNumber),
+  //  header: getHeader(applicationNumber),
     applicationSuccessCard: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -43,13 +68,10 @@ const getAcknowledgementCard = (state, dispatch, applicationNumber) => {
         card: acknowledgementCard({
           icon: "done",
           backgroundColor: "#39CB74",
-          header: {
-            labelName: "Store Master Submitted Successfully",
-            labelKey: "STORE_APPLICATION_SUCCESS_MESSAGE_MAIN",
-          },
+          header: getLabelForStoreAsset(),
           body: {
             labelName:
-              "A notification regarding Application Submission has been sent to the applicant registered Mobile No.",
+              "A notification regarding Application Submission has been sent to the applicant",
             labelKey: "PET_NOC_APPLICATION_SUCCESS_MESSAGE_SUB",
           },
           tailText: {
@@ -77,11 +99,11 @@ const screenConfig = {
     },
   },
   beforeInitScreen: (action, state, dispatch) => {
-    let applicationNumber = "";
+    let applicationNumber = code;
     const data = getAcknowledgementCard(
       state,
       dispatch,
-      (applicationNumber = "Dummy ID -12345")
+      applicationNumber
     );
     set(action, "screenConfig.components.div.children", data);
     return action;

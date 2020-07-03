@@ -4,34 +4,11 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getStoreSearchResults } from "../../../../../ui-utils/commons";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-export const getDeptName = (state, codes) => {
-  let deptMdmsData = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreenMdmsData.common-masters.Department",
-    []
-  );
-  let codeNames = codes.map((code) => {
-    return get(find(deptMdmsData, { code: code }), "name", "");
-  });
-  return codeNames.join();
-};
-
-export const getDesigName = (state, codes) => {
-  let desigMdmsData = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreenMdmsData.common-masters.Designation",
-    []
-  );
-  let codeNames = codes.map((code) => {
-    return get(find(desigMdmsData, { code: code }), "name", "");
-  });
-  return codeNames.join();
-};
 
 export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
@@ -94,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getStoreSearchResults(queryObject, dispatch);
+    let response = await getSearchResults(queryObject, dispatch,"storeMaster");
     try {
       let data = response.stores.map((item) => {
     

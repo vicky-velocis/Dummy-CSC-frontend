@@ -14,7 +14,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const role_name = JSON.parse(getUserInfo()).roles[0].code
 
-export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = false) => {
+export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = false,mode="create") => {
   let arrayToModify =[]
     if(Array.isArray(prepareFinalObject)) {
       arrayToModify = get(prepareFinalObject[0], arrayPath, []);
@@ -25,7 +25,10 @@ export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = fal
  const finalArray = arrayToModify.filter((item,index) =>{
        if(!item.hasOwnProperty("isDeleted")){
          if(isActive){
-           item.active = item.active ? item.active : true
+           if(mode === "create")
+                item.active = item.active ? item.active : true
+           else if (mode === "update")
+                 item.active = item.active ? item.active : false
          }
          return item;
        }
@@ -37,26 +40,19 @@ export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = fal
   return prepareFinalObject;
   }
 
-export const getStoreSearchResults = async queryObject => {
 
-  let data = {
-    "tenantId": getOPMSTenantId(), 
-    "applicationType": getapplicationType(),
-    "applicationStatus": "INITIATED",
-    "dataPayload": {
-      "createdBy": JSON.parse(getUserInfo()).uuid,
-      "applicationType": getapplicationType()
-    }
-  };
+export const getSearchResults = async (queryObject,dispatch,screenName) => {
+  let url =""
+  switch(screenName){
+    case "storeMaster": url =  "/store-asset-services/stores/_search";
+    break;
+    case "materialType": url = "store-asset-services/materialtypes/_search";
+    break;
+    case "supplier" : url = "store-asset-services/suppliers/_search";
+    break;
+  }
   try {
-    const response = await httpRequest(
-      "post",
-      "/store-asset-services/stores/_search",
-      "",
-      queryObject,
-      {}
-    );
-    //alert(JSON.stringify(response));
+    const response = await httpRequest("post", url, "", queryObject, {} );
     return response;
 
   } catch (error) {
@@ -70,35 +66,6 @@ export const getStoreSearchResults = async queryObject => {
   }
 
 };
-
-// serach for material type
-export const getMaterialTypeSearchResults =async queryObject => {
-
-
-  try {
-    const response = await httpRequest(
-      "post",
-      "store-asset-services/materialtypes/_search",
-      "",
-      queryObject,
-      {}
-    );
-    //alert(JSON.stringify(response));
-    return response;
-
-  } catch (error) {
-    store.dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: error.message, labelCode: error.message },
-        "error"
-      )
-    );
-  }
-
-};
-
-
 //view
 export const getSearchResultsView = async queryObject => {
   try {

@@ -21,7 +21,7 @@ import {
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getStoreSearchResults, handleCardDelete } from "../../../../ui-utils/commons";
+import {  handleCardDelete ,getSearchResults} from "../../../../ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from '../../../../config/common';
 import get from "lodash/get";
@@ -29,7 +29,8 @@ import { httpRequest } from "../../../../ui-utils/api";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
-
+const materialTypeCode = getQueryArg(window.location.href, "code");
+const tenantId = getQueryArg(window.location.href, "tenantId");
 const isEditMode = getQueryArg(window.location.href, "edited");
 const MaterialTypeRelationDetailsCard = {
   uiFramework: "custom-containers",
@@ -123,11 +124,6 @@ const MaterialTypeRelationDetailsCard = {
               screenName: "create-material-type",
               checkBoxPath: "components.div.children.addMaterialTypeTable.children.cardContent.children.MaterialTypeRelationDetailsCard.props.items[1].item1.children.cardContent.children.rltnDetailsCardContainer",
             },
-            beforeFieldChange: (action, state, dispatch) => {
-              if (!action.value) {
-                dispatch(handleField("create-material-type", action.componentJsonpath, "props.value", false));
-              }
-            }
           }
         },
         {
@@ -151,8 +147,8 @@ const MaterialTypeRelationDetailsCard = {
   },
   type: "array"
 };
-const callBackForUpdate = async (state, dispatch) => {
-  console.log("update");
+const callBackForUpdate = async (state, dispatch) =>{
+ 
   let isFormValid = true;
 
   isFormValid = validateFields(
@@ -162,7 +158,31 @@ const callBackForUpdate = async (state, dispatch) => {
     "create-material-type"
   );
 
-  if (!isFormValid) {
+  let materialTypeMapPath =
+    "components.div.children.addMaterialTypeTable.children.cardContent.children.MaterialTypeRelationDetailsCard.props.items"; //[1].item1.children.cardContent.children.rltnDetailsCardContainer",
+
+  let MaterialTypeMapItems = get(
+    state.screenConfiguration.screenConfig["create-material-type"],
+    materialTypeMapPath,
+    []
+  );
+
+  let isMaterialTypemapValid = true;
+  for (var j = 0; j < MaterialTypeMapItems.length; j++) {
+    if (
+      (MaterialTypeMapItems[j].isDeleted === undefined ||
+        MaterialTypeMapItems[j].isDeleted !== false) &&
+      !validateFields(
+        `${materialTypeMapPath}[${j}].item${j}.children.cardContent.children.rltnDetailsCardContainer.children`,
+        state,
+        dispatch,
+        "create-material-type"
+      )
+    )
+      isMaterialTypemapValid = false;
+  }
+
+  if (!isFormValid || !isMaterialTypemapValid) {
     const errorMessage = {
       labelName: "Please fill all fields",
       labelKey: "ERR_FILL_ALL_FIELDS",
@@ -170,12 +190,49 @@ const callBackForUpdate = async (state, dispatch) => {
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   } else {
     //trigger api for create store
-    dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+    const { screenConfiguration } = state;
+    const { materialTypes } = screenConfiguration.preparedFinalObject;
+    const tenantId = getTenantId();
+    materialTypes[0].tenantId = tenantId;
+
+    const queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }
+    ];
+
+
+    let  requestBody ={}
+     requestBody.materialTypes = handleCardDelete(materialTypes, "storeMapping", true,"update");
+
+    try {
+      const response = await httpRequest(
+        "post",
+        "store-asset-services/materialtypes/_update",
+        "",
+        queryObject,
+        requestBody
+      );
+       if(response){
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=materialType&mode=update&code=123456`));
+       }
+
+    } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: error.message, labelCode: error.message },
+          "error"
+        )
+      );
+    }
+
   }
 };
 //Submit Button
 const callBackForSubmit = async (state, dispatch) => {
-  console.log("submit");
+ 
   let isFormValid = true;
 
   isFormValid = validateFields(
@@ -231,8 +288,8 @@ const callBackForSubmit = async (state, dispatch) => {
     ];
 
 
-
-    const requestBody = handleCardDelete(materialTypes, "storeMapping", true);
+    let  requestBody ={}
+     requestBody.materialTypes = handleCardDelete(materialTypes, "storeMapping", true);
 
 
   //  console.log("requestbody", requestBody);
@@ -245,7 +302,7 @@ const callBackForSubmit = async (state, dispatch) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=materialType&mode=create&code=123456`));
        }
 
     } catch (error) {
@@ -263,32 +320,33 @@ const callBackForSubmit = async (state, dispatch) => {
 
 // Reset Button
 const callBackForReset = async (state, dispatch) => {
-  console.log("reset");
 
-  const checkBoxButton = ["isParent", "active"];
+
+  const checkBoxButton = ["active"];
   const textFields = [
     "code",
     "name",
     "description",
-    "parent",
+    "active"
   ];
-  for (let i = 0; i < checkBoxButton.length; i++) {
-    if (checkBoxButton[i]) {
-      dispatch(
-        handleField(
-          "create-material-type",
-          `components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.${checkBoxButton[i]}`,
-          "props.value",
-          false
-        )
-      );
-    }
-  }
+  // for (let i = 0; i < checkBoxButton.length; i++) {
+  //   if (checkBoxButton[i]) {
+  //     dispatch(
+  //       handleField(
+  //         "create-material-type",
+  //         `components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.${checkBoxButton[i]}`,
+  //         "props.value",
+  //         false
+  //       )
+  //     );
+  //   }
+  // }
 
-  // document.getElementById('central-store').removeAttribute('checked');
 
   for (let i = 0; i < textFields.length; i++) {
-    if (`state.screenConfiguration.screenConfig.create-material-type.components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children[${textFields[i]}].props.value`) {
+    const fieldValue = state.screenConfiguration.screenConfig['create-material-type'].components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children[textFields[i]].props.value;
+    
+    if (fieldValue) {
       dispatch(
         handleField(
           "create-material-type",
@@ -496,9 +554,7 @@ export const formwizardFirstStep = {
               "components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addMaterialTypeDetails.children.active",
           },
           beforeFieldChange: (action, state, dispatch) => {
-            if (!action.value) {
-              dispatch(handleField("create-material-type", action.componentJsonpath, "props.value", false));
-            }
+          
           }
         },
         inActiveDate: {
@@ -577,7 +633,7 @@ const screenConfig = {
     // fetching store name for populating dropdown
     const queryObject = [{ key: "tenantId", value: getTenantId() }];
 
-    getStoreSearchResults(queryObject, dispatch)
+    getSearchResults(queryObject, dispatch,"storeMaster")
       .then(response => {
         const storeName = response.stores.map((store, index) => {
           let name = store.name;
@@ -598,10 +654,12 @@ const screenConfig = {
 
 
     if (isEditMode) {
-      //   dispatch(prepareFinalObject("materialTypes", [{ code: "hello" }]));
-      dispatch(
-        prepareFinalObject("materialTypes[0].storeMapping", [{ active: true, stckInHand: "yes", departmentName: "ABC", storeName: "xyz" }, { active: false, stckInHand: "yes", departmentName: "ABC", storeName: "xyz" }, { active: true, stckInHand: "yes", departmentName: "ABC", storeName: "xyz" }])
-      );
+      const queryObject = [{ key: "code", value: materialTypeCode  },{ key: "tenantId", value: tenantId  }];
+
+      getSearchResults(queryObject, dispatch,"materialType")
+      .then(response =>{
+        dispatch(prepareFinalObject("materialTypes", [...response.materialTypes]));
+      });
     }
 
     return action;

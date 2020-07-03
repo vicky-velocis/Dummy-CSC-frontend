@@ -21,7 +21,7 @@ import { getCommonApplyFooter, validateFields } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId,getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
-import { getStoreSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils/api";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
@@ -75,7 +75,7 @@ const callBackForUpdate = async (state, dispatch) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
        }
   
     } catch (error) {
@@ -134,7 +134,7 @@ const callBackForSubmit = async (state, dispatch) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
        }
   
     } catch (error) {
@@ -626,7 +626,7 @@ const screenConfig = {
     if (isEditMode) {
       const queryObject = [{ key: "name", value: storeName  },{ key: "tenantId", value: tenantId  }];
 
-    getStoreSearchResults(queryObject, dispatch)
+      getSearchResults(queryObject, dispatch,"storeMaster")
     .then(response =>{
       dispatch(prepareFinalObject("stores", [...response.stores]));
       dispatch(
