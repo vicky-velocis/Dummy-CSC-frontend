@@ -42,14 +42,14 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "Properties[0].owners[0].ownerDetails.name" }
+                { jsonPath: "Owners[0].ownerDetails.name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "Properties[0].owners[0].ownerDetails.relation" }
+                { jsonPath: "Owners[0].ownerDetails.relation" }
             ),
             phone: getLabelWithValue(
                 {
@@ -57,7 +57,7 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "Properties[0].owners[0].ownerDetails.phone" 
+                    jsonPath: "Owners[0].ownerDetails.phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -66,7 +66,7 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "Properties[0].owners[0].ownerDetails.eamil" 
+                    jsonPath: "Owners[0].ownerDetails.eamil" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -75,7 +75,7 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber" 
+                    jsonPath: "Owners[0].ownerDetails.aadhaarNumber" 
                 }
             )
         })
@@ -101,21 +101,35 @@ export const getreviewPropertyAddressDetails = (isEditable = true) => {
             }
         },
         viewFour: getCommonContainer({
-            transitNumber: getLabelWithValue(
+            propertyId: getLabelWithValue(
                 {
-                    labelName: "Transit Site/Plot number",
-                    labelKey: "RP_SITE_PLOT_LABEL"
+                    labelName: "Property Id",
+                    labelKey: "RP_PROPERTY_ID"
                 },
-                { jsonPath: "Properties[0].propertyDetails.address.transitNumber" }
+                {jsonPath: "Owners[0].propertyId"}
             ),
-            area: getLabelWithValue(
-                areaLabel,
-                { jsonPath: "Properties[0].propertyDetails.address.area" }
-            ),
-            pincode: getLabelWithValue(
-                pincodeLabel,
-                { jsonPath: "Properties[0].propertyDetails.address.pincode" }
-            ),
+            allotmentNumber: getLabelWithValue(
+                {
+                    labelName: "Allotment Number",
+                    labelKey: "RP_ALLOTMENT_NUMBER"
+                },
+                {jsonPath: "Owners[0].allotmenNumber"}
+            )
+            // transitNumber: getLabelWithValue(
+            //     {
+            //         labelName: "Transit Site/Plot number",
+            //         labelKey: "RP_SITE_PLOT_LABEL"
+            //     },
+            //     { jsonPath: "Properties[0].propertyDetails.address.transitNumber" }
+            // ),
+            // area: getLabelWithValue(
+            //     areaLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
+            // ),
+            // pincode: getLabelWithValue(
+            //     pincodeLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
+            // ),
         })
     })
 }

@@ -3,7 +3,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
 
-const propertyHeader = getCommonTitle(
+export const propertyHeader = getCommonTitle(
         {
             labelName: "Property Details",
             labelKey: "RP_PROPERTY_DETAILS_HEADER"
@@ -16,7 +16,7 @@ const propertyHeader = getCommonTitle(
         }
       )
 
-const colonyField = {
+const colonyFieldConfig = {
     label: {
         labelName: "Colony",
         labelKey: "RP_COLONY_LABEL"
@@ -34,6 +34,10 @@ const colonyField = {
         xs: 12,
         sm: 6
     },
+}
+
+const colonyField = {
+    ...colonyFieldConfig,
     beforeFieldChange: (action, state, dispatch) => {
         const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
         const findItem = rentedPropertyColonies.find(item => item.code === action.value)
@@ -60,8 +64,8 @@ export const transitNumberConfig = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 4,
+    maxLength: 25,
     required: true,
 }
 
@@ -102,8 +106,8 @@ const transitNumberField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 3,
+    maxLength: 20,
     required: true,
     jsonPath: "Properties[0].owners[0].allotmenNumber"
   }
@@ -147,7 +151,6 @@ const transitNumberField = {
     }
   }
 
-
 const getPropertyDetails = () => {
     return {
         header: propertyHeader,
@@ -160,41 +163,6 @@ const getPropertyDetails = () => {
             posessionDate: getDateField(posessionDateField)
         })
     }
-}
-
-
-
-const dCcolonyField = {
-    label: {
-        labelName: "Colony",
-        labelKey: "RP_COLONY_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Colony",
-        labelKey: "RP_COLONY_PLACEHOLDER"
-    },
-    required: true,
-    jsonPath: "Duplicateletter[0].colony",
-    optionValue: "code",
-    optionLabel: "label",
-    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    beforeFieldChange: (action, state, dispatch) => {
-        const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
-        const findItem = rentedPropertyColonies.find(item => item.code === action.value)
-        const propertyAreas = !!findItem ? findItem.area.map(item => ({
-          code: item.code,
-          label: item.sqyd
-        })) : [];
-      }
-}
-
-const dCtransitNumberField = {
-    ...transitNumberConfig,
-    jsonPath: "Properties[0].transitNumber"
 }
 
 const transitSiteHeader = getCommonTitle(
@@ -210,21 +178,15 @@ const transitSiteHeader = getCommonTitle(
     }
   )
 
-
 const getTransitSiteDetails = () => {
     return {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(transitNumberField),
-            colony: getSelectField(colonyField),
+            colony: getSelectField(colonyFieldConfig),
         })
     }
 }
-
-
-
-
-
 
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())

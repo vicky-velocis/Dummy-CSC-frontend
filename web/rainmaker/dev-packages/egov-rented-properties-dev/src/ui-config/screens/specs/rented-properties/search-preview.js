@@ -30,7 +30,7 @@ const reviewPropertyDetails = getReviewProperty(false);
 const reviewAddressDetails = getReviewAddress(false);
 const reviewRentDetails = getReviewRentDetails(false);
 const reviewPaymentDetails = getReviewPaymentDetails(false);
-const reviewDocumentDetails = getReviewDocuments(false)
+const reviewDocumentDetails = getReviewDocuments(false, "apply")
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,

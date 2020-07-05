@@ -8,9 +8,10 @@ const reviewOwnerDetails = getReviewOwner();
 const reviewAddressDetails = getReviewAddress();
 const reviewRentDetails = getReviewRentDetails();
 const reviewPaymentDetails = getReviewPaymentDetails();
-const reviewDocuments = getReviewDocuments();
+const reviewDocuments = getReviewDocuments(true, "apply");
 const reviewApplicantDetails = getReviewApplicantDetails();
 const reviewPropertyAddressDetails = getreviewPropertyAddressDetails()
+const reviewFreshLicenceDocuments = getReviewDocuments(true, "ownership-apply")
 
 const header = getCommonTitle({
   labelName: "Please review your Application and Submit",
@@ -29,6 +30,7 @@ export const rentedReviewDetails = getCommonCard({
 
 export const ownerShipReviewDetails = getCommonCard({
     header,
+    reviewPropertyAddressDetails,
     reviewApplicantDetails,
-    reviewPropertyAddressDetails
+    reviewFreshLicenceDocuments
 })

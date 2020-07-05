@@ -25,7 +25,7 @@ const cardItems = [{
         labelName: "Apply"
     },
     icon: <TradeLicenseIcon />,
-    route: `mortage-apply?tenantId=${tenantId}`
+    route: `mortage-apply`
   },
   {
     label: {
@@ -56,11 +56,6 @@ const mortageHome = {
                   width: "100%"
                 }
               }
-            },
-            listCard: {
-              uiFramework: "custom-molecules-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "HowItWorks"
             }
           }
         }

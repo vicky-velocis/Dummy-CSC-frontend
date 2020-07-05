@@ -6,7 +6,7 @@ import {
   
   import { changeStep } from "./footer";
   
-  export const getReviewDocuments = (isEditable = true) => {
+  export const getReviewDocuments = (isEditable = true, screenKey) => {
     return getCommonGrayCard({
       headerDiv: {
         uiFramework: "custom-atoms",
@@ -49,7 +49,7 @@ import {
             onClickDefination: {
               action: "condition",
               callBack: (state, dispatch) => {
-                changeStep(state, dispatch, "apply", "", 1);
+                changeStep(state, dispatch, screenKey, "", 1);
               }
             }
           },

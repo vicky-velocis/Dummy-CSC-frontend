@@ -8,12 +8,18 @@ import { searchApiCall } from "./functions";
 import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 
 const userInfo = JSON.parse(getUserInfo());
 
+export const APPLICATION_NO = getLocaleLabels("APPLICATION NUMBER", "RP_COMMON_TABLE_COL_APPLICAITON_NUMBER")
+export const PROPERTY_ID = getLocaleLabels("PROPERTY ID", "RP_COMMON_TABLE_COL_PROPERTY_ID")
+export const OWNER_NAME = getLocaleLabels("OWNER NAME", "RP_COMMON_TABLE_COL_OWNER_NAME")
+export const STATUS = getLocaleLabels("STATUS", "RP_COMMON_TABLE_COL_STATUS")
+
+
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: true,
   props: {
@@ -70,6 +76,27 @@ const onRowClick = rowData => {
   if(rowData[3].toUpperCase() === "INITIATED" && !!findItem) {
     window.location.href = `apply?tenantId=${getTenantId()}&transitNumber=${rowData[0]}`
   } else {
-    window.location.href = `search-preview?transitNumber=${rowData[0]}&tenantId=${getTenantId()}&propertyId=${rowData[5]}`;
+    window.location.href = `search-preview?transitNumber=${rowData[0]}&tenantId=${getTenantId()}`;
   }
 };
+
+const onTransferPropertyRowClick = rowData => {
+  console.log("=======row data======", rowData)
+}
+
+export const transferSearchResults = {
+  ...searchResults,
+  props: {...searchResults.props, 
+    columns: [
+      APPLICATION_NO,
+      PROPERTY_ID,
+      OWNER_NAME,
+      STATUS
+    ],
+    options: {...searchResults.props.options,
+      onRowClick: (row, index) => {
+        onTransferPropertyRowClick(row);
+      }
+    }
+  }
+}

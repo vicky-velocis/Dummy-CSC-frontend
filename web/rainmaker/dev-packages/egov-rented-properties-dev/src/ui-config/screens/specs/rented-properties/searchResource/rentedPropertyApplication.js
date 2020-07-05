@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall } from "./functions";
+import { searchApiCall, searchTransferProperties } from "./functions";
 
 const colonyField = {
   label: {
@@ -46,6 +46,40 @@ gridDefination: {
 },
 required: false,
 jsonPath: "searchScreen.allotmentNumber"
+}
+
+const applicationNoField = {
+  label: {
+    labelName: "Application Number",
+    labelKey: "RP_APPLICATION_NUMBER",
+  },
+  placeholder: {
+    labelName: "Enter Application Number",
+    labelKey: "RP_APPLICATION_NUMBER_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+},
+required: false,
+jsonPath: "searchScreen.applicationNumber"
+}
+
+const propertyIdField = {
+  label: {
+    labelName: "Property Id",
+    labelKey: "RP_PROPERTY_ID",
+  },
+  placeholder: {
+    labelName: "Enter Property Id",
+    labelKey: "RP_PROPERTY_ID_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+},
+required: false,
+jsonPath: "searchScreen.propertyId"
 }
 
 const transitNumberField = {
@@ -105,6 +139,42 @@ const statusField = {
   }
 }
 
+
+const buttonItem = {
+  firstCont: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  },
+  searchButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+
+        backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+        borderRadius: "2px",
+        width: "80%",
+        height: "48px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "Search",
+        labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
+      })
+    }
+  }
+}
+
 export const rentedPropertyApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search Property Master",
@@ -117,51 +187,19 @@ export const rentedPropertyApplication = getCommonCard({
   colonyContainer: getCommonContainer({
     colony: getSelectField(colonyField),
     status: getSelectField(statusField)
-    // allotmentNumber: getTextField(allotmentNumberField)
   }),
   transitNumberContainer: getCommonContainer({
     transitNumber: getTextField(transitNumberField),
     phone: getTextField(phoneNumberField)
   }),
   button: getCommonContainer({
-    buttonContainer: getCommonContainer({
-      firstCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      },
-      searchButton: {
-        componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        },
-        props: {
-          variant: "contained",
-          style: {
-            color: "white",
-
-            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
-            borderRadius: "2px",
-            width: "80%",
-            height: "48px"
-          }
-        },
-        children: {
-          buttonLabel: getLabel({
-            labelName: "Search",
-            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_SEARCH"
-          })
-        },
+    buttonContainer: getCommonContainer(
+      {...buttonItem, searchButton: {...buttonItem.searchButton, 
         onClickDefination: {
           action: "condition",
           callBack: searchApiCall
         }
-      },
-      lastCont: {
+      }, lastCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
@@ -172,3 +210,40 @@ export const rentedPropertyApplication = getCommonCard({
     })
   })
 });
+
+
+export const ownerShipTransferApplication = getCommonCard({
+  subHeader: getCommonTitle({
+    labelName: "Search Ownership Transfer Property",
+    labelKey: "RP_SEARCH_OWNERSHIP_TRANSFER_HEADER"
+  }),
+  subParagraph: getCommonParagraph({
+    labelName: "Please provide atleast one parameter to search Property",
+    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
+  }),
+  applicationNoContainer: getCommonContainer({
+    applicationNo: getTextField(applicationNoField),
+    propertyId: getTextField(propertyIdField),
+  }),
+  statusContainer: getCommonContainer({
+    mobileNo: getTextField(phoneNumberField),
+    status: getSelectField(statusField)
+  }),
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer(
+      {...buttonItem, searchButton: {...buttonItem.searchButton, 
+        onClickDefination: {
+          action: "condition",
+          callBack: searchTransferProperties
+        }
+      }, lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  })
+})

@@ -1,5 +1,8 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD } from "../../utils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
 
 const rentHolderHeader = getCommonTitle(
     {
@@ -83,6 +86,7 @@ export const getRelationshipRadioButton = {
 
   const ownerShipRelationShip = {
       ...getRelationshipRadioButton,
+      jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee",
       props: {
           ...getRelationshipRadioButton.props,
           buttons: [
@@ -97,6 +101,7 @@ export const getRelationshipRadioButton = {
               value: "SPOUSE"
             }
           ],
+          jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee"
       }
   }
 
@@ -113,8 +118,8 @@ const fatherOrHusbandsNameField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 4,
+    maxLength: 40,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
@@ -132,8 +137,8 @@ const ownerNameField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 4,
+    maxLength: 40,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.name"
   }
@@ -155,13 +160,11 @@ const phoneNumberConfig = {
     maxLength: 100,
     required: true,
     pattern: getPattern("MobileNo"),
-   
   }
 
   const phoneNumberField = {
-    jsonPath: "Properties[0].owners[0].ownerDetails.phone",
-    ...phoneNumberConfig,
-
+      ...phoneNumberConfig,
+      jsonPath: "Properties[0].owners[0].ownerDetails.phone",
 }
 
 const dobFieldConfig = {
@@ -186,6 +189,19 @@ const dobFieldConfig = {
 const dobField = {
     ...dobFieldConfig,
     jsonPath: "Properties[0].owners[0].ownerDetails.dateOfBirth",
+}
+
+const deathField = {
+    ...dobFieldConfig,
+    label: {
+        labelName: "Date of Death of Allotee",
+        labelKey: "RP_DATE_DEATH_LABEL_ALLOTEE"
+    },
+    placeholder: {
+        labelName: "Enter Date of Death",
+        labelKey: "RP_DATE_DEATH_PLACEHOLDER"
+    },
+    jsonPath: "Owners[0].ownerDetails.dateOfDeathAllottee"
 }
 
 const emailConfig = {
@@ -286,12 +302,16 @@ const applicantNameField = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.name"
+    jsonPath: "Owners[0].ownerDetails.name"
 }
 
 
 const applicantphoneNumberField = {
     ...phoneNumberConfig,
+    props: {
+        value: userInfo.userName,
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].ownerDetails.phone"
 }
 
@@ -331,13 +351,13 @@ export const  applicantGenderLabel = {
 
 const applicantEmailField = {
     ...emailConfig,
-    jsonPath: "Properties[0].owners[0].ownerDetails.email",
+    jsonPath: "Owners[0].ownerDetails.email",
     required: false
 }
 
 const applicantAadharField = {
     ...aadharFieldConfig,
-     jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber"
+     jsonPath: "Owners[0].ownerDetails.aadhaarNumber"
 }
 
 const applicantAddressField = {
@@ -366,6 +386,7 @@ const getApplicantDetails = () => {
             ownerName: getTextField(applicantNameField),
             relationShip: ownerShipRelationShip,
             phone: getTextField(applicantphoneNumberField),
+            deathOfAllotee: getDateField(deathField),
             email: getTextField(applicantEmailField),
             aadhar: getTextField(applicantAadharField),
         })

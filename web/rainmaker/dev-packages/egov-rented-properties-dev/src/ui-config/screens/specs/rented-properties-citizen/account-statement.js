@@ -25,7 +25,7 @@ const cardItems = [{
         labelName: "Apply"
     },
     icon: <TradeLicenseIcon />,
-    route: `account-statement-apply?tenantId=${tenantId}`
+    route: `account-statement-apply`
   },
   {
     label: {
@@ -56,11 +56,6 @@ const accountStatementHome = {
                   width: "100%"
                 }
               }
-            },
-            listCard: {
-              uiFramework: "custom-molecules-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "HowItWorks"
             }
           }
         }

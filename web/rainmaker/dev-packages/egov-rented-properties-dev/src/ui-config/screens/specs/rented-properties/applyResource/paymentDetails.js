@@ -27,9 +27,9 @@ const paymentAmountField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
-    required: true,
+    // minLength: 1,
+    // maxLength: 100,
+    // required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid"
   }
 
@@ -42,7 +42,7 @@ const paymentDateField = {
         labelName: "Enter Date of Payment",
         labelKey: "RP_DATE_PAYEMNT_PLACEHOLDER"
     },
-    required: true,
+    // required: true,
     pattern: getPattern("Date"),
     jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentDate",
     props: {
@@ -65,9 +65,9 @@ const paymentModeField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
-    required: true,
+    // minLength: 1,
+    // maxLength: 100,
+    // required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentMode"
   }
 

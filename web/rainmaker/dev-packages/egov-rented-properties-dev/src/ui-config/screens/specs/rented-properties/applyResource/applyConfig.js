@@ -37,12 +37,7 @@ export const rentedDocumentsDetails = getCommonCard({
 
 export const ownershipTransferDocumentsDetails = getCommonCard({
   ...documentCardConfig,
-  documentList: {
-    ...documentList,
-    props: {...documentList.props,
-      documentTypePrefix: "",
-    }
-  }
+  documentList
 });
 
 
@@ -103,8 +98,8 @@ export const formwizardOwnershipFirstStep = {
     id: "apply_form1"
   },
   children: {
+    ownershipAddressDetails,
     applicantDetails,
-    ownershipAddressDetails
   }
 };
 

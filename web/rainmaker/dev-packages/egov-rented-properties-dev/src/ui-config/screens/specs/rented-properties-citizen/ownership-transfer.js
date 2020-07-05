@@ -25,7 +25,7 @@ const cardItems = [{
         labelName: "Apply for Ownership Transfer"
     },
     icon: <TradeLicenseIcon />,
-    route: `ownership-apply?tenantId=${tenantId}`
+    route: `ownership-apply`
   },
   {
     label: {
@@ -56,11 +56,6 @@ const ownershipHome = {
                   width: "100%"
                 }
               }
-            },
-            listCard: {
-              uiFramework: "custom-molecules-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "HowItWorks"
             }
           }
         }

@@ -1,5 +1,7 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { transitNumberConfig } from '../applyResource/propertyDetails'
+import { transitNumberConfig, propertyHeader } from '../applyResource/propertyDetails'
+import { getDetailsFromProperty } from "../../../../../ui-utils/apply";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const addressHeader = getCommonTitle(
     {
@@ -27,81 +29,9 @@ export const areaField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 3,
+    maxLength: 20,
     required: true,
-  }
-
-export const districtField = {
-    label: {
-        labelName: "District",
-        labelKey: "RP_DISTRICT_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter District",
-        labelKey: "RP_DISTRICT_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    // minLength: 1,
-    // maxLength: 100,
-    // required: true,
-  }
-
-export const stateField = {
-    label: {
-        labelName: "State",
-        labelKey: "RP_STATE_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter State",
-        labelKey: "RP_STATE_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    // minLength: 1,
-    // maxLength: 100,
-    // required: true,
-  }
-
-export const countryField = {
-    label: {
-        labelName: "Country",
-        labelKey: "RP_COUNTRY_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Country",
-        labelKey: "RP_COUNTRY_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    // minLength: 1,
-    // maxLength: 100,
-    // required: true,
-  }
-
-export const landmarkField = {
-    label: {
-        labelName: "Landmark",
-        labelKey: "RP_LANDMARK_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Landmark",
-        labelKey: "RP_LANDMARK_PLACEHOLDER"
-    },
-    // required: true,
-    optionValue: "code",
-    optionLabel: "label",
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    }
   }
 
 export const pincodeField = {
@@ -117,8 +47,8 @@ export const pincodeField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 100,
+    minLength: 6,
+    maxLength: 6,
     required: true,
   }
 
@@ -142,16 +72,41 @@ const areaNameField = {
 
 const ownershipTransitNumberField = {
     ...transitNumberConfig,
-    jsonPath: "Properties[0].propertyDetails.address.transitNumber"
+    jsonPath: "Properties[0].transitNumber",
+    iconObj: {
+        iconName: "search",
+        position: "end",
+        color: "#FE7A51",
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            getDetailsFromProperty(state, dispatch);
+          }
+        }
+      },
+      title: {
+        value:
+          "If you have already assessed your property, then please search your property by your transit Number",
+        key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
+      },
+      infoIcon: "info_circle",
+      beforeFieldChange: (action, state, dispatch) => {
+        dispatch(
+            prepareFinalObject(
+              "Owners[0].propertyId",
+              ""
+            )
+          )
+      }
 }
 
 const getOwnershipAddressDetails = () => {
     return {
-        header: addressHeader,
+        header: propertyHeader,
         detailsContainer: getCommonContainer({
             ownershipTransitNumber: getTextField(ownershipTransitNumberField),
-            areaName: getTextField(areaNameField),
-            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].propertyDetails.address.pincode"}),
+            areaName: getTextField({...areaNameField, jsonPath: "Properties[0].area", required: false, props: {...areaNameField.props, disabled: true}}),
+            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }
 }

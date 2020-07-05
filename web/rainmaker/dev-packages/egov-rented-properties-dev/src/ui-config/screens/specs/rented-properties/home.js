@@ -2,6 +2,7 @@ import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import "../utils/index.css";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
+import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 
 const header = getCommonHeader(
     {
@@ -47,10 +48,6 @@ const header = getCommonHeader(
     icon: <FormIcon />,
     route: "search-mortgage"
   },
-
-]
-
-const cardItems2 = [
   {
     label: {
         labelKey: "ACCOUNT_STATEMENT_GENERATION_HEADER",
@@ -85,6 +82,39 @@ const cardItems2 = [
   }
 ]
 
+const citizenCardItems = [{
+  label: {
+    labelName: "Transfer of Transit site In case of Legal Heir (Ownership Transfer)",
+    labelKey: "OWNER_SHIP_TRANSFER_HEADER"
+  },
+  icon: <TradeLicenseIcon />,
+  route: `/rented-properties-citizen/ownership-transfer`
+  },
+  {
+    label: {
+      labelName: "Duplicate copy of Allotment letter",
+      labelKey: "DUPLICATE_COPY_HEADER"
+    },
+    icon: <TradeLicenseIcon />,
+    route: `/rented-properties-citizen/duplicate-copy`
+    },
+    {
+      label: {
+        labelName: "Mortgage",
+        labelKey: "MORTAGE_HEADER"
+      },
+      icon: <TradeLicenseIcon />,
+      route: `/rented-properties-citizen/mortage`
+      },
+      {
+        label: {
+          labelName: "Account Statement Generation",
+          labelKey: "ACCOUNT_STATEMENT_GENERATION_HEADER"
+        },
+        icon: <TradeLicenseIcon />,
+        route: `/rented-properties-citizen/account-statement`
+        }
+]
 
   const home = {
     uiFramework: "material-ui",
@@ -96,32 +126,17 @@ const cardItems2 = [
         children: {
           header: header,
           applyCard: {
-            uiFramework: "custom-molecules",
+            moduleName: "egov-rented-properties",
+            uiFramework: "custom-molecules-local",
             componentPath: "LandingPage",
             props: {
-              items: cardItems,
+              items: process.env.REACT_APP_NAME === "Citizen" ? citizenCardItems : cardItems,
               history: {},
               style: {
                 width: "100%"
               }
             }
-          },
-          applyCard2: {
-            uiFramework: "custom-molecules",
-            componentPath: "LandingPage",
-            props: {
-              items: cardItems2,
-              history: {},
-              style: {
-                width: "100%"
-              }
-            }
-          },
-        //   listCard: {
-        //     uiFramework: "custom-molecules-local",
-        //     moduleName: "egov-tradelicence",
-        //     componentPath: "HowItWorks"
-        //   }
+          }
         }
       }
       }

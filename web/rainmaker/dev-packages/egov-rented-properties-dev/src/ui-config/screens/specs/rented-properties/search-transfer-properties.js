@@ -1,32 +1,23 @@
 import {
     getCommonHeader,
-    getLabel,
     getBreak,
-    getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
-import find from "lodash/find";
-import get from "lodash/get";
-import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
-import { searchApiCall } from "./searchResource/functions"
-import { searchResults } from "./searchResource/searchResults";
-import { getColonyTypes } from "./apply";
+import { ownerShipTransferApplication } from "./searchResource/rentedPropertyApplication";
+import { searchTransferProperties } from "./searchResource/functions"
+import { transferSearchResults } from "./searchResource/searchResults";
 
   const header = getCommonHeader({
     labelName: "Transfer Properties",
     labelKey: "RP_COMMON_TRANSFER_PROPERTIES"
   });
+
   const transferPropertiesSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search",
+    name: "search-transfer-properties",
     beforeInitScreen: (action, state, dispatch) => {
       dispatch(prepareFinalObject("searchScreen", {}))
-      getColonyTypes(action, state, dispatch)
-      searchApiCall(state, dispatch, true)
+      searchTransferProperties(state, dispatch, true)
       return action
     },
     components: {
@@ -51,9 +42,9 @@ import { getColonyTypes } from "./apply";
               }
             }
           },
-          rentedPropertyApplication,
+          ownerShipTransferApplication,
           breakAfterSearch: getBreak(),
-          searchResults
+          transferSearchResults
         }
       }
     }

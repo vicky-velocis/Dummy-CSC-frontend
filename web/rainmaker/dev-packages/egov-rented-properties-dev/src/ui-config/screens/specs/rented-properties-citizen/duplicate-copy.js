@@ -25,7 +25,7 @@ const cardItems = [{
         labelName: "Apply"
     },
     icon: <TradeLicenseIcon />,
-    route: `duplicate-copy-apply?tenantId=${tenantId}`
+    route: `duplicate-copy-apply`
   },
   {
     label: {
@@ -56,11 +56,6 @@ const duplicateCopyHome = {
                   width: "100%"
                 }
               }
-            },
-            listCard: {
-              uiFramework: "custom-molecules-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "HowItWorks"
             }
           }
         }

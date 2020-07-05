@@ -27,7 +27,7 @@ const rentAmountField = {
         sm: 6
     },
     minLength: 1,
-    maxLength: 100,
+    maxLength: 5,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.monthlyRent"
   }
@@ -46,7 +46,7 @@ const revisedPeriodField = {
         sm: 6
     },
     minLength: 1,
-    maxLength: 100,
+    maxLength: 5,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.revisionPeriod"
   }
@@ -65,7 +65,7 @@ const revisedPercentageField = {
         sm: 6
     },
     minLength: 1,
-    maxLength: 100,
+    maxLength: 3,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.revisionPercentage"
   }

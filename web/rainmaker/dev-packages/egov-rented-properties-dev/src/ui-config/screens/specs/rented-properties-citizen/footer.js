@@ -1,12 +1,14 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer } from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, getDetailsFromProperty } from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
+import { some } from "lodash";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
-        state.screenConfiguration.screenConfig["apply"],
+        state.screenConfiguration.screenConfig["ownership-apply"],
         "components.div.children.stepper.props.activeStep",
         0
     );
@@ -26,20 +28,66 @@ const callBackForNext = async(state, dispatch) => {
           "ownership-apply"
         )
         if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
-                applyOwnershipTransfer(state, dispatch, activeStep)
+          const propertyId = get(state.screenConfiguration.preparedFinalObject, "Owners[0].propertyId");
+          const transitNumber = get(state.screenConfiguration.preparedFinalObject, "Properties[0].transitNumber")
+          if(!propertyId) {
+            const res = await getDetailsFromProperty(state, dispatch)
+            if(!!res) {
+              const applyRes = applyOwnershipTransfer(state, dispatch, activeStep)
+              if(!applyRes) {
+                return
+              }
+            } else {
+              return
+            }
+          }
         } else {
             isFormValid = false;
         }
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
+      const uploadedDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Properties[0].propertyDetails.applicationDocuments",
+        []
+    );
 
+    const uploadedTempDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "PropertiesTemp[0].applicationDocuments",
+        []
+    );
+
+    for (var y = 0; y < uploadedTempDocData.length; y++) {
+      if (
+          uploadedTempDocData[y].required &&
+          !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+      ) {
+          isFormValid = false;
+      }
+    }
+    if(isFormValid) {
+      const reviewDocData =
+              uploadedDocData &&
+              uploadedDocData.map(item => {
+                  return {
+                      title: `RP_${item.documentType}`,
+                      link: item.fileUrl && item.fileUrl.split(",")[0],
+                      linkText: "View",
+                      name: item.fileName
+                  };
+              });
+              dispatch(
+                prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
+            );
+    }
     }
     if(activeStep === SUMMARY_STEP) {
       const rentedData = get(
         state.screenConfiguration.preparedFinalObject,
         "Properties[0]"
     );
-    isFormValid = await applyOwnershipTransfer(state, dispatch);
+    // isFormValid = await applyOwnershipTransfer(state, dispatch);
       if (isFormValid) {
           moveToSuccess(rentedData, dispatch);
       }

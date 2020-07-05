@@ -61,7 +61,10 @@ const callBackForNext = async(state, dispatch) => {
         )
         if(!!isPropertyDetailsValid && !!isRentHolderValid && !!isRentValid && !!isPaymentValid && !!isAddressValid
             ) {
-              applyRentedProperties(state, dispatch, activeStep)
+              const res = await applyRentedProperties(state, dispatch, activeStep)
+              if(!res) {
+                return
+              }
         } else {
             isFormValid = false;
         }

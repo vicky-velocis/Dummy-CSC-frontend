@@ -32,6 +32,10 @@ import {
   } from "egov-ui-framework/ui-utils/commons";
   import commonConfig from "config/common.js";
   import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getSearchResults } from "./commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
 
   export const applyRentedProperties = async (state, dispatch, activeIndex) => {
     try {
@@ -47,7 +51,7 @@ import {
         set(queryObject[0], "owners[0].ownerDetails.allotmentStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.allotmentStartdate))
         set(queryObject[0], "owners[0].ownerDetails.posessionStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.posessionStartdate))
         set(queryObject[0], "owners[0].ownerDetails.dateOfBirth", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.dateOfBirth))
-        set(queryObject[0], "owners[0].ownerDetails.payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.payment[0].paymentDate))
+        !!queryObject[0].owners[0].ownerDetails.payment && set(queryObject[0], "owners[0].ownerDetails.payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.payment[0].paymentDate))
         set(queryObject[0], "owners[0].ownerDetails.allotmentEnddate", addYears(queryObject[0].owners[0].ownerDetails.allotmentStartdate, 5))
         set(queryObject[0], "owners[0].ownerDetails.posessionEnddate", addYears(queryObject[0].owners[0].ownerDetails.posessionStartdate, 5))
         set(queryObject[0], "propertyDetails.floors", "")
@@ -105,16 +109,38 @@ import {
     }
   }
 
-
-
   export const applyOwnershipTransfer = async (state, dispatch, activeIndex) => {
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
-              get(state.screenConfiguration.preparedFinalObject, "Properties", [])
+              get(state.screenConfiguration.preparedFinalObject, "Owners", [])
             )
           );
-        console.log(queryObject);
+        const userInfo = JSON.parse(getUserInfo())
+        const tenantId = userInfo.permanentCity;
+        // const tenantId = getQueryArg(window.location.href, "tenantId");
+        const id = get(queryObject[0], "id");
+        let response;
+        set(queryObject[0], "tenantId", tenantId);
+        set(queryObject[0], "applicationStatus", "");
+        set(queryObject[0], "ownerDetails.phone", userInfo.userName)
+        set(queryObject[0], "ownerDetails.permanent", false)
+        set(queryObject[0], "isPrimaryOwner", true);
+        set(queryObject[0], "activeState", true);
+        set(queryObject[0], "ownerDetails.applicationType", "CitizenApplication")
+        set(queryObject[0], "ownerDetails.dateOfDeathAllottee", convertDateToEpoch(queryObject[0].ownerDetails.dateOfDeathAllottee))
+        if(!id) {
+          set(queryObject[0], "action", "INITIATE");
+          response = await httpRequest(
+            "post",
+            "/csp/ownership-transfer/_create",
+            "",
+            [],
+            { Owners: queryObject }
+          );
+        }
+        let {Owners} = response
+        dispatch(prepareFinalObject("Owners", Owners));
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -122,3 +148,99 @@ import {
         return false;
     }
   }
+
+export const getDetailsFromProperty = async (state, dispatch) => {
+  try {
+    const transitNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].transitNumber",
+      ""
+    );
+    if(!!transitNumber) {
+      let queryObject = [
+        { key: "transitNumber", value: transitNumber }
+      ];
+      const payload = await getSearchResults(queryObject)
+      if (
+        payload &&
+        payload.Properties
+      ) {
+        if (!payload.Properties.length) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Transit Number",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].transitNumber",
+              ""
+            )
+          )
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          const {Properties} = payload;
+          const {owners = []} = Properties[0]
+          const findOwner = owners.find(item => !!item.activeState) || {}
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].area",
+              Properties[0].propertyDetails.address.area
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].pincode",
+              Properties[0].propertyDetails.address.pincode
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Owners[0].propertyId",
+              Properties[0].propertyDetails.propertyId
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Owners[0].allotmenNumber",
+              findOwner.allotmenNumber
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Owners[0].ownerDetails.monthlyRent",
+              findOwner.ownerDetails.monthlyRent
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Owners[0].ownerDetails.revisionPeriod",
+              findOwner.ownerDetails.revisionPeriod
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Owners[0].ownerDetails.revisionPercentage",
+              findOwner.ownerDetails.revisionPercentage
+            )
+          )
+          return true
+        }
+    }
+  }
+ } catch (error) {
+  console.log(e);
+  }
+}

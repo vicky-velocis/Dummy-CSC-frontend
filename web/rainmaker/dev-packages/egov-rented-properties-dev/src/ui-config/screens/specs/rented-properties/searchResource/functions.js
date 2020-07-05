@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getCount } from "../../../../..//ui-utils/commons";
+import { getSearchResults, getCount, getOwnershipSearchResults } from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -13,6 +13,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../../ui-utils"
+import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS } from "./searchResults";
 
 export const getStatusList = async (state, dispatch, screen, path) => {
   const queryObject = [{ key: "tenantId", value: getTenantId() }, 
@@ -28,6 +29,94 @@ export const getStatusList = async (state, dispatch, screen, path) => {
         status
       )
     );
+  }
+}
+
+export const searchTransferProperties = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
+  !!hideTable && showHideTable(false, dispatch);
+  let queryObject = [
+    // {
+    //   key: "tenantId",
+    //   value: getTenantId()
+    // },
+    { key: "offset", value: offset },
+    { key: "limit", value: limit }
+  ];
+  queryObject = queryObject.filter(({value}) => !!value)
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen",
+    {}
+  );
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.ownerShipTransferApplication.children.cardContent.children.applicationNoContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid) && typeof onInit != "boolean") {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to start search",
+          labelKey: "ERR_FILL_VALID_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else if (
+    (Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")) && typeof onInit != "boolean"
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field to start search",
+          labelKey: "ERR_FILL_ONE_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else {
+      for (var key in searchScreenObject) {
+        if (
+          searchScreenObject.hasOwnProperty(key) &&
+          searchScreenObject[key].trim() !== ""
+        ) {
+            queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        }
+    }
+    const response = await getOwnershipSearchResults(queryObject);
+    try {
+      let data = response.Owners.map(item => ({
+        [APPLICATION_NO]: item.ownerDetails.applicationNumber || "-",
+        [PROPERTY_ID]: item.propertyId || "-",
+        [OWNER_NAME]: item.ownerDetails.name || "-",
+        [STATUS]: getLocaleLabels(item.state, item.state) || "-",
+      }));
+      dispatch(
+        handleField(
+          "search-transfer-properties",
+          "components.div.children.transferSearchResults",
+          "props.data",
+          data
+        )
+      );
+      !!hideTable && showHideTable(true, dispatch);
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.log(error);
+    }
   }
 }
 
