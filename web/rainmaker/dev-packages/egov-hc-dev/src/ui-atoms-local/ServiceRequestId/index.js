@@ -10,7 +10,8 @@ const styles = {
   textAlign: "center",
   verticalAlign: "middle",
   lineHeight: "35px",
-  fontSize: "16px"
+  fontSize: "16px",
+  marginTop: "5px"
 };
 
 

@@ -6,6 +6,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+// import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 
 
@@ -24,57 +25,18 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
     return label;
   }
 };
-export const getSearchResultsEmployeeRequestFilter = async (queryObject,state, dispatch) => {
+export const getSearchResultsEmployeeRequestFilter = async (data) => {
+  // debugger
+  
   try {
-    
-    let fromDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.fromDate")
-    let toDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.toDate")
-    let servicerequestid = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicerequestid") 
-    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype")
-    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus")
-    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla")
-    let contactNumber = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.contactNumber")
-    var dateFromObject = new Date(fromDate);
-    var dateToObject = new Date(toDate);
-    let fromDateNumeric = dateFromObject.getTime() 
-    let toDateNumeric = dateToObject.getTime()
-    var oneDayDifference = 60 * 60 * 24 * 1000
-    if (fromDateNumeric === toDateNumeric){
-      toDateNumeric = toDateNumeric + oneDayDifference
-    }
-      var data = {
-        "fromDate":fromDateNumeric,
-        "toDate": toDateNumeric,
-        "service_request_id":servicerequestid,
-        "serviceType":servicetype,
-        "serviceRequestStatus":servicestatus,
-        "streetName":mohalla,
-        "ownerContactNumber":contactNumber
-      
-    }
-   
-    
-    
-    console.log("$$$$query object", queryObject)
     const response = await httpRequest(
       "post",
       "/hc-services/serviceRequest/_get",
       "",
       [],
       data
-      
     );
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     return response;
   } catch (error) {
     store.dispatch(
@@ -114,9 +76,7 @@ export const getSearchResults = async queryObject => {
 };
 
 export const getCurrentAssigneeUserNameAndRole = async (dispatch,userId) => {
-  // debugger
-  let tenantId = "ch.chandigarh";
-  // /egov-hrms/employees
+  let tenantId = JSON.parse(getUserInfo()).permanentCity;
   try {
     let payload = null;
     payload = await httpRequest(

@@ -47,7 +47,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
           md: 4
         },
         
-        pattern: getPattern("MobileNo"),
+        pattern: getPattern("HCMobileNoSearch"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "serviceRequests.contactNumber"
       })

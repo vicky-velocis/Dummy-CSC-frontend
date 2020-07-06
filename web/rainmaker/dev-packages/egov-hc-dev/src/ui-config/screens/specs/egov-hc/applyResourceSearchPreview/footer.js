@@ -1,5 +1,6 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import get from "lodash/get";
 import { downloadAcknowledgementForm } from "../../utils";
 import "./index.css";
 import { getSLADays, getServiceRequestStatus } from "egov-ui-kit/utils/localStorageUtils";
@@ -131,25 +132,54 @@ export const downloadPrintContainer = (
   /** MenuButton data based on status */
   let downloadMenu = [];
   let printMenu = [];
-  
+
 
   let serviceRequestDownloadObject = {
     label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
     link: () => {
-      
+      let document_list = get(
+        state,
+        "screenConfiguration.preparedFinalObject.documents_list",
+        {}
+      );
+      var docs = "";
+      var img_cnt =1;
+      for(var i=0;i<document_list.length;i++)
+      {
+        if(document_list[i].length <80){
+          while(document_list[i].length<130){
+            document_list[i] = document_list[i] + " ";
+          }
+        }
+        
+        docs = docs + "Document "+img_cnt + " -   " +document_list[i];
+        img_cnt = img_cnt+1;
+      }
+      // alert(docs);
+    // alert("Doc :: "+ JSON.stringify(document_list));
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
-      myRequestDetails["SLADays"] = getSLADays()
+      myRequestDetails["SLADays"] = getSLADays();
+      myRequestDetails["Status"] = getServiceRequestStatus();
+      // myRequestDetails["documents"] = docs;
+      myRequestDetails["documents"] = docs;
       const data= [myRequestDetails];
-      downloadAcknowledgementForm(data);
+      downloadAcknowledgementForm(data, "download");
     },
     leftIcon: "assignment"
   };
   let serviceRequestPrintObject = {
     label: { labelName: "ServiceRequest", labelKey: "HC_SERVICEREQUEST" },
     link: () => {
+      let document_list = get(
+        state,
+        "screenConfiguration.preparedFinalObject.documents_list",
+        {}
+      );
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
-      myRequestDetails["SLADays"] = getSLADays()
-      const data= [myRequestDetails];
+      myRequestDetails["SLADays"] = getSLADays();
+      myRequestDetails["Status"] = getServiceRequestStatus();
+      myRequestDetails["documents"] = document_list[0].toString();
+      var data= [myRequestDetails];
       downloadAcknowledgementForm(data,'print');
     },
     leftIcon: "assignment"

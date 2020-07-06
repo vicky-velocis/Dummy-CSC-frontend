@@ -340,7 +340,7 @@ class HCActionDialog extends React.Component {
                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
-                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); this.getEmployeeList(e.target.value); }}
+                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); handleFieldChange(`${dataPath}.assignee`,[]);this.getEmployeeList(e.target.value) }}
                       
                       // onChange={this.props.onChange; this.handleChange}
                         jsonPath={`${dataPath}.roleList[0]`}
@@ -416,7 +416,7 @@ class HCActionDialog extends React.Component {
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfSDO}
-                         optionValue="value"
+                        optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
                         // onClose={handleFieldChange(`${dataPath}.assignee`,[""])}
@@ -485,7 +485,7 @@ class HCActionDialog extends React.Component {
                       inputProps={{
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
-                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
+                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "HC_UPLOAD_FILES_BUTTON" }}
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
@@ -554,7 +554,7 @@ class HCActionDialog extends React.Component {
                       />
                     </div>
                     <ImageUpload module="egov-workflow"  formKey={"workflow"} fieldKey={`wfDocuments`} />
-                    <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
+                    <Grid sm={12} style={{ textAlign: "right", marginTop: "16px", paddingTop:"10px"}} className="bottom-button-container">
                                          <Button
                         variant={"contained"}
                         color={"primary"}

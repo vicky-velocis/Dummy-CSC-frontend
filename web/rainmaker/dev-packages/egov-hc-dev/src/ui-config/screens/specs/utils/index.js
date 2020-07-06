@@ -174,12 +174,12 @@ export const getFinancialYearDates = (format, et) => {
   return financialDates;
 };
 
-export const downloadAcknowledgementForm = (serviceRequest,mode="download") => {
+export const downloadAcknowledgementForm = (serviceRequest,mode) => {
+
     const queryStr = [
       { key: "key", value: "hcServiceRequest" },
       { key: "tenantId", value: "ch" }
     ]
-    
     
     const DOWNLOADRECEIPT = {
       GET: {

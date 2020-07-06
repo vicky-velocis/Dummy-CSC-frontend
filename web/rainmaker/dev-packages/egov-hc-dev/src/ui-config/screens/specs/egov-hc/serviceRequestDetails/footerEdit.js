@@ -152,13 +152,13 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
           labelName: "HC_SUBMIT",
           labelKey: "HC_SUBMIT_LABEL"
         }),
-        nextButtonIcon: {
-          uiFramework: "custom-atoms",
-          componentPath: "Icon",
-          props: {
-            // iconName: "keyboard_arrow_right"
-          }
-        }
+        // nextButtonIcon: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Icon",
+        //   props: {
+        //     // iconName: "keyboard_arrow_right"
+        //   }
+        // }
       },
       onClickDefination: {
         action: "condition",
