@@ -22,8 +22,8 @@ import {
   const {roles = []} = userInfo
   const findItem = roles.find(item => item.code === "CTL_CLERK");
   const header = getCommonHeader({
-    labelName: "Rented Properties",
-    labelKey: "RP_COMMON_RENTED_PROPERTIES"
+    labelName: "Search Property Master",
+    labelKey: "RP_SEARCH_PROPERTY_MASTER_HEADER"
   });
 
   const getStatusList = async (action, state, dispatch) => {
@@ -72,6 +72,7 @@ import {
                   xs: 12,
                   sm: 8
                 },
+                ...header
               },
               searchButton: {
                 componentPath: "Button",

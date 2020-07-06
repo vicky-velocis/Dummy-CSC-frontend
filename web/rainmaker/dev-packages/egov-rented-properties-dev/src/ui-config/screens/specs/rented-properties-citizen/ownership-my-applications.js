@@ -50,7 +50,7 @@ const screenConfig = {
                 jsonPath: "allotmenNumber",
               },
               {
-                label: "RP_COMMON_TABLE_COL_OWN_NAME",
+                label: "RP_COMMON_TABLE_COL_OWNER_NAME",
                 jsonPath: "ownerDetails.name"
               },
               {
