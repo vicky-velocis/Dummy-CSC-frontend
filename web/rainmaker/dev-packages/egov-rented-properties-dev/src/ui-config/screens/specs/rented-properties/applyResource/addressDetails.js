@@ -87,13 +87,25 @@ const ownershipTransitNumberField = {
       title: {
         value:
           "If you have already assessed your property, then please search your property by your transit Number",
-        key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
+        key: "If you have already assessed your property, then please search your property by your transit Number"
       },
       infoIcon: "info_circle",
       beforeFieldChange: (action, state, dispatch) => {
         dispatch(
             prepareFinalObject(
               "Owners[0].propertyId",
+              ""
+            )
+          )
+        dispatch(
+            prepareFinalObject(
+              "Properties[0].area",
+              ""
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].pincode",
               ""
             )
           )

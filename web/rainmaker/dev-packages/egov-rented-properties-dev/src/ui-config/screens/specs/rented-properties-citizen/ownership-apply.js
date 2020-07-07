@@ -80,6 +80,12 @@ const applyLicense = {
     uiFramework: "material-ui",
     name: "ownership-apply",
     beforeInitScreen: (action, state, dispatch) => {
+      dispatch(
+        prepareFinalObject(
+          "Owners",
+          []
+          )
+          )
         setDocumentData(action, state, dispatch)
         return action;
       },
