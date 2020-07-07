@@ -61,8 +61,8 @@ const prepareItemSeizedDetails = async (state, dispatch) => {
       for (let seizedItemList = 0; seizedItemList < SeizedItemDetailList.length; seizedItemList++) {
         const element = SeizedItemDetailList[seizedItemList];
         let temp = [];
-
-        if (item['itemName'] === element['itemName']) {
+      
+        if (item['violationItemUuid'] === element['violationItemUuid']) {
           let defectqty = parseInt(element['quantity']) - parseInt(item['auctionedQuantity']);
 
           temp[0] = item['itemName'];
@@ -79,7 +79,7 @@ const prepareItemSeizedDetails = async (state, dispatch) => {
 
           dataarray.push(temp);
           let tempAuctionList = {
-            code: item['itemName'],
+            code: item['itemName']+"~"+item['violationItemUuid'],
             name: item['itemName']
           }
           SeizedItemlistforAuction.push(tempAuctionList);

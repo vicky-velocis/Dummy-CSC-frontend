@@ -142,7 +142,7 @@ export const searchResultsSummaryHOD = {
         label: getTextToLocalSeizedItemDetailHeader("itemName"),
         options: {
           filter: true,
-          setCellProps: () => ({style: {color:'black'}})
+          //setCellProps: () => ({style: {color:'black'}})
         }
       },
       {
@@ -157,7 +157,7 @@ export const searchResultsSummaryHOD = {
         label: getTextToLocalSeizedItemDetailHeader("siRemark"),
         options: {
           filter: true,
-          setCellProps: () => ({style: {'word-wrap': 'break-word'}}) 
+          //setCellProps: () => ({style: {'word-wrap': 'break-word'}}) 
         }
       }, {
         name: getTextToLocalSeizedItemDetailHeader("storeQtyRecd"),

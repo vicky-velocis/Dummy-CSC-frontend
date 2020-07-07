@@ -154,8 +154,8 @@ const AddAuctiontoGrid = async (state, dispatch, apply) => {
     let dataarray = [];
     dataarray = get(state, 'screenConfiguration.preparedFinalObject.auctionGridDetails', []);
     let temp = [];
-
-    temp[0] = obj['itemName'];
+    debugger
+    temp[0] = obj['itemName'].split('~')[0];
     temp[1] = obj['seizedQty'];
     temp[2] = obj['auctionDate'] === undefined ? '' : convertDateTimeToEpoch(obj['auctionDate']);
     temp[3] = obj['contactNumber'] === undefined ? '' : obj['contactNumber'];
@@ -238,7 +238,7 @@ const auctionDetailData = () => {
           labelKey: "EC_AUCTION_ITEM_NAME_LABEL"
         },
         optionLabel: "name",
-        optionValue: "name",
+        optionValue: "code",
         placeholder: {
           labelName: "Select Article / Item",
           labelKey: "EC_SELECT_AUCTION_ITEM_NAME_LIST_PLACEHOLDER"
@@ -263,7 +263,7 @@ const auctionDetailData = () => {
             for (let index = 0; index < articlesSeizedDetails.length; index++) {
               const element = articlesSeizedDetails[index];
 
-              if (element.itemName === action.value) {
+              if (element.violationItemUuid === action.value.split('~')[1]) {
                 isobjselected = true;
                 dispatch(prepareFinalObject("auctionDetails.seizedQty", element.actualQuantity));
                 dispatch(prepareFinalObject("auctionDetails.itemStoreUuid", element.itemStoreUuid));
