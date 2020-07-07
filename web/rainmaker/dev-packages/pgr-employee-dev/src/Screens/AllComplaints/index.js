@@ -21,6 +21,23 @@ class AllComplaints extends Component {
   constructor(props) {   
      super(props);  
       this.multiselectRef = React.createRef();
+    this.multiDropdownStyle = {
+      chips: {
+        background: "#FE7A51"
+      },
+      searchBox: {
+        border: "none",
+        borderBottom: "1px solid #cccccc",
+        borderRadius: "0px",
+      },
+      multiselectContainer: {
+        color: "#FE7A51"
+      },    
+	optionListContainer:{
+		"position" : "relative !important",
+		"z-index" : "99999"
+	}
+	};
     }
    selectedSector = [];
   state = {
@@ -232,8 +249,15 @@ class AllComplaints extends Component {
 
   onSearch = () => {
     const { complaintNo, mobileNo } = this.state;
-    const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
+    const { fetchComplaints, toggleSnackbarAndSetText,role } = this.props;
     let queryObj = [];
+
+    if(role === "eo"){
+      queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending" });
+    }
+    else if (role === "employee"){
+      queryObj.push({ key: "status", value: "open,reassignrequested" });
+    }
     if (complaintNo) {
       queryObj.push({ key: "serviceRequestId", value: complaintNo });
     }
@@ -272,7 +296,7 @@ class AllComplaints extends Component {
   clearSearch = () => {
     const { fetchComplaints } = this.props;
     fetchComplaints([
-      { key: "status", value: "assigned,open,reassignrequested" }
+      { key: "status", value: "assigned,open,reassignrequested,escalatedlevel1pending,escalatedlevel2pending" }
     ]);
     this.setState({ mobileNo: "", complaintNo: "", search: false,sector:[] });
     this.selectedSector = [];    this.multiselectRef.current.resetSelectedValues();
@@ -708,11 +732,12 @@ class AllComplaints extends Component {
                     hintStyle={{ width: "100%" }}
                   />
                    </div>
-                <div className="col-sm-6 col-md-6 col-xs-12" style={{ paddingLeft: 8 }}>   
+                <div className="col-sm-6 col-md-6 col-xs-12" style={{ paddingLeft: 8,paddingTop:8 }}>   
                   <Multiselect   
                     options={sectorDropdown}  
                     closeIcon="close"      
-                    displayValue="name"       
+                    displayValue="name"   
+                    style={this.multiDropdownStyle}
                     onSelect={(selectedList, selectedItem) => this.onSelect(selectedList, selectedItem)}                   
                     onRemove={(selectedList, selectedItem) => this.onRemove(selectedList, selectedItem)} 
                     ref={this.multiselectRef}    
@@ -859,7 +884,8 @@ const mapStateToProps = state => {
         complaint =>
           complaint.rawStatus === "escalatedlevel1pending" ||
           complaint.rawStatus === "escalatedlevel2pending" ||
-          complaint.rawStatus === "assigned" 
+          complaint.rawStatus === "assigned" ||
+          complaint.rawStatus === "reassignrequested"
       );  
     }else{
       filteredEmployeeComplaints = transformedComplaints.filter(
@@ -877,7 +903,8 @@ const mapStateToProps = state => {
       complaint =>
         complaint.rawStatus === "escalatedlevel1pending" ||
         complaint.rawStatus === "escalatedlevel2pending" ||
-        complaint.rawStatus === "assigned" 
+        complaint.rawStatus === "assigned" ||
+        complaint.rawStatus === "reassignrequested"
     );  
   }
   else{

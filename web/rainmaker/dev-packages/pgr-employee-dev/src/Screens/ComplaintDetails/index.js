@@ -312,7 +312,8 @@ class ComplaintDetails extends Component {
           btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
         } else if (complaint.status.toLowerCase() === "assigned") {
           btnOneLabel = "ES_REQUEST_REQUEST_RE_ASSIGN";
-          btnTwoLabel = "ES_RESOLVE_MARK_RESOLVED";
+          btnTwoLabel = "ES_REJECT_BUTTON";
+          btnThreeLabel="ES_RESOLVE_MARK_RESOLVED";
         }
       } else if (role === "employee") {
         if (complaint.complaintStatus.toLowerCase() === "assigned") {
@@ -330,7 +331,7 @@ class ComplaintDetails extends Component {
                 <div style={{marginTop:30}}>
           <Icon onClick={() => 
           {
-          const  {tabValue} = this.props.history.location.state;
+          const  {tabValue} = this.props.history.location.state || 0;
 
           window.localStorage.setItem('tabValue', tabValue);
             this.props.history.goBack();
