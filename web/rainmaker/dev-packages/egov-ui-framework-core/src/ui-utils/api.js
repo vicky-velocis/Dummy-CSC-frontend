@@ -165,6 +165,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     }
   } catch (error) {
     store.dispatch(toggleSpinner());
-    throw new Error(error);
+    alert("File size exceed the limit");
+    //throw new Error(error);
   }
 };
