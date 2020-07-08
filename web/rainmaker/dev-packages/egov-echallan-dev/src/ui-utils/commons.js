@@ -49,7 +49,7 @@ export const getSearchResults = async (RequestBody, dispatch) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/echallan-services/violation/_get",
+      "/ec-services/violation/_get",
       "",
       [],
       data
@@ -240,7 +240,7 @@ export const getFineMasterGridData = async () => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/fine/_get",
+      "/ec-services/fine/_get",
       "",
       [],
       data
@@ -329,7 +329,7 @@ const checkEffectiveDate = (state, dispatch, effectiveStartDate) => {
   }
 }
 export const createUpdateFineMaster = async (state, dispatch, status, isActive) => {
-debugger
+
   let FineID = get(state, "screenConfiguration.preparedFinalObject.FineMaster.fineUuid");
 
   let method = FineID ? "_update" : "_create";
@@ -344,7 +344,9 @@ debugger
     if (status !== 'APPROVE' && status !== 'REJECT') {
 
       isStartDateValid = checkEffectiveDate(state, dispatch, processeffective);
-      isEndDateVaild = new Date(processeffectiveEnd) < new Date(processeffective) ? true : false
+      //isEndDateVaild = new Date(processeffectiveEnd) < new Date(processeffective) ? true : false
+      
+	  isEndDateVaild = getDiffernceBetweenTwoDates(convertEpochToDate(convertDateTimeToEpoch(processeffectiveEnd)), convertEpochToDate(convertDateTimeToEpoch(processeffective))) <  0 ? true : false;
     }
 
     set(payload, "effectiveStartDate", convertEpochToDate(convertDateTimeToEpoch(processeffective)));
@@ -357,7 +359,7 @@ debugger
     let response;
 
     if (!isStartDateValid && !isEndDateVaild) {
-      response = await httpRequest("post", "/echallan-services/fine/" + method, "", [], { requestBody: payload });
+      response = await httpRequest("post", "/ec-services/fine/" + method, "", [], { requestBody: payload });
       if (response.ResponseBody.fineUuid !== 'null' || response.ResponseBody.fineUuid !== '') {
         dispatch(prepareFinalObject("FineMasters", response.ResponseBody));
         return { status: "success", message: response };
@@ -393,7 +395,7 @@ debugger
 export const fetchItemListMasterData = async (action, state, dispatch) => {
   //
   try {
-    const response = await httpRequest("post", "/echallan-services/item/_get", "", [], data);
+    const response = await httpRequest("post", "/ec-services/item/_get", "", [], data);
     let data = response.ResponseBody.map(item => ({
       // alert(item)
       'code': item['itemUuid'] || "-",
@@ -427,7 +429,7 @@ export const fetchItemMasterData = async (itemUuid) => {
     }
   }
   try {
-    const response = await httpRequest("post", "/echallan-services/item/_get", "", [], data);
+    const response = await httpRequest("post", "/ec-services/item/_get", "", [], data);
     return response;
 
   } catch (error) {
@@ -455,7 +457,7 @@ export const createUpdateItemMaster = async (state, dispatch, status, isActive) 
     let methodName = '';
 
     methodName = method === "CREATE" ? '_create' : '_update';
-    response = await httpRequest("post", "/echallan-services/item/" + methodName, "", [], { requestBody: payload });
+    response = await httpRequest("post", "/ec-services/item/" + methodName, "", [], { requestBody: payload });
 
     if (response.ResponseBody.itemUuid !== 'null' || response.ResponseBody.itemUuid !== '') {
       dispatch(prepareFinalObject("ItemMasters", response.ResponseBody));
@@ -476,7 +478,7 @@ export const fetchMasterChallanData = async (RequestBody) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/violation/_get",
+      "/ec-services/violation/_get",
       "",
       [],
       data
@@ -503,7 +505,7 @@ export const fetchMasterChallanHODAuction = async (RequestBody) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/auction/_getChallan",
+      "/ec-services/auction/_getChallan",
       "",
       [],
       data
@@ -529,7 +531,7 @@ export const fetchStoreItemHODMasterChallanData = async (RequestBody) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/storeitemregister/_get",
+      "/ec-services/storeitemregister/_get",
       "",
       [],
       data
@@ -556,7 +558,7 @@ export const fetchauctionHODMasterChallanData = async (RequestBody) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/auction/_get",
+      "/ec-services/auction/_get",
       "",
       [],
       data
@@ -586,7 +588,7 @@ export const fetchVendorDetails = async (state, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/vendor/_get",
+      "/ec-services/vendor/_get",
       "",
       [],
       data
@@ -628,7 +630,7 @@ export const createVendorDetails = async (file) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/vendor/_create",
+      "/ec-services/vendor/_create",
       "",
       [],
       data
@@ -641,7 +643,7 @@ export const createVendorDetails = async (file) => {
     };
     let updateresponse = await httpRequest(
       "post",
-      "/echallan-services/vendor/_update",
+      "/ec-services/vendor/_update",
       "",
       [],
       updatedata
@@ -711,7 +713,7 @@ export const getUserDetailsOnMobile = async (role, mobileNumber) => {
       "tenantId": tenantId,
       "mobileNumber": mobileNumber
     }
-    //http://192.168.12.114:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
+    //http://192.168.12.74:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
 
     payload = await httpRequest(
       "post",
@@ -747,7 +749,7 @@ export const approverejectAuctionDetails = async (state, dispatch, status) => {
       auctionList: payload
     }
 
-    response = await httpRequest("post", "/echallan-services/auction/_update", "", [], { RequestBody });
+    response = await httpRequest("post", "/ec-services/auction/_update", "", [], { RequestBody });
 
     if (response.ResponseInfo.status !== '') {
       return { status: "success", message: response.ResponseInfo };
@@ -890,7 +892,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
       //specially for calculating service
       dispatch(prepareFinalObject("eChallanFinalObj", payload));
 
-      response = await httpRequest("post", "/echallan-services/violation/_create", "", [], { requestBody: payload });
+      response = await httpRequest("post", "/ec-services/violation/_create", "", [], { requestBody: payload });
 
       if (response.ResponseBody.challanId !== 'null' || response.ResponseBody.challanId !== '') {
         dispatch(prepareFinalObject("eChallan", response.ResponseBody));
@@ -912,16 +914,6 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
           return { status: "fail", message: response + "Submission Falied, Try Again later!", createDemand: responsecreateDemand };
         }
       }
-    } else if (method === "UPDATE") {
-      response = await httpRequest("post", "/pm-services/noc/_update", "", [], { dataPayload: payload });
-      // response = furnishNocResponse(response);
-      if (status === 'RESENT') {
-        response_updatestatus = await httpRequest("post", "/pm-services/noc/_updateappstatus", "", [], { dataPayload: {} });
-      }
-      setapplicationNumber(response.applicationId);
-      setApplicationNumberBox(state, dispatch);
-      dispatch(prepareFinalObject("ADVERTISEMENTNOC", response));
-      return { status: "success", message: response };
     }
   } catch (error) {
 
@@ -938,7 +930,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
 export const sendPaymentReceiptOverMail = async (RequestBody) => {
   try {
     const response = await httpRequest(
-      "post", "/echallan-services/violation/_notify", "",
+      "post", "/ec-services/violation/_notify", "",
       [],
       { RequestBody }
     );
@@ -959,7 +951,7 @@ export const getSearchResultsView = async requestBody => {
   try {
     //
     const response = await httpRequest(
-      "post", "/echallan-services/violation/_get", "",
+      "post", "/ec-services/violation/_get", "",
       [],
       { requestBody }
     );
@@ -1023,7 +1015,7 @@ export const fetchVendorData = async () => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/vendor/_get",
+      "/ec-services/vendor/_get",
       "",
       [],
       data
@@ -1058,7 +1050,7 @@ export const UpdateChallanStatus = async (state, dispatch, status) => {
     }
 
     let response;
-    response = await httpRequest("post", "/echallan-services/violation/_update", "", [], { requestBody: data });
+    response = await httpRequest("post", "/ec-services/violation/_update", "", [], { requestBody: data });
 
     if (response.ResponseInfo.status !== '') {
       return { status: "success", message: response };
@@ -1133,7 +1125,7 @@ export const addToStoreViolationData = async (state, dispatch, status) => {
     }
     const response = await httpRequest(
       "post",
-      "/echallan-services/storeitemregister/_create",
+      "/ec-services/storeitemregister/_create",
       "",
       [],
       data
@@ -1166,7 +1158,7 @@ export const addToStoreReturnCloseData = async (state, dispatch, status) => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/echallan-services/storeitemregister/_update",
+      "/ec-services/storeitemregister/_update",
       "",
       [],
       data
@@ -1193,7 +1185,7 @@ export const fetchReportData = async (data) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/report/_get",
+      "/ec-services/report/_get",
       "",
       [],
       data
@@ -1289,7 +1281,7 @@ export const auctionCreateMasterChallanData = async (state, dispatch, data) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/auction/_create",
+      "/ec-services/auction/_create",
       "",
       [],
       { requestBody: data }
@@ -1317,7 +1309,7 @@ export const fetchViewHistorytData = async (data) => {
   try {
     const response = await httpRequest(
       "post",
-      "/echallan-services/auction/_get",
+      "/ec-services/auction/_get",
       "",
       [],
       { requestBody: data }
@@ -1350,7 +1342,7 @@ export const getDashboardChallanCount = async () => {
     };
     const response = await httpRequest(
       "post",
-      "/echallan-services/report/_getDashboard",
+      "/ec-services/report/_getDashboard",
       "",
       [],
       { RequestBody }

@@ -508,7 +508,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.penaltyAmount",
           required: true,
           pattern: getPattern("DecimalAmount"),///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUTFINE_FINE_AMOUNT_FIELD_MSG",
+          errorMessage: "ERR_DEFAULT_INPUT_FINE_FINE_AMOUNT_FIELD_MSG",
         }),
         addFineMasterStorageControl: getTextField({
           label: {

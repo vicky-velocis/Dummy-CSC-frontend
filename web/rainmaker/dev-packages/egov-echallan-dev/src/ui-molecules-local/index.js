@@ -27,12 +27,6 @@ const UploadSingleFile = Loadable({
   loading: () => <Loading />
 });
 
-const UploadMultipleFiles = Loadable({
-  loader: () => import("./UploadMultipleFiles"),
-  loading: () => <Loading />
-});
-
-
 const DocumentList = Loadable({
   loader: () => import("./DocumentList"),
   loading: () => <Loading />
@@ -89,7 +83,6 @@ export {
   Tooltip,
   CustomTab,
   UploadSingleFile,
-  UploadMultipleFiles,
   DocumentList,
   MapLocator,
   FeesEstimateCard,

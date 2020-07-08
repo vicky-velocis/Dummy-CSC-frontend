@@ -365,7 +365,7 @@ export const paymentSuccessFooter = () => {
         action: "page_change",
         path:
           process.env.REACT_APP_SELF_RUNNING === "true"
-            ? `/egov-ui-framework/egov-opms/search`
+            ? `/egov-ui-framework/egov-echallan/search`
             : `/`
       },
        visible: false
