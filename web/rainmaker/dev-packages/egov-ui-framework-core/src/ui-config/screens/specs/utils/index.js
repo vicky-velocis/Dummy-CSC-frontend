@@ -599,6 +599,15 @@ export const getPattern = type => {
       return /^[1-9][0-9]$/i;
     case "familyMonthlyIncome":
       return /^[1-9][0-9]\d*$/i;
+      
+    case "DecimalAmount":
+      return /^\d{0,6}(\.\d{1,2})?$/i
+	 case "ViolatorAddress":
+        return /^[a-zA-Z.0-9 @#%&-:]{1,512}$/i;
+case "ViolatorName":
+      return /^[a-zA-Z. ]{1,65}$/i;
+    case "SeizedQuantity":
+      return /^[0-9]{0,9}$/i; 
   }
   };
 
