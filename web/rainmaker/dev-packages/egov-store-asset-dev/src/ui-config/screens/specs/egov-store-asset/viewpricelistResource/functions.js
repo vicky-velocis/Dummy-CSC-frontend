@@ -148,23 +148,23 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 };
 
 export const furnishmaterialsData = (state, dispatch) => {
-  let employeeObject = get(
+  let priceLists = get(
     state.screenConfiguration.preparedFinalObject,
     "Employee",
     []
   );
-  setDateInYmdFormat(employeeObject[0], ["dateOfAppointment", "user.dob"]);
-  setAllDatesInYmdFormat(employeeObject[0], [
+  setDateInYmdFormat(priceLists[0], ["dateOfAppointment", "user.dob"]);
+  setAllDatesInYmdFormat(priceLists[0], [
     { object: "assignments", values: ["fromDate", "toDate"] },
-    { object: "serviceHistory", values: ["serviceFrom", "serviceTo"] }
+    { object: "priceListDetails", values: ["serviceFrom", "serviceTo"] }
   ]);
-  setAllYears(employeeObject[0], [
+  setAllYears(priceLists[0], [
     { object: "education", values: ["yearOfPassing"] },
     { object: "tests", values: ["yearOfPassing"] }
   ]);
-  setRolesData(employeeObject[0]);
+  setRolesData(priceLists[0]);
   setRolesList(state, dispatch);
-  dispatch(prepareFinalObject("Employee", employeeObject));
+  dispatch(prepareFinalObject("Employee", priceLists));
 };
 
 export const handleCreateUpdatePriceList = (state, dispatch) => {
@@ -183,7 +183,7 @@ export const handleCreateUpdatePriceList = (state, dispatch) => {
 export const createUpdatePriceList = async (state, dispatch, action) => {
   const pickedTenant = get(
     state.screenConfiguration.preparedFinalObject,
-    "materials[0].tenantId"
+    "priceLists[0].tenantId"
   );
   const tenantId =  getTenantId();
   let queryObject = [
@@ -193,14 +193,60 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     }
   ];
  
-  let materialsObject = get(
+  let priceLists = get(
     state.screenConfiguration.preparedFinalObject,
-    "materials",
+    "priceLists",
     []
   );
-  set(materialsObject[0], "tenantId", tenantId);
-  set(materialsObject[0], "status", true);
-  //handleDeletedCards(materialsObject[0], "storeMapping", "id");
+  set(priceLists[0], "tenantId", tenantId);
+  set(priceLists[0], "status", true);
+  // get set date field into epoch
+
+  let rateContractDate =
+  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].rateContractDate",0) 
+  rateContractDate = convertDateToEpoch(rateContractDate);
+  set(priceLists[0],"rateContractDate", rateContractDate);
+
+  let agreementDate =
+  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementDate",0) 
+  agreementDate = convertDateToEpoch(agreementDate);
+  set(priceLists[0],"agreementDate", agreementDate);
+
+  let agreementStartDate =
+  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementStartDate",0) 
+  agreementStartDate = convertDateToEpoch(agreementStartDate);
+  set(priceLists[0],"agreementStartDate", agreementStartDate);
+
+  let agreementEndDate =
+  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementEndDate",0) 
+  agreementEndDate = convertDateToEpoch(agreementEndDate);
+  set(priceLists[0],"agreementEndDate", agreementEndDate);
+  let fileStoreId =
+  get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",0)  
+  set(priceLists[0],"fileStoreId", fileStoreId);
+  // set date to epoch in  price list material name
+  let priceListDetails = returnEmptyArrayIfNull(
+    get(priceLists[0], "priceListDetails", [])
+  );
+  for (let i = 0; i < priceListDetails.length; i++) {
+    set(
+      priceLists[0],
+      `priceListDetails[${i}].fromDate`,
+      convertDateToEpoch(
+        get(priceLists[0], `priceListDetails[${i}].fromDate`),
+        "dayStart"
+      )
+    );
+    set(
+      priceLists[0],
+      `priceListDetails[${i}].toDate`,
+      convertDateToEpoch(
+        get(priceLists[0], `priceListDetails[${i}].toDate`),
+        "dayStart"
+      )
+    );
+  }
+  //handleDeletedCards(priceLists[0], "storeMapping", "id");
  
 
   
@@ -212,9 +258,8 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       console.log(queryObject)
       console.log("queryObject")
       let response = await createPriceList(
-        queryObject,
-        tenantId,
-        materialsObject,
+        queryObject,        
+        priceLists,
         dispatch
       );
       // let employeeId = get(response, "Employees[0].code");
@@ -230,7 +275,7 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     try {
       let response = await UpdatePriceList(
         queryObject,
-        materialsObject,
+        priceLists,
         dispatch
       );
       // let employeeId = response && get(response, "Employees[0].code");

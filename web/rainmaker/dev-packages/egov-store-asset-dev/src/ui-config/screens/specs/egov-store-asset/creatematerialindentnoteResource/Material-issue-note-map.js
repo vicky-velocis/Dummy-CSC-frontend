@@ -21,12 +21,12 @@ import {
       });
   };
   
-  const storeDetailsCard = {
+  const materialIssueCard = {
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
-        storeDetailsCardContainer: getCommonContainer(
+        materialIssueCardContainer: getCommonContainer(
           {
             store: getSelectField({
               label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
@@ -137,12 +137,12 @@ import {
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materials[0].jurisdictions",
       prefixSourceJsonPath:
-        "children.cardContent.children.storeDetailsCardContainer.children"
+        "children.cardContent.children.materialIssueCardContainer.children"
     },
     type: "array"
   };
   
-  export const storeDetails = getCommonCard({
+  export const materialIssue = getCommonCard({
     header: getCommonTitle(
       {
         labelName: "Material Map to Stpre Details",
@@ -154,5 +154,5 @@ import {
         }
       }
     ),
-    storeDetailsCard
+    materialIssueCard
   });

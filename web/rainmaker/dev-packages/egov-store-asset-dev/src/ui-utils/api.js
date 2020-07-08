@@ -4,7 +4,7 @@ import {
   addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import store from "../ui-redux/store";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "../ui-config/screens/specs/egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
   getTenantId,

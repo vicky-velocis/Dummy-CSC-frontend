@@ -211,8 +211,7 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
       console.log(queryObject)
       console.log("queryObject")
       let response = await createMaterial(
-        queryObject,
-        tenantId,
+        queryObject,        
         materialsObject,
         dispatch
       );

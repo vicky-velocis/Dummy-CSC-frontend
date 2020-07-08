@@ -3,12 +3,11 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
-  import { footer } from "./createpricelistResource/footer";
-  import { getstoreTenantId ,getsuppliersSearchResults} from "../../../../ui-utils/storecommonsapi";
-  import { getSearchResults} from "../../../../ui-utils/commons";
-  import { SupplierDetails } from "./createpricelistResource/Supplier-Details"; 
-  import { MaterialPriceDetails } from "./createpricelistResource/Material-price-map"; 
-  import { documentDetails } from "./createpricelistResource/documentDetails";
+  import { footer } from "./creatematerialindentnoteResource/footer";
+  import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
+  import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
+  import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
+  import { otherDetails } from "./creatematerialindentnoteResource/other-details";
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -18,15 +17,14 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   //import { getEmployeeData } from "./viewResource/functions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import {
-    prepareDocumentsUploadData,
-    
-  } from "../../../../ui-utils/storecommonsapi";
+
   export const stepsData = [
-    { labelName: "Supplier Details", labelKey: "STORE_PRICE_SUPPLIER_DETAILS" },
-    { labelName: "Price List for Material Name Details",  labelKey: "STORE_PRICE_PRICE_LIST_FOR_MATERIAL_NAME_DETAILS" },
-    //{ labelName: "Documents", labelKey: "STORE_PRICE_LIST_DOCUMENTS" },
-   
+    { labelName: "Indent Material Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE" },
+    {
+      labelName: "Indent Material Issue Details",
+      labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE_DETAILS"
+    },
+    { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
   ];
   export const stepper = getStepperObject(
@@ -37,8 +35,8 @@ import {
   
 export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: `Create Material Master`,
-      labelKey: "HR_COMMON_CREATE_MATERIAL_MASTER"
+      labelName: `Indent Material Issue Note `,
+      labelKey: "STORE_COMMON_CREATE_INDENT_MATERIAL_ISSUE_NOTE"
     })
   });
   
@@ -49,7 +47,7 @@ export const header = getCommonContainer({
       id: "apply_form1"
     },
     children: {
-        SupplierDetails
+      IndentMaterialIssueDetails
     }
   };
   
@@ -60,24 +58,22 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
-      documentDetails,
-        MaterialPriceDetails
+      materialIssue
     },
     visible: false
   };
-
-  // export const formwizardThirdStep = {
-  //   uiFramework: "custom-atoms",
-  //   componentPath: "Form",
-  //   props: {
-  //     id: "apply_form3"
-  //   },
-  //   children: {
-  //     documentDetails
-  //   },
-  //   visible: false
-  // };
-
+  
+  export const formwizardThirdStep = {
+    uiFramework: "custom-atoms",
+    componentPath: "Form",
+    props: {
+      id: "apply_form3"
+    },
+    children: {
+        otherDetails
+    },
+    visible: false
+  };
  
   
   const getMdmsData = async (state, dispatch, tenantId) => {
@@ -88,9 +84,9 @@ export const header = getCommonContainer({
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "Material" },
-              { name: "RateType", },
-              { name: "MaterialType"},
+              { name: "Material", },
+              { name: "InventoryType", },
+              { name: "MaterialType", filter: "[?(@.active == true)]"},
             ],
           },
           {
@@ -112,7 +108,15 @@ export const header = getCommonContainer({
               }
             ]
           },
-         
+          {
+            moduleName: "egov-location",
+            masterDetails: [
+              {
+                name: "TenantBoundary"
+                // filter: "$.*.hierarchyType"
+              }
+            ]
+          },
          
         ]
       }
@@ -125,23 +129,9 @@ export const header = getCommonContainer({
         [],
         mdmsBody
       );
-      // document type 
-
-     let  DocumentType_PriceList= [
-        {
-            code: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
-            isMandatory: true, 
-            required:true,
-            documentType:"STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION"  ,         
-            active: true
-        },]
-        dispatch(
-          prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes"))
-        );
       dispatch(
-        prepareFinalObject("DocumentType_PriceList", DocumentType_PriceList)
+        prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes"))
       );
-      prepareDocumentsUploadData(state, dispatch, 'pricelist');
       setRolesList(state, dispatch);
       setHierarchyList(state, dispatch);
       return true;
@@ -157,8 +147,8 @@ export const header = getCommonContainer({
         value: tenantId
       }];
     try {
-      let response = await getSearchResults(queryObject, dispatch,"supplier");
-      dispatch(prepareFinalObject("supplier", response));
+      let response = await getStoresSearchResults(queryObject, dispatch);
+      dispatch(prepareFinalObject("store", response));
     } catch (e) {
       console.log(e);
     }
@@ -216,62 +206,15 @@ export const header = getCommonContainer({
   
   const screenConfig = {
     uiFramework: "material-ui",
-    name: `createpricelist`,
+    name: "creatematerialmaster",
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
-      // const pickedTenant = getQueryArg(window.location.href, "tenantId");
-      // pickedTenant &&
-      //   dispatch(prepareFinalObject("Employee[0].tenantId", pickedTenant));
-      // const empTenantId = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   "Employee[0].tenantId"
-      // );
+     
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
-       // Set MDMS Data
-    // getMdmsData(action, state, dispatch).then(response => {
-    //   prepareDocumentsUploadData(state, dispatch, 'pricelist');
-    // });
-      let employeeCode = getQueryArg(window.location.href, "employeeCode");
-     // employeeCode && getEmployeeData(state, dispatch, employeeCode, tenantId);
-      // getYearsList(1950, state, dispatch);
-      // freezeEmployedStatus(state, dispatch);
-      // if (mdmsDataStatus) {
-      //   setHierarchyList(state, dispatch);
-      // }
-      //   dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-      //   dispatch(prepareFinalObject("LicensesTemp", []));
-      //   // getData(action, state, dispatch);
-      //   getData(action, state, dispatch).then(responseAction => {
-      //     const queryObj = [{ key: "tenantId", value: tenantId }];
-      //     getBoundaryData(action, state, dispatch, queryObj);
-      //     let props = get(
-      //       action.screenConfig,
-      //       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-      //       {}
-      //     );
-      //     props.value = tenantId;
-      //     props.disabled = true;
-      //     set(
-      //       action.screenConfig,
-      //       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-      //       props
-      //     );
-      //     dispatch(
-      //       prepareFinalObject(
-      //         "Licenses[0].tradeLicenseDetail.address.city",
-      //         tenantId
-      //       )
-      //     );
-      //     //hardcoding license type to permanent
-      //     set(
-      //       action.screenConfig,
-      //       "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-      //       "PERMANENT"
-      //     );
-      //   });
-  
+     
+    
       return action;
     },
   
@@ -299,8 +242,7 @@ export const header = getCommonContainer({
           stepper,
           formwizardFirstStep,
           formwizardSecondStep,
-         // formwizardThirdStep,
-         
+          formwizardThirdStep,
          
           footer
         }

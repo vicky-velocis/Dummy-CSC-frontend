@@ -130,7 +130,7 @@ import {
             },
             required: false,
             pattern: getPattern("Name") || null,
-            jsonPath: "materialReceipt[0].receiptDetails.material.code"
+            jsonPath: "materialReceipt[0].receiptDetails[0].material.code"
           })
         },
         LotNumber: {
@@ -145,7 +145,7 @@ import {
             },
             required: true,
             pattern: getPattern("Name") || null,
-            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo.lotNo"
+            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo[0].lotNo"
           })
         }, 
         ExpiryDate: {
@@ -160,7 +160,7 @@ import {
             },
             required: true,
             pattern: getPattern("Date") || null,
-            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo.expiryDate",
+            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",
             props: {
               inputProps: {
                 max: getTodaysDateInYMD()
@@ -180,7 +180,7 @@ import {
             },
             required: true,
             pattern: getPattern("Amount") || null,
-            jsonPath: "materialReceipt[0].receiptDetails.userReceivedQty"
+            jsonPath: "materialReceipt[0].receiptDetails[0].userReceivedQty"
           })
         },
         OpeningRate: {
@@ -195,7 +195,7 @@ import {
             },
             required: true,
             pattern: getPattern("Amount") || null,
-            jsonPath: "materialReceipt[0].receiptDetails.unitRate"
+            jsonPath: "materialReceipt[0].receiptDetails[0].unitRate"
           })
         },
 

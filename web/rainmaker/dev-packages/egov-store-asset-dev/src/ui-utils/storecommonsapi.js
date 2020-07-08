@@ -1,5 +1,5 @@
 
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar,toggleSpinner } from "../ui-config/screens/specs/egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getMultiUnits, getQueryArg,   } from "egov-ui-framework/ui-utils/commons";
 import {  getTenantId, getUserInfo,  } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
@@ -243,4 +243,65 @@ export const updateOpeningBalance = async (queryObject, payload, dispatch) => {
     );
     throw error;
   }
+};
+export const prepareDocumentsUploadData = async (state, dispatch, type) => {
+  let documents = '';
+  if (type == "pricelist") {
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.DocumentType_PriceList",
+      []
+    );
+  }
+
+  else {
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.store.Documents",
+      []
+    );
+  }
+
+  documents = documents.filter(item => {
+    return item.active;
+  });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    // Handle the case for multiple muildings
+ 
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      card["required"] = doc.required ? true : false;
+      if (doc.hasDropdown && doc.dropdownData) {
+        let dropdown = {};
+        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+        dropdown.required = true;
+        dropdown.menu = doc.dropdownData.filter(item => {
+          return item.active;
+        });
+        dropdown.menu = dropdown.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["dropdown"] = dropdown;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+    
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
+
 };

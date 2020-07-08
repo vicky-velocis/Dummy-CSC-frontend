@@ -34,21 +34,21 @@ import {
           },
           required: true,
           jsonPath: "priceLists[0].supplier.code",
-           // sourceJsonPath: "searchScreenMdmsData.store-asset.inventoryType",
+           sourceJsonPath: "supplier.suppliers",
            props: {
-            data: [
-              {
-                value: "Asset",
-                label: "Asset"
-              },
-              {
-                value: "Consumable",
-                label: "Consumable"
-              },
+            // data: [
+            //   {
+            //     value: "Asset",
+            //     label: "Asset"
+            //   },
+            //   {
+            //     value: "Consumable",
+            //     label: "Consumable"
+            //   },
              
-            ],
-            optionValue: "value",
-            optionLabel: "label"
+            // ],
+            optionValue: "code",
+            optionLabel: "name"
           },
         })
       },

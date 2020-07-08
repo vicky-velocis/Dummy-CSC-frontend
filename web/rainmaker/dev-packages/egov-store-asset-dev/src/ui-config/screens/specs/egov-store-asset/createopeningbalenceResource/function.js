@@ -57,7 +57,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
       );
       let expiryDate = get(
         state.screenConfiguration.preparedFinalObject,
-        "materialReceipt[0].receiptDetailsAddnInfo.expiryDate",
+        "materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",
         null
       );
       if(Number(receiptDate))
@@ -96,7 +96,10 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-   else{ 
+   else{
+     
+   
+
     if (uuid) {
       createUpdateOpeningBalence(state, dispatch, "UPDATE");
     } else {
@@ -119,21 +122,33 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
       }
     ];
    
-    let materialsObject = get(
+    let materialReceiptObject = get(
       state.screenConfiguration.preparedFinalObject,
       "materialReceipt",
       []
     );
   
-   // set(materialsObject[0], "tenantId", tenantId);
-    
+
+     // set date field in eoch formate
+
+    let receivedDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetailsAddnInfo[0].receivedDate",0) 
+  receivedDate = convertDateToEpoch(receivedDate);
+  set(materialReceiptObject[0],"receiptDate", receivedDate);
+
+  let expiryDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",0) 
+  expiryDate = convertDateToEpoch(expiryDate);
+  set(materialReceiptObject[0],"receiptDetailsAddnInfo[0].expiryDate", expiryDate);
+
+
   
     if (action === "CREATE") {
       try {
        
         let response = await createOpeningBalance(
           queryObject,         
-          materialsObject,
+          materialReceiptObject,
           dispatch
         );
         // let employeeId = get(response, "Employees[0].code");
@@ -149,7 +164,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
       try {
         let response = await updateOpeningBalance(
           queryObject,
-          materialsObject,
+          materialReceiptObject,
           dispatch
         );
         // let employeeId = response && get(response, "Employees[0].code");

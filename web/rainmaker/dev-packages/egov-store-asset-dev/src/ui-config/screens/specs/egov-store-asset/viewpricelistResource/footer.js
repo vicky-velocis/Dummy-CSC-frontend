@@ -2,7 +2,7 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { showHideAdhocPopup } from "../../utils";
-import { handleCreateUpdateEmployee } from "./functions";
+import { handleCreateUpdatePriceList } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
   const employeeCode = getQueryArg(window.location.href, "employeeID");
@@ -46,7 +46,7 @@ export const masterCommonFooter = () => {
       },
       onClickDefination: {
         action: "condition",
-        callBack: handleCreateUpdateEmployee
+        callBack: handleCreateUpdatePriceList
       }
     }
   });

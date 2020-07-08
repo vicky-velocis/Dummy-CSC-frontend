@@ -11,9 +11,9 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "../egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "../egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "../egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
 import {

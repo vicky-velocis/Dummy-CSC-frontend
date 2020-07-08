@@ -11,8 +11,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/creatematerialmaster?step=0`
-      : `/egov-store-asset/creatematerialmaster?step=0`;
+      ? `/egov-ui-framework/egov-store-asset/createpricelist?step=0`
+      : `/egov-store-asset/createpricelist?step=0`;
   dispatch(setRoute(createUrl));
 };
 
@@ -29,6 +29,58 @@ const getHeader = label => {
     },
     type: "array"
   };
+};
+const storeCard = {
+  uiFramework: "custom-containers",
+  componentPath: "MultiItem",
+  props: {
+    className: "review-hr",
+    scheama: getCommonGrayCard({
+      storeCardContainer: getCommonContainer({
+        materialcode: getLabelWithValue(
+          {
+            labelName: "Material Code",
+              labelKey: "STORE_MATERIAL_CODE"
+          },
+          { jsonPath: "priceLists[0].priceListDetails[0].material.code",          
+        }
+        ),
+        quantity: getLabelWithValue(
+          {
+            labelName: "quantity",
+                  labelKey: "STORE_DETAILS_QUANTITY"
+          },
+          { jsonPath: "priceLists[0].priceListDetails[0].quantity"
+          
+         }
+        ),
+        ratePerUnit: getLabelWithValue(
+          { labelName: "Rate",
+          labelKey: "STORE_DETAILS_RATE"},
+          {
+            jsonPath: "priceLists[0].priceListDetails[0].ratePerUnit"
+           
+          }
+        ),
+        uomcode: getLabelWithValue(
+          {  labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
+          {
+            jsonPath: "priceLists[0].priceListDetails[0].uom.code",
+           
+          }
+        )
+      })
+    }),
+
+    items: [],
+    hasAddItem: false,
+    isReviewPage: true,
+    sourceJsonPath: "materials[0].storeMapping",
+    prefixSourceJsonPath:
+      "children.cardContent.children.storeCardContainer.children",
+    afterPrefixJsonPath: "children.value.children.key"
+  },
+  type: "array"
 };
 
 export const getPriceListDetailsView = (isReview = true) => {
@@ -84,56 +136,74 @@ export const getPriceListDetailsView = (isReview = true) => {
    
     break1: getBreak(),
     viewOne: getCommonContainer({
-      reviewMaterialCode: getLabelWithValue(
+      reviewsuppliercode: getLabelWithValue(
         {
-          labelName: "Material Code",
-          labelKey: "STORE_MATERIAL_CODE"
+          labelName: "Supplier Name",
+            labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME"
         },
-        { jsonPath: "materials[0].code" }
+        {  jsonPath: "priceLists[0].supplier.code", }
       ),
-      reviewMaterialOldCode: getLabelWithValue(
-        { labelName: "Material Old Code", labelKey: "STORE_MATERIAL_OLD_CODE" },
-        { jsonPath: "materials[0].oldCode" }
+      reviewrateType: getLabelWithValue(
+        { labelName: "Rate Type", labelKey: "STORE_PRICE_RATE_TYPE" },
+        { jsonPath: "priceLists[0].rateType", }
       ),
-      reviewMaterialName: getLabelWithValue(
+      rateContractNumber: getLabelWithValue(
         {
-          labelName: "Material Name",
-          labelKey: "STORE_MATERIAL_NAME"
+          labelName: "Rate Contract/Tender/Quatation No.",
+            labelKey: "STORE_PRICE_RATE_CONTRACT_TENDER_QUATATION_NO"
         },
-        { jsonPath: "materials[0].name" }
+        { jsonPath: "priceLists[0].rateContractNumber" }
       ),
-      reviewMaterialDescription: getLabelWithValue(
-        { labelName: "Material Description", labelKey: "STORE_MATERIAL_DESCRIPTION" },
+      rateContractDate: getLabelWithValue(
+        { labelName: "Rate Contract/Tender/Quatation Date",
+        labelKey: "STORE_PRICE_RATE_CONTRACT_TENDER_QUATATION_DATE" },
         {
-          jsonPath: "materials[0].description",
-          // localePrefix: {
-          //   moduleName: "COMMON",
-          //   masterName: "GENDER"
-          // },
+          jsonPath: "priceLists[0].rateContractDate",
         }
       ),
-      reviewBaseUOMName: getLabelWithValue(
-        { labelName: "Base UOM Name", labelKey: "STORE_BASE_UOM_NAME" },
+      agreementNumber: getLabelWithValue(
+        { labelName: "Agrement No",
+        labelKey: "STORE_PRICE_AGREMENT_NO" },
         {
-          jsonPath: "materials[0].baseUom.code"//materials[0].baseUom.code
+          jsonPath: "priceLists[0].agreementNumber"
         }
       ),
-      reviewInventryType: getLabelWithValue(
-        { labelName: "Inventry Type", labelKey: "STORE_INVENTRY_TYPE" },
+      agreementDate: getLabelWithValue(
+        { labelName: "Agrement Date", labelKey: "STORE_PRICE_AGREMENT_DATE" },
         {
-          jsonPath: "materials[0].inventoryType"
+          jsonPath: "priceLists[0].agreementDate",
         }
       ),
-      reviewMaterialStatus: getLabelWithValue(
+      agreementStartDate: getLabelWithValue(
         {
-          labelName: "Material Status",
-          labelKey: "STORE_MATERIAL_STATUS"
+          labelName: "Agrement Start Date",
+            labelKey: "STORE_PRICE_AGREMENT_START_DATE"
         },
         {
-          jsonPath: "materials[0].status"
+          jsonPath: "priceLists[0].agreementStartDate",
+        }
+      ),
+      agreementEndDate: getLabelWithValue(
+        {
+          labelName: "Agrement End Date",
+            labelKey: "STORE_PRICE_AGREMENT_END_DATE"
+        },
+        {
+          jsonPath: "priceLists[0].agreementEndDate",
+        }
+      ),
+      active: getLabelWithValue(
+        {
+          labelName: "Active",
+          labelKey: "STORE_PRICE_ACTIVE"
+        },
+        {
+          jsonPath: "priceLists[0].active"
         }
       )
     }),
+    // break2: getBreak(),
+    // Viewtwo: storeCard
 
   });
 };

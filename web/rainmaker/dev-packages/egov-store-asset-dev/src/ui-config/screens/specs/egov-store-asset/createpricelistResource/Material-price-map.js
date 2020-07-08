@@ -3,10 +3,12 @@ import {
     getCommonGrayCard,
     getCommonTitle,
     getSelectField,
+    getDateField,
     getTextField,
     getPattern,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import { getTodaysDateInYMD } from "../../utils";
   import get from "lodash/get";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
@@ -29,23 +31,15 @@ import {
         storeDetailsCardContainer: getCommonContainer(
           {
             materialcode: getSelectField({
-              label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
+              label: {  labelName: " Material Name",
+              labelKey: "STORE_MATERIAL_NAME" },
               placeholder: {
-                labelName: "Select Store Name",
-                labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
+                labelName: "Select Material Name",
+                labelKey: "STORE_MATERIAL_NAME_SELECT"
               },
               required: true,
-              jsonPath: "priceLists[0].priceListDetails[0].material.code",
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-              },
-              // sourceJsonPath: "store.stores",
-              // props: {
-              //   optionValue: "id",
-              //   optionLabel: "name",
-              // },
-               // sourceJsonPath: "store.stores",
+              jsonPath: "priceLists[0].priceListDetails[0].material.code",            
+              
                props: {
                 data: [
                   {
@@ -59,72 +53,82 @@ import {
               },
               
             }),
-            // DepartmentName: {
-            //   ...getTextField({
-            //     label: {
-            //       labelName: "Department Name",
-            //       labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
-            //     },
-            //     placeholder: {
-            //       labelName: "Department Names",
-            //       labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
-            //     },
-            //     required: false,
-            //     pattern: getPattern("Name") || null,
-            //     jsonPath: "priceLists[0].priceListDetails[0].department.name"
-            //   })
-            // },
-            // DepartmentName: {
-            //   ...getTextField({
-            //     label: {
-            //       labelName: "Department Name",
-            //       labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
-            //     },
-            //     placeholder: {
-            //       labelName: "Department Names",
-            //       labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
-            //     },
-            //     required: false,
-            //     pattern: getPattern("Name") || null,
-            //     jsonPath: "priceLists[0].priceListDetails[0].department.name"
-            //   })
-            // },
-            quantity: {
-              ...getTextField({
+            fromDate: {
+              ...getDateField({
                 label: {
-                  labelName: "Department Name",
-                  labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+                  labelName: "From Date",
+                  labelKey: "STORE_PRICE_FROM_DATE"
                 },
                 placeholder: {
-                  labelName: "Department Names",
-                  labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+                  labelName: "Enter From Date",
+                  labelKey: "STORE_PRICE_FROM_DATE_PLACEHOLDER"
                 },
-                required: false,
-                pattern: getPattern("Name") || null,
-                jsonPath: "priceLists[0].priceListDetails[0].quantity"
+                required: true,
+                pattern: getPattern("Date") || null,
+                jsonPath: "priceLists[0].priceListDetails[0].fromDate",
+                props: {
+                  inputProps: {
+                    max: getTodaysDateInYMD()
+                  }
+                }
+              })
+            },
+            toDate: {
+              ...getDateField({
+                label: {
+                  labelName: "To Date",
+                  labelKey: "STORE_PRICE_TO_DATE"
+                },
+                placeholder: {
+                  labelName: "Enter To Date",
+                  labelKey: "STORE_PRICE_TO_DATE_PLACEHOLDER"
+                },
+                required: true,
+                pattern: getPattern("Date") || null,
+                jsonPath: "priceLists[0].priceListDetails[0].toDate",
+                props: {
+                  inputProps: {
+                    max: getTodaysDateInYMD()
+                  }
+                }
               })
             },
             ratePerUnit: {
               ...getTextField({
                 label: {
-                  labelName: "Department Name",
-                  labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+                  labelName: "Rate Per Unit",
+                  labelKey: "STORE_PRICE_RATE_PER_UNIT"
                 },
                 placeholder: {
-                  labelName: "Department Names",
-                  labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+                  labelName: "Enter Rate Per Unit",
+                  labelKey: "STORE_PRICE_RATE_PER_UNIT_PLACEHOLDER"
                 },
                 required: false,
-                pattern: getPattern("Name") || null,
+                pattern: getPattern("Amount") || null,
                 jsonPath: "priceLists[0].priceListDetails[0].ratePerUnit"
               })
             },
+            quantity: {
+              ...getTextField({
+                label: {
+                  labelName: "quantity",
+                  labelKey: "STORE_PRICE_QUANTITY"
+                },
+                placeholder: {
+                  labelName: "Enter quantity",
+                  labelKey: "STORE_PRICE_QUANTITY_PLACEHOLDER"
+                },
+                required: false,
+                pattern: getPattern("Amount") || null,
+                jsonPath: "priceLists[0].priceListDetails[0].quantity"
+              })
+            },          
 
             uomcode: getSelectField({
-              label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
+              label: { labelName: "UOM ", labelKey: "STORE_PRICE_UOM" },
               placeholder: {
-                labelName: "Select Store Name",
-                labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
+                labelName: "Select UOM",
+                labelKey: "STORE_PRICE_UOM_SELECT",
               },
               required: true,
               jsonPath: "priceLists[0].priceListDetails[0].uom.code",

@@ -3,89 +3,111 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-    prepareDocumentsUploadData
-} from "../../../../../ui-utils/commons";
-import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
   ifUserRoleExists,
-  validateFields,
-  epochToYmd
+  validateFields
 } from "../../utils";
 // import "./index.css";
 
 const moveToReview = dispatch => {
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/reviewpricelist`
-      : `/egov-store-asset/reviewpricelist`;
+      ? `/egov-ui-framework/egov-store-asset/reviewmaterialmaster`
+      : `/egov-store-asset/reviewmaterialmaster`;
   dispatch(setRoute(reviewUrl));
 };
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["createpricelist"],
+    state.screenConfiguration.screenConfig["creatematerialmaster"],
     "components.div.children.stepper.props.activeStep",
     0
   );
   let isFormValid = true;
   if (activeStep === 0) {
-    const isSupplierDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.SupplierDetails.children.cardContent.children.SupplierDetailsContainer.children",
+    const isMaterialDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.MaterialMasterDetails.children.cardContent.children.MaterialDetailsContainer.children",
       state,
       dispatch,
-      "createpricelist"
+      "creatematerialmaster"
     );
     
-    if (!(isSupplierDetailsValid)) {
+    if (!(isMaterialDetailsValid)) {
       isFormValid = false;
     }
-   // prepareDocumentsUploadData(state, dispatch,"pricelist");
   }
   if (activeStep === 1) {
-    let MaterialDetailsCardPath =
-      "components.div.children.formwizardSecondStep.children.MaterialPriceDetails.children.cardContent.children.MaterialDetailsCard.props.items";
-    let MasterDetailsItems = get(
-      state.screenConfiguration.screenConfig.createpricelist,
-      MaterialDetailsCardPath,
+    let storeDetailsCardPath =
+      "components.div.children.formwizardSecondStep.children.storeDetails.children.cardContent.children.storeDetailsCard.props.items";
+    let storeDetailsItems = get(
+      state.screenConfiguration.screenConfig.creatematerialmaster,
+      storeDetailsCardPath,
       []
     );
-    let isMasterDetailsValid = true;
-    for (var j = 0; j < MasterDetailsItems.length; j++) {
+    let isstoreDetailsValid = true;
+    for (var j = 0; j < storeDetailsItems.length; j++) {
       if (
-        (MasterDetailsItems[j].isDeleted === undefined ||
-          MasterDetailsItems[j].isDeleted !== false) &&
+        (storeDetailsItems[j].isDeleted === undefined ||
+          storeDetailsItems[j].isDeleted !== false) &&
         !validateFields(
-          `${MaterialDetailsCardPath}[${j}].item${j}.children.cardContent.children.storeDetailsCardContainer.children`,
+          `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.storeDetailsCardContainer.children`,
           state,
           dispatch,
-          "createpricelist"
+          "creatematerialmaster"
         )
       )
-      isMasterDetailsValid = false;
+        isstoreDetailsValid = false;
     }
-    if (!isMasterDetailsValid) {
+    if (!isstoreDetailsValid) {
       isFormValid = false
+    }
+  }
+  if (activeStep === 2) {   
+    const isPuchasingInformationValid = validateFields(
+      "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View1.children.cardContent.children.PuchasingInformationContainer.children",
+      state,
+      dispatch,
+      "creatematerialmaster"
+    );
+    const isStockingInformationValid = validateFields(
+      "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View2.children.cardContent.children.StockingInformationContainer.children",
+      state,
+      dispatch,
+      "creatematerialmaster"
+    );
+    const isSpecificationValid = validateFields(
+      "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View3.children.cardContent.children.SpecificationContainer.children",
+      state,
+      dispatch,
+      "creatematerialmaster"
+    );
+    
+    if (!isPuchasingInformationValid || !isStockingInformationValid || !isSpecificationValid) {
+      isFormValid = false;
     }
     if(isFormValid)
     {
 
-      // check validation for file uplaod
-      if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
-      moveToReview(dispatch);
-      }
-      else{
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          ))
-      }
+    // get max and min Qty and validate     
+    let MaxQty =0
+    let MinQty = 0
+    MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
+    MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
+    if(MaxQty> MinQty)
+    moveToReview(dispatch);
+    else{
+     // pop earnning Message
+     const errorMessage = {
+      labelName: "Maximun Qty is greater then Minimum Qty",
+      labelKey: "STORE_MATERIAL_MASTER_MAX_MIN_QTY_VALIDATION_MESSAGE"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+    }
     
   }
     else{
@@ -98,103 +120,9 @@ export const callBackForNext = async (state, dispatch) => {
 
     }
   }
-  if (activeStep !== 1) {
+  if (activeStep !== 2) {
     if (isFormValid) {
-          // get date and validate     
-    const CurrentDate = new Date();
-    let agreementDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementDate",
-      null
-    );
-    let rateContractDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].rateContractDate",
-      null
-    );
-    let agreementStartDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementStartDate",
-      null
-    );
-    let agreementEndDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementEndDate",
-      null
-    );
-    if(Number(agreementEndDate))
-    {
-      //alert('i am number')
-      agreementEndDate = epochToYmd(agreementEndDate)
-    }
-    // else{
-    //   agreementEndDate = convertDateToEpoch(agreementEndDate);
-    // }
-    if(Number(agreementDate))
-    {
-      //alert('i am number')
-      agreementDate = epochToYmd(agreementDate)
-    }
-    // else{
-    //   AgreementDate = convertDateToEpoch(AgreementDate);
-    // }
-    if(Number(agreementStartDate))
-    {
-      //alert('i am number')
-      agreementStartDate = epochToYmd(agreementStartDate)
-    }
-    // else{
-    //   agreementStartDate = convertDateToEpoch(agreementStartDate);
-    // }
-    if(Number(rateContractDate))
-    {
-      //alert('i am number')
-      rateContractDate = epochToYmd(rateContractDate)
-    }
-    // else{
-    //   rateContractDate = convertDateToEpoch(rateContractDate);
-    // }
-    const  rateContractDate_ = new Date(rateContractDate)
-    const  AgreementDate_ = new Date(agreementDate)
-    const  agreementStartDate_ = new Date(agreementStartDate)
-    const  agreementEndDate_ = new Date(agreementEndDate)
-    let IsValidDate = true
-    let IsValidStartDate = true    
-    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate|| agreementEndDate_> CurrentDate)
-    {
-      IsValidDate = false
-    }
-    else{
-      if(agreementStartDate_>agreementEndDate_)
-      {
-        IsValidStartDate = false
-      }
-     
-
-    }
-    if(IsValidDate)
-    {
-      if(IsValidStartDate)
       changeStep(state, dispatch);
-      else
-      {
-        const errorMessage = {
-          labelName: "Agreement start date Date is Less then End date",
-          labelKey: "STORE_MATERIAL_MASTER_AGREMENT_STARTT_DATE_VALIDATION"
-        };
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      }
-    }
-   
-    else{
-     // pop earnning Message
-     const errorMessage = {
-      labelName: "Input Date Must be less then or equal to current date",
-      labelKey: "STORE_MATERIAL_MASTER_CURRENT_DATE_VALIDATION"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-
-    }
     } else {
       const errorMessage = {
         labelName: "Please fill all fields",
@@ -212,7 +140,7 @@ export const changeStep = (
   defaultActiveStep = -1
 ) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["createpricelist"],
+    state.screenConfiguration.screenConfig["creatematerialmaster"],
     "components.div.children.stepper.props.activeStep",
     0
   );
@@ -247,7 +175,7 @@ export const changeStep = (
       value: isPayButtonVisible
     }
   ];
-  dispatchMultipleFieldChangeAction("createpricelist", actionDefination, dispatch);
+  dispatchMultipleFieldChangeAction("creatematerialmaster", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
 };
 
@@ -255,7 +183,7 @@ export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
-        "createpricelist",
+        "creatematerialmaster",
         getActionDefinationForStepper(
           "components.div.children.formwizardFirstStep"
         ),
@@ -264,7 +192,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 1:
       dispatchMultipleFieldChangeAction(
-        "createpricelist",
+        "creatematerialmaster",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
         ),
@@ -273,17 +201,25 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 2:
       dispatchMultipleFieldChangeAction(
-        "createpricelist",
+        "creatematerialmaster",
         getActionDefinationForStepper(
           "components.div.children.formwizardThirdStep"
         ),
         dispatch
       );
       break;
-   
+    case 3:
+      dispatchMultipleFieldChangeAction(
+        "creatematerialmaster",
+        getActionDefinationForStepper(
+          "components.div.children.formwizardFourthStep"
+        ),
+        dispatch
+      );
+      break;
     default:
       dispatchMultipleFieldChangeAction(
-        "createpricelist",
+        "creatematerialmaster",
         getActionDefinationForStepper(
           "components.div.children.formwizardFifthStep"
         ),
@@ -352,7 +288,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "STORE_COMMON_BUTTON_PREV_STEP"
+        labelKey: "HR_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -375,7 +311,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "STORE_COMMON_BUTTON_NXT_STEP"
+        labelKey: "HR_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -404,7 +340,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "STORE_COMMON_BUTTON_SUBMIT"
+        labelKey: "HR_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

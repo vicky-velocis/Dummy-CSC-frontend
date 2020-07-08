@@ -27,11 +27,8 @@ const storeCard = {
             labelName: "Store Name",
             labelKey: "STORE_COMMON_TABLE_COL_STORE_NAME"
           },
-          { jsonPath: "materials[0].storeMapping[0].storecode",
-          // localePrefix :{
-          //   moduleName : "EGOV_LOCATION",
-          //   masterName : "TENANTBOUNDARY"
-          // }, 
+          { jsonPath: "materials[0].storeMapping[0].store.code",
+          
         }
         ),
         reviewDepartment: getLabelWithValue(
@@ -39,21 +36,21 @@ const storeCard = {
             labelName: "Department",
             labelKey: "STORE_COMMON_TABLE_COL_DEPARTMENT"
           },
-          { jsonPath: "materials[0].storeMapping[0].departmentNameCode",
-          // localePrefix :{
-          //   moduleName : "EGOV_LOCATION",
-          //   masterName : "BOUNDARYTYPE"
-          // },
+          { jsonPath: "materials[0].storeMapping[0].department.Name.Code",
+          
          }
         ),
         reviewAccountCode: getLabelWithValue(
           { labelName: "Account Code", labelKey: "STORE_MATERIAL_ACCOUNT_CODE" },
           {
-            jsonPath: "materials[0].storeMapping[0].chartofAccountglCode",
-            // localePrefix: {
-            //   moduleName: "TENANT",
-            //   masterName: "TENANTS"
-            // }
+            jsonPath: "materials[0].storeMapping[0].chartofAccount.glcode",
+            
+          }
+        ),
+        Active: getLabelWithValue(
+          { labelName: "Active", labelKey: "MATERIAL_TYPE_ACTIVE" },
+          {
+            jsonPath: "materials[0].storeMapping[0].active",
           }
         )
       })

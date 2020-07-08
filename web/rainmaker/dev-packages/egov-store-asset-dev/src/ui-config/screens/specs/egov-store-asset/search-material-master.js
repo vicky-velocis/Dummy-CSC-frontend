@@ -23,7 +23,7 @@ import {
   });
   
   const createMaterialMasterHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-store-asset/create-material-master`));
+    dispatch(setRoute(`/egov-store-asset/creatematerialmaster`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
