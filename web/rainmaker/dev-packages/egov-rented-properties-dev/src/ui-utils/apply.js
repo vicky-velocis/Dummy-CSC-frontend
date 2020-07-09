@@ -144,6 +144,11 @@ let userInfo = JSON.parse(getUserInfo());
           } else {
             set(queryObject[0], "applicationAction", "SUBMIT")
           }
+          let ownershipTransferDocuments = get(queryObject[0], "ownerDetails.ownershipTransferDocuments") || [];
+          ownershipTransferDocuments = ownershipTransferDocuments.map(item => ({...item, active: true}))
+          const removedDocs = get(state.screenConfiguration.preparedFinalObject, "OwnersTemp[0].removedDocs") || [];
+          ownershipTransferDocuments = [...ownershipTransferDocuments, ...removedDocs]
+          set(queryObject[0], "ownerDetails.ownershipTransferDocuments", ownershipTransferDocuments)
           response = await httpRequest(
             "post",
             "/csp/ownership-transfer/_update",
@@ -153,7 +158,17 @@ let userInfo = JSON.parse(getUserInfo());
           );
         }
         let {Owners} = response
+        let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];
+        const removedDocs = ownershipTransferDocuments.filter(item => !item.active)
+        ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item.active)
+        Owners = [{...Owners[0], ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments}}]
         dispatch(prepareFinalObject("Owners", Owners));
+        dispatch(
+          prepareFinalObject(
+            "OwnersTemp[0].removedDocs",
+            removedDocs
+          )
+        );
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
