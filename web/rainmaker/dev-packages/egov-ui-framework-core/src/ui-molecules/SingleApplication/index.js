@@ -147,6 +147,14 @@ class SingleApplication extends React.Component {
         default:
           setRoute(`/egov-opms/roadcutnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
+    }  else if (moduleName === "EGOV-ECHALLAN") {
+      
+      switch (item.status) {        
+        case "INITIATED":
+          setRoute(`/egov-echallan/apply?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
+        default:
+          setRoute(`/egov-echallan/search-preview?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
+      }
     }
   };
 

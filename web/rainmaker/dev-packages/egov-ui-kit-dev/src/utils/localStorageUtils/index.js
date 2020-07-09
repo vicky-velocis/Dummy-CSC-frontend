@@ -51,6 +51,9 @@ export const getCurrentAssignee = () => {
   return localStorage.getItem("CurrentAssignee");
 };
 
+export const getEncroachmentType = () => {
+  return localStorage.getItem('encroachmentType');
+};
 
 
 //SET methods 
@@ -109,6 +112,11 @@ export const seteventid = (eventId) => {
 export const seteventuuid = (eventuuId) => {
   localStorageSet("eventuuId", eventuuId);
 };
+
+export const setEncroachmentType = (encroachmentType) => {
+  localStorageSet('encroachmentType',encroachmentType);
+};
+
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
   Object.keys(localStorage).forEach((key) => {
