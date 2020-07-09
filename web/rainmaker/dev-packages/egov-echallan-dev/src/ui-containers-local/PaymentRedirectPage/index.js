@@ -44,7 +44,7 @@ class PaymentRedirect extends Component {
 
         let addpaymentresponse = await httpRequest(
           "post",
-          "echallan-services/violation/_addPayment",
+          "ec-services/violation/_addPayment",
           "", [], {
             RequestBody : paymentData,
             auditDetails,
@@ -69,7 +69,7 @@ class PaymentRedirect extends Component {
         
           let responses = await httpRequest(
             "post",
-            "echallan-services/storeitemregister/_updateStorePayment", // "/echallan-services/v1/_update",
+            "ec-services/storeitemregister/_updateStorePayment", // "/ec-services/v1/_update",
             "", [], {
             auditDetails,
             RequestBody

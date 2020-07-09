@@ -154,7 +154,7 @@ const AddAuctiontoGrid = async (state, dispatch, apply) => {
     let dataarray = [];
     dataarray = get(state, 'screenConfiguration.preparedFinalObject.auctionGridDetails', []);
     let temp = [];
-    debugger
+    
     temp[0] = obj['itemName'].split('~')[0];
     temp[1] = obj['seizedQty'];
     temp[2] = obj['auctionDate'] === undefined ? '' : convertDateTimeToEpoch(obj['auctionDate']);

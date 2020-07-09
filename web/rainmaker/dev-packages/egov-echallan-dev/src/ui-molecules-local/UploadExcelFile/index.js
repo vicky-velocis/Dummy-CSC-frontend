@@ -29,7 +29,7 @@ class UploadExcelFile extends React.Component {
   }
   onFormSubmit(e) {
     e.preventDefault(); // Stop form submit
-    debugger
+    
     if (!this.state.isuploaded) {
       this.setState({isuploaded : true});
       store.dispatch(toggleSpinner());
@@ -72,7 +72,7 @@ class UploadExcelFile extends React.Component {
   }
   onChange(e) {
     let files = e.target.files;
-    debugger
+    
     store.dispatch(toggleSpinner());
     var f = files[0];
     let reader = new FileReader();
@@ -206,7 +206,7 @@ class UploadExcelFile extends React.Component {
         existingRecords.find(function (existingRecord, index) {
 
           if (rec["covNo"].toString().trim() === existingRecord["COV Number"].toString().trim()) {
-            debugger
+            
             rec["vendorUuid"] = existingRecord["Vendor Id"]
             updatedVendorList.push(rec);
           }
@@ -230,7 +230,7 @@ class UploadExcelFile extends React.Component {
   }
 
   async fileUpload(file) {
-    debugger
+    
     let ExcelUpload = {
 
       insert: this.state.fileInsert,
