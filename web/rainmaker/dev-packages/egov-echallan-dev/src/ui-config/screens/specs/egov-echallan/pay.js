@@ -12,7 +12,7 @@ import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
-import { getUserInfo, getOPMSTenantId, getapplicationType,getEncroachmentType, localStorageGet, lSRemoveItem, lSRemoveItemlocal } from "egov-ui-kit/utils/localStorageUtils";
+import { getapplicationType,getEncroachmentType } from "egov-ui-kit/utils/localStorageUtils";
 
 
 const header = getCommonContainer({

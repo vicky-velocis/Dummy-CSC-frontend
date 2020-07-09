@@ -8,7 +8,7 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields, showHideAdhocPopup } from "../../utils";
-import { getOPMSTenantId, localStorageSet, getapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageSet, getapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 
 export const selectPG = async (state, dispatch) => {
@@ -24,7 +24,6 @@ export const callPGService = async (state, dispatch) => {
     "challanNumber"
   );
 if(gateway != ''){
-  //let callbackUrl=`${window.origin}/egov-opms/paymentRedirectPage`;
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
@@ -75,7 +74,6 @@ if(gateway != ''){
             mobileNumber: userMobileNumber,
             name: userName,
             tenantId: getTenantId(),
-            // process.env.REACT_APP_NAME === "Employee" ? getOPMSTenantId() : get(state,"auth.userInfo.permanentCity")
           },
           callbackUrl
         }
@@ -190,7 +188,7 @@ const updatePayAction = async (
       "",
       [],
       {
-        OpmsNOCs: get(response, "echallanNOCs", [])
+        echallanNOCs: get(response, "echallanNOCs", [])
       }
     );
     if (get(response, "echallanNOCs", []).length > 0) {
@@ -340,13 +338,13 @@ const callBackForPay = async (state, dispatch) => {
       // Search NOC application and update action to PAY
       const applicationNo = getQueryArg(window.location, "applicationNumber");
       const tenantId = getQueryArg(window.location, "tenantId");
-      await updatePayAction(
-        state,
-        dispatch,
-        applicationNo,
-        tenantId,
-        receiptNumber
-      );
+      // await updatePayAction(
+      //   state,
+      //   dispatch,
+      //   applicationNo,
+      //   tenantId,
+      //   receiptNumber
+      // );
     } catch (e) {
       dispatch(
         toggleSnackbar(
