@@ -15,7 +15,7 @@ const onRowClickServiceRequestsSearch = rowData => {
         rowData[0]
       }&tenantId=${getTenantId()}&serviceType=${
         rowData[3]
-      }&role=${rowData[5]}`;
+      }`;
       break;
   }
 };
@@ -30,16 +30,7 @@ export const searchResultsServiceRequest ={
       getTextToLocalMapping("Service Request Date"),
       getTextToLocalMapping("Name Of Owner"),
       getTextToLocalMapping("Type Of Service Request"),
-      getTextToLocalMapping("Service Request Status"),  
-      {
-        name: "current_assignee",
-        options: {
-          display: false,
-          visible:false,
-          filter:false,
-          column:false
-        }
-      },
+      getTextToLocalMapping("Service Request Status"),    
     ],
     
 
@@ -47,7 +38,7 @@ export const searchResultsServiceRequest ={
       filter: false,
       download: false,
       responsive: "stacked",
-      selectableRows: false,
+      selectableRows: false,      
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {

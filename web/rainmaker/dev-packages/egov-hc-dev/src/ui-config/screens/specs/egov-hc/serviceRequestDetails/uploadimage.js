@@ -1,4 +1,4 @@
-import {  getBreak,  getCommonCard,  getCommonContainer,  getCommonTitle,  getTextField,  getSelectField,  getPattern} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {  getBreak,  getCommonCard,  getCommonContainer,  getCommonTitle,  getTextField,  getSelectField,  getPattern, getLabel} from "egov-ui-framework/ui-config/screens/specs/utils";
 import {  handleScreenConfigurationFieldChange as handleField,  prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -14,5 +14,5 @@ export const uploadimage = getCommonCard({
     },
     visible: true,
     // required: true
-    }
+    },
 });

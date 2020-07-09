@@ -6,6 +6,9 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
+import classNames from "classnames";
+import Chip from "@material-ui/core/Chip";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const getSuggestions = suggestions => {
   return (
@@ -47,10 +50,11 @@ const styles = theme => ({
     color: "rgba(162, 162, 162, 0.77)"
   },
   ac_paper: {
-    width: "80%",
-    maxHeight: "200px",
-    overflowY: "scroll",
-    marginTop: theme.spacing.unit
+    position: "absolute",
+    zIndex: 1105,
+    marginTop: theme.spacing.unit,
+    left: 0,
+    right: 0
   },
   ac_divider: {
     height: theme.spacing.unit * 2
@@ -140,15 +144,29 @@ function ValueContainer(props) {
   );
 }
 
+function MultiValue(props) {
+  return (
+    <Chip
+      tabIndex={-1}
+      label={props.children}
+      className={classNames(props.selectProps.classes.chip, {
+        [props.selectProps.classes.chipFocused]: props.isFocused
+      })}
+      onDelete={props.removeProps.onClick}
+      deleteIcon={<CancelIcon {...props.removeProps} />}
+    />
+  );
+}
+
 function Menu(props) {
   return (
     <Paper
       square
       className={props.selectProps.classes.ac_paper}
       {...props.innerProps}
-      style={{}}
+      style={{ overflowX: "scroll" }}
     >
-      <div style={{}}>{props.children}</div>
+      <div style={{ width: 800 }}>{props.children}</div>
     </Paper>
   );
 }
@@ -156,6 +174,7 @@ function Menu(props) {
 const components = {
   Control,
   Menu,
+  MultiValue,
   NoOptionsMessage,
   Option,
   Placeholder,
@@ -165,13 +184,14 @@ const components = {
 
 class IntegrationReactSelect extends React.Component {
   state = {
-    single: null
+    single: null,
+    multi: null
   };
 
   componentDidMount = () => {
     const { fieldValue } = this.props;
     if (fieldValue && fieldValue.code) {
-      this.setState({ single: fieldValue });
+      this.setState({ single: fieldValue, multi: fieldValue });
     }
   };
 
@@ -219,10 +239,10 @@ class IntegrationReactSelect extends React.Component {
           }}
           options={getSuggestions(suggestions) || []}
           components={components}
-          value={value ? value : this.state.single}
+          value={value ? value : this.state.multi}
           placeholder={placeholder}
           {...rest}
-          onChange={this.handleChange("single")}
+          onChange={this.handleChange("multi")}
         />
       </div>
     );

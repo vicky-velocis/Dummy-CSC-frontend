@@ -23,7 +23,7 @@ export const ownerdetails = getCommonCard({
             labelKey:"HC_OWNER_NAME_LABLE"
          },
          placeholder:{
-            labelName:"Name of Owner",
+            labelName:"Enter Name of Owner",
             labelKey:"HC_OWNER_NAME_LABLE_PLACEHOLDER"
          },
          gridDefination: {
@@ -50,7 +50,7 @@ export const ownerdetails = getCommonCard({
             labelKey:"HC_CONTACT_NUMBER_LABLE"
          },
          placeholder:{
-            labelName:"Contact Number",
+            labelName:"Enter Contact Number",
             labelKey:"HC_CONTACT_NUMBER_LABLE_PLACEHOLDER"
          },
          gridDefination: {
@@ -72,7 +72,7 @@ export const ownerdetails = getCommonCard({
               labelKey:"HC_EMAIL_LABEL"
            },
            placeholder:{
-              labelName:"Email",
+              labelName:"Enter Email",
               labelKey:"HC_EMAIL_LABEL_PLACEHOLDER"
            },
            gridDefination: {
