@@ -206,23 +206,23 @@ export const rentedPropertyApplication = getCommonCard({
   //   labelKey: "RP_SEARCH_PROPERTY_MASTER_HEADER"
   // }),
   subParagraph: getCommonParagraph({
-    labelName: "Please provide atleast one parameter to search Property",
-    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
+    labelName: "Please provide atleast one parameter to search Application",
+    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_APPLICATION_LABEL"
   }),
-  colonyContainer: getCommonContainer({
-    colony: getSelectField(colonyField),
-    status: getSelectField(statusField)
-  }),
-  transitNumberContainer: getCommonContainer({
+  applicationNoContainer: getCommonContainer({
+    applicationNo: getTextField(applicationNoField),
     transitNumber: getTextField(transitNumberField),
-    phone: getTextField(phoneNumberField)
+  }),
+  statusContainer: getCommonContainer({
+    mobileNo: getTextField(applicantMobileNumberField),
+    status: getSelectField(ownershipStatusField)
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer(
       {...buttonItem, searchButton: {...buttonItem.searchButton, 
         onClickDefination: {
           action: "condition",
-          callBack: searchApiCall
+          callBack: searchTransferProperties
         }
       }, lastCont: {
         uiFramework: "custom-atoms",
