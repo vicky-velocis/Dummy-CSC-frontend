@@ -14,7 +14,7 @@ export const SUMMARY_STEP = 2;
 export const moveToSuccess = (rentedData, dispatch, type) => {
   const id = get(rentedData, "id");
   const transitNumber = get(rentedData, "transitNumber")
-  const applicationNumber = get(rentedData, "applicationNumber")
+  const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
   const tenantId = get(rentedData, "tenantId");
   const purpose = "apply";
   const status = "success";
@@ -111,12 +111,12 @@ const callBackForNext = async(state, dispatch) => {
     }
 
     if(activeStep === SUMMARY_STEP) {
-      const rentedData = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Owners[0]"
-    );
     isFormValid = await applyRentedProperties(state, dispatch);
       if (isFormValid) {
+        const rentedData = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Properties[0]"
+      );
           moveToSuccess(rentedData, dispatch);
       }
     }
