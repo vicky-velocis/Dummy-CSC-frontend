@@ -47,7 +47,7 @@ const screenConfig = {
               },
               {
                 label: "RP_PROPERTY_ID_LABEL",
-                jsonPath: "propertyId"
+                jsonPath: "property.id"
               },
               {
                 label: "RP_ALLOTMENT_NUMBER",
@@ -62,7 +62,7 @@ const screenConfig = {
                 jsonPath: "state"
               }
             ],
-            moduleName: "RP",
+            moduleName: "OWNERSHIPTRANSFERRP",
             homeURL: "/rented-properties/home"
           }
         }

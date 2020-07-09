@@ -122,7 +122,7 @@ let userInfo = JSON.parse(getUserInfo());
         const id = get(queryObject[0], "id");
         let response;
         set(queryObject[0], "tenantId", tenantId);
-        set(queryObject[0], "applicationStatus", "");
+        set(queryObject[0], "applicationState", "");
         set(queryObject[0], "ownerDetails.phone", userInfo.userName)
         set(queryObject[0], "ownerDetails.permanent", false)
         set(queryObject[0], "isPrimaryOwner", true);
@@ -130,10 +130,23 @@ let userInfo = JSON.parse(getUserInfo());
         set(queryObject[0], "ownerDetails.applicationType", "CitizenApplication")
         set(queryObject[0], "ownerDetails.dateOfDeathAllottee", convertDateToEpoch(queryObject[0].ownerDetails.dateOfDeathAllottee))
         if(!id) {
-          set(queryObject[0], "action", "INITIATE");
+          set(queryObject[0], "applicationAction", "INITIATE");
           response = await httpRequest(
             "post",
             "/csp/ownership-transfer/_create",
+            "",
+            [],
+            { Owners: queryObject }
+          );
+        } else {
+          if(activeIndex === 0) {
+            set(queryObject[0], "applicationAction", "REINITIATE")
+          } else {
+            set(queryObject[0], "applicationAction", "SUBMIT")
+          }
+          response = await httpRequest(
+            "post",
+            "/csp/ownership-transfer/_update",
             "",
             [],
             { Owners: queryObject }
@@ -153,7 +166,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
   try {
     const transitNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].transitNumber",
+      "Owners[0].property.transitNumber",
       ""
     );
     if(!!transitNumber) {
@@ -178,7 +191,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             prepareFinalObject(
-              "Properties[0].transitNumber",
+              "Owners[0].property.transitNumber",
               ""
             )
           )
@@ -208,7 +221,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           )
           dispatch(
             prepareFinalObject(
-              "Owners[0].propertyId",
+              "Owners[0].property.id",
               Properties[0].propertyDetails.propertyId
             )
           )

@@ -8,6 +8,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getOwnershipSearchResults } from "../../../../ui-utils/commons";
 
 const header = getCommonHeader({
     labelName: "Apply for Ownership Transfer",
@@ -76,17 +78,33 @@ const setDocumentData = async(action, state, dispatch) => {
     dispatch(prepareFinalObject("PropertiesTemp[0].applicationDocuments", documentTypes))
 }
 
+const getData = async(action, state, dispatch) => {
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  if(!!applicationNumber) {
+    const queryObject = [
+      {key: "applicationNumber", value: applicationNumber}
+    ]
+    const response = await getOwnershipSearchResults(queryObject);
+    if (response && response.Owners) {
+    dispatch(prepareFinalObject("Owners", response.Owners))
+    }
+  } else {
+    dispatch(
+      prepareFinalObject(
+        "Owners",
+        []
+        )
+        )
+  }
+  setDocumentData(action, state, dispatch)
+}
+
+
 const applyLicense = {
     uiFramework: "material-ui",
     name: "ownership-apply",
     beforeInitScreen: (action, state, dispatch) => {
-      dispatch(
-        prepareFinalObject(
-          "Owners",
-          []
-          )
-          )
-        setDocumentData(action, state, dispatch)
+        getData(action, state, dispatch)
         return action;
       },
     components: {

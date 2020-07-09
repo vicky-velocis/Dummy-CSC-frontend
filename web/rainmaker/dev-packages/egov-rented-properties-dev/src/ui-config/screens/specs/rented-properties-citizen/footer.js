@@ -28,68 +28,69 @@ const callBackForNext = async(state, dispatch) => {
           "ownership-apply"
         )
         if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
-          const propertyId = get(state.screenConfiguration.preparedFinalObject, "Owners[0].propertyId");
-          const transitNumber = get(state.screenConfiguration.preparedFinalObject, "Properties[0].transitNumber")
+          const propertyId = get(state.screenConfiguration.preparedFinalObject, "Owners[0].property.id");
+          let res = true;
           if(!propertyId) {
-            const res = await getDetailsFromProperty(state, dispatch)
-            if(!!res) {
-              const applyRes = applyOwnershipTransfer(state, dispatch, activeStep)
-              if(!applyRes) {
-                return
-              }
-            } else {
+            res = await getDetailsFromProperty(state, dispatch)
+          }
+          if(!!res) {
+            const applyRes = applyOwnershipTransfer(state, dispatch, activeStep)
+            if(!applyRes) {
               return
             }
+          } else {
+            return
           }
         } else {
             isFormValid = false;
         }
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
-      const uploadedDocData = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Properties[0].propertyDetails.applicationDocuments",
-        []
-    );
+    //   const uploadedDocData = get(
+    //     state.screenConfiguration.preparedFinalObject,
+    //     "Properties[0].propertyDetails.applicationDocuments",
+    //     []
+    // );
 
-    const uploadedTempDocData = get(
-        state.screenConfiguration.preparedFinalObject,
-        "PropertiesTemp[0].applicationDocuments",
-        []
-    );
+    // const uploadedTempDocData = get(
+    //     state.screenConfiguration.preparedFinalObject,
+    //     "PropertiesTemp[0].applicationDocuments",
+    //     []
+    // );
 
-    for (var y = 0; y < uploadedTempDocData.length; y++) {
-      if (
-          uploadedTempDocData[y].required &&
-          !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
-      ) {
-          isFormValid = false;
-      }
-    }
-    if(isFormValid) {
-      const reviewDocData =
-              uploadedDocData &&
-              uploadedDocData.map(item => {
-                  return {
-                      title: `RP_${item.documentType}`,
-                      link: item.fileUrl && item.fileUrl.split(",")[0],
-                      linkText: "View",
-                      name: item.fileName
-                  };
-              });
-              dispatch(
-                prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
-            );
-    }
+    // for (var y = 0; y < uploadedTempDocData.length; y++) {
+    //   if (
+    //       uploadedTempDocData[y].required &&
+    //       !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+    //   ) {
+    //       isFormValid = false;
+    //   }
+    // }
+    // if(isFormValid) {
+    //   const reviewDocData =
+    //           uploadedDocData &&
+    //           uploadedDocData.map(item => {
+    //               return {
+    //                   title: `RP_${item.documentType}`,
+    //                   link: item.fileUrl && item.fileUrl.split(",")[0],
+    //                   linkText: "View",
+    //                   name: item.fileName
+    //               };
+    //           });
+    //           dispatch(
+    //             prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
+    //         );
+    // }
+    isFormValid = true
     }
     if(activeStep === SUMMARY_STEP) {
       const rentedData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Properties[0]"
+        "Owners[0]"
     );
-    // isFormValid = await applyOwnershipTransfer(state, dispatch);
+    isFormValid = await applyOwnershipTransfer(state, dispatch);
       if (isFormValid) {
-          moveToSuccess(rentedData, dispatch);
+          moveToSuccess(rentedData, dispatch, "OWNERSHIPTRANSFERRP");
       }
     }
     if(activeStep !== SUMMARY_STEP) {

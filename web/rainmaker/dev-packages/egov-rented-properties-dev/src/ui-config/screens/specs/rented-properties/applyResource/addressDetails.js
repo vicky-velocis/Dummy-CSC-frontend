@@ -72,7 +72,7 @@ const areaNameField = {
 
 const ownershipTransitNumberField = {
     ...transitNumberConfig,
-    jsonPath: "Properties[0].transitNumber",
+    jsonPath: "Owners[0].property.transitNumber",
     iconObj: {
         iconName: "search",
         position: "end",
@@ -93,7 +93,7 @@ const ownershipTransitNumberField = {
       beforeFieldChange: (action, state, dispatch) => {
         dispatch(
             prepareFinalObject(
-              "Owners[0].propertyId",
+              "Owners[0].property.id",
               ""
             )
           )
