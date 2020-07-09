@@ -1,5 +1,5 @@
 
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "../ui-config/screens/specs/egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getMultiUnits, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { getapplicationNumber, getapplicationType, getOPMSTenantId, getUserInfo, setapplicationNumber, lSRemoveItemlocal, lSRemoveItem, localStorageGet, setapplicationMode, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";

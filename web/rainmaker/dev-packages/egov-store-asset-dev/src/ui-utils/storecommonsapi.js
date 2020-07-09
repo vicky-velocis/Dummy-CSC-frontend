@@ -1,5 +1,5 @@
 
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar,toggleSpinner } from "../ui-config/screens/specs/egov-store-asset/creatematerialindentnoteResource/node_modules/egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getMultiUnits, getQueryArg,   } from "egov-ui-framework/ui-utils/commons";
 import {  getTenantId, getUserInfo,  } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
