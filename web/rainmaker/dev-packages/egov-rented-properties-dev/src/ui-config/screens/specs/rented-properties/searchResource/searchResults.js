@@ -85,6 +85,11 @@ const onTransferPropertyRowClick = rowData => {
   window.location.href = `ownership-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
+const onDuplicateCopyRowClick = rowData => {
+  console.log("=======row data======", rowData)
+  window.location.href = `ownership-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
+}
+
 export const transferSearchResults = {
   ...searchResults,
   props: {...searchResults.props, 
@@ -98,6 +103,24 @@ export const transferSearchResults = {
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {
         onTransferPropertyRowClick(row);
+      }
+    }
+  }
+}
+
+export const duplicateCopySearchResult = {
+  ...searchResults,
+  props: {...searchResults.props, 
+    columns: [
+      APPLICATION_NO,
+      getTextToLocalMapping("Transit No"),
+      // PROPERTY_ID,
+      OWNER_NAME,
+      STATUS
+    ],
+    options: {...searchResults.props.options,
+      onRowClick: (row, index) => {
+        onDuplicateCopyRowClick(row);
       }
     }
   }

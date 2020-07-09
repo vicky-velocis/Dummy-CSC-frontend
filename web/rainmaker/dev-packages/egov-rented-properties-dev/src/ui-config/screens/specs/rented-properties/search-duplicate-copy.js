@@ -12,10 +12,11 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
-import { searchApiCall } from "./searchResource/functions"
+import { searchDuplicateCopy } from "./searchResource/functions"
 import { searchResults } from "./searchResource/searchResults";
 import { getColonyTypes } from "./apply";
 import { getStatusList } from "./search";
+import { duplicateCopySearchResult } from "./searchResource/searchResults";
 
   const header = getCommonHeader({
     labelName: "Duplicate copy of Allotment letter",
@@ -30,7 +31,7 @@ import { getStatusList } from "./search";
       dispatch(prepareFinalObject("searchScreen", {}))
       // getColonyTypes(action, state, dispatch)
       // getStatusList(action, state, dispatch, queryObject, "search-transfer-properties", "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children.status")
-      searchApiCall(state, dispatch, true)
+      searchDuplicateCopy(state, dispatch, true)
       getStatusList(action, state, dispatch, queryObject, "search-duplicate-copy", "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children.status")
       return action
     },
@@ -58,7 +59,7 @@ import { getStatusList } from "./search";
           },
           rentedPropertyApplication,
           breakAfterSearch: getBreak(),
-          searchResults
+          duplicateCopySearchResult
         }
       }
     }

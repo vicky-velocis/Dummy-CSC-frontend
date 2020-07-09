@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall, searchTransferProperties } from "./functions";
+import { searchApiCall, searchTransferProperties,searchDuplicateCopy} from "./functions";
 
 const colonyField = {
   label: {
@@ -222,7 +222,7 @@ export const rentedPropertyApplication = getCommonCard({
       {...buttonItem, searchButton: {...buttonItem.searchButton, 
         onClickDefination: {
           action: "condition",
-          callBack: searchTransferProperties
+          callBack: searchDuplicateCopy
         }
       }, lastCont: {
         uiFramework: "custom-atoms",

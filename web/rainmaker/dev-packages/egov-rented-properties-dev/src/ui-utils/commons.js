@@ -123,6 +123,27 @@ export const getOwnershipSearchResults = async queryObject => {
   }
 }
 
+export const getDuplicateCopySearchResults = async queryObject => {
+  debugger
+  try {
+    const response = await httpRequest(
+      "post",
+      "/csp/duplicatecopy/_search",
+      "",
+      queryObject
+    )
+    return response
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+  }
+}
+
 export const getCount = async queryObject => {
   try {
     const response = await httpRequest(
