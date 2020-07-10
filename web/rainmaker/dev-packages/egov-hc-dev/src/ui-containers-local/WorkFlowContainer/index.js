@@ -19,26 +19,43 @@ import set from "lodash/set";
 import find from "lodash/find";
 import {
   localStorageGet,
-  getUserInfo
+  getUserInfo,
+  getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 import orderBy from "lodash/orderBy";
-
+import { getSearchResultsView } from "../../ui-utils/commons";
 const tenant = getQueryArg(window.location.href, "tenantId");
 
 class WorkFlowContainer extends React.Component {
-  state = {
-    open: false,
+  constructor(props){
+    super(props);
+    this.state = {
+      currentRoleOrAssignee: '',
+      open: false,
     action: ""
-  };
+  
+    }
+  }
+  
 
   componentDidMount = async () => {
-    
-    const { prepareFinalObject, toggleSnackbar } = this.props;
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
+    // debugger
+    let tenantIdForBoth = JSON.parse(getUserInfo()).permanentCity;
+    var response = await getSearchResultsView([
+      { key: "tenantId", value: tenantIdForBoth },
+      { key: "service_request_id", value: applicationNumber }
+    ]);
+    this.setState({currentRoleOrAssignee: response.ResponseBody[0].current_assignee
+    })
+    const { prepareFinalObject, toggleSnackbar } = this.props;
+    
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    // const serviceRequestDetailResponse =
+    
     const queryObject = [
       { key: "businessIds", value: applicationNumber },
       { key: "history", value: true },
@@ -295,6 +312,17 @@ class WorkFlowContainer extends React.Component {
       //data.comm
       // debugger;
       var validated= true;
+
+      if(data.comment.length=== 0)
+      {
+        validated= false;
+        toggleSnackbar(
+          true,
+          { labelName: "Please provide comments", labelKey: "ERR_PLEASE_PROVIDE_COMMENTS" },
+          "error"
+        );
+      }
+
       if(data.comment.length> 128)
       {
         validated= false;
@@ -317,6 +345,17 @@ class WorkFlowContainer extends React.Component {
             );
   
           }}
+
+          if(data.action==="INSPECT" ||data.action==="COMPLETE"){
+            const documents = get(data, "wfDocuments");
+            if (documents.length == 0) {
+              validated= false;
+              toggleSnackbar(
+                true,
+                { labelName: "Please Upload file !", labelKey: "ERR_UPLOAD_FILE" },
+                "error"
+              );
+            }}
 
           if (isDocRequired) {       
             const documents = get(data, "wfDocuments");
@@ -361,8 +400,7 @@ class WorkFlowContainer extends React.Component {
 
 
   getRedirectUrl = (action, businessId, moduleName) => {
-    // alert("$$$$$$$inside getRedirectUrl"+moduleName.toUpperCase().trim())
-    // console.log("modulenamewater", moduleName);
+ 
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
     const tenant = getQueryArg(window.location.href, "tenantId");
     const { ProcessInstances } = this.props;
@@ -565,7 +603,7 @@ class WorkFlowContainer extends React.Component {
      if(moduleName=== 'HORTICULTURE')
      {      
       // alert("inside"+moduleName)
-      const roleData = getQueryArg(window.location.href, "role");
+      const roleData = this.state.currentRoleOrAssignee
       const userRolesForHC = JSON.parse(getUserInfo()).roles;
       const userForHC = JSON.parse(getUserInfo());
       //  debugger;

@@ -22,7 +22,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   let flag_api_call = true;
   let fromdate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].FromDate")
   let Todate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].ToDate")
-  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype") 
+  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype.label") 
   let serviceRequestId = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicerequestid")
         
   var date1 = new Date(fromdate);
@@ -43,7 +43,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
       dispatch(
         toggleSnackbar(
           true,
-          { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
+          { labelName: "Please enter from date", labelKey: "ERR_FILL_FROM_DATE" },
           "warning"
         )
       );
@@ -59,7 +59,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Please fill To Date", labelKey: "ERR_FILL_TO_DATE" },
+            { labelName: "Please enter to date", labelKey: "ERR_FILL_TO_DATE" },
             "warning"
           )
         );
@@ -84,12 +84,13 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
     
 
   var oneDayDifference = 60 * 60 * 24 * 1000;
+  toDateInTime = toDateInTime + oneDayDifference
   // var fromDateInTime = date1.getTime();
   // var toDateInTime = date2.getTime();
-  if(parseInt(fromDateInTime) === parseInt(toDateInTime))
-    {
-      toDateInTime = toDateInTime + oneDayDifference
-    }
+  // if(parseInt(fromDateInTime) === parseInt(toDateInTime))
+  //   {
+  //     toDateInTime = toDateInTime + oneDayDifference
+  //   }
 
   let filterdata = 
   {
@@ -103,7 +104,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   {
     
   const response = await getSearchResultsForFilters(filterdata);
-  console.log("^^^^^^^",response.services.length)
+  // console.log("^^^^^^^",response.services.length)
   // alert(JSON.stringify(response.services[0].createdtime));
   
   // let servicerequestDate = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST", []);
@@ -150,7 +151,7 @@ export const resetFields = (state, dispatch) => {
     handleField(
       "myServiceRequests",
       "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
-      "props.value",
+      "props.value.label",
       ""
     )
   );
@@ -168,14 +169,65 @@ export const resetFields = (state, dispatch) => {
 
 export const resetFieldsForEmployeeFilter = (state, dispatch) => {
   // "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality"
+  //resetting locality using below 2 lines  of dispatch
+  // debugger
+  // var locality_path = JSON.parse(JSON.stringify({"style":{"width":"100%","cursor":"pointer"},"className":"citizen-city-picker","label":{"labelName":"Locality/Mohalla","labelKey":"HC_LOCALITY_MOHALLA_LABEL"},"placeholder":{"labelName":"Locality/Mohalla","labelKey":"HC_CHOOSE_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"},"sourceJsonPath":"applyScreenMdmsData.RAINMAKER-PGR.Sector","jsonPath":"serviceRequests.mohalla","labelsFromLocalisation":false,"suggestions":[],"fullwidth":true,"required":true,"inputLabelProps":{"shrink":true},"isMulti":false,"labelName":"name","valueName":"name"}))
+  // console.log("DDDDD"+JSON.parse({"style":{"width":"100%","cursor":"pointer"},"className":"citizen-city-picker","label":{"labelName":"Locality/Mohalla","labelKey":"HC_LOCALITY_MOHALLA_LABEL"},"placeholder":{"labelName":"Locality/Mohalla","labelKey":"HC_CHOOSE_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"},"sourceJsonPath":"applyScreenMdmsData.RAINMAKER-PGR.Sector","jsonPath":"serviceRequests.mohalla","labelsFromLocalisation":false,"suggestions":[],"fullwidth":true,"required":true,"inputLabelProps":{"shrink":true},"isMulti":false,"labelName":"name","valueName":"name"}))
+  // console.log("DDDDD"+JSON.stringify(locality_path))
+  // dispatch(
+  //   handleField(
+  //     "employeeServiceRequestsFilter",
+  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
+  //     "props",
+  //     locality_path
+  //   )
+  // );
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
-      "props.value",
+      "props.value.label",
       ""
     )
   );
+
+      //resetting servicerequeststatus using below 2 lines  of dispatch
+      
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+      "props.value.label",
+      ""
+    )
+  );
+
+  // dispatch(
+  //   handleField(
+  //     "employeeServiceRequestsFilter",
+  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
+
+    //resetting servicerequesttype using below 2 lines  of dispatch
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+      "props.value.label",
+      ""
+    )
+  );
+  // dispatch(
+  //   handleField(
+  //     "employeeServiceRequestsFilter",
+  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+  //     "props.value",
+  //     ""
+  //   )
+  // );
 
   dispatch(
     handleField(
@@ -194,16 +246,34 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
+  
+//   try{dispatch(
+//     handleField(
+//       "employeeServiceRequestsFilter",
+//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+//       "props.value.label",
+//       ""
+//     )
+//   );
+//   dispatch(
+//     handleField(
+//       "employeeServiceRequestsFilter",
+//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+//       "props.value.value",
+//       ""
+//     )
+//   );
 
-  dispatch(
-    handleField(
-      "employeeServiceRequestsFilter",
-      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-      "props.value",
-      null
-    )
-  );
+// }
 
+//   catch (e){dispatch(
+//     handleField(
+//       "employeeServiceRequestsFilter",
+//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+//       "props.value",
+//       ""
+//     )
+//   );}
 
   dispatch(
     handleField(
@@ -214,14 +284,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
     )
   );
 
-  dispatch(
-    handleField(
-      "employeeServiceRequestsFilter",
-      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
-      "props.value",
-      ""
-    )
-  );
+  
 
   dispatch(
     handleField(
