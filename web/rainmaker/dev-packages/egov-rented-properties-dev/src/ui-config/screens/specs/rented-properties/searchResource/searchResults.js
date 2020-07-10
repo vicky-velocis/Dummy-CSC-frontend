@@ -87,7 +87,7 @@ const onTransferPropertyRowClick = rowData => {
 
 const onDuplicateCopyRowClick = rowData => {
   console.log("=======row data======", rowData)
-  window.location.href = `ownership-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
+  window.location.href = `search-duplicate-copy-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
 export const transferSearchResults = {

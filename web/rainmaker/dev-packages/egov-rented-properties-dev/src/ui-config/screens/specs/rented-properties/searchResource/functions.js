@@ -124,10 +124,10 @@ export const searchTransferProperties = async (state, dispatch, onInit, offset, 
 export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
   !!hideTable && showHideTable(false, dispatch, "search-duplicate-copy");
   let queryObject = [
-    // {
-    //   key: "tenantId",
-    //   value: getTenantId()
-    // },
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
     { key: "offset", value: offset },
     { key: "limit", value: limit }
   ];
