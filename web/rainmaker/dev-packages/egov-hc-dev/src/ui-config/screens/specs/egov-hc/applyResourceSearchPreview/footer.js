@@ -155,14 +155,14 @@ export const downloadPrintContainer = (
         docs = docs + "Document "+img_cnt + " -   " +document_list[i];
         img_cnt = img_cnt+1;
       }
-      // alert(docs);
-    // alert("Doc :: "+ JSON.stringify(document_list));
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
-      // myRequestDetails["documents"] = docs;
       myRequestDetails["documents"] = docs;
+      var demo = myRequestDetails["description"];
+      myRequestDetails["description"] = encodeURI(demo);
       const data= [myRequestDetails];
+
       downloadAcknowledgementForm(data, "download");
     },
     leftIcon: "assignment"
@@ -175,11 +175,24 @@ export const downloadPrintContainer = (
         "screenConfiguration.preparedFinalObject.documents_list",
         {}
       );
+      var docs = "";
+      var img_cnt =1;
+      for(var i=0;i<document_list.length;i++)
+      {
+        if(document_list[i].length <80){
+          while(document_list[i].length<130){
+            document_list[i] = document_list[i] + " ";
+          }
+        }
+        
+        docs = docs + "Document "+img_cnt + " -   " +document_list[i];
+        img_cnt = img_cnt+1;
+      }
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
-      myRequestDetails["documents"] = document_list[0].toString();
-      var data= [myRequestDetails];
+      myRequestDetails["documents"] = docs;
+      const data= [myRequestDetails];
       downloadAcknowledgementForm(data,'print');
     },
     leftIcon: "assignment"

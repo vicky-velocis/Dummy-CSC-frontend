@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { MapLocation } from "../../ui-atoms-local";
-
+import axios from 'axios'
 import { defaultLocation } from "../../ui-config/hc-app-config";
 import { Button, Icon } from "egov-ui-framework/ui-atoms";
 import isEmpty from "lodash/isEmpty";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.scss";
-
+import { MAP_API_KEY_FOR_ADDRESS, MAX_LENGTH_OF_ADDRESS  } from "../../ui-config/hc-app-config";
 const pickBtn = {
   display: "block"
 };
@@ -61,10 +61,10 @@ class MapLocator extends Component {
     }
   };
 
-  setPickedLocation = (lati, long,address) => {
+  setPickedLocation = (lati, long) => {
     add.lat = lati;
     add.lng = long;
-    add.address=address;
+   
   };
 
   closeMapPopup = () => {
@@ -76,13 +76,20 @@ class MapLocator extends Component {
     );
   };
 
-  onClickPick = () => {
-    
+  onClickPick = async () => {
+    //  debugger  
+    var current_address
+    await axios.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+add.lat+','+add.lng+'&key='+MAP_API_KEY_FOR_ADDRESS+'').then(response=> {current_address=JSON.stringify(response.data.results[0].formatted_address)}).catch((error) => {
+    this.setState({ error: error.message })
+  });
+   var updated_address_first_Split = current_address.split('"')[1]
+   var updated_address_second_Split = updated_address_first_Split.split('"')[0]
+    // var trimmed_address = updated_address_second_Split.parseS.substring(0, MAX_LENGTH_OF_ADDRESS)
     this.props.handleField(
       "apply",
       "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.SILocationDetailsConatiner.children.propertyGisCoordinates.children.gisTextField",
       "props.value",
-      `${add.lat}, ${add.lng} ,${add.address}`
+      `${updated_address_second_Split}`
     );
     this.props.prepareFinalObject(
       "SERVICEREQUEST.latitude",
@@ -92,6 +99,10 @@ class MapLocator extends Component {
       "SERVICEREQUEST.longitude",
       add.lng
     );
+    this.props.prepareFinalObject(
+      "SERVICEREQUEST.address",
+      updated_address_second_Split
+    );
 
     this.closeMapPopup();
     
@@ -100,7 +111,7 @@ class MapLocator extends Component {
   };
 
   convertToAddress = add => {
-    const { lat, lng, address } = add;
+    const { lat, lng } = add;
     this.setState({
       currLoc: {}
     });
@@ -180,7 +191,7 @@ class MapLocator extends Component {
           dragInfoBox={false}
           viewLocation={false}
         />
-        <div className="responsive-action-button-cont">
+        <div className="responsive-action-button-cont" style={{background: "#fff", display: "flex", marginTop: "5px"}}>
           <Button
             id="map-close-button"
             className="pick responsive-action-button"

@@ -2,6 +2,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { applicationSuccessFooter } from "./acknowledgementResource/footers";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const getAcknowledgementCard = (
@@ -10,7 +11,13 @@ const getAcknowledgementCard = (
   serviceRequestId,
   tenant
 ) => {
-
+  dispatch(
+    toggleSnackbar(
+      false,
+      { labelName: "Please wait while your request being is generated", labelKey: "HC_SERVICE_REQUEST_BEING_GENERATED" },
+      "warning"
+    )
+  );
     return {
 
       serviceRequestSuccessCard: {

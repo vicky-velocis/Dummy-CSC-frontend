@@ -3,7 +3,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { fetchData, fetchDataForFilterFields, resetFields } from "./searchResource/citizenSearchFunctions";
-
+import { resetFieldsForEmployeeFilter } from "./searchResource/citizenSearchFunctions";
 
 
 const header = getCommonHeader(
@@ -31,7 +31,7 @@ export const FieldsForFilterForm = getCommonCard({
           labelKey: "HC_SERVICE_REQUEST_ID"
         },
         placeholder: {
-          labelName: "Service Request ID",
+          labelName: "Enter Service Request ID",
           labelKey: "HC_SERVICE_REQUEST_ID_PLACEHOLDER"
         },
         gridDefination: {
@@ -49,7 +49,7 @@ export const FieldsForFilterForm = getCommonCard({
     FromDate: getDateField({
       label: { labelName: "From Date", labelKey: "HC_FROM_DATE_LABEL" },
       placeholder: {
-        labelName: "FromDate",
+        labelName: "Select From Date",
         labelKey: "HC_FROM_DATE_PLACEHOLDER"
       },
       gridDefination: {
@@ -69,7 +69,7 @@ export const FieldsForFilterForm = getCommonCard({
     ToDate: getDateField({
       label: { labelName: "To Date", labelKey: "HC_TO_DATE_LABEL" },
       placeholder: {
-        labelName: "To Date",
+        labelName: "Select To Date",
         labelKey: "HC_TO_DATE_PLACEHOLDER"
       },
       gridDefination: {
@@ -86,25 +86,65 @@ export const FieldsForFilterForm = getCommonCard({
 
 
     }),
-    ServiceRequestType: getSelectField({
-      label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
-      optionLabel: "name",
-      optionValue: "name",
-      placeholder: {
-        labelName: "Service Request Type",
-        labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
-      },
-      //    jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-        md: 4
-      },
+    // ServiceRequestType: getSelectField({
+    //   label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
+    //   optionLabel: "name",
+    //   optionValue: "name",
+    //   placeholder: {
+    //     labelName: "Select Service Request Type",
+    //     labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    //   },
+    //   //    jsonPath: "searchScreen.toDate",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4,
+    //     md: 4
+    //   },
 
+    //   jsonPath: "myServiceRequests[0].servicetype",
+    //   sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
+    //   required: false
+    // }),
+    ServiceRequestType:{
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hc",
+      componentPath: "AutosuggestContainer",
       jsonPath: "myServiceRequests[0].servicetype",
+            required: true,
+            gridDefination: {
+              xs: 12,
+              sm: 4,
+              md: 4
+            },
+    props: {
+    style: {
+    width: "100%",
+    cursor: "pointer"
+    },
+   
+    className: "citizen-city-picker",
+    
+    label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
+
+    placeholder: {
+      labelName: "Select Service Request Type",
+      labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    },
+    jsonPath: "myServiceRequests[0].servicetype",
       sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-      required: false
-    }),
+   
+    labelsFromLocalisation: false,
+    suggestions: [],
+    fullwidth: true,
+    required: true,
+    inputLabelProps: {
+      shrink: true
+    },
+    isMulti: false,
+    labelName: "name",
+    valueName: "name"
+    },
+  },
   }),
 
 
@@ -113,16 +153,17 @@ export const FieldsForFilterForm = getCommonCard({
       firstCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 4
+        // }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 4,
+          md: 4,
           // align: "center"
         },
         props: {
@@ -132,7 +173,8 @@ export const FieldsForFilterForm = getCommonCard({
             // margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            minWidth: "220px",
+            // minWidth: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -156,7 +198,8 @@ export const FieldsForFilterForm = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 3
+          sm: 4,
+          md:4 
           // align: "center"
         },
         props: {
@@ -167,7 +210,8 @@ export const FieldsForFilterForm = getCommonCard({
             border: "#FE7A51 solid 1px",
             borderRadius: "2px",
             // width: window.innerWidth > 480 ? "80%" : "100%",
-            minWidth: "220px",
+           // minWidth: "220px",
+           width: "80%",
             height: "48px"
           }
         },
@@ -182,14 +226,14 @@ export const FieldsForFilterForm = getCommonCard({
           callBack: resetFields
         }
       },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      }
+      // lastCont: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   }
+      // }
     })
   })
 });
@@ -250,6 +294,8 @@ const screenConfig = {
   name: "myServiceRequests",
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch)
+    // resetFieldsForEmployeeFilter(state, dispatch);
+
     getMdmsData(dispatch).then(response => {
     })
     fetchData(action, state, dispatch);
