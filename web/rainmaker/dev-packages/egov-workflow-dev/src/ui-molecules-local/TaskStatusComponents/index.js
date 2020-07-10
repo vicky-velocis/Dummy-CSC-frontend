@@ -143,9 +143,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         </Typography>
         <Typography
           variant="body2"
-          classes={{
-            body2: "body2-word-wrap"
-          }}
+          className="bodydata-word-wrap"
         >
           <LabelContainer labelName={get(currentObj, "comment")} />
         </Typography>
