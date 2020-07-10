@@ -416,7 +416,7 @@ class HCActionDialog extends React.Component {
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfSDO}
-                        optionValue="value"
+                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
                         // onClose={handleFieldChange(`${dataPath}.assignee`,[""])}
@@ -457,10 +457,7 @@ class HCActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
-                        <LabelContainer
-                          labelName="Supporting Documents"
-                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />
+                        
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -489,6 +486,10 @@ class HCActionDialog extends React.Component {
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
+                    <LabelContainer
+                        labelName="Upload Document Should be less than 5MB"
+                        labelKey="HC_UPLOAD_DOCUMENT_MSG_LABEL"
+                      />
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                                          <Button
                         variant={"contained"}
@@ -530,10 +531,6 @@ class HCActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
-                        <LabelContainer
-                          labelName="Supporting Documents"
-                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -554,6 +551,7 @@ class HCActionDialog extends React.Component {
                       />
                     </div>
                     <ImageUpload module="egov-workflow"  formKey={"workflow"} fieldKey={`wfDocuments`} />
+                    
                     <Grid sm={12} style={{ textAlign: "right", marginTop: "16px", paddingTop:"10px"}} className="bottom-button-container">
                                          <Button
                         variant={"contained"}

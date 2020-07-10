@@ -122,12 +122,13 @@ export const getSearchResultsForFilters = async (filterdata) => {
 
 export const getSearchResultsView = async queryObject => {
   try {
-    
+    //debugger
     const response = await httpRequest(
       "post", "hc-services/serviceRequest/_getDetail", "",
       [],
       {
-        "service_request_id": queryObject[1].value
+        "service_request_id": queryObject[1].value,
+        "tenantId":queryObject[0].value
         }
       
     );
@@ -163,18 +164,18 @@ export const furnishServiceRequestDetailResponse = response => {
     serviceType = ""
   }
   set(refurnishresponse, "contactNumber", response.ResponseBody[0].contact_number);
-  set(refurnishresponse, "mohalla", response.ResponseBody[0].street_name);
+  // set(refurnishresponse, "mohalla", response.ResponseBody[0].street_name);
   set(refurnishresponse, "description", response.ResponseBody[0].description);
   set(refurnishresponse, "ownerName", response.ResponseBody[0].owner_name);
   set(refurnishresponse, "tenantId", response.ResponseBody[0].tenant_id);
   set(refurnishresponse, "email", response.ResponseBody[0].email_id);
-  set(refurnishresponse, "mohalla", response.ResponseBody[0].locality);
+  set(refurnishresponse, "mohalla", {value:"", label:response.ResponseBody[0].locality});
   set(refurnishresponse, "houseNoAndStreetName", response.ResponseBody[0].street_name);
   set(refurnishresponse, "landmark", response.ResponseBody[0].landmark);
   set(refurnishresponse, "latitude", response.ResponseBody[0].latitude);
   set(refurnishresponse, "longitude", response.ResponseBody[0].longitude);
   set(refurnishresponse, "address", response.ResponseBody[0].location);
-  set(refurnishresponse, "serviceType", serviceType);
+  set(refurnishresponse, "serviceType", {value:"", label: serviceType});
   set(refurnishresponse, "treeCount", response.ResponseBody[0].tree_count);
   set(refurnishresponse, "service_request_id", response.ResponseBody[0].service_request_id);
   set(refurnishresponse, "media", JSON.parse(response.ResponseBody[0].service_request_document));

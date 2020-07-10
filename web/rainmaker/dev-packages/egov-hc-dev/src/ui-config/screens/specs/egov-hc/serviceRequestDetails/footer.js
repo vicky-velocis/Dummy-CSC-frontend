@@ -41,13 +41,13 @@ let validatestepformflag = false ;
   if(media.length >= 1)
   {
     uploadFlag = true;
-    validatestepformflag = validatestepform(state,serviceRequest);
+    validatestepformflag = validatestepform(state, dispatch, serviceRequest);
   }
   else{
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Upload At least One Image..!", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
+        { labelName: "Image is mandatory", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
         "warning"
       )
     );
@@ -70,11 +70,11 @@ let validatestepformflag = false ;
       isFormValid = false;
       if(contact_flag>0)
       {
-        document.getElementById('custom-containers-typeofrequest').focus();
+        document.getElementById('custom-containers-contactno').focus();
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Invalid Contact Number..!", labelKey: "HC_CONTACT_NUMBER_ERROR" },
+            { labelName: "Invalid contact number", labelKey: "HC_CONTACT_NUMBER_ERROR" },
             "warning"
           )
         );
@@ -89,7 +89,7 @@ let validatestepformflag = false ;
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Invalid Contact Number..!", labelKey: "HC_TREE_COUNT_ERROR" },
+            { labelName: "Invalid tree count range in between (1-99)", labelKey: "HC_TREE_COUNT_ERROR" },
             "warning"
           )
         ); 
@@ -98,6 +98,65 @@ let validatestepformflag = false ;
       treeCount_flag = true;
     }
 
+    // Code Here
+    let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description");
+    let address = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.address");
+    let locality = ""
+    let houseNoAndStreetName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.houseNoAndStreetName");
+    let landmark = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.landmark");
+    let ownerName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.ownerName");
+    let email = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.email");
+    
+    // let latitude = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.latitude");
+    // let longitude = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.longitude");
+    
+    let validationErrorMsg = ""
+    let flagValidField = true;
+
+    if(! /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/.test(description))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LOCATION_ERROR" };
+        flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(address))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LOCATION_ERROR" };
+        flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(houseNoAndStreetName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(landmark))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z]+$/.test(ownerName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_OWNER_NAME_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(email))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_EMAIL_ERROR" };
+      flagValidField = false;
+    }
+
+    if(flagValidField == false)
+    {
+      dispatch(
+        toggleSnackbar(
+          true,
+          validationErrorMsg,
+          "warning"
+        )
+       );
+      
+    }
+    
+
     if(treeCount_flag == true && conno_flag == true)
     {
       isFormValid = validatestepformflag[0];
@@ -105,23 +164,43 @@ let validatestepformflag = false ;
       services.push(serviceRequest)
     }
     
-    if (isFormValid) {
+    // alert("Res :: "+ isFormValid +" "+ flagValidField );
+
+    if (isFormValid && flagValidField) {
       
       if (activeStep === 1) {
         // "custom-containers-nextButtonLabel"
-        
+        // debugger
         let status = 'INITIATED'
-        serviceRequest['city']= getTenantId(),
+        serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
         serviceRequest['tenantId']= getTenantId(),
         serviceRequest['media'] = media,
-        serviceRequest['address'] = 'hardcoded value',
+        // serviceRequest['address'] = 'hardcoded value',
         serviceRequest['isEditState'] = 0
+        try
+       { serviceRequest['mohalla'] = serviceRequest.mohalla["label"]
+      }
+      catch (e){
+        serviceRequest['mohalla'] = serviceRequest.mohalla
+      }
+      try
+        {serviceRequest['serviceType'] = serviceRequest.serviceType["label"]}
+
+        catch(e){serviceRequest['serviceType'] = serviceRequest.serviceType
+      }
         dispatch(
           handleField(
             "servicerequest",
             "components.div.children.footer.children",
             "nextButton.visible",
             false
+          )
+        );
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please wait while your request being is generated", labelKey: "HC_SERVICE_REQUEST_BEING_GENERATED" },
+            "warning"
           )
         );        
         let response = await createServiceRequest(state, dispatch, status);
@@ -130,9 +209,6 @@ let validatestepformflag = false ;
         
         let serviceRequestId = getapplicationNumber();
         if (responseStatus == "SUCCESS" || responseStatus == "success") {
-          
-        
-
           if (isFormValid) {
           get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST")
           dispatch(setRoute(`/egov-hc/acknowledgementServiceRequest?serviceRequestId=${serviceRequestId}`));
@@ -147,8 +223,8 @@ let validatestepformflag = false ;
             )
           );           
           let errorMessage = {
-            labelName: "Submission Falied, Try Again later!",
-            labelKey: "ERR_DEFAULT_INPUT_FIELD_MSG" 
+            labelName: "Submission Failed, Try Again later!",
+            labelKey: "ERR_SERVICE_REQUEST_FAILED_MSG" 
           };
           dispatch(toggleSnackbar(true, errorMessage, "error"));
         }
@@ -214,17 +290,38 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
+export const validatestepform = (state, dispatch, isFormValid, hasFieldToaster) => {
   let allAreFilled = true;
-
-  
-
   let error= false;
- 
+  let flagValidFields= false;
 
    document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
-   
-    if (!i.value) {
+    
+    let serviceRequest_validate = get(state,
+      "screenConfiguration.preparedFinalObject.SERVICEREQUEST"
+    );
+    if (serviceRequest_validate!=undefined) 
+    {if (serviceRequest_validate.mohalla == undefined || serviceRequest_validate.serviceType == undefined) {
+     
+      // i.value = 
+      if(error==false)
+      {
+        error=true;
+      i.focus();
+      allAreFilled = false;
+      i.parentNode.classList.add("MuiInput-error-853");
+      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+    }
+    if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+      i.parentNode.classList.add("MuiInput-error-853");
+      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+      allAreFilled = false;
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
+  }}
+
+    if (!i.value && i.value != undefined) {
       if(error==false)
       {
         error=true;
@@ -305,13 +402,16 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
   
   
   if (allAreFilled == false) {
-    
     isFormValid = false;
     hasFieldToaster = true;
+    flagValidFields = false;
   }
   else {
     isFormValid = true;
     hasFieldToaster = false;
+    flagValidFields = true;
   }
-  return [isFormValid, hasFieldToaster]
+
+
+  return [isFormValid, hasFieldToaster, flagValidFields]
 };
