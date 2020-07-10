@@ -54,7 +54,7 @@ const screenConfig = {
                             {
                                 label: "EC_COMMON_TABLE_COL_SI_CHALLAN_STATUS",
                                 jsonPath: "status",
-                                prefix: "WF_ECHALLAN_"
+                                prefix: "EC_WF_"
                             },
 
                         ],

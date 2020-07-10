@@ -1,12 +1,15 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import { connect } from "react-redux";
-import { compose } from "recompose";
+import {compose} from "recompose";
 import MainRoutes from "ui-routes";
-//import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
-import Div from "egov-ui-framework/ui-atoms/HtmlElements/Div";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import "./index.scss";
+import LoadingIndicator from "../../ui-molecules/LoadingIndicator";
+// import { Auth } from "aws-amplify";
+import Div from "../../ui-atoms/HtmlElements/Div";
+// import { logout } from "ui-redux/auth/actions";
+import { setRoute } from "ui-redux/app/actions";
+// import {authenticated} from "ui-redux/auth/actions";
+import "./index.css";
 
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {
@@ -15,27 +18,40 @@ class App extends React.Component {
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
-      window.parent.postMessage(`/employee-tradelicence${nextRoute}`, "*");
     }
   }
 
+  componentDidMount = async () => {
+    // const {authenticatedFn}=this.props;
+    try {
+      // if (await Auth.currentSession()) {
+      //   authenticatedFn();
+      // }
+    } catch (e) {
+      if (e !== "No current user") {
+        console.log(e);
+      }
+    }
+  };
+
+
   render() {
-    const { authenticated } = this.props;
+    const {spinner,authenticated} =this.props;
     const childProps = {
       isAuthenticated: authenticated
     };
     return (
       <Div className="App">
         <MainRoutes childProps={childProps} />
-        {/* {spinner && <LoadingIndicator/>} */}
+        {spinner && <LoadingIndicator/>}
       </Div>
     );
   }
 }
 
-const mapStateToProps = ({ app, auth }) => {
-  const { route, spinner } = app;
-  const { authenticated } = auth;
+const mapStateToProps = ({ app,auth }) => {
+  const { route,spinner } = app;
+  const {authenticated} =auth;
   return {
     route,
     spinner,
@@ -45,14 +61,10 @@ const mapStateToProps = ({ app, auth }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: route => dispatch(setRoute(route))
+    setRoute: route => dispatch(setRoute(route)),
+    // authenticatedFn:()=>dispatch(authenticated()),
+    // logout:()=>dispatch(logout())
   };
 };
 
-export default compose(
-  withRouter,
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(App);
+export default compose(withRouter,connect(mapStateToProps, mapDispatchToProps))(App);

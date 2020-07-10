@@ -9,7 +9,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL: window.location.origin,
+  baseURL: window.location.origin,   
   headers: {
     "Content-Type": "application/json"
   }
@@ -139,7 +139,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
       : getTenantId().split(".")[0]
     : "";
   const uploadInstance = axios.create({
-    baseURL: window.location.origin,
+    baseURL: window.location.origin,   
     headers: {
       "Content-Type": "multipart/form-data"
     }
