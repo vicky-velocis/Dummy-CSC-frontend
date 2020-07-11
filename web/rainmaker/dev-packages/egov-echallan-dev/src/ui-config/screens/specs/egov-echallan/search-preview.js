@@ -962,7 +962,7 @@ const createDemandforChallanCertificate = async (state, dispatch, tenantId) => {
 
     response.Calculations[0].taxHeadEstimates.forEach(element => {
 
-      if (element.taxHeadCode === 'ECHALLAN_FEE' && element.estimateAmount > 0) {
+      if (element.taxHeadCode === 'EC_ECHALLAN_FEE' && element.estimateAmount > 0) {
         searchBill(dispatch, applicationNumber, tenantId, paymentStatus);
         //generateBill(dispatch, applicationNumber, getTenantId());
       }

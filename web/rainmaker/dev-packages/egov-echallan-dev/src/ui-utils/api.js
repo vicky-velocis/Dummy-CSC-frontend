@@ -1,41 +1,65 @@
 import axios from "axios";
-import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "./commons";
+import {
+  fetchFromLocalStorage,
+  addQueryArg,
+  getDateInEpoch
+} from "egov-ui-framework/ui-utils/commons";
+import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "../ui-redux/store";
 import {
   getAccessToken,
-  getTenantId,
-  getLocale
+  getTenantId, getUserInfo, getapplicationType, getapplicationMode, getapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  //baseURL: window.location.origin, 
-  baseURL: "http://192.168.12.114:8096",  
-  headers: {
+	baseURL: window.location.origin, 
+    headers: {
     "Content-Type": "application/json"
   }
 });
 
-const wrapRequestBody = (requestBody, action) => {
+const wrapRequestBody = (requestBody, action, customRequestInfo) => {
+  const applicationnumber = getapplicationNumber();
   const authToken = getAccessToken();
   let RequestInfo = {
-    apiId: "Mihy",
+    apiId: "Rainmaker",
     ver: ".01",
     // ts: getDateInEpoch(),
     action: action,
     did: "1",
     key: "",
-    msgId: `20170310130900|${getLocale()}`,
+    msgId: "20170310130900|en_IN",
     requesterId: "",
-    authToken
+    authToken,
+    userInfo: JSON.parse(getUserInfo()), // For live purpose
+
   };
-  return Object.assign(
+  let ExtraPayload = {
+    applicationType: getapplicationType(),// 'PETNOC',
+    applicationStatus: getapplicationMode(),  //'INITIATED',
+    applicationId: applicationnumber === 'null' ? '' : applicationnumber,
+    tenantId: getTenantId(),
+  }
+  let auditDetails = {
+    createdBy: JSON.parse(getUserInfo()).id,
+    lastModifiedBy: JSON.parse(getUserInfo()).id,
+    createdTime: getDateInEpoch(),
+    lastModifiedTime: getDateInEpoch()
+  }
+  //ExtraPayload is custom defined.
+  //RequestInfo = { ...RequestInfo, ...customRequestInfo, ...ExtraPayload };
+  let ac = Object.assign(
     {},
     {
-      RequestInfo
+      RequestInfo,
+      ...ExtraPayload,
+      ...customRequestInfo,
+      ...requestBody,
+      auditDetails,
     },
-    requestBody
   );
+
+  return ac;
 };
 
 export const httpRequest = async (
@@ -44,8 +68,13 @@ export const httpRequest = async (
   action,
   queryObject = [],
   requestBody = {},
-  headers = []
+  headers = [],
+  customRequestInfo = {}
 ) => {
+
+  console.log('requestBody', requestBody);
+  console.log('endPoint', endPoint);
+
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
 
@@ -53,7 +82,6 @@ export const httpRequest = async (
     instance.defaults = Object.assign(instance.defaults, {
       headers
     });
-
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
@@ -61,18 +89,21 @@ export const httpRequest = async (
       case "post":
         response = await instance.post(
           endPoint,
-          wrapRequestBody(requestBody, action)
+          wrapRequestBody(requestBody, action, customRequestInfo)
         );
+
         break;
       default:
         response = await instance.get(endPoint);
     }
+
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
   } catch (error) {
+
     const { data, status } = error.response;
     if (status === 400 && data === "") {
       apiError = "INVALID_TOKEN";
@@ -89,7 +120,6 @@ export const httpRequest = async (
         (data.hasOwnProperty("error_description") && data.error_description) ||
         apiError;
     }
-
     store.dispatch(toggleSpinner());
   }
   // unhandled error
@@ -121,53 +151,4 @@ export const logoutRequest = async () => {
   }
 
   throw new Error(apiError);
-};
-
-export const prepareForm = params => {
-  let formData = new FormData();
-  for (var k in params) {
-    formData.append(k, params[k]);
-  }
-  return formData;
-};
-
-export const uploadFile = async (endPoint, module, file, ulbLevel) => {
-  // Bad idea to fetch from local storage, change as feasible
-  store.dispatch(toggleSpinner());
-  const tenantId = getTenantId()
-    ? ulbLevel
-      ? getTenantId().split(".")[0]
-      : getTenantId().split(".")[0]
-    : "";
-  const uploadInstance = axios.create({
-    //baseURL: window.location.origin, 
-  baseURL: "http://192.168.12.114:8096",  
-    headers: {
-      "Content-Type": "multipart/form-data"
-    }
-  });
-
-  const requestParams = {
-    tenantId,
-    module,
-    file
-  };
-  const requestBody = prepareForm(requestParams);
-
-  try {
-    const response = await uploadInstance.post(endPoint, requestBody);
-    const responseStatus = parseInt(response.status, 10);
-    let fileStoreIds = [];
-    store.dispatch(toggleSpinner());
-    if (responseStatus === 201) {
-      const responseData = response.data;
-      const files = responseData.files || [];
-      fileStoreIds = files.map(f => f.fileStoreId);
-      return fileStoreIds[0];
-    }
-  } catch (error) {
-    store.dispatch(toggleSpinner());
-    alert("File size exceed the limit");
-    //throw new Error(error);
-  }
 };

@@ -12,21 +12,15 @@ import {
   Typegraphy,
   Icon,
   Main
-} from "../../ui-atoms";
+} from "egov-ui-framework/ui-atoms";
 import IconButton from "@material-ui/core/IconButton";
 import Hidden from "@material-ui/core/Hidden";
-import Divider from "@material-ui/core/Divider";
-import { RenderRoutes } from "../../ui-molecules";
-import appRoutes from "ui-config/routes/mihy";
+import RenderRoutes from "egov-ui-framework/ui-molecules/RenderRoutes";
+import appRoutes from "../../ui-config/routes/mihy";
 import styles from "./css";
-// import BloodDashboard from "apps/ui-blood/views/Dashboard";
-// import SearchDonor from "apps/ui-blood/views/SearchDonor";
-// import Registration from "apps/ui-blood/views/Registration";
-// import DonorProcess from "apps/ui-blood/views/DonorProcess";
-import {compose} from "recompose";
-import {connect} from "react-redux";
-import {logout} from "ui-redux/auth/actions";
-
+import { compose } from "recompose";
+import { connect } from "react-redux";
+import { logout } from "egov-ui-framework/ui-redux/auth/actions";
 
 class Landing extends React.Component {
   state = {
@@ -37,17 +31,15 @@ class Landing extends React.Component {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
-  logout=async ()=>{
-
-  }
+  logout = async () => {};
 
   render() {
-    const { classes, theme, match ,logout} = this.props;
+    const { classes, theme, match, logout } = this.props;
 
     const drawer = (
       <Div>
         <Div className={classes.toolbar} />
-        <Divider />
+
         <List>
           <ListItem button>
             <ListItemText primary="Home" />
@@ -58,9 +50,12 @@ class Landing extends React.Component {
           <ListItem button>
             <ListItemText primary="Contact Us" />
           </ListItem>
-          <ListItem button onClick={()=>{
-            logout()
-          }}>
+          <ListItem
+            button
+            onClick={() => {
+              logout();
+            }}
+          >
             <ListItemText primary="Logout" />
           </ListItem>
         </List>
@@ -79,7 +74,7 @@ class Landing extends React.Component {
               <Icon iconName="menu" />
             </IconButton>
             <Typegraphy variant="title" color="inherit" noWrap>
-              Mihy
+              Rainmaker
             </Typegraphy>
           </Toolbar>
         </AppBar>
@@ -124,14 +119,16 @@ Landing.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-// const mapStateToProps=(state)=>{
-//   return null
-// }
-
-const mapDispatchToProps=(dispatch)=>{
+const mapDispatchToProps = dispatch => {
   return {
-    logout:()=>dispatch(logout())
-  }
-}
+    logout: () => dispatch(logout())
+  };
+};
 
-export default compose(connect(null,mapDispatchToProps),withStyles(styles, { withTheme: true }))(Landing);
+export default compose(
+  connect(
+    null,
+    mapDispatchToProps
+  ),
+  withStyles(styles, { withTheme: true })
+)(Landing);

@@ -1,596 +1,34 @@
-import isEmpty from "lodash/isEmpty";
-import { httpRequest, uploadFile } from "./api.js";
-import cloneDeep from "lodash/cloneDeep";
+import { convertDateToEpoch, convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
+import moment from 'moment';
 import {
-  localStorageSet,
-  localStorageGet,
-  getLocalization,
-  getLocale
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "./index"; //import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import {
+  getAccessToken,
+  getTenantId, getUserInfo, getapplicationType, getapplicationMode, setapplicationMode, setapplicationNumber
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import orderBy from "lodash/orderBy";
+import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import commonConfig from "config/common.js";
-import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import store from "ui-redux/store";
+import { getTranslatedLabel, convertDateTimeToEpoch, getTextToLocalMapping, getDiffernceBetweenTodayDate, getDiffernceBetweenTwoDates, fetchRoleCode, getEpochForDate } from "../ui-config/screens/specs/utils";
+import { getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 
-export const addComponentJsonpath = (components, jsonPath = "components") => {
-  for (var componentKey in components) {
-    if (components.hasOwnProperty(componentKey)) {
-      if (components[componentKey].children) {
-        components[
-          componentKey
-        ].componentJsonpath = `${jsonPath}.${componentKey}`;
-        const childJsonpath = `${components[componentKey].componentJsonpath}.children`;
-        addComponentJsonpath(components[componentKey].children, childJsonpath);
-      } else {
-        components[
-          componentKey
-        ].componentJsonpath = `${jsonPath}.${componentKey}`;
-      }
-    }
-  }
-  return components;
-};
-
-export const getQueryArg = (url, name) => {
-  if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return "";
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-};
-
-export const addQueryArg = (url, queries = []) => {
-  const urlParts = url.split("?");
-  const path = urlParts[0];
-  let queryParts = urlParts.length > 1 ? urlParts[1].split("&") : [];
-  queries.forEach(query => {
-    const key = query.key;
-    const value = query.value;
-    const newQuery = `${key}=${value}`;
-    queryParts.push(newQuery);
-  });
-  const newUrl = path + "?" + queryParts.join("&");
-  return newUrl;
-};
-
-export const isFieldEmpty = field => {
-  if (field === undefined || field === null) {
-    return true;
-  }
-  if (typeof field !== "object") {
-    field = field.toString().trim();
-    return isEmpty(field);
-  }
-  return false;
-};
-
-export const slugify = term => {
-  return term.toLowerCase().replace(/\s+/, "-");
-};
-
-export const persistInLocalStorage = obj => {
-  Object.keys(obj).forEach(objKey => {
-    const objValue = obj[objKey];
-    localStorageSet(objKey, objValue);
-  }, this);
-};
-
-export const ifUserRoleExists = role => {
-  let userInfo = JSON.parse(getUserInfo());
-  const roles = get(userInfo, "roles");
-  const roleCodes = roles ? roles.map(role => role.code) : [];
-  if (roleCodes.indexOf(role) > -1) {
-    return true;
-  } else return false;
-};
-
-export const fetchFromLocalStorage = key => {
-  return localStorageGet(key) || null;
-};
-
-export const trimObj = obj => {
-  if (!Array.isArray(obj) && typeof obj !== "object") return obj;
-  for (var key in obj) {
-    obj[key.trim()] =
-      typeof obj[key] === "string" ? obj[key].trim() : trimObj(obj[key]);
-    if (key === "") delete obj[key];
-  }
-  return obj;
-};
-
-export const getDateInEpoch = () => {
-  return new Date().getTime();
-};
-
-export const getImageUrlByFile = file => {
-  return new Promise(resolve => {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = e => {
-      const fileurl = e.target.result;
-      resolve(fileurl);
-    };
-  });
-};
-
-export const getFileSize = file => {
-  const size = parseFloat(file.size / 1024).toFixed(2);
-  return size;
-};
-
-export const isFileValid = (file, acceptedFiles) => {
-  const mimeType = file["type"];
-  return (
-    (mimeType &&
-      acceptedFiles &&
-      acceptedFiles.indexOf(mimeType.split("/")[1]) > -1) ||
-    false
-  );
-};
-
-export const transformById = (payload, id) => {
-  return (
-    payload &&
-    payload.reduce((result, item) => {
-      result[item[id]] = {
-        ...item
-      };
-
-      return result;
-    }, {})
-  );
-};
-
-export const getTransformedLocalStorgaeLabels = () => {
-  const localeLabels = JSON.parse(
-    getLocalization(`localization_${getLocale()}`)
-  );
-  return transformById(localeLabels, "code");
-};
-
-export const getTranslatedLabel = (labelKey, localizationLabels) => {
-  let translatedLabel = null;
-  if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {
-    translatedLabel = localizationLabels[labelKey];
-    if (
-      translatedLabel &&
-      typeof translatedLabel === "object" &&
-      translatedLabel.hasOwnProperty("message")
-    )
-      translatedLabel = translatedLabel.message;
-  }
-  return translatedLabel || labelKey;
-};
-
-export const epochToYmd = et => {
-  // Return null if et already null
-  if (!et) return null;
-  // Return the same format if et is already a string (boundary case)
-  if (typeof et === "string") return et;
-  let date = new Date(et);
-  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  let month =
-    date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-  // date = `${date.getFullYear()}-${month}-${day}`;
-  var formatted_date = date.getFullYear() + "-" + month + "-" + day;
-  return formatted_date;
-};
-
-export const getLocaleLabels = (label, labelKey, localizationLabels) => {
-  if (!localizationLabels)
-    localizationLabels = transformById(
-      JSON.parse(getLocalization(`localization_${getLocale()}`)),
-      "code"
-    );
+export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
     let translatedLabel = getTranslatedLabel(labelKey, localizationLabels);
     if (!translatedLabel || labelKey === translatedLabel) {
-      return translatedLabel;
+      return label;
     } else {
       return translatedLabel;
     }
   } else {
     return label;
-  }
-};
-
-export const replaceStrInPath = (inputString, search, replacement) => {
-  String.prototype.replaceAll = function (search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, "g"), replacement);
-  };
-  return inputString.replaceAll(search, replacement);
-};
-
-export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
-  const queryObject = [
-  	//{ key: "tenantId", value: tenantId||commonConfig.tenantId },
-    { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
-    { key: "fileStoreIds", value: fileStoreId }
-  ];
-  try {
-    const fileUrl = await httpRequest(
-      "get",
-      "/filestore/v1/files/url",
-      "",
-      queryObject
-    );
-    return fileUrl;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-const getAllFileStoreIds = async ProcessInstances => {
-  return (
-    ProcessInstances &&
-    ProcessInstances.reduce((result, eachInstance) => {
-      if (eachInstance.documents) {
-        let fileStoreIdArr = eachInstance.documents.map(item => {
-          return item.fileStoreId;
-        });
-        result[eachInstance.id] = fileStoreIdArr.join(",");
-      }
-      return result;
-    }, {})
-  );
-};
-
-
-export const getFileUrl = (linkText="") => {
-  const linkList = linkText.split(",");
-  let fileURL = '';
-  linkList&&linkList.map(link => {
-    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
-      fileURL = link;
-    }
-  })
-  return fileURL;
-}
-
-export const setDocuments = async (
-  payload,
-  sourceJsonPath,
-  destJsonPath,
-  dispatch,
-  businessService
-) => {
-  const uploadedDocData = get(payload, sourceJsonPath);
-
-  const fileStoreIds =
-    uploadedDocData &&
-    uploadedDocData
-      .map(item => {
-        return item.fileStoreId;
-      })
-      .join(",");
-  const fileUrlPayload =
-    fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-  const reviewDocData =
-    uploadedDocData &&
-    uploadedDocData.map((item, index) => {
-      return {
-        title: `${businessService}_${item.documentType}` || "",
-        link:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            getFileUrl(fileUrlPayload[item.fileStoreId])) ||
-          "",
-        linkText: "View",
-        name:
-          (fileUrlPayload &&
-            fileUrlPayload[item.fileStoreId] &&
-            decodeURIComponent(
-              getFileUrl(fileUrlPayload[item.fileStoreId])
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`
-      };
-    });
-  reviewDocData && dispatch(prepareFinalObject(destJsonPath, reviewDocData));
-};
-
-
-export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
-  const fileStoreIdByAction = await getAllFileStoreIds(ProcessInstances);
-  const fileUrlPayload = await getFileUrlFromAPI(
-    Object.values(fileStoreIdByAction).join(",")
-  );
-  const processInstances = cloneDeep(ProcessInstances);
-  processInstances.map(item => {
-    if (item.documents && item.documents.length > 0) {
-      item.documents.forEach(i => {
-        if (i.fileStoreId && fileUrlPayload[i.fileStoreId]) {
-          i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
-          i.title = `TL_${i.documentType}`;
-          i.name = decodeURIComponent(
-            getFileUrl(fileUrlPayload[i.fileStoreId])
-              .split("?")[0]
-              .split("/")
-              .pop()
-              .slice(13)
-          );
-          i.linkText = "View";
-        }
-      });
-    }
-  });
-  prepareFinalObject("workflow.ProcessInstances", processInstances);
-};
-
-export const setBusinessServiceDataToLocalStorage = async (
-  queryObject,
-  dispatch
-) => {
-  try {
-    dispatch(toggleSpinner());
-    const payload = await httpRequest(
-      "post",
-      "egov-workflow-v2/egov-wf/businessservice/_search",
-      "_search",
-      queryObject
-    );
-    if (
-      payload &&
-      payload.BusinessServices &&
-      payload.BusinessServices.length > 0
-    ) {
-      localStorageSet(
-        "businessServiceData",
-        JSON.stringify(get(payload, "BusinessServices"))
-      );
-    } else {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Business Service returned empty object",
-            labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE"
-          },
-          "error"
-        )
-      );
-    }
-    dispatch(toggleSpinner());
-  } catch (e) {
-    dispatch(toggleSpinner());
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelName: "Not authorized to access Business Service!",
-          labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE"
-        },
-        "error"
-      )
-    );
-  }
-};
-
-export const acceptedFiles = acceptedExt => {
-  const splitExtByName = acceptedExt.split(",");
-  const acceptedFileTypes = splitExtByName.reduce((result, curr) => {
-    if (curr.includes("image")) {
-      result.push("image");
-    }
-	 else if (curr.includes("vnd.ms-excel")) {
-      result.push("vnd.ms-excel");
-    }
-	 else if (curr.includes("ms-excel")) {
-      result.push("ms-excel");
-    }
-    else if (curr.includes("audio")) {
-      result.push("audio");
-    }	
-    else if (curr.includes("video")) {
-      result.push("video");
-    } else {
-      result.push(curr.split(".")[1]);
-    }
-    return result;
-  }, []);
-  return acceptedFileTypes;
-};
-
-export const handleFileUpload = (event, handleDocument, props) => {
-  const S3_BUCKET = {
-    endPoint: "filestore/v1/files"
-  };
-  let uploadDocument = true;
-  const { inputProps, maxFileSize, moduleName } = props;
-  const input = event.target;
-  if (input.files && input.files.length > 0) {
-    const files = input.files;
-    Object.keys(files).forEach(async (key, index) => {
-      const file = files[key];
-      let fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
-      const isSizeValid = getFileSize(file) <= maxFileSize;
-	  
-	  
-	        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-      {
-         
-        if(localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined')
-        {
-         
-            switch(localStorage.getItem("libdocindex"))
-            {
-              case "0" :
-                 fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
-              break;
-              case "1" :
-                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
-              break;
-              case "2" :
-                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
-              break;
-              case "3" :
-                fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
-              break;
-              case "4" :
-              fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
-              break;
-              case "5" :
-              fileValid = isFileValid(file, ["WAV", "wav", "AIFF", "aiff", "AU", "au", "PCM", "pcm", "BWF", "bwf", "mp3", "mpeg", "mp4", "M4P", "m4p", "m4v", "M4V", "MPG", "mpg", "mp2", "MP2", "MPE", "mpe", "MPV", "mpv", "MOV", "mov", "qt", "QT","quicktime","ogg","basic",]);
-              break;
-              default :
-              break;
-            }
-        }
-      }
-	  
-      if (!fileValid) {
-        if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
-        {
-          alert(`Only image or pdf files can be uploaded`);
-          uploadDocument = false;
-        } 
-        else
-        {
-          alert(`File type not supported`);
-          uploadDocument = false;
-        }  
-      }
-      if (!isSizeValid) {
-        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
-        uploadDocument = false;
-      }
-      if (uploadDocument) {
-        if (file.type.match(/^image\//)) {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
-        } else {
-          const fileStoreId = await uploadFile(
-            S3_BUCKET.endPoint,
-            moduleName,
-            file,
-            commonConfig.tenantId
-          );
-          handleDocument(file, fileStoreId);
-        }
-      }
-    });
-  }
-};
-
-//localizations
-export const getTransformedLocale = label => {
-  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
-};
-
-export const appendModulePrefix = (value, localePrefix) => {
-  const { moduleName, masterName } = localePrefix;
-
-  const transformedValue = `${getTransformedLocale(
-    moduleName
-  )}_${getTransformedLocale(masterName)}_${getTransformedLocale(value)}`;
-  return transformedValue;
-};
-
-export const orderWfProcessInstances = processInstances => {
-  processInstances = orderBy(
-    processInstances,
-    "auditDetails.lastModifiedTime",
-    "asc"
-  );
-  let initiatedFound = false;
-  const filteredInstances = processInstances.reverse().reduce((acc, item) => {
-    if (item.action == "INITIATE" && !initiatedFound) {
-      initiatedFound = true;
-      acc.push(item);
-    } else if (item.action !== "INITIATE") {
-      acc.push(item);
-    }
-    return acc;
-  }, []);
-  return filteredInstances.reverse();
-};
-
-export const getSelectedTabIndex = paymentType => {
-  switch (paymentType) {
-    case "Cash":
-      return {
-        selectedPaymentMode: "cash",
-        selectedTabIndex: 0,
-        fieldsToValidate: ["payeeDetails"]
-      };
-    case "Cheque":
-      return {
-        selectedPaymentMode: "cheque",
-        selectedTabIndex: 1,
-        fieldsToValidate: ["payeeDetails", "chequeDetails"]
-      };
-    case "DD":
-      return {
-        selectedPaymentMode: "demandDraft",
-        selectedTabIndex: 2,
-        fieldsToValidate: ["payeeDetails", "demandDraftDetails"]
-      };
-    case "Card":
-      return {
-        selectedPaymentMode: "card",
-        selectedTabIndex: 3,
-        fieldsToValidate: ["payeeDetails", "cardDetails"]
-      };
-    default:
-      return {
-        selectedPaymentMode: "cash",
-        selectedTabIndex: 0,
-        fieldsToValidate: ["payeeDetails"]
-      };
-  }
-};
-export const getMultiUnits = multiUnits => {
-  let hasTradeType = false;
-  let hasAccessoryType = false;
-
-  let mergedUnits =
-    multiUnits &&
-    multiUnits.reduce((result, item) => {
-      hasTradeType = item.hasOwnProperty("tradeType");
-      hasAccessoryType = item.hasOwnProperty("accessoryCategory");
-      if (item && item !== null && (hasTradeType || hasAccessoryType)) {
-        if (item.hasOwnProperty("id")) {
-          if (item.hasOwnProperty("active") && item.active) {
-            if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-              set(item, "active", false);
-              result.push(item);
-            } else {
-              result.push(item);
-            }
-          }
-        } else {
-          if (!item.hasOwnProperty("isDeleted")) {
-            result.push(item);
-          }
-        }
-      }
-      return result;
-    }, []);
-
-  return mergedUnits;
-};
-
-export const getUlbGradeLabel = ulbGrade => {
-  if (ulbGrade) {
-    let ulbWiseHeaderName = ulbGrade.toUpperCase();
-    if (ulbWiseHeaderName.indexOf(" ") > 0) {
-      ulbWiseHeaderName = ulbWiseHeaderName.split(" ").join("_");
-    }
-    return "ULBGRADE" + "_" + ulbWiseHeaderName;
   }
 };
 
@@ -602,78 +40,1293 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   }
 };
 
-export const validateFields = (
-  objectJsonPath,
-  state,
-  dispatch,
-  screen = "apply"
-) => {
-  const fields = get(
-    state.screenConfiguration.screenConfig[screen],
-    objectJsonPath,
-    {}
+export const getSearchResults = async (RequestBody, dispatch) => {
+  try {
+
+    let data = {
+      RequestBody
+    }
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/ec-services/violation/_get",
+      "",
+      [],
+      data
+    );
+
+
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const prepareDocumentsUploadData = (state, dispatch) => {
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.documents",
+    []
   );
-  let isFormValid = true;
-  for (var variable in fields) {
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
-      }
+  documents = documents.filter(item => {
+    return item.active;
+  });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = "",//getTextToLocalMapping(doc.documentType);
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+      dropdown.required = true;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
+      });
+      dropdown.menu = dropdown.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropdown"] = dropdown;
+    }
+    tempDoc[doc.documentType].cards.push(card);
+    //}
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
+};
+
+export const prepareDocumentsUploadRedux = (state, dispatch) => {
+  const {
+    documentsList,
+    documentsUploadRedux = {},
+    prepareFinalObject
+  } = this.props;
+  let index = 0;
+  documentsList.forEach(docType => {
+    docType.cards &&
+      docType.cards.forEach(card => {
+        if (card.subCards) {
+          card.subCards.forEach(subCard => {
+            let oldDocType = get(
+              documentsUploadRedux,
+              `[${index}].documentType`
+            );
+            let oldDocCode = get(
+              documentsUploadRedux,
+              `[${index}].documentCode`
+            );
+            let oldDocSubCode = get(
+              documentsUploadRedux,
+              `[${index}].documentSubCode`
+            );
+            if (
+              oldDocType != docType.code ||
+              oldDocCode != card.name ||
+              oldDocSubCode != subCard.name
+            ) {
+              documentsUploadRedux[index] = {
+                documentType: docType.code,
+                documentCode: card.name,
+                documentSubCode: subCard.name
+              };
+            }
+            index++;
+          });
+        } else {
+          let oldDocType = get(documentsUploadRedux, `[${index}].documentType`);
+          let oldDocCode = get(documentsUploadRedux, `[${index}].documentCode`);
+          if (oldDocType != docType.code || oldDocCode != card.name) {
+            documentsUploadRedux[index] = {
+              documentType: docType.code,
+              documentCode: card.name,
+              isDocumentRequired: card.required,
+              isDocumentTypeRequired: card.dropdown
+                ? card.dropdown.required
+                : false
+            };
+          }
+        }
+        index++;
+      });
+  });
+  prepareFinalObject("documentsUploadRedux", documentsUploadRedux);
+};
+
+export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
+  if (!applicationNo) {
+    applicationNo = get(
+      state,
+      "screenConfiguration.preparedFinalObject.eChallan.challanId",
+      null
+    );
+  }
+
+  if (applicationNo) {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "visible",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        applicationNo
+      )
+    );
+  }
+};
+
+export const getFineMasterGridData = async () => {
+  let data = {
+    "RequestBody": {
+      "tenantId": getTenantId(),
     }
   }
-  return isFormValid;
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/fine/_get",
+      "",
+      [],
+      data
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
 };
 
-export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
-  if (typeof mSewaApp === "undefined") {
-    // we are running in browser
-    receiptPDF.download(filename);
-  } else {
-    // we are running under webview
-    receiptPDF.getBase64(data => {
-      mSewaApp.downloadBase64File(data, filename);
+const checkEffectiveDate = (state, dispatch, effectiveStartDate) => {
+
+  try {
+    let isactionDateLess = false
+    let isactionDateEquall = false
+    let fineGridRecord = [];
+    let gridCurrentRecord = get(state, 'screenConfiguration.preparedFinalObject.FineMaster', []);
+    let existingfineGridData = get(state, 'screenConfiguration.preparedFinalObject.FineMasterGrid', []);
+    let curlistRecord = [];
+
+    let __FOUND = existingfineGridData.find(function (fineRecord, index) {
+
+      if (fineRecord[7] !== "REJECTED") {
+        fineGridRecord.push(fineRecord);
+        //return true;
+      }
     });
+    fineGridRecord.forEach(element => {
+      if (gridCurrentRecord.hasOwnProperty('fineUuid')) {
+        if (element[1] === gridCurrentRecord.encroachmentType
+          && element[2] === gridCurrentRecord.numberOfViolation
+          && element[0] !== gridCurrentRecord.fineUuid) {
+          curlistRecord.push(element);
+        }
+      } else {
+        if (element[1] === gridCurrentRecord.encroachmentType
+          && element[2] === gridCurrentRecord.numberOfViolation) {
+          curlistRecord.push(element);
+        }
+      }
+    });
+
+    if (curlistRecord.length > 0) {
+      for (let index = 0; index < curlistRecord.length; index++) {
+        const element = curlistRecord[index];
+        let eleDate = new Date(getEpochForDate(element[6]));
+        let actionDate = new Date(effectiveStartDate);
+
+        if (actionDate < eleDate) {
+          if (!isactionDateLess) {
+            isactionDateLess = true;
+          }
+        } else if (getDiffernceBetweenTwoDates(convertEpochToDate(convertDateToEpoch(effectiveStartDate)), element[6]) === 0) {
+          if (!isactionDateEquall) {
+            isactionDateEquall = true
+          }
+        } else if (eleDate < actionDate) {
+          if (!isactionDateLess) {
+            isactionDateLess = false;
+          }
+        }
+      }
+    }
+    if (!isactionDateLess && !isactionDateEquall) {
+      return false;
+    } else if (isactionDateLess && isactionDateEquall) {
+      return true;
+    } else if (!isactionDateLess && isactionDateEquall) {
+      return true;
+    } else if (isactionDateLess && !isactionDateEquall) {
+      return true;
+    }
+
+  } catch (error) {
+
+    console.log(error);
+  }
+}
+export const createUpdateFineMaster = async (state, dispatch, status, isActive) => {
+
+  let FineID = get(state, "screenConfiguration.preparedFinalObject.FineMaster.fineUuid");
+
+  let method = FineID ? "_update" : "_create";
+  try {
+    let payload = get(state.screenConfiguration.preparedFinalObject, "FineMaster", []);
+
+    let processeffective = get(payload, 'effectiveStartDate', new Date());
+    let processeffectiveEnd = get(payload, 'effectiveEndDate', new Date());
+    let isStartDateValid = false;
+    let isEndDateVaild = false;
+
+    if (status !== 'APPROVE' && status !== 'REJECT') {
+
+      isStartDateValid = checkEffectiveDate(state, dispatch, processeffective);
+      //isEndDateVaild = new Date(processeffectiveEnd) < new Date(processeffective) ? true : false
+
+      isEndDateVaild = getDiffernceBetweenTwoDates(convertEpochToDate(convertDateTimeToEpoch(processeffectiveEnd)), convertEpochToDate(convertDateTimeToEpoch(processeffective))) < 0 ? true : false;
+    }
+
+    set(payload, "effectiveStartDate", convertEpochToDate(convertDateTimeToEpoch(processeffective)));
+    set(payload, "effectiveEndDate", convertEpochToDate(convertDateTimeToEpoch(processeffectiveEnd)));
+
+    set(payload, "tenantId", getTenantId());
+    set(payload, "approvalStatus", status);
+    set(payload, "isActive", true);
+    payload.hasOwnProperty('storageCharges') ? set(payload, "storageCharges", payload.storageCharges) : set(payload, "storageCharges", 0)
+    let response;
+
+    if (!isStartDateValid && !isEndDateVaild) {
+      response = await httpRequest("post", "/ec-services/fine/" + method, "", [], { requestBody: payload });
+      if (response.ResponseBody.fineUuid !== 'null' || response.ResponseBody.fineUuid !== '') {
+        dispatch(prepareFinalObject("FineMasters", response.ResponseBody));
+        return { status: "success", message: response };
+      } else {
+        return { status: "fail", message: response };
+      }
+    } else if (isStartDateValid) {
+
+      var processeffectiveEndDate = moment(processeffectiveEnd).format('YYYY-MM-DD')
+      var processeffectiveStartDate = moment(processeffective).format('YYYY-MM-DD')
+      set(payload, "effectiveStartDate", processeffectiveStartDate);
+      set(payload, "effectiveEndDate", processeffectiveEndDate);
+      let labelName = "Start Date should be greater then the previous End Date for the selected Criteria";
+      return { status: "InValidStartDate", message: labelName };
+
+    } else if (isEndDateVaild) {
+
+      var processeffectiveEndDate = moment(processeffectiveEnd).format('YYYY-MM-DD')
+      var processeffectiveStartDate = moment(processeffective).format('YYYY-MM-DD')
+      set(payload, "effectiveEndDate", processeffectiveEndDate);
+      set(payload, "effectiveStartDate", processeffectiveStartDate);
+      let labelName = "End Date should be greater then the Start Date for the selected Criteria";
+      return { status: "InValidEndDate", message: labelName };
+
+    }
+
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
   }
 };
 
-if (window) {
-  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
-}
-// Get user data from uuid API call
-export const getUserDataFromUuid = async bodyObject => {
+export const fetchItemListMasterData = async (action, state, dispatch) => {
+  //
+  try {
+    const response = await httpRequest("post", "/ec-services/item/_get", "", [], data);
+    let data = response.ResponseBody.map(item => ({
+      // alert(item)
+      'code': item['itemUuid'] || "-",
+      'name': item['itemName'] || "-"
+    }));
+    data.push({ 'code': 'Other', 'name': 'Other' })
+
+    store.dispatch(prepareFinalObject("applyScreenMdmsData.egec.ItemList", data));
+    //this is kept purposely if the data does not get at the load then it would be assigned.
+    store.dispatch(prepareFinalObject("applyScreenMdmsData.egec.ViolationItemList", data));
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchItemMasterData = async (itemUuid) => {
+  let itemUid = itemUuid ? 'itemUuid : ' + itemUuid : ''
+  let data = {
+    "RequestBody": {
+      tenantId: getTenantId(),
+      itemUid,
+    }
+  }
+  try {
+    const response = await httpRequest("post", "/ec-services/item/_get", "", [], data);
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const createUpdateItemMaster = async (state, dispatch, status, isActive) => {
+  let ItemID = get(state, "screenConfiguration.preparedFinalObject.ItemMaster.itemUuid");
+  setapplicationNumber(ItemID);
+  let method = ItemID ? "UPDATE" : "CREATE";
+  try {
+    let payload = get(state.screenConfiguration.preparedFinalObject, "ItemMaster", []);
+    set(payload, "tenantId", getTenantId());
+    set(payload, "approvalStatus", status);
+    set(payload, "isActive", isActive);
+    let response;
+    let methodName = '';
+
+    methodName = method === "CREATE" ? '_create' : '_update';
+    response = await httpRequest("post", "/ec-services/item/" + methodName, "", [], { requestBody: payload });
+
+    if (response.ResponseBody.itemUuid !== 'null' || response.ResponseBody.itemUuid !== '') {
+      dispatch(prepareFinalObject("ItemMasters", response.ResponseBody));
+      return { status: "success", message: response };
+    } else {
+      return { status: "fail", message: response };
+    }
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
+  }
+};
+
+export const fetchMasterChallanData = async (RequestBody) => {
+  let data = {
+    RequestBody
+  }
   try {
     const response = await httpRequest(
+      "post",
+      "/ec-services/violation/_get",
+      "",
+      [],
+      data
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchMasterChallanHODAuction = async (RequestBody) => {
+  let data = {
+    RequestBody
+  }
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/auction/_getChallan",
+      "",
+      [],
+      data
+    );
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchStoreItemHODMasterChallanData = async (RequestBody) => {
+  let data = {
+    RequestBody
+  }
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/storeitemregister/_get",
+      "",
+      [],
+      data
+    );
+
+    return response.ResponseBody;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchauctionHODMasterChallanData = async (RequestBody) => {
+  let data = {
+    RequestBody
+  }
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/auction/_get",
+      "",
+      [],
+      data
+    );
+
+    return response.ResponseBody;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchVendorDetails = async (state, dispatch) => {
+  let data = {
+    RequestBody: {
+      tenantId: getTenantId(),
+    }
+  }
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/vendor/_get",
+      "",
+      [],
+      data
+    );
+
+    let vendordata = [];
+    response.ResponseBody.forEach(vendor => {
+      let vendormodified = {
+        code: vendor.covNo,
+        name: vendor.name + "(" + vendor.covNo + ")",
+        fullname: vendor.name,
+        address: vendor.address,
+        fatherSpouseName: vendor.fatherSpouseName,
+        contactNumber: vendor.contactNumber,
+      }
+      vendordata.push(vendormodified);
+
+    });
+    return vendordata;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+export const createVendorDetails = async (file) => {
+
+  let data = {
+    RequestBody: {
+      vendorRegistrationList: file.insert
+    }
+  };
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/vendor/_create",
+      "",
+      [],
+      data
+    );
+
+    let updatedata = {
+      RequestBody: {
+        vendorRegistrationList: file.update
+      }
+    };
+    let updateresponse = await httpRequest(
+      "post",
+      "/ec-services/vendor/_update",
+      "",
+      [],
+      updatedata
+    );
+
+
+    if (response.ResponseInfo.status === 'Success' && updateresponse.ResponseInfo.status === 'Success') {
+      return { status: "success", message: response.responseInfo };
+    } else {
+      return { status: "fail", message: 'Error' };
+    }
+
+    return response;
+  } catch (error) {
+    //console.log("error", error);
+
+  }
+
+
+}
+
+export const createCitizenBasedonMobileNumber = async (state, dispatch) => {
+  let response = '';
+  try {
+    let payload = get(state.screenConfiguration.preparedFinalObject, "eChallan", []);
+    let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId()
+    let User = {
+      name: payload.violatorName,
+      userName: payload.contactNumber,
+      password: payload.contactNumber,
+      dob: null,
+      fatherOrHusbandName: payload.fatherName,
+      mobileNumber: payload.contactNumber,
+      active: true,
+      tenantId: tenantId,
+      type: 'CITIZEN',
+      permanentAddress: payload.address,
+      correspondenceAddress: payload.address,
+      roles: [
+        {
+          code: 'CITIZEN',
+          name: 'CITIZEN',
+          tenantId: tenantId
+        }
+      ]
+    }
+    response = await httpRequest("post", "/user/users/_createnovalidate", "", [], { User });
+    if (response.responseInfo.status !== '') {
+      return { status: "success", message: response.responseInfo };
+    } else {
+      return { status: "fail", message: response };
+    }
+  } catch (error) {
+    //dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "fail", message: response };
+  }
+
+}
+
+export const getUserDetailsOnMobile = async (role, mobileNumber) => {
+
+  try {
+    let payload = "";
+    let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId()
+
+    const queryStr = {
+      "tenantId": tenantId,
+      "mobileNumber": mobileNumber
+    }
+    //http://192.168.12.74:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
+
+    payload = await httpRequest(
       "post",
       "/user/_search",
       "",
       [],
-      bodyObject
+      queryStr,
     );
-    return response;
+    return payload;
+    //}
+  } catch (e) {
+    console.log(e);
+  }
+
+};
+
+export const approverejectAuctionDetails = async (state, dispatch, status) => {
+  let response = '';
+  try {
+    let payload = get(state, "screenConfiguration.preparedFinalObject.auctionapproverejectlist", []);
+    let challanObj = get(state.screenConfiguration.preparedFinalObject, "eChallanDetail[0]", []);
+
+    let tenantId = getTenantId(); //.length > 2 ? getTenantId().split('.')[0] : getTenantId()
+    let RequestBody = {
+      status: status,
+      challanId: challanObj.challanId,
+      challanUuid: challanObj.challanUuid,
+      tenantId: tenantId,
+      auctionUuid: payload[0].auctionUuid,
+      auctionList: payload
+    }
+
+    response = await httpRequest("post", "/ec-services/auction/_update", "", [], { RequestBody });
+
+    if (response.ResponseInfo.status !== '') {
+      return { status: "success", message: response.ResponseInfo };
+    } else {
+      return { status: "fail", message: response };
+    }
   } catch (error) {
-    console.log(error);
-    return {};
+    //dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "fail", message: response };
+  }
+
+}
+
+export const createUpdateGenerateChallanApplication = async (state, dispatch, status) => {
+  let response = '';
+  let response_updatestatus = '';
+  let nocId = getapplicationNumber() === 'null' ? '' : getapplicationNumber();
+  let method = nocId ? "UPDATE" : "CREATE";
+  //let method = "CREATE";
+  try {
+
+    let payload = get(state.screenConfiguration.preparedFinalObject, "eChallan", []);
+    let notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[0]", {});
+    let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    let violationDocuments = get(state, "screenConfiguration.preparedFinalObject.violationDocuments", {});
+    let violationItemList = [];
+
+    // Set owners & other documents
+    let ownerDocuments = [];
+    let Remarks = "";
+    jp.query(reduxDocuments, "$.*").forEach(doc => {
+      if (doc.documents && doc.documents.length > 0) {
+        if (doc.documentCode === "EC_VIOLATORIMAGE" || doc.documentCode === "ViolatorImage" || doc.documentCode === "imageofViolator") {
+          ownerDocuments = [
+            ...ownerDocuments,
+            {
+              fileStoreId: doc.documents[0].fileStoreId,
+              documentName: doc.documents[0].fileName,
+              documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
+              tenantId: getTenantId(),
+              isActive: true,
+            }
+          ];
+        }
+        else if (doc.documentCode === "EC_VIOLATORIDPROOF" || doc.documentCode === "ViolatorIdProof" || doc.documentCode === "idProofofViolator") {
+          ownerDocuments = [
+            ...ownerDocuments,
+            {
+              fileStoreId: doc.documents[0].fileStoreId,
+              documentName: doc.documents[0].fileName,
+              documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
+              tenantId: getTenantId(),
+              isActive: true,
+            }
+          ];
+        }
+      }
+    });
+    if (violationDocuments !== "") {
+      jp.query(violationDocuments, "$.*").forEach(doc => {
+        if (doc.documentType !== null) {
+          ownerDocuments = [
+            ...ownerDocuments,
+            {
+              fileStoreId: doc.fileStoreId,
+              documentName: doc.fileName,
+              documentType: "violationDocuments - " + doc.documentType,
+              tenantId: getTenantId(),
+              isActive: true,
+            }
+          ];
+
+        }
+      });
+    }
+    //Set Violation List 
+    /** This logic is used for creating the obj
+     *  temp[0] = obj['ItemName'];
+      temp[1] = obj['Other'] === undefined ? '' : obj['Other'];
+      temp[2] = obj['SeizedQty'] === undefined ? '' : obj['SeizedQty'];
+      temp[3] = obj['VehicleNumber'] === undefined ? '' : obj['VehicleNumber'];
+      temp[4] = obj['Remark']  === undefined ? '' : obj['Remark'];
+     
+     */
+    let articleSeizedGridDetails = get(state.screenConfiguration.preparedFinalObject, "articleSeizedGridDetails", []);
+
+    if (articleSeizedGridDetails.length > 0) {
+      articleSeizedGridDetails.forEach(doc => {
+        violationItemList = [
+          ...violationItemList,
+          {
+            itemType: payload.encroachmentType === 'Seizure of Vehicles' ? doc["Seized Article"] : '',
+            itemName: payload.encroachmentType === 'Seizure of Vehicles' ? doc["Other Item"] : doc["Seized Article"] === 'Other' ? doc["Other Item"] : doc["Seized Article"],
+            quantity: payload.encroachmentType === 'Seizure of Vehicles' ? 1 : doc["Quantity / Vehicle Type"],
+            vehicleNumber: payload.encroachmentType === 'Seizure of Vehicles' ? doc["Vehicle Registration Number"] : '',
+            remark: doc["Remarks"],
+            isActive: true
+          }
+        ];
+
+      })
+    }
+
+    setapplicationMode(status);
+    // let violatorDate = new Date();
+    // var month = violatorDate.getMonth() + 1 < 10 ? "0" + (violatorDate.getMonth() + 1) : violatorDate.getMonth() + 1;
+    // var day = violatorDate.getDate() < 10 ? "0" + violatorDate.getDate() : violatorDate.getDate();
+    // // violatorDate = "";
+    // // violatorDate = day + "/" + month + "/"+ violatorDate.getFullYear();
+
+    // set(payload, "violationDate", day + "/" + month + "/" + violatorDate.getFullYear());
+    set(payload, "location", payload.latitude + ',' + payload.longitude);
+    set(payload, 'siName', JSON.parse(getUserInfo()).name)
+    set(payload, "document", ownerDocuments);
+    set(payload, "violationItem", violationItemList);
+    set(payload, "remarks", Remarks);
+    set(payload, 'status', getapplicationMode())
+    set(payload, 'isActive', true);
+    set(payload, 'tenantId', getTenantId())
+    set(payload, 'paymentDetails', {})
+
+
+    let message = notificationTemplate.message.replace('<EnchroachmentType>', payload.encroachmentType).replace('<Date and Time>', payload.violationDate + " " + payload.violationTime);
+    let body = notificationTemplate.body.replace('<EnchroachmentType>', payload.encroachmentType).replace('<Date and Time>', payload.violationDate + " " + payload.violationTime);
+    let modifiedNotificationTemplate = {};
+    modifiedNotificationTemplate.email = payload.emailId;
+    modifiedNotificationTemplate.subject = notificationTemplate.subject;
+    modifiedNotificationTemplate.body = body;
+    modifiedNotificationTemplate.attachmentUrls = null;
+    modifiedNotificationTemplate.mobileNumber = payload.contactNumber;
+    modifiedNotificationTemplate.message = message;
+    modifiedNotificationTemplate.isHtml = notificationTemplate.isHtml;
+
+    set(payload, 'notificationTemplate', modifiedNotificationTemplate)
+
+
+
+    let responsecreateDemand = '';
+    if (method === "CREATE") {
+      //specially for calculating service
+      dispatch(prepareFinalObject("eChallanFinalObj", payload));
+
+      response = await httpRequest("post", "/ec-services/violation/_create", "", [], { requestBody: payload });
+
+      if (response.ResponseBody.challanId !== 'null' || response.ResponseBody.challanId !== '') {
+        dispatch(prepareFinalObject("eChallan", response.ResponseBody));
+        setapplicationNumber(response.ResponseBody.challanId);
+        setApplicationNumberBox(state, dispatch);
+        //calculate service called
+
+        // responsecreateDemand = await createDemandForAdvNOC(state, dispatch);
+        // //calculate search Bill called
+        // responsecreateDemand.Calculations[0].taxHeadEstimates[0].estimateAmount > 0 ?
+        //   await searchBill(dispatch, response.challanId, getTenantId()) : '';
+
+        return { status: "success", message: response.ResponseInfo, createDemand: responsecreateDemand };
+      } else {
+
+        if (response.Errors[0].message.message === 'Fine Data does not exist') {
+          return { status: "fail", message: response.Errors[0].message.message, createDemand: responsecreateDemand };
+        } else {
+          return { status: "fail", message: response + "Submission Falied, Try Again later!", createDemand: responsecreateDemand };
+        }
+      }
+    }
+  } catch (error) {
+
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+
+    // Revert the changed pfo in case of request failure
+    //let fireNocData = get(state, "screenConfiguration.preparedFinalObject.ADVERTISEMENTNOC", []);
+    //fireNocData = furnishAdvertisementNocResponse({ FireNOCs: fireNocData });
+    //dispatch(prepareFinalObject("ADVERTISEMENTNOC", fireNocData));
+    return { status: "failure", message: error };
   }
 };
 
-export const getCommonPayUrl = (dispatch, applicationNo, tenantId) => {
-  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
-  dispatch(setRoute(url));
+export const sendPaymentReceiptOverMail = async (RequestBody) => {
+  try {
+    const response = await httpRequest(
+      "post", "/ec-services/violation/_notify", "",
+      [],
+      { RequestBody }
+    );
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true, { labelName: error.message, labelCode: error.message }, "error"
+      )
+    );
+  }
+
+}
+
+//view
+export const getSearchResultsView = async requestBody => {
+  try {
+    //
+    const response = await httpRequest(
+      "post", "/ec-services/violation/_get", "",
+      [],
+      { requestBody }
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true, { labelName: error.message, labelCode: error.message }, "error"
+      )
+    );
+  }
+  //alert(JSON.stringify(response));
 };
+
+export const getSearchResultsForNocCretificate = async queryObject => {
+  try {
+    const response = await httpRequest("post", get(queryObject[3], "value"), "", [], get(queryObject[2], "value"));
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+  //alert(JSON.stringify(response));
+};
+
+export const getSearchResultsForNocCretificateDownload = async queryObject => {
+  try {
+
+    let filestoreIds = get(queryObject[2], "value");
+
+    const response = await httpRequest(
+      "get",
+      get(queryObject[3], "value") + filestoreIds,
+      "", [], "");
+    return response;
+
+  } catch (error) {
+    //alert("rrrrr")
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+  //alert(JSON.stringify(response));
+};
+
+export const fetchVendorData = async () => {
+  let data = {
+    "RequestBody": {
+      tenant_id: getTenantId(),
+    }
+  }
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/vendor/_get",
+      "",
+      [],
+      data
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const UpdateChallanStatus = async (state, dispatch, status) => {
+
+  let challanDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
+
+  let method = challanDetails.challanUuid ? "UPDATE" : "CREATE";
+
+  try {
+    let data = {
+      challanId: challanDetails.challanId,
+      challanUuid: challanDetails.challanUuid,
+      status: status,
+      tenantId: getTenantId(),
+    }
+
+    let response;
+    response = await httpRequest("post", "/ec-services/violation/_update", "", [], { requestBody: data });
+
+    if (response.ResponseInfo.status !== '') {
+      return { status: "success", message: response };
+    } else {
+      return { status: "fail", message: response };
+    }
+
+
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
+  }
+};
+
+export const addToStoreViolationData = async (state, dispatch, status) => {
+  try {
+
+    let addStoreItemList = get(state, 'screenConfiguration.preparedFinalObject.eChallanSMSeizedList', {});
+    let challanDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
+    let storeItemDate = new Date();
+    var month = storeItemDate.getMonth() + 1 < 10 ? "0" + (storeItemDate.getMonth() + 1) : storeItemDate.getMonth() + 1;
+    var day = storeItemDate.getDate() < 10 ? "0" + storeItemDate.getDate() : storeItemDate.getDate();
+    let storeItemDateprocess = day + "/" + month + "/" + storeItemDate.getFullYear();
+    let violationDocuments = get(state, "screenConfiguration.preparedFinalObject.violationDocuments", {});
+
+    let storeItemRegister = [];
+    let payload = {};
+    let file = [];
+    if (violationDocuments !== "") {
+      jp.query(violationDocuments, "$.*").forEach(doc => {
+        if (doc.documentType !== null) {
+          file = [
+            ...file,
+            {
+              fileStoreId: doc.fileStoreId,
+              documentName: doc.fileName,
+              documentType: "StoreManagerUpload - " + doc.documentType,
+              tenantId: getTenantId(),
+              isActive: true,
+            }
+          ]
+        }
+      });
+    }
+    addStoreItemList.forEach(element => {
+      payload = {
+        tenantId: getTenantId(),
+        isActive: true,
+        itemUuid: "",
+        itemName: element[0],
+        quantity: element[3],
+        isVerified: status,
+        isAuctioned: false,
+        remark: element[5],
+        itemStoreDepositDate: storeItemDateprocess,
+        violationItemUuid: element[6],
+        violationUuid: element[7]
+      }
+      storeItemRegister.push(payload);
+    });
+
+    let data = {
+      RequestBody: {
+        challanId: challanDetails.challanId,
+        challanUuid: challanDetails.challanUuid,
+        status: "ADDED TO STORE",
+        tenantId: getTenantId(),
+        violationUuid: challanDetails.violationUuid,
+        document: file,
+        storeItemRegister
+      }
+    }
+    const response = await httpRequest(
+      "post",
+      "/ec-services/storeitemregister/_create",
+      "",
+      [],
+      data
+    );
+    if (response.ResponseInfo.status === 'success' || response.ResponseBody.status !== '') {
+      return { status: "success", message: response };
+    } else {
+      return { status: "fail", message: response };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+
+
+}
+
+export const addToStoreReturnCloseData = async (state, dispatch, status) => {
+  try {
+    let challanDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
+
+    let data = {
+      RequestBody: {
+        challanId: challanDetails.challanId,
+        challanUuid: challanDetails.challanUuid,
+        status: "CLOSED",
+        tenantId: getTenantId(),
+      }
+    }
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/ec-services/storeitemregister/_update",
+      "",
+      [],
+      data
+    );
+    store.dispatch(toggleSpinner());
+
+
+    if (response.ResponseInfo.status === 'success' || response.ResponseBody.status !== '') {
+      return { status: "success", message: response };
+    } else {
+      return { status: "fail", message: response };
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+
+
+
+}
+
+
+export const fetchReportData = async (data) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/report/_get",
+      "",
+      [],
+      data
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+
+export const fetchMdmsData = async (state, dispatch, mdmsBody, onlySector = false) => {
+  try {
+
+    let payload = null;
+
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    if (!onlySector) {
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    } else {
+      dispatch(prepareFinalObject("applyScreenMdmsData.egec.sector", payload.MdmsRes.egec.sector));
+    }
+    console.log("MDMS Payload Response :", payload.MdmsRes);
+  }
+  catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchSIName = async (state, dispatch, queryStr) => {
+  try {
+
+    let payload = null;
+
+    payload = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "",
+      queryStr,
+      {}
+    );
+    console.log("resss", payload.MdmsRes);
+    if (payload.ResponseInfo.status === 'successful') {
+      let SINameList = [];
+      payload.Employees.forEach(element => {
+        let temp = {
+          code: element.user.name,
+          name: element.user.name
+        }
+        SINameList.push(temp);
+      });
+
+      dispatch(prepareFinalObject("applyScreenMdmsData.egec.SINameList", SINameList));
+    }
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+export const auctionCreateMasterChallanData = async (state, dispatch, data) => {
+  // let data = {
+  //   RequestBody
+  // }
+
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/auction/_create",
+      "",
+      [],
+      { requestBody: data }
+    );
+    if (response.ResponseInfo.status === 'success' || response.ResponseInfo.status === 'Success') {
+      return { status: "success", message: response.ResponseInfo };
+    } else {
+      return { status: "fail", message: response.ResponseInfo };
+    }
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+export const fetchViewHistorytData = async (data) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/auction/_get",
+      "",
+      [],
+      { requestBody: data }
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const getDashboardChallanCount = async () => {
+  try {
+
+    let tenantId = getTenantId();
+    let rolecode = fetchRoleCode(false, '');
+
+    let RequestBody = {
+      tenantId: tenantId,
+      roleCode: rolecode
+
+    };
+    const response = await httpRequest(
+      "post",
+      "/ec-services/report/_getDashboard",
+      "",
+      [],
+      { RequestBody }
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+}

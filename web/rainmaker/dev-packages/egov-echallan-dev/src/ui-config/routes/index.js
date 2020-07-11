@@ -1,9 +1,9 @@
 import React from "react";
 import Loadable from 'react-loadable';
-import LinearProgress from '../../ui-atoms/LinearSpinner';
+import LoadingIndicator from 'egov-ui-framework/ui-molecules/LoadingIndicator';
 import * as mainRouteConstants from "./route-names";
 
-const Loading = () => <LinearProgress/>;
+const Loading = () => <LoadingIndicator/>;
 
 const Landing = Loadable({
   loader: () => import('ui-views/Landing'),
@@ -33,7 +33,6 @@ const mainRoutes = [
     path: mainRouteConstants.PLAYGROUND,
     component: Playground
   },
-  
   {
     isRedirect:true,
     to:mainRouteConstants.REDIRECT

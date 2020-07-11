@@ -664,7 +664,7 @@ const createDemandforChallanCertificate = async (state, dispatch, tenantId) => {
   let applicationNumber = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId', '');
   if (response) {
     response.Calculations[0].taxHeadEstimates.forEach(element => {
-      if (element.taxHeadCode === 'ECHALLAN_FEE' && element.estimateAmount > 0) {
+      if (element.taxHeadCode === 'EC_ECHALLAN_FEE' && element.estimateAmount > 0) {
         generateBill(dispatch, applicationNumber, tenantId);
       }
     });
