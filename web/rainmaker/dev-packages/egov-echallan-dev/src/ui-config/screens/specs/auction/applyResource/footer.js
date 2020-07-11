@@ -3,7 +3,9 @@ import {
   getLabel,
   convertEpochToDate
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { 
+  handleScreenConfigurationFieldChange as handleField,
+  toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter, validateFields, convertDateTimeToEpoch } from "../../utils";
@@ -32,9 +34,16 @@ const updateAuctioDetails = async (state, dispatch) => {
   challanObj = get(state.screenConfiguration.preparedFinalObject, "eChallanDetail[0]", []);
   auctionedGrid = get(state.screenConfiguration.preparedFinalObject, "auctionGridDetails", []);
   let aulist = [];
+  dispatch(toggleSpinner());
   if (auctionedGrid.length > 0 && !isSubmitted) {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.footer.children.submitButton",
+        "props.disabled", true
+      ));
+
     set(state, 'screenConfiguration.preparedFinalObject.auctionDetails.isSubmitted', true);
-    dispatch(toggleSpinner());
     auctionedGrid.forEach(element => {
       let temp = {
         purchaserName: element[4],
@@ -77,6 +86,7 @@ const updateAuctioDetails = async (state, dispatch) => {
     }
   }
   else {
+    dispatch(toggleSpinner());
     dispatch(toggleSnackbar(true, {
       labelName: "Atleast one Auction Detail has to be there for processing Auction!",
       labelKey: "EC_AUCTION_NO_RECORD_TOASTER"

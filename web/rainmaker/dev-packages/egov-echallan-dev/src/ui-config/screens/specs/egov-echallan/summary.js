@@ -341,6 +341,10 @@ const setSearchResponse = async (
         return true;
     });
     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+
+    let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
+  
   }
 
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
@@ -660,7 +664,7 @@ const createDemandforChallanCertificate = async (state, dispatch, tenantId) => {
   let applicationNumber = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId', '');
   if (response) {
     response.Calculations[0].taxHeadEstimates.forEach(element => {
-      if (element.taxHeadCode === 'ECHALLAN_FEE' && element.estimateAmount > 0) {
+      if (element.taxHeadCode === 'EC_ECHALLAN_FEE' && element.estimateAmount > 0) {
         generateBill(dispatch, applicationNumber, tenantId);
       }
     });

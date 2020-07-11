@@ -26,7 +26,7 @@ axios.interceptors.response.use(
 );
 
 const instance = axios.create({
-  baseURL: window.location.origin,
+  baseURL: window.location.origin, 
   headers: {
     "Content-Type": "application/json",
   },
@@ -161,7 +161,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
   // Bad idea to fetch from local storage, change as feasible
   const tenantId = getTenantId() ? (ulbLevel ? getTenantId() : getTenantId().split(".")[0]) : "";
   const uploadInstance = axios.create({
-    baseURL: window.location.origin,
+    baseURL: window.location.origin, 
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -193,7 +193,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
 export const loginRequest = async (username = null, password = null, refreshToken = "", grantType = "password", tenantId = "", userType) => {
   tenantId = tenantId ? tenantId : commonConfig.tenantId;
   const loginInstance = axios.create({
-    baseURL: window.location.origin,
+    baseURL: window.location.origin, 
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Authorization: "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0",

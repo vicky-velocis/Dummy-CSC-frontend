@@ -6,6 +6,7 @@ import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { furnishNocResponse, getSearchResults, fetchItemListMasterData, fetchVendorDetails } from "../../../../../ui-utils/commons";
 import { resetAllFields } from "../../utils";
+import "./index.css";
 
 const getArticleData = async (action, state, dispatch) => {
   try {

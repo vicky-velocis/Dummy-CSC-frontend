@@ -17,13 +17,13 @@ import { checkForRole } from "../utils";
 const header = getCommonHeader(
   {
     labelName: "eChallan",
-    labelKey: "ACTION_TEST_ECHALLAN"
+    labelKey: "EC_MANAGE_CHALLAN"
   },
   {
     style: {
-    padding: "20px",
+      padding: "20px",
     }
-    },
+  },
   {
     classes: {
       root: "common-header-cont"
@@ -142,30 +142,30 @@ const eChallanPermissionManagement = {
     geteChallanCount(action, state, dispatch).then(response => {
       let countDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0]', {});
       let userInfo = JSON.parse(getUserInfo());
-      const roles = get(userInfo, "roles") 
-        if (checkForRole(roles, 'challanSI') || checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
+      const roles = get(userInfo, "roles")
+      if (checkForRole(roles, 'challanSI') || checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
         dispatch(
           handleField('home', 'components.div.children.applyCard.props.items[0]',
-            'pendingCount', 
-            get(state,'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].challanCount',''))
+            'pendingCount',
+            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].challanCount', ''))
         );
       }
 
       if (checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
         dispatch(
           handleField('home', 'components.div.children.applyCard.props.items[1]',
-            'pendingCount', 
-            get(state,'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].auctionCount',''))
+            'pendingCount',
+            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].auctionCount', ''))
         );
       }
       if (checkForRole(roles, 'challanHOD')) {
         dispatch(
           handleField('home', 'components.div.children.applyCard.props.items[2]',
-            'pendingCount', 
-            get(state,'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].fineCount',''))
+            'pendingCount',
+            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].fineCount', ''))
         );
       }
-     });
+    });
     return action;
   },
   components: {

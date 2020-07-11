@@ -329,7 +329,7 @@ export const adhocPopup = getCommonContainer({
           required: true,
           pattern: getPattern("VillageName"), ///^[a-zA-Z0-9 ]*$/i, // /^[a-zA-Z0-9]*$/i,
          // errorMessage: "EC_ERR_DEFAULT_INPUT_ADDRESS_FIELD_MSG",
-          errorMessage: "ERR_DEFAULT_INPUT_ITEM_NAME_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_ITEM_NAME_FIELD_MSG",
           // props: {
           //     value: 'challanHOD',
           // },
@@ -360,7 +360,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "ItemMaster.description",
           required: true,
           pattern: getPattern("eventDescription"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_ITEM_DESCRIPTION_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_ITEM_DESCRIPTION_FIELD_MSG",
           //errorMessage: "Invalid input field",
         })
       })

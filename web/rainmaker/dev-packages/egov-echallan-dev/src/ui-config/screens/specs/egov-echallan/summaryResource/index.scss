@@ -1,6 +1,9 @@
 div#material-ui-body tbody {
   word-break: break-all;
 }
+div#material-ui-body tbody tr td input {
+  font-size: small;
+ }
 @media only screen and (max-width: 768px) {
   .apply-wizard-footer button {
   width: 100% !important; } }

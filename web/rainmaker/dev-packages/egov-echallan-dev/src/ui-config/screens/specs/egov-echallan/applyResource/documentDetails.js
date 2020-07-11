@@ -23,6 +23,34 @@ export const documentDetails = getCommonCard({
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
     labelKey: "EC_VIOLATION_UPLOAD_SUBHEAD"
   }),
+  upload: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        marginLeft: 8
+      }
+    },
+    required: true,
+    children: {
+      subText_format: getCommonParagraph(
+        {
+          labelName: "Only .jpg and .pdf files. 1MB max file size.",
+          labelKey: "EC_VIOLATION_SINGLE_UPLOAD_SUBHEAD"
+        },
+        {
+          style: {
+            fontSize: 12,
+            marginBottom: 0,
+            marginTop: 5,
+            width: "100%",
+            color: "rgba(0, 0, 0, 0.6000000238418579)"
+          }
+        }
+      ),
+      
+    }
+  },
   break: getBreak(),
   documentList: {
     uiFramework: "custom-containers-local",
@@ -45,40 +73,6 @@ export const documentDetails = getCommonCard({
 
 });
 
-export const documentDetailsIDProof = getCommonCard({
-  header: getCommonTitle(
-    {
-      labelName: "Required Documents",
-      labelKey: "EC_DOCUMENT_DETAILS_HEADER_POPUP"
-    },
-    {
-      style: {
-        marginBottom: 18
-      }
-    }
-  ),
-  subText: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT_POPUP"
-  }),
-  break: getBreak(),
-  imageUpload: {
-    uiFramework: "custom-molecules-local",
-    moduleName: "egov-echallan",
-    componentPath: "ImageUploadMolecule",
-    props: {
-      formKey: `apply`,
-      fieldKey: 'echallanViolateridProof',
-      moduleName: "egov-echallan"
-
-    },
-    visible: true
-  },
-  break: getBreak(),
-
-});
-
 export const violationDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -91,11 +85,11 @@ export const violationDocumentDetails = getCommonCard({
       }
     }
   ),
-  // subText: getCommonParagraph({
-  //   labelName:
-  //     "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-  //   labelKey: "EC_VIOLATION_UPLOAD_SUBHEAD"
-  // }),
+  subText: getCommonParagraph({
+    labelName:
+      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+    labelKey: "EC_VIOLATION_UPLOAD_SUBHEAD"
+  }),
   break: getBreak(),
   upload: {
     uiFramework: "custom-atoms",
