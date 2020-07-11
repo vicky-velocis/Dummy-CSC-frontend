@@ -501,115 +501,109 @@ export const getTodaysDateInYMD = () => {
   };
   
 
-export const getPattern = type => {
-  switch (type) {
-  case "Name":
-  return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
-  case "MobileNo":
-  return /^[6789][0-9]{9}$/i;
-  case "Amount":
-  return /^[0-9]{0,9}$/i;
-  case "Email":
-  return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
-  case "Address":
-  return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
-  case "PAN":
-  return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
-  case "TradeName":
-  return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
-  case "Date":
-  return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
-  case "UOMValue":
-  return /^(0)*[1-9][0-9]{0,3}$/i;
-  case "OperationalArea":
-  return /^(0)*[1-9][0-9]{0,6}$/i;
-  case "NoOfEmp":
-  return /^(0)*[1-9][0-9]{0,2}$/i;
-  case "GSTNo":
-  return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
-  case "DoorHouseNo":
-  return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
-  case "BuildingStreet":
-  return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
-  case "Pincode":
-  return /^[1-9][0-9]{5}$/i;
-  case "PropertyID":
-  return /^[a-zA-z0-9\s\\/\-]$/i;
-  case "ElectricityConnNo":
-  return /^[0-9]{15}$/i;
-  case "DocumentNo":
-  return /^[0-9]{1,15}$/i; 
-  case "eventName":
-  return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
-  case "eventDescription":
-  return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
-  case "FireNOCNo":
-  return /^[a-zA-Z0-9-]*$/i;
-  case "consumerNo":
-  return /^[a-zA-Z0-9/-]*$/i;
-  case "VeterinaryRegistrationNo":
-  return /^[a-zA-Z0-9 \/-]*$/i;
-  case "VillageName":
-  return /^[a-zA-Z. ]*$/i;
-  case "BadageNumber":
-  return /^[a-zA-Z0-9]*$/i;
-  case "NoOfTree":
-    return /^[0-9][0-9]{0,1}$/i;
-  case "HCOwnerName":
-    return /^[a-zA-Z\s\\/\-]{1,256}$/i;
-    case "HCMobileNoSearch":
-      return /^[0-9]{0,10}$/i;
-    case "HCEmail":
-      return /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
-  case "HCMobileNo":
-    return /^[0-9]{10}$/i;
-    case "serviceRequestDescription":
-      return  /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/;
-   case "Amountopms":
-      return /^[0-9.]{0,20}$/i;
-      case "validUrl":
-      return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
+  export const getPattern = type => {
+    switch (type) {
+    case "Name":
+    return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i;
+    case "MobileNo":
+    return /^[6789][0-9]{9}$/i;
+    case "Amount":
+    return /^[0-9]{0,9}$/i;
+    case "Email":
+    return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
+    case "Address":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+    case "PAN":
+    return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
+    case "TradeName":
+    return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,100}$/i;
+    case "Date":
+    return /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i;
+    case "UOMValue":
+    return /^(0)*[1-9][0-9]{0,3}$/i;
+    case "OperationalArea":
+    return /^(0)*[1-9][0-9]{0,6}$/i;
+    case "NoOfEmp":
+    return /^(0)*[1-9][0-9]{0,2}$/i;
+    case "GSTNo":
+    return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
+    case "DoorHouseNo":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
+    case "BuildingStreet":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,100}$/i;
+    case "Pincode":
+    return /^[1-9][0-9]{5}$/i;
+    case "PropertyID":
+    return /^[a-zA-z0-9\s\\/\-]$/i;
+    case "ElectricityConnNo":
+    return /^[0-9]{15}$/i;
+    case "DocumentNo":
+    return /^[0-9]{1,15}$/i; 
+    case "eventName":
+    return /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,65}$/i;
+    case "eventDescription":
+    return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+    case "FireNOCNo":
+    return /^[a-zA-Z0-9-]*$/i;
+    case "consumerNo":
+    return /^[a-zA-Z0-9/-]*$/i;
+    case "VeterinaryRegistrationNo":
+    return /^[a-zA-Z0-9 \/-]*$/i;
+    case "VillageName":
+    return /^[a-zA-Z. ]*$/i;
+    case "BadageNumber":
+    return /^[a-zA-Z0-9]*$/i;
+    case "Amountopms":
+        return /^[0-9.]{0,20}$/i;
+        case "validUrl":
+        return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
         case "TextValidation":
-      return /^[a-zA-Z ]{1,180}$/;
-     case "AlphaNumValidation":
-      return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
-      case "EventDescription":
-      return /^(?![0-9-/,&]*$)[a-zA-Z0-9!@#$&()\\-`.+,/\" ]{1,500}$/i;
-      case "EventTitle":
-      return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
-      
-      case "subjectvalidation":
-      return /^[a-zA-Z ]{1,180}$/i;
-      case "AlphaNumValidationLocation":
-      return /^(?![0-9-/,&]*$)[a-zA-Z0-9-/,& ]{1,180}$/i;
-      case "AlphaNumValidationsms":
-      return /^(?![0-9-/,&]*$)[a-zA-Z0-9!@#$&()\\-`.+,/\" ]{1,180}$/i;
-      case "sizeofpublication":
-      return /^[0-9]{1,50}$/i;
-      
-      case "fileNumber":
-      return /^[a-zA-Z0-9-]{1,50}$/i;
-      case "TextValidationWithoutSpace":
-      return /^[a-zA-Z]{1,180}$/i;
-	  case "budget":
-      return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
-      case "AlphaNumSubjectSMS":
-      return /^(?![0-9-/,&]*$)[a-zA-Z0-9~!@#$%^&*(){}[]\/.,<>:;" ]{1,180}$/i;
-    case "age":
-      return /^[1-9][0-9]$/i;
-    case "familyMonthlyIncome":
-      return /^[1-9][0-9]\d*$/i;
-      
-    case "DecimalAmount":
-      return /^\d{0,6}(\.\d{1,2})?$/i
-	 case "ViolatorAddress":
-        return /^[a-zA-Z.0-9 @#%&-:]{1,512}$/i;
-case "ViolatorName":
-      return /^[a-zA-Z. ]{1,65}$/i;
-    case "SeizedQuantity":
-      return /^[0-9]{0,9}$/i; 
-  }
-  };
+        return /^[a-zA-Z ]{1,180}$/i;
+       case "AlphaNumValidation":
+        return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
+        
+        case "EventDescription":
+        return /^(?![0-9.]*$)[a-zA-Z0-9. ]{1,500}$/i;
+        
+        case "EventTitle":
+        return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
+        
+        case "AlphaNumValidationLocation":
+        return /^(?![0-9-/,&]*$)[a-zA-Z0-9-/,& ]{1,180}$/i;
+  
+        case "sizeofpublication":
+        return /^[0-9]{1,50}$/i;
+        
+        case "fileNumber":
+        return /^[a-zA-Z0-9-]{1,50}$/i;
+        case "TextValidationWithoutSpace":
+        return /^[a-zA-Z]{1,180}$/i;
+       case "budget":
+        return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
+       case "age":
+        return /^[1-9][0-9]$/i;
+       case "familyMonthlyIncome":
+        return /^[1-9][0-9]\d*$/i;
+       case "alpha-numeric-with-space":
+        return /^[a-z0-9 ]*$/i;
+       case "alpha-numeric-with-space-and-newline":
+        return /^[a-z0-9 \n]*$/i;
+       case "alpha-numeric":
+         return /^[a-z0-9]*$/i;
+       case "non-empty-alpha-numeric":
+         return /^[a-z0-9]+$/i;
+       case "alpha-only":
+         return  /^[a-z]+$/i;
+       case "numeric-only":
+         return  /^[0-9]*$/i;   
+         case "VATNo":
+         return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{8}[V]{1}$/i;
+         case "CSTNo":
+          return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{8}[C]{1}$/i;
+          case "TINNo":
+            return  /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{9}$/i;
+    }
+    };
 
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
