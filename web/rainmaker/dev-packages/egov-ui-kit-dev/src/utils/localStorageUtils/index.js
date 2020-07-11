@@ -159,3 +159,9 @@ export const lSRemoveItem = (key) => {
 export const lSRemoveItemlocal = (key) => {
   window.localStorage.removeItem(key);
 };
+
+
+// get tenantId for Employee/Citizen
+export const getTenantIdCommon = () => {
+  return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
+}
