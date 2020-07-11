@@ -63,7 +63,8 @@ import {
                   labelName: "Enter From Date",
                   labelKey: "STORE_PRICE_FROM_DATE_PLACEHOLDER"
                 },
-                required: true,
+                required: false,
+                visible:false,
                 pattern: getPattern("Date") || null,
                 jsonPath: "priceLists[0].priceListDetails[0].fromDate",
                 props: {
@@ -83,7 +84,8 @@ import {
                   labelName: "Enter To Date",
                   labelKey: "STORE_PRICE_TO_DATE_PLACEHOLDER"
                 },
-                required: true,
+                required: false,
+                visible:false,
                 pattern: getPattern("Date") || null,
                 jsonPath: "priceLists[0].priceListDetails[0].toDate",
                 props: {
@@ -138,11 +140,29 @@ import {
               },
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
             props: {
-              optionLabel: "code",
-              optionValue: "name"
+              optionLabel: "name",
+              optionValue: "code"
             },
               
             }),
+            active: {
+              uiFramework: "custom-containers-local",
+              moduleName: "egov-store-asset",
+              componentPath: "CheckboxContainer",
+              jsonPath: "priceLists[0].priceListDetails[0].active",
+              gridDefination: {
+                xs: 4,
+              },
+              isFieldValid: true,
+              required: false,
+        
+              props: {
+                content: "STORE_PRICE_ACTIVE",
+                screenName: "createpricelist",
+                checkBoxPath:
+                  "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.active",
+              },
+            },
           },
           {
             style: {

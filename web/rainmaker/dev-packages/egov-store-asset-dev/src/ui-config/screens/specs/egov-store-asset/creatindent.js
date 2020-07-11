@@ -146,8 +146,10 @@ export const header = getCommonContainer({
         value: tenantId
       }];
     try {
-      let response = await getSearchResults(queryObject, dispatch,"supplier");
-      dispatch(prepareFinalObject("supplier", response));
+      let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+      dispatch(prepareFinalObject("store", response));
+       response = await getSearchResults(queryObject, dispatch,"materials");
+      dispatch(prepareFinalObject("materials", response));
     } catch (e) {
       console.log(e);
     }

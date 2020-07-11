@@ -6,10 +6,10 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  createPriceList,
-  getMaterialMasterSearchResults,
+  createMaterialIndent,
+  getMaterialIndentSearchResults,
   getPriceListSearchResults,
-  UpdatePriceList
+  updateMaterialIndent
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -199,7 +199,6 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     []
   );
   set(indents[0], "tenantId", tenantId);
-  set(indents[0], "status", true);
   // get set date field into epoch
 
   let indentDate =
@@ -212,6 +211,11 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
   expectedDeliveryDate = convertDateToEpoch(expectedDeliveryDate);
   set(indents[0],"expectedDeliveryDate", agreementDate);
 
+  //set defailt value
+  set(indents[0],"indentNumber", "");
+  set(indents[0],"indentType", "Indent");
+  set(indents[0],"materialHandOverTo", "Test");
+  set(indents[0],"designation", "");
 
   // set date to epoch in  price list material name
   let priceListDetails = returnEmptyArrayIfNull(
@@ -229,7 +233,7 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     try {
       console.log(queryObject)
       console.log("queryObject")
-      let response = await createPriceList(
+      let response = await createMaterialIndent(
         queryObject,        
         indents,
         dispatch
@@ -245,7 +249,7 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     }
   } else if (action === "UPDATE") {
     try {
-      let response = await UpdatePriceList(
+      let response = await updateMaterialIndent(
         queryObject,
         indents,
         dispatch

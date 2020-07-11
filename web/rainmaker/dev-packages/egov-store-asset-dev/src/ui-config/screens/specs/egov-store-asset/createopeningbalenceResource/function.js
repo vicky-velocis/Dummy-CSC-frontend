@@ -13,6 +13,7 @@ import {
 import {
   convertDateToEpoch,
   epochToYmdDate,
+  epochToYmd,
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
@@ -50,29 +51,29 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
       let expiryDateValid = true
       let receiptDateValid = true
       const CurrentDate = new Date();
-      let receiptDate = get(
+      let receivedDate = get(
         state.screenConfiguration.preparedFinalObject,
-        "materialReceipt[0].receiptDate",
+        "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate",
         null
       );
       let expiryDate = get(
         state.screenConfiguration.preparedFinalObject,
-        "materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",
+        "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",
         null
       );
-      if(Number(receiptDate))
+      if(Number(receivedDate))
       {
         //alert('i am number')
-        receiptDate = epochToYmd(receiptDate)
+        receivedDate = epochToYmd(receivedDate)
       }
       if(Number(expiryDate))
     {
       //alert('i am number')
       expiryDate = epochToYmd(expiryDate)
     }
-    const  receiptDate_ = new Date(receiptDate)
+    const  receiptDate_ = new Date(receivedDate)
     const  expiryDate_ = new Date(expiryDate)
-    if(receiptDate_>=CurrentDate)
+    if(receivedDate>=CurrentDate)
     {
       receiptDateValid = false
     }
@@ -132,15 +133,25 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
      // set date field in eoch formate
 
     let receivedDate =
-  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetailsAddnInfo[0].receivedDate",0) 
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate",0) 
   receivedDate = convertDateToEpoch(receivedDate);
-  set(materialReceiptObject[0],"receiptDate", receivedDate);
+  set(materialReceiptObject[0],"receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate", receivedDate);
+  set(materialReceiptObject[0],"mrnNumber","");
+  set(materialReceiptObject[0],"receiptDate","");
+  set(materialReceiptObject[0],"mrnStatus","CREATED");
+  set(materialReceiptObject[0],"receiptDetails[0].material.description","");
+  let UOM = get(state, "screenConfiguration.preparedFinalObject.material.materials",[]) 
+  let MaterialCode = get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetails[0].material.code",'') 
+  let UOMCode = UOM.filter((x) => x.code ===MaterialCode)
+  console.log(UOMCode);
+  set(materialReceiptObject[0],"receiptDetails[0].uom.code",UOMCode[0].baseUom.code);
+  set(materialReceiptObject[0],"receiptDetails[0].receivedQty","");
 
   let expiryDate =
-  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",0) 
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",0) 
   expiryDate = convertDateToEpoch(expiryDate);
-  set(materialReceiptObject[0],"receiptDetailsAddnInfo[0].expiryDate", expiryDate);
-
+  set(materialReceiptObject[0],"receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate", expiryDate);
+  set(materialReceiptObject[0],"tenantId", tenantId);
 
   
     if (action === "CREATE") {
@@ -151,12 +162,9 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           materialReceiptObject,
           dispatch
         );
-        // let employeeId = get(response, "Employees[0].code");
-        // const acknowledgementUrl =
-        //   process.env.REACT_APP_SELF_RUNNING === "true"
-        //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`
-        //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
-        // dispatch(setRoute(acknowledgementUrl));
+        if(response){
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+         }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);
       }
@@ -167,12 +175,9 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           materialReceiptObject,
           dispatch
         );
-        // let employeeId = response && get(response, "Employees[0].code");
-        // const acknowledgementUrl =
-        //   process.env.REACT_APP_SELF_RUNNING === "true"
-        //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
-        //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
-        // dispatch(setRoute(acknowledgementUrl));
+        if(response){
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+         }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);
       }

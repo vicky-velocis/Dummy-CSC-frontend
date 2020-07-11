@@ -4,7 +4,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMaterialMasterSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getOpeningBalanceSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
 import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -92,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getMaterialMasterSearchResults(queryObject, dispatch);
+    let response = await getOpeningBalanceSearchResults(queryObject, dispatch);
     try {
       if(response.materialReceipt.length===0)
       {

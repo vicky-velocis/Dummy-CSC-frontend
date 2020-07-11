@@ -9,16 +9,11 @@ export const getTextToLocalMapping = (label) => {
     case "Suplier Name":
       return getLocaleLabels(
         "Suplier Name",
-        "STORE_SUPLIER_NAME",
+        "STORE_SUPPLIER_MASTER_SUPPLIER_NAME",
         localisationLabels
       );
 
-      case "rate Type":
-        return getLocaleLabels(
-          "rate Type",
-          "STORE_PRICE_RATE_TYPE",
-          localisationLabels
-        );
+     
     case "Material Type Description":
       return getLocaleLabels(
         "Material Type Description",
@@ -37,16 +32,28 @@ export const getTextToLocalMapping = (label) => {
             "STORE_COMMON_TABLE_COL_STORE_NAME",
             localisationLabels
           );
+          case "Material Name":
+            return getLocaleLabels(
+              "Material Name",
+              "STORE_COMMON_TABLE_COL_STORE_NAME",
+              localisationLabels
+            );
+            case "Rate Type":
+        return getLocaleLabels(
+          "Rate Type",
+          "STORE_PRICE_RATE_TYPE",
+          localisationLabels
+        );
     case "Active":
       return getLocaleLabels(
         "Active",
         "STORE_COMMON_TABLE_COL_ACTIVE",
         localisationLabels
       );
-    case "Search Results for Material Master":
+    case "Search Results for Price List":
       return getLocaleLabels(
-        "Search Results for Material Master",
-        "STORE_MATERIAL_MASTER_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for Price List",
+        "STORE_MATERIAL_PRICE_LIST_RESULTS_TABLE_HEADING",
         localisationLabels
       );
   }
@@ -58,18 +65,18 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Material Name"),
-      getTextToLocalMapping("Material Type Name"),
-      getTextToLocalMapping("Store Name"),     
+      getTextToLocalMapping("Suplier Name"),
+     // getTextToLocalMapping("Material Name"),
+      getTextToLocalMapping("Rate Type"),     
       getTextToLocalMapping("Active"),
       {
-        name: "code",
+        name: "id",
         options: {
           display: false
         }
       },
     ],
-    title: getTextToLocalMapping("Search Results for Material Master"),
+    title: getTextToLocalMapping("Search Results for Price List"),
     options: {
       filter: false,
       download: false,
@@ -86,7 +93,8 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-material-master?code=${rowData[4]}&tenantId=${tenantId}`;
+ console.log(rowData);
+ window.location.href = `view-price-list?id=${rowData[3]}&tenantId=${tenantId}&code=${rowData[3]}`;
 };
 
 

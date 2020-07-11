@@ -221,6 +221,12 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
   get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementEndDate",0) 
   agreementEndDate = convertDateToEpoch(agreementEndDate);
   set(priceLists[0],"agreementEndDate", agreementEndDate);
+  // priceLists[0].priceListDetails[0].uom.code
+  let UOMList = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.common-masters.UOM",[]) 
+  let UOM =  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].priceListDetails[0].uom.code",'') 
+
+  let conversionFactor = UOMList.filter(x=> x.code === UOM)
+  set(priceLists[0],"priceListDetails[0].uom.conversionFactor", conversionFactor[0].conversionFactor);
   let fileStoreId =
   get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",0)  
   set(priceLists[0],"fileStoreId", fileStoreId);
@@ -228,24 +234,24 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
   let priceListDetails = returnEmptyArrayIfNull(
     get(priceLists[0], "priceListDetails", [])
   );
-  for (let i = 0; i < priceListDetails.length; i++) {
-    set(
-      priceLists[0],
-      `priceListDetails[${i}].fromDate`,
-      convertDateToEpoch(
-        get(priceLists[0], `priceListDetails[${i}].fromDate`),
-        "dayStart"
-      )
-    );
-    set(
-      priceLists[0],
-      `priceListDetails[${i}].toDate`,
-      convertDateToEpoch(
-        get(priceLists[0], `priceListDetails[${i}].toDate`),
-        "dayStart"
-      )
-    );
-  }
+  // for (let i = 0; i < priceListDetails.length; i++) {
+  //   set(
+  //     priceLists[0],
+  //     `priceListDetails[${i}].fromDate`,
+  //     convertDateToEpoch(
+  //       get(priceLists[0], `priceListDetails[${i}].fromDate`),
+  //       "dayStart"
+  //     )
+  //   );
+  //   set(
+  //     priceLists[0],
+  //     `priceListDetails[${i}].toDate`,
+  //     convertDateToEpoch(
+  //       get(priceLists[0], `priceListDetails[${i}].toDate`),
+  //       "dayStart"
+  //     )
+  //   );
+  // }
   //handleDeletedCards(priceLists[0], "storeMapping", "id");
  
 
@@ -268,6 +274,9 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`
       //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
+      if(response){
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+       }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
     }
@@ -284,6 +293,9 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
       //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
+      if(response){
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+       }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
     }
@@ -322,5 +334,39 @@ export const getMaterialmasterData = async (
       }
     )
   );
+ // furnishmaterialsData(state, dispatch);
+};
+
+export const getPriceLstData = async (
+  state,
+  dispatch,
+  id,
+  tenantId
+) => {
+  let queryObject = [
+    {
+      key: "id",
+      value: id
+    },
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ];
+
+ let response = await getPriceListSearchResults(queryObject, dispatch);
+// let response = samplematerialsSearch();
+  dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+  // dispatch(
+  //   handleField(
+  //     "create",
+  //     "components.div.children.headerDiv.children.header.children.header.children.key",
+  //     "props",
+  //     {
+  //       labelName: "Edit Material Maste",
+  //       labelKey: "STORE_EDITMATERIAL_MASTER_HEADER"
+  //     }
+  //   )
+  // );
  // furnishmaterialsData(state, dispatch);
 };

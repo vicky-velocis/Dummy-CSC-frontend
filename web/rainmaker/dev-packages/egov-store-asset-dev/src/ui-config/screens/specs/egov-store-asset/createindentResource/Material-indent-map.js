@@ -42,7 +42,7 @@ import {
                 },
                 required: true,               
                 jsonPath: "indents[0].indentDetails[0].material.code",
-                sourceJsonPath: "material.materials",
+                sourceJsonPath: "materials.materials",
                 props: {
                   optionValue: "code",
                   optionLabel: "description",

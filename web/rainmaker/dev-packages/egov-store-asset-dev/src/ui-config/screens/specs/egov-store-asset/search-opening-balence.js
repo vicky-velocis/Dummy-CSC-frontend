@@ -8,8 +8,8 @@ import {
   import set from "lodash/set";
   import { httpRequest,getsto } from "../../../../ui-utils";
   import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
-  import { searchForm } from "./searchMaterialMasterResource/searchForm";
-  import { searchResults } from "./searchMaterialMasterResource/searchResults";
+  import { searchForm } from "./searchOpeniongbalenceResource/searchForm";
+  import { searchResults } from "./searchOpeniongbalenceResource/searchResults";
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   
@@ -22,8 +22,8 @@ import {
     labelKey: "STORE_OPENING_BALANCE",
   });
   
-  const createMaterialMasterHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-store-asset/create-material-master`));
+  const createOpeningBalenceHandle = async (state, dispatch) => {
+    dispatch(setRoute(`/egov-store-asset/createopeningbalence`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
@@ -140,13 +140,13 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add Material Master",
-                    labelKey: "STORE_ADD_NEW_MATERIAL_MASTER_BUTTON",
+                    labelName: "Add Opennng Balence",
+                    labelKey: "STORE_ADD_NEW_OPPENING_BALENCE",
                   }),
                 },
                 onClickDefination: {
                   action: "condition",
-                  callBack: createMaterialMasterHandle,
+                  callBack: createOpeningBalenceHandle,
                 },
               },
             },

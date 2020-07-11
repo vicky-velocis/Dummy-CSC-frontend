@@ -111,11 +111,11 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Suplier Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("rate Type")]: get(item, "rateType", "-") || "-", 
+          [getTextToLocalMapping("Suplier Name")]: get(item, "supplier.name", "-") || "-",
+          [getTextToLocalMapping("Rate Type")]: get(item, "rateType", "-") || "-", 
         //  [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
-          [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
-          code: item.code,       
+          [getTextToLocalMapping("Active")]: get(item, "active", "-") || "-",  
+          id: item.id,       
          
         };
       });
@@ -133,7 +133,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search-price-list",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Master")} (${
+          `${getTextToLocalMapping("Search Results for Price List")} (${
             response.priceLists.length
           })`
         )

@@ -305,3 +305,137 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
   dispatch(prepareFinalObject("documentsContract", documentsContract));
 
 };
+
+export const getMaterialIndentSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/indents/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const createMaterialIndent = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/indents/_create",
+      "",
+      queryObject,
+      { indents: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updateMaterialIndent = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/indents/_update",
+      "",
+      queryObject,
+      { indents: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const getmaterialissuesSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatematerialissues = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues/_create",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updatematerialissues = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues/_update",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};

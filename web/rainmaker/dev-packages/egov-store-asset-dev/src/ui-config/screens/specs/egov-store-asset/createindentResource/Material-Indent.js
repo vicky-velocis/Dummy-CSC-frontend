@@ -93,7 +93,7 @@ import {
           },
           required: true,
           jsonPath: "indents[0].inventoryType",
-           sourceJsonPath: "searchScreenMdmsData.store-asset.InventoryType",
+           sourceJsonPath: "createScreenMdmsData.store-asset.InventoryType",
           props: {
            
             optionValue: "code",

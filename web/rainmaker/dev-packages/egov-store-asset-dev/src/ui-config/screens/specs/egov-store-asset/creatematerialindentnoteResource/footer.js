@@ -23,7 +23,7 @@ const moveToReview = dispatch => {
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["creatematerialmaster"],
+    state.screenConfiguration.screenConfig["createMaterialIndentNote"],
     "components.div.children.stepper.props.activeStep",
     0
   );
@@ -33,7 +33,7 @@ export const callBackForNext = async (state, dispatch) => {
       "components.div.children.formwizardFirstStep.children.MaterialMasterDetails.children.cardContent.children.MaterialDetailsContainer.children",
       state,
       dispatch,
-      "creatematerialmaster"
+      "createMaterialIndentNote"
     );
     
     if (!(isMaterialDetailsValid)) {
@@ -44,7 +44,7 @@ export const callBackForNext = async (state, dispatch) => {
     let storeDetailsCardPath =
       "components.div.children.formwizardSecondStep.children.storeDetails.children.cardContent.children.storeDetailsCard.props.items";
     let storeDetailsItems = get(
-      state.screenConfiguration.screenConfig.creatematerialmaster,
+      state.screenConfiguration.screenConfig.createMaterialIndentNote,
       storeDetailsCardPath,
       []
     );
@@ -57,7 +57,7 @@ export const callBackForNext = async (state, dispatch) => {
           `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.storeDetailsCardContainer.children`,
           state,
           dispatch,
-          "creatematerialmaster"
+          "createMaterialIndentNote"
         )
       )
         isstoreDetailsValid = false;
@@ -71,19 +71,19 @@ export const callBackForNext = async (state, dispatch) => {
       "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View1.children.cardContent.children.PuchasingInformationContainer.children",
       state,
       dispatch,
-      "creatematerialmaster"
+      "createMaterialIndentNote"
     );
     const isStockingInformationValid = validateFields(
       "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View2.children.cardContent.children.StockingInformationContainer.children",
       state,
       dispatch,
-      "creatematerialmaster"
+      "createMaterialIndentNote"
     );
     const isSpecificationValid = validateFields(
       "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View3.children.cardContent.children.SpecificationContainer.children",
       state,
       dispatch,
-      "creatematerialmaster"
+      "createMaterialIndentNote"
     );
     
     if (!isPuchasingInformationValid || !isStockingInformationValid || !isSpecificationValid) {
@@ -140,7 +140,7 @@ export const changeStep = (
   defaultActiveStep = -1
 ) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["creatematerialmaster"],
+    state.screenConfiguration.screenConfig["createMaterialIndentNote"],
     "components.div.children.stepper.props.activeStep",
     0
   );
@@ -175,7 +175,7 @@ export const changeStep = (
       value: isPayButtonVisible
     }
   ];
-  dispatchMultipleFieldChangeAction("creatematerialmaster", actionDefination, dispatch);
+  dispatchMultipleFieldChangeAction("createMaterialIndentNote", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
 };
 
@@ -183,7 +183,7 @@ export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
-        "creatematerialmaster",
+        "createMaterialIndentNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFirstStep"
         ),
@@ -192,7 +192,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 1:
       dispatchMultipleFieldChangeAction(
-        "creatematerialmaster",
+        "createMaterialIndentNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
         ),
@@ -201,7 +201,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 2:
       dispatchMultipleFieldChangeAction(
-        "creatematerialmaster",
+        "createMaterialIndentNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardThirdStep"
         ),
@@ -210,7 +210,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 3:
       dispatchMultipleFieldChangeAction(
-        "creatematerialmaster",
+        "createMaterialIndentNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFourthStep"
         ),
@@ -219,7 +219,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     default:
       dispatchMultipleFieldChangeAction(
-        "creatematerialmaster",
+        "createMaterialIndentNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFifthStep"
         ),

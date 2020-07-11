@@ -23,7 +23,7 @@ import {
   });
   
   const createPriceListHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-store-asset/create-price-list`));
+    dispatch(setRoute(`/egov-store-asset/createpricelist`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {

@@ -110,7 +110,7 @@ import {
             },
             required: false,
            
-            jsonPath: "materialReceipt[0].code",
+            jsonPath: "materialReceipt[0].receiptDetails[0].material.code",
             sourceJsonPath: "material.materials",
             props: {
               optionValue: "code",
@@ -129,6 +129,10 @@ import {
               labelKey: "STORE_MATERIAL_OLD_CODE"
             },
             required: false,
+            visible:false,
+            props:{
+              disabled:true,
+            },
             pattern: getPattern("Name") || null,
             jsonPath: "materialReceipt[0].receiptDetails[0].material.code"
           })
@@ -145,7 +149,7 @@ import {
             },
             required: true,
             pattern: getPattern("Name") || null,
-            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo[0].lotNo"
+            jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].lotNo"
           })
         }, 
         ExpiryDate: {
@@ -160,7 +164,7 @@ import {
             },
             required: true,
             pattern: getPattern("Date") || null,
-            jsonPath: "materialReceipt[0].receiptDetailsAddnInfo[0].expiryDate",
+            jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",
             props: {
               inputProps: {
                 max: getTodaysDateInYMD()
@@ -226,7 +230,7 @@ import {
           },
           required: true,
           pattern: getPattern("Date") || null,
-          jsonPath: "materialReceipt[0].receiptDate",
+          jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate",
           props: {
             inputProps: {
               max: getTodaysDateInYMD()
@@ -234,6 +238,26 @@ import {
           }
         })
       },
+      remarks: {
+        ...getTextField({
+          label: {
+            labelName: "Remarks",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
+          },
+          placeholder: {
+            labelName: "Remarks",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
+          },
+          required: true,
+          props: {
+            className: "applicant-details-error",
+            multiline: "multiline",
+            rowsMax: 2,
+          },
+          pattern: getPattern("eventDescription") || null,
+          jsonPath: "materialReceipt[0].receiptDetails[0].remarks"
+        })
+      }, 
        
       })
     }),

@@ -221,6 +221,9 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
       //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`
       //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
+      if(response){
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+       }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
     }
@@ -237,6 +240,9 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
       //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
       //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
+      if(response){
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+       }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
     }

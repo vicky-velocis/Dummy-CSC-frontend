@@ -38,7 +38,7 @@ import {
 export const header = getCommonContainer({
     header: getCommonHeader({
       labelName: `Create Material Master`,
-      labelKey: "HR_COMMON_CREATE_MATERIAL_MASTER"
+      labelKey: "STORE_COMMON_CREATE_PRICE_LIST_HEADER"
     })
   });
   

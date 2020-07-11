@@ -206,7 +206,7 @@ export const header = getCommonContainer({
   
   const screenConfig = {
     uiFramework: "material-ui",
-    name: "creatematerialmaster",
+    name: "createMaterialIndentNote",
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
      

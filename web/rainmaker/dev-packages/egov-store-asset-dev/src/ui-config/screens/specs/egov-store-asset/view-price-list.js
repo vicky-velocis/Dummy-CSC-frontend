@@ -3,9 +3,9 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import { MasterReviewDetails } from "./viewMaterialMasterResource/master-review";
-import { masterViewFooter } from "./viewMaterialMasterResource/footer";
-import { getMaterialmasterData } from "./viewMaterialMasterResource/functions";
+import { PriceListReviewDetails } from "./viewpricelistResource/pricelist-review";
+import { masterViewFooter } from "./viewpricelistResource/footer";
+import { getPriceLstData } from "./viewpricelistResource/functions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";  
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -18,7 +18,7 @@ export const header = getCommonContainer({
     labelKey: "STORE_VIEW_PRICE_LIST"
   })
 });
-const masterView = MasterReviewDetails(false);
+const masterView = PriceListReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
   const tenant = tenantId || getTenantId();
   let mdmsBody = {
@@ -55,9 +55,9 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-material-master",
   beforeInitScreen: (action, state, dispatch) => {
-    let code = getQueryArg(window.location.href, "code");
+    let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    getMaterialmasterData(state, dispatch, code, tenantId);
+    getPriceLstData(state, dispatch, id, tenantId);
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
     return action;
