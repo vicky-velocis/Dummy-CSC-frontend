@@ -1041,7 +1041,7 @@ export const footerReviewTop = (
       const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1051,7 +1051,7 @@ export const footerReviewTop = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };
@@ -1226,7 +1226,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1236,7 +1236,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };
