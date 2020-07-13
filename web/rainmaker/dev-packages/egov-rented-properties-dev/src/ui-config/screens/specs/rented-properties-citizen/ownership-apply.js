@@ -5,16 +5,31 @@ import {stepper, formwizardOwnershipFirstStep, formwizardOwnershipSecondStep, fo
 import {footer} from './footer';
 import { getMdmsData } from "../rented-properties/apply";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getOwnershipSearchResults } from "../../../../ui-utils/commons";
+import { getOwnershipSearchResults, setDocsForEditFlow } from "../../../../ui-utils/commons";
 
 const header = getCommonHeader({
     labelName: "Apply for Ownership Transfer",
     labelKey: "RP_APPLY_OWNERSHIP_TRANFER"
 });
+
+export const prepareOwnerShipDocuments = documents => {
+  let documentsArr =
+    documents.length > 0
+      ? documents.reduce((documentsArr, item, ind) => {
+        documentsArr.push({
+          name: item.code,
+          required: item.required,
+          jsonPath: `Owners[0].ownerDetails.ownershipTransferDocuments[${ind}]`,
+          statement: item.description
+        });
+        return documentsArr;
+      }, [])
+      : [];
+  return documentsArr;
+};
 
 const setDocumentData = async(action, state, dispatch) => {
     const documentTypePayload = [{
@@ -44,10 +59,10 @@ const setDocumentData = async(action, state, dispatch) => {
         labelKey: item.description
     }
     }))
-    const documentTypes = prepareDocumentTypeObj(masterDocuments);
+    const documentTypes = prepareOwnerShipDocuments(masterDocuments);
     let applicationDocs = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].propertyDetails.applicationDocuments",
+      "Owners[0].ownerDetails.ownershipTransferDocuments",
       []
     ) || [];
     applicationDocs = applicationDocs.filter(item => !!item)
@@ -63,7 +78,7 @@ const setDocumentData = async(action, state, dispatch) => {
     applicationDocsReArranged &&
       dispatch(
         prepareFinalObject(
-          "Properties[0].propertyDetails.applicationDocuments",
+          "Owners[0].ownerDetails.ownershipTransferDocuments",
           applicationDocsReArranged
         )
       );
@@ -75,7 +90,7 @@ const setDocumentData = async(action, state, dispatch) => {
           freshLicenceDocuments
       )
   );
-    dispatch(prepareFinalObject("PropertiesTemp[0].applicationDocuments", documentTypes))
+    dispatch(prepareFinalObject("OwnersTemp[0].ownershipTransferDocuments", documentTypes))
 }
 
 const getData = async(action, state, dispatch) => {
@@ -88,6 +103,7 @@ const getData = async(action, state, dispatch) => {
     if (response && response.Owners) {
     dispatch(prepareFinalObject("Owners", response.Owners))
     }
+    setDocsForEditFlow(state, dispatch, "Owners[0].ownerDetails.ownershipTransferDocuments", "OwnersTemp[0].uploadedDocsInRedux");
   } else {
     dispatch(
       prepareFinalObject(

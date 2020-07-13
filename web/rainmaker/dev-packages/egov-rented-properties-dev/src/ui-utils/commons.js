@@ -170,10 +170,10 @@ export const getCount = async queryObject => {
   }
 }
 
-const setDocsForEditFlow = async (state, dispatch) => {
+export const setDocsForEditFlow = async (state, dispatch, sourceJsonPath, destinationJsonPath) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
-    "Properties[0].propertyDetails.applicationDocuments",
+    sourceJsonPath,
     []
   ) || []
   applicationDocuments = applicationDocuments.filter(item => !!item.active)
@@ -207,7 +207,7 @@ const setDocsForEditFlow = async (state, dispatch) => {
       ];
     });
   dispatch(
-    prepareFinalObject("PropertiesTemp[0].uploadedDocsInRedux", uploadedDocuments)
+    prepareFinalObject(destinationJsonPath, uploadedDocuments)
   );
 };
 
@@ -245,7 +245,7 @@ export const updatePFOforSearchResults = async (
   if (payload && payload.Properties) {
     dispatch(prepareFinalObject("Properties", payload.Properties));
   }
-  setDocsForEditFlow(state, dispatch);
+  setDocsForEditFlow(state, dispatch, "Properties[0].propertyDetails.applicationDocuments", "PropertiesTemp[0].uploadedDocsInRedux");
 };
 
 export const getBoundaryData = async (
