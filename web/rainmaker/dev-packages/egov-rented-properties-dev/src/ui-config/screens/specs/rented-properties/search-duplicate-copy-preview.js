@@ -18,7 +18,7 @@ const headerrow = getCommonContainer({
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
-const reviewFreshLicenceDocuments = getReviewDocuments(false, "ownership-apply")
+const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy")
 
 const transferReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
