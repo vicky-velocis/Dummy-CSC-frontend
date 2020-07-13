@@ -6,18 +6,18 @@ import {
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getOwnershipSearchResults,getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
-import { getReviewApplicantDetails, getreviewPropertyAddressDetails } from "./applyResource/review-applications";
+import { getDuplicateCopyReviewPropertyAddressDetails , getDuplicateCopyPreviewApplicantDetails} from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
 
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Duplicate Copy Application",
-      labelKey: "OWNER_SHIP_TRANSFER_APPLICATION_HEADER"
+      labelKey: "DUPLICATE_COPY_APPLICATION_HEADER"
     })
   });
 
-const reviewApplicantDetails = getReviewApplicantDetails(false);
-const reviewPropertyAddressDetails = getreviewPropertyAddressDetails(false)
+const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
+const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
 const reviewFreshLicenceDocuments = getReviewDocuments(false, "ownership-apply")
 
 const transferReviewDetails = getCommonCard({
@@ -87,8 +87,7 @@ const duplicateCopySearchPreview = {
                   props: {
                     dataPath: "DuplicateCopyApplications",
                     moduleName: "DuplicateCopyOfAllotmentLetterRP",
-                    // updateUrl: "/csp/ownership-transfer/_update",
-                    updateUrl: " /csp/duplicatecopy/_update"
+                    updateUrl: "/csp/duplicatecopy/_update"
                   }
                 },
               transferReviewDetails

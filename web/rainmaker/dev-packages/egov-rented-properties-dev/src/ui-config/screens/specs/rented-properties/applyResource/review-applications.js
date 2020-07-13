@@ -133,3 +133,121 @@ export const getreviewPropertyAddressDetails = (isEditable = true) => {
         })
     })
 }
+
+export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Applicant Details",
+                        labelKey: "RP_APPLICANT_DETAILS_HEADER"
+                    })
+                },
+                editSection: freshLicenseEditSection(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+            ownerName: getLabelWithValue(
+                {
+                    labelName: "Applicant Name",
+                    labelKey: "RP_APPLICANT_NAME_LABEL"
+                },
+                { jsonPath: "DuplicateCopyApplications[0].applicant[0].name" }
+            ),
+            relationship: getLabelWithValue(
+                {
+                    labelName: "Relationship",
+                    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+                },
+                { jsonPath: "DuplicateCopyApplications[0].applicant[0].relationship" }
+            ),
+            phone: getLabelWithValue(
+                {
+                    labelName: "Mobile No.",
+                    labelKey: "RP_MOBILE_NO_LABEL"
+                },
+                {
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].phone" 
+                }
+            ),
+            email: getLabelWithValue(
+                {
+                    labelName: "Email",
+                    labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
+                },
+                {
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].email" 
+                }
+            ),
+            aadhar: getLabelWithValue(
+                {
+                    labelName: "Aadhar Number",
+                    labelKey: "RP_AADHAR_LABEL"
+                },
+                {
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].adhaarNumber" 
+                }
+            )
+        })
+    })
+}
+
+export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Property Details",
+                        labelKey: "RP_PROPERTY_DETAILS_HEADER"
+                    })
+                },
+                editSection: freshLicenseEditSection(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+            propertyId: getLabelWithValue(
+                {
+                    labelName: "Property Id",
+                    labelKey: "RP_PROPERTY_ID"
+                },
+                {jsonPath: "DuplicateCopyApplications[0].property.id"}
+            ),
+            allotmentNumber: getLabelWithValue(
+                {
+                    labelName: "Allotment Number",
+                    labelKey: "RP_ALLOTMENT_NUMBER"
+                },
+                {jsonPath: "DuplicateCopyApplications[0].allotmenNumber"}
+            ),
+            transitNumber: getLabelWithValue(
+                {
+                    labelName: "Transit Site/Plot number",
+                    labelKey: "RP_SITE_PLOT_LABEL"
+                },
+                { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
+            )
+            // area: getLabelWithValue(
+            //     areaLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
+            // ),
+            // pincode: getLabelWithValue(
+            //     pincodeLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
+            // ),
+        })
+    })
+}
+
+
