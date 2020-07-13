@@ -11,9 +11,10 @@ import { AdvtDetails, PetParticularDetails } from "./advApplyResource/nocDetails
 import { immunizationDetails } from "./advApplyResource/immunization";
 
 import { documentDetails } from "./advApplyResource/documentDetails";
-import {  prepareFinalObject,  handleScreenConfigurationFieldChange as handleField
+import {
+  prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getOPMSTenantId, getUserInfo, setapplicationType,lSRemoveItem, lSRemoveItemlocal, setapplicationNumber,localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getOPMSTenantId, getUserInfo, setapplicationType, lSRemoveItem, lSRemoveItemlocal, setapplicationNumber, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import jp from "jsonpath";
 import set from "lodash/set";
@@ -150,7 +151,7 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "typeOfAdvertisement",
-              "filter":"$.[?(@.active==true)]"
+              "filter": "$.[?(@.active==true)]"
             },
             {
               name: "subTypeOfAdvertisement"
@@ -192,7 +193,7 @@ const getFirstListFromDotSeparated = list => {
 };
 
 export const prepareEditFlow = async (state, dispatch, applicationNumber, tenantId) => {
-  
+
   if (applicationNumber) {
     let response = await getSearchResultsView([
       { key: "tenantId", value: tenantId },
@@ -206,21 +207,21 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
     let typecateID =
-    get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
-      item => item.name === Refurbishresponse.typeOfAdvertisement
+      get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
+        item => item.name === Refurbishresponse.typeOfAdvertisement
       );
 
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new",typecateID[0].subTypeOfAdvertisement
-    )
-  );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new", typecateID[0].subTypeOfAdvertisement
+      )
+    );
 
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.egpm.duration-new",typecateID[0].durationDropdown
-    )
-  );
+    dispatch(
+      prepareFinalObject(
+        "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
+      )
+    );
     // Set sample docs upload
     // dispatch(prepareFinalObject("documentsUploadRedux", sampleDocUpload()));
     let documentsPreview = [];
@@ -228,43 +229,43 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
     // Get all documents from response
     let advtnocdetail = get(state, "screenConfiguration.preparedFinalObject.ADVERTISEMENTNOC", {});
     let applicationStatus = response.nocApplicationDetail[0].applicationstatus
-    
+
     localStorageSet("advertisementStatus", applicationStatus);
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.typeOfAdvertisement",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" ? true : false));
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.subTypeOfAdvertisement",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" ? true : false));
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.toDatePeriodOfDisplay",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" ? true : false));
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.fromDatePeriodOfDisplay",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" ? true : false));
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" || typecateID[0].id === "10010" || typecateID[0].id === "10012" ? true : false));
     dispatch(
       handleField(
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.duration",
-        "props.disabled", applicationStatus==="REASSIGN"?true:false));
+        "props.disabled", applicationStatus === "REASSIGN" ? true : false));
 
 
     let uploadVaccinationCertificate = advtnocdetail.hasOwnProperty('uploadDocuments') ?
       advtnocdetail.uploadDocuments[0]['fileStoreId'] : '';
-    
+
     if (uploadVaccinationCertificate !== '') {
       documentsPreview.push({
         title: "ADV.ADV_PHOTOCOPY_HOARDING",
@@ -307,7 +308,7 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
         return doc;
       });
       dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-     dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+      dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
 
     }
 
@@ -321,9 +322,9 @@ const screenConfig = {
     localStorageSet("advertisementStatus", "");
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     !applicationNumber ? clearlocalstorageAppDetails(state) : ''
-    
+
     setapplicationType("ADVERTISEMENTNOC");
-    
+
 
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const step = getQueryArg(window.location.href, "step");
@@ -348,7 +349,7 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
-    
+
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
@@ -377,16 +378,16 @@ const screenConfig = {
         );
       }
     }
-    if(applicationNumber){ 
+    if (applicationNumber) {
       dispatch(
         handleField(
           "advertisementApply",
           "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.exemptedCategory.children.exemptionradio.props.buttons",
           "disabled", true)
-          );
-        }
+      );
+    }
 
-        return action;
+    return action;
   },
   components: {
     div: {

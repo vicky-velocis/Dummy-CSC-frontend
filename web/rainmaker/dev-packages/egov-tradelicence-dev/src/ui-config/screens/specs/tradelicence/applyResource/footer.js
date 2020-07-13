@@ -1017,7 +1017,7 @@ export const footerReviewTop = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString, Licenses, data());
+      download(receiptQueryString, Licenses, data(), userInfo.name);
       // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
@@ -1030,7 +1030,7 @@ export const footerReviewTop = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString,Licenses, data(), "print");
+      download(receiptQueryString,Licenses, data(), userInfo.name, "print");
      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
@@ -1041,7 +1041,7 @@ export const footerReviewTop = (
       const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1051,7 +1051,7 @@ export const footerReviewTop = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };
@@ -1204,7 +1204,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString, Licenses, data());
+      download(receiptQueryString, Licenses, data(), userInfo.name);
     },
     leftIcon: "receipt"
   };
@@ -1216,7 +1216,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString, Licenses, data(), "print");
+      download(receiptQueryString, Licenses, data(), userInfo.name, "print");
     },
     leftIcon: "receipt"
   };
@@ -1226,7 +1226,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1236,7 +1236,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };

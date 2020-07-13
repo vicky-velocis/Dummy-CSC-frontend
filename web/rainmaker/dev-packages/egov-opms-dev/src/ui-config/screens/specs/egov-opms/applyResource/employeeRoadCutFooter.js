@@ -7,7 +7,7 @@ import {
     showHideAdhocPopupopmsReject,
     showHideAdhocPopupopmsReassign,
     showHideAdhocPopupopmsApprove,
-    showHideAdhocPopupopmsForward
+    showHideAdhocPopupopmsForward,checkForRole
     } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -25,7 +25,8 @@ import {
   } from "egov-ui-kit/utils/localStorageUtils";
   import { getapplicationType  } from "egov-ui-kit/utils/localStorageUtils";
   import { callbackforSummaryActionCancel,callbackforSummaryActionSubmit } from '../roadcutnoc_summary'
-  let role_name=JSON.parse(getUserInfo()).roles[0].code
+
+  let roles = JSON.parse(getUserInfo()).roles
 
   const callbackforsummaryactionpay = async (dispatch) => {
     let tenantId = getOPMSTenantId();
@@ -68,7 +69,7 @@ import {
         action: "condition",
         callBack: (state, dispatch) => showHideAdhocPopupopmsForward(state, dispatch, "roadcutnoc-search-preview","nextButton")
       },
-      visible:role_name=="JE" || role_name=="SDO"  || role_name=="EE" || role_name=="SE"?true:false
+      visible:checkForRole(roles, 'JE') || checkForRole(roles, 'SDO')  || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')?true:false
       
     },
     reject: {
@@ -141,7 +142,7 @@ import {
           showHideAdhocPopupopmsReassign(state, dispatch, "roadcutnoc-search-preview","reject")
       }
       },
-      visible:role_name=="JE" || role_name=="SDO" || role_name=="CE" || role_name=="EE" || role_name=="SE"?true:false
+      visible:checkForRole(roles, 'JE') ||checkForRole(roles, 'SDO')|| checkForRole(roles, 'CE') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')?true:false
     },
     approve: {
       componentPath: "Button",

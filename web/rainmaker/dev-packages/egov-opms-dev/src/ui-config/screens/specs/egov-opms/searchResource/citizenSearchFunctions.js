@@ -509,7 +509,7 @@ export const getSectordata = async (action, state, dispatch, pricebookid) => {
       // dispatch(prepareFinalObject("gridData",response.nocApplicationDetail));
 
       // localStorage.setItem('Matserdata',JSON.stringify(response.nocApplicationDetail))
-      response.MdmsRes.egpm.sector.unshift({ name: "All", code: "undefined" });
+      response.MdmsRes.egpm.sector.unshift({ name: "ALL", code: "ALL" });
       dispatch(prepareFinalObject("SectorData", response.MdmsRes.egpm.sector));
 
       dispatch(
@@ -677,7 +677,7 @@ export const getTextForPetNoc = label => {
     case "PAID":
       return 'Paid'
     case "REASSIGNTOSI":
-      return 'Application Reassignd To SI'
+      return 'Application Reassigned To SI'
     case "RESENT":
       return 'Resent'
     case "APPROVED":

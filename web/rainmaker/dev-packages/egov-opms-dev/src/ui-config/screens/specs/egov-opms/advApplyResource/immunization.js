@@ -16,38 +16,39 @@ import { getOPMSPattern } from "../../utils/index"
 let previousUoms = [];
 
 var applicationNumberId = getQueryArg(window.location.href, "applicationNumber");
+
 const undertakingButton1 = getCommonContainer({
- 
-  exemptionradio : {
-      uiFramework: "custom-containers",
-      componentPath: "RadioGroupContainer",
-      gridDefination: {
-        xs: 12
-      },
-      jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
-      props: {
-        required: true,
-        label: { name: "Exempted Category", key: "ADV_EXEMPTED_CATEGORY_NOC_PLACEHOLDER" },
-        buttons: [
-          {
-            labelName: "Yes",
-            labelKey: "Exempted_Yes",
-            value: "1",
-            disabled:applicationNumberId!=null?true:false
-          },
-          {
-            labelName: "No",
-            labelKey: "Exempted_No",
-            value: "0",
-            disabled:applicationNumberId!=null?true:false
-          }
-        ],
-        jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
-        defaultValue: "0"
-      },
-      type: "array",
-     
+
+  exemptionradio: {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12
     },
+    jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
+    props: {
+      required: true,
+      label: { name: "Exempted Category", key: "ADV_EXEMPTED_CATEGORY_NOC_PLACEHOLDER" },
+      buttons: [
+        {
+          labelName: "Yes",
+          labelKey: "Exempted_Yes",
+          value: "1",
+          disabled: applicationNumberId != null ? true : false
+        },
+        {
+          labelName: "No",
+          labelKey: "Exempted_No",
+          value: "0",
+          disabled: applicationNumberId != null ? true : false
+        }
+      ],
+      jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
+      defaultValue: "0"
+    },
+    type: "array",
+
+  },
 
 });
 
@@ -77,29 +78,65 @@ const commonBuildingData = buildingType => {
         props: {
           className: "applicant-details-error",
           required: true,
-           disabled: false
+          disabled: false
         },
         beforeFieldChange: (action, state, dispatch) => {
           try {
             let typecateID =
               get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
                 item => item.name === action.value
-                );
-                localStorageSet("this_adv_code", typecateID[0].code);
-                localStorageSet("this_adv_id", typecateID[0].id);
-    
+              );
+            localStorageSet("this_adv_code", typecateID[0].code);
+            localStorageSet("this_adv_id", typecateID[0].id);
+
+
             dispatch(
               prepareFinalObject(
-                "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new",typecateID[0].subTypeOfAdvertisement
+                "applyScreenMdmsData.egpm.subTypeOfAdvertisement-new", typecateID[0].subTypeOfAdvertisement
               )
             );
 
             dispatch(
               prepareFinalObject(
-                "applyScreenMdmsData.egpm.duration-new",typecateID[0].durationDropdown
+                "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
               )
             );
-            // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
+
+            if (typecateID[0].id === "10010" || typecateID[0].id === "10012") {
+              dispatch(
+                handleField(
+                  "advertisementApply",
+                  "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+                  "props.required", false));
+              //disabled
+              dispatch(
+                handleField(
+                  "advertisementApply",
+                  "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+                  "props.disabled", true));
+              dispatch(
+                handleField(
+                  "advertisementApply",
+                  "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+                  "props.value", ''));
+
+            } else {
+              let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+
+              dispatch(
+                handleField(
+                  "advertisementApply",
+                  "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+                  "props.required", true));
+              //disabled
+              if (nocStatus !== "REASSIGN") {
+                dispatch(
+                  handleField(
+                    "advertisementApply",
+                    "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.enterSpace",
+                    "props.disabled", false));
+              }
+            }
           } catch (e) {
             console.log(e);
           }
@@ -128,20 +165,20 @@ const commonBuildingData = buildingType => {
         props: {
           className: "applicant-details-error",
           required: true,
-          disabled:false
+          disabled: false
         },
-        beforeFieldChange: (action, state, dispatch) => { 
+        beforeFieldChange: (action, state, dispatch) => {
           try {
             let typecateID =
               get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.subTypeOfAdvertisement-new", []).filter(
                 item => item.name === action.value
-                );
-                localStorageSet("this_sub_adv_code", typecateID[0].code);
-                localStorageSet("this_sub_adv_id", typecateID[0].id);
-              }
-              catch (e) {
-                console.log(e);
-              }
+              );
+            localStorageSet("this_sub_adv_code", typecateID[0].code);
+            localStorageSet("this_sub_adv_id", typecateID[0].id);
+          }
+          catch (e) {
+            console.log(e);
+          }
         },
       }),
     },
@@ -162,8 +199,8 @@ const commonBuildingData = buildingType => {
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
-      props:{
-        disabled:false,
+      props: {
+        disabled: false,
       },
       afterFieldChange: (action, state, dispatch) => {
         let today = getTodaysDateInYMD();
@@ -193,13 +230,14 @@ const commonBuildingData = buildingType => {
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
-      props:{
-        disabled:false,
+      props: {
+        disabled: false,
       },
       afterFieldChange: (action, state, dispatch) => {
+
         let FromDate = get(state.screenConfiguration.preparedFinalObject, `ADVERTISEMENTNOC.fromDateToDisplay`, []);
         let ToDate = get(state.screenConfiguration.preparedFinalObject, `ADVERTISEMENTNOC.toDateToDisplay`, []);
-        if (ToDate <= FromDate) {
+        if (ToDate < FromDate) {
           dispatch(toggleSnackbar(true, { labelName: "To Date should be greater than or equal to From Date!", labelKey: "" },
             "warning"));
           set(state, 'screenConfiguration.preparedFinalObject.ADVERTISEMENTNOC.toDateToDisplay', '');
@@ -264,7 +302,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_LOCATION_OF_ADVERTISEMENT_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.locationOfAdvertisement",
       })
@@ -280,7 +318,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_LANDMARK_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementLandmark",
       })
@@ -323,7 +361,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_SUB_SECTOR_VILLAGE_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementVillageSubSector",
       })
@@ -339,7 +377,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
       })
@@ -354,7 +392,7 @@ const commonBuildingData = buildingType => {
           labelName: "Enter Space(In Sq.ft.)",
           labelKey: "ADV_ENTER_SPACE_NOC_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         props: {
           disabled: false,
         },
@@ -374,7 +412,7 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
+        pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
       })

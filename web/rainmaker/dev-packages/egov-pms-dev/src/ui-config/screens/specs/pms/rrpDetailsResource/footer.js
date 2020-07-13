@@ -6,7 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getCommonApplyFooter, validateFields,convertDateToEpoch,convertEpochToDate } from "../../utils";
+import { getCommonApplyFooter, validateFields,convertDateToEpoch,convertEpochToDate,epochToYmd } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -595,6 +595,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   let isLeaveValidDate = true;
   let isLeaveValidCount = true;
   let  ischeckboxfield= false;
+  let isValidwef = true;
   if (activeStep === 0) {
   
    
@@ -754,8 +755,41 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
             isFormValid = false
           }
         else{
+// wef validation
+          if(!Accesslable[0].employeeOtherDetailsUpdate)
+          {
+            
+          let dateOfRetirement = get(
+            state.screenConfiguration.preparedFinalObject,
+            "ProcessInstances[0].employee.dateOfRetirement",//dateOfDeath
+            0
+          );
+          if(Number(dateOfRetirement))
+          {
+            //alert('i am number')
+            dateOfRetirement = epochToYmd(dateOfRetirement)
+          }
+          let wef =
+          get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef",0) 
+          //wef = convertDateToEpoch(wef);
+          if(wef)
+          {
+          const  wef_ = new Date(wef)
+          const  dateOfRetirement_ = new Date(dateOfRetirement)
+          if(wef_ < dateOfRetirement_ )
+          {
+            isFormValid = false;
+            isValidwef = false;
+          }
+          else
+          {
+            isFormValid = true;
+            isValidwef = true;
+
+          } 
+        } 
+        }       
           
-          isFormValid = true
         }
         
       }
@@ -795,57 +829,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         isFormValid= ReasionContainer;
        
 
-      }
-    // if(isLeaveValid)
-    // {
-
-    //   let leave = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "ProcessInstances[0].leaves",
-    //     []
-    //   );
-      
-    //   for (let index = 0; index < leave.length; index++) {
-    //     const element = leave[index];
-    //     if ((leave[index].isDeleted === undefined || leave[index].isDeleted !== false))
-       
-    //     {
-          
-    //      const  start = new Date(element.leaveFrom)
-    //      const  end = new Date(element.leaveTo)        
-    //      if(end > start )   
-    //      {
-    //       let dayCount = 0
-    //        while (end > start) {
-    //          dayCount++
-    //          start.setDate(start.getDate() + 1)
-    //          }
-    //          if(Number(element.leaveCount)>dayCount)
-    //          {
-    //            
-    //            isLeaveValid = false;
-    //            isLeaveValidCount = false;
-    //            isFormValid = false;
-    //            break;
-    //          }
-    //      } 
-    //      else
-    //      {
-    //        
-    //        isLeaveValid = false;
-    //        isLeaveValidDate = false;
-    //        isFormValid = false;
-    //        break;
-    //      }      
-        
-    //     }
-       
-        
-    //   }
-    // }
-   
-    // wfActionLoad(state, dispatch).then(res=>{   
-    // })
+      }   
    
     
   }
@@ -1243,6 +1227,17 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         };
 
       }
+
+      else if(!isValidwef)
+      {
+        errorMessage = {
+          labelName:
+          " Date of Commencement is greater then Date of Retirement of a employee!",
+          labelKey: "PENSION_ERR_FILL_EMP_VALD_WEF_DOR"
+        };
+
+      }
+      //alert(errorMessage.labelKey);
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
@@ -1260,6 +1255,7 @@ const callBackForNext = async (state, dispatch) => {
  {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
  // setButtons(details)
+
  let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)

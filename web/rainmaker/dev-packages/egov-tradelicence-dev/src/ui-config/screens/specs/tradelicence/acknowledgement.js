@@ -49,7 +49,7 @@ const abc=(  state,
                 const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
                 const documents = LicensesTemp[0].reviewDocData;
                 set(Licenses[0],"additionalDetails.documents", documents)
-                downloadAcknowledgementForm(Licenses);
+                downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
               }
             },
           },
@@ -65,7 +65,7 @@ const abc=(  state,
             const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
             const documents = LicensesTemp[0].reviewDocData;
             set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses);
+            downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
           }
         },
       },
@@ -91,7 +91,7 @@ const abc=(  state,
               const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
               const documents = LicensesTemp[0].reviewDocData;
               set(Licenses[0],"additionalDetails.documents", documents)
-              downloadAcknowledgementForm(Licenses,'print');
+              downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData, 'print');
             }
           },
 
@@ -108,7 +108,7 @@ const abc=(  state,
             const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
             const documents = LicensesTemp[0].reviewDocData;
             set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses,'print');
+            downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
           }
         },
       }

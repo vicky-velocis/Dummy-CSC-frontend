@@ -49,6 +49,11 @@ const formSubmit = (store) => (next) => (action) => {
     //employee login authenticated
     if (formKey === "employeeLogin") {
       delete payload.ResponseInfo;
+      const mobile = payload && payload.UserRequest && payload.UserRequest.mobileNumber;
+
+      if(!mobile)
+          redirectionRoute = "/user/profile";
+
       dispatch(authenticated(payload));
     }
 

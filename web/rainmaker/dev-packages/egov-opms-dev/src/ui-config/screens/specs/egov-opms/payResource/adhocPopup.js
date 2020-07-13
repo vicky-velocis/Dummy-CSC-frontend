@@ -3,22 +3,22 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideAdhocPopupopmsForward, showHideAdhocPopup, getBill, showHideAdhocPopupopmsReject, showHideAdhocPopupopmsReassign, showHideAdhocPopupopmsApprove } from "../../utils";
 import get from "lodash/get";
-import { httpRequest } from "../../../../../ui-utils/api";
-import cloneDeep from "lodash/cloneDeep";
-import { createEstimateData } from "../../utils";
-import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import { UpdateStatus } from "../../../../../ui-utils/commons";
 import { documentDetails } from "./documentDetails";
 import { getAccessToken, getOPMSTenantId, getLocale, getUserInfo, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "redux/store";
-import { createDemandForRoadCutNOCPOPup } from "../../utils/index";
 import {
   localStorageGet, localStorageSet
 } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { callPGService } from "./footer";
-import { getOPMSPattern } from '../../utils/index'
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+import { getOPMSPattern, checkForRole } from '../../utils/index'
+//let role_name = JSON.parse(getUserInfo()).roles[0].code
+let roles = JSON.parse(getUserInfo()).roles
 
 const popupvalidate = () => {
 
@@ -116,7 +116,9 @@ const updateAdhoc1 = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
+
     // let res=moveToReview(state, dispatch);
 
     const badgeNumber = get(
@@ -133,8 +135,7 @@ const updateAdhoc1 = (state, dispatch) => {
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -144,12 +145,12 @@ const updateAdhoc1 = (state, dispatch) => {
         }],
         "remarks": remarks,
         "badgeNumber": badgeNumber
+      }
     }
-    }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks,
         "badgeNumber": badgeNumber
@@ -170,8 +171,8 @@ const updateAdhoc1 = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -189,14 +190,14 @@ const updateAdhocReaasign = (state, dispatch) => {
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
   if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "PetNoc[0].PetNocDetails.Reaasign.remarks"
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -207,10 +208,10 @@ const updateAdhocReaasign = (state, dispatch) => {
         "remarks": remarks,
       }
     }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks,
       }
@@ -223,7 +224,7 @@ const updateAdhocReaasign = (state, dispatch) => {
 
         "applicationType": "PETNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "SI" ? "REASSIGN" : role_name == "MOH" ? "REASSIGNTOSI" : '',
+        "applicationStatus": checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'MOH') ? "REASSIGNTOSI" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -233,8 +234,8 @@ const updateAdhocReaasign = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -248,15 +249,15 @@ const updateAdhocReject = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "PetNoc[0].PetNocDetails.Reject.remarks"
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -265,12 +266,12 @@ const updateAdhocReject = (state, dispatch) => {
           )
         }],
         "remarks": remarks,
+      }
     }
-    }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks,
       }
@@ -290,8 +291,8 @@ const updateAdhocReject = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -303,7 +304,7 @@ const updateAdhocApprove = (state, dispatch) => {
   let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
-
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "PetNoc[0].PetNocDetails.Approve.remarks"
@@ -332,8 +333,8 @@ const updateAdhocApprove = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -352,13 +353,12 @@ const updateAdhocAdvForward = (state, dispatch) => {
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
   if (isFormValid) {
-
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].Forward.Remark");
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -369,20 +369,20 @@ const updateAdhocAdvForward = (state, dispatch) => {
         "remarks": remarks
       }
     }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks
 
       }
     }
     UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
-    {
+      {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "JEX" ? "REVIEWOFSUPERINTENDENT" : role_name == "SUPERINTENDENT" ? "REVIEWOFOSD" : role_name == "OSD" ? "PENDINGAPPROVAL" : '',
+        "applicationStatus": checkForRole(roles, 'JEX') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "REVIEWOFOSD" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
@@ -392,8 +392,8 @@ const updateAdhocAdvForward = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -405,7 +405,7 @@ const updateAdhocAdvApprove = (state, dispatch) => {
   let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
-
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].Approve.Remark");
@@ -414,7 +414,7 @@ const updateAdhocAdvApprove = (state, dispatch) => {
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": localStorageGet('pms_iswithdrawn')==="yes"?'APPROVEFORWITHDRAW':'APPROVED',
+        "applicationStatus": localStorageGet('pms_iswithdrawn') === "yes" ? 'APPROVEFORWITHDRAW' : 'APPROVED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
@@ -425,8 +425,8 @@ const updateAdhocAdvApprove = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -439,38 +439,37 @@ const updateAdhocAdvReject = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
-
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].Reject.Remark");
-      let data={}
-      if(file)
-      {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": get(
-              state.screenConfiguration.preparedFinalObject,
-              "documentsUploadRedux[0].documents[0].fileStoreId"
-            )
-          }],
-          "remarks": remarks
-        }
+    let data = {}
+    if (file) {
+      data = {
+        "uploadDocuments": [{
+          "fileStoreId": get(
+            state.screenConfiguration.preparedFinalObject,
+            "documentsUploadRedux[0].documents[0].fileStoreId"
+          )
+        }],
+        "remarks": remarks
       }
-      else{
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId":""
-            }],
-          "remarks": remarks
-        }
+    }
+    else {
+      data = {
+        "uploadDocuments": [{
+          "fileStoreId": ""
+        }],
+        "remarks": remarks
       }
+    }
     UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
 
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": localStorageGet('pms_iswithdrawn')==="yes"?'REJECTEFORWITHDRAW':'REJECTED',
+        "applicationStatus": localStorageGet('pms_iswithdrawn') === "yes" ? 'REJECTEFORWITHDRAW' : 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -479,8 +478,8 @@ const updateAdhocAdvReject = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -498,36 +497,36 @@ const updateAdhocAdvReassign = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  let data={}
+  let data = {}
 
-  if(file)
-  {
-    data = {
-    "uploadDocuments": [{
-      "fileStoreId": get(
-        state.screenConfiguration.preparedFinalObject,
-        "documentsUploadRedux[0].documents[0].fileStoreId"
-      )
-    }],
-    "remarks": remarks
-    }
-    }
-    else{
+  if (file) {
     data = {
       "uploadDocuments": [{
-        "fileStoreId":""
-        }],
+        "fileStoreId": get(
+          state.screenConfiguration.preparedFinalObject,
+          "documentsUploadRedux[0].documents[0].fileStoreId"
+        )
+      }],
+      "remarks": remarks
+    }
+  }
+  else {
+    data = {
+      "uploadDocuments": [{
+        "fileStoreId": ""
+      }],
 
-    "remarks": remarks
+      "remarks": remarks
 
     }
-}
-  if (isFormValid ) {
+  }
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "JEX" ? "REASSIGN" : role_name == "SUPERINTENDENT" ? "REASSIGNTOJEX" : role_name == "OSD" ? "REASSIGNTOSUPERINTENDENT": role_name == "COMMISSIONER" ? "REASSIGNTOOSD" : '',
+        "applicationStatus": checkForRole(roles, 'JEX') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOJEX" : checkForRole(roles, 'OSD') ? "REASSIGNTOSUPERINTENDENT" : checkForRole(roles, 'COMMISSIONER') ? "REASSIGNTOOSD" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -536,8 +535,8 @@ const updateAdhocAdvReassign = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -554,7 +553,8 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-   if (isFormValid) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const Amount = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].WithdraApproval.Amount");
@@ -567,31 +567,30 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].totalAmount");
 
-    let data={}
-      if(file)
-     {
-          data = {
-              "uploadDocuments": [{
-                "fileStoreId": get(
-                  state.screenConfiguration.preparedFinalObject,
-                  "documentsUploadRedux[0].documents[0].fileStoreId"
-                )
-              }],
-              "remarks": Remark,
-              "withdrawapprovalamount": Amount,
+    let data = {}
+    if (file) {
+      data = {
+        "uploadDocuments": [{
+          "fileStoreId": get(
+            state.screenConfiguration.preparedFinalObject,
+            "documentsUploadRedux[0].documents[0].fileStoreId"
+          )
+        }],
+        "remarks": Remark,
+        "withdrawapprovalamount": Amount,
 
-            }
-          }
-          else{
-          data = {
-            "uploadDocuments": [{
-              "fileStoreId":""
-              }],
-          "remarks": Remark,
-          "withdrawapprovalamount": Amount,
-          }
       }
-    
+    }
+    else {
+      data = {
+        "uploadDocuments": [{
+          "fileStoreId": ""
+        }],
+        "remarks": Remark,
+        "withdrawapprovalamount": Amount,
+      }
+    }
+
 
     if (BillAmount != undefined && BillAmount != null && Amount < BillAmount) {
 
@@ -600,12 +599,13 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
         {
           "applicationType": "ADVERTISEMENTNOC",
           "tenantId": getOPMSTenantId(),
-          "applicationStatus": role_name == "JEX" ? "REVIEWOFSPAFTERWITHDRAW" : role_name == "OSD" ? "PENDINGAPPROVALFORWITHDRAW" : '',
+          "applicationStatus": checkForRole(roles, 'JEX') ? "REVIEWOFSPAFTERWITHDRAW" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVALFORWITHDRAW" : '',
           "applicationId": localStorage.getItem('ApplicationNumber'),
           "dataPayload": data
         }
       );
     } else {
+      dispatch(toggleSpinner());
 
       store.dispatch(
         toggleSnackbar(
@@ -620,8 +620,8 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -637,7 +637,7 @@ const updateAdhocAdvWithdraw = (state, dispatch) => {
   let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
-
+    dispatch(toggleSpinner());
     const Remark = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].withdraw.Remark");
@@ -660,8 +660,8 @@ const updateAdhocAdvWithdraw = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -678,16 +678,15 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
-
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "SellMeat[0].SellMeatDetails.Forward.remarks"
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -696,12 +695,12 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
           )
         }],
         "remarks": remarks
-  }
+      }
     }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks
       }
@@ -712,10 +711,10 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
       {
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "SI" ? "REVIEWOFSUPERINTENDENT" : role_name == "SUPERINTENDENT" ? "PENDINGAPPROVAL" : '',
+        "applicationStatus": checkForRole(roles, 'SI') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload":data
+        "dataPayload": data
       }
     );
 
@@ -723,8 +722,8 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -736,6 +735,7 @@ const updateAdhocSellMeatApprove = (state, dispatch) => {
   let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "SellMeat[0].SellMeatDetails.Approve.remarks"
@@ -756,8 +756,8 @@ const updateAdhocSellMeatApprove = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -771,15 +771,15 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
 
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "SellMeat[0].SellMeatDetails.Reject.remarks"
     );
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -788,12 +788,12 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
           )
         }],
         "remarks": remarks
-}
+      }
     }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks
       }
@@ -807,7 +807,7 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
         "tenantId": getOPMSTenantId(),
         "applicationStatus": 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload":data
+        "dataPayload": data
       }
     );
 
@@ -815,8 +815,8 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -830,15 +830,15 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "SellMeat[0].SellMeatDetails.Reassign.remarks"
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -847,12 +847,12 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
           )
         }],
         "remarks": remarks
-}
+      }
     }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks
       }
@@ -864,7 +864,7 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
 
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "SI" ? "REASSIGN" : role_name == "SUPERINTENDENT" ? "REASSIGNTOSI" : role_name == "MOH" ? "REASSIGNTOSUPERINTENDENT" : '',
+        "applicationStatus": checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOSI" : checkForRole(roles, 'MOH') ? "REASSIGNTOSUPERINTENDENT" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -874,8 +874,8 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -891,8 +891,8 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
-
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks"
@@ -910,57 +910,57 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges"
     );
     let data = {}
-    if (role_name == 'JE') {
-      if(file){
-      data = {
-        "uploadDocuments": [{
-          "fileStoreId": get(
-            state.screenConfiguration.preparedFinalObject,
-            "documentsUploadRedux[0].documents[0].fileStoreId"
-          )
-        }],
-        "remarks": remarks,
-        "gstAmount": RoadCutForwardGstAmount,
-        "amount": RoadCutForwardAmount,
-        "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
+    if (checkForRole(roles, 'JE')) {
+      if (file) {
+        data = {
+          "uploadDocuments": [{
+            "fileStoreId": get(
+              state.screenConfiguration.preparedFinalObject,
+              "documentsUploadRedux[0].documents[0].fileStoreId"
+            )
+          }],
+          "remarks": remarks,
+          "gstAmount": RoadCutForwardGstAmount,
+          "amount": RoadCutForwardAmount,
+          "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
+        }
+      } else {
+        data = {
+          "uploadDocuments": [{
+            "fileStoreId": ""
+          }],
+          "remarks": remarks,
+          "gstAmount": RoadCutForwardGstAmount,
+          "amount": RoadCutForwardAmount,
+          "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
+        }
       }
-    }else{
-      data = {
-        "uploadDocuments": [{
-          "fileStoreId": ""
-        }],
-        "remarks": remarks,
-        "gstAmount": RoadCutForwardGstAmount,
-        "amount": RoadCutForwardAmount,
-        "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
-      }
-    }
     }
     else {
-      if(file){
-      data = {
-        "uploadDocuments": [{
-          "fileStoreId": get(
+      if (file) {
+        data = {
+          "uploadDocuments": [{
+            "fileStoreId": get(
+              state.screenConfiguration.preparedFinalObject,
+              "documentsUploadRedux[0].documents[0].fileStoreId"
+            )
+          }],
+          "remarks": get(
             state.screenConfiguration.preparedFinalObject,
-            "documentsUploadRedux[0].documents[0].fileStoreId"
-          )
-        }],
-        "remarks": get(
-          state.screenConfiguration.preparedFinalObject,
-          "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
-        ),
+            "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
+          ),
+        }
+      } else {
+        data = {
+          "uploadDocuments": [{
+            "fileStoreId": ""
+          }],
+          "remarks": get(
+            state.screenConfiguration.preparedFinalObject,
+            "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
+          ),
+        }
       }
-    }else{
-      data = {
-        "uploadDocuments": [{
-          "fileStoreId": ""
-        }],
-        "remarks": get(
-          state.screenConfiguration.preparedFinalObject,
-          "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
-        ),
-      }
-    }
     }
     UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
 
@@ -968,7 +968,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
 
         "applicationType": "ROADCUTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "JE" ? "REVIEWSDO" : role_name == "SDO" ? "REVIEWOFEE" : role_name == "EE" ? "REVIEWOFSE" : role_name == "SE" ? "PENDINGAPRROVAL" : role_name == "CE" ? "PAYMENTPENDING" : '',
+        "applicationStatus": checkForRole(roles, 'JE') ? "REVIEWSDO" : checkForRole(roles, 'SDO') ? "REVIEWOFEE" : checkForRole(roles, 'EE') ? "REVIEWOFSE" : checkForRole(roles, 'SE') ? "PENDINGAPRROVAL" : checkForRole(roles, 'CE') ? "PAYMENTPENDING" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
@@ -979,8 +979,8 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -992,6 +992,7 @@ const updateAdhocRoadCutApprove = (state, dispatch) => {
   let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks");
@@ -1012,8 +1013,8 @@ const updateAdhocRoadCutApprove = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -1027,33 +1028,33 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
+  if (isFormValid) {
+    dispatch(toggleSpinner());
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks");
 
-      let data = {}
-      if(file)
-      {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": get(
-              state.screenConfiguration.preparedFinalObject,
-              "documentsUploadRedux[0].documents[0].fileStoreId"
-            )
-          }],
-          "remarks": remarks
-        }
-      }
-      else{
-        data = {
+    let data = {}
+    if (file) {
+      data = {
         "uploadDocuments": [{
-          "fileStoreId":""
-          }],
-          "remarks": remarks
-        }
+          "fileStoreId": get(
+            state.screenConfiguration.preparedFinalObject,
+            "documentsUploadRedux[0].documents[0].fileStoreId"
+          )
+        }],
+        "remarks": remarks
       }
-   
+    }
+    else {
+      data = {
+        "uploadDocuments": [{
+          "fileStoreId": ""
+        }],
+        "remarks": remarks
+      }
+    }
+
     UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
 
       {
@@ -1069,8 +1070,8 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -1083,8 +1084,8 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
-  if (isFormValid ) {
-
+  if (isFormValid) {
+    dispatch(toggleSpinner());
 
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
@@ -1092,8 +1093,7 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
     );
 
     let data = {}
-    if(file)
-    {
+    if (file) {
       data = {
         "uploadDocuments": [{
           "fileStoreId": get(
@@ -1102,12 +1102,12 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
           )
         }],
         "remarks": remarks
+      }
     }
-    }
-    else{
+    else {
       data = {
-      "uploadDocuments": [{
-        "fileStoreId":""
+        "uploadDocuments": [{
+          "fileStoreId": ""
         }],
         "remarks": remarks
       }
@@ -1118,7 +1118,7 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
       {
         "applicationType": "ROADCUTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": role_name == "JE" ? "REASSIGN" : role_name == "SDO" ? "REASSIGNTOJE" : role_name == "EE" ? "REASSIGNTOSDO" : role_name == "SE" ? "REASSIGNTOEE" : role_name == "CE" ? "REASSIGNTOSE" : '',
+        "applicationStatus": checkForRole(roles, 'JE') ? "REASSIGN" : checkForRole(roles, 'SDO') ? "REASSIGNTOJE" : checkForRole(roles, 'EE') ? "REASSIGNTOSDO" : checkForRole(roles, 'SE') ? "REASSIGNTOEE" : checkForRole(roles, 'CE') ? "REASSIGNTOSE" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -1127,8 +1127,8 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
   else {
     let errorMessage = {
       labelName:
-        "Please fill all mandatory fields for Applicant Details, then proceed!",
-      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        "Please fill all mandatory fields, then proceed!",
+      labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
@@ -1163,7 +1163,7 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           div: getCommonHeader(
             {
               labelName: "Select Gateway"
-             // labelKey: "NOC_SELECT_GATEWAY_BOX"
+              // labelKey: "NOC_SELECT_GATEWAY_BOX"
             },
             {
               style: {
@@ -1207,8 +1207,14 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              showHideAdhocPopup(state, dispatch, "pay")
+              callBack: (state, dispatch) => {
+                showHideAdhocPopup(state, dispatch, "pay")
+                dispatch(
+                  handleField(
+                    "pay",
+                    "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+                    "props.value", ""));
+              }
             }
           }
         }
@@ -1221,7 +1227,7 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         penaltyReason: getSelectField({
           label: {
             labelName: "Select Gateway"
-           // labelKey: "NOC_SELECT_GATEWAY"
+            // labelKey: "NOC_SELECT_GATEWAY"
           },
           placeholder: {
             labelName: "Select Gateway"
@@ -1279,8 +1285,14 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
-          showHideAdhocPopup(state, dispatch, "pay")
+          callBack: (state, dispatch) => {
+            showHideAdhocPopup(state, dispatch, "pay")
+            dispatch(
+              handleField(
+                "pay",
+                "components.adhocDialog.children.popup.children.adhocPenaltyCard.children.penaltyAmountAndReasonContainer.children.penaltyReason",
+                "props.value", ""));
+          }
         }
       },
       addButton: {
@@ -1389,7 +1401,7 @@ export const adhocPopup1 = getCommonContainer({
                   ""
                 )
                 window.location.reload();
-                
+
               }
             }
           }
@@ -1787,8 +1799,11 @@ export const adhocPopup3 = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
+              callBack: (state, dispatch) => {
                 showHideAdhocPopupopmsApprove(state, dispatch, "search-preview")
+                window.location.reload();
+              }
+
             }
           }
         }
@@ -1887,7 +1902,7 @@ export const adhocPopup3 = getCommonContainer({
           callBack: (state, dispatch) => {
             showHideAdhocPopupopmsApprove(state, dispatch, "search-preview")
             window.location.reload();
-            
+
           }
         }
       },
@@ -1996,7 +2011,7 @@ export const adhocPopup4 = getCommonContainer({
                   ""
                 )
                 window.location.reload();
-                
+
               }
             }
           }
@@ -2204,7 +2219,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
   adhocPopupAdvertisementJEXForwardRemarkCard: getCommonContainer(
     {
       advertisementJEXForwardRemarkContainer: getCommonContainer({
-         documentDetails,
+        documentDetails,
         advertisementJEXForwardRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2392,7 +2407,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
   adhocPopupAdvertisementJEXReassignRemarkCard: getCommonContainer(
     {
       advertisementJEXReassignRemarkContainer: getCommonContainer({
-         documentDetails,
+        documentDetails,
         advertisementJEXReassignRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2579,7 +2594,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
   adhocPopupAdvertisementCommissionerRejectRemarkCard: getCommonContainer(
     {
       advertisementCommissionerRejectRemarkContainer: getCommonContainer({
-         documentDetails,
+        documentDetails,
         advertisementCommissionerRejectRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2748,8 +2763,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              {
+              callBack: (state, dispatch) => {
                 showHideAdhocPopupopmsApprove(state, dispatch, "advertisementnoc-search-preview")
 
                 window.location.reload();
@@ -2825,8 +2839,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
-          {
+          callBack: (state, dispatch) => {
             showHideAdhocPopupopmsApprove(state, dispatch, "advertisementnoc-search-preview")
             window.location.reload();
           }
@@ -2929,10 +2942,9 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              {
-              showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
-              window.location.reload();
+              callBack: (state, dispatch) => {
+                showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+                window.location.reload();
               }
             }
           }
@@ -2949,11 +2961,11 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
 
           label: {
             labelName: "Enter Amount",
-            labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRA_APPROVAL_AMOUNT_LABEL"
+            labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
           },
           placeholder: {
             labelName: "Enter Amount",
-            labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRA_APPROVAL_AMOUNT_LABEL"
+            labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
           },
           gridDefination: {
             xs: 12,
@@ -2981,7 +2993,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
   adhocPopupAdvertisementCommissionerWithdrawApproveRemarkCard: getCommonContainer(
     {
       advertisementCommissionerWithdrawApproveRemarkContainer: getCommonContainer({
-        
+
         advertisementCommissionerWithdrawApproveRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3043,9 +3055,9 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>{
-          showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
-          window.location.reload();
+          callBack: (state, dispatch) => {
+            showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+            window.location.reload();
           }
         }
       },
@@ -3153,7 +3165,7 @@ export const SellMeatForward = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 ),
-                window.location.reload();
+                  window.location.reload();
               }
             }
           }
@@ -3166,7 +3178,7 @@ export const SellMeatForward = getCommonContainer({
     {
 
       SellMeatForwardContainer: getCommonContainer({
-         documentDetails,
+        documentDetails,
         SellMeatForwardField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3234,7 +3246,7 @@ export const SellMeatForward = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             ),
-            window.location.reload();
+              window.location.reload();
           }
         }
       },
@@ -3342,7 +3354,7 @@ export const SellMeatReassign = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 ),
-                window.location.reload();
+                  window.location.reload();
               }
             }
           }
@@ -3356,7 +3368,7 @@ export const SellMeatReassign = getCommonContainer({
 
       SellMeatReassignContainer: getCommonContainer({
 
-         documentDetails,
+        documentDetails,
         SellMeatReassignField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3526,8 +3538,7 @@ export const SellMeatApprove = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              {
+              callBack: (state, dispatch) => {
                 showHideAdhocPopupopmsApprove(state, dispatch, "sellmeatnoc-search-preview")
                 window.location.reload();
               }
@@ -3604,8 +3615,7 @@ export const SellMeatApprove = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
-          {
+          callBack: (state, dispatch) => {
             showHideAdhocPopupopmsApprove(state, dispatch, "sellmeatnoc-search-preview")
             window.location.reload();
           }
@@ -3715,7 +3725,7 @@ export const SellMeatReject = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 ),
-                window.location.reload();
+                  window.location.reload();
               }
             }
           }
@@ -3728,7 +3738,7 @@ export const SellMeatReject = getCommonContainer({
     {
 
       SellMeatRejectContainer: getCommonContainer({
- 
+
         documentDetails,
         SellMeatRejectField: getTextField({
           label: {
@@ -3799,7 +3809,7 @@ export const SellMeatReject = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             ),
-            window.location.reload();
+              window.location.reload();
           }
         }
       },
@@ -3907,7 +3917,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 ),
-                window.location.reload();
+                  window.location.reload();
               }
             }
           }
@@ -4068,7 +4078,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             ),
-            window.location.reload();
+              window.location.reload();
           }
         }
       },
@@ -4178,7 +4188,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
                   ""
                 ),
-                window.location.reload();
+                  window.location.reload();
               }
             }
           }
@@ -4262,7 +4272,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
               ""
             ),
-            window.location.reload();
+              window.location.reload();
           }
         }
       },
@@ -4365,8 +4375,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              {
+              callBack: (state, dispatch) => {
                 showHideAdhocPopupopmsApprove(state, dispatch, "roadcutnoc-search-preview")
                 window.location.reload();
               }
@@ -4445,8 +4454,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
-          {
+          callBack: (state, dispatch) => {
             showHideAdhocPopupopmsApprove(state, dispatch, "roadcutnoc-search-preview")
             window.location.reload();
           }
@@ -4933,8 +4941,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: (state, dispatch) =>
-              {
+              callBack: (state, dispatch) => {
                 showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
                 window.location.reload();
               }
@@ -5008,8 +5015,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
         },
         onClickDefination: {
           action: "condition",
-          callBack: (state, dispatch) =>
-          {
+          callBack: (state, dispatch) => {
             showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
             window.location.reload();
           }

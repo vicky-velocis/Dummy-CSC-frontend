@@ -16,7 +16,7 @@ import {
     showHideAdhocPopupopmsReject,
     showHideAdhocPopupopmsReassign,
     showHideAdhocPopupopmsApprove,
-    showHideAdhocPopupopmsForward
+    showHideAdhocPopupopmsForward,checkForRole
     } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -40,7 +40,9 @@ import {
   } from "egov-ui-kit/utils/localStorageUtils";
   import { getapplicationType  } from "egov-ui-kit/utils/localStorageUtils";
   import { callBackForCancel,callBackForNexthome } from '../sellmeatnoc_summary'
-  let role_name=JSON.parse(getUserInfo()).roles[0].code
+
+  let roles = JSON.parse(getUserInfo()).roles
+
   //import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
   
   export const generatePdfFromDiv = (action, applicationNumber) => {
@@ -303,7 +305,7 @@ import {
         action: "condition",
         callBack: (state, dispatch) => showHideAdhocPopupopmsForward(state, dispatch, "sellmeatnoc-search-preview","nextButton")
       },
-      visible:role_name=="SI"?true:role_name=='SUPERINTENDENT'?true:false
+      visible:checkForRole(roles, 'SI')?true:checkForRole(roles, 'SUPERINTENDENT')?true:false
       
     },
     reject: {
@@ -340,7 +342,7 @@ import {
           showHideAdhocPopupopmsReject(state, dispatch, "sellmeatnoc-search-preview","reject")
       }
       },
-     visible: role_name=="SI"?false:role_name=="MOH"?true:false
+     visible: checkForRole(roles, 'SI')?false:checkForRole(roles, 'MOH')?true:false
     },
     reassign: {
       componentPath: "Button",
@@ -376,7 +378,7 @@ import {
           showHideAdhocPopupopmsReassign(state, dispatch, "sellmeatnoc-search-preview","reject")
       }
       },
-      visible: role_name=="SI"?true:role_name=="MOH"?true:role_name=='SUPERINTENDENT'?true:false
+      visible: checkForRole(roles, 'SI')?true:checkForRole(roles, 'MOH')?true:checkForRole(roles, 'SUPERINTENDENT')?true:false
     },
     approve: {
       componentPath: "Button",
@@ -412,7 +414,7 @@ import {
           showHideAdhocPopupopmsApprove(state, dispatch, "sellmeatnoc-search-preview","reject")
       }
       },
-      visible: role_name=="SI"?false:role_name=="MOH"?true:false
+      visible: checkForRole(roles, 'SI')?false:checkForRole(roles, 'MOH')?true:false
     },
     submitButton: {
       componentPath: "Button",

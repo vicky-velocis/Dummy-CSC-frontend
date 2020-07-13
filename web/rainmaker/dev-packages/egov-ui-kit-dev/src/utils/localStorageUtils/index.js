@@ -40,8 +40,29 @@ export const getOPMSTenantId = () => {
   return localStorage.getItem('opms-tenant-id');
 };
 
+export const getServiceRequestStatus = () => {
+  return localStorage.getItem("ServiceRequestStatus");
+};
+
+export const getSLADays = () => {
+  return localStorage.getItem("SLADays");
+};
+export const getCurrentAssignee = () => {
+  return localStorage.getItem("CurrentAssignee");
+};
+
+
 
 //SET methods 
+export const setCurrentAssignee = (CurrentAssignee) => {
+  localStorageSet("CurrentAssignee", CurrentAssignee, null);
+};
+export const setSLADays = (SLADays) => {
+  localStorageSet("SLADays", SLADays, null);
+};
+export const setServiceRequestStatus = (ServiceRequestStatus) => {
+  localStorageSet("ServiceRequestStatus", ServiceRequestStatus, null);
+}; 
 export const setUserInfo = (userInfo) => {
   localStorageSet("user-info", userInfo, null);
 };

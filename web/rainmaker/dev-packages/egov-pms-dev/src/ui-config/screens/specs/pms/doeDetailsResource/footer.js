@@ -6,7 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getCommonApplyFooter, validateFields,convertDateToEpoch } from "../../utils";
+import { getCommonApplyFooter, validateFields,convertDateToEpoch,epochToYmd } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { downloadAcknowledgementLetter , downloadAcknowledgementForm} from "../../utils";;
@@ -738,6 +738,18 @@ const wfActionSubmit= async (state, dispatch) => {
     
     setcommentFile(state,dispatch);
   }
+  let familyPensionIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified",0) 
+  familyPensionIStartDateVerified = convertDateToEpoch(familyPensionIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIStartDateVerified", familyPensionIStartDateVerified);
+  let familyPensionIEndDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified",0) 
+  familyPensionIEndDateVerified = convertDateToEpoch(familyPensionIEndDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIEndDateVerified", familyPensionIEndDateVerified);  
+  let familyPensionIIStartDateVerified =
+  get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified",0) 
+  familyPensionIIStartDateVerified = convertDateToEpoch(familyPensionIIStartDateVerified);
+  set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].pensionCalculationUpdateDetails.familyPensionIIStartDateVerified", familyPensionIIStartDateVerified);
   let response = await createUpdateNPApplication(
     state,
     dispatch,
@@ -938,6 +950,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   let  ischeckboxfield= false;
  let isGratuityAmountValid = true;
  let isGratuityPensionValid = false;
+ let isValidwef = true;
   if (activeStep === 0) {
   
    
@@ -1075,20 +1088,21 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         
       }
       else{
-        isFormValid = false;
+       // alert('no need to check')
+       // isFormValid = false;
       }
        
     }
     if(fields.dues!==undefined 
       &&fields.miscellaneous!==undefined 
-      &&fields.medicalRelief!==undefined 
-      &&fields.fma!==undefined       
-      &&fields.pensionArrear!==undefined       
+      // &&fields.medicalRelief!==undefined 
+       &&fields.fma!==undefined       
+      // &&fields.pensionArrear!==undefined       
       &&fields.lpd!==undefined 
       &&fields.cess!==undefined 
       &&fields.incomeTax!==undefined 
       &&fields.overPayment!==undefined 
-      &&fields.ltc!==undefined 
+     // &&fields.ltc!==undefined 
       &&fields.totalNoPayLeavesMonths!==undefined 
       &&fields.employeeGroup!==undefined 
       // &&fields.accountNumber!==undefined 
@@ -1098,14 +1112,14 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
         
         if(fields.dues.isFieldValid ===false 
           ||fields.miscellaneous.isFieldValid ===false 
-          ||fields.medicalRelief.isFieldValid ===false 
+         // ||fields.medicalRelief.isFieldValid ===false 
           ||fields.fma.isFieldValid ===false           
-          ||fields.pensionArrear.isFieldValid ===false           
+         // ||fields.pensionArrear.isFieldValid ===false           
           ||fields.lpd.isFieldValid ===false 
           ||fields.cess.isFieldValid ===false 
           ||fields.incomeTax.isFieldValid ===false 
           ||fields.overPayment.isFieldValid ===false 
-          ||fields.ltc.isFieldValid ===false 
+         // ||fields.ltc.isFieldValid ===false 
           ||fields.totalNoPayLeavesMonths.isFieldValid ===false
           ||fields.totalNoPayLeavesYears.isFieldValid ===false
           ||fields.totalNoPayLeaves.isFieldValid ===false
@@ -1113,18 +1127,56 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
           // ||fields.bankAddress.isFieldValid === false
           ||fields.employeeGroup.isFieldValid ===false)
           {
+           
             isFormValid = false
           }
-        else{
-          
-          isFormValid = true
-        }
+          else{
+            // wef validation
+                      if(!Accesslable[0].employeeOtherDetailsUpdate)
+                      {
+                        
+                      let dateOfDeath = get(
+                        state.screenConfiguration.preparedFinalObject,
+                        "ProcessInstances[0].employee.dateOfDeath",//dateOfDeath
+                        0
+                      );
+                      if(Number(dateOfDeath))
+                      {
+                        //alert('i am number')
+                        dateOfDeath = epochToYmd(dateOfDeath)
+                      }
+                      let wef =
+                      get(state, "screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.wef",0) 
+                      //wef = convertDateToEpoch(wef);
+                     if(wef)
+                     {
+                      const  wef_ = new Date(wef)
+                      const  dateOfRetirement_ = new Date(dateOfDeath)
+                      if(wef_ < dateOfRetirement_ )
+                      {
+                        isFormValid = false;
+                        isValidwef = false;
+                      }
+                      else
+                      {
+                        isFormValid = true;
+                        isValidwef = true;
+            
+                      } 
+                    } 
+                    }       
+                      
+                    }
         
-      }
+      }     
      if(!isDependentValid)
      {
        isFormValid = false;
      }
+    //  else{
+    //    alert('why')
+    //   isFormValid = true;
+    //  }
      if(isFormValid)
      { 
     if(isDependentValid)
@@ -1567,6 +1619,7 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
   
           }
         }
+       
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
    
@@ -1742,13 +1795,30 @@ const ValidateForm = async (state , dispatch, activeStep, IsMove)=>{
               labelName:
                 "Please add at lease one valid dependent to get pension amount",
               labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_PENSION"
+            };  
+          }
+          else if(!isGratuityAmountValid)
+          {
+            errorMessage = {
+              labelName:
+                "Total gratuity percentage should not be greater then 100",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_DEPENDENT_GRATUITY_AMOUNT"
             };
   
+          }
+          else if(!isValidwef)
+          {
+            errorMessage = {
+              labelName:
+                " Date of Commencement is greater then Date of Death of a employee!",
+              labelKey: "PENSION_ERR_FILL_EMP_VALD_WEF_DOD"
+            };
+    
           }
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
- // validate doc upload
+
   
 return isFormValid
 }
@@ -1764,7 +1834,7 @@ const callBackForNext = async (state, dispatch) => {
   let details = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].state.actions", [] );
   setButtons(details)
   let IsValidApplication= get(state.screenConfiguration.preparedFinalObject,"IsValidApplication", false ) 
- 
+
  if(IsValidApplication)
   ValidateForm(state,dispatch,activeStep,true)
   else{
