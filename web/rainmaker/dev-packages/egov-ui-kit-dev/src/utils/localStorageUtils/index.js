@@ -54,6 +54,9 @@ export const getCurrentAssignee = () => {
 export const getEncroachmentType = () => {
   return localStorage.getItem('encroachmentType');
 };
+export const getModule = () => {
+  return localStorage.getItem("module");
+};
 
 
 //SET methods 
@@ -103,7 +106,9 @@ export const setapplicationMode = (applicationMode) => {
 export const setOPMSTenantId = (OPMSTenantId) => {
   localStorageSet('opms-tenant-id',OPMSTenantId);
 };
-
+export const setModule = (moduleName) => {
+  localStorageSet("module", moduleName);
+};
 
 
 export const seteventid = (eventId) => {
