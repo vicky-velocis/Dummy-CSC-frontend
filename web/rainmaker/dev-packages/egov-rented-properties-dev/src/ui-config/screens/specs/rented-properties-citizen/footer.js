@@ -81,7 +81,6 @@ const callBackForNext = async(state, dispatch) => {
                 prepareFinalObject("OwnersTemp[0].reviewDocData", reviewDocData)
             );
     }
-    isFormValid = true
     }
     if(activeStep === SUMMARY_STEP) {
     isFormValid = await applyOwnershipTransfer(state, dispatch);

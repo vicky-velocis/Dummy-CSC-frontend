@@ -182,13 +182,21 @@ class WorkFlowContainer extends React.Component {
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-    const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
+    const { toggleSnackbar, dataPath, preparedFinalObject, moduleName } = this.props;
     let data = {};
       data = get(preparedFinalObject, dataPath, [])
       data = data[0];
     //setting the action to send in RequestInfo
-    set(data, `masterDataAction`, label);
-
+    switch(moduleName) {
+      case "MasterRP" : {
+        set(data, `masterDataAction`, label);
+        break;
+      }
+      case "OwnershipTransferRP": {
+        set(data, `applicationAction`, label);
+        break;
+      }
+    }
     if (isDocRequired) {
       const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
