@@ -12,21 +12,27 @@ import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
 import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
-import { searchApiCall } from "./searchResource/functions"
+import { searchDuplicateCopy } from "./searchResource/functions"
 import { searchResults } from "./searchResource/searchResults";
 import { getColonyTypes } from "./apply";
+import { getStatusList } from "./search";
+import { duplicateCopySearchResult } from "./searchResource/searchResults";
 
   const header = getCommonHeader({
     labelName: "Duplicate copy of Allotment letter",
     labelKey: "DUPLICATE_COPY_HEADER"
   });
-  const transferPropertiesSearchAndResult = {
+  const duplicateCopySearchAndResult = {
     uiFramework: "material-ui",
-    name: "search",
+    name: "search-duplicate-copy",
     beforeInitScreen: (action, state, dispatch) => {
+      const queryObject = [{ key: "tenantId", value: getTenantId() }, 
+                      { key: "businessServices", value: "DuplicateCopyOfAllotmentLetterRP" }]
       dispatch(prepareFinalObject("searchScreen", {}))
-      getColonyTypes(action, state, dispatch)
-      searchApiCall(state, dispatch, true)
+      // getColonyTypes(action, state, dispatch)
+      // getStatusList(action, state, dispatch, queryObject, "search-transfer-properties", "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children.status")
+      searchDuplicateCopy(state, dispatch, true)
+      getStatusList(action, state, dispatch, queryObject, "search-duplicate-copy", "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children.status")
       return action
     },
     components: {
@@ -53,11 +59,11 @@ import { getColonyTypes } from "./apply";
           },
           rentedPropertyApplication,
           breakAfterSearch: getBreak(),
-          searchResults
+          duplicateCopySearchResult
         }
       }
     }
   };
   
-  export default transferPropertiesSearchAndResult;
+  export default duplicateCopySearchAndResult;
   

@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getCount, getOwnershipSearchResults } from "../../../../..//ui-utils/commons";
+import { getSearchResults, getCount, getDuplicateCopySearchResults , getOwnershipSearchResults} from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -117,6 +117,94 @@ export const searchTransferProperties = async (state, dispatch, onInit, offset, 
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
+    }
+  }
+}
+
+export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
+  !!hideTable && showHideTable(false, dispatch, "search-duplicate-copy");
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "offset", value: offset },
+    { key: "limit", value: limit }
+  ];
+  queryObject = queryObject.filter(({value}) => !!value)
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen",
+    {}
+  );
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.rentedPropertyApplication.children.cardContent.children.applicationNoContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid) && typeof onInit != "boolean") {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to start search",
+          labelKey: "ERR_FILL_VALID_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else if (
+    (Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")) && typeof onInit != "boolean"
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field to start search",
+          labelKey: "ERR_FILL_ONE_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else {
+      for (var key in searchScreenObject) {
+        if (
+          searchScreenObject.hasOwnProperty(key) &&
+          searchScreenObject[key].trim() !== ""
+        ) {
+            queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        }
+    }
+    const response = await getDuplicateCopySearchResults(queryObject);
+    try {
+      let data = response.DuplicateCopyApplications.map(item => ({
+        [APPLICATION_NO]: item.applicationNumber || "-",
+        [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
+        // [PROPERTY_ID]: item.property.id || "-",
+        [OWNER_NAME]: item.applicant[0].name || "-",
+        [STATUS]: getLocaleLabels(item.state, item.state) || "-",
+      }));
+      dispatch(
+        handleField(
+          "search-duplicate-copy",
+          "components.div.children.duplicateCopySearchResult",
+          "props.data",
+          data
+        )
+      );
+      !!hideTable && showHideTable(true, dispatch, "search-duplicate-copy");
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
     }
   }
 }
