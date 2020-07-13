@@ -47,7 +47,7 @@ class DownloadDeleteFileContainer extends Component {
 
   handleEvent = (fileid) => {
    // alert("Bind Delete API : File ID" + fileid);
-		if(confirm("Are you sure you want to remove this Media?"))
+		if(confirm("Are you sure you want to remove this media?"))
 	{
 		let tenantId = getTenantId();
 		let invitedGuestlist = [];
@@ -75,7 +75,7 @@ class DownloadDeleteFileContainer extends Component {
 		let delete_api = baserequestURL+"/prscp-services/v1/library/_delete";
 		payload =  httpRequest("post", delete_api, "_delete", [], { RequestBody: mdmsBody }).then(response => {
 		console.log("responseeeeeeeeee");
-		debugger;
+		;
 		console.log(response)
 		if(response.ResponseInfo.status === "Success")
 		{
@@ -130,7 +130,7 @@ class DownloadDeleteFileContainer extends Component {
 						xs={12}
 						sm={4}
 						className="background-grey"
-						style={{padding: "15px", margin:"10px", background:"#fff"}}
+						style={{padding: "15px 35px 15px 15px", margin:"10px", background:"#fff"}}
 					  >
 					  <Grid xs={12}>
 					  <Button  class="deletemedia" data={fileid} onClick={() => {this.handleEvent(item.fileStoreId)}} documentData={documentData} {...rest}  style={{border:"none",position:"relative",margin:"0% 90%",width:"50px",color:"RED",background:"TRANSPARENT"}}> <span class="material-icons"><i class="material-icons">clear</i></span></Button>

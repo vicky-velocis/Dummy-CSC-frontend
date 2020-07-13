@@ -131,7 +131,7 @@ class DocumentList extends Component {
       documentsUploadRedux = {},
       prepareFinalObject
     } = this.props;
-	debugger
+	
     let index = 0;
     if(documentsUploadRedux)
     {

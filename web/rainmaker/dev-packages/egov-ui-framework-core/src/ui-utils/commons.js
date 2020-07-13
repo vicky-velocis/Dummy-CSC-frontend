@@ -18,6 +18,7 @@ import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "redux/store";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -451,7 +452,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
         }
       }
 	  
-      if (!fileValid) {
+      /* if (!fileValid) {
         if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
         {
           alert(`Only image or pdf files can be uploaded`);
@@ -465,6 +466,50 @@ export const handleFileUpload = (event, handleDocument, props) => {
       }
       if (!isSizeValid) {
         alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+        uploadDocument = false;
+      } */
+	  
+	  
+	  
+	  
+	  if (!fileValid) {
+        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
+        {
+          // alert(`File type not supported`);
+          // uploadDocument = false; 
+          var msg=`File type not supported`
+          store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+          uploadDocument = false;
+		  
+        } 
+        else
+        {
+			if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
+        {
+          alert(`Only image or pdf files can be uploaded`);
+          uploadDocument = false;
+		}
+		 else
+        {
+          alert(`File type not supported`);
+          uploadDocument = false;
+        } 
+		
+        }  
+      }
+      
+
+      
+      if (!isSizeValid) {
+       /// alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+       if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
+       {
+        var msg=`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`
+        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+       }
+       else{
+        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+       }
         uploadDocument = false;
       }
       if (uploadDocument) {

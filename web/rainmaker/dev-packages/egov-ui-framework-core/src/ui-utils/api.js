@@ -9,7 +9,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL: window.location.origin,   
+  baseURL:window.location.origin,   
   headers: {
     "Content-Type": "application/json"
   }
@@ -139,7 +139,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
       : getTenantId().split(".")[0]
     : "";
   const uploadInstance = axios.create({
-    baseURL: window.location.origin,   
+    baseURL:window.location.origin,   
     headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -165,7 +165,15 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     }
   } catch (error) {
     store.dispatch(toggleSpinner());
-    alert("File size exceed the limit");
+    if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
+        {
+    var msg=`File size exceed the limit`
+    store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+        }
+        else{
+          alert("File size exceed the limit");
+
+        }
     //throw new Error(error);
   }
 };

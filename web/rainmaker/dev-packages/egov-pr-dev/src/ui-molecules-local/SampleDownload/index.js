@@ -14,7 +14,7 @@ const styles = {
 };
 
 function SampleDownload(props) {
-	return <div style={styles}><a href={sampledata} download='sampledata.xls'>Sample Download</a></div>;
+	return <div style={styles}><a href={sampledata} download='sampledata.xls'style={{textDecoration: "underline", fontWeight: "100"}}>Sample Download</a></div>;
 }
 
 export default SampleDownload;

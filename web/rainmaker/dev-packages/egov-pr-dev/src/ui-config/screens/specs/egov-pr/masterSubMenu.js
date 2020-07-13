@@ -14,6 +14,11 @@ const header = getCommonHeader(
     labelKey: "Press Master"
   },
   {
+style: {
+padding: "20px",
+}
+},
+  {
     classes: {
       root: "common-header-cont"
     }
@@ -37,8 +42,8 @@ const cardItems = [
   },
   {
     label: {
-      labelName: "Manage Press",
-      labelKey: "Manage Press"
+      labelName: "Press Master List",
+      labelKey: "Press Master List"
     },
     icon: <i
     viewBox="0 -8 35 42"
@@ -71,7 +76,8 @@ const PRSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PR"
           }
         },
         

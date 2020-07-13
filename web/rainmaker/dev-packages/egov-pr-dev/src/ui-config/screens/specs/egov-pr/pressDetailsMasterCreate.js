@@ -97,7 +97,7 @@ const pressDetails = {
   uiFramework: "material-ui",
   name: "pressDetailsMasterCreate",
   beforeInitScreen: (action, state, dispatch) => {
-  
+    dispatch(prepareFinalObject("PRESSDETAILS", {}));
   getMdmsData(action, state, dispatch)
 let id=getQueryArg(window.location.href, "presstId")
 if(id){

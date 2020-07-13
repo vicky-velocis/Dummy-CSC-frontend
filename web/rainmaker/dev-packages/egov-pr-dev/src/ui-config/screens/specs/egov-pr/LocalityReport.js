@@ -20,8 +20,6 @@ import {
   import get from "lodash/get";
   import set from "lodash/set";
   import { getSearchResults } from "../../../../ui-utils/commons";
-  import { searchBill } from "../utils/index";
-  import { loadPdfGenerationData } from "../utils/receiptTransformer";
   import { LocalityWiseReport } from "./searchResource/Report";
   import { LocalityReportSearchResults } from "./searchResource/searchResults";
   

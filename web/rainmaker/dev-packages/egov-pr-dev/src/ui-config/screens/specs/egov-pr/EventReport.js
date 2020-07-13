@@ -89,6 +89,9 @@ const getMdmsData = async (action, state, dispatch) => {
     obj['code']="ALL"
     payload.MdmsRes["common-masters"].Department.unshift(obj)
     
+ let obj1={}
+ obj1['name']="Select Department Name"
+ payload.MdmsRes["common-masters"].Department.push(obj1)
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
@@ -98,6 +101,7 @@ const NOCSearchAndResult = {
   uiFramework: "material-ui",
   name: "EventReport",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("eventReport", {}));
     dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));    
     dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));

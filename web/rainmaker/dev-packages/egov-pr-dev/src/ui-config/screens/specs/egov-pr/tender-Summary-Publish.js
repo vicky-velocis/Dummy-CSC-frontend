@@ -104,7 +104,13 @@ const screenConfig = {
 		   headerresend: getCommonHeader({
 					labelName: "Invited Press List",
 					labelKey: "PR_INVITED_PRESS_LIST"
-			}),	
+      },
+      {
+        style: {
+          marginBottom: 18,
+        }
+      }
+      ),	
           ResendTenderInviteGrid:checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: ResendTenderInviteGrid,
          
         }),

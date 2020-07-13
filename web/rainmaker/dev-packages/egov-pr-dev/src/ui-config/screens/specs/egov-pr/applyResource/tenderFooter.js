@@ -6,6 +6,7 @@ import "./index.css";
 import { createMasterTender, forwardMasterTender,UpdateMasterTender,updatestatustoPublishd } from "../../../../../ui-utils/commons";
 import { getTenantId,localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
  
@@ -43,8 +44,10 @@ if(tenderNoticeUuid!==null)
   if( get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", "")=="" ||
   get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")=="" ||
   get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", "")==""||
- // get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", "")=="" ||
   get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")==""
+  ||
+get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")==undefined
+
   )
   {
   
@@ -57,12 +60,10 @@ if(tenderNoticeUuid!==null)
     );
     
   }else{
-//alert( get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId"))
     let data = {
       "RequestBody": {
         "tenantId": getTenantId(),
-      //  "tenantId1": `${getTenantId()}`,
-       // "tenderNoticeStatus": "CREATED",
+    
         "moduleCode": localStorageGet("modulecode"),
         "tenderSubject": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", ""),
         "tenderDate":date[0],
@@ -74,7 +75,7 @@ if(tenderNoticeUuid!==null)
         "noteContent": localStorageGet("tendernote"),
         "moduleCode":localStorageGet("modulecode"),
         "tenderDocument":get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")===undefined?[{ "fileStoreId":localStorageGet('tenderFilStore') }]: [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId") }],
-        ///===""?localStorageGet('tenderFilStore'): get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber")
+       
 
 
 
@@ -88,7 +89,11 @@ if(tenderNoticeUuid!==null)
    
     let response = await UpdateMasterTender(dispatch,data);
     if (get(response.ResponseInfo, "status", "") === "Success") {
-  
+      dispatch( toggleSnackbar(
+        true,
+        { labelName: 'Tender updated successfully', labelCode: 'PR_UPDATE_TENDER_MSG' },
+        "success"
+      ))
       const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet('modulecode')
        
       dispatch(setRoute(acknowledgementUrl));
@@ -97,11 +102,16 @@ if(tenderNoticeUuid!==null)
   }
 
 else{
+  
 
 if( get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber", "")=="" ||
 get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")==""
+||
+get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId")==undefined
+
+
 )
 {
 
@@ -125,7 +135,7 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
    
      "noteContent": localStorageGet("tendernote"),
       "moduleCode":localStorageGet("modulecode"),
-      "tenderDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId", {}) }]
+      "tenderDocument": [{ "fileStoreId": get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.documents.0.fileStoreId") }]
     },
     userInfo: JSON.parse(getUserInfo()),
   }
@@ -133,12 +143,24 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
   let response = await createMasterTender(dispatch,data);
   if (get(response.ResponseInfo, "status", "") === "Success") {
 
+    dispatch(toggleSpinner());
+  dispatch(  toggleSnackbar(
+      true,
+      { labelName: 'Tender created suceessfully', labelCode: 'PR_CREATE_TENDER_MSG' },
+      "success"
+    ))
     const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
     dispatch(setRoute(acknowledgementUrl));
+  }
+  else{
+    dispatch(toggleSpinner());
   }
 }
 };
 }
+
+
+
 const gotoHome = async (state, dispatch) => {
   const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
  

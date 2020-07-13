@@ -48,9 +48,11 @@ const styles = theme => ({
   },
   ac_paper: {
     width: "80%",
-    maxHeight: "200px",
-    overflowY: "scroll",
-    marginTop: theme.spacing.unit
+    position: "absolute",
+    zIndex: 9999,
+    // maxHeight: "200px",
+    // overflowY: "scroll",
+    // marginTop: theme.spacing.unit
   },
   ac_divider: {
     height: theme.spacing.unit * 2

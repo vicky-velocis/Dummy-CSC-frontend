@@ -16,10 +16,10 @@ const cancelTohome = async (state, dispatch) => {
 
   setTimeout(function(){  
     
-    const acknowledgementUrl =`/egov-pr/home?modulecode=`+localStorageGet("modulecode");
+    const acknowledgementUrl =localStorageGet("modulecode")==="PR"?`/egov-pr/home?modulecode=`+localStorageGet("modulecode"):
+    `/egov-pr/home-scp?modulecode=`+localStorageGet("modulecode")
     dispatch(setRoute(acknowledgementUrl));
-    
-  // window.location.href = acknowledgementUrl;
+
 }, 1500); 
 
   
@@ -27,26 +27,31 @@ const cancelTohome = async (state, dispatch) => {
 
 
 const updateNocApplication = async (state, dispatch) => {
+
+ let msg= getQueryArg(window.location.href, "responseMessage")
+ if(msg)
+ {
   let errorMessage = {
-    labelName: "Event Created Successfully",
-    labelKey: "PR_ERR_EVENT_MESSAGE_TOAST"
+    labelName: "",
+    labelKey: msg
   };
 
 
 
   dispatch(toggleSnackbar(true, errorMessage, "success"))
-  
+}
  
 
   setTimeout(function(){  
     
-    const acknowledgementUrl =`/egov-pr/home?modulecode=`+localStorageGet("modulecode");
+    const acknowledgementUrl =localStorageGet("modulecode")==="PR"?`/egov-pr/home?modulecode=`+localStorageGet("modulecode"):
+    `/egov-pr/home-scp?modulecode=`+localStorageGet("modulecode")
     dispatch(setRoute(acknowledgementUrl));
     
-  // window.location.href = acknowledgementUrl;
+  
 }, 1500); 
 
-  //}
+ 
 };
 const goToHome = async (state, dispatch) => {
 
@@ -65,6 +70,9 @@ dispatch(setRoute(reviewUrl));
 }
 
 const cancelNocApplication = async (state, dispatch) => {
+  var confirmCancel= confirm("Are you sure you want to cancel this event?");
+if(confirmCancel===true)
+{
 let data={"RequestBody":{
   
       
@@ -75,7 +83,8 @@ let data={"RequestBody":{
           } }
           cancelEventApplication(state, dispatch,data)
 
-
+ }
+       
   //}
 };
 const setInvitePageRoutehome = async (state, dispatch) => { 

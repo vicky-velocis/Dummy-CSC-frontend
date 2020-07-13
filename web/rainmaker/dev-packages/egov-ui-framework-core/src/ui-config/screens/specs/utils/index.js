@@ -401,9 +401,10 @@ export const getLabelWithValue = (label, value, props = {}) => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
-    gridDefination: {
-      xs: 6,
-      sm: 3
+     gridDefination: {
+      xs: 12,
+      sm: 4,
+      md: 3
     },
     props: {
       style: {
@@ -554,32 +555,36 @@ export const getTodaysDateInYMD = () => {
     case "BadageNumber":
     return /^[a-zA-Z0-9]*$/i;
     case "Amountopms":
-        return /^[0-9.]{0,20}$/i;
-        case "validUrl":
-        return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
+      return /^[0-9.]{0,20}$/i;
+      case "validUrl":
+      return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]{1,255}$/i;
         case "TextValidation":
-        return /^[a-zA-Z ]{1,180}$/i;
-       case "AlphaNumValidation":
-        return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
-        
-        case "EventDescription":
-        return /^(?![0-9.]*$)[a-zA-Z0-9. ]{1,500}$/i;
-        
-        case "EventTitle":
-        return /^(?![0-9]*$)[a-zA-Z0-9 ]{1,180}$/i;
-        
-        case "AlphaNumValidationLocation":
-        return /^(?![0-9-/,&]*$)[a-zA-Z0-9-/,& ]{1,180}$/i;
-  
-        case "sizeofpublication":
-        return /^[0-9]{1,50}$/i;
-        
-        case "fileNumber":
-        return /^[a-zA-Z0-9-]{1,50}$/i;
-        case "TextValidationWithoutSpace":
-        return /^[a-zA-Z]{1,180}$/i;
-       case "budget":
-        return /^[0-9]{0,7}(\.[0-9]{0,2})?$/;
+      return /^[a-zA-Z ]{1,180}$/;
+     case "AlphaNumValidation":
+      return /^[a-zA-Z0-9 ]{1,180}$/i;
+       case "EventDescription":
+      return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,500}$/i;
+      case "EventTitle":
+      return /^[a-zA-Z0-9 ]{1,180}$/i;
+      case "PReventDescription":
+      return /^[^\$\"'<>?\\\\~`!@\n\r$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
+       case "subjectvalidation":
+      return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,180}$/i;
+      case "AlphaNumValidationLocation":
+      return /^[a-zA-Z0-9-/,& ]{1,180}$/i;
+      case "AlphaNumValidationsms":
+      return /^[a-zA-Z0-9!@\n\r#$&()\\-`.+,/\" ]{1,180}$/i;
+      case "sizeofpublication":
+      return /^[0-9]{1,50}$/i;
+      
+      case "fileNumber":
+      return /^[a-zA-Z0-9-!%:;“”‘’*=@#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,50}$/i;
+      case "TextValidationWithoutSpace":
+      return /^[a-zA-Z]{1,180}$/i;
+	  case "budget":
+      return /^[0-9]{0,9}(\.[0-9]{0,2})?$/;
+      case "AlphaNumSubjectSMS":
+      return /^[a-zA-Z0-9~!@\n\r#$%^&*(){}[]\/.,<>:;" ]{1,180}$/i;
        case "age":
         return /^[1-9][0-9]$/i;
        case "familyMonthlyIncome":
