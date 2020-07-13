@@ -187,12 +187,12 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
     }
     const response = await getDuplicateCopySearchResults(queryObject);
     try {
-      let data = response.Owners.map(item => ({
-        [APPLICATION_NO]: item.ownerDetails.applicationNumber || "-",
+      let data = response.DuplicateCopyApplications.map(item => ({
+        [APPLICATION_NO]: item.applicationNumber || "-",
         [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
         // [PROPERTY_ID]: item.property.id || "-",
-        [OWNER_NAME]: item.ownerDetails.name || "-",
-        [STATUS]: getLocaleLabels(item.applicationState, item.applicationState) || "-",
+        [OWNER_NAME]: item.applicant[0].name || "-",
+        [STATUS]: getLocaleLabels(item.state, item.state) || "-",
       }));
       dispatch(
         handleField(

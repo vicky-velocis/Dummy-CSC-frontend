@@ -125,18 +125,18 @@ export const getOwnershipSearchResults = async queryObject => {
 
 export const getDuplicateCopySearchResults = async queryObject => {
   try {
-    // const response = await httpRequest(
-    //   "post",
-    //   "/csp/duplicatecopy/_search",
-    //   "",
-    //   queryObject
-    // )
     const response = await httpRequest(
       "post",
-      "/csp/ownership-transfer/_search",
+      "/csp/duplicatecopy/_search",
       "",
       queryObject
     )
+    // const response = await httpRequest(
+    //   "post",
+    //   "/csp/ownership-transfer/_search",
+    //   "",
+    //   queryObject
+    // )
     console.log(response)
     return response
   } catch (error) {

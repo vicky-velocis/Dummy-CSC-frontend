@@ -33,9 +33,9 @@ const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
       {key: "applicationNumber", value: applicationNumber}
     ]
     const response = await getDuplicateCopySearchResults(queryObject);
-    // if (response && response.Owners) {
-    // dispatch(prepareFinalObject("Owners", response.Owners))
-    // }
+    if (response && response.DuplicateCopyApplications) {
+    dispatch(prepareFinalObject("DuplicateCopyApplications", response.DuplicateCopyApplications))
+    }
   }
 }
 
@@ -85,9 +85,10 @@ const duplicateCopySearchPreview = {
                   moduleName: "egov-rented-properties",
                   componentPath: "WorkFlowContainer",
                   props: {
-                    dataPath: "duplicate",
+                    dataPath: "DuplicateCopyApplications",
                     moduleName: "DuplicateCopyOfAllotmentLetterRP",
-                    // updateUrl: "/csp/ownership-transfer/_update"
+                    // updateUrl: "/csp/ownership-transfer/_update",
+                    updateUrl: " /csp/duplicatecopy/_update"
                   }
                 },
               transferReviewDetails
