@@ -152,7 +152,6 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
   let violatorDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail', []);
   let numbertowords = numWords(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail.paymentDetails.paymentAmount', '0')) + ' ' + 'only.'
   //const secondNumber = getQueryArg(window.location.href, "secondNumber");
-
   //NOC_Receipts
   let data = {
     "receiptNo": generateReceiptNumber(violatorDetails.challanId), //"MCC-EC-1",

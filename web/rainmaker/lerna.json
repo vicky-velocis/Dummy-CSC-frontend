@@ -16,6 +16,7 @@
     "dev-packages/egov-opms-dev",
     "dev-packages/egov-hc-dev",
     "dev-packages/egov-pms-dev",
+    "dev-packages/egov-store-asset-dev",
     "dev-packages/egov-echallan-dev",
     "dev-packages/egov-bpa-dev", 
     "dev-packages/egov-pr-dev",

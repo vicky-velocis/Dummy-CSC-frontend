@@ -10,7 +10,7 @@ import { footer } from "./applyResource/footer";
 import { violationsDetails, violatorDetails } from "./applyResource/violationDetail";
 import { ArticleDetails } from "./applyResource/articleDetails";
 import { ArticleGridDetails } from "./applyResource/articleGridDetails"
-import { documentDetails, violationDocumentDetails, documentDetailsIDProof } from "./applyResource/documentDetails";
+import { documentDetails, violationDocumentDetails } from "./applyResource/documentDetails";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
