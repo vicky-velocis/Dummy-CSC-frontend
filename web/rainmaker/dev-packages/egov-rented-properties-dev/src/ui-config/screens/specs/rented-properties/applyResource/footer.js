@@ -26,26 +26,6 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   );
 };
 
-
-
-export const moveToSuccessMortgage = (rentedData, dispatch, type) => {
-  const id = get(rentedData, "id");
-  const transitNumber = get(rentedData, "transitNumber")
-  const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
-  const tenantId = get(rentedData, "tenantId");
-  const purpose = "apply";
-  const status = "success";
-  const path = type === "MORTAGETRANSFERRP" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
-  : `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
-  dispatch(
-    setRoute(path)
-  );
-};
-
-
-
-
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
@@ -130,14 +110,14 @@ const callBackForNext = async(state, dispatch) => {
     }
 
     if(activeStep === SUMMARY_STEP) {
-    // isFormValid = await applyRentedProperties(state, dispatch);
+    isFormValid = await applyRentedProperties(state, dispatch);
     isFormValid = true;
       if (isFormValid) {
         const rentedData = get(
           state.screenConfiguration.preparedFinalObject,
           "Properties[0]"
       );
-          moveToSuccessMortgage(rentedData, dispatch);
+          moveToSuccess(rentedData, dispatch);
       }
     }
 
@@ -296,12 +276,6 @@ export const changeStep = (
     changeStep(state, dispatch, "apply", "previous");
   };
 
-
-
-  // export const callBackForPreviousMortgage = (state, dispatch) => {
-  //   changeStep(state, dispatch, "mortage-apply", "previous");
-  // };
-
 export const previousButton = {
   componentPath: "Button",
       props: {
@@ -408,28 +382,3 @@ export const footer = getCommonApplyFooter({
       },
     }
   });
-
-
-  // export const mortgagefooter = getCommonApplyFooter({
-  //   previousButton: {
-  //     ...previousButton, 
-  //     onClickDefination: {
-  //       action: "condition",
-  //       callBack: callBackForPreviousMortgage
-  //     },
-  //   },
-  //   nextButton: {
-  //     ...nextButton,
-  //     onClickDefination: {
-  //       action: "condition",
-  //       callBack: callBackForNextMortgage
-  //     }
-  //   },
-  //   submitButton: {
-  //     ...submitButton,
-  //     onClickDefination: {
-  //       action: "condition",
-  //       callBack: callBackForNextMortgage
-  //     },
-  //   }
-  // });

@@ -3,7 +3,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
-  import {mortgagefooter} from './footer';
+  import {mortgagefooter} from './footer-mortgage';
 
 
 const header = getCommonHeader({

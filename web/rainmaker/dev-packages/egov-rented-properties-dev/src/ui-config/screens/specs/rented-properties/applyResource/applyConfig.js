@@ -197,7 +197,7 @@ export const formwizardMortgageSecondStep = {
   },
   children: {
     mortgageDocumentsDetails
-    
+
   },
   visible: false
 }
@@ -211,9 +211,8 @@ export const formwizardMortgageThirdStep = {
   },
   children: {
     mortgageReviewDetails
-    // ownerShipReviewDetails
     
-  },
+    },
   visible: false
 }
 
