@@ -90,6 +90,13 @@ class Footer extends React.Component {
           }
           break
         }
+        case "DuplicateCopyOfAllotmentLetterRP": {
+          if(!!action && dataPath[0].state !== "PENDINGCLVERIFICATION") {
+            const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
+            assignee = !!assigner.uuid ? [assigner.uuid] : []
+          }
+          break
+        }
       }
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, assignee);

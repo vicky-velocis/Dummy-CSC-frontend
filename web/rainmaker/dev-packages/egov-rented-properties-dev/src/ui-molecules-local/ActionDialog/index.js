@@ -220,6 +220,19 @@ class ActionDialog extends React.Component {
                     />
                   </Grid>
                   )}
+                     {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (dataPath[0].state === "PENDINGSIVERIFICATION" || dataPath[0].state === "PENDINGAPRO") && (
+                    <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={fieldConfig.amount.label}
+                      onChange={e =>
+                        handleFieldChange(`${dataPath}.amount`, e.target.value)
+                      }
+                      jsonPath={`${dataPath}.amount`}
+                      placeholder={fieldConfig.amount.placeholder}
+                    />
+                  </Grid>
+                  )}
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

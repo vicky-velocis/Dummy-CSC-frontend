@@ -52,6 +52,7 @@ class WorkFlowContainer extends React.Component {
           queryObject = [...queryObject, { key: "businessIds", value: transitNumber }]
           break
         }
+        case "DuplicateCopyOfAllotmentLetterRP":
         case "OwnershipTransferRP": {
           queryObject = [...queryObject, { key: "businessIds", value: applicationNumber }]
           break
@@ -139,6 +140,7 @@ class WorkFlowContainer extends React.Component {
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
+
       this.setState({
         open: false
       });
@@ -151,6 +153,9 @@ class WorkFlowContainer extends React.Component {
           }
           case "OwnershipTransferRP": {
             path = `&applicationNumber=${data[0].ownerDetails.applicationNumber}&tenantId=${tenant}&type=OWNERSHIPTRANSFERRP`
+          }
+          case "DuplicateCopyOfAllotmentLetterRP": {
+            path = `&applicationNumber=${data[0].applicationNumber}&tenantId=${tenant}&type=DUPLICATECOPYOFALLOTMENTLETTERRP`
           }
         }
         window.location.href = `acknowledgement?${this.getPurposeString(
@@ -192,6 +197,7 @@ class WorkFlowContainer extends React.Component {
         set(data, `masterDataAction`, label);
         break;
       }
+      case "DuplicateCopyOfAllotmentLetterRP":
       case "OwnershipTransferRP": {
         set(data, `applicationAction`, label);
         break;
@@ -334,7 +340,8 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName
     // let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = moduleName === "OwnershipTransferRP" ? get(data[data.length - 1], businessId) : get(data[data.length - 1], "propertyDetails.propertyId");
+    let businessId = moduleName === "OwnershipTransferRP" ? get(data[data.length - 1], businessId) :
+    moduleName === "DuplicateCopyOfAllotmentLetterRP" ? get(data[data.length - 1], businessId) : get(data[data.length - 1], "propertyDetails.propertyId");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
