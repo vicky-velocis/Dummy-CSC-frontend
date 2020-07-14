@@ -71,21 +71,24 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getSearchResults(queryObject, dispatch,"materialType");
+    let response = await getSearchResults(queryObject, dispatch,"purchaseOrder");
     try {
-      let data = response.materialTypes.map((item) => {
+      let data = response.purchaseOrders.map((item) => {
   
         return {
-          [getTextToLocalMapping("Material Type Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Material Type Description")]: get(item, "description", "-") || "-",
-          [getTextToLocalMapping("Active")]: get(item, "active",false) ? "Yes": "No",
-          ["code"]: get(item, "code", "-")
+            [getTextToLocalMapping("Indent No")]: get(item, "purchaseOrderNumber", "-") || "-",
+            [getTextToLocalMapping("Indent Date")]: get(item, "purchaseOrderDate", "-") || "-",
+            [getTextToLocalMapping("Store Name")]: get(item, "store.name", "-") || "-",
+            [getTextToLocalMapping("Indent Purpose")]: get(item, "name", "-") || "-", // field not present
+            [getTextToLocalMapping("Inventory Type")]: get(item, "purchaseOrderDetails[0].material.inventoryType", "-") || "-",
+            [getTextToLocalMapping("Raised By")]: get(item, "name", "-") || "-",// field not present
+            [getTextToLocalMapping("Indent Status")]: get(item, "name", "-") || "-",// field not present
         };
       });
 
       dispatch(
         handleField(
-          "search-material-type",
+          "search-purchase-order",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -93,11 +96,11 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-material-type",
+          "search-purchase-order",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Type")} (${
-            response.materialTypes.length
+          `${getTextToLocalMapping("Search Results for Purchase Order")} (${
+            response.purchaseOrders.length
           })`
         )
       );
@@ -117,7 +120,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-material-type",
+      "search-purchase-order",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow
