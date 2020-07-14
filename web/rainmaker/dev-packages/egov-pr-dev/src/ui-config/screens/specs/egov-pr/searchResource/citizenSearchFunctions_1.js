@@ -960,9 +960,8 @@ let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("Inv
    //let selectedrows =[]
    if(localStorageGet("Invitelist") === null  && localStorageGet("InvitelistAll")===null )
    {
-    // alert('Select at least one Employee ')
-     var msg=`Select at least one Employee`
-     dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
+     alert('Select at least one Employee ')
+
     
      
    }
@@ -2057,10 +2056,7 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 		});
   }
   else{
- //   alert("Select at least one department");
-    var msg=`Select at least one department`
-     dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
-    
+		alert("Select at least one department");
   }
   
   try {

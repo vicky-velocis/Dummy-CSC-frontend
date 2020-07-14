@@ -5,8 +5,7 @@ import {
   getDateField,
   getPattern,
   getTextField,
-  getBreak,
-  getCommonParagraph
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 
@@ -89,7 +88,7 @@ export const tenderMSWordTemplate = getCommonCard({
     TenderDetails: {
       
     },
-    subHeader: getCommonParagraph({
+    subHeader: getCommonTitle({
       labelName: "Note",
       labelKey: "PR_TENDER_NOTICE_NOTE"
     }),
@@ -99,7 +98,7 @@ export const tenderMSWordTemplate = getCommonCard({
 
 
 break: getBreak(),
-subHeader: getCommonParagraph({
+subHeader: getCommonTitle({
   labelName: "Note",
   labelKey: "PR_TENDER_DETAILS"
 }),

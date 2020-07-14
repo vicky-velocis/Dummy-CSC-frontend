@@ -338,7 +338,7 @@ export const EventFirstStepperTimeDetail = getCommonCard({
       },
       required: true,
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_START_DATE_INVALID",
       jsonPath: "PublicRelation[0].CreateEventDetails.startDate1",
       props: {
         inputProps: {
@@ -377,11 +377,12 @@ export const EventFirstStepperTimeDetail = getCommonCard({
         labelKey: "PR_EVENT_START_TIME_PLACEHOLDER"
       },
       required: true,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_START_TIME_INVALID",
       jsonPath: "PublicRelation[0].CreateEventDetails.startTime",
 	  beforeFieldChange: (action, state, dispatch) => {
 			starttimevalidation(action, state, dispatch)
-	   
+     // timevalidation(action, state, dispatch)
+      
         }
       
     }),
@@ -398,7 +399,7 @@ export const EventFirstStepperTimeDetail = getCommonCard({
      
       required: true,
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_END_DATE_INVALID",
       jsonPath: "PublicRelation[0].CreateEventDetails.endDate1",
       props: {
         inputProps: {
@@ -424,7 +425,7 @@ export const EventFirstStepperTimeDetail = getCommonCard({
       },
       required: true,
    
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_END_TIME_INVALID",
       jsonPath: "PublicRelation[0].CreateEventDetails.endTime",
 	   beforeFieldChange: (action, state, dispatch) => {
 			timevalidation(action, state, dispatch)
@@ -443,20 +444,49 @@ export const EventFirstStepperTimeDetail = getCommonCard({
 // Time validation
 export const timevalidation =(action, state, dispatch) =>
 {
-	let startdate = get(	state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
+ // 
+ // screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1
+	let startdate = get(	state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
 								{}
 							);
 							
-	    let enddate = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1",
+	    let enddate = get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endDate1",
 								{}
 							);		
 			
-		 let starttime = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startTime",
+		 let starttime = get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startTime",
 								{}
 							);		
 
-		
-       // alert(startdate +" , "+ enddate +" , "+ starttime)
+              var d = new Date(); // for now
+              d.getHours(); // => 9
+              d.getMinutes(); // =>  30
+              d.getSeconds();
+var currDate=d.toISOString().split('T')[0]
+   var curTime=d.getHours()+':'+ d.getMinutes()        
+          
+       if(startdate==currDate && starttime < curTime)
+       {
+        localStorageSet("EventTimeINvalid","yes");
+        dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Select correct time slot", labelKey: "PR_END_TIME_VALIDATION_MESSAGE" },
+                  "warning"
+                )
+              );
+        
+        setTimeout(function(){
+        dispatch(
+          handleField(
+          "apply",            "components.div.children.formwizardFirstStep.children.EventFirstStepperTimeDetail.children.cardContent.children.propertyDetailsConatiner.children.EndTime",
+          "value",
+          ""
+          )
+        );
+         }, 1000);
+       }
+       else{
 		localStorageSet("EventTimeINvalid","no");
 		if(startdate == enddate && starttime >= action.value)
 		{
@@ -479,9 +509,9 @@ export const timevalidation =(action, state, dispatch) =>
 			);
 			 }, 1000);
 			 
-			 //set(state, "screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endTime", "" )
+			 
     }
-   
+  }
 }
 
 
@@ -499,7 +529,35 @@ export const starttimevalidation =(action, state, dispatch) =>
 		 let endtime = get(state,								"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.endTime",
 								{}
 							);		
-
+              var d = new Date(); // for now
+              d.getHours(); // => 9
+              d.getMinutes(); // =>  30
+              d.getSeconds();
+var currDate=d.toISOString().split('T')[0]
+   var curTime=d.getHours()+':'+ d.getMinutes()        
+            
+       if(startdate==currDate && action.value < curTime)
+       {
+        localStorageSet("EventTimeINvalid","yes");
+        dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Select correct time slot", labelKey: "PR_END_TIME_VALIDATION_MESSAGE" },
+                  "warning"
+                )
+              );
+        
+        setTimeout(function(){
+        dispatch(
+          handleField(
+          "apply",            "components.div.children.formwizardFirstStep.children.EventFirstStepperTimeDetail.children.cardContent.children.propertyDetailsConatiner.children.EndTime",
+          "value",
+          ""
+          )
+        );
+         }, 1000);
+       }
+       else{
 		localStorageSet("EventTimeINvalid","no");
 		if(startdate == enddate && action.value >= endtime)
 		{
@@ -523,7 +581,7 @@ export const starttimevalidation =(action, state, dispatch) =>
 			 }, 1000);
 			 
     }
-   
+  }
 }
 
 export const datevalidation =(action, state, dispatch) =>

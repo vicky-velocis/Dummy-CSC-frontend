@@ -54,7 +54,7 @@ class UploadExternalGuests extends React.Component {
     }
     post(url, formData,config).then(response => {
 		console.log("responseeeeeeeeee");
-		debugger;
+		;
 		console.log(response)
 		if(response.data.ResponseInfo.status === "Success")
 		{

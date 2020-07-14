@@ -14,6 +14,11 @@ const header = getCommonHeader(
     labelKey: "PR_COMMITTEE"
   },
   {
+    style: {
+      padding: "20px",
+    }
+  },
+  {
     classes: {
       root: "common-header-cont"
     }
@@ -71,7 +76,9 @@ const PRSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PR"
+
           }
         },
        

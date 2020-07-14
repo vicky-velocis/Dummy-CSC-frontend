@@ -8,7 +8,7 @@ import {
     getTextField,
     getPattern,
     getLabel,
-    getCommonParagraph,
+   
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  import { documentDetails } from "./emaildocumentDetails";
@@ -109,7 +109,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
       
     }),
     	
-	 subHeader: getCommonParagraph({
+	 subHeader: getCommonTitle({
         labelName: "Note",
         labelKey: "PR_PRESS_NOTE_NOTE"
     }, 
@@ -240,7 +240,7 @@ export const EmailSmsContent = getCommonCard({
   //         props: { label : "subject"}
   // },
   break: getBreak(),	
-	headeremail: getCommonParagraph(
+	headeremail: getCommonTitle(
     {
       labelName: "Email Template",
       labelKey: "PR_EMAIL_TEMPLATE"
@@ -264,7 +264,7 @@ export const EmailSmsContent = getCommonCard({
   
     break: getBreak(),
    break: getBreak(),
-   headersms:  getCommonParagraph(
+   headersms: getCommonTitle(
     {
       labelName: "SMS Template",
       labelKey: "PR_SMS_TEMPLATE"

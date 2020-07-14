@@ -95,6 +95,7 @@ const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "TimeSeriesReport",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("TimeseriesReport", {}));
     dispatch(prepareFinalObject("eventReport", {}));
     dispatch(prepareFinalObject("LocalityReport", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));

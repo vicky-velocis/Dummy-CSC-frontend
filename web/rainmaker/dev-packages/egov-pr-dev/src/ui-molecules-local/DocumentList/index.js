@@ -205,7 +205,7 @@ class DocumentList extends Component {
   };
 
   handleDocument = async (file, fileStoreId) => {
-    debugger;
+    ;
     let { uploadedDocIndex } = this.state;
     const { prepareFinalObject, documentsUploadRedux } = this.props;
     const fileUrl = await getFileUrlFromAPI(fileStoreId);

@@ -84,6 +84,8 @@ const LibrarySearchAndResult = {
   uiFramework: "material-ui",
   name: "library-search",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));
+    
     dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));

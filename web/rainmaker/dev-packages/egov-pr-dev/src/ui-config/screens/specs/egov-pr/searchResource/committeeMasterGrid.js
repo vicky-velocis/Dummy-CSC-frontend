@@ -10,6 +10,7 @@ import {
   getLocalization,
   getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
@@ -33,6 +34,8 @@ export const committeeMasterGrid = {
         name: getTextToLocalMapping("Committee Id"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
           
         }
       },
@@ -50,6 +53,7 @@ export const committeeMasterGrid = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
+      
       onRowClick: (row, index) => {
         onRowClick(row);
       }

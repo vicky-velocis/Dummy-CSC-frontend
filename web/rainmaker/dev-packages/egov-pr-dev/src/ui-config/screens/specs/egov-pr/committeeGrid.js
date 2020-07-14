@@ -19,7 +19,6 @@ import {
     prepareFinalObject,
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
   import { getCommitieeGridData } from "./searchResource/citizenSearchFunctions";
   
   const hasButton = getQueryArg(window.location.href, "hasButton");

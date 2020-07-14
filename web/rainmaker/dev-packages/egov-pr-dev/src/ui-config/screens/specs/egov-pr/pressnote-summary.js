@@ -140,7 +140,13 @@ set(
 		 resendheader: getCommonHeader({
 				labelName: "Invited Press List",
 				labelKey: "PR_INVITED_PRESS_LIST"
-			}),
+      },
+      {
+        style: {
+          marginBottom: 18,
+        }
+      }
+      ),
 			guestlist : ResendPressInviteGrid
 		}),	
     

@@ -189,7 +189,8 @@ const PRSCPSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PRSCP"
           }
         },
         
