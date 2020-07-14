@@ -404,7 +404,7 @@ const articleDetailData = () => {
         },
         jsonPath: "articleSeizedDetails.other",
         required: true,
-        pattern: getPattern("VillageName"),
+        pattern: getPattern("ECViolatorName"),
         errorMessage: "EC_ERR_OTHER_VEHICLE_INPUT_FIELD_MSG",
         gridDefination: {
           xs: 12,
@@ -454,7 +454,7 @@ const articleDetailData = () => {
         },
         jsonPath: "articleSeizedDetails.VehicleNumber",
         required: true,
-        pattern: getPattern("VeterinaryRegistrationNo"),
+        pattern: getPattern("VehicleRegistrationNo"),
         errorMessage: "EC_ERR_VEHICLE_REGISTRATION_NUMBER_INPUT_FIELD_MSG",
         gridDefination: {
           xs: 12,
@@ -480,7 +480,7 @@ const articleDetailData = () => {
         },
         jsonPath: "articleSeizedDetails.Remark",
         required: true,
-        pattern: getPattern("eventDescription"),
+        pattern: getPattern("ECItemDescription"),
         errorMessage: "EC_ERR_SEZIURE_REMARK_DEFAULT_INPUT_FIELD_MSG",
         gridDefination: {
           xs: 12,

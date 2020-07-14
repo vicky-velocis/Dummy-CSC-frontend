@@ -99,7 +99,7 @@ export const serachVendorResultGrid = {
       //   label: getTextToLocalMappingVendorDetail("remark"),
       //   options: {
       //     filter: true,
-          
+
       //   }
       // },
     ],
@@ -109,9 +109,9 @@ export const serachVendorResultGrid = {
     ),
     options: {
       filter: false,
-      print:false,
+      print: false,
       download: true,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       hover: true,
       fixedHeaderOptions: {
@@ -127,7 +127,7 @@ export const serachVendorResultGrid = {
           useDisplayedRowsOnly: false,
         },
       },
- 
+
     },
     customSortColumn: {
       column: "Vendor Detail",
@@ -173,95 +173,58 @@ export const serachVendorErrorResultGrid = {
   props: {
     data: [],
     columns: [
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("covNo"),
-      //   label: getTextToLocalMappingVendorErrorDetail("covNo"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("name"),
-      //   label: getTextToLocalMappingVendorErrorDetail("name"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
-      //   label: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("address"),
-      //   label: getTextToLocalMappingVendorErrorDetail("address"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("contactNumber"),
-      //   label: getTextToLocalMappingVendorErrorDetail("contactNumber"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("vendorCategory"),
-      //   label: getTextToLocalMappingVendorErrorDetail("vendorCategory"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("streetVendorArea"),
-      //   label: getTextToLocalMappingVendorErrorDetail("streetVendorArea"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("transportMode"),
-      //   label: getTextToLocalMappingVendorErrorDetail("transportMode"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      // {
-      //   name: getTextToLocalMappingVendorErrorDetail("remark"),
-      //   label: getTextToLocalMappingVendorErrorDetail("remark"),
-      //   options: {
-      //     filter: true,
-      //   }
-      // },
-      getTextToLocalMappingVendorErrorDetail("covNo"),
-      getTextToLocalMappingVendorErrorDetail("name"),
-      getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
-      getTextToLocalMappingVendorErrorDetail("address"),
-      getTextToLocalMappingVendorErrorDetail("contactNumber"),
-      getTextToLocalMappingVendorErrorDetail("vendorCategory"),
-      getTextToLocalMappingVendorErrorDetail("streetVendorArea"),
-      getTextToLocalMappingVendorErrorDetail("transportMode"),
-      getTextToLocalMappingVendorErrorDetail("remark"),
-    ],
-
+      {
+        name: getTextToLocalMappingVendorErrorDetail("covNo"),
+        label: getTextToLocalMappingVendorErrorDetail("covNo"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("name"),
+        label: getTextToLocalMappingVendorErrorDetail("name"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
+        label: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("address"),
+        label: getTextToLocalMappingVendorErrorDetail("address"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("contactNumber"),
+        label: getTextToLocalMappingVendorErrorDetail("contactNumber"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("vendorCategory"),
+        label: getTextToLocalMappingVendorErrorDetail("vendorCategory"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("streetVendorArea"),
+        label: getTextToLocalMappingVendorErrorDetail("streetVendorArea"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("transportMode"),
+        label: getTextToLocalMappingVendorErrorDetail("transportMode"),
+      },
+      {
+        name: getTextToLocalMappingVendorErrorDetail("remark"),
+        label: getTextToLocalMappingVendorErrorDetail("remark"),
+      }],
 
     title: //getTextToLocalMappingVendorErrorDetail(
       "Error Details for Vendor Upload",
     //),
     options: {
       filter: false,
-      print:false,
+      print: false,
       download: false,
-      responsive: "scroll",
+      responsive: "stacked",
+      resizableColumns:false,
       selectableRows: false,
       hover: true,
-      fixedHeaderOptions: {
-        xAxis: true,
-        yAxis: true
-      },
+      // fixedHeaderOptions: {
+      //   xAxis: true,
+      //   yAxis: true
+      // },
       rowsPerPageOptions: [10, 15, 20],
       downloadOptions: {
         filename: "ErrorDetails.csv",
@@ -271,22 +234,22 @@ export const serachVendorErrorResultGrid = {
           useDisplayedRowsOnly: false,
         },
       },
- 
+
     },
-    customSortColumn: {
-      column: "Error Detail",
-      sortingFn: (data, i, itemName) => {
-        const epochDates = data.reduce((acc, curr) => {
-          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
-          return acc;
-        }, []);
-        const order = sortDateOrder === "asc" ? true : false;
-        const finalData = sortByEpoch(epochDates, !order).map(item => {
-          item.pop();
-          return item;
-        });
-        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
-      }
-    },
+    // customSortColumn: {
+    //   column: "Error Detail",
+    //   sortingFn: (data, i, itemName) => {
+    //     const epochDates = data.reduce((acc, curr) => {
+    //       acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+    //       return acc;
+    //     }, []);
+    //     const order = sortDateOrder === "asc" ? true : false;
+    //     const finalData = sortByEpoch(epochDates, !order).map(item => {
+    //       item.pop();
+    //       return item;
+    //     });
+    //     return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+    //   }
+    // },
   }
 };

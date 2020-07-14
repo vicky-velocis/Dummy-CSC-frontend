@@ -20,7 +20,8 @@ export const violationsSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12,
+          sm: 8
         },
         ...getCommonSubHeader({
           labelName: "Violations Details",
@@ -38,7 +39,8 @@ export const violationsSummary = getCommonGrayCard({
         },
         visible:true,
         gridDefination: {
-          xs: 4,
+          xs: 12,
+          sm: 4,
           align: "right"
         },
         children: {

@@ -44,7 +44,7 @@ export const AuctionGridDetails = {
       print: false,
       download: false,
       // responsive: "scrollMaxHeight",
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,

@@ -45,7 +45,7 @@ class UploadExcelFile extends React.Component {
             setTimeout(() => store.dispatch(toggleSnackbar(
               true,
               {
-                labelName: "There are few records in the file that contained errors so they were not uploaded",
+                labelName: "File contains few records with error which are not uploaded.",
                 labelKey: ""
               },
               "error"
@@ -143,7 +143,7 @@ class UploadExcelFile extends React.Component {
               message += "Address is not present, ";
             }
             if (element[6] === undefined || element[6] === "") {
-              message += "Contact Number is not present, ";
+              message += "Mobile / Contact Number is not present, ";
             }
 
             if (message.toString().trim() === "" && headerFlag) {

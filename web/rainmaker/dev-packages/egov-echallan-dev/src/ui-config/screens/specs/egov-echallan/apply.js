@@ -179,7 +179,7 @@ const screenConfig = {
     //getEpochForDate(convertDateToEpoch(getTodaysDateInYMD()))
     dispatch(prepareFinalObject("eChallan.violationDate", convertEpochToDate(dateString)));
     dispatch(prepareFinalObject("eChallan.violationTime", dateString.getHours() + ":" + dateString.getMinutes()));
-    dispatch(prepareFinalObject("eChallan.licenseNoCov", ""));
+    //dispatch(prepareFinalObject("eChallan.licenseNoCov", ""));
     set(
       action.screenConfig,
       "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.Date.props.disabled",

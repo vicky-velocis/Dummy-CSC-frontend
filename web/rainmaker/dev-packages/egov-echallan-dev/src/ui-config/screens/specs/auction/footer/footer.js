@@ -19,7 +19,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const callbackforsummaryaction = async (state, dispatch) => {
-  debugger
+  
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/auction/home`;
@@ -28,7 +28,7 @@ const callbackforsummaryaction = async (state, dispatch) => {
 };
 
 const callbackforAuction = async (state, dispatch) => {
- debugger
+ 
   let challandetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -40,7 +40,7 @@ const callbackforAuction = async (state, dispatch) => {
 };
 
 const callbackforAuctionApprove = async (state, dispatch) => {
-  debugger
+  
   try {
 
     dispatch(toggleSpinner());
@@ -49,7 +49,7 @@ const callbackforAuctionApprove = async (state, dispatch) => {
     let responseStatus = get(response, "status", "");
 
     if (responseStatus === 'SUCCESS' || responseStatus === 'success') {
-      debugger
+      
       dispatch(toggleSnackbar(true, {
         labelName: "Auction Details has been Approved!",
         labelKey: "EC_AUCTION_APPROVER_SUCCESS_TOASTER"
