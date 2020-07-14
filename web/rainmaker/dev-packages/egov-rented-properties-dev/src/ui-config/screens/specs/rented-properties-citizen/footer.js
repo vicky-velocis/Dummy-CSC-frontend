@@ -122,12 +122,7 @@ const callBackForNext = async(state, dispatch) => {
     }
 }
 
-
-
-
-
 const callBackForNextDuplicate = async(state, dispatch) => {
-  
     let activeStep = get(
         state.screenConfiguration.screenConfig["duplicate-copy-apply"],
         "components.div.children.stepper.props.activeStep",
@@ -209,14 +204,6 @@ const callBackForNextDuplicate = async(state, dispatch) => {
         }
     }
 }
-
-
-
-
-
-
-
-
 
 const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "ownership-apply", "previous");
