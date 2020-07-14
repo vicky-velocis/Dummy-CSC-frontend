@@ -58,61 +58,61 @@ export const propertyLocationDetails = getCommonCard({
             action.value
           )
         );
-        // try {
-        //   let payload = await httpRequest(
-        //     "post",
-        //     "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-        //     "_search",
-        //     [{ key: "tenantId", value: action.value }],
-        //     {}
-        //   );
-        //   const mohallaData =
-        //     payload &&
-        //     payload.TenantBoundary[0] &&
-        //     payload.TenantBoundary[0].boundary &&
-        //     payload.TenantBoundary[0].boundary.reduce((result, item) => {
-        //       result.push({
-        //         ...item,
-        //         name: `${action.value
-        //           .toUpperCase()
-        //           .replace(
-        //             /[.]/g,
-        //             "_"
-        //           )}_REVENUE_${item.code
-        //             .toUpperCase()
-        //             .replace(/[._:-\s\/]/g, "_")}`
-        //       });
-        //       return result;
-        //     }, []);
-        //   dispatch(
-        //     prepareFinalObject(
-        //       "applyScreenMdmsData.tenant.localities",
-        //       mohallaData
-        //     )
-        //   );
-        //   dispatch(
-        //     handleField(
-        //       "register-property",
-        //       "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
-        //       "props.suggestions",
-        //       mohallaData
-        //     )
-        //   );
-        //   const mohallaLocalePrefix = {
-        //     moduleName: action.value,
-        //     masterName: "REVENUE"
-        //   };
-        //   dispatch(
-        //     handleField(
-        //       "register-property",
-        //       "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
-        //       "props.localePrefix",
-        //       mohallaLocalePrefix
-        //     )
-        //   );
-        // } catch (e) {
-        //   console.log(e);
-        // }
+        try {
+          let payload = await httpRequest(
+            "post",
+            "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+            "_search",
+            [{ key: "tenantId", value: action.value }],
+            {}
+          );
+          const mohallaData =
+            payload &&
+            payload.TenantBoundary[0] &&
+            payload.TenantBoundary[0].boundary &&
+            payload.TenantBoundary[0].boundary.reduce((result, item) => {
+              result.push({
+                ...item,
+                name: `${action.value
+                  .toUpperCase()
+                  .replace(
+                    /[.]/g,
+                    "_"
+                  )}_REVENUE_${item.code
+                    .toUpperCase()
+                    .replace(/[._:-\s\/]/g, "_")}`
+              });
+              return result;
+            }, []);
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.tenant.localities",
+              mohallaData
+            )
+          );
+          dispatch(
+            handleField(
+              "register-property",
+              "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+              "props.suggestions",
+              mohallaData
+            )
+          );
+          const mohallaLocalePrefix = {
+            moduleName: action.value,
+            masterName: "REVENUE"
+          };
+          dispatch(
+            handleField(
+              "register-property",
+              "components.div.children.formwizardFirstStep.children.propertyLocationDetails.children.cardContent.children.propertyLocationDetailsContainer.children.localityOrMohalla",
+              "props.localePrefix",
+              mohallaLocalePrefix
+            )
+          );
+        } catch (e) {
+          console.log(e);
+        }
       }
 
     },
@@ -136,8 +136,8 @@ export const propertyLocationDetails = getCommonCard({
               labelKey: "PT_COMMON_LOCALITY_OR_MOHALLA_PLACEHOLDER"
             },
             jsonPath: "Property.address.locality.code",//db sake
-        sourceJsonPath: "sectorDropDown",
-       // labelsFromLocalisation: true,
+        sourceJsonPath: "applyScreenMdmsData.tenant.localities",
+        labelsFromLocalisation: true,
         suggestions: [],
         fullwidth: true,
         inputLabelProps: {
