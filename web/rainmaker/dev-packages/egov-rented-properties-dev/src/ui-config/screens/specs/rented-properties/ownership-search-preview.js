@@ -18,7 +18,7 @@ const headerrow = getCommonContainer({
 
 const reviewApplicantDetails = getReviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getreviewPropertyAddressDetails(false)
-const reviewFreshLicenceDocuments = getReviewDocuments(false, "ownership-apply")
+const reviewFreshLicenceDocuments = getReviewDocuments(false, "ownership-apply", "OwnersTemp[0].reviewDocData")
 
 const transferReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
@@ -34,7 +34,24 @@ const applicationNumber = getQueryArg(window.location.href, "applicationNumber")
     ]
     const response = await getOwnershipSearchResults(queryObject);
     if (response && response.Owners) {
-    dispatch(prepareFinalObject("Owners", response.Owners))
+    let {Owners} = response
+    let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];
+    const removedDocs = ownershipTransferDocuments.filter(item => !item.active)
+    ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item.active)
+    Owners = [{...Owners[0], ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments}}]
+    dispatch(prepareFinalObject("Owners", Owners))
+    dispatch(
+      prepareFinalObject(
+        "OwnersTemp[0].removedDocs",
+        removedDocs
+      )
+    );
+    await setDocuments(
+      response,
+      "Owners[0].ownerDetails.ownershipTransferDocuments",
+      "OwnersTemp[0].reviewDocData",
+      dispatch,'RP'
+    );
     }
   }
 }

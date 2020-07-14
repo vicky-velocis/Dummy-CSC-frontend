@@ -47,50 +47,49 @@ const callBackForNext = async(state, dispatch) => {
         }
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
-    //   const uploadedDocData = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "Properties[0].propertyDetails.applicationDocuments",
-    //     []
-    // );
+      const uploadedDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Owners[0].ownerDetails.ownershipTransferDocuments",
+        []
+    );
 
-    // const uploadedTempDocData = get(
-    //     state.screenConfiguration.preparedFinalObject,
-    //     "PropertiesTemp[0].applicationDocuments",
-    //     []
-    // );
+    const uploadedTempDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "OwnersTemp[0].ownershipTransferDocuments",
+        []
+    );
 
-    // for (var y = 0; y < uploadedTempDocData.length; y++) {
-    //   if (
-    //       uploadedTempDocData[y].required &&
-    //       !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
-    //   ) {
-    //       isFormValid = false;
-    //   }
-    // }
-    // if(isFormValid) {
-    //   const reviewDocData =
-    //           uploadedDocData &&
-    //           uploadedDocData.map(item => {
-    //               return {
-    //                   title: `RP_${item.documentType}`,
-    //                   link: item.fileUrl && item.fileUrl.split(",")[0],
-    //                   linkText: "View",
-    //                   name: item.fileName
-    //               };
-    //           });
-    //           dispatch(
-    //             prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
-    //         );
-    // }
-    isFormValid = true
+    for (var y = 0; y < uploadedTempDocData.length; y++) {
+      if (
+          uploadedTempDocData[y].required &&
+          !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+      ) {
+          isFormValid = false;
+      }
+    }
+    if(isFormValid) {
+      const reviewDocData =
+              uploadedDocData &&
+              uploadedDocData.map(item => {
+                  return {
+                      title: `RP_${item.documentType}`,
+                      link: item.fileUrl && item.fileUrl.split(",")[0],
+                      linkText: "View",
+                      name: item.fileName
+                  };
+              });
+              dispatch(
+                prepareFinalObject("OwnersTemp[0].reviewDocData", reviewDocData)
+            );
+    }
     }
     if(activeStep === SUMMARY_STEP) {
-      const rentedData = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Owners[0]"
-    );
     isFormValid = await applyOwnershipTransfer(state, dispatch);
       if (isFormValid) {
+        const rentedData = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Owners[0]"
+      );
           moveToSuccess(rentedData, dispatch, "OWNERSHIPTRANSFERRP");
       }
     }

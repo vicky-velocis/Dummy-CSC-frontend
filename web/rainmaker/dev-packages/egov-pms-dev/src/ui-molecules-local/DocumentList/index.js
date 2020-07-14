@@ -274,6 +274,8 @@ this.setState({
 
   handleChange = (key, event) => {
     const { documentsUploadRedux, prepareFinalObject } = this.props;
+    if(event.target.value.length<=250)
+    {   
     prepareFinalObject(`documentsUploadRedux`, {
       ...documentsUploadRedux,
       [key]: {
@@ -281,6 +283,7 @@ this.setState({
         dropdown: { value: event.target.value }
       }
     });
+  }
   };
 
   getUploadCard = (card, key) => {
@@ -310,7 +313,7 @@ this.setState({
           )}
         </Grid>
         
-        {/* <Grid item={true} xs={12} sm={6} md={4}> */}
+        <Grid item={true} xs={6} sm={6} md={4}>
           {card.documentComment && (
             <TextFieldContainer
             select={false}
@@ -318,7 +321,7 @@ this.setState({
             placeholder={{ labelKey: "comment" }}
             // data={card.dropdown.menu}
             // optionValue="code"
-            // optionLabel="label"
+            // optionLabel="label"           
             shrink={true}
             required={false}
             disabled={!card.documentComment}           
@@ -326,7 +329,7 @@ this.setState({
             jsonPath={jsonPath}
           />
           )}
-        {/* </Grid> */}
+        </Grid>
        
         <Grid
           item={true}

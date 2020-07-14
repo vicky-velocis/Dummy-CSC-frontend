@@ -1,0 +1,308 @@
+import { getCommonCard, getCommonContainer, getCommonHeader, getDateField, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../ui-utils";
+import { fetchData, fetchDataForFilterFields, resetFields } from "./searchResource/citizenSearchFunctions";
+
+
+
+const header = getCommonHeader(
+  {
+    labelName: "My Service Request",
+    labelKey: "HC_MY_SERVICE_REQUEST_HEADER"
+  },
+  {
+    classes: {
+      root: "common-header-cont"
+    }
+  }
+);
+
+
+
+// setapplicationType("SERVICEREQUEST");
+export const FieldsForFilterForm = getCommonCard({
+
+  masterContainer: getCommonContainer({
+    ServiceRequestId: {
+      ...getTextField({
+        label: {
+          labelName: "Service Request ID",
+          labelKey: "HC_SERVICE_REQUEST_ID"
+        },
+        placeholder: {
+          labelName: "Service Request ID",
+          labelKey: "HC_SERVICE_REQUEST_ID_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+          md: 4
+        },
+
+        //  required:true,
+        pattern: getPattern("BuildingStreet"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "myServiceRequests[0].servicerequestid"
+      })
+    },
+    FromDate: getDateField({
+      label: { labelName: "From Date", labelKey: "HC_FROM_DATE_LABEL" },
+      placeholder: {
+        labelName: "FromDate",
+        labelKey: "HC_FROM_DATE_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+      pattern: getPattern("Date"),
+
+
+      jsonPath: "myServiceRequests[0].FromDate",
+      sourceJsonPath: "myServiceRequests[0].FromDate",
+
+
+    }),
+
+    ToDate: getDateField({
+      label: { labelName: "To Date", labelKey: "HC_TO_DATE_LABEL" },
+      placeholder: {
+        labelName: "To Date",
+        labelKey: "HC_TO_DATE_PLACEHOLDER"
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+      pattern: getPattern("Date"),
+
+
+      jsonPath: "myServiceRequests[0].ToDate",
+      sourceJsonPath: "myServiceRequests[0].ToDate",
+
+
+
+    }),
+    ServiceRequestType: getSelectField({
+      label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
+      optionLabel: "name",
+      optionValue: "name",
+      placeholder: {
+        labelName: "Service Request Type",
+        labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+      },
+      //    jsonPath: "searchScreen.toDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+      },
+
+      jsonPath: "myServiceRequests[0].servicetype",
+      sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
+      required: false
+    }),
+  }),
+
+
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer({
+      firstCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      },
+      searchButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+          // align: "center"
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "white",
+            // margin: "8px",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            minWidth: "220px",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Apply",
+            labelKey: "HC_APPLY_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            fetchDataForFilterFields(state, dispatch);
+            // set("")
+          }
+
+
+        }
+      },
+      resetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 3
+          // align: "center"
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "#FE7A51",
+            // backgroundColor: "#FE7A51",
+            border: "#FE7A51 solid 1px",
+            borderRadius: "2px",
+            // width: window.innerWidth > 480 ? "80%" : "100%",
+            minWidth: "220px",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "CLEAR ALL",
+            labelKey: "HC_CLEARFORM_BUTTON"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
+        }
+      },
+      lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  })
+});
+//useful
+
+const getMdmsData = async (dispatch) => {
+
+  let tenantId = getTenantId().split(".")[0];
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
+            }
+          ]
+        },
+        {
+          moduleName: "eg-horticulture",
+          masterDetails: [
+            {
+              name: "ServiceType"
+            }
+          ]
+        },
+        {
+          moduleName: "RAINMAKER-PGR",
+          masterDetails: [
+            {
+              name: "Sector"
+            }
+          ]
+        }
+      ]
+    }
+  };
+  try {
+    // debugger
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    // debugger
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const screenConfig = {
+  uiFramework: "material-ui",
+  name: "myServiceRequests",
+  beforeInitScreen: (action, state, dispatch) => {
+    resetFields(state, dispatch)
+    getMdmsData(dispatch).then(response => {
+    })
+    fetchData(action, state, dispatch);
+    return action;
+  },
+
+  components: {
+    div: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      children: {
+        header: header,
+        form: FieldsForFilterForm,
+        applicationsCard: {
+          uiFramework: "custom-molecules",
+          componentPath: "SingleApplication",
+          visible: true,
+          props: {
+            contents: [
+              {
+                label: "HC_COMMON_TABLE_COL_SERVICE_TYPE_LABEL",
+                // label: { labelName: "Type of Service Request", labelKey: "HC_COMMON_TABLE_COL_SERVICE_TYPE_LABEL" },
+                jsonPath: "service_type"
+              },
+              {
+                label: "HC_COMMON_TABLE_COL_OWNER_NAME_LABEL",
+                // label: { labelName: "Owner Name", labelKey: "HC_COMMON_TABLE_COL_OWNER_NAME_LABEL" },
+                jsonPath: "owner_name"
+              },
+              {
+                label: "HC_COMMON_TABLE_COL_SERVICE_REQUEST_DATE_LABEL",
+                // label: { labelName: "Type of Service Request", labelKey: "HC_COMMON_TABLE_COL_SERVICE_TYPE_LABEL" },
+                jsonPath: "createdtime"
+              },
+              {
+                label: "HC_COMMON_TABLE_COL_SERVICE_REQUEST_ID_LABEL",
+                // label: { labelName: "Service Request ID", labelKey: "HC_COMMON_TABLE_COL_SERVICE_REQUEST_ID_LABEL" },
+                jsonPath: "service_request_id"
+              },
+              {
+                label: "HC_COMMON_TABLE_COL_SERVICE_REQUEST_STATUS_LABEL",
+                // label: { labelName: "Service Request Status", labelKey: "HC_COMMON_TABLE_COL_SERVICE_REQUEST_STATUS_LABEL" },
+                jsonPath: "service_request_status",
+                prefix: "HC_SERVICE_REQUEST_STATUS_"
+              }
+            ],
+            moduleName: "HC",
+            homeURL: "/egov-hc/servicerequest"
+          }
+        }
+      }
+    }
+  }
+};
+
+export default screenConfig;

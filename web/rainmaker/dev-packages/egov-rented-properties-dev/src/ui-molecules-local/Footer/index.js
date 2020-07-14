@@ -62,14 +62,10 @@ class Footer extends React.Component {
   }
 
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute, dataPath } = this.props;
+    const { handleFieldChange, setRoute, dataPath, moduleName } = this.props;
     const {preparedFinalObject} = this.props.state.screenConfiguration;
-    const {workflow: {ProcessInstances = []}, Properties} = preparedFinalObject || {}
+    const {workflow: {ProcessInstances = []}} = preparedFinalObject || {}
     let employeeList = [];
-    if (dataPath === "BPA") {
-      handleFieldChange(`${dataPath}.comment`, "");
-      handleFieldChange(`${dataPath}.assignees`, "");
-    } else {
       let action = ""
       switch(item.buttonLabel) {
         case "SENDBACK": {
@@ -79,14 +75,24 @@ class Footer extends React.Component {
         default : action = ""
       }
       let assignee = [];
-      if(!!action && Properties[0].masterDataState !== "PENDINGJAVERIFICATION") {
-        const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
-        assignee = !!assigner.uuid ? [assigner.uuid] : []
+      switch(moduleName) {
+        case "MasterRP": {
+          if(!!action && dataPath[0].masterDataState !== "PENDINGJAVERIFICATION") {
+            const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
+            assignee = !!assigner.uuid ? [assigner.uuid] : []
+          }
+          break
+        }
+        case "OwnershipTransferRP": {
+          if(!!action && dataPath[0].applicationState !== "PENDINGCLVERIFICATION") {
+            const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
+            assignee = !!assigner.uuid ? [assigner.uuid] : []
+          }
+          break
+        }
       }
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, assignee);
-    }
-
     if (item.isLast) {
       const url =
         process.env.NODE_ENV === "development"
@@ -176,23 +182,6 @@ class Footer extends React.Component {
       dispatch
     } = this.props;
     const { open, data, employeeList } = this.state;
-    const status = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Properties[0].status`
-    );
-    const id = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Properties[0].id`
-    );
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Properties[0].tenantId`
-    );
-    const transitNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Properties[0].transitNumber`
-    );
-
     const downloadMenu =
       contractData &&
       contractData.map(item => {
@@ -204,41 +193,7 @@ class Footer extends React.Component {
             this.openActionDialog(item);
           }
         };
-      });
-  //     if(moduleName === "NewTL"){
-  //       const responseLength = get(
-  //         state.screenConfiguration.preparedFinalObject,
-  //         `licenseCount`,
-  //         1
-  //       );
-  //     const rolearray=  getUserInfo() && JSON.parse(getUserInfo()).roles.filter((item)=>{
-  //         if(item.code=="TL_CEMP"&&item.tenantId===tenantId)
-  //         return true;
-  //       })
-  //      const rolecheck= rolearray.length>0? true: false;
-  //   if ((status === "APPROVED"||status === "EXPIRED") && applicationType !=="RENEWAL"&& responseLength===1 && rolecheck===true) {
-  //     const editButton = {
-  //       label: "Edit",
-  //       labelKey: "WF_TL_RENEWAL_EDIT_BUTTON",
-  //       link: () => {
-  //         this.props.setRoute(
-  //           `/tradelicence/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
-  //         );
-  //       }
-  //     };
-  //     downloadMenu && downloadMenu.push(editButton);
-  //     const submitButton = {
-  //       label: "Submit",
-  //       labelKey: "WF_TL_RENEWAL_SUBMIT_BUTTON",
-  //       link: () => {
-  //         this.renewTradelicence(financialYear, tenantId);
-  //       }
-  //     };
-  //     downloadMenu && downloadMenu.push(submitButton);
-  //   }
-  // }
-
-    
+      });    
     const buttonItems = {
       label: { labelName: "Take Action", labelKey: "WF_TAKE_ACTION" },
       rightIcon: "arrow_drop_down",
@@ -272,6 +227,7 @@ class Footer extends React.Component {
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
           dataPath={dataPath}
+          moduleName={moduleName}
         />
       </div>
     );

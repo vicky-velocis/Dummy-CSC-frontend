@@ -22,7 +22,7 @@ const header = getCommonContainer({
   header: getCommonHeader({
     //labelName: `Application for ${getapplicationType()} - (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
     //labelKey: "NOC_COMMON_APPLY_NOC"
-    labelName: `Application for ${getapplicationType().substring(0,getapplicationType().length -3)} NOC - (${getCurrentFinancialYear()})` //later use getFinancialYearDates
+    labelName: `Application for ${getapplicationType().substring(0, getapplicationType().length - 3)} NOC - (${getCurrentFinancialYear()})` //later use getFinancialYearDates
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -71,31 +71,7 @@ const loadNocData = async (dispatch, applicationNumber, tenantId) => {
   dispatch(prepareFinalObject("OpmsNOCs", get(response, "OpmsNOCs", [])));
 };
 
-const getPaymentGatwayList = async (action, state, dispatch) => {
-  try {
-    let payload = null;
-    payload = await httpRequest(
-      "post",
-      "/pg-service/gateway/v1/_search",
-      "_search",
-      [],
-      {}
-    );
 
-    let payloadprocess = [];
-      for (let index = 0; index < payload.length; index++) {
-        const element = payload[index];
-        let pay = {
-          element : element
-        }
-        payloadprocess.push(pay);
-      }
-
-    dispatch(prepareFinalObject("applyScreenMdmsData.payment", payloadprocess));
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 
 
@@ -105,8 +81,6 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    getPaymentGatwayList(action, state, dispatch).then(response => {
-    });
     loadNocData(dispatch, applicationNumber, tenantId);
     fetchBill(state, dispatch, applicationNumber, tenantId);
     return action;
@@ -168,8 +142,8 @@ const screenConfig = {
               //   "PM_PAYMENT_VIEW_BREAKUP",
               //   "pay"
               // ),
-             // capturePaymentDetails,
-            //  g8Details
+              // capturePaymentDetails,
+              //  g8Details
             })
           }
         },

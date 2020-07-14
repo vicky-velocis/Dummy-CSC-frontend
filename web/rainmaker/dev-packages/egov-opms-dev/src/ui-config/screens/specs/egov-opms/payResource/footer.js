@@ -9,105 +9,158 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields, showHideAdhocPopup } from "../../utils";
 import { getOPMSTenantId, localStorageSet, getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+const getPaymentGatwayList = async (dispatch) => {
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/pg-service/gateway/v1/_search",
+      "_search",
+      [],
+      {}
+    );
 
+    let payloadprocess = [];
+    for (let index = 0; index < payload.length; index++) {
+      const element = payload[index];
+      let pay = {
+        element: element
+      }
+      payloadprocess.push(pay);
+    }
 
+    dispatch(prepareFinalObject("applyScreenMdmsData.payment", payloadprocess));
+  } catch (e) {
+    dispatch(toggleSpinner());
+    console.log(e);
+  }
+};
 export const selectPG = async (state, dispatch) => {
-  showHideAdhocPopup(state, dispatch, "pay")
+  try {
+    dispatch(toggleSpinner());
+    await getPaymentGatwayList(dispatch).then(response => {
+      dispatch(toggleSpinner());
+      showHideAdhocPopup(state, dispatch, "pay")
+    });
+  } catch (e) {
+    dispatch(toggleSpinner());
+    console.log(e);
+  }
 };
 export const callPGService = async (state, dispatch) => {
+
   const gateway = get(state, "screenConfiguration.preparedFinalObject.OPMS.paymentGateway");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  const applicationNumber = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-
-  //let callbackUrl=`${window.origin}/egov-opms/paymentRedirectPage`;
-  let callbackUrl = `${
-    process.env.NODE_ENV === "production"
-      ? `${window.origin}/citizen`
-      : window.origin
-    }/egov-opms/paymentRedirectPage`;
-  try {
-    const queryObj = [
-      { key: "tenantId", value: tenantId },
-      { key: "consumerCode", value: applicationNumber },
-      //value:"PMS-2020-02-21-041823"
-      { key: "businessService", value: "OPMS" }
-      //value: applicationNumber
-    ];
+  if (gateway) {
 
 
-    // const billPayload = await getBill(queryObj);
-    // const taxAmount = get(billPayload, "Bill[0].totalAmount")
-    // const billId = get(billPayload, "Bill[0].id")
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
 
-    const taxAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
-    const billId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].id");
-    const consumerCode = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");
-    const Accountdetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].billAccountDetails");
-    localStorageSet("amount", 0);
-    localStorageSet("gstAmount", 0);
-    localStorageSet("performanceBankGuaranteeCharges", 0);
-
-    for (let index = 0; index < Accountdetails.length; index++) {
-      const element = Accountdetails[index];
-      if (element.taxHeadCode === `PETNOC_FEE` ||
-        element.taxHeadCode === `ROADCUTNOC_FEE` ||
-        element.taxHeadCode === `ADVERTISEMENTNOC_FEE`) {
-        localStorageSet("amount", element.amount);
-      } else if (element.taxHeadCode === `PETNOC_TAX` ||
-        element.taxHeadCode === `ROADCUTNOC_TAX` ||
-        element.taxHeadCode === `ADVERTISEMENTNOC_TAX`) {
-        localStorageSet("gstAmount", element.amount);
-      } else if (element.taxHeadCode === `ROADCUTNOC_FEE_BANK`) {
-        localStorageSet("performanceBankGuaranteeCharges", element.amount);
-      }
-    }
-
-
-    const taxAndPayments = [{
-      amountPaid: taxAmount,
-      billId: billId
-    }]
-
+    //let callbackUrl=`${window.origin}/egov-opms/paymentRedirectPage`;
+    let callbackUrl = `${
+      process.env.NODE_ENV === "production"
+        ? `${window.origin}/citizen`
+        : window.origin
+      }/egov-opms/paymentRedirectPage`;
     try {
+      const queryObj = [
+        { key: "tenantId", value: tenantId },
+        { key: "consumerCode", value: applicationNumber },
+        //value:"PMS-2020-02-21-041823"
+        { key: "businessService", value: "OPMS" }
+        //value: applicationNumber
+      ];
 
-      const userMobileNumber = get(state, "auth.userInfo.mobileNumber")
-      const userName = get(state, "auth.userInfo.name")
-      const requestBody = {
-        Transaction: {
-          tenantId,
-          billId: billId, // get(billPayload, "Bill[0].id"),
-          txnAmount: taxAmount, //get(billPayload, "Bill[0].totalAmount"),
-          module: "OPMS",
-          taxAndPayments,
-          consumerCode: consumerCode, // get(billPayload, "Bill[0].consumerCode"),
-          productInfo: getapplicationType(), // "Property Tax Payment",
-          gateway: gateway,
-          user: {
-            mobileNumber: userMobileNumber,
-            name: userName,
-            tenantId: getOPMSTenantId(),
-            // process.env.REACT_APP_NAME === "Employee" ? getOPMSTenantId() : get(state,"auth.userInfo.permanentCity")
-          },
-          callbackUrl
+      const taxAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
+      const billId = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].id");
+      const consumerCode = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");
+      const Accountdetails = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].billAccountDetails");
+      localStorageSet("amount", 0);
+      localStorageSet("gstAmount", 0);
+      localStorageSet("performanceBankGuaranteeCharges", 0);
+
+      for (let index = 0; index < Accountdetails.length; index++) {
+        const element = Accountdetails[index];
+        if (element.taxHeadCode === `PETNOC_FEE` ||
+          element.taxHeadCode === `ROADCUTNOC_FEE` ||
+          element.taxHeadCode === `ADVERTISEMENTNOC_FEE`) {
+          localStorageSet("amount", element.amount);
+        } else if (element.taxHeadCode === `PETNOC_TAX` ||
+          element.taxHeadCode === `ROADCUTNOC_TAX` ||
+          element.taxHeadCode === `ADVERTISEMENTNOC_TAX`) {
+          localStorageSet("gstAmount", element.amount);
+        } else if (element.taxHeadCode === `ROADCUTNOC_FEE_BANK`) {
+          localStorageSet("performanceBankGuaranteeCharges", element.amount);
         }
-      };
-      const goToPaymentGateway = await httpRequest(
-        "post",
-        "pg-service/transaction/v1/_create",
-        "_create",
-        [],
-        requestBody
-      );
-      const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
-      window.location = redirectionUrl;
+      }
+
+
+      const taxAndPayments = [{
+        amountPaid: taxAmount,
+        billId: billId
+      }]
+
+      try {
+
+        const userMobileNumber = get(state, "auth.userInfo.mobileNumber")
+        const userName = get(state, "auth.userInfo.name")
+        const requestBody = {
+          Transaction: {
+            tenantId,
+            billId: billId, // get(billPayload, "Bill[0].id"),
+            txnAmount: taxAmount, //get(billPayload, "Bill[0].totalAmount"),
+            module: `OPMS.${getapplicationType()}`,
+            taxAndPayments,
+            consumerCode: consumerCode, // get(billPayload, "Bill[0].consumerCode"),
+            productInfo: getapplicationType(),
+            gateway: gateway,
+            user: {
+              mobileNumber: userMobileNumber,
+              name: userName,
+              tenantId: getOPMSTenantId(),
+            },
+            callbackUrl
+          }
+        };
+
+        const goToPaymentGateway = await httpRequest(
+          "post",
+          "pg-service/transaction/v1/_create",
+          "_create",
+          [],
+          requestBody
+        );
+
+        const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
+        window.location = redirectionUrl;
+      } catch (e) {
+        dispatch(toggleSnackbar(true, { labelName: `API ERROR ${e.message}` }, "error"));
+
+        console.log(e);
+      }
     } catch (e) {
+      dispatch(toggleSnackbar(true, { labelName: `API ERROR ${e.message}` }, "error"));
+
       console.log(e);
     }
-  } catch (e) {
-    console.log(e);
+  } else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please Select Gateway To Proceed",
+          labelKey: "PM_SELECT_GATEWAY_WARN"
+        },
+        "warning"
+      )
+    );
+
+
   }
 };
 
@@ -338,7 +391,7 @@ const callBackForPay = async (state, dispatch) => {
         "collection-services/receipts/_create",
         "_create",
         [], ReceiptBody, [], {});
-        
+
       let receiptNumber = get(
         response,
         "Receipt[0].Bill[0].billDetails[0].receiptNumber",

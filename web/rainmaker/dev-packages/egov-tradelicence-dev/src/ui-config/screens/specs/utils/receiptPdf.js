@@ -1051,7 +1051,7 @@ const generateReceipt = async (state, dispatch, type) => {
       // certificate_data && pdfMakeCustom.createPdf(certificate_data).print();
       break;
     case "receipt_download":
-      download(receiptQueryString, Licenses, transformedData);
+      download(receiptQueryString, Licenses, transformedData, userInfo.name);
 
     //   let receipt_data = getReceiptData(transformedData, ulbLogo);
     //   receipt_data &&
@@ -1059,7 +1059,7 @@ const generateReceipt = async (state, dispatch, type) => {
     //     pdfMakeCustom.createPdf(receipt_data).open();
       break;
     case "receipt_print":
-      download(receiptQueryString, Licenses, transformedData, "print");
+      download(receiptQueryString, Licenses, transformedData, userInfo.name, "print");
 
       // receipt_data = getReceiptData(transformedData, ulbLogo);
       // receipt_data && pdfMakeCustom.createPdf(receipt_data).print();

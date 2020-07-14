@@ -15,14 +15,37 @@ import isEqual from "lodash/isEqual";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import CountDetails from "./components/CountDetails";
 import "./index.css";
+import { Multiselect } from "multiselect-react-dropdown";
 
 class AllComplaints extends Component {
+  constructor(props) {   
+     super(props);  
+      this.multiselectRef = React.createRef();
+    this.multiDropdownStyle = {
+      chips: {
+        background: "#FE7A51"
+      },
+      searchBox: {
+        border: "none",
+        borderBottom: "1px solid #cccccc",
+        borderRadius: "0px",
+      },
+      multiselectContainer: {
+        color: "#FE7A51"
+      },    
+	optionListContainer:{
+		"position" : "relative !important",
+		"z-index" : "99999"
+	}
+	};
+    }
+   selectedSector = [];
   state = {
     complaintNo: "",
     mobileNo: "",
     complaints: [],
     search: false,
-    value: 0,
+    value: window.localStorage.getItem('tabValue')?parseInt(window.localStorage.getItem('tabValue')):0,
     sortPopOpen: false,
     errorText: ""
   };
@@ -42,6 +65,12 @@ class AllComplaints extends Component {
       renderCustomTitle,
       prepareFinalObject
     } = this.props;
+
+    if(window.localStorage.getItem('tabValue')){
+      // this.onChange(parseInt(window.localStorage.getItem('tabValue')));
+       window.localStorage.removeItem('tabValue');
+     }
+     
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
     //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
@@ -195,7 +224,10 @@ class AllComplaints extends Component {
   };
 
   onComplaintClick = complaintNo => {
-    this.props.history.push(`/complaint-details/${complaintNo}`);
+    this.props.history.push({
+      pathname: `/complaint-details/${complaintNo}`,
+      state: { tabValue: this.state.value }
+    })
   };
 
   onComplaintChange = e => {
@@ -217,15 +249,24 @@ class AllComplaints extends Component {
 
   onSearch = () => {
     const { complaintNo, mobileNo } = this.state;
-    const { fetchComplaints, toggleSnackbarAndSetText } = this.props;
+    const { fetchComplaints, toggleSnackbarAndSetText,role } = this.props;
     let queryObj = [];
+
+    if(role === "eo"){
+      queryObj.push({ key: "status", value: "assigned,escalatedlevel1pending,escalatedlevel2pending" });
+    }
+    else if (role === "employee"){
+      queryObj.push({ key: "status", value: "open,reassignrequested" });
+    }
     if (complaintNo) {
       queryObj.push({ key: "serviceRequestId", value: complaintNo });
     }
     if (mobileNo) {
       queryObj.push({ key: "phone", value: mobileNo });
     }
-
+    if (this.selectedSector.length > 0) { 
+       queryObj.push({ key: "mohalla", value: this.selectedSector });
+    }
     // if (complaintNo || mobileNo) {
     //   fetchComplaints(queryObj, true, true);
     // }
@@ -246,17 +287,27 @@ class AllComplaints extends Component {
     } else if (mobileNo) {
       fetchComplaints(queryObj, true, true);
     }
+    else if (this.selectedSector.length > 0) { 
+        fetchComplaints(queryObj, true, true); 
+       }
     this.setState({ search: true });
   };
 
   clearSearch = () => {
     const { fetchComplaints } = this.props;
     fetchComplaints([
-      { key: "status", value: "assigned,open,reassignrequested" }
+      { key: "status", value: "assigned,open,reassignrequested,escalatedlevel1pending,escalatedlevel2pending" }
     ]);
-    this.setState({ mobileNo: "", complaintNo: "", search: false });
+    this.setState({ mobileNo: "", complaintNo: "", search: false,sector:[] });
+    this.selectedSector = [];    this.multiselectRef.current.resetSelectedValues();
   };
+  onSelect(selectedList, selectedItem) {  
+      this.selectedSector = selectedList.map((sectorDetail) => sectorDetail.value );
+    }
 
+    onRemove(selectedList, removedItem) {   
+     this.selectedSector = selectedList.map( (sectorDetail) => sectorDetail.value );  
+  }
   onChange = value => {
     this.setState({ value });
   };
@@ -284,7 +335,8 @@ class AllComplaints extends Component {
       searchFilterEmployeeComplaints,
       assignedTotalComplaints,
       unassignedTotalComplaints,
-      employeeTotalComplaints
+      employeeTotalComplaints,
+      sectorDropdown
     } = this.props;
     const hintTextStyle = {
       letterSpacing: "0.7px",
@@ -343,6 +395,7 @@ class AllComplaints extends Component {
         <Tabs
           className="employee-complaints-tab"
           onChange={this.onChange}
+          value = {this.state.value}
           tabs={[
             {
               label: (
@@ -678,10 +731,25 @@ class AllComplaints extends Component {
                     }}
                     hintStyle={{ width: "100%" }}
                   />
-                </div>
+                   </div>
+                <div className="col-sm-6 col-md-6 col-xs-12" style={{ paddingLeft: 8,paddingTop:8 }}>   
+                  <Multiselect   
+                    options={sectorDropdown}  
+                    closeIcon="close"      
+                    displayValue="name"   
+                    style={this.multiDropdownStyle}
+                    onSelect={(selectedList, selectedItem) => this.onSelect(selectedList, selectedItem)}                   
+                    onRemove={(selectedList, selectedItem) => this.onRemove(selectedList, selectedItem)} 
+                    ref={this.multiselectRef}    
+                    closeIcon={"circle"}     
+                    placeholder={"Select Sector"} 
+                    selectedValues={this.state.sector}       
+                    avoidHighlightFirstOption             
+                   />   
+                  </div>     
                 <div
-                  className="col-sm-6 col-xs-12 csr-action-buttons"
-                  style={{ marginTop: 10, paddingRight: 8 }}
+                  className="col-sm-12 col-xs-12 csr-action-buttons"
+                  style={{ marginTop: 10, paddingRight: 8,textAlign:"center" }}
                 >
                   <Button
                     label={
@@ -771,7 +839,7 @@ const displayStatus = (status = "") => {
 
 const mapStateToProps = state => {
   const { complaints, common, screenConfiguration = {} } = state || {};
-  const { categoriesById, byId, order } = complaints;
+  const { categoriesById, byId, order,complaintSector } = complaints;
   const { fetchSuccess } = complaints;
   const { preparedFinalObject = {} } = screenConfiguration;
   const { pgrComplaintCount = {} } = preparedFinalObject;
@@ -816,7 +884,8 @@ const mapStateToProps = state => {
         complaint =>
           complaint.rawStatus === "escalatedlevel1pending" ||
           complaint.rawStatus === "escalatedlevel2pending" ||
-          complaint.rawStatus === "assigned" 
+          complaint.rawStatus === "assigned" ||
+          complaint.rawStatus === "reassignrequested"
       );  
     }else{
       filteredEmployeeComplaints = transformedComplaints.filter(
@@ -834,7 +903,8 @@ const mapStateToProps = state => {
       complaint =>
         complaint.rawStatus === "escalatedlevel1pending" ||
         complaint.rawStatus === "escalatedlevel2pending" ||
-        complaint.rawStatus === "assigned" 
+        complaint.rawStatus === "assigned" ||
+        complaint.rawStatus === "reassignrequested"
     );  
   }
   else{
@@ -934,6 +1004,14 @@ const mapStateToProps = state => {
   );
   const numEmpComplaint = employeeComplaints.length;
   const numCSRComplaint = transformedComplaints.length;
+  let  sectorDropdown ="";
+if(complaintSector){
+  sectorDropdown =  Object.values(complaintSector).map(sector => {
+                                    let value = sector.code;
+                                    let name = sector.name;
+                                    return { value:value , name:name}
+                            });
+                   }
   return {
     assignedComplaints,
     unassignedComplaints,
@@ -947,7 +1025,8 @@ const mapStateToProps = state => {
     searchFilterEmployeeComplaints,
     assignedTotalComplaints,
     unassignedTotalComplaints,
-    employeeTotalComplaints
+    employeeTotalComplaints,
+    sectorDropdown
   };
 };
 

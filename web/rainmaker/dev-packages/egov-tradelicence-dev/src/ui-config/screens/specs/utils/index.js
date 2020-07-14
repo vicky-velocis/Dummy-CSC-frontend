@@ -3,7 +3,7 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import moment from 'moment'
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
@@ -958,17 +958,23 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses,mode="download") => {
+export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="download") => {
   const queryStr = [
     { key: "key", value: `tlapplication_${Licenses[0].businessService}` },
     { key: "tenantId", value: "ch" }
   ]
   let {documents} = Licenses[0].additionalDetails;
+  let fees = feeEstimate.map(item => ({
+    ...item,
+    label: getLocaleLabels(item.name.labelName, item.name.labelKey)
+  }))
+  const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
+  const {owners} = Licenses[0].tradeLicenseDetail;
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
   const length = documents.length % 4
-  documents = [...documents, ...new Array(length > 2 ? 4 - length : length).fill({title: "", name: ""})]
+  documents = !!length ? [...documents, ...new Array(4 - length).fill({title: "", name: ""})] : documents
   const myDocuments = documents.map((item) => ({
     ...item, title: getLocaleLabels(item.title, item.title)
   })).reduce((splits, i) => {
@@ -977,8 +983,9 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
     const lastArray = splits[length - 1] || [];
     return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
   }, []);
+  const age = calculateAge(owners[0].dob);
   let licenses = Licenses[0];
-  licenses = {...licenses, additionalDetails: {documents: myDocuments}, ownerDocument}
+  licenses = {...licenses, additionalDetails: {documents: myDocuments}, ownerDocument, age, feeEstimate: fees, totalAmount}
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
@@ -2547,14 +2554,18 @@ export const checkValueForNA = value => {
 
 export const calculateAge = dob => {
   var regEx = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i
+  const todayDate = moment();
   if (regEx.test(dob)) {
-    dob = new Date(dob);
-    return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
+    const dobDate = moment(dob, "DD-MM-YYYY");
+    return todayDate.diff(dobDate, 'years');
+    // dob = new Date(dob);
+    // return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
   } else {
     const newTimestamp = new Date(dob).getTime();
     if (!isNaN(parseFloat(newTimestamp)) && isFinite(newTimestamp)) {
-      dob = new Date(dob);
-      return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
+      return todayDate.diff(moment(new Date(dob)), 'years')
+      // dob = new Date(dob);
+      // return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
     }
     return false;
   }

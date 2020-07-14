@@ -6,7 +6,8 @@ import {
   getSelectField,
   getCheckBoxwithLabel,
   getCommonContainer,
-  getPattern
+  getPattern,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getPMSPattern } from "../../../../../ui-utils/commons";
 import { getMapLocator } from "../../utils";
@@ -100,7 +101,8 @@ return getCommonCard({
           uiFramework: "custom-containers",
           componentPath: "RadioGroupContainer",
           gridDefination: {
-            xs: 6
+            xs:24,
+            sm: 12
           },
           jsonPath: "ProcessInstances[0].employeeOtherDetails.isTakenMonthlyPensionAndGratuity",
           type: "array",
@@ -332,12 +334,14 @@ return getCommonCard({
           }
         },
       }
-    ),
-   
+    ),   
     dues: getTextField({
       label: {
         labelName: "Dues Amount",
         labelKey: "PENSION_EMPLOYEE_PENSION_DUES_AMOUNT"
+      },
+      style: {
+        width: "50%",
       },
       props:{
         className:"applicant-details-error"
@@ -347,6 +351,10 @@ return getCommonCard({
         labelKey: "PENSION_EMPLOYEE_PENSION_DUES_AMOUNT"
       },
       required: false,
+      gridDefination: {
+        xs:24,
+        sm: 12
+      },
       minValue:0,
       props: {
         disabled: data[0].employeeOtherDetailsUpdate,      
@@ -354,6 +362,7 @@ return getCommonCard({
       pattern: getPattern("Amount"),
       jsonPath: "ProcessInstances[0].employeeOtherDetails.dues"
     }),
+    breakAfterDuesAmount: getBreak(), 
     employeeGroup: {
       ...getSelectField({
         label: {
@@ -384,6 +393,7 @@ return getCommonCard({
      
       
     },
+
     totalNoPayLeavesYears: getTextField({
       label: {
         labelName: "leaveCount YEAR ",
@@ -534,7 +544,9 @@ return getCommonCard({
         moduleName: "egov-pms",
         componentPath: "CheckboxContainer",
         gridDefination: {
-          xs: 6
+          xs: 6,
+         
+
         },
         isFieldValid: true,
         required:false,
@@ -546,33 +558,14 @@ return getCommonCard({
         }
     
       },
-      miscellaneous: getTextField({
-        label: {
-          labelName: "Miscellaneous",
-          labelKey: "PENSION_EMPLOYEE_PENSION_MISCELLANEOUS"
-        },
-        props:{
-          className:"applicant-details-error"
-        }, 
-        placeholder: {
-          labelName: "Miscellaneous",
-          labelKey: "PENSION_EMPLOYEE_PENSION_MISCELLANEOUS"
-        },
-        required: false,
-        minValue:0,
-        maxLength:18,
-        props: {
-          disabled: data[0].employeeOtherDetailsUpdate,      
-        },
-        pattern: getPMSPattern("Amount"),
-        jsonPath: "ProcessInstances[0].employeeOtherDetails.miscellaneous"
-      }),
+
       //
       isAnyMisconductInsolvencyInefficiency: {
         uiFramework: "custom-containers",
         componentPath: "RadioGroupContainer",
         gridDefination: {
-          xs: 6
+          xs:24,
+          sm: 12
         },
         jsonPath: "ProcessInstances[0].employeeOtherDetails.isAnyMisconductInsolvencyInefficiency",
         type: "array",
@@ -610,6 +603,13 @@ return getCommonCard({
               )
             );  
             set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isAnyMisconductInsolvencyInefficiency", false);           
+            set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted", false);           
+            dispatch(
+              handleField(
+                "ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted",
+                false
+              )
+            );
                      
           } 
           else {
@@ -628,6 +628,55 @@ return getCommonCard({
         }
       },
      
+      
+       //
+       employeeCompassionatePensionContainer:getCommonContainer(
+        {
+         
+      isCompassionatePensionGranted: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pms",
+        componentPath: "CheckboxContainer",
+        gridDefination: {
+          xs:24,
+          sm: 12
+        },
+        isFieldValid: true,
+        required:false,
+        props: {
+          //content: "any Misconduct, Insolvency or Inefficiency",
+          content: "PENSION_EMPLOYEE_COMPASSIONATE_PENSION_GRANTED",
+          jsonPath: "ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted",
+         disabled: data[0].employeeOtherDetailsUpdate,
+        }
+    
+      }
+    }    
+      ),
+
+      //
+      BreakAfterMisconduct:getBreak(),
+      miscellaneous: getTextField({
+        label: {
+          labelName: "Miscellaneous",
+          labelKey: "PENSION_EMPLOYEE_PENSION_MISCELLANEOUS"
+        },
+        props:{
+          className:"applicant-details-error"
+        }, 
+        placeholder: {
+          labelName: "Miscellaneous",
+          labelKey: "PENSION_EMPLOYEE_PENSION_MISCELLANEOUS"
+        },
+        required: false,
+        minValue:0,
+        maxLength:18,
+        props: {
+          disabled: data[0].employeeOtherDetailsUpdate,      
+        },
+        pattern: getPMSPattern("Amount"),
+        jsonPath: "ProcessInstances[0].employeeOtherDetails.miscellaneous"
+      }),
       incomeTax: getTextField({
         label: {
           labelName: "Income Tax",
@@ -649,35 +698,6 @@ return getCommonCard({
         pattern: getPMSPattern("Amount"),
         jsonPath: "ProcessInstances[0].employeeOtherDetails.incomeTax"
       }),
-       //
-       employeeCompassionatePensionContainer:getCommonContainer(
-        {
-          gridDefination: {
-            xs: 6,
-            align: "right"
-          },
-      isCompassionatePensionGranted: {
-        uiFramework: "custom-containers-local",
-        moduleName: "egov-pms",
-        componentPath: "CheckboxContainer",
-        gridDefination: {
-          xs: 6,
-          align: "right"
-        },
-        isFieldValid: true,
-        required:false,
-        props: {
-          //content: "any Misconduct, Insolvency or Inefficiency",
-          content: "PENSION_EMPLOYEE_COMPASSIONATE_PENSION_GRANTED",
-          jsonPath: "ProcessInstances[0].employeeOtherDetails.isCompassionatePensionGranted",
-         disabled: data[0].employeeOtherDetailsUpdate,
-        }
-    
-      }
-    }    
-      ),
-
-      //
       cess: getTextField({
         label: {
           labelName: "Cess",

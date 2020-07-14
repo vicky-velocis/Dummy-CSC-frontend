@@ -27,6 +27,8 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { getAccessToken, setapplicationType, getOPMSTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { checkForRole } from "../utils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const stepsData = [
   { labelName: "Applicant Details", labelKey: "ADV_APPLICANT_DETAILS_NOC" },
@@ -40,8 +42,8 @@ export const stepper = getStepperObject(
 );
 
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
 
+let roles = JSON.parse(getUserInfo()).roles
 const getMdmsData = async (action, state, dispatch) => {
 
   let tenantId = getOPMSTenantId();
@@ -128,57 +130,68 @@ export const callbackforsummaryaction = async (state, dispatch) => {
   }
 };
 
-const routeToPaymentPage=(exempted,dispatch)=>{
+const routeToPaymentPage = (exempted, dispatch) => {
   let tenantId = getOPMSTenantId();
   const applicationid = getQueryArg(window.location.href, "applicationNumber");
 
   const appendUrl =
-  process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = parseInt(exempted) === 1 ? `/egov-opms/advertisementnoc-my-applications`
-  :
-  localStorageGet('app_noc_status') === 'REASSIGN' ? `/egov-opms/advertisementnoc-my-applications` 
-  : `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`;
-     dispatch(setRoute(reviewUrl));
+    :
+    localStorageGet('app_noc_status') === 'REASSIGN' ? `/egov-opms/advertisementnoc-my-applications`
+      : `${appendUrl}/egov-opms/pay?applicationNumber=${applicationid}&tenantId=${tenantId}`;
+  dispatch(toggleSpinner());
+
+  dispatch(setRoute(reviewUrl));
 }
 
 export const callbackforsummaryactionpay = async (state, dispatch) => {
-  let applicantdetail = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationdetail",
-    {}
-  );
-  let applicationStatus = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
-    {}
-  );
+  try {
+    dispatch(toggleSpinner());
 
-  let exempted = JSON.parse(applicantdetail).exemptedCategory;
-  if(applicationStatus==="DRAFT"){
-    let response=await updateAppStatus(state,dispatch,parseInt(exempted) === 1?"INITIATEDEXC":"INITIATED");
-    let responseStatus = get(response, "status", "");
-    if(responseStatus === "success"){
-        routeToPaymentPage(exempted,dispatch)
+    let applicantdetail = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationdetail",
+      {}
+    );
+    let applicationStatus = get(
+      state,
+      "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus",
+      {}
+    );
+
+    let exempted = JSON.parse(applicantdetail).exemptedCategory;
+    if (applicationStatus === "DRAFT") {
+      let response = await updateAppStatus(state, dispatch, parseInt(exempted) === 1 ? "INITIATEDEXC" : "INITIATED");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus === "success") {
+        routeToPaymentPage(exempted, dispatch)
+      }
+      else if (responseStatus === "fail" || responseStatus === "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
     }
-    else if(responseStatus === "fail" || responseStatus==="Fail"){
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    else if (applicationStatus === "INITIATED") {
+      routeToPaymentPage(exempted, dispatch)
     }
-  }
-  else if (applicationStatus==="INITIATED") {
-    routeToPaymentPage(exempted,dispatch)
-} 
- else  if (applicationStatus==="REASSIGN") {
-    let response=await updateAppStatus(state,dispatch,"RESENT");
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == "success") {
-      routeToPaymentPage(exempted,dispatch)
+    else if (applicationStatus === "REASSIGN") {
+      let response = await updateAppStatus(state, dispatch, "RESENT");
+      let responseStatus = get(response, "status", "");
+      if (responseStatus == "success") {
+        routeToPaymentPage(exempted, dispatch)
+      }
+      else if (responseStatus == "fail" || responseStatus == "Fail") {
+        dispatch(toggleSpinner());
+        dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+      }
     }
-    else if(responseStatus == "fail"){
-      dispatch(toggleSnackbar(true, { labelName: "API ERROR" }, "error"));
+    else {
+      routeToPaymentPage(exempted, dispatch)
     }
-  } 
-  else{
-    routeToPaymentPage(exempted,dispatch)
+  } catch (error) {
+    dispatch(toggleSpinner());
+    console.log(error)
   }
 }
 
@@ -350,8 +363,8 @@ const setSearchResponse = async (
 
 
   prepareDocumentsView(state, dispatch);
-  
-  
+
+
   getMdmsData(action, state, dispatch).then(response => {
     let advertisementtypeselected = '';
     let advertisementsubtypeselected = '';
@@ -406,19 +419,20 @@ const screenConfig = {
         },
         stepper,
 
-        body: role_name !== 'CITIZEN' ? getCommonCard({
-          estimateSummary: estimateSummary,
-          advertisementapplicantSummary: advertisementapplicantSummary,
-          detailSummary: detailSummary,
-          documentsSummary: documentsSummary
-
-        }) : getCommonCard({
+        body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           estimateSummary: estimateSummary,
           advertisementapplicantSummary: advertisementapplicantSummary,
           detailSummary: detailSummary,
           documentsSummary: documentsSummary,
- 
-        }),
+
+        })
+          : getCommonCard({
+            estimateSummary: estimateSummary,
+            advertisementapplicantSummary: advertisementapplicantSummary,
+            detailSummary: detailSummary,
+            documentsSummary: documentsSummary
+
+          }),
         break: getBreak(),
         titlebarfooter,
         citizenFooter:

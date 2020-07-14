@@ -32,7 +32,7 @@ class ComplaintDetails extends Component {
       <Screen className="citizen-screen-bottom-padding-clear">
         {complaint && (
           <div className="form-without-button-cont-generic">
-            <Details {...complaint} action={action} history={history} />
+            <Details {...complaint} action={action} history={history} timeLine={timeLine} />
             <ComplaintTimeLine
               status={complaint.status}
               timeLine={timeLine}
