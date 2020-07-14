@@ -29,8 +29,6 @@ import { duplicateCopySearchResult } from "./searchResource/searchResults";
       const queryObject = [{ key: "tenantId", value: getTenantId() }, 
                       { key: "businessServices", value: "DuplicateCopyOfAllotmentLetterRP" }]
       dispatch(prepareFinalObject("searchScreen", {}))
-      // getColonyTypes(action, state, dispatch)
-      // getStatusList(action, state, dispatch, queryObject, "search-transfer-properties", "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children.status")
       searchDuplicateCopy(state, dispatch, true)
       getStatusList(action, state, dispatch, queryObject, "search-duplicate-copy", "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children.status")
       return action

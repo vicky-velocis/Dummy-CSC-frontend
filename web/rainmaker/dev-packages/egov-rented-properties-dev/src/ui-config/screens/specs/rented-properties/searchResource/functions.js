@@ -190,7 +190,6 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
       let data = response.DuplicateCopyApplications.map(item => ({
         [APPLICATION_NO]: item.applicationNumber || "-",
         [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
-        // [PROPERTY_ID]: item.property.id || "-",
         [OWNER_NAME]: item.applicant[0].name || "-",
         [STATUS]: getLocaleLabels(item.state, item.state) || "-",
       }));
