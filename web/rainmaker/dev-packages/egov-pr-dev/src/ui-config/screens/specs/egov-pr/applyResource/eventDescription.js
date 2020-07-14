@@ -335,9 +335,15 @@ import {
           labelName: "Description Of Event",
           labelKey: "PR_EVENT_DESCRIPTION_LABEL"
         },
+        props:{
+          
+                  className:"textfield-enterable-selection",
+                  multiline: true,
+                  rows: "4"
+                },
         required: true,
         pattern: getPattern("EventDescription"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "PR_EVENT_DESCRIPTION_INVALID",
         jsonPath: "PublicRelation[0].CreateEventDetails.eventDescription"
       }),
      

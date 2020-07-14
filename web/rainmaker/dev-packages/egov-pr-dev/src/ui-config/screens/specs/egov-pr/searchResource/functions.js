@@ -295,7 +295,7 @@ export const EventReportSearch = async (state, dispatch) => {
     "eventReport.dept"
   )
   
-  if(dept!==undefined )
+  if(dept!=undefined )
   {
 let data={
 
@@ -308,7 +308,7 @@ let data={
     },
     {
       "name":"departmentName",
-      "input":dept=="ALL"?"":dept
+      "input":dept.value=="ALL"?"":dept.value
     }
   ]
  
@@ -468,15 +468,20 @@ let data={
         "LocalityReport.toDate"
       )
     },
+    // {
+    //   "name":"localityName",
+    //   "input":get(
+    //     state.screenConfiguration.preparedFinalObject,
+    //     "LocalityReport.localityname"
+    //   )=="ALL"?"":get(
+    //     state.screenConfiguration.preparedFinalObject,
+    //     "LocalityReport.localityname"
+    //   )
+    // }
     {
       "name":"localityName",
-      "input":get(
-        state.screenConfiguration.preparedFinalObject,
-        "LocalityReport.localityname"
-      )=="ALL"?"":get(
-        state.screenConfiguration.preparedFinalObject,
-        "LocalityReport.localityname"
-      )
+      "input":localityName.label=="ALL"?"":localityName.label
+      
     }
   ]
 }

@@ -6,6 +6,7 @@ import {
   getLabel,
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./index.css"
 import { gotoApplyWithStep,gotoApplyWithStepPressNote } from "../../utils/index";
 
 export const documentsEventSummary = getCommonGrayCard({
@@ -21,8 +22,8 @@ export const documentsEventSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Documents",
-          labelKey: "NOC_SUMMARY_DOCUMENTS_HEADER﻿"
+          labelName: "Event Documents",
+          labelKey: "PR_EVENT_DOCUMENTS"
         })
       },
       editSection: {
@@ -152,7 +153,7 @@ export const documentslibrarySummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",
@@ -314,7 +315,7 @@ export const documentslibrarySummary1 = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",
@@ -394,7 +395,7 @@ export const documentslibrarySummary2 = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",
@@ -474,7 +475,7 @@ export const documentslibrarySummary3 = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",
@@ -554,7 +555,7 @@ export const documentslibrarySummary4 = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",
@@ -634,7 +635,7 @@ export const documentslibrarySummary5 = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12
         },
         ...getCommonSubHeader({
           labelName: "Uploaded library Documents",

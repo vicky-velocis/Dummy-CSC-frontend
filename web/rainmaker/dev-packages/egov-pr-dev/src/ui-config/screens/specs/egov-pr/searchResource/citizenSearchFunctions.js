@@ -47,6 +47,19 @@ const convertTime =(time)=> {
   }
   return time.join(''); // return adjusted time or original string
   }
+  const truncTime=(str, length, ending)=> {
+    if (length == null) {
+      length = 20;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  };
 export const getGridData = async (action, state, dispatch) => {
   const response = await getEventGridData();
   try {
@@ -121,9 +134,9 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
       [getTextToLocalMapping("Event Id")]:
       item.eventId || "-",
       [getTextToLocalMapping("Event Title")]:
-      item.eventTitle || "-",
+      truncTime(item.eventTitle) || "-",
       [getTextToLocalMapping("Organizer Department")]:
-      [item.EmpName, item.organizerUsernName]|| "-",
+      item.EmpName|| "-",
       [getTextToLocalMapping("Organizer Employee")]:
       item.organizerUsernName || "-",
     [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -226,9 +239,9 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
       [getTextToLocalMapping("Event Id")]:
       item.eventId || "-",
       [getTextToLocalMapping("Event Title")]:
-      item.eventTitle || "-",
+      truncTime(item.eventTitle) || "-",
       [getTextToLocalMapping("Organizer Department")]:
-      [item.EmpName, item.organizerUsernName]|| "-",
+      item.EmpName|| "-",
       [getTextToLocalMapping("Organizer Employee")]:
       item.organizerUsernName || "-",
    [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -273,7 +286,7 @@ export const getPressGridData = async (action, state, dispatch) => {
       [getTextToLocalMapping("File Number")]:
       item.fileNumber || "-",
       [getTextToLocalMapping("Subject")]:
-      item.pressNoteSubject || "-",
+      truncTime(item.pressNoteSubject) || "-",
       [getTextToLocalMapping("Press Note List UUID")]:
       item.pressNoteUuid || "-",
     
@@ -317,11 +330,11 @@ export const getPressGridDatanote = async (action, state, dispatch) => {
     let data = response.ResponseBody.map(item => ({
 		
       [getTextToLocalMapping("Publication Name")]:
-      item.publicationName || "-",
+      truncTime(item.publicationName) || "-",
       [ getTextToLocalMapping("Type of the Press")]:
       item.pressType || "-",
       [getTextToLocalMapping("Personnel Name")]:
-      item.personnelName || "-",
+      truncTime(item.personnelName) || "-",
       [getTextToLocalMapping("Email Id")]:
       item.email || "-",
       [getTextToLocalMapping("Mobile Number")]:
@@ -373,7 +386,7 @@ export const getPressGridDatatender = async (action, state, dispatch) => {
       [ getTextToLocalMapping("Type of the Press")]:
       item.pressType || "-",
       [getTextToLocalMapping("Personnel Name")]:
-      item.personnelName || "-",
+      truncTime(item.personnelName) || "-",
       [getTextToLocalMapping("Email Id")]:
       item.email || "-",
       [getTextToLocalMapping("Mobile Number")]:
@@ -430,11 +443,11 @@ export const getPressGridDataforview = async (action, state, dispatch) => {
 
       
       [getTextToLocalMapping("Publication Name")]:
-      item.publicationName || "-",
+      truncTime(item.publicationName) || "-",
       [ getTextToLocalMapping("Type of the Press")]:
       item.pressType || "-",
       [ getTextToLocalMapping("Personnel Name")]:
-      item.personnelName || "-",
+      truncTime(item.personnelName) || "-",
       [ getTextToLocalMapping("Email Id")]:
       item.email || "-",
       [getTextToLocalMapping("Mobile Number")]:
@@ -610,7 +623,7 @@ export const getGridDataPublishTender = async (action, state, dispatch) => {
        [getTextToLocalMapping("Tender Notice ID")]:item.tenderNoticeId || "-",
        [getTextToLocalMapping("Date")]:item.tenderDate.split(" ")[0] || "-",
        [getTextToLocalMapping("File Number")]:item.fileNumber || "-",
-       [getTextToLocalMapping("Subject")]:item.tenderSubject || "-",
+       [getTextToLocalMapping("Subject")]:truncTime(item.tenderSubject) || "-",
        [getTextToLocalMapping("Department User")]:item.createdByName || "-",
        [getTextToLocalMapping("tenderNoticeUuid")]:item.tenderNoticeUuid || "-",
        [getTextToLocalMapping("tenderNoticeStatus")]:item.tenderNoticeStatus || "-"
@@ -637,11 +650,23 @@ export const getGridDataPublishTender = async (action, state, dispatch) => {
 
 // GET EMPLOYEES
 export const GetEmployees = async (state, dispatch) => {
+  let Emp= get(state.screenConfiguration.preparedFinalObject, "CreateInvite", []);
+  let empname = get(state.screenConfiguration.preparedFinalObject, "CreateInvite.employeename", []);
+ 
   let tenantId = getTenantId();
-   let empname = get(state.screenConfiguration.preparedFinalObject, "CreateInvite.employeename", []);
-		
+  
+   	console.log(typeof empname)
    let departments = [];
    let departments_query = [];
+   
+  if(Emp.hasOwnProperty("employeename")===true)
+  {
+   lSRemoveItem("Invitelist");
+   lSRemoveItemlocal("Invitelist");
+   lSRemoveItem("InvitelistAll");
+   lSRemoveItemlocal("InvitelistAll");
+  }
+  
    var fetchflag = true;
   //  lSRemoveItem("Invitelist");
 	// lSRemoveItemlocal("Invitelist");
@@ -800,11 +825,14 @@ export const GetEmployees = async (state, dispatch) => {
 	let allrows = response;
 	localStorageSet("gridobjlength", allrows.length)
 	allrows.map(item => {
+    delete item.user.roles
 			selectedrows.push(JSON.stringify(item))
   })
-  debugger
+  
 	localStorageSet("gridobj",selectedrows);
-	let preSelectedRows =JSON.parse(localStorageGet("Invitelist"));
+  let preSelectedRows =JSON.parse(localStorageGet("Invitelist"));
+  let preSelectedRowsAll =JSON.parse(localStorageGet("InvitelistAll"));
+
   if(preSelectedRows!==null)
   {
   console.log('departments_query')
@@ -852,7 +880,29 @@ console.log(preSelectedRows)
  localStorageSet("Invitelist",JSON.stringify(preSelectedRows))
   
     }
-	 
+    if(preSelectedRowsAll!==null){
+    
+      console.log(typeof(preSelectedRowsAll))
+      response.map(function (item, index) {
+        if(item.user!=null && item.user.uuid){
+      
+          preSelectedRowsAll.map(function (commiteeMember,index1) {
+          if(commiteeMember[4]===item.user.uuid){
+           
+            selectedIndexRows.push(index)
+            commiteeMember[5]=index
+         
+            
+            
+          }
+        });
+
+      }
+        });
+ localStorageSet("InvitelistAll",JSON.stringify(preSelectedRowsAll))
+ localStorageSet("Invitelist",JSON.stringify(preSelectedRowsAll))
+
+    }
 	  dispatch(
        handleField(
          "createInvite",	
@@ -905,8 +955,21 @@ console.log(preSelectedRows)
 
 export const showinvitelist = async (state, dispatch) => {
 	
-	;
-	 let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("InvitelistAll") :  localStorageGet("Invitelist") ;
+	
+let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("InvitelistAll") :  localStorageGet("Invitelist") ;
+   //let selectedrows =[]
+   if(localStorageGet("Invitelist") === null  && localStorageGet("InvitelistAll")===null )
+   {
+    // alert('Select at least one Employee ')
+     var msg=`Select at least one Employee`
+     dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
+    
+     
+   }
+   else{
+   // selectedrows=localStorageGet("Invitelist")
+
+   
 	 selectedrows = JSON.parse(selectedrows);
 	
 	// Create Payload to Save Internal Guest List
@@ -983,7 +1046,13 @@ export const showinvitelist = async (state, dispatch) => {
 		)
       );
 	   lSRemoveItem("Invitelist");
-	lSRemoveItemlocal("Invitelist");
+	
+  lSRemoveItemlocal("Invitelist");
+  lSRemoveItem("InvitelistAll");
+  lSRemoveItemlocal("InvitelistAll");
+  dispatch(prepareFinalObject("CreateInvite", {}));
+         }
+
 }	
 
 export const SearchEmployees = async (state, dispatch) => {
@@ -1047,24 +1116,24 @@ facebookurl="<a>"+facebookurl+"</a>"
           masterDetails: [{ name: "eventType" }, { name: "eventStatus" },{ name: "eventDocuments" },  { name: "eventSector" },, { name: "localityAreaName" }]
         },
        
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
+        // {
+        //   moduleName: "tenant",
+        //   masterDetails: [
+        //     {
+        //       name: "tenants"
+        //     }
+        //   ]
+        // },
 
 
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
+        // {
+        //   moduleName: "tenant",
+        //   masterDetails: [
+        //     {
+        //       name: "tenants"
+        //     }
+        //   ]
+        // },
         {
           moduleName: "common-masters",
           masterDetails: [
@@ -1423,10 +1492,15 @@ export const deleteguestbyid = async (data, state, dispatch) => {
 
 
 export const InvitePress = async (state, dispatch) => {
-
-	 let selectedrows = localStorageGet("selectedPressList");
-	 selectedrows = JSON.parse(selectedrows);
-	 
+  
+let selectedrows = localStorageGet("selectedPressList");
+console.log(selectedrows)
+if(selectedrows!=="[]")
+{
+if(selectedrows!==null)
+{
+	
+  selectedrows = JSON.parse(selectedrows);
 	// Create Payload to Save Internal Guest List
 	let tenantId = getTenantId();
 	let invitedGuestlist = [];
@@ -1499,8 +1573,26 @@ export const InvitePress = async (state, dispatch) => {
       );
 	 
 }	
-
-
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please select all mandatory feilds", labelKey: "PR_RPRESS_GUEST_REQMSG" },
+      "warning"
+    )
+  );
+}
+}
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please select all mandatory feilds", labelKey: "PR_RPRESS_GUEST_REQMSG" },
+      "warning"
+    )
+  );
+}
+}
 
 
 // Event List grid data
@@ -1578,9 +1670,9 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
 			   [getTextToLocalMapping("Event Id")]:
 			  item.eventId || "-",
 			  [getTextToLocalMapping("Event Title")]:
-			  item.eventTitle || "-",
+        truncTime(item.eventTitle) || "-",
 			  [getTextToLocalMapping("Organizer Department")]:
-			  [item.EmpName, item.organizerUsernName]|| "-",
+			  item.EmpName|| "-",
 			  [getTextToLocalMapping("Organizer Employee")]:
 			  item.organizerUsernName || "-",
 			[getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -1736,11 +1828,11 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
    response.ResponseBody[0].publicationList.map(item => ({
  
       [getTextToLocalMapping("Publication Name")]:
-      item.publicationName || "-",
+      truncTime(item.publicationName) || "-",
       [ getTextToLocalMapping("Type of the Press")]:
       item.pressType || "-",
       [ getTextToLocalMapping("Personnel Name")]:
-      item.personnelName || "-",
+      truncTime(item.personnelName) || "-",
       [ getTextToLocalMapping("Email Id")]:
       item.email || "-",
       [getTextToLocalMapping("Mobile Number")]:
@@ -1863,8 +1955,6 @@ export const getPressMasterGridData = async (action, state, dispatch) => {
   const response = await getPressMasterGridData1();
   try {
   
-	console.log("Pressssssssssssssssssssssssssss");
-	console.log(response.ResponseBody)
 	
 	let selectedrows = []
 	let allrows = response.ResponseBody;
@@ -1882,11 +1972,11 @@ export const getPressMasterGridData = async (action, state, dispatch) => {
       [getTextToLocalMapping("Press Id")]:
       item.pressMasterUuid || "-",
       [getTextToLocalMapping("Publication name")]:
-      item.publicationName || "-",
+      truncTime(item.publicationName) || "-",
       [getTextToLocalMapping("Type of the press")]:
       item.pressType || "-",
       [getTextToLocalMapping("Personnel Name")]:
-      item.personnelName || "-",
+      truncTime(item.personnelName) || "-",
       
     
       [getTextToLocalMapping("Email Id")]:
@@ -1941,15 +2031,24 @@ export const getSearchResultsforTenderViewBilling= async (state, dispatch,data) 
 
 //committee
 export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
-
+  let Emp= get(state.screenConfiguration.preparedFinalObject, "CreateInvite", []);
   let empname = get(state.screenConfiguration.preparedFinalObject, "CreateInvite.employeename", []);
+ 
   let tenantId = getTenantId();
-   	
+  
+   	console.log(typeof empname)
    let departments = [];
    let departments_query = [];
-   lSRemoveItem("Invitelist");
-	lSRemoveItemlocal("Invitelist");
-  if(localStorageGet('selectedDepartmentsInvite') !== null)	
+   
+  if(Emp.hasOwnProperty("employeename")===true)
+  {
+   lSRemoveItem("committeelist");
+   lSRemoveItemlocal("committeelist");
+   lSRemoveItem("committeelistAll");
+   lSRemoveItemlocal("committeelistAll");
+  }
+ 
+  if(localStorageGet('selectedDepartmentsInvite') !== null && localStorageGet('selectedDepartmentsInvite') !== "[]")	
   {
 	departments = JSON.parse(localStorageGet('selectedDepartmentsInvite'));
 	 departments.map(function(item, index) {
@@ -1958,7 +2057,10 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 		});
   }
   else{
-		alert("Select Departments");
+ //   alert("Select at least one department");
+    var msg=`Select at least one department`
+     dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
+    
   }
   
   try {
@@ -2070,11 +2172,14 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 	let allrows = response;
 	localStorageSet("gridobjlength", allrows.length)
 	allrows.map(item => {
-		
+    delete item.user.roles
+    
 		selectedrows.push(JSON.stringify(item))
 	})
 	localStorageSet("gridobj",selectedrows);
   let preSelectedRows = 	JSON.parse(localStorageGet("committeelist"));
+  let preSelectedRowsAll= 	JSON.parse(localStorageGet("committeelistAll"));
+
   if(preSelectedRows!==null)
   {
   console.log('departments_query')
@@ -2090,6 +2195,7 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
 console.log('preSelectedRows')
 console.log(preSelectedRows)
   }
+
 	  
     let data = response.map(item => ({
      
@@ -2125,6 +2231,31 @@ console.log(preSelectedRows)
       }
         });
  localStorageSet("committeelist",JSON.stringify(preSelectedRows))
+  
+    }
+
+    if(preSelectedRowsAll!==null){
+    
+      console.log(typeof(preSelectedRowsAll))
+      response.map(function (item, index) {
+        if(item.user!=null && item.user.uuid){
+      
+          preSelectedRowsAll.map(function (commiteeMember,index1) {
+          if(commiteeMember['Employee ID']===item.user.uuid){
+           
+            selectedIndexRows.push(index)
+            commiteeMember['index']=index
+          //  localStorageSet("committeelist")
+            
+            
+          }
+        });
+
+      }
+        });
+ localStorageSet("committeelist",JSON.stringify(preSelectedRowsAll))
+ localStorageSet("committeelistAll",JSON.stringify(preSelectedRowsAll))
+
   
     }
 	 
@@ -2396,7 +2527,7 @@ export const getCommitieeGridData = async (action, state, dispatch) => {
       [getTextToLocalMapping("Committee Id")]:
       item.committeeUuid || "-",
       [getTextToLocalMapping("Committee Name")]:
-      item.committeeName || "-",
+      truncTime(item.committeeName) || "-",
       [getTextToLocalMapping("PR_CREATEDON")]:
       item.createdOn || "-",
       [getTextToLocalMapping("PR_CREATORNAME")]:
@@ -2460,15 +2591,26 @@ export const InviteExternalEmployees = async (state, dispatch, excelid) => {
 		 dispatch(
               toggleSnackbar(
                 true,
-                { labelName: "Unable to save data", labelKey: "UNABLE_TO_SAVE" },
+                { labelName: "Unable to save data", labelKey: "PR_FILE_UNABLE_TO_SAVE" },
                 "warning"
               )
             );
 	}
   } catch (e) {
     console.log(e);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Unable to save data", labelKey: "PR_FILE_UNABLE_TO_SAVE" },
+        "warning"
+      )
+    );
   }  
 }  
+
+
+
+
 
 
 
@@ -2488,6 +2630,13 @@ export const resendinvitationpress = async (state, dispatch, type) => {
   
   }
   else{
+    dispatch(
+      handleField(
+        "pressnote-summary",
+        "components.div.children.body.children.cardContent.children.resendbody.children.cardContent.children.guestlist",
+        "props.options.rowsSelected",
+        []
+      ))
 		dispatch(
 		  toggleSnackbar(
 			true,
@@ -2505,6 +2654,13 @@ export const resendinvitationtender = async (state, dispatch, type) => {
 		let response = resendinvitation(state, dispatch, type="tender")
 	}
 	  else{
+      dispatch(
+        handleField(
+          "tender-Summary-Publish",
+          "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+          "props.options.rowsSelected",
+          []
+        ))
 		dispatch(
 		  toggleSnackbar(
 			true,
@@ -2514,14 +2670,25 @@ export const resendinvitationtender = async (state, dispatch, type) => {
 		);
 	  }	
 }
-
+export const resendinvitationevent = async (state, dispatch, type) => {
+  
+ 
+		let response = resendinvitation(state, dispatch, type="event")
+	
+	  
+}
 export const resendinvitation = async (state, dispatch, type="event") => {
-  if(localStorageGet("ResendInvitelist") !==  null || localStorageGet("ResendInvitelistAll") !==  null  )
+
+  
+  
+  if(localStorageGet("ResendInvitelist")!=="[]" || localStorageGet("ResendInvitelistAll")!==null )
+  {
+  if(localStorageGet("ResendInvitelist") !==  null || localStorageGet("ResendInvitelistAll") !==  null )
   {
    let selectedrows = ''
    
 
-   if(localStorageGet("ResendInvitelist")!==null){
+   if(localStorageGet("ResendInvitelist")!==null ){
     selectedrows = localStorageGet("ResendInvitelist");
  }
  else{
@@ -2535,7 +2702,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
 	let invitedGuestlist = [];
 	var data_result="";
 	 let temp = {}
-	 
+ 
 	 if(type == "event")
 	 {
 		let invitedGuest = selectedrows.map((item , index)=>{
@@ -2601,7 +2768,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Success", labelKey: "Success" },
+        { labelName: "Notifications resent successfully.", labelKey: "PR_RESEND_MSG" },
         "success"
       )
     );
@@ -2656,5 +2823,34 @@ else{
     )
   );
   }
-
+  }
+  else{
+    
+    if(type!="event"){
+      dispatch(
+        toggleSnackbar(
+        true,
+        { labelName: "Please Select Employee!", labelKey: "PR_EMPLOYEE_FIELD_MANDATORY" },
+        "warning"
+        )
+      );
+      }	
+      else{
+        dispatch(
+          handleField(
+            "event_summary",
+            "components.div.children.resendbody.children.cardContent.children.guestlist",
+            "props.options.rowsSelected",
+            []
+          )
+        );
+    dispatch(
+      toggleSnackbar(
+      true,
+      { labelName: "Please Select Employee!", labelKey: "PR_GUEST_FIELD_MANDATORY" },
+      "warning"
+      )
+    );
+  }
+}
 }

@@ -85,7 +85,7 @@ export const getPublishTenderGrid = async () => {
 };
 
 export const createTender = async data => {
-  debugger
+  
   try {
     const response = await httpRequest(
       "post",
@@ -110,7 +110,7 @@ export const createTender = async data => {
 };
 
 export const forwardTender = async data => {
-  debugger
+  
   try {
     const response = await httpRequest(
       "post",
@@ -135,7 +135,7 @@ export const forwardTender = async data => {
 };
 
 export const publishTender = async data => {
-  debugger
+  
   try {
     const response = await httpRequest(
       "post",
@@ -161,7 +161,7 @@ export const publishTender = async data => {
 
 export const getSearchResultsForTenderSummary = async data => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
@@ -188,7 +188,7 @@ export const getSearchResultsTender = async queryObject => {
 
  
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
@@ -213,7 +213,7 @@ export const getSearchResultsTender = async queryObject => {
 export const furnishNocResponseTender = response => {
   // Handle applicant ownership dependent dropdowns
   let refurnishresponse = {};
-  debugger
+  
   if (response.ResponseBody[0] !== null && response.ResponseBody[0] !== '') {
     let startdate = response.ResponseBody[0].tenderDate
     startdate = startdate.split(' ');

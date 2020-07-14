@@ -50,22 +50,11 @@ export const documentDetails1 = getCommonCard({
 
 });
 export const pressNotedocumentDetails = getCommonCard({
-  // header: getCommonTitle(
-  //   {
-  //     labelName: "Required Documents",
-  //     labelKey: "PR_DOCUMENT_DETAILS_HEADER"
-  //   },
-  //   {
-  //     style: {
-  //       marginBottom: 18
-  //     }
-  //   }
-  // ),
-  // subText: getCommonParagraph({
-  //   labelName:
-  //     "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-  //   labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT"
-  // }),
+  subText: getCommonParagraph({
+    labelName:
+      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload and 1MB max file size.",
+    labelKey: "PR_EMAILDOCUMENT_DETAILS_SUBTEXT"
+  }),
   break: getBreak(),
   documentList: {
     uiFramework: "custom-containers-local",
@@ -81,7 +70,7 @@ export const pressNotedocumentDetails = getCommonCard({
       inputProps: {
         accept: ".pdf,.png,.jpeg"
       },
-      maxFileSize: 1000
+      maxFileSize: 2000
     },
     type: "array"
   } 
@@ -174,7 +163,7 @@ export const MultipleDocumentDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Event Documents",
-      labelKey: "PR_COMMON_DOCUMENTS"
+      labelKey: "PR_EVENT_DOCUMENTS"
     },
     {
       style: {
@@ -182,11 +171,12 @@ export const MultipleDocumentDetails = getCommonCard({
       }
     }
   ),
-  // subText: getCommonParagraph({
-  //   labelName:
-  //     "Multiple files can be uploaded",
-  //   labelKey: "PR_DOCUMENT_DETAILS_SUBTEXT_POPUP"
-  // }),
+  subText: getCommonParagraph({
+    labelName:
+      "Only image and .pdf files can be uploaded.Max file size 2MB each and 8 files can be uploaded.",
+    labelKey: "PR_EVENTDOCUMENT_DETAILS_SUBTEXT"
+  
+  }),
   break: getBreak(),
   upload: {
     uiFramework: "custom-atoms",
@@ -212,7 +202,7 @@ export const MultipleDocumentDetails = getCommonCard({
             labelName: "UPLOAD FILE",
 			labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
           },
-          maxFileSize: 5000,
+          maxFileSize: 2000,
           moduleName: "egov-pr",
           hasLocalization: false
         }

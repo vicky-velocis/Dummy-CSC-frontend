@@ -28,6 +28,8 @@ import { checkForRole } from "../../../../ui-utils/commons";
     labelName: "",
     labelKey:"PR_SPORTS_AND_CULTURE",
   
+  },
+  {
     style: {
       padding: "20px",
     }
@@ -176,7 +178,8 @@ const PRSCPSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PRSCP"
           }
         },
         

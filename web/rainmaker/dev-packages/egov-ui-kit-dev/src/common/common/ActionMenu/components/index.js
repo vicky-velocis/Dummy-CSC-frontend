@@ -12,7 +12,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Tooltip from "@material-ui/core/Tooltip";
 import Label from "egov-ui-kit/utils/translationNode";
-import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getModuleName } from "egov-ui-kit/utils/commons";
+import { localStorageSet, localStorageGet,setModule } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const styles = {
@@ -108,6 +109,7 @@ class ActionMenuComp extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps && nextProps.activeRoutePath != this.props.activeRoutePath) {
+      setModule(getModuleName());
       this.initialMenuUpdate();
       this.setState({
         searchText: "",

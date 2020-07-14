@@ -94,9 +94,9 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 		{
 			if(rowData.length == 0)
 			{
-				localStorageSet("committeelist",[]);
+				localStorageSet("committeelist","");
 			}
-			localStorageSet("committeelistAll", []);
+			localStorageSet("committeelistAll", "");
 			
 		}
 } 
@@ -119,7 +119,7 @@ const onEmployeeselect = async (type, rowData, state,dispatch,action,index,allRo
 var selectedRows1=[]
 		console.log("committeelist");
 		console.log( localinvdata);
-		if(localinvdata === null || localinvdata === "undefined")
+		if(localinvdata === null || localinvdata === "undefined" || localinvdata === "[]")
 		{
       let tempAll = JSON.parse(localStorageGet("committeelistAll"));
       
@@ -136,6 +136,7 @@ if(tempAll!==null)
           localStorageSet("committeelist", JSON.stringify(tempAll));	
           let selIndex1=[]
           let selIndex= JSON.parse(localStorageGet("committeelist"));
+          localStorageSet("committeelistAll", "");
           selIndex.map((item,index)=>{
           
              selIndex1.push(item['index'])	
@@ -347,6 +348,8 @@ export const searchDepartmentEmployeesResults = getCommonCard({
       selectableRows: true,
 	  filterType: 'checkbox',
       hover: true,
+    
+      
 	  selectableRowsHeader : false,
       rowsPerPageOptions: [5, 10, 15, 20],
 	  onRowsSelect:(currentRowsSelected , allRowsSelected) =>{
@@ -435,6 +438,7 @@ export const searchInvitedEmployeesResults = {
       download: false,
       responsive: "stacked",
       selectableRows: false,
+      
       hover: true,
 	  disableToolbarSelect : false,
 	  selectableRows: false,
@@ -488,6 +492,7 @@ export const eventlistforinvitation = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         load_invite_summary(row);
@@ -512,10 +517,21 @@ export const eventlistforinvitation = {
 };
 
 export const searchDepartmentEmployeesResults_committee = getCommonCard({
-  gridtitle :  getCommonHeader({
+  header: getCommonTitle(
+    {
       labelName: `Select Employee`, 
       labelKey: "PR_SELECT_EMPLOYEE"
-    }),
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+  ),
+  // gridtitle :  getCommonHeader({
+  //     labelName: `Select Employee`, 
+  //     labelKey: "PR_SELECT_EMPLOYEE"
+  //   }),
   committieegrid : {
  uiFramework: "custom-molecules",
  componentPath: "Table",
@@ -532,13 +548,16 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
       name: getTextToLocalMapping("Department Id"),
       options: {
         display: false,
+         filter: false,
+          display: "excluded",
         
       }
     },{
       name: getTextToLocalMapping("Employee ID"),
       options: {
         display: false,
-        
+        filter: false,
+        display: "excluded",
       }
     },
    
@@ -546,6 +565,8 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
       name: getTextToLocalMapping("DepartmentName"),
       options: {
         display: false,
+        filter: false,
+        display: "excluded",
       
       }
     },
@@ -560,6 +581,8 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
      selectableRows: true,
      rowsSelected: [],     
      filterType: 'checkbox',
+     
+     
      hover: true,
 	 selectableRowsHeader : true,
 	 selectableRowsOnClick : false,
@@ -568,11 +591,17 @@ export const searchDepartmentEmployeesResults_committee = getCommonCard({
     onAllEmployeeselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
   
    },
+   customToolbarSelect: () => {},
      onRowClick: (row, index,state,dispatch,action,allRowsSelected) => {
          onEmployeeselect('rowdata',row,state,dispatch,action,index,allRowsSelected)
      },
   
    },
+  //  selectedRows: {
+  //   text: "row(s) selected",
+  //   // delete: "Delete",
+  //   // deleteAria: "Delete Selected Rows",
+  // },
    customSortColumn: {
      column: "Application Date",
      sortingFn: (data, i, sortDateOrder) => {
@@ -644,12 +673,16 @@ export const searchDepartmentEmployeesResults_committee1 = {
         name: getTextToLocalMapping("Department Id"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
           
         }
       },{
         name: getTextToLocalMapping("Employee ID"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
          
         }
       },
@@ -664,8 +697,11 @@ export const searchDepartmentEmployeesResults_committee1 = {
       download: false,
       responsive: "stacked",
       selectableRows: false,
+     
+      
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
+         
      
     },
     customSortColumn: {
@@ -705,13 +741,15 @@ export const searchDepartmentEmployeesResults_committeeSummary = {
         name: getTextToLocalMapping("Department Id"),
         options: {
           display: false,
-          
+          filter: false,
+          display: "excluded",
         }
       },{
         name: getTextToLocalMapping("Employee ID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       },
       
@@ -722,7 +760,10 @@ export const searchDepartmentEmployeesResults_committeeSummary = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+    
+      
       rowsPerPageOptions: [10, 15, 20],
+       customToolbarSelect: () => {},
       onRowClick: (row, index) => {
        
       }
