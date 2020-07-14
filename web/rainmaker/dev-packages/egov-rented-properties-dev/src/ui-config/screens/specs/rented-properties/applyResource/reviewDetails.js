@@ -1,6 +1,7 @@
 import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getReviewProperty, getReviewOwner, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./review-property";
-import {getReviewApplicantDetails, getreviewPropertyAddressDetails, getReviewApplicantDetailsMortgage, getreviewPropertyAddressDetailsMortgage} from './review-applications'
+import { getReviewApplicantDetails, getreviewPropertyAddressDetails } from './review-applications'
+import { getReviewApplicantDetailsMortgage, getreviewPropertyAddressDetailsMortgage } from './review-applications-mortgage'
 import { getReviewDocuments } from "./review-documents";
 
 const reviewPropertyDetails = getReviewProperty();

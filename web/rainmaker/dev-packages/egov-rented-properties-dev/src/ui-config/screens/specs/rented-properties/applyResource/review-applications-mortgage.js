@@ -18,6 +18,17 @@ const freshLicenseEditSection = isEditable => ({
     }
 })
 
+const freshLicenseEditSectionMortgage = isEditable => ({
+    ...editSection,
+    visible: isEditable,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            changeStep(state, dispatch, "mortage-apply", "", 0);
+        }
+    }
+})
+
 export const getReviewApplicantDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -66,7 +77,7 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "Owners[0].ownerDetails.email" 
+                    jsonPath: "Owners[0].ownerDetails.eamil" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -82,59 +93,9 @@ export const getReviewApplicantDetails = (isEditable = true) => {
     })
 }
 
-export const getreviewPropertyAddressDetails = (isEditable = true) => {
-    return getCommonGrayCard({
-        headerDiv: {
-            ...headerDiv,
-            children: {
-                header: {
-                    gridDefination: {
-                        xs: 12,
-                        sm: 10
-                    },
-                    ...getCommonSubHeader({
-                        labelName: "Property Details",
-                        labelKey: "RP_PROPERTY_DETAILS_HEADER"
-                    })
-                },
-                editSection: freshLicenseEditSection(isEditable)
-            }
-        },
-        viewFour: getCommonContainer({
-            // propertyId: getLabelWithValue(
-            //     {
-            //         labelName: "Property Id",
-            //         labelKey: "RP_PROPERTY_ID"
-            //     },
-            //     {jsonPath: "Owners[0].property.id"}
-            // ),
-            transitNumber: getLabelWithValue(
-                {
-                    labelName: "Transit Site/Plot number",
-                    labelKey: "RP_SITE_PLOT_LABEL"
-                },
-                { jsonPath: "Owners[0].property.transitNumber" }
-            ),
-            allotmentNumber: getLabelWithValue(
-                {
-                    labelName: "Allotment Number",
-                    labelKey: "RP_ALLOTMENT_NUMBER"
-                },
-                {jsonPath: "Owners[0].allotmenNumber"}
-            ),
-            area: getLabelWithValue(
-                areaLabel,
-                { jsonPath: "Owners[0].property.address.area" }
-            ),
-            pincode: getLabelWithValue(
-                pincodeLabel,
-                { jsonPath: "Owners[0].property.address.pincode" }
-            ),
-        })
-    })
-}
 
-export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
+
+export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
             ...headerDiv,
@@ -149,7 +110,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                         labelKey: "RP_APPLICANT_DETAILS_HEADER"
                     })
                 },
-                editSection: freshLicenseEditSection(isEditable)
+                editSection: freshLicenseEditSectionMortgage(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -158,14 +119,14 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "Duplicate[0].applicant[0].name" }
+                { jsonPath: "Owners[0].ownerDetails.name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "Duplicate[0].applicant[0].relationship" }
+                { jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee" }
             ),
             phone: getLabelWithValue(
                 {
@@ -173,7 +134,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].phone" 
+                    jsonPath: "Owners[0].ownerDetails.phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -182,7 +143,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].email" 
+                    jsonPath: "Owners[0].ownerDetails.eamil" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -191,14 +152,18 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].adhaarNumber" 
+                    jsonPath: "Owners[0].ownerDetails.aadhaarNumber" 
                 }
             )
         })
     })
 }
 
-export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) => {
+
+
+
+
+export const getreviewPropertyAddressDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
             ...headerDiv,
@@ -222,21 +187,21 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                     labelName: "Property Id",
                     labelKey: "RP_PROPERTY_ID"
                 },
-                {jsonPath: "Duplicate[0].property.id"}
+                {jsonPath: "Owners[0].property.id"}
             ),
             allotmentNumber: getLabelWithValue(
                 {
                     labelName: "Allotment Number",
                     labelKey: "RP_ALLOTMENT_NUMBER"
                 },
-                {jsonPath: "Duplicate[0].allotmenNumber"}
+                {jsonPath: "Owners[0].allotmenNumber"}
             ),
             transitNumber: getLabelWithValue(
                 {
                     labelName: "Transit Site/Plot number",
                     labelKey: "RP_SITE_PLOT_LABEL"
                 },
-                { jsonPath: "Duplicate[0].property.transitNumber" }
+                { jsonPath: "Owners[0].property.transitNumber" }
             )
             // area: getLabelWithValue(
             //     areaLabel,
@@ -251,3 +216,56 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
 }
 
 
+
+
+export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Property Details",
+                        labelKey: "RP_PROPERTY_DETAILS_HEADER"
+                    })
+                },
+                editSection: freshLicenseEditSectionMortgage(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+            propertyId: getLabelWithValue(
+                {
+                    labelName: "Property Id",
+                    labelKey: "RP_PROPERTY_ID"
+                },
+                {jsonPath: "Owners[0].property.id"}
+            ),
+            allotmentNumber: getLabelWithValue(
+                {
+                    labelName: "Allotment Number",
+                    labelKey: "RP_ALLOTMENT_NUMBER"
+                },
+                {jsonPath: "Owners[0].allotmenNumber"}
+            ),
+            transitNumber: getLabelWithValue(
+                {
+                    labelName: "Transit Site/Plot number",
+                    labelKey: "RP_SITE_PLOT_LABEL"
+                },
+                { jsonPath: "Owners[0].property.transitNumber" }
+            )
+            // area: getLabelWithValue(
+            //     areaLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
+            // ),
+            // pincode: getLabelWithValue(
+            //     pincodeLabel,
+            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
+            // ),
+        })
+    })
+}
