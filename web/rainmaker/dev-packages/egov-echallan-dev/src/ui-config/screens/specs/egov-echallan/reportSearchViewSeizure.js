@@ -12,7 +12,7 @@ const header = getCommonHeader({
 });
 
 const getSiNameDetails = async (action, state, dispatch) => {
-  //http://192.168.12.114:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
+  //http://192.168.12.74:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
   try {
     const queryStr = [
       { key: "tenantId", value: getTenantId() },

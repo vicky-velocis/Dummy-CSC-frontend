@@ -72,8 +72,9 @@ export const searchTextViewSeizureReport = getCommonCard({
       required: true,
       // visible: true,
       gridDefination: {
-        xs: 4,
-        sm: 4
+        xs: 12,
+        sm: 4,
+        md: 4,
       },
       props: {
         style: {
@@ -131,8 +132,9 @@ export const searchTextViewSeizureReport = getCommonCard({
       required: true,
       // visible: true,
       gridDefination: {
-        xs: 4,
-        sm: 4
+        xs: 12,
+        sm: 4,
+        md: 4,
       },
       props: {
         style: {

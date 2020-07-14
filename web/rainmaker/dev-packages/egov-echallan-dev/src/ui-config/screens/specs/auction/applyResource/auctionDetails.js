@@ -374,7 +374,7 @@ const auctionDetailData = () => {
           labelKey: "EC_AUCTION_PURCHASER_NAME_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("VillageName"),
+        pattern: getPattern("ECViolatorName"),
         errorMessage: "EC_ERR_DEFAULT_PURCHASER_NAME_INPUT_FIELD_MSG",
         jsonPath: "auctionDetails.purchaseName",
 

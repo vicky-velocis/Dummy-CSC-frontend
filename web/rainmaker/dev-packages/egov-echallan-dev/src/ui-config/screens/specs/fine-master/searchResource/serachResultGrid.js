@@ -171,7 +171,7 @@ export const serachResultGrid = {
       print: true,
       download: true,
       // responsive: "scrollMaxHeight",
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,

@@ -236,6 +236,7 @@ class IntegrationReactSelect extends React.Component {
 IntegrationReactSelect.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
+
 };
 
 export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);

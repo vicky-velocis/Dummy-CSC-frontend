@@ -102,7 +102,7 @@ export const serachResultGrid = {
       filter: false,
       print: true,
       download: true,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,

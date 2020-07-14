@@ -104,7 +104,7 @@ export const ArticleGridDetails = {
       print: false,
       download: false,
       // responsive: "scrollMaxHeight",
-      responsive: "scroll",
+      responsive: "stacked",
       // responsive: "stack"
       selectableRows: false,
       disableToolbarSelect: true,
