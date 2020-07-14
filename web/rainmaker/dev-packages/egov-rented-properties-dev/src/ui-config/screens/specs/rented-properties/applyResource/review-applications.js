@@ -18,6 +18,17 @@ const freshLicenseEditSection = isEditable => ({
     }
 })
 
+const freshLicenseEditSectionMortgage = isEditable => ({
+    ...editSection,
+    visible: isEditable,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            changeStep(state, dispatch, "mortage-apply", "", 0);
+        }
+    }
+})
+
 export const getReviewApplicantDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -81,6 +92,76 @@ export const getReviewApplicantDetails = (isEditable = true) => {
         })
     })
 }
+
+
+
+export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Applicant Details",
+                        labelKey: "RP_APPLICANT_DETAILS_HEADER"
+                    })
+                },
+                editSection: freshLicenseEditSectionMortgage(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+            ownerName: getLabelWithValue(
+                {
+                    labelName: "Applicant Name",
+                    labelKey: "RP_APPLICANT_NAME_LABEL"
+                },
+                { jsonPath: "Owners[0].ownerDetails.name" }
+            ),
+            relationship: getLabelWithValue(
+                {
+                    labelName: "Relationship",
+                    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+                },
+                { jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee" }
+            ),
+            phone: getLabelWithValue(
+                {
+                    labelName: "Mobile No.",
+                    labelKey: "RP_MOBILE_NO_LABEL"
+                },
+                {
+                    jsonPath: "Owners[0].ownerDetails.phone" 
+                }
+            ),
+            email: getLabelWithValue(
+                {
+                    labelName: "Email",
+                    labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
+                },
+                {
+                    jsonPath: "Owners[0].ownerDetails.eamil" 
+                }
+            ),
+            aadhar: getLabelWithValue(
+                {
+                    labelName: "Aadhar Number",
+                    labelKey: "RP_AADHAR_LABEL"
+                },
+                {
+                    jsonPath: "Owners[0].ownerDetails.aadhaarNumber" 
+                }
+            )
+        })
+    })
+}
+
+
+
+
 
 export const getreviewPropertyAddressDetails = (isEditable = true) => {
     return getCommonGrayCard({
