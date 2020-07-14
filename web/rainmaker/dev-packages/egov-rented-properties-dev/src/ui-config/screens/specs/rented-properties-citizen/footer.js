@@ -82,7 +82,7 @@ const callBackForNextMortgage = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "Properties[0]"
     );
-        // moveToSuccess(rentedData, dispatch);
+        moveToSuccessMortgage(rentedData, dispatch);
     }
     
   }
