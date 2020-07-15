@@ -26,6 +26,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "ownership-my-applications",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("actualResults", []));
+    dispatch(prepareFinalObject("searchResults", []));
     getData(action, state, dispatch)
     return action
   },
@@ -59,7 +61,7 @@ const screenConfig = {
               },
               {
                 label: "RP_COMMON_TABLE_COL_STATUS",
-                jsonPath: "state"
+                jsonPath: "applicationState"
               }
             ],
             moduleName: "OWNERSHIPTRANSFERRP",

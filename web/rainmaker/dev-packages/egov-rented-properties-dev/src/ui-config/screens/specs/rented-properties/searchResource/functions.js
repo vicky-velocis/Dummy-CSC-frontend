@@ -138,14 +138,14 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
     {}
   );
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.rentedPropertyApplication.children.cardContent.children.applicationNoContainer.children",
+    "components.div.children.searchDuplicateCopyApplication.children.cardContent.children.applicationNoContainer.children",
     state,
     dispatch,
     "search"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children",
+    "components.div.children.searchDuplicateCopyApplication.children.cardContent.children.statusContainer.children",
     state,
     dispatch,
     "search"

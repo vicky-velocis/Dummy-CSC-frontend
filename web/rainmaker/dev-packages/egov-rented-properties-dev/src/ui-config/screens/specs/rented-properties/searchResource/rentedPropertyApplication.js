@@ -206,23 +206,23 @@ export const rentedPropertyApplication = getCommonCard({
   //   labelKey: "RP_SEARCH_PROPERTY_MASTER_HEADER"
   // }),
   subParagraph: getCommonParagraph({
-    labelName: "Please provide atleast one parameter to search Application",
-    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_APPLICATION_LABEL"
+    labelName: "Please provide atleast one parameter to search Property",
+    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
   }),
-  applicationNoContainer: getCommonContainer({
-    applicationNo: getTextField(applicationNoField),
+  colonyContainer: getCommonContainer({
+    colony: getSelectField(colonyField),
+    status: getSelectField(statusField)
+  }),
+  transitNumberContainer: getCommonContainer({
     transitNumber: getTextField(transitNumberField),
-  }),
-  statusContainer: getCommonContainer({
-    mobileNo: getTextField(applicantMobileNumberField),
-    status: getSelectField(ownershipStatusField)
+    phone: getTextField(phoneNumberField)
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer(
       {...buttonItem, searchButton: {...buttonItem.searchButton, 
         onClickDefination: {
           action: "condition",
-          callBack: searchDuplicateCopy
+          callBack: searchApiCall
         }
       }, lastCont: {
         uiFramework: "custom-atoms",
@@ -236,8 +236,7 @@ export const rentedPropertyApplication = getCommonCard({
   })
 });
 
-
-export const ownerShipTransferApplication = getCommonCard({
+const commonSearchForm = {
   // subHeader: getCommonTitle({
   //   labelName: "Search Ownership Transfer Property",
   //   labelKey: "RP_SEARCH_OWNERSHIP_TRANSFER_HEADER"
@@ -271,4 +270,30 @@ export const ownerShipTransferApplication = getCommonCard({
       }
     })
   })
-})
+}
+
+export const ownerShipTransferApplication = getCommonCard(
+  commonSearchForm
+)
+
+export const searchDuplicateCopyApplication = getCommonCard(
+  {...commonSearchForm,
+    button: getCommonContainer({
+      buttonContainer: getCommonContainer(
+        {...buttonItem, searchButton: {...buttonItem.searchButton, 
+          onClickDefination: {
+            action: "condition",
+            callBack: searchDuplicateCopy
+          }
+        }, lastCont: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }
+      })
+    })
+  }
+)

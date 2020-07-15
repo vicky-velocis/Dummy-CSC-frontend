@@ -1,20 +1,11 @@
 import {
     getCommonHeader,
-    getLabel,
     getBreak,
-    getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
-import find from "lodash/find";
-import get from "lodash/get";
-import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { searchDuplicateCopyApplication } from "./searchResource/rentedPropertyApplication";
 import { searchDuplicateCopy } from "./searchResource/functions"
-import { searchResults } from "./searchResource/searchResults";
-import { getColonyTypes } from "./apply";
 import { getStatusList } from "./search";
 import { duplicateCopySearchResult } from "./searchResource/searchResults";
 
@@ -29,10 +20,8 @@ import { duplicateCopySearchResult } from "./searchResource/searchResults";
       const queryObject = [{ key: "tenantId", value: getTenantId() }, 
                       { key: "businessServices", value: "DuplicateCopyOfAllotmentLetterRP" }]
       dispatch(prepareFinalObject("searchScreen", {}))
-      // getColonyTypes(action, state, dispatch)
-      // getStatusList(action, state, dispatch, queryObject, "search-transfer-properties", "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children.status")
       searchDuplicateCopy(state, dispatch, true)
-      getStatusList(action, state, dispatch, queryObject, "search-duplicate-copy", "components.div.children.rentedPropertyApplication.children.cardContent.children.statusContainer.children.status")
+      getStatusList(action, state, dispatch, queryObject, "search-duplicate-copy", "components.div.children.searchDuplicateCopyApplication.children.cardContent.children.statusContainer.children.status")
       return action
     },
     components: {
@@ -57,7 +46,7 @@ import { duplicateCopySearchResult } from "./searchResource/searchResults";
               }
             }
           },
-          rentedPropertyApplication,
+          searchDuplicateCopyApplication,
           breakAfterSearch: getBreak(),
           duplicateCopySearchResult
         }
