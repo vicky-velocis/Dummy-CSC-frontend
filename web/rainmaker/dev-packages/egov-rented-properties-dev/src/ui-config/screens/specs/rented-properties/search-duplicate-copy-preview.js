@@ -18,7 +18,7 @@ const headerrow = getCommonContainer({
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
-const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy")
+const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy", "OwnersTemp[0].reviewDocData")
 
 const transferReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
@@ -27,17 +27,34 @@ const transferReviewDetails = getCommonCard({
 })
 
 const beforeInitFn = async(action, state, dispatch) => {
-const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  if(!!applicationNumber) {
-    const queryObject = [
-      {key: "applicationNumber", value: applicationNumber}
-    ]
-    const response = await getDuplicateCopySearchResults(queryObject);
-    if (response && response.DuplicateCopyApplications) {
-    dispatch(prepareFinalObject("DuplicateCopyApplications", response.DuplicateCopyApplications))
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    if(!!applicationNumber) {
+      const queryObject = [
+        {key: "applicationNumber", value: applicationNumber}
+      ]
+      const response = await getDuplicateCopySearchResults(queryObject);
+      if (response && response.DuplicateCopyApplications) {
+      let {DuplicateCopyApplications} = response
+      let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
+      const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
+      duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
+      DuplicateCopyApplications = [{...DuplicateCopyApplications[0], DuplicateCopyApplications: {...DuplicateCopyApplications[0].applicationDocuments, duplicateCopyDocuments}}]
+      dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
+      dispatch(
+        prepareFinalObject(
+          "OwnersTemp[0].removedDocs",
+          removedDocs
+        )
+      );
+      await setDocuments(
+        response,
+        "DuplicateCopyApplications[0].applicationDocuments",
+        "OwnersTemp[0].reviewDocData",
+        dispatch,'RP'
+      );
+      }
     }
   }
-}
 
 const duplicateCopySearchPreview = {
     uiFramework: "material-ui",
