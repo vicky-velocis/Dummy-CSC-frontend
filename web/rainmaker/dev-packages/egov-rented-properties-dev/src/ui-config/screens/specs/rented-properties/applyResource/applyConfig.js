@@ -59,6 +59,20 @@ export const ownershipTransferDocumentsDetails = getCommonCard({
 });
 
 
+export const ownershipTransferDuplicateDocumentsDetails = getCommonCard({
+  ...documentCardConfig,
+  documentList : {
+    ...documentList,
+    props: {
+      ...documentList.props,
+      documentsJsonPath: "DuplicateTemp[0].ownershipTransferDocuments",
+      uploadedDocumentsJsonPath: "DuplicateTemp[0].uploadedDocsInRedux",
+      tenantIdJsonPath: "Duplicate[0].tenantId",
+      removedJsonPath: "DuplicateTemp[0].removedDocs"
+    }
+  }
+});
+
 export const stepsData = [
     { labelName: "Details", labelKey: "RP_COMMON_TR_DETAILS" },
     { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
@@ -171,7 +185,15 @@ export const formwizardDuplicateCopyFirstStep = {
 };
 
 export const formwizardDuplicateCopySecondStep = {
-  
+    uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form2"
+  },
+  children: {
+    ownershipTransferDuplicateDocumentsDetails
+  },
+  visible: false
 };
 
 export const formwizardDuplicateCopyThirdStep = {

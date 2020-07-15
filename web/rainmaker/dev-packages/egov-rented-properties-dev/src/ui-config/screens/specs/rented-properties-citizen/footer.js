@@ -164,7 +164,41 @@ const callBackForNextDuplicate = async(state, dispatch) => {
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
   
-    isFormValid = true
+    const uploadedDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Duplicate[0].applicationDocuments",
+        []
+    );
+
+    const uploadedTempDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        "DuplicateTemp[0].ownershipTransferDocuments",
+        []
+    );
+
+    for (var y = 0; y < uploadedTempDocData.length; y++) {
+      if (
+          uploadedTempDocData[y].required &&
+          !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+      ) {
+          isFormValid = false;
+      }
+    }
+    if(isFormValid) {
+      const reviewDocData =
+              uploadedDocData &&
+              uploadedDocData.map(item => {
+                  return {
+                      title: `RP_${item.documentType}`,
+                      link: item.fileUrl && item.fileUrl.split(",")[0],
+                      linkText: "View",
+                      name: item.fileName
+                  };
+              });
+              dispatch(
+                prepareFinalObject("DuplicateTemp[0].reviewDocData", reviewDocData)
+            );
+    }
     }
     if(activeStep === SUMMARY_STEP) {
       const rentedData = get(
