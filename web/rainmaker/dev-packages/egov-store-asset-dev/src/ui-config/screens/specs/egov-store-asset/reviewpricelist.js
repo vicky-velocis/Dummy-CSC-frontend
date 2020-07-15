@@ -25,7 +25,7 @@ import {
   
   const screenConfig = {
     uiFramework: "material-ui",
-    name: "reviewmaterialmaster",
+    name: "reviewpricelist",
     beforeInitScreen: (action, state, dispatch) => {
       // COMMA SEPARATED ROLES IN REVIEW SCREEN
       setRolesList(state, dispatch);

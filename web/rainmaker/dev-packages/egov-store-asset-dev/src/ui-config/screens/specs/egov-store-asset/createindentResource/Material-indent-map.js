@@ -85,8 +85,8 @@ import {
                 jsonPath: "indents[0].indentDetails[0].uom.code",
                 sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
                 props: {
-                  optionLabel: "code",
-                  optionValue: "name"
+                  optionLabel: "name",
+                  optionValue: "code"
                 },
               })
             },
@@ -94,7 +94,7 @@ import {
               ...getTextField({
                 label: {
                   labelName: "Assest Code",
-                  labelKey: "Assest Code"
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE"
                 },
                 placeholder: {
                   labelName: "Assest Code",
@@ -134,6 +134,7 @@ import {
                   disabled:true
                 },
                 required: false,
+                visible:false,
                 pattern: getPattern("Name") || null,
                 jsonPath: "indents[0].indentDetails[0].project.code",
                 //sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
@@ -150,14 +151,32 @@ import {
                 },
               })
             },
+            indentQuantity: {
+              ...getTextField({
+                label: {
+                  labelName: "indentQuantity",
+                  labelKey: "STORE_MATERIAL_INDENT_QUANTITY"
+                },
+                placeholder: {
+                  labelName: " indent Quantity",
+                  labelKey: "STORE_MATERIAL_INDENT_QUANTITY_PLACEHOLDER"
+                },
+                props:{
+                  disabled:false
+                },
+                required: true,
+                pattern: getPattern("Amount") || null,
+                jsonPath: "indents[0].indentDetails[0].indentQuantity"
+              })
+            },
             QuantityRequired: {
               ...getTextField({
                 label: {
-                  labelName: "Project Code",
+                  labelName: "QuantityRequired",
                   labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED"
                 },
                 placeholder: {
-                  labelName: "Project Code",
+                  labelName: "QuantityRequired",
                   labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED_PLACEHOLDER"
                 },
                 props:{

@@ -15,9 +15,12 @@ import {
   import { commonTransform, objectArrayToDropdown } from "../utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
+  import {
+    IndentConfiguration
+  } from "../../../../ui-utils/sampleResponses";
   export const stepsData = [
     { labelName: "Indent Material Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE" },
     {
@@ -213,8 +216,39 @@ export const header = getCommonContainer({
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
-     
+     // SEt Default data
+
+     dispatch(
+      prepareFinalObject(
+        "materialIssues[0].materialIssueStatus",
+        IndentConfiguration().materialIssueStatus,
+      )
+    );
+    let issueStore = get(
+      state.screenConfiguration.preparedFinalObject,
+      `indents[0].issueStore`,
+      []
+    );
+    //designation
+    dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
+    let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
+    if(issueStore)
+    { 
+      if(issueStore.code !== undefined)
+      {
+        let IndentId = getQueryArg(window.location.href, "id");
+        dispatch(prepareFinalObject("materialIssues[0].toStore.code",issueStore.code));
+        dispatch(prepareFinalObject("materialIssues[0].indent",indents.filter(x=> x.id === IndentId )));
+        dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
+        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+      }
     
+    else
+    dispatch(setRoute(`/egov-store-asset/search-indent`));
+    }
+    else{
+      dispatch(setRoute(`/egov-store-asset/search-indent`));
+    }
       return action;
     },
   

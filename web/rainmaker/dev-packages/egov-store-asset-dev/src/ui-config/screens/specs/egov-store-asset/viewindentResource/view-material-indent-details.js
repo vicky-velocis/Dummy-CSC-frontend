@@ -10,47 +10,72 @@ import {
   const gotoCreatePage = (state, dispatch) => {
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-store-asset/createpricelist?step=0`
-    : `/egov-store-asset/createpricelist?step=0`;
+    ? `/egov-ui-framework/egov-store-asset/creatindent?step=0`
+    : `/egov-store-asset/creatindent?step=0`;
     dispatch(setRoute(createUrl));
   };
   
-  const pricestoreCard = {
+  const storeCard = {
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
       className: "review-hr",
       scheama: getCommonGrayCard({
-        pricestoreCardContainer: getCommonContainer({
-          materialcode: getLabelWithValue(
+        storeCardContainer: getCommonContainer({
+          MaterialName: getLabelWithValue(
             {
-              labelName: "Material Code",
-                labelKey: "STORE_MATERIAL_CODE"
+              labelName: "Material Nmae",
+                  labelKey: "STORE_MATERIAL_NAME"
             },
-            { jsonPath: "priceLists[0].priceListDetails[0].material.code",          
+            { jsonPath: "indents[0].indentDetails[0].material.code",          
           }
           ),
-          quantity: getLabelWithValue(
+          MaterialDescription: getLabelWithValue(
             {
-              labelName: "quantity",
-                    labelKey: "STORE_PRICE_QUANTITY"
+              labelName: "Material Description",
+                  labelKey: "STORE_MATERIAL_DESCRIPTION"
             },
-            { jsonPath: "priceLists[0].priceListDetails[0].quantity"
+            { jsonPath: "indents[0].storeMapping[0].MaterialDescription"
             
            }
           ),
-          ratePerUnit: getLabelWithValue(
-            { labelName: "Rate",
-            labelKey: "STORE_PRICE_RATE_PER_UNIT"},
+          UOMName: getLabelWithValue(
+            { labelName: "UOM Name",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"},
             {
-              jsonPath: "priceLists[0].priceListDetails[0].ratePerUnit"
+              jsonPath: "indents[0].indentDetails[0].uom.code"
              
             }
           ),
-          uomcode: getLabelWithValue(
-            {  labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
+          AssestCode: getLabelWithValue(
+            {  labelName: "Assest Code",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE" },
             {
-              jsonPath: "priceLists[0].priceListDetails[0].uom.code",
+              jsonPath: "indents[0].indentDetails[0].asset.code",
+             
+            }
+          ),
+          // ProjectCode: getLabelWithValue(
+          //   { labelName: "Project Code",
+          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE" },
+          //   {
+          //     jsonPath: "indents[0].indentDetails[0].project.code",
+             
+          //   }
+          // ),
+          indentQuantity: getLabelWithValue(
+            {   labelName: "indentQuantity",
+            labelKey: "STORE_MATERIAL_INDENT_QUANTITY" },
+            {
+              jsonPath: "indents[0].indentDetails[0].indentQuantity",
+             
+            }
+          ),
+          QuantityRequired: getLabelWithValue(
+            {   labelName: "QuantityRequired",
+            labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED" },
+            {
+              jsonPath: "indents[0].indentDetails[0].userQuantity",
              
             }
           )
@@ -60,15 +85,14 @@ import {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-     // screenKey:"view-price-list",
       sourceJsonPath: "priceLists[0].priceListDetails",
       prefixSourceJsonPath:
-        "children.cardContent.children.pricestoreCardContainer.children",
+        "children.cardContent.children.storeCardContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
   };
-  export const getStoreDetailsView = (isReview = true) => {
+  export const getIndentDetailsView = (isReview = true) => {
     return getCommonGrayCard({
       headerDiv: {
         uiFramework: "custom-atoms",
@@ -83,8 +107,8 @@ import {
               sm: 10
             },
             ...getCommonSubHeader({
-              labelName: "Material Map Store Details",
-              labelKey: "STORE_MATERIAL_MAP_STORE_DETAILS"
+              labelName: "Material Map Indent Details",
+              labelKey: "STORE_MATERIAL_MAP_INDENT_DETAILS"
             })
           },
           editSection: {
@@ -118,7 +142,7 @@ import {
           }
         }
       },
-      viewOne: pricestoreCard
+      viewOne: storeCard
     });
   };
   

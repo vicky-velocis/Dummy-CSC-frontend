@@ -52,8 +52,6 @@ export const getSearchResults = async (queryObject,dispatch,screenName) => {
     break;
     case "materials" : url = "store-asset-services/materials/_search";
     break;
-     case "purchaseOrder" : url = "store-asset-services/purchaseorders/_search";
-    break;
   }
   try {
     const response = await httpRequest("post", url, "", queryObject, {} );

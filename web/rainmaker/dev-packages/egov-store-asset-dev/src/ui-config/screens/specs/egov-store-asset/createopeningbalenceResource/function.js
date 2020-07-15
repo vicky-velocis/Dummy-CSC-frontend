@@ -24,9 +24,9 @@ import {
   
   } from "../../../../../ui-utils/sampleResponses";
 export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
-    let uuid = get(
+    let id = get(
       state.screenConfiguration.preparedFinalObject,
-      "Employee[0].uuid",
+      "materialReceipt[0].id",
       null
     );
 
@@ -101,7 +101,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
      
    
 
-    if (uuid) {
+    if (id) {
       createUpdateOpeningBalence(state, dispatch, "UPDATE");
     } else {
       createUpdateOpeningBalence(state, dispatch, "CREATE");
@@ -163,7 +163,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           dispatch
         );
         if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=create&code=123456`));
          }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);
@@ -176,7 +176,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           dispatch
         );
         if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=update&code=123456`));
          }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);

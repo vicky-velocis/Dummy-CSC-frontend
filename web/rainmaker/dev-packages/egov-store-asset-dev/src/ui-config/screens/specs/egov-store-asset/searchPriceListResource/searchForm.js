@@ -96,6 +96,10 @@ export const searchForm = getCommonCard({
         },
         required: false,
         jsonPath: "searchScreen.rateType",
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+        },
          // sourceJsonPath: "searchScreenMdmsData.store-asset.inventoryType",
          props: {
           data: [
@@ -122,7 +126,7 @@ export const searchForm = getCommonCard({
       required: false,
 
       props: {
-        content: "STORE_MATERIAL_MASTER_ACTIVE",
+        content: "STORE_MATERIAL_TYPE_ACTIVE",
         jsonPath: "searchScreen.active",
         screenName: "search-price-list",
         checkBoxPath:

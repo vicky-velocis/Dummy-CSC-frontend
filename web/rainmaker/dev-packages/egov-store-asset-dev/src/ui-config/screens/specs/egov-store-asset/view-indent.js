@@ -1,24 +1,31 @@
 import {
   getCommonHeader,
+  getLabel,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-import { PriceListReviewDetails } from "./viewpricelistResource/pricelist-review";
-import { masterViewFooter } from "./viewpricelistResource/footer";
-import { getPriceLstData } from "./viewpricelistResource/functions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";  
+import { IndentListReviewDetails } from "./viewindentResource/indent-review";
+import { masterViewFooter } from "./viewindentResource/footer";
+import { getMaterialIndentData } from "./viewindentResource/functions";
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `View Price List`,
     labelKey: "STORE_VIEW_PRICE_LIST"
   })
 });
-const masterView = PriceListReviewDetails(false);
+
+const createMatrialIndentNoteHandle = async (state, dispatch) => {
+
+  let IndentId = getQueryArg(window.location.href, "id");
+  dispatch(setRoute(`/egov-store-asset/createMaterialIndentNote?IndentId=${IndentId}`));
+};
+const masterView = IndentListReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
   const tenant = tenantId || getTenantId();
   let mdmsBody = {
@@ -53,11 +60,11 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "view-price-list",
+  name: "view-indent",
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    getPriceLstData(state, dispatch, id, tenantId);
+    getMaterialIndentData(state, dispatch, id, tenantId);
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
     return action;
@@ -65,7 +72,7 @@ const screenConfig = {
   components: {
     div: {
       uiFramework: "custom-atoms",
-      componentPath: "Div",
+      componentPath: "Form",
       props: {
         className: "common-div-css"
       },
@@ -77,10 +84,51 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 6,
               },
               ...header
-            }
+            },
+            newApplicationButton: {
+              componentPath: "Button",
+              gridDefination: {
+                xs: 12,
+                sm: 6,
+                align: "right",
+              },
+              visible: true,// enableButton,
+              props: {
+                variant: "contained",
+                color: "primary",
+                style: {
+                  color: "white",
+                  borderRadius: "2px",
+                  width: "250px",
+                  height: "48px",
+                },
+              },
+
+              children: {
+                plusIconInsideButton: {
+                  uiFramework: "custom-atoms",
+                  componentPath: "Icon",
+                  props: {
+                    iconName: "add",
+                    style: {
+                      fontSize: "24px",
+                    },
+                  },
+                },
+
+                buttonLabel: getLabel({
+                  labelName: "Add Material Indent Note",
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_ADD",
+                }),
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: createMatrialIndentNoteHandle,
+              },
+            },
           }
         },
         masterView,

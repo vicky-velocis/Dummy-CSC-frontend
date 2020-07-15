@@ -39,19 +39,11 @@ import {
               },
               required: true,
               jsonPath: "priceLists[0].priceListDetails[0].material.code",            
-              
-               props: {
-                data: [
-                  {
-                    value: "MAT02",
-                    label: "MAT02"
-                  },
-                  
-                ],
-                optionValue: "value",
-                optionLabel: "label"
+              sourceJsonPath: "createScreenMdmsData.store-asset.Material",
+              props: {
+                optionValue: "code",
+                optionLabel: "name",
               },
-              
             }),
             fromDate: {
               ...getDateField({

@@ -11,7 +11,9 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.scss";
 import get from "lodash/get";
-
+import {
+  getLocaleLabels,
+} from "egov-ui-framework/ui-utils/commons";
 const styles = {
   root: {
     color: "#FE7A51",
@@ -49,7 +51,13 @@ class CheckboxLabels extends React.Component {
   };
 
   render() {
-    const { classes, content, id, isChecked, disabled } = this.props;
+    const { classes, content, id, isChecked, disabled,localizationLabels } = this.props;
+    //set localization value
+    let translatedLabel = getLocaleLabels(
+      content,
+      content,
+      localizationLabels
+    );
     console.log("check box", this.state.checkedG, isChecked);
     return (
       <FormGroup row>
@@ -68,7 +76,8 @@ class CheckboxLabels extends React.Component {
               disabled={disabled ? true : false}
             />
           }
-          label={content}
+         // label={content}
+          label={translatedLabel}
         />
       </FormGroup>
     );
@@ -76,11 +85,12 @@ class CheckboxLabels extends React.Component {
 }
 
 const mapStateToProps = (state, ownprops) => {
-  const { screenConfiguration } = state;
+  const { screenConfiguration,app } = state;
   const { jsonPath } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
   const isChecked = get(preparedFinalObject, jsonPath, false);
-  return { preparedFinalObject, jsonPath, isChecked };
+  const { localizationLabels } = app;
+  return { preparedFinalObject, jsonPath, isChecked,localizationLabels };
 };
 
 const mapDispatchToProps = (dispatch) => {

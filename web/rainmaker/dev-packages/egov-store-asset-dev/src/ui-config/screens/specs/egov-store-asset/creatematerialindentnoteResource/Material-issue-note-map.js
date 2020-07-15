@@ -8,7 +8,8 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import get from "lodash/get";
-  //import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import filter from "lodash/filter";
+  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
   const arrayCrawler = (arr, n) => {
     if (n == 1) {
@@ -40,12 +41,33 @@ import {
                 },
                 required: true,               
                 jsonPath: "materialIssues.indent.indentDetails[0].material.id",
-                sourceJsonPath: "material.materials",
+                sourceJsonPath: "indents[0].indentDetails",
                 props: {
-                  optionValue: "id",
-                  optionLabel: "description",
+                  optionValue: "material.code",
+                  optionLabel: "material.name",
+                  // optionValue: "id",
+                  // optionLabel: "id",
                 },
-              })
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+                let Material = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `indents[0].indentDetails`,
+                  []
+                );
+                console.log(Material)
+                let currentObject = filter(Material, {
+                  code: action.value
+                });
+                console.log(currentObject)
+                dispatch(
+                  prepareFinalObject(
+                    "Employees[0].disabilityPercentage",
+                    currentObject[0].value
+                  )
+                );
+              }
+
             },
             TotalIndentQty: {
               ...getTextField({

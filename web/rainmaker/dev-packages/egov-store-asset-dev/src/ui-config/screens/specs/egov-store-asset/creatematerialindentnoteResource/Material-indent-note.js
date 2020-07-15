@@ -8,7 +8,11 @@ import {
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  // import { getTodaysDateInYMD } from "../../utils";
-  
+ import set from "lodash/set";
+ import get from "lodash/get";
+ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
+ import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   export const IndentMaterialIssueDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -40,7 +44,22 @@ import {
               optionValue: "code",
               optionLabel: "name",
             },
-        })
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          alert(action.value)
+          let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
+          let fromstore = store.filter(x=> x.code === action.value)
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.code",fromstore[0].code));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.name",fromstore[0].name));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.department.id",fromstore[0].department));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
+          dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));
+        }
       },
       IssueDate: {
         ...getDateField({
@@ -59,16 +78,16 @@ import {
       },
       IndentingStore: {
         ...getTextField({
-          label: { labelName: "Material Type", labelKey: "STORE_COMMON_MATERIAL_TYPE" },
+          label: { labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE" },
           placeholder: {
-            labelName: "Select Material Type",
-            labelKey: "STORE_MATERIAL_TYPE_NAME_SELECT"
+            labelName: "Indenting Store",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
           },
           props: {
             disabled: true,       
           },
-          required: true,
-          jsonPath: "materialIssues[0].toStore",
+          required: false,
+          jsonPath: "materialIssues[0].toStore.code",
           
         })
       },
@@ -76,7 +95,7 @@ import {
         ...getTextField({
           label: {
             labelName: "Indenting Dept. Name",
-            labelKey: "STORE_MATERIAL_NAME"
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_DEP_NAME"
           },
           placeholder: {
             labelName: "Enter Indenting Dept. Name",
@@ -87,18 +106,18 @@ import {
           },
           required: false,
           pattern: getPattern("Name") || null,
-          jsonPath: "materialIssues[0].name"
+          jsonPath: "materialIssues[0].fromStore.department.name"
         })
       },
       IssueToEmployee: {
-        ...getSelectField({
+        ...getTextField({
           label: {
             labelName: "Issue To Employee",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
           },
           placeholder: {
             labelName: "Select Issue To Employee",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE_SELECT"
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
           },
           props: {
             className: "applicant-details-error",
@@ -106,7 +125,7 @@ import {
             rowsMax: 4,
           },
           required: false,
-          jsonPath: "materialIssues[0].indent.issuedToEmployee",
+          jsonPath: "materialIssues[0].issuedToEmployee",
           sourceJsonPath: "store.stores",
             props: {
               optionValue: "code",
@@ -114,15 +133,15 @@ import {
             },
         })
       },
-      DesignationEmp: {
+      issuedToDesignation: {
         ...getTextField({
-          label: { labelName: "Designation", labelKey: "STORE_BASSTORE_MATERIAL_INDENT_NOTE_DESIGNATIONE_UOM_NAME" },
+          label: { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
           placeholder: {
             labelName: "Enter Designation",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION_PLACEHOLDER"
           },
           required: false,
-          jsonPath: "materialIssues[0].designation",
+          jsonPath: "materialIssues[0].issuedToDesignation",
           
           props: {
             disabled: true,       
@@ -163,8 +182,9 @@ import {
             disabled: true,       
           },
           required: false,
+          visible:false,
           pattern: getPattern("Name") || null,
-          jsonPath: "materialIssues[0].oldCode"
+          jsonPath: "materialIssues[0].IssueBy"
         })
       },
       DesignationIssueBy: {
@@ -175,6 +195,7 @@ import {
             labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION"
           },
           required: false,
+          visible:false,
           jsonPath: "materialIssues[0].DesignationIssueBy",           
            props: {
             disabled: true,       

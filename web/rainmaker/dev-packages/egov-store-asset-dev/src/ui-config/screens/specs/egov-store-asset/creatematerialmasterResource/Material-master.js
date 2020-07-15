@@ -38,7 +38,7 @@ import {
           sourceJsonPath: "createScreenMdmsData.store-asset.Material",
           props: {
             optionValue: "code",
-            optionLabel: "description",
+            optionLabel: "name",
           },
         })
       },
@@ -122,8 +122,8 @@ import {
           jsonPath: "materials[0].baseUom.code",
           sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
           props: {
-            optionLabel: "code",
-            optionValue: "name"
+            optionLabel: "name",
+            optionValue: "code"
           },
         })
       },

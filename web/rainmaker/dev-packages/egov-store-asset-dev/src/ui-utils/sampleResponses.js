@@ -471,3 +471,16 @@ export const sampleGetBill = () => {
     }
   };
 };
+export const IndentConfiguration =()=>{
+
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+    
+  }
+}

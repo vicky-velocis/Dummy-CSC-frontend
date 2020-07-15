@@ -80,9 +80,9 @@ import {
     await getstoreData(action,state, dispatch);
   };
   
-  const materialMasterSearchAndResult = {
+  const screenConfig = {
     uiFramework: "material-ui",
-    name: "search-material-master",
+    name: "view-opening-balence",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
       return action;
@@ -140,8 +140,8 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add Material Master",
-                    labelKey: "STORE_ADD_NEW_MATERIAL_MASTER_BUTTON",
+                    labelName: "Add Oppening Balance",
+                    labelKey: "STORE_ADD_OPPENING_BALANCE_BUTTON",
                   }),
                 },
                 onClickDefination: {
@@ -159,5 +159,5 @@ import {
     },
   };
   
-  export default materialMasterSearchAndResult;
+  export default screenConfig;
   

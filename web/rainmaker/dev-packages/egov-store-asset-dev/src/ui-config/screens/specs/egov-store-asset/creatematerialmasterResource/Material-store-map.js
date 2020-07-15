@@ -112,7 +112,7 @@ import {
               required: false,
         
               props: {
-                content: "MATERIAL_TYPE_ACTIVE",
+                content: "STORE_MATERIAL_TYPE_ACTIVE",
                 jsonPath: "materials[0].storeMapping[0].active",
                 screenName: "search-material-master",
                 checkBoxPath:

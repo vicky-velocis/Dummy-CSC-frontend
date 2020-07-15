@@ -362,6 +362,7 @@ export const updateMaterialIndent = async (queryObject, payload, dispatch) => {
     );
     return response;
   } catch (error) {
+    console.log(error)
     dispatch(
       toggleSnackbar(
         true,

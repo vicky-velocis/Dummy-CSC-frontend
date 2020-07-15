@@ -118,7 +118,7 @@ export const searchForm = getCommonCard({
       required: false,
 
       props: {
-        content: "MATERIAL_TYPE_STORE_MAP",
+        content: "STORE_MATERIAL_TYPE_STORE_MAP",
         jsonPath: "searchScreen.storeMappingInfo",
         screenName: "search-material-master",
         checkBoxPath:
@@ -137,7 +137,7 @@ export const searchForm = getCommonCard({
       required: false,
 
       props: {
-        content: "MATERIAL_TYPE_ACTIVE",
+        content: "STORE_MATERIAL_TYPE_ACTIVE",
         jsonPath: "searchScreen.active",
         screenName: "search-material-master",
         checkBoxPath:

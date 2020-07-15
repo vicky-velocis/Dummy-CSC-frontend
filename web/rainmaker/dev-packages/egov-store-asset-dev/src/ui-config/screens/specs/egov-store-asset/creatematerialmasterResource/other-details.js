@@ -52,8 +52,8 @@ import {
             jsonPath: "materials[0].purchaseUom.code",
             sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
           props: {
-            optionLabel: "code",
-            optionValue: "name"
+            optionLabel: "name",
+            optionValue: "code"
           },
           })
         },
@@ -124,8 +124,8 @@ import {
             jsonPath: "materials[0].stockingUom.code",
             sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
             props: {
-              optionLabel: "code",
-              optionValue: "name"
+              optionLabel: "name",
+            optionValue: "code"
             },
           })
         },

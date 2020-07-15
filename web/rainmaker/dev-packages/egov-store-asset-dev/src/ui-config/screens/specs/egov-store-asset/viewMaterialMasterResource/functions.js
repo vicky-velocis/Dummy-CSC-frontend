@@ -167,12 +167,12 @@ export const furnishmaterialsData = (state, dispatch) => {
 };
 
 export const handleCreateUpdateMaterialMaster = (state, dispatch) => {
-  let uuid = get(
+  let id = get(
     state.screenConfiguration.preparedFinalObject,
-    "Employee[0].uuid",
+    "materials[0].id",
     null
   );
-  if (uuid) {
+  if (id) {
     createUpdateMaterialMaster(state, dispatch, "UPDATE");
   } else {
     createUpdateMaterialMaster(state, dispatch, "CREATE");
@@ -222,7 +222,7 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
       //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MaterialMaster&mode=create&code=123456`));
        }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
@@ -241,7 +241,7 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
       //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MaterialMaster&mode=update&code=123456`));
        }
     } catch (error) {
       furnishmaterialsData(state, dispatch);
