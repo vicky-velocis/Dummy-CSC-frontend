@@ -131,13 +131,6 @@ export const getDuplicateCopySearchResults = async queryObject => {
       "",
       queryObject
     )
-    // const response = await httpRequest(
-    //   "post",
-    //   "/csp/ownership-transfer/_search",
-    //   "",
-    //   queryObject
-    // )
-    console.log(response)
     return response
   } catch (error) {
     store.dispatch(

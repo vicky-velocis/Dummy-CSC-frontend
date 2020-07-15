@@ -201,10 +201,6 @@ const buttonItem = {
 }
 
 export const rentedPropertyApplication = getCommonCard({
-  // subHeader: getCommonTitle({
-  //   labelName: "Search Property Master",
-  //   labelKey: "RP_SEARCH_PROPERTY_MASTER_HEADER"
-  // }),
   subParagraph: getCommonParagraph({
     labelName: "Please provide atleast one parameter to search Property",
     labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
