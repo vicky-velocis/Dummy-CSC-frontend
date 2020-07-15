@@ -5,7 +5,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getOwnershipSearchResults,getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
+import { getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
 import { getDuplicateCopyReviewPropertyAddressDetails , getDuplicateCopyPreviewApplicantDetails} from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
 
@@ -18,7 +18,7 @@ const headerrow = getCommonContainer({
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
-const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy", "OwnersTemp[0].reviewDocData")
+const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy", "DuplicateCopyTemp[0].reviewDocData")
 
 const transferReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
@@ -42,14 +42,14 @@ const beforeInitFn = async(action, state, dispatch) => {
       dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
       dispatch(
         prepareFinalObject(
-          "OwnersTemp[0].removedDocs",
+          "DuplicateCopyTemp[0].removedDocs",
           removedDocs
         )
       );
       await setDocuments(
         response,
         "DuplicateCopyApplications[0].applicationDocuments",
-        "OwnersTemp[0].reviewDocData",
+        "DuplicateCopyTemp[0].reviewDocData",
         dispatch,'RP'
       );
       }
