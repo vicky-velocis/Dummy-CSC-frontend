@@ -20,13 +20,14 @@ import {
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId,getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils/api";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from '../../../../config/common';
+import store from "egov-ui-framework/ui-redux/store";
 const isEditMode = getQueryArg(window.location.href, "edited");
 const storeName = getQueryArg(window.location.href, "name");
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -49,12 +50,11 @@ const callBackForUpdate = async (state, dispatch) => {
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   } else {
     //trigger api for update store
-    const {screenConfiguration} = state;
-    const {stores} = screenConfiguration.preparedFinalObject;
+    const { screenConfiguration } = state;
+    const { stores } = screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
     stores[0].tenantId = tenantId;
-    stores[0].storeInCharge = { code:"employee1",
-    name:"Ram"}
+   
     stores[0].officeLocation.tenantId = tenantId;
 
     const queryObject = [
@@ -64,8 +64,8 @@ const callBackForUpdate = async (state, dispatch) => {
       }
     ];
 
-    const requestBody = {stores};
-    
+    const requestBody = { stores };
+
     try {
       const response = await httpRequest(
         "post",
@@ -74,10 +74,10 @@ const callBackForUpdate = async (state, dispatch) => {
         queryObject,
         requestBody
       );
-       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
-       }
-  
+      if (response) {
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=${stores[0].name}`));
+      }
+
     } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -109,12 +109,12 @@ const callBackForSubmit = async (state, dispatch) => {
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   } else {
     //trigger api for create store
-    const {screenConfiguration} = state;
-    const {stores} = screenConfiguration.preparedFinalObject;
+    const { screenConfiguration } = state;
+    const { stores } = screenConfiguration.preparedFinalObject;
     const tenantId = getTenantId();
     stores[0].tenantId = tenantId;
-    stores[0].storeInCharge = { code:"employee1",
-    name:"Ram"}
+    stores[0].active = true;
+
 
     const queryObject = [
       {
@@ -123,7 +123,7 @@ const callBackForSubmit = async (state, dispatch) => {
       }
     ];
 
-    const requestBody = {stores};
+    const requestBody = { stores };
     console.log("requestbody", requestBody);
     try {
       const response = await httpRequest(
@@ -133,10 +133,10 @@ const callBackForSubmit = async (state, dispatch) => {
         queryObject,
         requestBody
       );
-       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
-       }
-  
+      if (response) {
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=${stores[0].name}`));
+      }
+
     } catch (error) {
       dispatch(
         toggleSnackbar(
@@ -308,24 +308,6 @@ export const formwizardFirstStep = {
       break: getBreak(),
 
       addStoreDetails: getCommonContainer({
-        code: getTextField({
-          label: {
-            labelName: "Store Code",
-            labelKey: "STORE_DETAILS_STORE_CODE",
-          },
-          props: {
-            className: "applicant-details-error",
-          },
-          placeholder: {
-            labelName: "Enter Store Code",
-            labelKey: "STORE_DETAILS_STORE_CODE_PLACEHOLDER",
-          },
-          required: true,
-         
-          pattern: getPattern("non-empty-alpha-numeric"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-          jsonPath: "stores[0].code",
-        }),
         name: getTextField({
           label: {
             labelName: "Store Name",
@@ -344,6 +326,24 @@ export const formwizardFirstStep = {
 
           jsonPath: "stores[0].name",
         }),
+        code: getTextField({
+          label: {
+            labelName: "Store Code",
+            labelKey: "STORE_DETAILS_STORE_CODE",
+          },
+          props: {
+            className: "applicant-details-error",
+          },
+          placeholder: {
+            labelName: "Enter Store Code",
+            labelKey: "STORE_DETAILS_STORE_CODE_PLACEHOLDER",
+          },
+          required: true,
+
+          pattern: getPattern("non-empty-alpha-numeric"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "stores[0].code",
+        }),
         department: getSelectField({
           label: {
             labelName: "Department Name",
@@ -351,6 +351,8 @@ export const formwizardFirstStep = {
           },
           props: {
             className: "applicant-details-error",
+            optionLabel: "name",
+            optionValue: "code",
           },
           placeholder: {
             labelName: "Select Department Name",
@@ -444,17 +446,16 @@ export const formwizardFirstStep = {
           },
           props: {
             className: "applicant-details-error",
+            optionLabel: "name",
+            optionValue: "code",
           },
           placeholder: {
             labelName: "Select In-charge Employee Name",
             labelKey: "STORE_DETAILS_IN_CHARGE_EMPLOYEE_PLACEHOLDER",
           },
+          sourceJsonPath: "createScreenMdmsData1.employee",
           jsonPath: "stores[0].storeInCharge.code",
-          //  required: true,
-          localePrefix: {
-            moduleName: "firenoc",
-            masterName: "FireStations",
-          },
+          required: true,
         }),
         contactNo1: getTextField({
           label: {
@@ -513,6 +514,8 @@ export const formwizardFirstStep = {
           },
           props: {
             className: "applicant-details-error",
+            optionLabel: "name",
+            optionValue: "code",
           },
           placeholder: {
             labelName: "Select Office Location",
@@ -521,10 +524,6 @@ export const formwizardFirstStep = {
           jsonPath: "stores[0].officeLocation.code",
           sourceJsonPath: "createScreenMdmsData.store-asset.Location",
           required: true,
-          localePrefix: {
-            moduleName: "firenoc",
-            masterName: "FireStations",
-          },
         }),
         active: {
           uiFramework: "custom-containers-local",
@@ -580,8 +579,8 @@ const getMDMSData = async (action, state, dispatch) => {
   let mdmsBody = {
 
     MdmsCriteria: {
-       tenantId: commonConfig.tenantId,
-       moduleDetails: [
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
         {
           moduleName: "store-asset",
           masterDetails: [
@@ -617,6 +616,38 @@ const getMDMSData = async (action, state, dispatch) => {
 
 const getData = async (action, state, dispatch) => {
   await getMDMSData(action, state, dispatch);
+  try {
+    //fecthing employee details 
+    const queryParams = [{ key: "roles", value: "EMPLOYEE" },{ key: "tenantId", value:  getTenantId() }];
+    const payload = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "_search",
+      queryParams,
+    );
+    if(payload){
+      if (payload.Employees) {
+        const empDetails =
+        payload.Employees.map((item, index) => {
+            const deptCode = item.assignments[0] && item.assignments[0].department;
+            const empCode = item.code;
+            const empName = `${item.user.name}`;
+          return {
+                  code : empCode,
+                  name : empName,
+                  dept : deptCode
+          };
+        });
+      
+        if(empDetails){
+          dispatch(prepareFinalObject("createScreenMdmsData1.employee",empDetails));  
+        }
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+ 
 };
 
 const screenConfig = {
@@ -624,20 +655,23 @@ const screenConfig = {
   name: "createStore",
   beforeInitScreen: (action, state, dispatch) => {
     if (isEditMode) {
-      const queryObject = [{ key: "name", value: storeName  },{ key: "tenantId", value: tenantId  }];
+      const queryObject = [{ key: "name", value: storeName }, { key: "tenantId", value: tenantId }];
 
-      getSearchResults(queryObject, dispatch,"storeMaster")
-    .then(response =>{
-      dispatch(prepareFinalObject("stores", [...response.stores]));
-      dispatch(
-        handleField(
-          "createStore",
-          `components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addStoreDetails.children.code`,
-          "props.disabled",
-          true
-        )
-      );
-    });
+      getSearchResults(queryObject, dispatch, "storeMaster")
+        .then(response => {
+          dispatch(prepareFinalObject("stores", [...response.stores]));
+          dispatch(
+            handleField(
+              "createStore",
+              `components.div.children.formwizardFirstStep.children.formDetail.children.cardContent.children.addStoreDetails.children.code`,
+              "props.disabled",
+              true
+            )
+          );
+        });
+    }
+    else {
+      dispatch(prepareFinalObject("stores[0].active", true));
     }
     getData(action, state, dispatch);
     return action;

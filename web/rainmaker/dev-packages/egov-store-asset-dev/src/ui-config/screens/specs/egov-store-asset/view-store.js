@@ -53,7 +53,7 @@ export const getLabelWithValue = (label, value, props = {}) => {
 };
 //Edit Button
 const callBackForEdit = async (state, dispatch) => {
-  window.location.href = `/egov-store-asset/createStore?tenantId=${tenantId}&name=${storeName}&edited=true`;
+  window.location.href = `/employee/egov-store-asset/createStore?tenantId=${tenantId}&name=${storeName}&edited=true`;
 };
 export const footer = getCommonApplyFooter({
   editButton: {
@@ -81,15 +81,15 @@ export const footer = getCommonApplyFooter({
 });
 export const renderService = () => {
   return getCommonContainer({
-    code: getLabelWithValue(
-      { labelKey: "STORE_DETAILS_STORE_CODE" },
-      { jsonPath: "stores[0].code" }
-    ),
     name: getLabelWithValue(
       { labelKey: "STORE_DETAILS_STORE_NAME" },
       {
         jsonPath: "stores[0].name",
       }
+    ),
+    code: getLabelWithValue(
+      { labelKey: "STORE_DETAILS_STORE_CODE" },
+      { jsonPath: "stores[0].code" }
     ),
     department: getLabelWithValue(
       { labelKey: "STORE_DETAILS_DEPARTMENT_NAME" },

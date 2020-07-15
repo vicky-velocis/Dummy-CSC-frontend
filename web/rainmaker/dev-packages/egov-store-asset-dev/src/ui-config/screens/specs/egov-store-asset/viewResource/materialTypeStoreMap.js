@@ -31,12 +31,12 @@ import {
             { jsonPath: "materialTypes[0].storeMapping[0].department",
             }
           ),
-          stckInHand: getLabelWithValue(
-            { labelName: "Stock-In-Hand Code", labelKey: "STORE_DETAILS_STORE_STCK_HAND" },
-            {
-              jsonPath: "materialTypes[0].storeMapping[0].chartofAccount.glcode",
-            }
-          ),
+          // stckInHand: getLabelWithValue(
+          //   { labelName: "Stock-In-Hand Code", labelKey: "STORE_DETAILS_STORE_STCK_HAND" },
+          //   {
+          //     jsonPath: "materialTypes[0].storeMapping[0].chartofAccount.glcode",
+          //   }
+          // ),
         }),
       }),
   

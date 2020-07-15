@@ -38,6 +38,7 @@ let labelValue = "";
       labelName: "Store Master Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
+    break;
     case "MATERIALTYPE": labelValue = {
       labelName: "Store Master Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
@@ -68,7 +69,6 @@ let labelValue = "";
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
     break;
-    break;
     case "MATERIALINDENTNOTE": labelValue = {
       labelName: "Material Indent Note Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
@@ -77,6 +77,33 @@ let labelValue = "";
     default :  labelValue = {
       labelName: "Submitted Successfully",
       labelKey: "",
+    }
+
+  }
+ return labelValue;
+}
+
+const getApplicationDisplayCode =() => {
+  let labelValue = "";
+  switch(screenName){
+    case "STOREMASTER": labelValue = {
+      labelName: "Store Name",
+      labelKey: `STORE_DETAILS_STORE_NAME`,
+    }
+    break;
+    case "MATERIALTYPE": labelValue = {
+      labelName: "Material Type name",
+      labelKey: "STORE_MATERIAL_TYPE_NAME", 
+    }
+    break;
+    case "SUPPLIERMASTER": labelValue = {
+      labelName: "Supplier Name",
+      labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME",
+    }
+    break;
+    default :  labelValue = {
+      labelName: "Application No.",
+      labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",
     }
 
   }
@@ -100,10 +127,7 @@ const getAcknowledgementCard = (state, dispatch, applicationNumber) => {
               "A notification regarding Application Submission has been sent to the applicant",
             labelKey: "PET_NOC_APPLICATION_SUCCESS_MESSAGE_SUB",
           },
-          tailText: {
-            labelName: "Application No.",
-            labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",
-          },
+          tailText: getApplicationDisplayCode(),
           number: applicationNumber,
         }),
       },
