@@ -222,7 +222,7 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
           );
         }
         let {DuplicateCopyApplications} = response
-        dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications));
+        dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications));
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
