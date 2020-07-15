@@ -46,7 +46,7 @@ import {
             },
         }),
         beforeFieldChange: (action, state, dispatch) => {
-          alert(action.value)
+          //alert(action.value)
           let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
           let fromstore = store.filter(x=> x.code === action.value)
           dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));

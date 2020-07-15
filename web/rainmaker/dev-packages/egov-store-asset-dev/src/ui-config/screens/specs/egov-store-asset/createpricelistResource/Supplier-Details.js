@@ -12,8 +12,8 @@ import {
   export const SupplierDetails = getCommonCard({
     header: getCommonTitle(
       {
-        labelName: "Material Details",
-        labelKey: "STORE_MATERIAL_DETAILS"
+        labelName: "Supplier Details",
+        labelKey: "STORE_PRICE_SUPPLIER_DETAILS"
       },
       {
         style: {

@@ -43,7 +43,7 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    materialName: getTextField({
+    materialName: getSelectField({
       label: { labelName: "Material  Name", labelKey: "STORE_MATERIAL_NAME" },
       placeholder: {
         labelName: "Select Materila  Name",
@@ -55,15 +55,12 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4,
       },
-      // sourceJsonPath: "searchScreenMdmsData.common-masters.materialName",
-      // props: {
-      //   optionValue: "code",
-      //   optionLabel: "name",
-      // },
-      // localePrefix: {
-      //   moduleName: "common-store",
-      //   masterName: "materialName",
-      // },
+      sourceJsonPath: "searchScreenMdmsData.store-asset.Material",
+      props: {
+        optionValue: "code",
+        optionLabel: "name",
+      },
+     
     }),
     materialType: getSelectField({
       label: { labelName: "Material Type Name", labelKey: "STORE_MATERIAL_TYPE_NAME" },

@@ -52,6 +52,7 @@ import {
             jsonPath: "materials[0].purchaseUom.code",
             sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
           props: {
+            disabled:true,
             optionLabel: "name",
             optionValue: "code"
           },

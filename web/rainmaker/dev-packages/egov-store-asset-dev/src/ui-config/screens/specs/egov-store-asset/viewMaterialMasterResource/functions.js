@@ -198,7 +198,20 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
     []
   );
   set(materialsObject[0], "tenantId", tenantId);
-  set(materialsObject[0], "status", true);
+  set(materialsObject[0], "status", "CREATED");
+
+  //set default glcode
+  //materials[0].storeMapping[0].chartofAccount.glCode
+  let storeMapping = get(state, "screenConfiguration.preparedFinalObject.materials[0].storeMapping",[]) 
+  let materials = get(
+    state.screenConfiguration.preparedFinalObject,
+    "materials",
+    []
+  );
+  for (let i = 0; i < storeMapping.length; i++) {
+    set(materials[0],`storeMapping[${i}].chartofAccount.glCode`, "46130");
+  }
+  
   //handleDeletedCards(materialsObject[0], "storeMapping", "id");
  
 
@@ -207,6 +220,9 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
 
 
   if (action === "CREATE") {
+    for (let i = 0; i < storeMapping.length; i++) {
+      set(materials[0],`storeMapping[${i}].active`, true);
+    }
     try {
       console.log(queryObject)
       console.log("queryObject")

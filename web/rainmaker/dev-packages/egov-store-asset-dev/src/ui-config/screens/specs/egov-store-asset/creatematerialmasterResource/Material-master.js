@@ -7,6 +7,9 @@ import {
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import get from "lodash/get";
+  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { filter } from "lodash";
  // import { getTodaysDateInYMD } from "../../utils";
   
   export const MaterialMasterDetails = getCommonCard({
@@ -25,12 +28,12 @@ import {
       MaterialCode: {
         ...getSelectField({
           label: {
-            labelName: "Material Code",
-            labelKey: "STORE_MATERIAL_CODE"
+            labelName: "Material Name",
+            labelKey: "STORE_MATERIAL_NAME"
           },
           placeholder: {
-            labelName: "Material Code",
-            labelKey: "STORE_MATERIAL_CODE_SELECT"
+            labelName: "Select Material Name",
+            labelKey: "STORE_MATERIAL_NAME_SELECT"
           },
           required: false,
           pattern: getPattern("Name") || null,
@@ -40,7 +43,19 @@ import {
             optionValue: "code",
             optionLabel: "name",
           },
-        })
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
+          let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
+          // console.log(MaterialType[0])
+          // alert(MaterialType[0].materialType.code);
+          // alert(MaterialType[0].baseUom.code);
+          // alert(MaterialType[0].purchaseUom.code);
+          dispatch(prepareFinalObject("materials[0].name",MaterialType[0].name));
+          dispatch(prepareFinalObject("materials[0].materialType.code",MaterialType[0].materialType.code));
+          dispatch(prepareFinalObject("materials[0].baseUom.code",MaterialType[0].baseUom.code));
+          dispatch(prepareFinalObject("materials[0].purchaseUom.code",MaterialType[0].baseUom.code));
+        }
       },
       MaterialoldCode: {
         ...getTextField({
@@ -53,6 +68,7 @@ import {
             labelKey: "STORE_MATERIAL_OLD_CODE"
           },
           required: false,
+          visible:false,
           pattern: getPattern("Name") || null,
           jsonPath: "materials[0].oldCode"
         })
@@ -68,7 +84,11 @@ import {
           required: true,
           jsonPath: "materials[0].materialType.code",
           sourceJsonPath: "createScreenMdmsData.store-asset.MaterialType",
+          // props:{
+          //   disabled:true
+          // },
         props: {
+          disabled:true,
           optionValue: "code",
           optionLabel: "name",
         },
@@ -85,7 +105,8 @@ import {
             labelName: "Material Name",
             labelKey: "STORE_MATERIAL_NAME"
           },
-          required: true,
+          required: false,
+          visible:false,
           pattern: getPattern("Name") || null,
           jsonPath: "materials[0].name"
         })
@@ -122,6 +143,7 @@ import {
           jsonPath: "materials[0].baseUom.code",
           sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
           props: {
+            disabled:true,
             optionLabel: "name",
             optionValue: "code"
           },
@@ -132,11 +154,11 @@ import {
           label: { labelName: "Inventry Type", labelKey: "STORE_INVENTRY_TYPE" },
           placeholder: {
             labelName: "Select Inventry Type",
-            labelKey: "STORE_MATERIAL_TYPE_NAME_SELECT"
+            labelKey: "STORE_INVENTRY_TYPE_SELECT"
           },
           required: false,
           jsonPath: "materials[0].inventoryType",
-           sourceJsonPath: "searchScreenMdmsData.store-asset.InventoryType",
+           sourceJsonPath: "createScreenMdmsData.store-asset.InventoryType",
           props: {
             // data: [
             //   {
@@ -165,6 +187,7 @@ import {
             labelKey: "STORE_MATERIAL_STATUS"
           },
           required: false,
+          visible:false,
           pattern: getPattern("Name") || null,
           jsonPath: "materials[0].status"
         })

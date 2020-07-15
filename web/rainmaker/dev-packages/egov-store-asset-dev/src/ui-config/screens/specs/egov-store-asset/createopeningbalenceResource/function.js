@@ -136,10 +136,19 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
   get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate",0) 
   receivedDate = convertDateToEpoch(receivedDate);
   set(materialReceiptObject[0],"receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate", receivedDate);
+  let id = get(
+    state.screenConfiguration.preparedFinalObject,
+    "materialReceipt[0].id",
+    null
+  );
+  if(id === null)
+  {
   set(materialReceiptObject[0],"mrnNumber","");
   set(materialReceiptObject[0],"receiptDate","");
   set(materialReceiptObject[0],"mrnStatus","CREATED");
   set(materialReceiptObject[0],"receiptDetails[0].material.description","");
+  }
+  
   let UOM = get(state, "screenConfiguration.preparedFinalObject.material.materials",[]) 
   let MaterialCode = get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDetails[0].material.code",'') 
   let UOMCode = UOM.filter((x) => x.code ===MaterialCode)
@@ -163,7 +172,8 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           dispatch
         );
         if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=create&code=123456`));
+          let mrnNumber = response.materialReceipt[0].mrnNumber
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=create&code=${mrnNumber}`));
          }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);
@@ -176,7 +186,8 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
           dispatch
         );
         if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=update&code=123456`));
+          let mrnNumber = response.materialReceipt[0].mrnNumber
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=OPENINGBALANCE&mode=update&code=${mrnNumber}`));
          }
       } catch (error) {
         //furnishmaterialsData(state, dispatch);

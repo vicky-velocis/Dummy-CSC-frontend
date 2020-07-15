@@ -114,7 +114,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Suplier Name")]: get(item, "supplier.name", "-") || "-",
           [getTextToLocalMapping("Rate Type")]: get(item, "rateType", "-") || "-", 
         //  [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
-          [getTextToLocalMapping("Active")]: get(item, "active", "-") || "-",  
+          [getTextToLocalMapping("Active")]: get(item, "active",false) ? "Yes": "No", 
           id: item.id,       
          
         };

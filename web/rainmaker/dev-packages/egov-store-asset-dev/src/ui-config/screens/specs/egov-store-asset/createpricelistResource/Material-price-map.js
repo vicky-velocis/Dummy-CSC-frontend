@@ -30,7 +30,8 @@ import {
       scheama: getCommonGrayCard({
         storeDetailsCardContainer: getCommonContainer(
           {
-            materialcode: getSelectField({
+            materialcode:{            
+            ...getSelectField({
               label: {  labelName: " Material Name",
               labelKey: "STORE_MATERIAL_NAME" },
               placeholder: {
@@ -45,6 +46,12 @@ import {
                 optionLabel: "name",
               },
             }),
+            beforeFieldChange: (action, state, dispatch) => {
+              let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
+              let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
+              dispatch(prepareFinalObject("priceLists[0].priceListDetails[0].uom.code",MaterialType[0].baseUom.code));
+            }
+          },
             fromDate: {
               ...getDateField({
                 label: {
@@ -132,6 +139,7 @@ import {
               },
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
             props: {
+              disabled:true,
               optionLabel: "name",
               optionValue: "code"
             },
@@ -166,12 +174,12 @@ import {
       items: [],
       addItemLabel: {
         labelName: "ADD STORE",
-        labelKey: "STORE_MATERIAL_MAP_ADD"
+        labelKey: "STORE_COMMON_ADD_BUTTON"
       },
       headerName: "Store",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
-      sourceJsonPath: "priceLists[0].jurisdictions",
+      sourceJsonPath: "priceLists[0].priceListDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.storeDetailsCardContainer.children"
     },
@@ -181,8 +189,8 @@ import {
   export const MaterialPriceDetails = getCommonCard({
     header: getCommonTitle(
       {
-        labelName: "Material Map to Stpre Details",
-        labelKey: "STORE_MATERIAL_MAP_STORE_DETAILS"
+        labelName: "Price List for Material Name Details",
+        labelKey: "STORE_PRICE_PRICE_LIST_FOR_MATERIAL_NAME_DETAILS"
       },
       {
         style: {

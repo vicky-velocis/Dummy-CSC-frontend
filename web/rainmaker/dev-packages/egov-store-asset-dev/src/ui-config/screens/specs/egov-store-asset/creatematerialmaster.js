@@ -208,13 +208,13 @@ export const header = getCommonContainer({
     uiFramework: "material-ui",
     name: "creatematerialmaster",
     // hasBeforeInitAsync:true,
-    beforeInitScreen: (action, state, dispatch) => {
-     
+    beforeInitScreen: (action, state, dispatch) => {     
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
      
-    
+    // set active true when crete
+    dispatch(prepareFinalObject("materials[0].storeMapping[0].active",true));
       return action;
     },
   

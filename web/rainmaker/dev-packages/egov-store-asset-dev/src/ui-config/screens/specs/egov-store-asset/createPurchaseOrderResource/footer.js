@@ -10,7 +10,7 @@ import {
   ifUserRoleExists,
   validateFields
 } from "../../utils";
-import "./index.css";
+//import "./index.css";
 
 const moveToReview = dispatch => {
   const reviewUrl =

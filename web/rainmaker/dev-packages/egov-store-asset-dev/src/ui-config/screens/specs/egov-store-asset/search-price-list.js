@@ -36,6 +36,7 @@ import {
             moduleName: "store-asset",
             masterDetails: [
               { name: "Material" },
+              { name: "RateType", },
               { name: "MaterialType"},
             ],
           },
@@ -68,8 +69,8 @@ import {
         value: tenantId
       }];
     try {
-      let response = await getStoresSearchResults(queryObject, dispatch);
-      dispatch(prepareFinalObject("store", response));
+      let response = await getSearchResults(queryObject, dispatch,"supplier");
+      dispatch(prepareFinalObject("suppliers", response));
     } catch (e) {
       console.log(e);
     }
@@ -77,7 +78,7 @@ import {
   
   const getData = async (action, state, dispatch) => {
     await getMDMSData(action, state, dispatch);
-   // await getstoreData(action,state, dispatch);
+   await getstoreData(action,state, dispatch);
   };
   
   const materialMasterSearchAndResult = {
