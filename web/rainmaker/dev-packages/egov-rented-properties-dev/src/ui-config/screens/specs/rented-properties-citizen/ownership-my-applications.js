@@ -26,6 +26,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "ownership-my-applications",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("actualResults", []));
+    dispatch(prepareFinalObject("searchResults", []));
     getData(action, state, dispatch)
     return action
   },

@@ -20,10 +20,28 @@ const getAcknowledgementCard = (
     type
   ) => {
     if ((purpose === "apply" || purpose === "forward" || purpose === "sendback" || purpose ==="reject" || purpose === "approve" || purpose === "submit" || purpose === "pay") && status === "success") {
-      const header = type === "OWNERSHIPTRANSFERRP" ? {
+      const header = type === "OWNERSHIPTRANSFERRP" ? purpose === "apply" ? {
         labelName: "Ownership transfer application submitted successfully",
         labelKey: "RP_OWNER_SHIP_TRANSFER_SUCCESS_MESSAGE_MAIN"
-      }
+      } : purpose === "forward" ? {
+        labelName: "Ownership transfer application Forwarded Successfully",
+        labelKey: "RP_OWNER_SHIP_FORWARD_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "sendback" ? {
+        labelName: "Ownership transfer application is sent back Successfully",
+        labelKey: "RP_OWNER_SHIP_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+      } : purpose ==="reject" ? {
+        labelName: "Ownership transfer application is Rejected",
+        labelKey: "RP_OWNER_SHIP_APPROVAL_REJ_MESSAGE_HEAD"
+      } : purpose === "approve" ? {
+        labelName: "Ownership transfer application is Approved Successfully",
+        labelKey: "RP_OWNER_SHIP_APPROVAL_SUCCESS_MESSAGE_HEAD"
+      } : purpose === "submit" ? {
+        labelName: "Ownership transfer application is Submitted Successfully",
+        labelKey: "RP_OWNER_SHIP_SUBMISSION_SUCCESS_MESSAGE_HEAD"
+      } : {
+        labelName: "Payment is collected successfully",
+        labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
+      } 
       : purpose === "apply" ? {
         labelName: "Rented Property Master Entry Submitted Successfully",
         labelKey: "RP_MASTER_ENTRY_SUCCESS_MESSAGE_MAIN"
