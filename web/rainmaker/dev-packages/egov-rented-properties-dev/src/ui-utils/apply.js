@@ -162,7 +162,6 @@ let userInfo = JSON.parse(getUserInfo());
         let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];
         const removedDocs = ownershipTransferDocuments.filter(item => !item.active)
         ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item.active)
-        debugger
         Owners = [{...Owners[0], ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments}}]
         dispatch(prepareFinalObject("Owners", Owners));
         dispatch(
