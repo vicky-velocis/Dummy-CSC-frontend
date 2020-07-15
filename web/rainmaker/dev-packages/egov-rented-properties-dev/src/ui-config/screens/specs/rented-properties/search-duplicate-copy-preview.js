@@ -26,36 +26,36 @@ const transferReviewDetails = getCommonCard({
     reviewFreshLicenceDocuments
 })
 
-const beforeInitFn = async(action, state, dispatch) => {
-  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    if(!!applicationNumber) {
-      const queryObject = [
-        {key: "applicationNumber", value: applicationNumber}
-      ]
-      const response = await getDuplicateCopySearchResults(queryObject);
-      if (response && response.DuplicateCopyApplications) {
-      let {DuplicateCopyApplications} = response
-      let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
-      const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
-      duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
-      DuplicateCopyApplications = [{...DuplicateCopyApplications[0], DuplicateCopyApplications: {...DuplicateCopyApplications[0].applicationDocuments, duplicateCopyDocuments}}]
-      dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
-      dispatch(
-        prepareFinalObject(
-          "DuplicateCopyTemp[0].removedDocs",
-          removedDocs
-        )
-      );
-      await setDocuments(
-        response,
-        "DuplicateCopyApplications[0].applicationDocuments",
-        "DuplicateCopyTemp[0].reviewDocData",
-        dispatch,'RP'
-      );
+  const beforeInitFn = async(action, state, dispatch) => {
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(!!applicationNumber) {
+        const queryObject = [
+          {key: "applicationNumber", value: applicationNumber}
+        ]
+        const response = await getDuplicateCopySearchResults(queryObject);
+        if (response && response.DuplicateCopyApplications) {
+        let {DuplicateCopyApplications} = response
+        let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
+        const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
+        duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
+        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], DuplicateCopyApplications: {...DuplicateCopyApplications[0].applicationDocuments, duplicateCopyDocuments}}]
+        dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications))
+        dispatch(
+          prepareFinalObject(
+            "DuplicateCopyTemp[0].removedDocs",
+            removedDocs
+          )
+        );
+        await setDocuments(
+          response,
+          "DuplicateCopyApplications[0].applicationDocuments",
+          "DuplicateCopyTemp[0].reviewDocData",
+          dispatch,'RP'
+        );
+        }
       }
     }
-  }
-
+  
 const duplicateCopySearchPreview = {
     uiFramework: "material-ui",
     name: "search-duplicate-copy-preview",
@@ -102,7 +102,7 @@ const duplicateCopySearchPreview = {
                   moduleName: "egov-rented-properties",
                   componentPath: "WorkFlowContainer",
                   props: {
-                    dataPath: "DuplicateCopyApplications",
+                    dataPath: "Duplicate",
                     moduleName: "DuplicateCopyOfAllotmentLetterRP",
                     updateUrl: "/csp/duplicatecopy/_update"
                   }

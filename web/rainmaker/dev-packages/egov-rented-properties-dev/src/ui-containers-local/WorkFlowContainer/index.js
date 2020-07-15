@@ -117,6 +117,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=approve&status=success";
       case "SENDBACK":
         return "purpose=sendback&status=success";
+      case "SUBMIT": 
+        return "purpose=submit&status=success";
       case "REFER":
         return "purpose=refer&status=success";
       case "SENDBACKTOCITIZEN":
@@ -340,8 +342,8 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName
     // let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = moduleName === "OwnershipTransferRP" ? get(data[data.length - 1], businessId) :
-    moduleName === "DuplicateCopyOfAllotmentLetterRP" ? get(data[data.length - 1], businessId) : get(data[data.length - 1], "propertyDetails.propertyId");
+    let businessId = moduleName === "OwnershipTransferRP" || moduleName === "DuplicateCopyOfAllotmentLetterRP" ? get(data[data.length - 1], businessId) :
+    get(data[data.length - 1], "propertyDetails.propertyId");
     let filteredActions = [];
 
     filteredActions = get(data[data.length - 1], "nextActions", []).filter(
