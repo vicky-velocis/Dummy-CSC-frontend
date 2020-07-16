@@ -127,7 +127,6 @@ class ActionDialog extends React.Component {
     }
 
     const applicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).applicationState
-    const duplicateCopyApplicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).state
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -220,20 +219,6 @@ class ActionDialog extends React.Component {
                         handleFieldChange(applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge` , e.target.value)
                       }
                       jsonPath={applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
-                      placeholder={fieldConfig.amount.placeholder}
-                    />
-                  </Grid>
-                  )}
-
-                {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
-                    <Grid item sm="12">
-                    <TextFieldContainer
-                      InputLabelProps={{ shrink: true }}
-                      label={fieldConfig.amount.label}
-                      onChange={e =>
-                        handleFieldChange(duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant.dueAmount` : `${dataPath}.ownerDetails.aproCharge` , e.target.value)
-                      }
-                      jsonPath={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
                       placeholder={fieldConfig.amount.placeholder}
                     />
                   </Grid>
