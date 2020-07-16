@@ -41,6 +41,28 @@ const getAcknowledgementCard = (
       } : {
         labelName: "Payment is collected successfully",
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
+      } :
+      type === "DUPLICATECOPYOFALLOTMENTLETTERRP" ? purpose === "apply" ? {
+        labelName: "Duplicate Copy Allotment application submitted successfully",
+        labelKey: "RP_DUPLICATE_COPY_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "forward" ? {
+        labelName: "Duplicate Copy Allotment application Forwarded Successfully",
+        labelKey: "RP_DUPLICATE_COPY_FORWARD_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "sendback" ? {
+        labelName: "Duplicate Copy Allotment application is sent back Successfully",
+        labelKey: "RP_DUPLICATE_COPY_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+      } : purpose ==="reject" ? {
+        labelName: "Duplicate Copy Allotment application is Rejected",
+        labelKey: "RP_DUPLICATE_COPY_APPROVAL_REJ_MESSAGE_HEAD"
+      } : purpose === "approve" ? {
+        labelName: "Duplicate Copy Allotment application is Approved Successfully",
+        labelKey: "RP_DUPLICATE_COPY_APPROVAL_SUCCESS_MESSAGE_HEAD"
+      } : purpose === "submit" ? {
+        labelName: "Duplicate Copy Allotment application is Submitted Successfully",
+        labelKey: "RP_DUPLICATE_COPY_SUBMISSION_SUCCESS_MESSAGE_HEAD"
+      } : {
+        labelName: "Payment is collected successfully",
+        labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
       } 
       : purpose === "apply" ? {
         labelName: "Rented Property Master Entry Submitted Successfully",
@@ -65,7 +87,7 @@ const getAcknowledgementCard = (
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
       }
 
-      const tailText = type === "OWNERSHIPTRANSFERRP" ? {
+      const tailText = type === "OWNERSHIPTRANSFERRP" || type === "DUPLICATECOPYOFALLOTMENTLETTERRP"  ? {
         labelName: "Application Number",
         labelKey: "RP_APPLICATION_NUMBER_LABEL"
       } : {

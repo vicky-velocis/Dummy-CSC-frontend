@@ -35,10 +35,10 @@ const duplicateReviewDetails = getCommonCard({
         const response = await getDuplicateCopySearchResults(queryObject);
         if (response && response.DuplicateCopyApplications) {
         let {DuplicateCopyApplications} = response
-        let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
-        const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
-        duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
-        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], DuplicateCopyApplications: {...DuplicateCopyApplications[0].applicationDocuments, duplicateCopyDocuments}}]
+        let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
+        const removedDocs = applicationDocuments.filter(item => !item.active)
+        applicationDocuments = applicationDocuments.filter(item => !!item.active)
+        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
         dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
         dispatch(
           prepareFinalObject(

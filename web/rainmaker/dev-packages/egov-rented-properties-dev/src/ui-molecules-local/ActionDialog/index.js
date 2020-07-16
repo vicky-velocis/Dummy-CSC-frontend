@@ -137,7 +137,6 @@ class ActionDialog extends React.Component {
     }
 
     const applicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).applicationState
-
     return (
       <Dialog
         fullScreen={fullscreen}
