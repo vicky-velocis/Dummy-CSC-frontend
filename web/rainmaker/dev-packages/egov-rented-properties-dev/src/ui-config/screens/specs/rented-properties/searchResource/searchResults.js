@@ -16,6 +16,7 @@ export const APPLICATION_NO = getLocaleLabels("APPLICATION NUMBER", "RP_COMMON_T
 export const PROPERTY_ID = getLocaleLabels("PROPERTY ID", "RP_COMMON_TABLE_COL_PROPERTY_ID")
 export const OWNER_NAME = getLocaleLabels("APPLICANT NAME", "RP_COMMON_TABLE_COL_APPLICANT_NAME")
 export const STATUS = getLocaleLabels("APPLICATION STATUS", "RP_COMMON_TABLE_COL_APPLICATION_STATUS")
+export const LAST_MODIFIED_ON = getLocaleLabels("LAST MODIFIED ON", "RP_COMMON_TABLE_COL_LAST_MODIFIED_ON")
 
 
 export const searchResults = {
@@ -98,7 +99,8 @@ export const transferSearchResults = {
       getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
-      STATUS
+      STATUS,
+      LAST_MODIFIED_ON
     ],
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {
