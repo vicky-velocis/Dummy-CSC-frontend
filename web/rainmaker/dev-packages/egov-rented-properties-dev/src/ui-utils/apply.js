@@ -213,11 +213,11 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
           } else {
             set(queryObject[0], "action", "SUBMIT")
           }
-          let duplicateCopyDocuments = get(queryObject[0], "Duplicate[0].applicationDocuments") || [];
-          duplicateCopyDocuments = duplicateCopyDocuments.map(item => ({...item, active: true}))
+          let applicationDocuments = get(queryObject[0], "applicationDocuments") || [];
+          applicationDocuments = applicationDocuments.map(item => ({...item, active: true}))
           const removedDocs = get(state.screenConfiguration.preparedFinalObject, "DuplicateTemp[0].removedDocs") || [];
-          duplicateCopyDocuments = [...duplicateCopyDocuments, ...removedDocs]
-          set(queryObject[0], "Duplicate[0].applicationDocuments", duplicateCopyDocuments)
+          applicationDocuments = [...applicationDocuments, ...removedDocs]
+          set(queryObject[0], "applicationDocuments", applicationDocuments)
           response = await httpRequest(
             "post",
             "/csp/duplicatecopy/_update",
@@ -227,10 +227,10 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
           );
         }
         let {DuplicateCopyApplications} = response
-        let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments || [];
-        const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
-        duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
-        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], duplicateCopyDocuments}]
+        let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments || [];
+        const removedDocs = applicationDocuments.filter(item => !item.active)
+        applicationDocuments = applicationDocuments.filter(item => !!item.active)
+        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
         dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications));
          dispatch(
           prepareFinalObject(

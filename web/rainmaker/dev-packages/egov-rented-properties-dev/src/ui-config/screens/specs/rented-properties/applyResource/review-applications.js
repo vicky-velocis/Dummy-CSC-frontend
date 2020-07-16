@@ -17,7 +17,16 @@ const freshLicenseEditSection = isEditable => ({
         }
     }
 })
-
+const DuplicateLicenseEditSection = isEditable => ({
+    ...editSection,
+    visible: isEditable,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            changeStep(state, dispatch, "duplicate-copy-apply", "", 0);
+        }
+    }
+})
 export const getReviewApplicantDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
@@ -149,7 +158,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                         labelKey: "RP_APPLICANT_DETAILS_HEADER"
                     })
                 },
-                editSection: freshLicenseEditSection(isEditable)
+                editSection: DuplicateLicenseEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -213,7 +222,7 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                         labelKey: "RP_PROPERTY_DETAILS_HEADER"
                     })
                 },
-                editSection: freshLicenseEditSection(isEditable)
+                editSection: DuplicateLicenseEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
