@@ -7,7 +7,7 @@ import {addressDetails, ownershipAddressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
-import {rentedReviewDetails, ownerShipReviewDetails} from './reviewDetails'
+import {rentedReviewDetails, ownerShipReviewDetails,duplicateCopyDetails} from './reviewDetails'
 
 
 const documentCardConfig = {
@@ -197,5 +197,13 @@ export const formwizardDuplicateCopySecondStep = {
 };
 
 export const formwizardDuplicateCopyThirdStep = {
- 
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    duplicateCopyDetails
+  },
+  visible: false
 };
