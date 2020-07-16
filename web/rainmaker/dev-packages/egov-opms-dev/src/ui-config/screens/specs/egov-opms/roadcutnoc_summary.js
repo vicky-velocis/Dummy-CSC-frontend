@@ -52,6 +52,12 @@ import {
 } from "../../../../ui-utils/commons";
 import { taskStatusSummary } from './summaryResource/taskStatusSummary';
 
+import {
+  
+  getCommonApplyFooter,
+ 
+} from "../utils";
+
 
 export const stepsData = [
   { labelName: "Road Cut NOC Details", labelKey: "ROADCUT_APPLICANT_DETAILS_NOC" },
@@ -103,7 +109,6 @@ export const callbackforSummaryActionSubmit = async (state, dispatch) => {
     );
 
     if (applicationStatus === "DRAFT") {
-
       let response = await updateAppStatus(state, dispatch, "INITIATED");
       let responseStatus = get(response, "status", "");
       if (responseStatus == "success") {
@@ -143,18 +148,14 @@ export const callbackforSummaryActionCancel = async (state, dispatch) => {
 
 };
 
-const callbackforSummaryActionResend = async (state, dispatch) => {
-  let response = await createUpdateRoadCutNocApplication(state, dispatch, "INITIATED");
-};
-
-
-var titlebarfooter = getCommonContainer({
+var titlebarfooter = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
     props: {
       variant: "outlined",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
 
@@ -179,43 +180,13 @@ var titlebarfooter = getCommonContainer({
     },
     visible: true
   },
-  resendButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        // minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      nextButtonLabel: getLabel({
-        labelName: "RESEND",
-        labelKey: "NOC_RESEND_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforSummaryActionResend
-    },
-    visible: false
-  },
   submitButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -240,151 +211,106 @@ var titlebarfooter = getCommonContainer({
   }
 });
 
+// const prepareDocumentsView = async (state, dispatch) => {
+//   //alert('prepare')
+//   let documentsPreview = [];
+
+//   // Get all documents from response
+//   let ROADCUTNOC = get(
+//     state,
+//     "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]",
+//     {}
+//   );
+//   let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
+//     JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
+
+
+//   let allDocuments = [];
+//   allDocuments.push(uploadDocuments)
+
+//   if (uploadDocuments !== '') {
+//     documentsPreview.push(
+//       {
+//         title: "uploadDocuments",
+//         fileStoreId: uploadDocuments,
+//         linkText: "View"
+//       });
+
+//     let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+//     let fileUrls =
+//       fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+//     documentsPreview = documentsPreview.map(function (doc, index) {
+
+//       doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+//       doc["name"] =
+//         (fileUrls[doc.fileStoreId] &&
+//           decodeURIComponent(
+//             fileUrls[doc.fileStoreId]
+//               .split(",")[0]
+//               .split("?")[0]
+//               .split("/")
+//               .pop()
+//               .slice(13)
+//           )) ||
+//         `Document - ${index + 1}`;
+//       return doc;
+//     });
+
+//     dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+//   }
+// };
+
 const prepareDocumentsView = async (state, dispatch) => {
-  //alert('prepare')
   let documentsPreview = [];
 
-  // Get all documents from response
   let ROADCUTNOC = get(
-    state,
-    "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]",
-    {}
-  );
-  let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
-    JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
+    state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]", {});
+
+  let doc = JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments
+
+  let doctitle = []
+  if (doc.length > 0) {
+    if (doc.length > 0) {
+
+      for (let i = 0; i < doc.length; i++) {
+        let eventDoc = doc[i]['fileStoreId']
+        doctitle.push(doc[i]['name:']);
+
+        if (eventDoc !== '' || eventDoc !== undefined) {
+          documentsPreview.push({
+            title: doc[i]['name:'],
+            fileStoreId: eventDoc,
+            linkText: "View",
+            fileName: doc[i]['name:']
+          })
+          let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+          let fileUrls =
+            fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+
+          documentsPreview = documentsPreview.map(function (doc, index) {
 
 
-  let allDocuments = [];
-  allDocuments.push(uploadDocuments)
+            doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+            doc["name"] =
+              (fileUrls[doc.fileStoreId] &&
+                decodeURIComponent(
+                  fileUrls[doc.fileStoreId]
+                    .split(",")[0]
+                    .split("?")[0]
+                    .split("/")
+                    .pop()
+                    .slice(13)
+                )) ||
+              `Document - ${index + 1}`;
+            return doc;
+          });
+        }
+      }
 
-  if (uploadDocuments !== '') {
-    documentsPreview.push(
-      {
-        title: "uploadDocuments",
-        fileStoreId: uploadDocuments,
-        linkText: "View"
-      });
-
-    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-    let fileUrls =
-      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-    documentsPreview = documentsPreview.map(function (doc, index) {
-
-      doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-      doc["name"] =
-        (fileUrls[doc.fileStoreId] &&
-          decodeURIComponent(
-            fileUrls[doc.fileStoreId]
-              .split(",")[0]
-              .split("?")[0]
-              .split("/")
-              .pop()
-              .slice(13)
-          )) ||
-        `Document - ${index + 1}`;
-      return doc;
-    });
-
-    dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+    }
   }
-};
+  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
 
-
-const setDownloadMenu = (state, dispatch) => {
-  /** MenuButton data based on status */
-  let status = get(
-    state,
-    "screenConfiguration.preparedFinalObject.OpmsNOCs[0].opmsNOCDetails.status"
-  );
-  let downloadMenu = [];
-  let printMenu = [];
-  let certificateDownloadObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      // generatePdf(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let certificatePrintObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      // generatePdf(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      // generatePdf(state, dispatch, "receipt_download");
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      // generatePdf(state, dispatch, "receipt_print");
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      // generatePdf(state, dispatch, "application_download");
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      // generatePdf(state, dispatch, "application_print");
-    },
-    leftIcon: "assignment"
-  };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        certificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  dispatch(
-    handleField(
-      "roadcutnoc_summary",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
-      "props.data.menu",
-      downloadMenu
-    )
-  );
-  dispatch(
-    handleField(
-      "roadcutnoc_summary",
-      "components.div.children.headerDiv.children.header.children.printMenu",
-      "props.data.menu",
-      printMenu
-    )
-  );
-  /** END */
 };
 
 const setSearchResponse = async (
@@ -398,10 +324,8 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-
-
   prepareDocumentsView(state, dispatch);
-  setDownloadMenu(state, dispatch);
+
 };
 
 
@@ -467,24 +391,20 @@ const screenConfig = {
           }
         },
         body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
-          //estimateSummary: estimateSummary,
           applicantSummary: applicantSummary,
           nocSummary: nocSummary,
           documentsSummary: documentsSummary,
-          //taskStatusSummary:taskStatusSummary,
 
         }) :
           getCommonCard({
-            // estimateSummary: estimateSummary,
             applicantSummary: applicantSummary,
             nocSummary: nocSummary,
-            // propertySummary: propertySummary,         
             documentsSummary: documentsSummary
           }),
         break: getBreak(),
         titlebarfooter,
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
+        // citizenFooter:
+        //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
       }
     }
   }

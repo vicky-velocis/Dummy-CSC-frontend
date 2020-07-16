@@ -494,7 +494,7 @@ export const searchResultsReports = {
       getTextToLocalMapping("noOfApplicationRejected")
 
     ],
-    //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
+    title: "Summary Report",
     options: {
       filter: false,
       download: false,
@@ -538,7 +538,7 @@ export const searchResultsReports2 = {
       getTextToLocalMapping("totalNoApplicationApprovedWithNilCharges")
 
     ],
-    //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
+    title: "Revenue Collection Report Application Type Wise",
     options: {
       filter: false,
       download: false,
@@ -585,7 +585,7 @@ export const searchResultsReports3 = {
 
 
     ],
-    //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
+    title: "Revenue Collection Report Sector Wise",
     options: {
       filter: false,
       download: false,
@@ -630,7 +630,7 @@ export const searchResultsReports4 = {
       getTextToLocalMapping("pendingMoreThan30Days"),
 
     ],
-    //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
+    title: "Application Processing Time Report",
     options: {
       filter: false,
       download: false,
@@ -676,7 +676,7 @@ export const searchResultsReports5 = {
       getTextToLocalMapping("exempted"),
 
     ],
-    //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),
+    title: "Revenue Collection Report Month Wise",
     options: {
       filter: false,
       download: false,

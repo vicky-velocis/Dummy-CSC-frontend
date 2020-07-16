@@ -9,10 +9,8 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
 import { paymentGatewaySelectionPopup } from "./payResource/adhocPopup";
-import capturePaymentDetails from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
-import g8Details from "./payResource/g8-details";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
@@ -126,24 +124,11 @@ const screenConfig = {
                   color: "primary",
                   style: {}
                 },
-                // children: {
-                //   previousButtonLabel: getLabel({
-                //     labelName: "ADD REBATE/PENALTY",
-                //     labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
-                //   })
-                // },
                 onClickDefination: {
                   action: "condition",
                   callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
                 }
-              },
-              // viewBreakupButton: getDialogButton(
-              //   "VIEW BREAKUP",
-              //   "PM_PAYMENT_VIEW_BREAKUP",
-              //   "pay"
-              // ),
-              // capturePaymentDetails,
-              //  g8Details
+              }
             })
           }
         },

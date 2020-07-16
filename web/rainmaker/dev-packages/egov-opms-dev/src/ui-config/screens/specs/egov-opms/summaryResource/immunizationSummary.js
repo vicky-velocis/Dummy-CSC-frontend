@@ -188,7 +188,8 @@ export const immunizationSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12,
+          md: 8
         },
         ...getCommonSubHeader({
           labelName: "Immunization Record",
@@ -205,7 +206,8 @@ export const immunizationSummary = getCommonGrayCard({
           }
         },
         gridDefination: {
-          xs: 4,
+          xs: 3,
+          md:4,
           align: "right"
         },
         children: {

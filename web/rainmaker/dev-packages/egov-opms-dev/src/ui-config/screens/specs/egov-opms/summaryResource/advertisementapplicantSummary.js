@@ -20,7 +20,8 @@ export const advertisementapplicantSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 9,
+          md: 8
         },
         ...getCommonSubHeader({
           labelName: "Applicant Details",
@@ -37,7 +38,8 @@ export const advertisementapplicantSummary = getCommonGrayCard({
           }
         },
         gridDefination: {
-          xs: 4,
+          xs: 3,
+          md: 4,
           align: "right"
         },
         children: {
@@ -289,7 +291,7 @@ export const advertisementapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].sector",
-              
+
             }
           ),
           applicantVillageSuSector: getLabelWithValue(
@@ -334,7 +336,8 @@ export const detailSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12,
+          md: 8
         },
         ...getCommonSubHeader({
           labelName: "Advertisement Detail",
@@ -351,7 +354,8 @@ export const detailSummary = getCommonGrayCard({
           }
         },
         gridDefination: {
-          xs: 4,
+          xs: 3,
+          md:4,
           align: "right"
         },
         children: {
@@ -562,8 +566,8 @@ export const detailSummary = getCommonGrayCard({
         jsonPath: "nocApplicationDetail[0].applicationdetail",
         callBack: value => {
           if (value != undefined) {
-			 let enteredSpace = JSON.parse(value).hasOwnProperty('space') ? Number(JSON.parse(value)['space']): '';
-			 return enteredSpace;
+            let enteredSpace = JSON.parse(value).hasOwnProperty('space') ? Number(JSON.parse(value)['space']) : '';
+            return enteredSpace;
           } else {
             return '';
           }
@@ -581,7 +585,7 @@ export const detailSummary = getCommonGrayCard({
           if (value != undefined) {
             let exemptedCategory = JSON.parse(value).hasOwnProperty('exemptedCategory') ? JSON.parse(value)['exemptedCategory'] : '';
 
-            return exemptedCategory === 0 ? 'NO' : 'YES' ;
+            return exemptedCategory == "0" ? 'NO' : 'YES';
           } else {
             return '';
           }
@@ -615,7 +619,8 @@ export const detailSummary = getCommonGrayCard({
         callBack: value => {
           if (value != undefined) {
             let withdrawapprovalamount = JSON.parse(value).hasOwnProperty('withdrawapprovalamount') ? JSON.parse(value)['withdrawapprovalamount'] : '';
-            return withdrawapprovalamount>0?withdrawapprovalamount:'';
+            //return withdrawapprovalamount > 0 ? withdrawapprovalamount : '';
+            return withdrawapprovalamount;
           } else {
             return '';
           }
