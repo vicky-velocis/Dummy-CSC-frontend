@@ -2,7 +2,8 @@ import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-  import {stepper, formwizardMortgageFirstStep } from '../rented-properties/applyResource/applyConfig';
+  import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
+  import {mortgagefooter} from './footer-mortgage';
 
 
 const header = getCommonHeader({
@@ -38,7 +39,10 @@ const applyLicense = {
                     }
                 },
                 stepper,
-                formwizardMortgageFirstStep
+                formwizardFirstStep: formwizardMortgageFirstStep,
+                formwizardSecondStep:formwizardMortgageSecondStep,
+                formwizardThirdStep: formwizardMortgageThirdStep,
+                footer: mortgagefooter
             }
         }
     }

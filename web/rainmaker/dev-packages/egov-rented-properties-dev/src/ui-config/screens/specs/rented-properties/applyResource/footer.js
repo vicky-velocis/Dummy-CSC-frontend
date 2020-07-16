@@ -26,7 +26,6 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   );
 };
 
-
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
@@ -112,6 +111,7 @@ const callBackForNext = async(state, dispatch) => {
 
     if(activeStep === SUMMARY_STEP) {
     isFormValid = await applyRentedProperties(state, dispatch);
+    isFormValid = true;
       if (isFormValid) {
         const rentedData = get(
           state.screenConfiguration.preparedFinalObject,
@@ -275,7 +275,6 @@ export const changeStep = (
   export const callBackForPrevious = (state, dispatch) => {
     changeStep(state, dispatch, "apply", "previous");
   };
-
 
 export const previousButton = {
   componentPath: "Button",

@@ -22,6 +22,7 @@ const callBackForNext = async(state, dispatch) => {
           dispatch,
           "ownership-apply"
         )
+        
         const isAddressDetailsValid = validateFields(
           "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children",            
           state,
@@ -242,6 +243,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
 const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "ownership-apply", "previous");
 };
+
 
 export const footer = getCommonApplyFooter({
     previousButton: {
