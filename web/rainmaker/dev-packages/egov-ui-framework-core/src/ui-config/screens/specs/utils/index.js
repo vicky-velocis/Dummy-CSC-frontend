@@ -599,6 +599,9 @@ export const getPattern = type => {
       return /^[1-9][0-9]$/i;
     case "familyMonthlyIncome":
       return /^[1-9][0-9]\d*$/i;
+    // Numbers only
+    case "Numeric":
+      return /^[0-9]*$/i;
   }
   };
 
