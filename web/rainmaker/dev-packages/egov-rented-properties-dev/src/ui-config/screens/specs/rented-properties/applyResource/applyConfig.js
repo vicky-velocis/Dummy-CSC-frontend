@@ -69,7 +69,7 @@ export const ownershipTransferDuplicateDocumentsDetails = getCommonCard({
       ...documentList.props,
       documentsJsonPath: "DuplicateTemp[0].ownershipTransferDocuments",
       uploadedDocumentsJsonPath: "DuplicateTemp[0].uploadedDocsInRedux",
-      tenantIdJsonPath: "Duplicate[0].tenantId",
+      tenantIdJsonPath: "DuplicateCopyApplications[0].tenantId",
       removedJsonPath: "DuplicateTemp[0].removedDocs"
     }
   }

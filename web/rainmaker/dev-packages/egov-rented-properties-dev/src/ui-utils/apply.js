@@ -184,7 +184,7 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
-              get(state.screenConfiguration.preparedFinalObject, "Duplicate", [])
+              get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", [])
             )
           );
           
@@ -231,7 +231,7 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
         const removedDocs = applicationDocuments.filter(item => !item.active)
         applicationDocuments = applicationDocuments.filter(item => !!item.active)
         DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
-        dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications));
+        dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications));
          dispatch(
           prepareFinalObject(
             "DuplicateTemp[0].removedDocs",
@@ -354,7 +354,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
     
     const transitNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      "Duplicate[0].property.transitNumber",
+      "DuplicateCopyApplications[0].property.transitNumber",
       ""
     );
     if(!!transitNumber) {
@@ -380,7 +380,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             prepareFinalObject(
-              "Duplicate[0].property.transitNumber",
+              "DuplicateCopyApplications[0].property.transitNumber",
               ""
             )
           )
@@ -399,19 +399,19 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
          
           dispatch(
             prepareFinalObject(
-              "Properties[0].pincode",
+              "DuplicateCopyApplications[0].property.pincode",
               Properties[0].propertyDetails.address.pincode
             )
           )
           dispatch(
             prepareFinalObject(
-              "Duplicate[0].property.id",
+              "DuplicateCopyApplications[0].property.id",
               Properties[0].propertyDetails.propertyId
             )
           )
            dispatch(
             prepareFinalObject(
-              "Properties[0].colony",
+              "DuplicateCopyApplications[0].property.colony",
               Properties[0].propertyDetails.address.colony
             )
           )

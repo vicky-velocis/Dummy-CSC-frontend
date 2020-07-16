@@ -39,7 +39,7 @@ const duplicateReviewDetails = getCommonCard({
         const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
         duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
         DuplicateCopyApplications = [{...DuplicateCopyApplications[0], DuplicateCopyApplications: {...DuplicateCopyApplications[0].applicationDocuments, duplicateCopyDocuments}}]
-        dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications))
+        dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
         dispatch(
           prepareFinalObject(
             "DuplicateTemp[0].removedDocs",
@@ -102,7 +102,7 @@ const duplicateCopySearchPreview = {
                   moduleName: "egov-rented-properties",
                   componentPath: "WorkFlowContainer",
                   props: {
-                    dataPath: "Duplicate",
+                    dataPath: "DuplicateCopyApplications",
                     moduleName: "DuplicateCopyOfAllotmentLetterRP",
                     updateUrl: "/csp/duplicatecopy/_update"
                   }
