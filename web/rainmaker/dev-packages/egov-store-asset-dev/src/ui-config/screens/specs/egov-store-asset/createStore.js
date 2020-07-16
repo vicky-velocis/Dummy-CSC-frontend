@@ -20,7 +20,7 @@ import {
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils/api";
