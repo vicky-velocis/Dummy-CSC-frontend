@@ -26,6 +26,21 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   );
 };
 
+export const dulicateCopyMoveToSuccess = (rentedData, dispatch, type) => {
+  const id = get(rentedData, "id");
+  const transitNumber = get(rentedData, "transitNumber")
+  const applicationNumber = get(rentedData, "Duplicate[0].applicationNumber")
+  const tenantId = get(rentedData, "tenantId");
+  const purpose = "apply";
+  const status = "success";
+  const path = type === "DUPLICATECOPYRP" ? 
+  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+  : `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
+  dispatch(
+    setRoute(path)
+  );
+};
+
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
