@@ -18,12 +18,12 @@ const headerrow = getCommonContainer({
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
-const reviewFreshLicenceDocuments = getReviewDocuments(false, "duplicate-copy", "DuplicateCopyTemp[0].reviewDocData")
+const reviewDuplicateCopyDocuments = getReviewDocuments(false, "duplicate-copy-apply","DuplicateTemp[0].reviewDocData")
 
-const transferReviewDetails = getCommonCard({
+const duplicateReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
     reviewApplicantDetails,
-    reviewFreshLicenceDocuments
+    reviewDuplicateCopyDocuments
 })
 
   const beforeInitFn = async(action, state, dispatch) => {
@@ -42,14 +42,14 @@ const transferReviewDetails = getCommonCard({
         dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications))
         dispatch(
           prepareFinalObject(
-            "DuplicateCopyTemp[0].removedDocs",
+            "DuplicateTemp[0].removedDocs",
             removedDocs
           )
         );
         await setDocuments(
           response,
           "DuplicateCopyApplications[0].applicationDocuments",
-          "DuplicateCopyTemp[0].reviewDocData",
+          "DuplicateTemp[0].reviewDocData",
           dispatch,'RP'
         );
         }
@@ -107,7 +107,7 @@ const duplicateCopySearchPreview = {
                     updateUrl: "/csp/duplicatecopy/_update"
                   }
                 },
-              transferReviewDetails
+              duplicateReviewDetails
             }
           }
     }
