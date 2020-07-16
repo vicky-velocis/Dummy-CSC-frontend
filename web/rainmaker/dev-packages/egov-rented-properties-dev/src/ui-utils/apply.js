@@ -259,7 +259,8 @@ export const getDetailsFromProperty = async (state, dispatch) => {
     );
     if(!!transitNumber) {
       let queryObject = [
-        { key: "transitNumber", value: transitNumber }
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "APPROVED"}
       ];
       const payload = await getSearchResults(queryObject)
       if (
@@ -358,7 +359,8 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
     );
     if(!!transitNumber) {
       let queryObject = [
-        { key: "transitNumber", value: transitNumber }
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "APPROVED" }
       ];
       const payload = await getSearchResults(queryObject)
       if (

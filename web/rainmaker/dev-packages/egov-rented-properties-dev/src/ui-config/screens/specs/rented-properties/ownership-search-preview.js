@@ -14,11 +14,21 @@ import { set } from "lodash";
 import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Ownership Transfer Application",
       labelKey: "OWNER_SHIP_TRANSFER_APPLICATION_HEADER"
-    })
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-rented-properties",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      }
+    }
   });
 
 const reviewApplicantDetails = getReviewApplicantDetails(false);
@@ -83,8 +93,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
     process.env.REACT_APP_NAME === "Citizen"
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
-    const showEstimate = getButtonVisibility(status, "PENDINGPAYMENT");
-
+    const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
     dispatch(
       handleField(
           "ownership-search-preview",

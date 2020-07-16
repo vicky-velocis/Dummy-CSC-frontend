@@ -236,7 +236,7 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                     labelName: "Transit Site/Plot number",
                     labelKey: "RP_SITE_PLOT_LABEL"
                 },
-                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].property.transitNumber" }
+                { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
             )
             // area: getLabelWithValue(
             //     areaLabel,
