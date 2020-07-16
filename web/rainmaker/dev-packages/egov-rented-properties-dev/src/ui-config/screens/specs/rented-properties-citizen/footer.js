@@ -6,8 +6,6 @@ import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DE
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-
-
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["ownership-apply"],
@@ -299,28 +297,3 @@ export const duplicatefooter = getCommonApplyFooter({
       },
     }
   });
-
-  
-export const mortgagefooter = getCommonApplyFooter({
-  previousButton: {
-    ...previousButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForPreviousMortgage
-    },
-  },
-  nextButton: {
-    ...nextButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForNextMortgage
-    }
-  },
-  submitButton: {
-    ...submitButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForNextMortgage
-    },
-  }
-});
