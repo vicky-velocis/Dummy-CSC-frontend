@@ -83,8 +83,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
     process.env.REACT_APP_NAME === "Citizen"
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
-    const showEstimate = getButtonVisibility(status, "PENDINGPAYMENT");
-
+    const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
     dispatch(
       handleField(
           "ownership-search-preview",
