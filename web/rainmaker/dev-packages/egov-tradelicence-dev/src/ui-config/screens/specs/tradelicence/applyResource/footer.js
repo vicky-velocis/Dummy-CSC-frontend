@@ -2,7 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applyTradeLicense,getNextFinancialYearForRenewal, download, organizeLicenseData } from "../../../../../ui-utils/commons";
+import { applyTradeLicense,getNextFinancialYearForRenewal, download, organizeLicenseData, getSearchResults } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -190,11 +190,36 @@ export const callBackForNext = async (state, dispatch) => {
           if(age < 18) {
             isFormValid = false;
             ageFieldError = true
+          } 
+           else {
+            let isRenewable;
+            const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType");
+            if(applicationType === "Renew") {
+              const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
+            const tenantId = getQueryArg(window.location.href, "tenantId");
+            const queryObj = [
+              {
+                key: "tenantId",
+                value: tenantId
+              },
+              {
+                key:"oldLicenseNumber",
+                value: oldLicenseNumber
+              }
+            ]
+
+          const applicationsData = await getSearchResults(queryObj);
+          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "APPROVED");
+          isRenewable = !isRenewable.length
           } else {
+            isRenewable = true
+          }
+          if(isRenewable) {
             await getDocList(state, dispatch, licenseType);
             getReviewDetails(state, dispatch, "apply", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewOne", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewOne", true)
             const response = await applyTradeLicense(state, dispatch, activeStep);
             if(!!response) {
+              isFormValid = true;
               dispatch(
                 handleField(
                   "apply",
@@ -211,7 +236,19 @@ export const callBackForNext = async (state, dispatch) => {
                   true
                 )
               );
+            } else {
+              isFormValid = false;
             }
+          } else {
+            isFormValid = false;
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "An Application with same old licence number is already in progress.", labelKey: "TL_APPLICATION_ALREADY_IN_PROGRESS" },
+                "error"
+              )
+            );
+          }
           }
       }
       else {
@@ -568,18 +605,25 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
-
   const tenantId= get(licences[0] , "tenantId");
 
+    const queryObj = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key:"oldLicenseNumber",
+        value: licences[0].licenseNumber
+      }
+    ]
+
+  const applicationsData = await getSearchResults(queryObj);
+  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "APPROVED");
+
+ if(!isRenewable.length) {
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
-  // let currentFinancialYr = getCurrentFinancialYear();
-  // let fY1 = currentFinancialYr.split("-")[1];
-  // fY1 = fY1.substring(2, 4);
-  // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-
   let applicationDocuments = licences[0].tradeLicenseDetail.applicationDocuments
-
   const payload = {
     applicationType: "Renew",
     financialYear: nextFinancialYear,
@@ -711,29 +755,15 @@ dispatch(
     true
   )
 );
-
-
-  // const wfCode = "DIRECTRENEWAL";
-//   set(licences[0], "action", "INITIATE");
-//   set(licences[0], "workflowCode", wfCode);
-//   set(licences[0], "applicationType", "RENEWAL");
-//   set(licences[0],"financialYear" ,nextFinancialYear);
-
-// const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
-//     Licenses: licences
-//   })
-//    const renewedapplicationNo = get(
-//     response,
-//     `Licenses[0].applicationNumber`
-//   );
-//   const licenseNumber = get(
-//     response,
-//     `Licenses[0].licenseNumber`
-//   );
-//   dispatch(
-//     setRoute(
-//       `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-//     ));
+  } else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "An Application is already in progress.", labelKey: "TL_APPLICATION_ALREADY_IN_PROGRESS" },
+        "error"
+      )
+    );
+  }
 };
 
 export const footerReview = (
