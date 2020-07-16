@@ -17,7 +17,6 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { fetchBill, searchBill, createDemandForRoadCutNOC } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 
 import { footer } from "./applyResource/employeeRoadCutFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
@@ -58,8 +57,8 @@ const ReassignButton = getCommonContainer({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius: "inherit",
-        align: "right"
+        // borderRadius: "inherit",
+        // align: "right"
       }
     },
     children: {
@@ -154,7 +153,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-opms",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getapplicationNumber(),
+      number: getapplicationNumber()
     }
   },
   downloadMenu: {
@@ -165,7 +164,7 @@ const titlebar = getCommonContainer({
         label: "Download",
         leftIcon: "cloud_download",
         rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
+        props: { variant: "outlined", style: { marginLeft: 10, marginTop: 5 } },
         menu: []
       }
     }
@@ -188,50 +187,106 @@ const titlebar = getCommonContainer({
 
 
 const prepareDocumentsView = async (state, dispatch) => {
-  let documentsPreview = [];
+  //  let documentsPreview = [];
 
   // Get all documents from response
-  let ROADCUTNOC = get(
-    state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]", {});
-  let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
-    JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
+  // let ROADCUTNOC = get(
+  //   state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]", {});
+  // let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
+  //   JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
 
   // let uploadPetPicture=JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadPetPicture')?
   // JSON.parse(ROADCUTNOC.applicationdetail).uploadPetPicture[0]['fileStoreId']:'';
 
-  let allDocuments = [];
-  allDocuments.push(uploadDocuments)
+  // let allDocuments = [];
+  // allDocuments.push(uploadDocuments)
 
-  if (uploadDocuments !== '') {
-    documentsPreview.push(
-      {
-        title: "ROAD_CUT_STAMP_DOC",
-        fileStoreId: uploadDocuments,
-        linkText: "View"
-      });
+  // if (uploadDocuments !== '') {
+  //   documentsPreview.push(
+  //     {
+  //       title: "ROAD_CUT_STAMP_DOC",
+  //       fileStoreId: uploadDocuments,
+  //       linkText: "View"
+  //     });
 
-    let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-    let fileUrls =
-      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-    documentsPreview = documentsPreview.map(function (doc, index) {
+  //   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+  //   let fileUrls =
+  //     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+  //   documentsPreview = documentsPreview.map(function (doc, index) {
 
-      doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-      doc["name"] =
-        (fileUrls[doc.fileStoreId] &&
-          decodeURIComponent(
-            fileUrls[doc.fileStoreId]
-              .split(",")[0]
-              .split("?")[0]
-              .split("/")
-              .pop()
-              .slice(13)
-          )) ||
-        `Document - ${index + 1}`;
-      return doc;
-    });
+  //     doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+  //     doc["name"] =
+  //       (fileUrls[doc.fileStoreId] &&
+  //         decodeURIComponent(
+  //           fileUrls[doc.fileStoreId]
+  //             .split(",")[0]
+  //             .split("?")[0]
+  //             .split("/")
+  //             .pop()
+  //             .slice(13)
+  //         )) ||
+  //       `Document - ${index + 1}`;
+  //     return doc;
+  //   });
 
-    dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  //   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  // }
+  let documentsPreview = [];
+  // Get all documents from response
+  //  let roadcutnocdetail = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]", {});
+
+  let ROADCUTNOC = get(
+    state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0]", {});
+  // let uploadDocuments = JSON.parse(ROADCUTNOC.applicationdetail).hasOwnProperty('uploadDocuments') ?
+  //   JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments[0]['fileStoreId'] : '';
+
+  //    let documentsPreview = [];
+
+  let doc = JSON.parse(ROADCUTNOC.applicationdetail).uploadDocuments
+
+  let doctitle = []
+  if (doc.length > 0) {
+    if (doc.length > 0) {
+
+      for (let i = 0; i < doc.length; i++) {
+        let eventDoc = doc[i]['fileStoreId']
+        doctitle.push(doc[i]['name:']);
+
+        if (eventDoc !== '' || eventDoc !== undefined) {
+          documentsPreview.push({
+            title: doc[i]['name:'],
+            fileStoreId: eventDoc,
+            linkText: "View",
+            fileName: doc[i]['name:']
+          })
+          let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+          let fileUrls =
+            fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+
+          documentsPreview = documentsPreview.map(function (doc, index) {
+
+
+            doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+            doc["name"] =
+              (fileUrls[doc.fileStoreId] &&
+                decodeURIComponent(
+                  fileUrls[doc.fileStoreId]
+                    .split(",")[0]
+                    .split("?")[0]
+                    .split("/")
+                    .pop()
+                    .slice(13)
+                )) ||
+              `Document - ${index + 1}`;
+            return doc;
+          });
+        }
+      }
+
+    }
   }
+  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+
 };
 
 const setDownloadMenu = (state, dispatch) => {
@@ -243,90 +298,14 @@ const setDownloadMenu = (state, dispatch) => {
     label: { labelName: "NOC Certificate PET", labelKey: "NOC_CERTIFICATE_PET" },
     link: () => {
       window.location.href = httpLinkPET;
-      //// generatePdf(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
-  // let certificateDownloadObjectSELLMEAT = {
-  //   label: { labelName: "NOC Certificate SELLMEAT", labelKey: "NOC_CERTIFICATE_SELLMEAT" },
-  //   link: () => {
-  //     window.location.href = httpLinkSELLMEAT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectROADCUT = {
-  //   label: { labelName: "NOC Certificate ROADCUT", labelKey: "NOC_CERTIFICATE_ROADCUT" },
-  //   link: () => {
-  //     window.location.href = httpLinkROADCUT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectADVT = {
-  //   label: { labelName: "NOC Certificate ADVT", labelKey: "NOC_CERTIFICATE_ADVT" },
-  //   link: () => {
-  //     window.location.href = httpLinkADVT;
-  //   },
-  //   leftIcon: "book"
-  // };
-
-  //Object creation for Receipt's
-  // let certificateDownloadObjectPET_RECEIPT = {
-  //   label: { labelName: "NOC Certificate PET", labelKey: "NOC_RECEIPT_PET" },
-  //   link: () => {
-  //    window.location.href = httpLinkPET_RECEIPT;
-  //    //// generatePdf(state, dispatch, "certificate_download");
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectROADCUT_RECEIPT = {
-  //   label: { labelName: "NOC Certificate ROADCUT", labelKey: "NOC_RECEIPT_ROADCUT" },
-  //   link: () => {
-  //     window.location.href = httpLinkROADCUT_RECEIPT;
-  //   },
-  //   leftIcon: "book"
-  // };
-  // let certificateDownloadObjectADVT_RECEIPT = {
-  //   label: { labelName: "NOC Certificate ADVT", labelKey: "NOC_RECEIPT_ADVT" },
-  //   link: () => {
-  //     window.location.href = httpLinkADVT_RECEIPT;
-  //   },
-  //   leftIcon: "book"
-  // };
 
   downloadMenu = [
     certificateDownloadObjectPET
-    //certificateDownloadObjectSELLMEAT,
-    //certificateDownloadObjectROADCUT,
-    //certificateDownloadObjectADVT,
-    // certificateDownloadObjectPET_RECEIPT,
-    // certificateDownloadObjectROADCUT_RECEIPT,
-    // certificateDownloadObjectADVT_RECEIPT
   ];
 
-  // switch (status) {
-  //   case "APPROVED":
-  //     downloadMenu = [
-  //       certificateDownloadObject
-  //     ];
-  //     printMenu = [
-  //       certificatePrintObject
-  //     ];
-  //     break;
-  //   case "DOCUMENTVERIFY":
-  //   case "FIELDINSPECTION":
-  //   case "PENDINGAPPROVAL":
-  //   case "REJECTED":
-  //     downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-  //     printMenu = [receiptPrintObject, applicationPrintObject];
-  //     break;
-  //   case "CANCELLED":
-  //   case "PENDINGPAYMENT":
-  //     downloadMenu = [applicationDownloadObject];
-  //     printMenu = [applicationPrintObject];
-  //     break;
-  //   default:
-  //     break;
-  // }
   dispatch(
     handleField(
       "roadcutnoc-search-preview",
@@ -335,15 +314,6 @@ const setDownloadMenu = (state, dispatch) => {
       downloadMenu
     )
   );
-  // dispatch(
-  //   handleField(
-  //     "search-preview",
-  //     "components.div.children.headerDiv.children.header.children.printMenu",
-  //     "props.data.menu",
-  //     printMenu
-  //   )
-  // );
-  /** END */
 };
 
 const HideshowEdit = (action, nocStatus, amount) => {
@@ -437,7 +407,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
     searchBill(dispatch, applicationNumber, tenantId);
   } else {
-    if (amount > 0 && performancebankguaranteecharges > 0 && gstamount > 0) {
+    if (amount > 0) {
       dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", amount));
       dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", gstamount));
       dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", performancebankguaranteecharges));
@@ -451,6 +421,9 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
           ], dispatch);
         }
       }
+    } else {
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", {}));
+      dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", {}));
     }
   }
   prepareDocumentsView(state, dispatch);
@@ -524,7 +497,6 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
       link: () => {
         if (httpLinkROADCUT != "")
           window.location.href = httpLinkROADCUT;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };
@@ -563,7 +535,6 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
       link: () => {
         if (httpLinkROADCUT_RECEIPT != "")
           window.location.href = httpLinkROADCUT_RECEIPT;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };

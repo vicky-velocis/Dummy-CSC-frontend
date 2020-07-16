@@ -1,7 +1,7 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
-import { getRequiredDocData, clearlocalstorageAppDetails,checkForRole } from "../utils";
+import { getRequiredDocData, clearlocalstorageAppDetails, checkForRole } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -37,7 +37,7 @@ if (checkForRole(roles, 'CITIZEN')) {
       icon: <i
         viewBox="0 -8 35 42"
         color="primary"
-        class="material-icons module-page-icon" style={{fontSize:"48px"}}>
+        class="material-icons module-page-icon" style={{ fontSize: "48px" }}>
         picture_in_picture
       </i>,
       route: "advertisementApply"
@@ -79,32 +79,9 @@ const tradeLicenseSearchAndResult = {
             items: cardItems,
             history: {}
           }
-        },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-opms",
-          componentPath: "HowItWorks"
         }
       }
     },
-    // cityPickerDialog: {
-    //   componentPath: "Dialog",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "md"
-    //   },
-    //   children: {
-    //     dialogContent: {
-    //       componentPath: "DialogContent",
-    //       props: {
-    //         style: { minHeight: "180px", minWidth: "365px" }
-    //       },
-    //       children: {
-    //         popup: cityPicker
-    //       }
-    //     }
-    //   }
-    // }
     adhocDialog: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-opms",

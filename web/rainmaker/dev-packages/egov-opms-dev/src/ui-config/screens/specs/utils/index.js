@@ -22,7 +22,6 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 
 
 export const getCommonApplyFooter = children => {
@@ -75,6 +74,7 @@ export const validateFields = (
     objectJsonPath,
     {}
   );
+
   let isFormValid = true;
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
@@ -680,7 +680,7 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
         { key: "businessService", value: `OPMS.${getapplicationType()}` }
       ];
       const payload = await getBill(queryObj);
-      // let payload = sampleGetBill();
+
       if (payload) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload));
         const estimateData = createEstimateData(payload);
@@ -1066,8 +1066,8 @@ export const getOPMSPattern = type => {
       return /^([L|U]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$/i;
     case "petnocApplicantName":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,50}$/i;
-    case "petnocIdentificationMark":
-      return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,100}$/i;
+    // case "petnocIdentificationMark":
+    //   return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’0-9]{1,100}$/i;
     case "VeterinaryRegistrationNo":
       return /^[a-zA-Z0-9 \/-]{1,50}$/i;
     case "DoorHouseNo":
@@ -1083,9 +1083,13 @@ export const getOPMSPattern = type => {
     case "ROADCUTFEE":
       return /^\d{1,12}(\.\d{1,2})?$/i;
     case "Remarks":
-      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,500}$/i;
+      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,128}$/i;
     case "BadgeNumber":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}&#,\[\]*.:;“”‘’]{1,50}$/i;
+      case "typeofroadcut":
+      return /^[a-zA-Z0-9-, ]{1,200}$/i;
+      case "petnocIdentificationMark":
+      return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,100}$/i;
   }
 };
 

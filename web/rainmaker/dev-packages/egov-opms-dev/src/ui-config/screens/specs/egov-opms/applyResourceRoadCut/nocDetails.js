@@ -81,6 +81,22 @@ export const nocDetails = getCommonCard({
     //     disabled: true
     //   }
     // },
+    roadCutType: {
+      ...getTextField({
+        label: {
+          labelName: "Road Cut Type",
+          labelKey: "ROADCUT_ROAD_CUT_TYPE_LABEL_NOC"
+        },
+        placeholder: {
+          labelName: "Enter Road Cut Type",
+          labelKey: "ROADCUT_ROAD_CUT_TYPE_PLACEHOLDER"
+        },
+        pattern: getOPMSPattern("typeofroadcut"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        required: false,
+        jsonPath: "ROADCUTNOC.roadCutType"
+      })
+    },
 
     applicantName: {
       ...getTextField({
@@ -98,8 +114,27 @@ export const nocDetails = getCommonCard({
         jsonPath: "ROADCUTNOC.applicantName"
       })
     },
-    division: {
-      ...getTextField({
+    // division: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Division",
+    //       labelKey: "ROADCUT_DIVISION_NOC"
+    //     },
+    //     placeholder: {
+    //       labelName: "Enter Division",
+    //       labelKey: "ROADCUT_DIVISION_PLACEHOLDER"
+    //     },
+    //     required: true,
+    //     pattern: getOPMSPattern("Division"),
+    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     jsonPath: "ROADCUTNOC.division"
+    //   })
+    // },
+      applicantDivision: {
+      ...getSelectField({
+        
+        optionLabel: "name",
+        optionValue:"name",
         label: {
           labelName: "Division",
           labelKey: "ROADCUT_DIVISION_NOC"
@@ -108,11 +143,17 @@ export const nocDetails = getCommonCard({
           labelName: "Enter Division",
           labelKey: "ROADCUT_DIVISION_PLACEHOLDER"
         },
+        sourceJsonPath: "applyScreenMdmsData.egpm.roadCutDivision",
+        jsonPath: "ROADCUTNOC.division",
         required: true,
-        pattern: getOPMSPattern("Division"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "ROADCUTNOC.division"
-      })
+        props: {
+          className: "hr-generic-selectfield",
+          optionLabel: "name"
+          // hasLocalization: false
+          // disabled: true
+        },
+        
+      }),
     },
     ward: {
       ...getTextField({

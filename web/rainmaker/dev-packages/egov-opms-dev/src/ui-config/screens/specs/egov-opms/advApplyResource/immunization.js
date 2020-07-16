@@ -34,13 +34,13 @@ const undertakingButton1 = getCommonContainer({
           labelName: "Yes",
           labelKey: "Exempted_Yes",
           value: "1",
-          disabled: applicationNumberId != null ? true : false
+          disabled: false
         },
         {
           labelName: "No",
           labelKey: "Exempted_No",
           value: "0",
-          disabled: applicationNumberId != null ? true : false
+          disabled: false
         }
       ],
       jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
@@ -80,8 +80,9 @@ const commonBuildingData = buildingType => {
           required: true,
           disabled: false
         },
-        beforeFieldChange: (action, state, dispatch) => {
+        afterFieldChange: (action, state, dispatch) => {
           try {
+
             let typecateID =
               get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
                 item => item.name === action.value
@@ -101,7 +102,32 @@ const commonBuildingData = buildingType => {
                 "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
               )
             );
+            dispatch(
+              prepareFinalObject(
+                "ADVERTISEMENTNOC.duration", ""
+              )
+            );
 
+            dispatch(
+              prepareFinalObject(
+                "ADVERTISEMENTNOC.subTypeOfAdvertisement", ""
+              )
+            );
+
+            dispatch(
+              handleField(
+                "advertisementApply",
+                "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.subTypeOfAdvertisement",
+                "props.value", ""));
+            dispatch(
+              handleField(
+                "advertisementApply",
+                "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.duration",
+                "props.value", ""));
+
+
+
+            // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
             if (typecateID[0].id === "10010" || typecateID[0].id === "10012") {
               dispatch(
                 handleField(
@@ -163,8 +189,8 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.subTypeOfAdvertisement",
         required: true,
         props: {
-          className: "applicant-details-error",
-          required: true,
+          //className: "applicant-details-error",
+          //required: true,
           disabled: false
         },
         beforeFieldChange: (action, state, dispatch) => {
@@ -258,8 +284,8 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_DURATION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        //pattern: getPattern("Name"),
+        //errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         sourceJsonPath: "applyScreenMdmsData.egpm.duration-new",
 
         jsonPath: "ADVERTISEMENTNOC.duration",

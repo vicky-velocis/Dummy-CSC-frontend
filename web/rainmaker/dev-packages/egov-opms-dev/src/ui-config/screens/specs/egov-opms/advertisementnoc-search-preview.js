@@ -17,7 +17,6 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchBill, createDemandForAdvNOC } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 
 import { footer } from "./applyResource/employeeAdvertisementFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
@@ -121,7 +120,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-opms",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getapplicationNumber(),
+      number: getapplicationNumber()
     }
   },
   downloadMenu: {
@@ -132,7 +131,7 @@ const titlebar = getCommonContainer({
         label: "Download",
         leftIcon: "cloud_download",
         rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
+        props: { variant: "outlined", style: { marginLeft: 10, marginTop: 5, } },
         menu: []
       }
     }
@@ -202,7 +201,6 @@ const setDownloadMenu = (state, dispatch) => {
     label: { labelName: "NOC Certificate PET", labelKey: "NOC_CERTIFICATE_PET" },
     link: () => {
       window.location.href = httpLinkPET;
-      //// generatePdf(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
@@ -275,7 +273,7 @@ const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
       nocStatus != "INITIATED" ?
         nocStatus != "DRAFT" ?
           localStorageGet('pms_iswithdrawn') !== "yes" ?
-            exemptedcategory === 0
+            exemptedcategory == 0
               ? true
               : false
             : false
@@ -329,9 +327,9 @@ const HideshowEdit = (action, nocStatus, exemptedcategory, dispatch) => {
     "screenConfig.components.div.children.footer.children.submitButton.visible",
     checkForRole(roles, 'CITIZEN') ?
       nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"
-          ? true
-          : false
+        ? true
         : false
+      : false
   );
 }
 
@@ -506,7 +504,6 @@ const setSearchResponseForNocCretificate = async (
       link: () => {
         if (httpLinkADVERTISEMENT != "")
           window.location.href = httpLinkADVERTISEMENT;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };
@@ -547,7 +544,6 @@ const setSearchResponseForNocCretificate = async (
       link: () => {
         if (httpLinkADVERTISEMENT_RECEIPT != "")
           window.location.href = httpLinkADVERTISEMENT_RECEIPT;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };

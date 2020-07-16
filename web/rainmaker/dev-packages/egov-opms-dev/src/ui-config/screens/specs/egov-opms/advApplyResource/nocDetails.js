@@ -295,6 +295,31 @@ export const AdvtDetails = getCommonCard({
         jsonPath: "ADVERTISEMENTNOC.applicantDivision",
       })
     },
+    // applicantDivision: {
+    //   ...getSelectField({
+        
+    //     optionLabel: "name",
+    //     optionValue:"name",
+    //     label: {
+    //     labelName: "Division",
+    //     labelKey: "ADV_APPLDIVISION_NOC"
+    //   },
+    //   placeholder: {
+    //     labelName: "Division",
+    //     labelKey: "ADV_APPLDIVISION_NOC_PLACEHOLDER"
+    //   },
+    //     sourceJsonPath: "applyScreenMdmsData.egpm.roadCutDivision",
+    //     jsonPath: "ADVERTISEMENTNOC.applicantDivision",
+    //     required: true,
+    //     props: {
+    //       className: "hr-generic-selectfield",
+    //       optionLabel: "name"
+    //       // hasLocalization: false
+    //       // disabled: true
+    //     },
+        
+    //   }),
+    // },
     applicantWard: {
       ...getTextField({
         label: {

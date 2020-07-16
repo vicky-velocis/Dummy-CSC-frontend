@@ -20,7 +20,8 @@ export const roadcutapplicantSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 9,
+          md: 8
         },
         ...getCommonSubHeader({
           labelName: "Applicant Details",
@@ -37,7 +38,8 @@ export const roadcutapplicantSummary = getCommonGrayCard({
           }
         },
         gridDefination: {
-          xs: 4,
+          xs: 3,
+          md:4,
           align: "right"
         },
         children: {
@@ -77,8 +79,8 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].nocnumber"
-          
-         }
+
+            }
           ),
           applicantName: getLabelWithValue(
             {
@@ -88,7 +90,7 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicantname"
-              
+
             }
           ),
           applicanttype: getLabelWithValue(
@@ -99,17 +101,17 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let applicanttype = JSON.parse(value).hasOwnProperty('typeOfApplicant')?JSON.parse(value)['typeOfApplicant']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let applicanttype = JSON.parse(value).hasOwnProperty('typeOfApplicant') ? JSON.parse(value)['typeOfApplicant'] : '';
                   return applicanttype;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
-         
+
           purpose: getLabelWithValue(
             {
               labelName: "applicanttype",
@@ -118,14 +120,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let purpose = JSON.parse(value).hasOwnProperty('purposeOfRoadCutting')?JSON.parse(value)['purposeOfRoadCutting']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let purpose = JSON.parse(value).hasOwnProperty('purposeOfRoadCutting') ? JSON.parse(value)['purposeOfRoadCutting'] : '';
                   return purpose;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           divsion: getLabelWithValue(
@@ -136,14 +138,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let divsion = JSON.parse(value).hasOwnProperty('division')?JSON.parse(value)['division']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let divsion = JSON.parse(value).hasOwnProperty('division') ? JSON.parse(value)['division'] : '';
                   return divsion;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           ward: getLabelWithValue(
@@ -154,14 +156,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let ward = JSON.parse(value).hasOwnProperty('ward')?JSON.parse(value)['ward']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let ward = JSON.parse(value).hasOwnProperty('ward') ? JSON.parse(value)['ward'] : '';
                   return ward;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           requestedLocation: getLabelWithValue(
@@ -172,14 +174,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let requestedLocation = JSON.parse(value).hasOwnProperty('requestedLocation')?JSON.parse(value)['requestedLocation']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let requestedLocation = JSON.parse(value).hasOwnProperty('requestedLocation') ? JSON.parse(value)['requestedLocation'] : '';
                   return requestedLocation;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           applicantAddress: getLabelWithValue(
@@ -200,14 +202,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let landmark = JSON.parse(value).hasOwnProperty('landmark')?JSON.parse(value)['landmark']:'';
+              callBack: value => {
+                if (value != undefined) {
+                  let landmark = JSON.parse(value).hasOwnProperty('landmark') ? JSON.parse(value)['landmark'] : '';
                   return landmark;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           length: getLabelWithValue(
@@ -218,14 +220,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                  let length = JSON.parse(value).hasOwnProperty('length')?Number(JSON.parse(value)['length']):'';
+              callBack: value => {
+                if (value != undefined) {
+                  let length = JSON.parse(value).hasOwnProperty('length') ? Number(JSON.parse(value)['length']) : '';
                   return length;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           width: getLabelWithValue(
@@ -236,14 +238,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].applicationdetail",
-                callBack: value => {
-                  if(value!=undefined){
-                 let width = JSON.parse(value).hasOwnProperty('width')?Number(JSON.parse(value)['width']):'';
+              callBack: value => {
+                if (value != undefined) {
+                  let width = JSON.parse(value).hasOwnProperty('width') ? Number(JSON.parse(value)['width']) : '';
                   return width;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           ),
           amount: getLabelWithValue(
@@ -254,13 +256,13 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].amount",
-                callBack: value => {
-                  if(value>0){
+              callBack: value => {
+                if (value > 0) {
                   return value;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
 
             }
           ),
@@ -272,13 +274,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].performancebankguaranteecharges",
-                callBack: value => {
-                  if(value>0){
-                  return value;
-                  }else{
-                    return '';
-                  }
-                }
+              callBack: value => {
+                return value;
+                // if (value > 0) {
+                //   return value;
+                // } else {
+                //   return '';
+                // }
+              }
 
             }
           ),
@@ -290,13 +293,14 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].gstamount",
-                callBack: value => {
-                  if(value>0){
-                  return value;
-                  }else{
-                    return '';
-                  }
-                }
+              callBack: value => {
+                return value;
+                // if(value>0){
+                // return value;
+                // }else{
+                //   return '';
+                // }
+              }
             }
           ),
           totalAmount: getLabelWithValue(
@@ -307,16 +311,16 @@ export const roadcutapplicantSummary = getCommonGrayCard({
             {
               jsonPath:
                 "nocApplicationDetail[0].totalamount",
-                callBack: value => {
-                  if(value>0){
+              callBack: value => {
+                if (value > 0) {
                   return value;
-                  }else{
-                    return '';
-                  }
+                } else {
+                  return '';
                 }
+              }
             }
           )
-       
+
         })
       }),
       items: [],

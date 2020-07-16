@@ -39,31 +39,46 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
 };
 
 const moveToReview = (state, dispatch, applnid) => {
-  if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
-  {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"));
 
-  let validateDocumentField = false;
+  if (get(state.screenConfiguration.preparedFinalObject, "RoadCutDocuments") !== undefined) {
+    const documentsFormat = Object.values(
+      get(state.screenConfiguration.preparedFinalObject, "RoadCutDocuments"));
 
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
+    let validateDocumentField = false;
 
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
-            validateDocumentField = true;
+    if (documentsFormat.length > 0) {
+      for (let i = 0; i < documentsFormat.length; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i],
+          "isDocumentTypeRequired"
+        );
+
+        let documents = get(documentsFormat[i], "documents");
+        if (isDocumentRequired) {
+          if (documents && documents.length > 0) {
+            if (isDocumentTypeRequired) {
+              if (get(documentsFormat[i], "dropdown.value")) {
+                validateDocumentField = true;
+              } else {
+                dispatch(
+                  toggleSnackbar(
+                    true,
+                    { labelName: "Please select type of Document!", labelKey: "" },
+                    "warning"
+                  )
+                );
+                validateDocumentField = false;
+                break;
+              }
+            } else {
+              validateDocumentField = true;
+            }
           } else {
             dispatch(
               toggleSnackbar(
                 true,
-                { labelName: "Please select type of Document!", labelKey: "" },
+                { labelName: "Please uplaod mandatory documents!", labelKey: "" },
                 "warning"
               )
             );
@@ -73,34 +88,33 @@ const moveToReview = (state, dispatch, applnid) => {
         } else {
           validateDocumentField = true;
         }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
       }
-    } else {
-      validateDocumentField = true;
+      return validateDocumentField;
+    }
+    else {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+          "warning"
+        )
+      );
+      // validateDocumentField = false;
+
     }
   }
-  return validateDocumentField;
-}
-else {
-  dispatch(
-    toggleSnackbar(
-      true,
-      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-      "warning"
-    )
-  );
- // validateDocumentField = false;
- // break;
-}
+  else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+        "warning"
+      )
+    );
+
+    // validateDocumentField = false;
+    // break;
+  }
 };
 
 const getMdmsData = async (state, dispatch) => {
@@ -143,10 +157,10 @@ const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  
+
   let isFormValid = true;
   let hasFieldToaster = false;
-  
+
   let validatestepformflag = validatestepform(activeStep + 1)
 
   isFormValid = validatestepformflag[0];
@@ -162,12 +176,13 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
+    //  isFormValid = true;
     isFormValid = moveToReview(state, dispatch);
   }
 
   if (activeStep !== 2) {
     //alert("Entered in active step != 3 " + activeStep + " : " + isFormValid)
-    
+
     if (isFormValid) {
       let responseStatus = "success";
       if (activeStep === 1) {
@@ -177,7 +192,9 @@ const callBackForNext = async (state, dispatch) => {
         responseStatus = get(response, "status", "");
         let applicationId = get(response, "applicationId", "");
         if (responseStatus === 'SUCCESS' || responseStatus === 'success') {
+          //isFormValid = true;
           isFormValid = moveToReview(state, dispatch, applicationId);
+
           if (isFormValid) {
             setReviewPageRoute(state, dispatch, applicationId);
           }

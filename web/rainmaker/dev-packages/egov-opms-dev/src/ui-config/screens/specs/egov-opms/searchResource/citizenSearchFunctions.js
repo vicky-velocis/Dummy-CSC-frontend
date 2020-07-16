@@ -218,7 +218,7 @@ export const getGridDataAdvertisement = async (action, state, dispatch) => {
       let data = response.nocApplicationDetail.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationId || "-",
-        [getTextToLocalMapping("Application Status")]: getTextAdvertisement(item.applicationStatus) || "-",
+        [getTextToLocalMapping("Application Status")]: getTextAdvertisement(item.applicationStatus, item.Withdraw) || "-",
         [getTextToLocalMapping("Applicant Name")]:
           item.applicantName || "-",
 
@@ -321,7 +321,7 @@ export const getMasterGridData = async (action, state, dispatch) => {
         [getTextToLocalMapping("effectiveFromDate")]:
           item.effectiveFromDate.split(" ")[0] || "-",
         [getTextToLocalMapping("effectiveToDate")]:
-          item.effectiveToDate===null?"-":item.effectiveToDate.split(" ")[0] || "-",
+          item.effectiveToDate === null ? "-" : item.effectiveToDate.split(" ")[0] || "-",
 
       }));
 
@@ -381,9 +381,10 @@ export const getUpdatePriceBook = async (action, state, dispatch, pricebookid) =
           // alert(cat1.includes("annual"))
           set(
             state,
-            "screenConfiguration.preparedFinalObjec.masterScreen.duration",
+            "screenConfiguration.preparedFinalObject.masterScreen.duration",
             cat1
           );
+
           if (cat1.includes("day") === true) {
             set(
               action,
@@ -398,14 +399,15 @@ export const getUpdatePriceBook = async (action, state, dispatch, pricebookid) =
           }
 
           if (cat1.includes("week") === true) {
+
             set(
               action,
-              "screenConfig.components.div.children.NOCApplication2.children.cardContent.children.masterContainer.children.perweek.props.disabled",
+              "screenConfig.components.div.children.NOCApplication2.children.cardContent.children.masterContainer.children.perWeek.props.disabled",
               false
             );
             set(
               action,
-              "screenConfig.components.div.children.NOCApplication2.children.cardContent.children.masterContainer.children.perweek.required",
+              "screenConfig.components.div.children.NOCApplication2.children.cardContent.children.masterContainer.children.perWeek.required",
               true
             );
           }
@@ -710,31 +712,31 @@ export const getTextForSellMeatNoc = label => {
   }
 }
 
-export const getTextAdvertisement = label => {
+export const getTextAdvertisement = (label, isWithdrawn) => {
 
   switch (label) {
     case "INITIATED":
       return 'Initiated'
-   case "INITIATEDEXC":
+    case "INITIATEDEXC":
       return 'Initiated'
     case "PAID":
       return 'Paid'
     case "REVIEWOFSUPERINTENDENT":
       return 'Review Of Superintendent'
     case "REVIEWOFSPAFTERWITHDRAW":
-      return 'Review Of Superintendent' 
+      return 'Withdraw Request';
     case "REVIEWOFOSD":
-      return 'Review Of OSD'
+      return isWithdrawn === "0" ? 'Review Of OSD' : 'Withdraw Request';
     case "WITHDRAWAPPROVAL":
-      return 'Withdraw Approval'
+      return 'Withdraw Approval';
     case "WITHDRAWAFTERAPRROVAL":
-      return 'Reassign To JEX'
+      return 'Withdraw Request';
     case "WITHDRAW":
-      return 'Withdraw'
+      return 'Withdraw';
     case "PENDINGAPPROVAL":
-        return 'Pending Approval'
+      return 'Pending Approval';
     case "PENDINGAPPROVALFORWITHDRAW":
-      return 'Pending Approval'
+      return 'Withdraw Request';
     case "REJECTED":
       return 'Rejected'
     case "RESENT":
@@ -744,11 +746,11 @@ export const getTextAdvertisement = label => {
     case "APPROVED":
       return 'Approved'
     case "REASSIGNTOJEX":
-      return 'Reassign To JEX'
+      return isWithdrawn === "0" ? 'Reassign To JEX' : 'Withdraw Request';
     case "REASSIGNTOSUPERINTENDENT":
-      return 'Reassign To Superintendent'
-   case "REASSIGNTOOSD":
-        return 'Reassign To OSD'
+      return isWithdrawn === "0" ? 'Reassign To Superintendent' : 'Withdraw Request';
+    case "REASSIGNTOOSD":
+      return isWithdrawn === "0" ? 'Reassign To OSD' : 'Withdraw Request';
     case "PAYMENTPENDING":
       return 'Payment Pending'
     default:
