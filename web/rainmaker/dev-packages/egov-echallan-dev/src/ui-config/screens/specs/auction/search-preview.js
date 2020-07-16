@@ -24,7 +24,7 @@ import { getSearchResultsView, fetchStoreItemHODMasterChallanData, fetchauctionH
 import { setEncroachmentType, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { AuctionGridHistoryDetails } from "./auctionHistory/serachResultGrid"
 import { searchResultApiResponseViewHistory } from "./searchResource/searchResultApiResponse"
-import { getTextToLocalMapping, checkForRole, fetchRoleCode } from "../utils";
+import { getTextToLocalMapping, checkForRole, fetchRoleCode, getMdmsEncroachmentSectorData } from "../utils";
 import { showHideAdhocPopupAuction } from "../utils/index";
 import {titlebarfooter} from "./footer/footer";
 
@@ -82,41 +82,6 @@ const titlebar = getCommonContainer({
   },
 
 });
-
-const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
-        {
-          moduleName: "egec",
-          masterDetails: [
-            {
-              name: "EncroachmentType"
-            },
-            {
-              name: "paymentType"
-            },
-            {
-              name: "sector"
-            },
-          ]
-        },
-
-      ]
-    }
-  };
-  await fetchMdmsData(state, dispatch, mdmsBody, false);
-};
 
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -451,7 +416,8 @@ const setSearchResponse = async (
   tenantId,
   action
 ) => {
-  getMdmsData(action, state, dispatch);
+  
+  await getMdmsEncroachmentSectorData(action, state, dispatch);
 
   let RequestBody = {
     searchtext: applicationNumber,
@@ -469,6 +435,14 @@ const setSearchResponse = async (
       return true;
   });
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == sectorval.encroachmentType)
+      return true;
+  });    
+
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
 
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate', formatedDate);

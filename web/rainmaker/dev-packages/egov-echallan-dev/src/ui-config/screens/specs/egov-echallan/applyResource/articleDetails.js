@@ -454,7 +454,7 @@ const articleDetailData = () => {
         },
         jsonPath: "articleSeizedDetails.VehicleNumber",
         required: true,
-        pattern: getPattern("VehicleRegistrationNo"),
+        pattern: getPattern("ECVehicleRegistrationNo"),
         errorMessage: "EC_ERR_VEHICLE_REGISTRATION_NUMBER_INPUT_FIELD_MSG",
         gridDefination: {
           xs: 12,

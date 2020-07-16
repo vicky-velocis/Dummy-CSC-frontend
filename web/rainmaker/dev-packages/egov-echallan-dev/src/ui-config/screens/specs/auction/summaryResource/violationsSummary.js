@@ -78,7 +78,7 @@ export const violationsSummary = getCommonGrayCard({
               labelKey: "EC_ECHALLAN_ENCROACHMENT_SEIZURE_CATEGORY_LABEL"
             },
             {
-              jsonPath: "eChallanDetail[0].encroachmentType"
+              jsonPath: "eChallanDetail[0].encroachmentTypeName"
               // callBack: value => {
               //   return value.split(".")[0];
               // }

@@ -319,21 +319,6 @@ export const getReceiptData = async queryObject => {
   }
 };
 
-export const getMdmsData = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "egov-mdms-service/v1/_get",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    return {};
-  }
-};
-
 
 export const createDemandForChallan = async (state, dispatch, tenantId) => {
   try {
@@ -1924,3 +1909,48 @@ export const sendReceiptBymail = async (state, dispatch, ReceiptLink, violatorDe
   }
 
 }
+
+export const getMdmsData = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_get",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getMdmsEncroachmentSectorData = async (action, state, dispatch) => {
+  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "egec",
+          masterDetails: [
+            {
+              name: "EncroachmentType"
+            },
+            {
+              name: "paymentType"
+            },
+            {
+              name: "paymentStatus"
+            },
+            {
+              name: "sector"
+            },
+          ]
+        },
+
+      ]
+    }
+  };
+  await fetchMdmsData(state, dispatch, mdmsBody, false);
+};

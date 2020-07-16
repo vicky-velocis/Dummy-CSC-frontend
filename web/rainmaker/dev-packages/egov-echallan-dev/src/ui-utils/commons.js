@@ -1179,7 +1179,6 @@ export const fetchMdmsData = async (state, dispatch, mdmsBody, onlySector = fals
   try {
 
     let payload = null;
-
     payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",

@@ -342,6 +342,14 @@ const setSearchResponse = async (
     });
     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
 
+    let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+    let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+      if (encroachRecord.code == sectorval.encroachmentType)
+        return true;
+    });    
+  
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
+  
     let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
   
