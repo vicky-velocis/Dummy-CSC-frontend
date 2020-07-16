@@ -67,7 +67,7 @@ export const AuctionGridHistoryDetails = {
       filter: false,
       print: false,
       download: false,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,
