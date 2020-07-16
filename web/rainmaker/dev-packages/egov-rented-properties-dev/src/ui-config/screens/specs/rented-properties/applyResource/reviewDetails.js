@@ -1,7 +1,7 @@
 import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getReviewProperty, getReviewOwner, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./review-property";
 
-import {getReviewApplicantDetails, getreviewPropertyAddressDetails,getDuplicateCopyAddressDetails,getDuplicateCopyApplicantDetails} from './review-applications'
+import {getReviewApplicantDetails, getreviewPropertyAddressDetails,getDuplicateCopyReviewPropertyAddressDetails,getDuplicateCopyPreviewApplicantDetails} from './review-applications'
 import { getReviewDocuments ,getDuplicateCopyReviewDocuments} from "./review-documents";
 
 
@@ -20,8 +20,8 @@ const reviewPropertyAddressDetails = getreviewPropertyAddressDetails()
 const reviewApplicantDetailsMortgage = getReviewApplicantDetailsMortgage();
 const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage();
 const reviewFreshLicenceDocuments = getReviewDocuments(true, "ownership-apply", "OwnersTemp[0].reviewDocData")
-const reviewDuplicatePropertytDetails=getDuplicateCopyAddressDetails()
-const reviewDuplicateApplicantDetails=getDuplicateCopyApplicantDetails()
+const reviewDuplicatePropertytDetails=getDuplicateCopyReviewPropertyAddressDetails()
+const reviewDuplicateApplicantDetails=getDuplicateCopyPreviewApplicantDetails()
 const reviewDupliateCopytDocuments=getDuplicateCopyReviewDocuments(true,"duplicate-copy-apply","DuplicateTemp[0].reviewDocData")
 const header = getCommonTitle({
   labelName: "Please review your Application and Submit",
