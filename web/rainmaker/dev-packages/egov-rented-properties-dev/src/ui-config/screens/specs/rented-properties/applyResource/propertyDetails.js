@@ -182,6 +182,9 @@ const transitNumberField = {
         labelKey: "RP_AREA_PROPERTY_PLACEHOLDER"
     },
     required: true,
+    minLength: 2,
+    maxLength: 20,
+    pattern: getPattern("Numeric"),
     jsonPath: "Properties[0].propertyDetails.area",
     // optionValue: "code",
     // optionLabel: "label",
