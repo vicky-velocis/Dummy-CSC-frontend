@@ -7,7 +7,7 @@ import {
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
-import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
@@ -36,6 +36,9 @@ export const getStatusList = async (state, dispatch, screen, path) => {
 }
 
 export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100 , hideTable = true) => {
+  // show loader
+  dispatch(toggleSpinner());
+
   !!hideTable && showHideTable(false, dispatch);
   let queryObject = [
     {
@@ -196,6 +199,8 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         )
       );
       !!hideTable && showHideTable(true, dispatch);
+      // hide loader
+      dispatch(toggleSpinner());
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
