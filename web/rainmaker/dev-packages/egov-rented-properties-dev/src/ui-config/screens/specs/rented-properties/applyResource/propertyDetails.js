@@ -89,7 +89,7 @@ export const transitNumberConfig = {
 
 const ownershipTransitNumberField = {
     ...transitNumberConfig,
-    jsonPath: "Duplicate[0].property.transitNumber",
+    jsonPath: "DuplicateCopyApplications[0].property.transitNumber",
     iconObj: {
         iconName: "search",
         position: "end",
@@ -110,7 +110,7 @@ const ownershipTransitNumberField = {
       beforeFieldChange: (action, state, dispatch) => {
         dispatch(
             prepareFinalObject(
-              "Duplicate[0].property.id",
+              "DuplicateCopyApplications[0].property.id",
               ""
             )
           )
@@ -246,8 +246,8 @@ const getTransitSiteDetails = () => {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(ownershipTransitNumberField),
-            colony: getTextField({...colonyFieldConfig,jsonPath: "Properties[0].colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
-            pincode: getTextField({...pincodeField, jsonPath: "Properties[0].pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+            colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }
 }

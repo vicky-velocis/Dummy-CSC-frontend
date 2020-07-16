@@ -7,7 +7,9 @@ import {addressDetails, ownershipAddressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
-import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails} from './reviewDetails'
+
+import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails,duplicateCopyDetails} from './reviewDetails'
+
 
 
 const documentCardConfig = {
@@ -67,7 +69,7 @@ export const ownershipTransferDuplicateDocumentsDetails = getCommonCard({
       ...documentList.props,
       documentsJsonPath: "DuplicateTemp[0].ownershipTransferDocuments",
       uploadedDocumentsJsonPath: "DuplicateTemp[0].uploadedDocsInRedux",
-      tenantIdJsonPath: "Duplicate[0].tenantId",
+      tenantIdJsonPath: "DuplicateCopyApplications[0].tenantId",
       removedJsonPath: "DuplicateTemp[0].removedDocs"
     }
   }
@@ -242,5 +244,13 @@ export const formwizardDuplicateCopySecondStep = {
 };
 
 export const formwizardDuplicateCopyThirdStep = {
- 
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    duplicateCopyDetails
+  },
+  visible: false
 };
