@@ -158,14 +158,14 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "Duplicate[0].applicant[0].name" }
+                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "Duplicate[0].applicant[0].relationship" }
+                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].relationship" }
             ),
             phone: getLabelWithValue(
                 {
@@ -173,7 +173,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].phone" 
+                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -182,7 +182,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].email" 
+                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].email" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -191,7 +191,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "Duplicate[0].applicant[0].adhaarNumber" 
+                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].adhaarNumber" 
                 }
             )
         })
@@ -222,21 +222,21 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                     labelName: "Property Id",
                     labelKey: "RP_PROPERTY_ID"
                 },
-                {jsonPath: "Duplicate[0].property.id"}
+                {jsonPath: "DuplicateCopyApplications[0].property.id"}
             ),
             allotmentNumber: getLabelWithValue(
                 {
                     labelName: "Allotment Number",
                     labelKey: "RP_ALLOTMENT_NUMBER"
                 },
-                {jsonPath: "Duplicate[0].allotmenNumber"}
+                {jsonPath: "DuplicateCopyApplications[0].allotmenNumber"}
             ),
             transitNumber: getLabelWithValue(
                 {
                     labelName: "Transit Site/Plot number",
                     labelKey: "RP_SITE_PLOT_LABEL"
                 },
-                { jsonPath: "Duplicate[0].property.transitNumber" }
+                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].property.transitNumber" }
             )
             // area: getLabelWithValue(
             //     areaLabel,

@@ -155,9 +155,11 @@ class WorkFlowContainer extends React.Component {
           }
           case "OwnershipTransferRP": {
             path = `&applicationNumber=${data[0].ownerDetails.applicationNumber}&tenantId=${tenant}&type=OWNERSHIPTRANSFERRP`
+            break
           }
           case "DuplicateCopyOfAllotmentLetterRP": {
             path = `&applicationNumber=${data[0].applicationNumber}&tenantId=${tenant}&type=DUPLICATECOPYOFALLOTMENTLETTERRP`
+            break
           }
         }
         window.location.href = `acknowledgement?${this.getPurposeString(
