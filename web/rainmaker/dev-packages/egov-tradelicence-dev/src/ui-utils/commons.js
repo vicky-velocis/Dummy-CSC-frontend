@@ -216,12 +216,12 @@ export const updatePFOforSearchResults = async (
     );
   
   if (dob) {
-    const dobConverted = (convertEpochToDate(dob).replace(/\//g, "-")).split("-").reverse().join("-");
+    // const dobConverted = (convertEpochToDate(dob).replace(/\//g, "-")).split("-").reverse().join("-");
 
     set(
       payload,
       "Licenses[0].tradeLicenseDetail.owners[0].age",
-      calculateAge(dobConverted)
+      calculateAge(dob)
     )
 
     const age = get(

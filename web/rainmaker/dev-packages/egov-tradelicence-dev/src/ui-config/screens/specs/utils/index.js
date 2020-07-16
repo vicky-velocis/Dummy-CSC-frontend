@@ -2553,21 +2553,12 @@ export const checkValueForNA = value => {
 };
 
 export const calculateAge = dob => {
-  var regEx = /^[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/i
   const todayDate = moment();
-  if (regEx.test(dob)) {
-    const dobDate = moment(dob, "DD-MM-YYYY");
-    return todayDate.diff(dobDate, 'years');
-    // dob = new Date(dob);
-    // return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
-  } else {
-    const newTimestamp = new Date(dob).getTime();
-    if (!isNaN(parseFloat(newTimestamp)) && isFinite(newTimestamp)) {
-      return todayDate.diff(moment(new Date(dob)), 'years')
-      // dob = new Date(dob);
-      // return new Number((new Date().getTime() - dob.getTime()) / 31536000000).toFixed(0);
-    }
-    return false;
+  try {
+    const dobDate = moment(new Date(dob));
+    return todayDate.diff(dobDate, 'years')
+  } catch (error) {
+    return false
   }
 }
 
