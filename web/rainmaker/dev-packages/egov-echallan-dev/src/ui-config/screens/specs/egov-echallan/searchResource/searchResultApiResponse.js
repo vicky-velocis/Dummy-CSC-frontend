@@ -4,7 +4,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { convertEpochToDate, convertDateToEpoch, fetchRoleCode } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-import { validateFields, getMdmsSectorData } from "../../utils";
+import { validateFields, getMdmsEncroachmentSectorData } from "../../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { fetchMasterChallanData, fetchViewSeizureData, fetchPaymentDetailsData, fetchStoreItemHODMasterChallanData } from "../../../../../ui-utils/commons";
@@ -27,12 +27,14 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
   }
   try {
     let response;
-    await getMdmsSectorData(action,state,dispatch);
+    await getMdmsEncroachmentSectorData(action,state,dispatch);
 
     response = await fetchMasterChallanData(requestBody);
     if (response) {
       let dataarray = [];
       let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+      let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+    
       let data = response.ResponseBody.map(function (item, index) {
         // alert(item)
         let temp = [];
@@ -41,9 +43,14 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
           if (sectorRecord.code == item['sector'])
             return true;
         });
+        let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+          if (encroachRecord.code == item['encroachmentType'])
+            return true;
+        });    
+  
         let paymentStatus = item.paymentDetails.paymentStatus === 'PENDING' ? 'UNPAID' : 'PAID';
         temp[0] = item['challanId'];
-        temp[1] = item['encroachmentType'];
+        temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
         temp[3] = item['violatorName'];
         temp[4] = __FOUND.name;

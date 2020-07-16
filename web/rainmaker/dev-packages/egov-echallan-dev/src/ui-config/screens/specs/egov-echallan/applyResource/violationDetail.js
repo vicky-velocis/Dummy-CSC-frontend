@@ -101,6 +101,7 @@ export const violationsDetails = getCommonCard({
           labelKey: "EC_ENCROACHMENT_TYPE_LABEL"
         },
         optionLabel: "name",
+        optionValue: "code",
         placeholder: {
           labelName: "Select Encroachment/Seizure Category",
           labelKey: "EC_ENCROACHMENT_TYPE_PLACEHOLDER"

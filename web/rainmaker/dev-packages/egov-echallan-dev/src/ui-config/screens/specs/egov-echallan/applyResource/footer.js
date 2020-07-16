@@ -154,7 +154,6 @@ const callBackForNext = async (state, dispatch) => {
         try {
           
           prepareDocumentsUploadData(state, dispatch, 'apply');
-          //getMdmsData(state, dispatch);
           let statuss = "CHALLAN ISSUED";
 
           let userResponse = await createCitizenBasedonMobileNumber(state, dispatch);

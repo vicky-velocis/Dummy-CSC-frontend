@@ -48,7 +48,7 @@ export const searchTextViewSeizureReport = getCommonCard({
         labelKey: "EC_REPORT_SEIZURE_ENCROACHMENT_TYPE_LABEL"
       },
       optionLabel: "name",
-      optionValue: "name",
+      optionValue: "code",
       placeholder: {
         labelName: "ENCROACHMENT TYPE",
         labelKey: "EC_REPORT_SEIZURE_ENCROACHMENT_TYPE_PLACEHOLDER"

@@ -11,7 +11,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData } from "../utils/index";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
@@ -31,41 +31,6 @@ let roles = JSON.parse(getUserInfo()).roles;
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-
-const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
-        {
-          moduleName: "egec",
-          masterDetails: [
-            {
-              name: "EncroachmentType"
-            },
-            {
-              name: "paymentType"
-            },
-            {
-              name: "sector"
-            },
-          ]
-        },
-
-      ]
-    }
-  };
-  await fetchMdmsData(state, dispatch, mdmsBody, false);
-};
 
 const titleHeader = getCommonSubHeader(
   {
@@ -595,7 +560,7 @@ const setSearchResponse = async (
   // const response = await getSearchResultsView([
   //   { key: "applicationNumber", value: applicationNumber }
   // ]);
-  await getMdmsData(action, state, dispatch);
+  await getMdmsEncroachmentSectorData(action, state, dispatch);
   const response = await getSearchResultsView(RequestBody);
   //
   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
@@ -607,6 +572,14 @@ const setSearchResponse = async (
   });
 
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == sectorval.encroachmentType)
+      return true;
+  });    
+
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
 
   let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);

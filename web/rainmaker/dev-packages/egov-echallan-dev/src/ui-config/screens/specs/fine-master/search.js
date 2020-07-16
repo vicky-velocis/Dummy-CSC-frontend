@@ -97,8 +97,9 @@ const FineMasterSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     clearlocalstorageAppDetails(state);
     setapplicationType('Fine-Master');
-    getMdmsData(action, state, dispatch);
-    searchResultApiResponse(action, state, dispatch);
+    getMdmsData(action, state, dispatch).then (response =>{
+      searchResultApiResponse(action, state, dispatch);
+    })
     return action;
   },
   components: {

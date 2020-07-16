@@ -619,7 +619,7 @@ export const getPattern = type => {
       return /^[a-zA-Z. ]{1,256}$/i;
     case "ECItemDescription":
       return /^[a-zA-Z.0-9 @#/%&]{1,256}$/i;
-    case "VehicleRegistrationNo":
+    case "ECVehicleRegistrationNo":
       return /^[a-zA-Z0-9 -]{1,10}$/i;
   }
 };

@@ -87,6 +87,7 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
     try {
       const response = await fetchReportData(dataReq)
       let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+      let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
 
       let data = [];
       if (response.ResponseBody === null) {
@@ -110,10 +111,15 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
             if (sectorRecord.code == item['sector'])
               return true;
           });
+          let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+            if (encroachRecord.code == item['encroachmentType'])
+              return true;
+          });    
+    
           temp[0] = item['challanId'];
           temp[1] = item['violatorName'];
           temp[2] = convertEpochToDate(item['violationDate']);
-          temp[3] = item['encroachmentType'];
+          temp[3] = __FOUNDENCROACH.name;
           temp[4] = item['siName'];
           temp[5] = __FOUND.name;
           temp[6] = item['paymentAmount'];
@@ -215,6 +221,7 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
     }
     try {
       let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+    
       const response = await fetchReportData(dataReq)
       let data = [];
       if (response.ResponseBody === null) {
@@ -238,6 +245,7 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
             if (sectorRecord.code == item['sector'])
               return true;
           });
+
           temp[0] = item['challanId'] || "-";
           temp[1] = item['violatorName'] || "-";
           temp[2] = item['paymentAmount'] || "-";
