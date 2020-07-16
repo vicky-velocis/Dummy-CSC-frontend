@@ -1,6 +1,7 @@
 import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getReviewProperty, getReviewOwner, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./review-property";
-import {getReviewApplicantDetails, getreviewPropertyAddressDetails} from './review-applications'
+import { getReviewApplicantDetails, getreviewPropertyAddressDetails } from './review-applications'
+import { getReviewApplicantDetailsMortgage, getreviewPropertyAddressDetailsMortgage } from './review-applications-mortgage'
 import { getReviewDocuments } from "./review-documents";
 
 const reviewPropertyDetails = getReviewProperty();
@@ -11,6 +12,8 @@ const reviewPaymentDetails = getReviewPaymentDetails();
 const reviewDocuments = getReviewDocuments(true, "apply");
 const reviewApplicantDetails = getReviewApplicantDetails();
 const reviewPropertyAddressDetails = getreviewPropertyAddressDetails()
+const reviewApplicantDetailsMortgage = getReviewApplicantDetailsMortgage();
+const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage();
 const reviewFreshLicenceDocuments = getReviewDocuments(true, "ownership-apply", "OwnersTemp[0].reviewDocData")
 
 const header = getCommonTitle({
@@ -33,4 +36,11 @@ export const ownerShipReviewDetails = getCommonCard({
     reviewPropertyAddressDetails,
     reviewApplicantDetails,
     reviewFreshLicenceDocuments
+})
+
+export const mortgageReviewDetails = getCommonCard({
+  header,
+  reviewPropertyAddressDetailsMortgage,
+  reviewApplicantDetailsMortgage,
+  
 })

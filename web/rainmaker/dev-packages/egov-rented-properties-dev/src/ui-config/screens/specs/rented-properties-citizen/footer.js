@@ -6,6 +6,8 @@ import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DE
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
+
+
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["ownership-apply"],
@@ -22,6 +24,7 @@ const callBackForNext = async(state, dispatch) => {
           dispatch,
           "ownership-apply"
         )
+        
         const isAddressDetailsValid = validateFields(
           "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children",            
           state,
@@ -243,6 +246,7 @@ const callBackForPrevious = (state, dispatch) => {
   changeStep(state, dispatch, "ownership-apply", "previous");
 };
 
+
 export const footer = getCommonApplyFooter({
     previousButton: {
       ...previousButton,
@@ -295,3 +299,28 @@ export const duplicatefooter = getCommonApplyFooter({
       },
     }
   });
+
+  
+export const mortgagefooter = getCommonApplyFooter({
+  previousButton: {
+    ...previousButton,
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForPreviousMortgage
+    },
+  },
+  nextButton: {
+    ...nextButton,
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForNextMortgage
+    }
+  },
+  submitButton: {
+    ...submitButton,
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForNextMortgage
+    },
+  }
+});

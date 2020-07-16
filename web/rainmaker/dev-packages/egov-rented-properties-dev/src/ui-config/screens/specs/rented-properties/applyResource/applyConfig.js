@@ -7,7 +7,7 @@ import {addressDetails, ownershipAddressDetails} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
-import {rentedReviewDetails, ownerShipReviewDetails} from './reviewDetails'
+import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails} from './reviewDetails'
 
 
 const documentCardConfig = {
@@ -83,6 +83,23 @@ export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
     stepsData
   );
+
+  export const mortgageDocumentsDetails = getCommonCard({
+    ...documentCardConfig,
+    documentList : {
+      ...documentList,
+      props: {
+        ...documentList.props,
+        documentsJsonPath: "OwnersTemp[0].ownershipTransferDocuments",
+        uploadedDocumentsJsonPath: "OwnersTemp[0].uploadedDocsInRedux",
+        tenantIdJsonPath: "Owners[0].tenantId",
+        removedJsonPath: "OwnersTemp[0].removedDocs"
+      }
+    }
+  });
+  
+
+
 
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
@@ -166,9 +183,37 @@ export const formwizardMortgageFirstStep = {
     id: "apply_form5"
   },
   children: {
-    applicantDetails,
-    ownershipAddressDetails
+    ownershipAddressDetails,
+    applicantDetails
+    
   }
+}
+
+export const formwizardMortgageSecondStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form7"
+  },
+  children: {
+    mortgageDocumentsDetails
+
+  },
+  visible: false
+}
+
+
+export const formwizardMortgageThirdStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form6"
+  },
+  children: {
+    mortgageReviewDetails
+    
+    },
+  visible: false
 }
 
 export const formwizardDuplicateCopyFirstStep = {
