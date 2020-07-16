@@ -201,7 +201,10 @@ class WorkFlowContainer extends React.Component {
         set(data, `masterDataAction`, label);
         break;
       }
-      case "DuplicateCopyOfAllotmentLetterRP":
+      case "DuplicateCopyOfAllotmentLetterRP": {
+          set(data, `Action`, label);
+            break;
+      } 
       case "OwnershipTransferRP": {
         set(data, `applicationAction`, label);
         break;

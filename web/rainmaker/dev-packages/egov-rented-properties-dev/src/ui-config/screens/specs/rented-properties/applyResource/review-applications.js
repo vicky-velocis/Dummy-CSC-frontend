@@ -158,14 +158,14 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].name" }
+                { jsonPath: "DuplicateCopyApplications[0].applicant[0].name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].relationship" }
+                { jsonPath: "DuplicateCopyApplications[0].applicant[0].relationship" }
             ),
             phone: getLabelWithValue(
                 {
@@ -173,7 +173,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].phone" 
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -182,7 +182,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].email" 
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].email" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -191,7 +191,7 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "DuplicateCopyApplicationsCopyApplications[0].applicant[0].adhaarNumber" 
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].adhaarNumber" 
                 }
             )
         })
