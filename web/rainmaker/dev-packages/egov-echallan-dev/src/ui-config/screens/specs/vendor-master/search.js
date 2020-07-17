@@ -120,7 +120,6 @@ const VENDORSearchAndResult = {
             }
           },
           children: {
-
             div: getCommonHeader(
               {
                 labelName: "Error Details",
@@ -140,7 +139,6 @@ const VENDORSearchAndResult = {
             )
           }
         },
-
         serachVendorErrorResultGrid
       },
     }

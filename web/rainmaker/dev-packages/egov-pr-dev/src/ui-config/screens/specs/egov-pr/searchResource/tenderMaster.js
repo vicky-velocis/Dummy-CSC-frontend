@@ -5,7 +5,8 @@ import {
   getDateField,
   getPattern,
   getTextField,
-  getBreak
+  getBreak,
+  getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 
@@ -29,7 +30,7 @@ export const tenderMasterCreate = getCommonCard({
       },
       required: true,
       pattern: getPattern("Date"),
-      errorMessage: "Invalid Date",
+      errorMessage: "PR_TENDER_DATE_INVALID",
       jsonPath: "tenderNotice.tenderDate",
       gridDefination: {
         xs: 12,
@@ -51,7 +52,7 @@ export const tenderMasterCreate = getCommonCard({
           labelKey: "PR_TENDER_DETAILS_FILE_NUMBER_PLACEHOLDER"
         },
         pattern:getPattern("fileNumber"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "PR_TENDER_FILE_NUMBER_INVALID",
         required: true,
         jsonPath: "tenderNotice.fileNumber"
       })
@@ -73,7 +74,7 @@ export const tenderMSWordTemplate = getCommonCard({
           labelKey: "PR_TENDER_DETAILS_SUBJECT_PLACEHOLDER"
         },
         pattern: getPattern("subjectvalidation"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "PR_TENDER_SUBJECT_INVALID",
         required: true,
         jsonPath: "tenderNotice.tenderSubject",
         gridDefination: {
@@ -88,7 +89,7 @@ export const tenderMSWordTemplate = getCommonCard({
     TenderDetails: {
       
     },
-    subHeader: getCommonTitle({
+    subHeader: getCommonParagraph({
       labelName: "Note",
       labelKey: "PR_TENDER_NOTICE_NOTE"
     }),
@@ -98,7 +99,7 @@ export const tenderMSWordTemplate = getCommonCard({
 
 
 break: getBreak(),
-subHeader: getCommonTitle({
+subHeader: getCommonParagraph({
   labelName: "Note",
   labelKey: "PR_TENDER_DETAILS"
 }),

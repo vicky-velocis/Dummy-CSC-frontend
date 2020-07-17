@@ -51,7 +51,14 @@ const HowItWorks = Loadable({
   loader: () => import("./HowItWorks"),
   loading: () => <Loading />
 });
-
+const SampleDownload = Loadable({
+  loader: () => import("./SampleDownload"),
+  loading: () => <Loading />
+});
+const SampleDownloadForSellMeat = Loadable({
+  loader: () => import("./SampleDownloadForSellMeat"),
+  loading: () => <Loading />
+});
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -62,5 +69,7 @@ export {
   MapLocator,
   FeesEstimateCard,
   DividerWithLabel,
-  HowItWorks
+  HowItWorks,
+  SampleDownload,
+  SampleDownloadForSellMeat
   };

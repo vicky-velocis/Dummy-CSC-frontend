@@ -81,61 +81,33 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
   });
   let documentsContract = [];
   let tempDoc = {};
-
   documents.forEach(doc => {
     let card = {};
     card["code"] = doc.documentType;
-    card["title"] = getTextToLocalMapping(doc.documentType);
+    card["title"] = "",//getTextToLocalMapping(doc.documentType);
     card["cards"] = [];
     tempDoc[doc.documentType] = card;
   });
 
   documents.forEach(doc => {
-    // Handle the case for multiple muildings
-    if (
-      doc.code === "BUILDING.BUILDING_PLAN" &&
-      doc.hasMultipleRows &&
-      doc.options
-    ) {
-      let buildingsData = get(
-        state,
-        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
-        []
-      );
-
-      buildingsData.forEach(building => {
-        let card = {};
-        card["name"] = building.name;
-        card["code"] = doc.code;
-        card["hasSubCards"] = true;
-        card["subCards"] = [];
-        doc.options.forEach(subDoc => {
-          let subCard = {};
-          subCard["name"] = subDoc.code;
-          subCard["required"] = subDoc.required ? true : false;
-          card.subCards.push(subCard);
-        });
-        tempDoc[doc.documentType].cards.push(card);
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+      dropdown.required = true;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
       });
-    } else {
-      let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
-        dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter(item => {
-          return item.active;
-        });
-        dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["dropdown"] = dropdown;
-      }
-      tempDoc[doc.documentType].cards.push(card);
+      dropdown.menu = dropdown.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropdown"] = dropdown;
     }
+    tempDoc[doc.documentType].cards.push(card);
+    //}
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -345,8 +317,8 @@ export const createUpdateFineMaster = async (state, dispatch, status, isActive) 
 
       isStartDateValid = checkEffectiveDate(state, dispatch, processeffective);
       //isEndDateVaild = new Date(processeffectiveEnd) < new Date(processeffective) ? true : false
-      
-	  isEndDateVaild = getDiffernceBetweenTwoDates(convertEpochToDate(convertDateTimeToEpoch(processeffectiveEnd)), convertEpochToDate(convertDateTimeToEpoch(processeffective))) <  0 ? true : false;
+
+      isEndDateVaild = getDiffernceBetweenTwoDates(convertEpochToDate(convertDateTimeToEpoch(processeffectiveEnd)), convertEpochToDate(convertDateTimeToEpoch(processeffective))) < 0 ? true : false;
     }
 
     set(payload, "effectiveStartDate", convertEpochToDate(convertDateTimeToEpoch(processeffective)));
@@ -722,9 +694,6 @@ export const getUserDetailsOnMobile = async (role, mobileNumber) => {
       [],
       queryStr,
     );
-
-    console.log("resss", payload)
-
     return payload;
     //}
   } catch (e) {
@@ -782,7 +751,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
     let Remarks = "";
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
-        if (doc.documentCode === "EC_ViolatorImage" || doc.documentCode === "ViolatorImage" || doc.documentCode === "imageofViolator") {
+        if (doc.documentCode === "EC_VIOLATORIMAGE" || doc.documentCode === "ViolatorImage" || doc.documentCode === "imageofViolator") {
           ownerDocuments = [
             ...ownerDocuments,
             {
@@ -794,7 +763,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
             }
           ];
         }
-        else if (doc.documentCode === "EC_ViolatorIdProof" || doc.documentCode === "ViolatorIdProof" || doc.documentCode === "idProofofViolator") {
+        else if (doc.documentCode === "EC_VIOLATORIDPROOF" || doc.documentCode === "ViolatorIdProof" || doc.documentCode === "idProofofViolator") {
           ownerDocuments = [
             ...ownerDocuments,
             {
@@ -1210,7 +1179,6 @@ export const fetchMdmsData = async (state, dispatch, mdmsBody, onlySector = fals
   try {
 
     let payload = null;
-
     payload = await httpRequest(
       "post",
       "/egov-mdms-service/v1/_search",

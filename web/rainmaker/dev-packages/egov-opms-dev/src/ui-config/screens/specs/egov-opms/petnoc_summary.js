@@ -46,7 +46,11 @@ export const stepper = getStepperObject(
   { props: { activeStep: 3 } },
   stepsData
 );
-
+import {
+  
+  getCommonApplyFooter,
+ 
+} from "../utils";
 
 
 let roles = JSON.parse(getUserInfo()).roles
@@ -67,7 +71,7 @@ const undertakingButton1 = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "20",
+        // minWidth: "20",
         height: "10px",
         marginRight: "5px",
         marginTop: "15px"
@@ -94,7 +98,9 @@ const undertakingButton1 = getCommonContainer({
         //minWidth: "200px",
         height: "48px",
         marginRight: "40px",
-        paddingBottom: "14px"
+        paddingLeft: "0px",
+        paddingBottom: "14px",
+        textTransform: "capitalize"
       }
     },
     children: {
@@ -108,43 +114,9 @@ const undertakingButton1 = getCommonContainer({
       callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "petnoc_summary")
     },
     visible: true,
-  },
-  resendButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "180px",
-        height: "48px",
-        marginRight: "45px",
-        borderRadius: "inherit",
-        align: "right"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Resend",
-        labelKey: "PM_COMMON_BUTTON_RESEND"
-      }),
-      submitButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        gotoApplyWithStep(state, dispatch, 0);
-      }
-    },
-    visible: false
-
   }
 });
+
 const titlebar = getCommonContainer({
   header: getCommonHeader({
     labelName: "Application for PET NOC",
@@ -162,9 +134,7 @@ const titlebar = getCommonContainer({
 
 const routeToPage = (dispatch, type) => {
   let tenantId = getOPMSTenantId();
-
   const applicationid = getQueryArg(window.location.href, "applicationNumber");
-
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   if (type === "payment") {
@@ -177,8 +147,6 @@ const routeToPage = (dispatch, type) => {
     dispatch(toggleSpinner());
     dispatch(setRoute(reviewUrl));
   }
-
-
 }
 
 
@@ -237,44 +205,21 @@ export const callbackforsummaryactionpay = async (state, dispatch) => {
 }
 
 export const callbackforsummaryaction = async (state, dispatch) => {
-  let action = "submit";
-  if (action == 'submit') {
-
-    const appendUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/egov-opms/my-applications`;
-    dispatch(setRoute(reviewUrl));
-  }
-  else if (action == 'draft') {
-
-    const appendUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/egov-opms/home`;
-    dispatch(setRoute(reviewUrl));
-  }
-  else if (action == 'resend') {
-    const appendUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/egov-opms/home`;
-    dispatch(setRoute(reviewUrl));
-  }
-  else {
-
-    const appendUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    const reviewUrl = `${appendUrl}/egov-opms/home`;
-    dispatch(setRoute(reviewUrl));
-  }
+  const appendUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const reviewUrl = `${appendUrl}/egov-opms/my-applications`;
+  dispatch(setRoute(reviewUrl));
 };
 
 
-var titlebarfooter = getCommonContainer({
+var titlebarfooter = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
     props: {
       variant: "outlined",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
 
@@ -299,43 +244,13 @@ var titlebarfooter = getCommonContainer({
     },
     visible: true
   },
-  resendButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        // minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      nextButtonLabel: getLabel({
-        labelName: "RESEND",
-        labelKey: "NOC_RESEND_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforsummaryaction
-    },
-    visible: false
-  },
   submitButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -413,104 +328,6 @@ const prepareDocumentsView = async (state, dispatch) => {
   }
 };
 
-
-const setDownloadMenu = (state, dispatch) => {
-  /** MenuButton data based on status */
-  let status = get(
-    state,
-    "screenConfiguration.preparedFinalObject.OpmsNOCs[0].opmsNOCDetails.status"
-  );
-  let downloadMenu = [];
-  let printMenu = [];
-  let certificateDownloadObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      // generatePdf(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let certificatePrintObject = {
-    label: { labelName: "NOC Certificate", labelKey: "NOC_CERTIFICATE" },
-    link: () => {
-      // generatePdf(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      // generatePdf(state, dispatch, "receipt_download");
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "NOC_RECEIPT" },
-    link: () => {
-      // generatePdf(state, dispatch, "receipt_print");
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      // generatePdf(state, dispatch, "application_download");
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "NOC_APPLICATION" },
-    link: () => {
-      // generatePdf(state, dispatch, "application_print");
-    },
-    leftIcon: "assignment"
-  };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        certificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        certificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "DOCUMENTVERIFY":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "REJECTED":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  dispatch(
-    handleField(
-      "petnoc_summary",
-      "components.div.children.headerDiv.children.header.children.downloadMenu",
-      "props.data.menu",
-      downloadMenu
-    )
-  );
-  dispatch(
-    handleField(
-      "petnoc_summary",
-      "components.div.children.headerDiv.children.header.children.printMenu",
-      "props.data.menu",
-      printMenu
-    )
-  );
-  /** END */
-};
-
 const setSearchResponse = async (state, dispatch, applicationNumber, tenantId) => {
   const response = await getSearchResultsView([
     { key: "tenantId", value: tenantId },
@@ -520,7 +337,7 @@ const setSearchResponse = async (state, dispatch, applicationNumber, tenantId) =
   dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
 
   prepareDocumentsView(state, dispatch);
-  setDownloadMenu(state, dispatch);
+
 };
 
 
@@ -616,9 +433,9 @@ const screenConfig = {
         })
         ,
         break: getBreak(),
-        titlebarfooter,
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
+        titlebarfooter
+        // citizenFooter:
+        //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
       }
     }, undertakingdialog: {
       uiFramework: "custom-containers-local",

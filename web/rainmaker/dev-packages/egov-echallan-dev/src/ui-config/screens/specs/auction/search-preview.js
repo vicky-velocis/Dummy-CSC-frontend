@@ -24,8 +24,9 @@ import { getSearchResultsView, fetchStoreItemHODMasterChallanData, fetchauctionH
 import { setEncroachmentType, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { AuctionGridHistoryDetails } from "./auctionHistory/serachResultGrid"
 import { searchResultApiResponseViewHistory } from "./searchResource/searchResultApiResponse"
-import { getTextToLocalMapping, checkForRole, fetchRoleCode } from "../utils";
+import { getTextToLocalMapping, checkForRole, fetchRoleCode, getMdmsEncroachmentSectorData } from "../utils";
 import { showHideAdhocPopupAuction } from "../utils/index";
+import {titlebarfooter} from "./footer/footer";
 
 let roles = JSON.parse(getUserInfo()).roles;
 //alert('CITIZEN');
@@ -80,251 +81,6 @@ const titlebar = getCommonContainer({
     }
   },
 
-});
-
-const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
-        {
-          moduleName: "egec",
-          masterDetails: [
-            {
-              name: "EncroachmentType"
-            },
-            {
-              name: "paymentType"
-            },
-            {
-              name: "sector"
-            },
-          ]
-        },
-
-      ]
-    }
-  };
-  await fetchMdmsData(state, dispatch, mdmsBody, false);
-};
-
-
-const callbackforsummaryaction = async (state, dispatch) => {
-  const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/auction/home`;
-  dispatch(setRoute(reviewUrl));
-
-};
-
-const callbackforAuction = async (state, dispatch) => {
-  let challandetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
-  const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/auction/apply?challanNumber=${
-    challandetails.challanId
-    }&tenantId=${challandetails.tenantId}&Key=${challandetails.challanUuid}`;
-  dispatch(setRoute(reviewUrl));
-
-};
-
-const callbackforAuctionApprove = async (state, dispatch) => {
-  try {
-
-    dispatch(toggleSpinner());
-    let response = await approverejectAuctionDetails(state, dispatch, "APPROVE");
-    dispatch(toggleSpinner());
-    let responseStatus = get(response, "status", "");
-
-    if (responseStatus === 'SUCCESS' || responseStatus === 'success') {
-      dispatch(toggleSnackbar(true, {
-        labelName: "Auction Details has been Approved!",
-        labelKey: "EC_AUCTION_APPROVER_SUCCESS_TOASTER"
-      }, "success"));
-      callbackforsummaryaction(state, dispatch);
-    } else {
-      dispatch(toggleSnackbar(true, {
-        labelName: "Submission Falied, Try Again later!",
-        labelKey: "EC_AUCTION_APPROVER_FAIL_TOASTER",
-      }, "warning"));
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-};
-
-const callbackforAuctionReject = async (state, dispatch) => {
-  try {
-
-    dispatch(toggleSpinner());
-    let response = await approverejectAuctionDetails(state, dispatch, "REJECT");
-    dispatch(toggleSpinner());
-    let responseStatus = get(response, "status", "");
-    if (responseStatus == 'SUCCESS' || responseStatus == 'success') {
-      dispatch(toggleSnackbar(true, {
-        labelName: "Auction Details has been Rejected!",
-        labelKey: "EC_AUCTION_APPROVER_FAIL_TOASTER"
-      }, "success"));
-      callbackforsummaryaction(state, dispatch);
-    } else {
-      dispatch(toggleSnackbar(true, {
-        labelName: "Submission Falied, Try Again later!",
-        labelKey: "EC_AUCTION_APPROVER_FAIL_TOASTER",
-      }, "warning"));
-    }
-  } catch (error) {
-    console.log(error);
-  }
-
-};
-
-var titlebarfooter = getCommonContainer({
-  previousButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        height: "48px",
-        minWidth: "200px",
-        marginRight: "16px",
-
-      }
-    },
-    children: {
-      cancelButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_left"
-        }
-      },
-      previousButtonLabel: getLabel({
-        labelName: "Back",
-        labelKey: "EC_ECHALLAN_COMMON_BUTTON_BACK"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforsummaryaction
-    },
-    visible: true
-  },
-  submitButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      nextButtonLabel: getLabel({
-        labelName: "INITATE AUCTION",
-        labelKey: "EC_AUCTION_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforAuction
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["challanSM"],
-      action: "AUCTION"
-    },
-    visible: true
-  },
-  approveButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      approveButtonLabel: getLabel({
-        labelName: "APPROVE",
-        labelKey: "EC_AUCTION_APPROVE_BUTTON"
-      }),
-      approveButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforAuctionApprove
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["challanHOD"],
-      action: "AUCTION"
-    },
-    visible: true
-  },
-  rejectButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      rejectButtonLabel: getLabel({
-        labelName: "REJECT",
-        labelKey: "EC_AUCTION_REJECT_BUTTON"
-      }),
-      rejectButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforAuctionReject
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["challanHOD"],
-      action: "AUCTION"
-    },
-    visible: true
-  }
 });
 
 const prepareDocumentsView = async (state, dispatch) => {
@@ -660,7 +416,8 @@ const setSearchResponse = async (
   tenantId,
   action
 ) => {
-  getMdmsData(action, state, dispatch);
+  
+  await getMdmsEncroachmentSectorData(action, state, dispatch);
 
   let RequestBody = {
     searchtext: applicationNumber,
@@ -679,8 +436,20 @@ const setSearchResponse = async (
   });
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
 
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == sectorval.encroachmentType)
+      return true;
+  });    
+
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
+
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate', formatedDate);
+
+  let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
+
 
   let appstatus = auctionUuid === '' ? get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '') : 'PENDING FOR APPROVAL';
   let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
@@ -854,40 +623,7 @@ const screenConfig = {
         AuctionGridHistoryDetails
       },
     }
-    // adhocDialog: {
-    //   uiFramework: "custom-containers-local",
-    //   moduleName: "egov-echallan",
-    //   componentPath: "PopupContainer",
-    //   props: {
-    //     open: false,
-    //     maxWidth: "xl",
-    //     screenKey: "search-preview"
-    //   },
-    //   children: {
-    //     cancelIconInsideButton: {
-    //       uiFramework: "custom-atoms",
-    //       componentPath: "Icon",
-    //       gridDefination: {
-    //         align: "right"
-    //       },
-    //       props: {
-    //         iconName: "close",
-    //         textAlign: "right",
-    //         // style: {
-    //         //   fontSize: "24px"
-    //         // }
-    //       },
-    //       onClickDefination: {
-    //         action: "condition",
-    //         callBack: (state, dispatch) => {
-    //           showHideAdhocPopupAuction(state, dispatch, "search-preview")
-    //         }
-    //       },
-    //     },
-    //     AuctionGridHistoryDetails
-    //   },
-
-    // }
+    
   },
 
 };

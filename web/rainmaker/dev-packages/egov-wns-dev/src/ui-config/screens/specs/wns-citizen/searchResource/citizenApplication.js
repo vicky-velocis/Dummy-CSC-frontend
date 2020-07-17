@@ -55,10 +55,10 @@ const resetFields = (state, dispatch) => {
 };
 export const citizenApplication = getCommonCard({
     subHeader: getCommonTitle({
-        labelKey: "WS_SEARCH_CONNECTION_HEADER"
+        labelKey: "WS_SEARCH_CONNECTION_SUB_HEADER"
     }),
     subParagraph: getCommonParagraph({
-        labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
+        labelKey: "WS_HOME_SEARCH_CONN_RESULTS_DESC"
     }),
     cityPropertyAndMobNumContainer: getCommonContainer({
         city: getSelectField({
@@ -170,7 +170,7 @@ export const citizenApplication = getCommonCard({
             resetButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 6,
+                    xs: 12,
                     sm: 6
                     // align: "center"
                 },
@@ -179,7 +179,7 @@ export const citizenApplication = getCommonCard({
                     style: {
                         color: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
-                        width: "70%",
+                        width: "220px",
                         height: "48px",
                         margin: "8px",
                         float: "right"
@@ -198,7 +198,7 @@ export const citizenApplication = getCommonCard({
             searchButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 6,
+                    xs: 12,
                     sm: 6,
                     // align: "center"
                 },
@@ -209,7 +209,7 @@ export const citizenApplication = getCommonCard({
                         margin: "8px",
                         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderRadius: "2px",
-                        width: "70%",
+                        width: "220px",
                         height: "48px"
                     }
                 },

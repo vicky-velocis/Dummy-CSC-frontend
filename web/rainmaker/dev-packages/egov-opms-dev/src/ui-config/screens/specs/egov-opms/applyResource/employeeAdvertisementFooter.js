@@ -11,17 +11,17 @@ import {
   showHideAdhocPopupopmsReassign,
   showHideAdhocPopupopmsApprove,
   showHideAdhocPopupopmsForward,
-  showHideAdhocPopup,checkForRole
+  showHideAdhocPopup, checkForRole
 } from "../../utils";
 import { gotoApplyWithStep } from "../../utils/index";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   toggleSnackbar,
-  prepareFinalObject
+  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
-import generateReceipt from "../../utils/receiptPdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import get from "lodash/get";
@@ -36,8 +36,7 @@ import {
   localStorageGet
 } from "egov-ui-kit/utils/localStorageUtils";
 import { getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
-import { callbackforsummaryaction,callbackforsummaryactionpay } from '../advertisement_summary'
-
+import { callbackforsummaryaction, callbackforsummaryactionpay } from '../advertisement_summary';
 
 let roles = JSON.parse(getUserInfo()).roles
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -247,6 +246,7 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
 
@@ -354,8 +354,8 @@ export const footer = getCommonApplyFooter({
     },
     children: {
       nextButtonLabel: getLabel({
-        labelName: "REASSIGN",
-        labelKey: "REASSIGN"
+        labelName: "REVERT",
+        labelKey: "PM_REVERT"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -453,6 +453,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -474,6 +475,21 @@ export const footer = getCommonApplyFooter({
       action: "condition",
 
       callBack: (state, dispatch) => {
+        let withdrawProps = get(
+          state.screenConfiguration.screenConfig["advertisementnoc-search-preview"],
+          "components.adhocDialog.children.popup.children.adhocPopupAdvertisementWithdrawRemarkCard.children.advertisementWithdrawRemarkContainer.children.advertisementWithdrawRemarkField.props",
+          {}
+        );
+        if (withdrawProps.hasOwnProperty('value')) {
+          delete withdrawProps["value"];
+          set(state.screenConfiguration.preparedFinalObject, "advertisement[0].withdraw.Remark", "");
+
+          dispatch(
+            handleField(
+              "advertisementnoc-search-preview",
+              "components.adhocDialog.children.popup.children.adhocPopupAdvertisementWithdrawRemarkCard.children.advertisementWithdrawRemarkContainer.children.advertisementWithdrawRemarkField",
+              "props", withdrawProps));
+        }
         showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
       }
     },
@@ -485,7 +501,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "45px"
       }
@@ -500,12 +516,12 @@ export const footer = getCommonApplyFooter({
       action: "page_change",
       path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=OPMSNOC`
     },
-    
+
     roleDefination: {
       rolePath: "user-info.roles",
       action: "PAY"
     },
-    visible:  false
+    visible: false
   },
   submitButton: {
     componentPath: "Button",
@@ -513,7 +529,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -539,386 +555,3 @@ export const footer = getCommonApplyFooter({
 
 
 });
-
-export const footerReview = (
-  action,
-  state,
-  dispatch,
-  status,
-  applicationNumber,
-  tenantId
-) => {
-  /** MenuButton data based on status */
-  let downloadMenu = [];
-  let printMenu = [];
-  let pmCertificateDownloadObject = {
-    label: { labelName: "PM Certificate", labelKey: "PM_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let pmCertificatePrintObject = {
-    label: { labelName: "PM Certificate", labelKey: "PM_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PM_RECEIPT" },
-    link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PM_RECEIPT" },
-    link: () => {
-      generateReceipt(state, dispatch, "receipt_print");
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PM_APPLICATION" },
-    link: () => {
-      generatePdfFromDiv("download", applicationNumber);
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PM_APPLICATION" },
-    link: () => {
-      generatePdfFromDiv("print", applicationNumber);
-    },
-    leftIcon: "assignment"
-  };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        pmCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        pmCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "APPLIED":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  /** END */
-
-  return getCommonApplyFooter({
-    container: {
-      uiFramework: "custom-atoms",
-      componentPath: "Container",
-      children: {
-        leftdiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          props: {
-            style: { textAlign: "left", display: "flex" }
-          },
-          children: {
-            downloadMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-OPMS",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Download",
-                  leftIcon: "cloud_download",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: downloadMenu
-                }
-              }
-            },
-            printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-OPMS",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Print",
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
-              }
-            }
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          }
-        },
-        rightdiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          children: {
-            rejectButton: {
-              componentPath: "Button",
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "16px",
-                  borderRadius: "inherit"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "Reject",
-                  labelKey: "PM_APPROVER_TRADE_APP_BUTTON_REJECT"
-                })
-              },
-              visible: getButtonVisibility(status, "REJECT"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["PM_APPROVER"]
-              }
-            },
-            approveButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "APPROVE",
-                  labelKey: "PM_APPROVER_TRADE_APP_BUTTON_APPROVE"
-                })
-              },
-              visible: getButtonVisibility(status, "APPROVE"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["PM_APPROVER"]
-              }
-            },
-            proceedPayButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "PROCEED TO PAYMENT",
-                  labelKey: "PM_COMMON_BUTTON_PROC_PMT"
-                })
-              },
-              onClickDefination: {
-                action: "page_change",
-                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
-              },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                action: "PAY"
-              }
-            },
-            cancelButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "CANCEL TRADE LICENSE",
-                  labelKey: "PM_COMMON_BUTTON_CANCEL_LICENSE"
-                })
-              },
-              visible: getButtonVisibility(status, "CANCEL TRADE LICENSE"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["PM_APPROVER"]
-              }
-            }
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          }
-        }
-      }
-    }
-  });
-};
-
-
-export const downloadPrintContainer = (
-  action,
-  state,
-  dispatch,
-  status,
-  applicationNumber,
-  tenantId
-) => {
-  /** MenuButton data based on status */
-  let downloadMenu = [];
-  let printMenu = [];
-  let pmCertificateDownloadObject = {
-    label: { labelName: "PM Certificate", labelKey: "PM_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_download");
-    },
-    leftIcon: "book"
-  };
-  let pmCertificatePrintObject = {
-    label: { labelName: "PM Certificate", labelKey: "PM_CERTIFICATE" },
-    link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
-    },
-    leftIcon: "book"
-  };
-  let receiptDownloadObject = {
-    label: { labelName: "Receipt", labelKey: "PM_RECEIPT" },
-    link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
-    },
-    leftIcon: "receipt"
-  };
-  let receiptPrintObject = {
-    label: { labelName: "Receipt", labelKey: "PM_RECEIPT" },
-    link: () => {
-      generateReceipt(state, dispatch, "receipt_print");
-    },
-    leftIcon: "receipt"
-  };
-  let applicationDownloadObject = {
-    label: { labelName: "Application", labelKey: "PM_APPLICATION" },
-    link: () => {
-      generatePdfFromDiv("download", applicationNumber);
-    },
-    leftIcon: "assignment"
-  };
-  let applicationPrintObject = {
-    label: { labelName: "Application", labelKey: "PM_APPLICATION" },
-    link: () => {
-      generatePdfFromDiv("print", applicationNumber);
-    },
-    leftIcon: "assignment"
-  };
-  switch (status) {
-    case "APPROVED":
-      downloadMenu = [
-        pmCertificateDownloadObject,
-        receiptDownloadObject,
-        applicationDownloadObject
-      ];
-      printMenu = [
-        pmCertificatePrintObject,
-        receiptPrintObject,
-        applicationPrintObject
-      ];
-      break;
-    case "APPLIED":
-    case "FIELDINSPECTION":
-    case "PENDINGAPPROVAL":
-    case "PENDINGPAYMENT":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
-    case "CANCELLED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    case "REJECTED":
-      downloadMenu = [applicationDownloadObject];
-      printMenu = [applicationPrintObject];
-      break;
-    default:
-      break;
-  }
-  /** END */
-
-  return {
-    leftdiv: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        style: { textAlign: "left", display: "flex" }
-      },
-      children: {
-        downloadMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-OPMS",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: "Download",
-              leftIcon: "cloud_download",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
-              menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-OPMS",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: "Print",
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
-              menu: printMenu
-            }
-          }
-        }
-      },
-      // gridDefination: {
-      //   xs: 12,
-      //   sm: 6
-      // }
-    }
-  }
-};

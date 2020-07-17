@@ -95,13 +95,21 @@ class CustomizedLandingPage extends React.Component {
          items.map(obj => {
           let objrole = obj.roleDefination === undefined ? '' : obj.roleDefination;
           return !this.rolescheck(objrole) ? (
+        // <Grid
+        //   className={classes.item}
+        //   item
+        //   xs={12 / items.length}
+        //   sm={12 / items.length}
+        //   align="center"
+        // >
         <Grid
-          className={classes.item}
-          item
-          xs={12 / items.length}
-          sm={12 / items.length}
-          align="center"
-        >
+        className={classes.item}
+        item
+        xs={6}
+        sm={4}
+        align="center"
+        style={{width:"100%"}}
+      >
           <Card
             className={`${classes.paper} module-card-style`}
             onClick={() => this.onCardCLick(obj.route)}

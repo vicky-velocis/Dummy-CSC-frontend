@@ -23,13 +23,13 @@ export const searchResultsSummary = {
     columns: [
       getTextToLocalMappingChallanSummary("itemName"),
       getTextToLocalMappingChallanSummary("quantity"),
-      getTextToLocalMappingChallanSummary("remark"),        
+      getTextToLocalMappingChallanSummary("remark"),
     ],
     title: getTextToLocalMappingChallanSummary("Seized_Item_List"),
     options: {
       filter: false,
       download: false,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       hover: true,
       print: false,
@@ -38,7 +38,7 @@ export const searchResultsSummary = {
         //onRowClick(row);
       }
     },
-    
+
   }
 };
 
@@ -55,13 +55,13 @@ export const searchVehicleResultsSummary = {
       getTextToLocalMappingChallanSummary("vehicleType"),
       getTextToLocalMappingChallanSummary("vehicleNumber"),
       getTextToLocalMappingChallanSummary("quantity"),
-      getTextToLocalMappingChallanSummary("remark"),        
+      getTextToLocalMappingChallanSummary("remark"),
     ],
     title: getTextToLocalMappingChallanSummary("Seized_Item_List"),
     options: {
       filter: false,
       download: false,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       hover: true,
       print: false,
@@ -70,7 +70,7 @@ export const searchVehicleResultsSummary = {
         //onRowClick(row);
       }
     },
-    
+
   }
 };
 //});
@@ -130,45 +130,46 @@ export const serachResultGridSM = {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => {
-            
-            return(
-            <FormControlLabel
-              control={<TextField value={value || ''} type='number' />}
-              onChange={event => {
-                let state = store.getState();
-                if (parseInt(event.target.value) > parseInt(tableMeta.rowData[1])) {
 
-                  let intactQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("intactQtyGreater");
-                  store.dispatch(toggleSnackbar(true,
-                    {
-                      labelName: intactQtyGreaterMessage,
-                      labelKey: ""
-                    }, "warning"))
-                  //window.alert(`Intact qty recd. cannot be greater then seized qty`);
-                  updateValue(0);
-                  set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
-                } else {                  
-                  let DamageQty = parseInt(tableMeta.rowData[4]) === "" ? 0 : parseInt(tableMeta.rowData[4])
-                  let sum = parseInt(event.target.value) + DamageQty
-                  if (sum > parseInt(tableMeta.rowData[1])) {
-                    let sumQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("sumQtyGreater");
+            return (
+              <FormControlLabel
+                control={<TextField value={value || ''} type='number' />}
+                onChange={event => {
+                  let state = store.getState();
+                  if (parseInt(event.target.value) > parseInt(tableMeta.rowData[1])) {
+
+                    let intactQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("intactQtyGreater");
                     store.dispatch(toggleSnackbar(true,
                       {
-                        labelName: sumQtyGreaterMessage,
+                        labelName: intactQtyGreaterMessage,
                         labelKey: ""
                       }, "warning"))
-                    //window.alert(` Sum of Damage and Intact Qty cannot be greater then Seized Qty `);
+                    //window.alert(`Intact qty recd. cannot be greater then seized qty`);
                     updateValue(0);
                     set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
                   } else {
-                    updateValue(event.target.value);
-                    
-                    set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, event.target.value);
+                    let DamageQty = parseInt(tableMeta.rowData[4]) === "" ? 0 : parseInt(tableMeta.rowData[4])
+                    let sum = parseInt(event.target.value) + DamageQty
+                    if (sum > parseInt(tableMeta.rowData[1])) {
+                      let sumQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("sumQtyGreater");
+                      store.dispatch(toggleSnackbar(true,
+                        {
+                          labelName: sumQtyGreaterMessage,
+                          labelKey: ""
+                        }, "warning"))
+                      //window.alert(` Sum of Damage and Intact Qty cannot be greater then Seized Qty `);
+                      updateValue(0);
+                      set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
+                    } else {
+                      updateValue(event.target.value);
+
+                      set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, event.target.value);
+                    }
                   }
-                }
-              }}
-            />
-          )}
+                }}
+              />
+            )
+          }
         }
       }, {
         name: getTextToLocalSeizedItemDetailHeader("damageLostQty"),
@@ -176,9 +177,9 @@ export const serachResultGridSM = {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
-            
             <FormControlLabel
-            labelPlacement='end'
+              style={{ fontSize: "medium" }}
+              labelPlacement='end'
               control={<TextField value={value || ''} type='number' />}
               onChange={event => {
                 let state = store.getState();
@@ -188,37 +189,37 @@ export const serachResultGridSM = {
                 //   set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummary.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
                 //   updateValue(0);
                 // } else {
-                  
-                  if (sum > parseInt(tableMeta.rowData[1])) {
-                    let sumQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("sumQtyGreater");
-                    store.dispatch(toggleSnackbar(true,
-                      {
-                        labelName: sumQtyGreaterMessage,
-                        labelKey: ""
-                      }, "warning"))
-                    //window.alert(` Sum of Damage and Intact Qty cannot be greater then Seized Qty `);
-                    updateValue(0);
-                    set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
-                  } else if (parseInt(event.target.value) > parseInt(tableMeta.rowData[1])) {
-                    let damageQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("damageQtyGreater");
-                    store.dispatch(toggleSnackbar(true,
-                      {
-                        labelName: damageQtyGreaterMessage,
-                        labelKey: ""
-                      }, "warning"))
-                    //window.alert(`Defect/Damage Qty cannot be greater then Seized Qty`);
-                    set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
-                    updateValue(0);
-                  } 
-                  else if (sum < parseInt(tableMeta.rowData[1])){
-                    updateValue(event.target.value);
-                    set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0); 
-                  } 
-                   else if (sum == parseInt(tableMeta.rowData[1])) {
-                    updateValue(event.target.value);
-                    set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, event.target.value);
-                    
-                  }
+
+                if (sum > parseInt(tableMeta.rowData[1])) {
+                  let sumQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("sumQtyGreater");
+                  store.dispatch(toggleSnackbar(true,
+                    {
+                      labelName: sumQtyGreaterMessage,
+                      labelKey: ""
+                    }, "warning"))
+                  //window.alert(` Sum of Damage and Intact Qty cannot be greater then Seized Qty `);
+                  updateValue(0);
+                  set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
+                } else if (parseInt(event.target.value) > parseInt(tableMeta.rowData[1])) {
+                  let damageQtyGreaterMessage = getTextToLocalSeizedItemDetailHeader("damageQtyGreater");
+                  store.dispatch(toggleSnackbar(true,
+                    {
+                      labelName: damageQtyGreaterMessage,
+                      labelKey: ""
+                    }, "warning"))
+                  //window.alert(`Defect/Damage Qty cannot be greater then Seized Qty`);
+                  set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
+                  updateValue(0);
+                }
+                else if (sum < parseInt(tableMeta.rowData[1])) {
+                  updateValue(event.target.value);
+                  set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, 0);
+                }
+                else if (sum == parseInt(tableMeta.rowData[1])) {
+                  updateValue(event.target.value);
+                  set(state, `screenConfiguration.screenConfig["search-preview"].components.div.children.body.children.cardContent.children.searchResultsSummarySM.props.data[${tableMeta.rowIndex}][${tableMeta.columnIndex}]`, event.target.value);
+
+                }
                 //}
 
               }}
@@ -232,7 +233,7 @@ export const serachResultGridSM = {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
             <FormControlLabel
-              control={<TextField value={value || ''} type='string' inputProps={{maxLength: 256}}/>}
+              control={<TextField value={value || ''} type='string' inputProps={{ maxLength: 256 }} />}
               onChange={event => {
                 let state = store.getState();
                 updateValue(event.target.value)
@@ -281,7 +282,7 @@ export const serachResultGridSM = {
       print: false,
       download: false,
       // responsive: "scrollMaxHeight",
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,
@@ -296,7 +297,7 @@ export const serachResultGridSM = {
       // onRowClick(row);
       //},
       onCellClick: (cellData, cellMeta) => {
-        
+
         // alert(cellData)
         // if (cellData.props !== undefined) {
         //   let state = store.getState();
@@ -311,7 +312,7 @@ export const serachResultGridSM = {
         console.log(cellData, cellMeta);
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => {
-        
+
         onselect(selectedRows, displayData, setSelectedRows)
 
       }
@@ -335,7 +336,7 @@ export const serachResultGridSM = {
 };
 
 const onRowClick = rowData => {
-  
+
   switch (rowData[5]) {
     case "INITIATED":
       window.location.href = `apply?challanNumber=${rowData[0]}&tenantId=${
@@ -404,13 +405,13 @@ export const searchResultsSummaryHOD = {
         label: getTextToLocalSeizedItemDetailHeader("actualQtyRecd"),
         options: {
           filter: true,
-         
+
         }
       }, {
         name: getTextToLocalSeizedItemDetailHeader("damageLostQty"),
         label: getTextToLocalSeizedItemDetailHeader("damageLostQty"),
         options: {
-          filter: true,          
+          filter: true,
         }
       }, {
         name: getTextToLocalSeizedItemDetailHeader("smRemark"),
@@ -425,7 +426,7 @@ export const searchResultsSummaryHOD = {
         options: {
           visible: true,
           filter: true,
-          download:false,
+          download: false,
           display: 'excluded',
         }
       },
@@ -435,7 +436,7 @@ export const searchResultsSummaryHOD = {
         options: {
           visible: true,
           filter: true,
-          download:false,
+          download: false,
           display: 'excluded',
         }
       },
@@ -445,7 +446,7 @@ export const searchResultsSummaryHOD = {
         options: {
           visible: true,
           filter: true,
-          download:false,
+          download: false,
           display: 'excluded',
         }
       },
@@ -456,7 +457,7 @@ export const searchResultsSummaryHOD = {
           visible: false,
           filter: true,
           display: 'excluded',
-          download:false,
+          download: false,
           // customBodyRender: (value, tableMeta, updateValue) => (
           //   <FormControlLabel
           //     value={value}
@@ -472,7 +473,7 @@ export const searchResultsSummaryHOD = {
         options: {
           display: 'excluded',
           filter: true,
-          download:false,
+          download: false,
           // customBodyRender: (value, tableMeta, updateValue) => (
           //   <FormControlLabel
           //     value={value}
@@ -483,7 +484,7 @@ export const searchResultsSummaryHOD = {
         }
       },
     ],
-    title: 
+    title:
       "Seized Item Details"
     ,
 
@@ -491,7 +492,7 @@ export const searchResultsSummaryHOD = {
       filter: false,
       print: false,
       download: false,
-      responsive: "scroll",
+      responsive: "stacked",
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,
@@ -506,7 +507,7 @@ export const searchResultsSummaryHOD = {
       // onRowClick(row);
       //},
       onCellClick: (cellData, cellMeta) => {
-        
+
         // alert(cellData)
         // if (cellData.props !== undefined) {
         //   let state = store.getState();
@@ -521,7 +522,7 @@ export const searchResultsSummaryHOD = {
         console.log(cellData, cellMeta);
       },
       customToolbarSelect: (selectedRows, displayData, setSelectedRows) => {
-        
+
         onselect(selectedRows, displayData, setSelectedRows)
 
       }

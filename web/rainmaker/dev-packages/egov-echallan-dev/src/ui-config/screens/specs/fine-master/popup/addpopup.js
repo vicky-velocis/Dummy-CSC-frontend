@@ -35,7 +35,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const createUpdateFineMasterDetails = async (state, dispatch, applnid) => {
-  
+
   let isDuplicateCheck = false;
   let isFormValid = true;
   isFormValid = validateFields(
@@ -47,7 +47,7 @@ const createUpdateFineMasterDetails = async (state, dispatch, applnid) => {
   if (isFormValid) {
     //isDuplicateCheck = checkDuplicteRecord(state, dispatch);
 
-    
+
     if (!isDuplicateCheck) {
       let response = await createUpdateFineMaster(state, dispatch, "PENDING", true);
       setapplicationMode("PENDING");
@@ -93,7 +93,7 @@ const createUpdateFineMasterDetails = async (state, dispatch, applnid) => {
           )
         );
       } else {
-   
+
         dispatch(
           toggleSnackbar(
             true,
@@ -140,7 +140,7 @@ const approveFineMasterDetails = async (state, dispatch, applnid) => {
   let response = await createUpdateFineMaster(state, dispatch, "APPROVE", true);
   setapplicationMode("APPROVE");
   let responseStatus = get(response, "status", "");
-  
+
   if (responseStatus === "SUCCESS" || responseStatus === "success") {
     // let errorMessage =
     //     getLabel({
@@ -217,7 +217,7 @@ export const adhocPopup = getCommonContainer({
       style: {
         width: "100%",
         float: "right",
-        
+
       }
     },
     children: {
@@ -259,46 +259,46 @@ export const adhocPopup = getCommonContainer({
           )
         }
       },
-      closebtns: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 2,
-          sm: 2
-        },
-        props: {
-          style: {
-            width: "100%",
-            float: "right",
-            cursor: "pointer"
-          }
-        },
-        children: {
-          closeButton: {
-            componentPath: "Button",
-            props: {
-              style: {
-                float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
-              }
-            },
-            children: {
-              // previousButtonIcon: {
-              //   uiFramework: "custom-atoms",
-              //   componentPath: "Icon",
-              //   props: {
-              //     iconName: "close"
-              //   }
-              // }
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) =>
-                showHideAdhocPopup(state, dispatch, "create")
-            }
-          }
-        }
-      }
+      // closebtns: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 2,
+      //     sm: 2
+      //   },
+      //   props: {
+      //     style: {
+      //       width: "100%",
+      //       float: "right",
+      //       cursor: "pointer"
+      //     }
+      //   },
+      //   children: {
+      //     closeButton: {
+      //       componentPath: "Button",
+      //       props: {
+      //         style: {
+      //           float: "right",
+      //           color: "rgba(0, 0, 0, 0.60)"
+      //         }
+      //       },
+      //       children: {
+      //         // previousButtonIcon: {
+      //         //   uiFramework: "custom-atoms",
+      //         //   componentPath: "Icon",
+      //         //   props: {
+      //         //     iconName: "close"
+      //         //   }
+      //         // }
+      //       },
+      //       onClickDefination: {
+      //         action: "condition",
+      //         callBack: (state, dispatch) =>
+      //           showHideAdhocPopup(state, dispatch, "create")
+      //       }
+      //     }
+      //   }
+      // }
     }
   },
   addFineMasterCard: getCommonContainer(
@@ -372,7 +372,7 @@ export const adhocPopup = getCommonContainer({
             disabled: true,
           }
         }),
-        
+
         addFineMasterTypeofEncroachment: getSelectField({
           label: {
             labelName: "Type of Encroachment",
@@ -386,10 +386,13 @@ export const adhocPopup = getCommonContainer({
             xs: 12,
             sm: 12
           },
-          sourceJsonPath: "applyScreenMdmsData.egec.EncroachmentType-new",
+          optionLabel: "name",
+          optionValue: "code",
+
+          sourceJsonPath: "applyScreenMdmsData.egec.EncroachmentType",
           jsonPath: "FineMaster.encroachmentType",
           required: true,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_ENCROACHMENT_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_ENCROACHMENT_FIELD_MSG",
           props: {
             style: {
               width: "100%"
@@ -397,7 +400,7 @@ export const adhocPopup = getCommonContainer({
           },
           beforeFieldChange: (action, state, dispatch) => {
             try {
-              
+
               if (action.value === "Seizure of Vehicles") {
                 dispatch(
                   prepareFinalObject(
@@ -477,7 +480,7 @@ export const adhocPopup = getCommonContainer({
           sourceJsonPath: "applyScreenMdmsData.egec.Numberofvioalation-new",
           jsonPath: "FineMaster.numberOfViolation",
           required: true,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_VIOLATION_COUNT_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_VIOLATION_COUNT_FIELD_MSG",
           optionLabel: "name",
           optionValue: "code",
           props: {
@@ -508,7 +511,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.penaltyAmount",
           required: true,
           pattern: getPattern("DecimalAmount"),///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_FINE_AMOUNT_FIELD_MSG",
+          errorMessage: "ERR_DEFAULT_INPUT_FINE_AMOUNT_FIELD_MSG",
         }),
         addFineMasterStorageControl: getTextField({
           label: {
@@ -532,10 +535,10 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.storageCharges",
           required: true,
           pattern: getPattern("DecimalAmount"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_STORAGE_BASIS_AMOUNT_FIELD_MSG",
-          
+          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_STORAGE_BASIS_AMOUNT_FIELD_MSG",
+
         }),
-    
+
         addFineMasterStartDate: getDateField({
           label: {
             labelName: "Start Date",
@@ -558,7 +561,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.effectiveStartDate",
           required: true,
           pattern: getPattern("Date"),///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_START_DATE_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_START_DATE_FIELD_MSG",
           beforeFieldChange: (action, state, dispatch) => {
             try {
               let gridCurrentRecord = get(state, 'screenConfiguration.preparedFinalObject.FineMaster', []);
@@ -615,7 +618,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.effectiveEndDate",
           required: true,
           pattern: getPattern("Date"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_END_DATE_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_END_DATE_FIELD_MSG",
         }),
       })
     },
@@ -639,11 +642,11 @@ export const adhocPopup = getCommonContainer({
     children: {
       cancelApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "right"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "right"
+        // },
         visible: enableButton,
         props: {
           variant: "outlined",
@@ -651,7 +654,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             // color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -691,26 +694,26 @@ export const adhocPopup = getCommonContainer({
       },
       saveApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "left"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "left"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
           color: "primary",
-           style: {
+          style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
-          //   color: "white",
-          //   borderRadius: "2px",
-          //   width: "auto",
-          //   height: "48px",
-          //   marginRight: "16px"
+            //   color: "white",
+            //   borderRadius: "2px",
+            //   width: "auto",
+            //   height: "48px",
+            //   marginRight: "16px"
           }
         },
 
@@ -743,11 +746,11 @@ export const adhocPopup = getCommonContainer({
       },
       RejectApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "right"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "right"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
@@ -755,7 +758,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -790,11 +793,11 @@ export const adhocPopup = getCommonContainer({
       },
       approveApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "left"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "left"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
@@ -802,7 +805,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }

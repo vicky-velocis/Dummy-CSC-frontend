@@ -6,10 +6,10 @@ form#serachResultGrid tbody {
   word-break: break-all;
 }
   
-td{
-  color: black!important;
-  cursor: pointer!important;
-}
+// td{
+//   color: black!important;
+//   cursor: pointer!important;
+// }
 form#searchViewSeizureReport tbody {
   word-break: break-all;
 }
@@ -18,6 +18,10 @@ form#serachReportInventoryDetailGrid tbody {
 }
 form#serachReportPaymentDetailGrid tbody {
   word-break: break-all; }
+
+  div#material-ui-searchTextViewSeizureReport {
+    overflow: visible !important;
+}
 /************************ ECHALLAN CSS END *************************/
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {

@@ -220,8 +220,8 @@ export const adhocPopup = getCommonContainer({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
-          xs: 10,
-          sm: 10
+          xs: 12,
+          sm: 12
         },
         props: {
           style: {
@@ -243,48 +243,48 @@ export const adhocPopup = getCommonContainer({
           )
         }
       },
-      submitbtns: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 2,
-          sm: 2
-        },
-        props: {
-          style: {
-            width: "100%",
-            float: "right",
-            cursor: "pointer"
-          }
-        },
-        children: {
-          closeButton: {
-            componentPath: "Button",
-            props: {
-              style: {
-                float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
-              }
-            },
-            children: {
-              // previousButtonIcon: {
-              //   uiFramework: "custom-atoms",
-              //   componentPath: "Icon",
-              //   props: {
-              //     iconName: "close"
-              //   }
-              // }
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) =>{
-                showHideAdhocPopup(state, dispatch, "create");
-                setTimeout(() => window.location.reload(), 1000);
-              }   
-            }
-          }
-        }
-      }
+      // submitbtns: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 2,
+      //     sm: 2
+      //   },
+      //   props: {
+      //     style: {
+      //       width: "100%",
+      //       float: "right",
+      //       cursor: "pointer"
+      //     }
+      //   },
+      //   children: {
+      //     closeButton: {
+      //       componentPath: "Button",
+      //       props: {
+      //         style: {
+      //           float: "right",
+      //           color: "rgba(0, 0, 0, 0.60)"
+      //         }
+      //       },
+      //       children: {
+      //         // previousButtonIcon: {
+      //         //   uiFramework: "custom-atoms",
+      //         //   componentPath: "Icon",
+      //         //   props: {
+      //         //     iconName: "close"
+      //         //   }
+      //         // }
+      //       },
+      //       onClickDefination: {
+      //         action: "condition",
+      //         callBack: (state, dispatch) =>{
+      //           showHideAdhocPopup(state, dispatch, "create");
+      //           setTimeout(() => window.location.reload(), 1000);
+      //         }   
+      //       }
+      //     }
+      //   }
+      // }
     }
   },
 
@@ -327,9 +327,9 @@ export const adhocPopup = getCommonContainer({
           },
           jsonPath: "ItemMaster.itemName",
           required: true,
-          pattern: getPattern("VillageName"), ///^[a-zA-Z0-9 ]*$/i, // /^[a-zA-Z0-9]*$/i,
+          pattern: getPattern("ECItemName"), ///^[a-zA-Z0-9 ]*$/i, // /^[a-zA-Z0-9]*$/i,
          // errorMessage: "EC_ERR_DEFAULT_INPUT_ADDRESS_FIELD_MSG",
-          errorMessage: "ERR_DEFAULT_INPUT_ITEM_NAME_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_ITEM_NAME_FIELD_MSG",
           // props: {
           //     value: 'challanHOD',
           // },
@@ -359,8 +359,8 @@ export const adhocPopup = getCommonContainer({
           },
           jsonPath: "ItemMaster.description",
           required: true,
-          pattern: getPattern("eventDescription"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_ITEM_DESCRIPTION_FIELD_MSG",
+          pattern: getPattern("ECItemDescription"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
+          errorMessage: "EC_ERR_DEFAULT_INPUT_ITEM_DESCRIPTION_FIELD_MSG",
           //errorMessage: "Invalid input field",
         })
       })
@@ -385,11 +385,11 @@ export const adhocPopup = getCommonContainer({
     children: {
       cancelApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "right"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "right"
+        // },
         visible: enableButton,
         props: {
           variant: "outlined",
@@ -397,7 +397,7 @@ export const adhocPopup = getCommonContainer({
           style: {
            // color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+             minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -436,11 +436,11 @@ export const adhocPopup = getCommonContainer({
       },
       saveApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "left"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "left"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
@@ -448,7 +448,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+             minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -483,11 +483,11 @@ export const adhocPopup = getCommonContainer({
       },
       RejectApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "right"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "right"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
@@ -495,7 +495,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+             minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -530,11 +530,11 @@ export const adhocPopup = getCommonContainer({
       },
       approveApplicationButton: {
         componentPath: "Button",
-        gridDefination: {
-          xs: 12,
-          sm: 6,
-          // align: "left"
-        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6,
+        //   // align: "left"
+        // },
         visible: enableButton,
         props: {
           variant: "contained",
@@ -542,7 +542,7 @@ export const adhocPopup = getCommonContainer({
           style: {
             color: "white",
             borderRadius: "2px",
-             minWidth: "200px",
+             minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }

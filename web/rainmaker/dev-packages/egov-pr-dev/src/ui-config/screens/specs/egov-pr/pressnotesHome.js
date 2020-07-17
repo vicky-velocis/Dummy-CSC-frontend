@@ -11,7 +11,12 @@ import { pbkdf2 } from "crypto";
 const header = getCommonHeader(
   {
     labelName: "Generate Press Notes",
-    labelKey: "PR_GENERATE_PRESS_NOTES"
+    labelKey: "PR_GENERATE_PRESS_NOTE"
+  },
+  {
+    style: {
+      padding: "20px",
+    }
   },
   {
     classes: {
@@ -22,7 +27,7 @@ const header = getCommonHeader(
 const cardItems = [
   {
     label: {
-      labelKey: "PR_GENERATE_PRESS_NOTES",
+      labelKey: "PR_GENERATE_PRESS_NOTE",
       labelName: "Generate Press Notes"
     },
     icon: <i
@@ -74,7 +79,8 @@ const PRSCPSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PR"
           }
         },
         

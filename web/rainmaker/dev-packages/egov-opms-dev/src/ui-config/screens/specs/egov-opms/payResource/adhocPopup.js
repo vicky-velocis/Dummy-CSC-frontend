@@ -16,7 +16,7 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { callPGService } from "./footer";
-import { getOPMSPattern, checkForRole } from '../../utils/index'
+import { getOPMSPattern, checkForRole } from '../../utils/index';
 //let role_name = JSON.parse(getUserInfo()).roles[0].code
 let roles = JSON.parse(getUserInfo()).roles
 
@@ -910,71 +910,81 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges"
     );
     let data = {}
-    if (checkForRole(roles, 'JE')) {
-      if (file) {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": get(
+    if (RoadCutForwardAmount > 0) {
+      if (checkForRole(roles, 'JE')) {
+        if (file) {
+          data = {
+            "uploadDocuments": [{
+              "fileStoreId": get(
+                state.screenConfiguration.preparedFinalObject,
+                "documentsUploadRedux[0].documents[0].fileStoreId"
+              )
+            }],
+            "remarks": remarks,
+            "gstAmount": RoadCutForwardGstAmount,
+            "amount": RoadCutForwardAmount,
+            "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
+          }
+        } else {
+          data = {
+            "uploadDocuments": [{
+              "fileStoreId": ""
+            }],
+            "remarks": remarks,
+            "gstAmount": RoadCutForwardGstAmount,
+            "amount": RoadCutForwardAmount,
+            "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
+          }
+        }
+      }
+      else {
+        if (file) {
+          data = {
+            "uploadDocuments": [{
+              "fileStoreId": get(
+                state.screenConfiguration.preparedFinalObject,
+                "documentsUploadRedux[0].documents[0].fileStoreId"
+              )
+            }],
+            "remarks": get(
               state.screenConfiguration.preparedFinalObject,
-              "documentsUploadRedux[0].documents[0].fileStoreId"
-            )
-          }],
-          "remarks": remarks,
-          "gstAmount": RoadCutForwardGstAmount,
-          "amount": RoadCutForwardAmount,
-          "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
-        }
-      } else {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": ""
-          }],
-          "remarks": remarks,
-          "gstAmount": RoadCutForwardGstAmount,
-          "amount": RoadCutForwardAmount,
-          "performanceBankGuaranteeCharges": RoadCutForwardPerformanceBankGuaranteeCharges
-        }
-      }
-    }
-    else {
-      if (file) {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": get(
+              "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
+            ),
+          }
+        } else {
+          data = {
+            "uploadDocuments": [{
+              "fileStoreId": ""
+            }],
+            "remarks": get(
               state.screenConfiguration.preparedFinalObject,
-              "documentsUploadRedux[0].documents[0].fileStoreId"
-            )
-          }],
-          "remarks": get(
-            state.screenConfiguration.preparedFinalObject,
-            "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
-          ),
-        }
-      } else {
-        data = {
-          "uploadDocuments": [{
-            "fileStoreId": ""
-          }],
-          "remarks": get(
-            state.screenConfiguration.preparedFinalObject,
-            "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
-          ),
+              "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks"
+            ),
+          }
         }
       }
+      UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
+
+        {
+
+          "applicationType": "ROADCUTNOC",
+          "tenantId": getOPMSTenantId(),
+          "applicationStatus": checkForRole(roles, 'JE') ? "REVIEWSDO" : checkForRole(roles, 'SDO') ? "REVIEWOFEE" : checkForRole(roles, 'EE') ? "REVIEWOFSE" : checkForRole(roles, 'SE') ? "PENDINGAPRROVAL" : checkForRole(roles, 'CE') ? "PAYMENTPENDING" : '',
+
+          "applicationId": localStorage.getItem('ApplicationNumber'),
+          "dataPayload": data
+        }
+      );
+    } else {
+      dispatch(toggleSpinner());
+
+      let errorMessage = {
+        labelName:
+          "Amount Should be Greater Than 0 ",
+        //labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
-    UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
-
-      {
-
-        "applicationType": "ROADCUTNOC",
-        "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'JE') ? "REVIEWSDO" : checkForRole(roles, 'SDO') ? "REVIEWOFEE" : checkForRole(roles, 'EE') ? "REVIEWOFSE" : checkForRole(roles, 'SE') ? "PENDINGAPRROVAL" : checkForRole(roles, 'CE') ? "PAYMENTPENDING" : '',
-
-        "applicationId": localStorage.getItem('ApplicationNumber'),
-        "dataPayload": data
-      }
-    );
-
   }
   else {
     let errorMessage = {
@@ -1060,7 +1070,7 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
       {
         "applicationType": "ROADCUTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": 'REJECTED',
+        "applicationStatus": checkForRole(roles, 'CE') ? "REJECT" : 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -1192,7 +1202,9 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
             componentPath: "Button",
             props: {
               style: {
-                float: "right",
+                float: "right",                
+                marginRight: "-15px",                 
+                paddingRight: "0px",                 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -1262,7 +1274,7 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -1380,7 +1392,9 @@ export const adhocPopup1 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1463,7 +1477,8 @@ export const adhocPopup1 = getCommonContainer({
 
         })
 
-      })
+      }),
+     
     },
     {
       style: {
@@ -1477,7 +1492,7 @@ export const adhocPopup1 = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -1487,7 +1502,7 @@ export const adhocPopup1 = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -1517,7 +1532,7 @@ export const adhocPopup1 = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -1594,7 +1609,9 @@ export const adhocPopup2 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1668,7 +1685,7 @@ export const adhocPopup2 = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -1678,7 +1695,7 @@ export const adhocPopup2 = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -1707,7 +1724,7 @@ export const adhocPopup2 = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -1785,7 +1802,9 @@ export const adhocPopup3 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1876,7 +1895,7 @@ export const adhocPopup3 = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -1886,7 +1905,7 @@ export const adhocPopup3 = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -1912,7 +1931,7 @@ export const adhocPopup3 = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -1990,7 +2009,9 @@ export const adhocPopup4 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -2069,7 +2090,7 @@ export const adhocPopup4 = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -2079,7 +2100,7 @@ export const adhocPopup4 = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -2109,7 +2130,7 @@ export const adhocPopup4 = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -2187,6 +2208,8 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2244,8 +2267,13 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
 
         }),
 
-
-      })
+        downloadcard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-opms",
+          componentPath: "SampleDownload"
+        },
+      }),
+     
     },
     {
       style: {
@@ -2259,7 +2287,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -2269,7 +2297,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -2298,7 +2326,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -2375,6 +2403,8 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2431,7 +2461,11 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           pattern: getOPMSPattern("Remarks"),
 
         }),
-
+        downloadcard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-opms",
+          componentPath: "SampleDownload"
+        },
       })
     },
     {
@@ -2446,7 +2480,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -2456,7 +2490,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -2485,7 +2519,7 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -2562,6 +2596,8 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2618,7 +2654,11 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           pattern: getOPMSPattern("Remarks"),
 
         }),
-
+        downloadcard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-opms",
+          componentPath: "SampleDownload"
+        },
       })
     },
     {
@@ -2633,7 +2673,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -2643,7 +2683,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -2672,7 +2712,7 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -2749,6 +2789,8 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2802,6 +2844,11 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           pattern: getOPMSPattern("Remarks"),
 
         }),
+        downloadcard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-opms",
+          componentPath: "SampleDownload"
+        },
       })
     },
     {
@@ -2816,7 +2863,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -2826,7 +2873,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -2851,7 +2898,7 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -2928,7 +2975,9 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -2981,7 +3030,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           pattern: getPattern("Amountopms"),
 
         }),
-
+       
       })
     },
     {
@@ -3018,6 +3067,11 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           pattern: getOPMSPattern("Remarks"),
 
         }),
+        downloadcard: {
+          uiFramework: "custom-molecules-local",
+          moduleName: "egov-opms",
+          componentPath: "SampleDownload"
+        },
       })
     },
     {
@@ -3032,7 +3086,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -3042,7 +3096,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -3067,7 +3121,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -3145,7 +3199,9 @@ export const SellMeatForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3217,7 +3273,7 @@ export const SellMeatForward = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -3227,7 +3283,7 @@ export const SellMeatForward = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -3256,7 +3312,7 @@ export const SellMeatForward = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -3334,7 +3390,9 @@ export const SellMeatReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3407,7 +3465,7 @@ export const SellMeatReassign = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -3417,7 +3475,7 @@ export const SellMeatReassign = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -3446,7 +3504,7 @@ export const SellMeatReassign = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -3524,7 +3582,9 @@ export const SellMeatApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3578,6 +3638,12 @@ export const SellMeatApprove = getCommonContainer({
           pattern: getOPMSPattern("Remarks"),
 
         }),
+        // break: getBreak(),
+        // break: getBreak(),
+       
+       // break: getBreak(),
+      
+
       })
     },
     {
@@ -3592,7 +3658,7 @@ export const SellMeatApprove = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -3602,7 +3668,7 @@ export const SellMeatApprove = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -3627,7 +3693,7 @@ export const SellMeatApprove = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -3705,7 +3771,9 @@ export const SellMeatReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3780,7 +3848,7 @@ export const SellMeatReject = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -3790,7 +3858,7 @@ export const SellMeatReject = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -3819,7 +3887,7 @@ export const SellMeatReject = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -3897,6 +3965,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -4049,7 +4119,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -4059,7 +4129,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -4088,7 +4158,7 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -4168,6 +4238,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -4242,7 +4314,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -4252,7 +4324,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -4282,7 +4354,7 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -4361,7 +4433,9 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4431,7 +4505,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -4441,7 +4515,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -4466,7 +4540,7 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -4546,7 +4620,9 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4618,7 +4694,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -4628,7 +4704,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -4657,7 +4733,7 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -4735,7 +4811,9 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
+                 marginRight: "-15px", 
+                 paddingRight: "0px", 
+                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4807,7 +4885,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -4817,7 +4895,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -4846,7 +4924,7 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },
@@ -4927,6 +5005,8 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
             props: {
               style: {
                 float: "right",
+                marginRight: "-15px", 
+                paddingRight: "0px", 
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -4992,7 +5072,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
     props: {
       style: {
         width: "100%",
-        textAlign: "right"
+        // textAlign: "right"
       }
     },
     children: {
@@ -5002,7 +5082,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -5027,7 +5107,7 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            width: "140px",
+            width: "180px",
             height: "48px"
           }
         },

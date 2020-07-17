@@ -561,7 +561,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -589,7 +589,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px"
           }
         },
@@ -624,8 +624,8 @@ export const adhocPopupReceivePayment = getCommonContainer({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
-          xs: 10,
-          sm: 10
+          xs: 12,
+          sm: 12
         },
         props: {
           style: {
@@ -647,51 +647,51 @@ export const adhocPopupReceivePayment = getCommonContainer({
           )
         }
       },
-      div2: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 2,
-          sm: 2
-        },
-        props: {
-          style: {
-            width: "100%",
-            float: "right",
-            cursor: "pointer"
-          }
-        },
-        children: {
-          closeButton: {
-            componentPath: "Button",
-            props: {
-              style: {
-                float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
-              }
-            },
-            children: {
-              // previousButtonIcon: {
-              //   uiFramework: "custom-atoms",
-              //   componentPath: "Icon",
-              //   props: {
-              //     iconName: "close"
-              //   }
-              // }
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) => {
-                showHideAdhocPopupReceivePayment(state, dispatch, "search-preview")
-                // set(state,
-                //   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
-                //   ""
-                // )
-              }
-            }
-          }
-        }
-      }
+      // div2: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 2,
+      //     sm: 2
+      //   },
+      //   props: {
+      //     style: {
+      //       width: "100%",
+      //       float: "right",
+      //       cursor: "pointer"
+      //     }
+      //   },
+      //   children: {
+      //     closeButton: {
+      //       componentPath: "Button",
+      //       props: {
+      //         style: {
+      //           float: "right",
+      //           color: "rgba(0, 0, 0, 0.60)"
+      //         }
+      //       },
+      //       children: {
+      //         // previousButtonIcon: {
+      //         //   uiFramework: "custom-atoms",
+      //         //   componentPath: "Icon",
+      //         //   props: {
+      //         //     iconName: "close"
+      //         //   }
+      //         // }
+      //       },
+      //       onClickDefination: {
+      //         action: "condition",
+      //         callBack: (state, dispatch) => {
+      //           showHideAdhocPopupReceivePayment(state, dispatch, "search-preview")
+      //           // set(state,
+      //           //   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+      //           //   ""
+      //           // )
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     }
   },
 
@@ -815,7 +815,7 @@ export const adhocPopupReceivePayment = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "16px"
           }
@@ -847,7 +847,7 @@ export const adhocPopupReceivePayment = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px"
           }
         },

@@ -4,8 +4,9 @@ import {
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { furnishNocResponse, getSearchResults, fetchItemListMasterData, fetchVendorDetails } from "../../../../../ui-utils/commons";
+import { getSearchResults, fetchItemListMasterData } from "../../../../../ui-utils/commons";
 import { resetAllFields } from "../../utils";
+import "./index.css";
 
 const getArticleData = async (action, state, dispatch) => {
   try {
@@ -100,6 +101,7 @@ export const violationsDetails = getCommonCard({
           labelKey: "EC_ENCROACHMENT_TYPE_LABEL"
         },
         optionLabel: "name",
+        optionValue: "code",
         placeholder: {
           labelName: "Select Encroachment/Seizure Category",
           labelKey: "EC_ENCROACHMENT_TYPE_PLACEHOLDER"
@@ -121,7 +123,6 @@ export const violationsDetails = getCommonCard({
                   "props.data", [])
               );
               if (action.value === 'Registered Street Vendors') {
-
                 const objectJsonPath = `components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children`;
                 const children = get(
                   state.screenConfiguration.screenConfig["apply"],
@@ -133,13 +134,39 @@ export const violationsDetails = getCommonCard({
                   handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
-                    "props.required", true));
+                    "required", true));
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
+                    "props.required", true));                //hidden
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
+                    "visible", true));
               } else {
                 dispatch(
                   handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
                     "props.value", ""));
+
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
+                    "required", false));
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
+                    "props.required", false));
+                dispatch(
+                  handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
+                    "visible", false));
                 dispatch(prepareFinalObject("eChallan.licenseNoCov", ''));
 
               }
@@ -149,17 +176,7 @@ export const violationsDetails = getCommonCard({
             dispatch(prepareFinalObject("articleSeizedDetails.Quantity", ''));
             dispatch(prepareFinalObject("articleSeizedDetails.VehicleNumber", ''));
             dispatch(prepareFinalObject("articleSeizedDetails.Remark", ''));
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
-                "props.required", false));
-            //hidden
-            dispatch(
-              handleField(
-                "apply",
-                "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
-                "visible", false));
+
 
             if (action.value === 'Seizure of Vehicles') {
               let dataNumberOfViolation = [];
@@ -264,19 +281,7 @@ export const violationsDetails = getCommonCard({
                   "apply",
                   "components.div.children.formwizardSecondStep.children.ArticleDetails.children.cardContent.children.articleDetailsConatiner.children.articleContainer.children.articleCard.children.VehicleNumber",
                   "visible", false));
-              if (action.value === 'Registered Street Vendors') {
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
-                    "props.required", true));
-                //hidden
-                dispatch(
-                  handleField(
-                    "apply",
-                    "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.LicenseNo",
-                    "visible", true));
-              }
+
             }
             // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
           } catch (e) {
@@ -351,7 +356,7 @@ export const violationsDetails = getCommonCard({
           labelName: "Enter Nature Of Violation",
           labelKey: "EC_NATURE_OF_VIOLATION_PLACEHOLDER"
         },
-        pattern: getPattern("eventDescription"),
+        pattern: getPattern("ECItemDescription"),
         errorMessage: "EC_ERR_DEFAULT_INPUT_NATURE_OF_VIOLATION_FIELD_MSG",
         required: true,
         jsonPath: "eChallan.natureOfViolation",
@@ -438,6 +443,7 @@ export const violationsDetails = getCommonCard({
       required: false,
       visible: false,
       props: {
+        required: false,
         style: {
           width: "100%",
           cursor: "pointer"
@@ -447,6 +453,7 @@ export const violationsDetails = getCommonCard({
           labelName: "Enter License Number",
           labelKey: "EC_LICENSE_NUMBER_PLACEHOLDER"
         },
+        errorMessage: "EC_ERR_DEFAULT_INPUT_LICENSE_NUMBER_FIELD_MSG",
         jsonPath: "eChallan.licenseNoCov",
         sourceJsonPath: "applyScreenMdmsData.egec.vendorList",
         labelsFromLocalisation: true,
@@ -547,7 +554,7 @@ export const violatorDetails = getCommonCard(
           labelName: "Enter Name Of Violator",
           labelKey: "EC_NAME_OF_VIOLATOR_LABEL"
         },
-        pattern: getPattern("VillageName"),
+        pattern: getPattern("ECViolatorName"),
         errorMessage: "EC_ERR_DEFAULT_INPUT_VIOLATOR_NAME_FIELD_MSG",
         required: true,
         jsonPath: "eChallan.violatorName",
@@ -555,7 +562,7 @@ export const violatorDetails = getCommonCard(
 
           let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
           let licenseNo = get(state, 'screenConfiguration.preparedFinalObject.eChallan.licenseNoCov', '');
-          if (action.value === 'Registered Street Vendors') {
+          if (encroachmentType === 'Registered Street Vendors') {
             if (licenseNo === '') {
               dispatch(
                 toggleSnackbar(
@@ -592,7 +599,7 @@ export const violatorDetails = getCommonCard(
           labelKey: "EC_VIOLATOR_FATHER_NAME_PLACEHOLDER"
         },
 
-        pattern: getPattern("VillageName"),
+        pattern: getPattern("ECViolatorName"),
         errorMessage: "EC_ERR_DEFAULT_INPUT_FATHER_NAME_FIELD_MSG",
         required: true,
         jsonPath: "eChallan.fatherName",
@@ -674,7 +681,7 @@ export const violatorDetails = getCommonCard(
           labelKey: "EC_VIOLATOR_ADDRESS_PLACEHOLDER"
         },
 
-        pattern: getPattern("ViolatorAddress"),
+        pattern: getPattern("ECViolatorAddress"),
         errorMessage: "EC_ERR_DEFAULT_INPUT_ADDRESS_FIELD_MSG",
         required: true,
         jsonPath: "eChallan.address"

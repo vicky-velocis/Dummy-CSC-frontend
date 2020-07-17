@@ -9,7 +9,7 @@ import {
   getSelectField,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {  toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { UpdateMasterPrice } from "../../../../../ui-utils/commons";
 import {
@@ -26,6 +26,10 @@ export const UpdateMaster = async (state, dispatch) => {
   let perWeek = 0
   let perMonth = 0
   let annual = 0
+  let isValid = true;
+  let isDateValid = true;
+  let validatMasterUpdateformflag = masterFormvalidate()
+  let isFormValid = validatMasterUpdateformflag[0];
 
   let Duration = get(
     state.screenConfiguration.preparedFinalObject,
@@ -36,15 +40,14 @@ export const UpdateMaster = async (state, dispatch) => {
     labelName: "Fill all complusory fields'.",
     labelKey: "COMPULSORY_FEILD_MASTER_TOST"
   };
- // alert('Date should be greater than the current date.');
   if (NewDueation.includes("day") === true) {
     if (get(
       state.screenConfiguration.preparedFinalObject,
       "Matserdata[0].perDayPrice"
     ) === "") {
-      alert('Fill all complusory feilds');
+      isValid = false;
       dispatch(toggleSnackbar(true, errorMessage1, "warning"));
-      
+
     }
     else {
       perDay = get(
@@ -52,23 +55,22 @@ export const UpdateMaster = async (state, dispatch) => {
         "Matserdata[0].perDayPrice"
       )
     }
-
+    isValid = true;
   }
   if (NewDueation.includes("week") === true) {
     if (get(
       state.screenConfiguration.preparedFinalObject,
       "Matserdata[0].perWeekPrice"
     ) === "") {
-     // alert('Fill all complusory feilds');
+      isValid = false;
       dispatch(toggleSnackbar(true, errorMessage1, "warning"));
-      
     }
     else {
       perWeek = get(
         state.screenConfiguration.preparedFinalObject,
         "Matserdata[0].perWeekPrice"
       )
-
+      isValid = true;
     }
   }
   if (NewDueation.includes("month") === true) {
@@ -76,15 +78,16 @@ export const UpdateMaster = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Matserdata[0].perMonthPrice"
     ) === "") {
-     // alert('Fill all complusory feilds');
-     dispatch(toggleSnackbar(true, errorMessage1, "warning"));
-     
+      isValid = false;
+      dispatch(toggleSnackbar(true, errorMessage1, "warning"));
+
     }
     else {
       perMonth = get(
         state.screenConfiguration.preparedFinalObject,
         "Matserdata[0].perMonthPrice"
       )
+      isValid = true;
     }
   }
   if (NewDueation.includes("annual") === true) {
@@ -92,20 +95,20 @@ export const UpdateMaster = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Matserdata[0].annualPrice"
     ) === "") {
-     // alert('Fill all complusory feilds');
-     dispatch(toggleSnackbar(true, errorMessage1, "warning"));
-     
+      isValid = false;
+      dispatch(toggleSnackbar(true, errorMessage1, "warning"));
+
     }
     else {
       annual = get(
         state.screenConfiguration.preparedFinalObject,
         "Matserdata[0].annualPrice"
       )
-
+      isValid = true;
     }
 
-  }
 
+  }
   let date = convertEpochToDate(get(
     state.screenConfiguration.preparedFinalObject,
     "Matserdata[0].effectiveFromDate"
@@ -121,14 +124,13 @@ export const UpdateMaster = async (state, dispatch) => {
       labelName: "Date should be greater than the current date.",
       labelKey: "DATE_FORMAT_TOST"
     };
-   // alert('Date should be greater than the current date.');
+    isValid = false;
+    isDateValid = false;
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    
+
   }
-
-  else {
-
-    let data = {      
+  if (isValid && isFormValid) {
+    let data = {
       "tenantId": getOPMSTenantId(),
       "applicationType": "ADVERTISEMENTNOC",
       "applicationStatus": "UPDATE",
@@ -153,17 +155,23 @@ export const UpdateMaster = async (state, dispatch) => {
 
       }
     }
-
-
     let res = UpdateMasterPrice(state, dispatch, [],
       data
     );
 
   }
+  else {
+    if (isDateValid === false) {
+      let errorMessage = {
+        labelName: "Date should be greater than the current date.",
+        labelKey: "DATE_FORMAT_TOST"
+      };
 
-
-
-
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    } else {
+      dispatch(toggleSnackbar(true, errorMessage1, "warning"));
+    }
+  }
 }
 
 
@@ -232,7 +240,6 @@ export const NOCApplication2 = getCommonCard({
     labelName: "Rate Proposed",
     labelKey: "NOC_RATE_PROPOSED_HEADING"
   }),
-
   masterContainer: getCommonContainer({
     EffectiveDate: getDateField({
       label: { labelName: "Effective Date", labelKey: "NOC_EFFECTIVE_DATE_LABEL" },
@@ -245,12 +252,8 @@ export const NOCApplication2 = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-
       jsonPath: "Matserdata[0].effectiveFromDate",
-
       sourceJsonPath: "Matserdata[0].effectiveFromDate"
-
-
     }),
     perDay: getTextField({
       label: {
@@ -259,7 +262,7 @@ export const NOCApplication2 = getCommonCard({
       },
       placeholder: {
         labelName: "Enter Per Day",
-        labelKey: "NOC_PER Day_PLACEHOLDER"
+        labelKey: "NOC_PER DAY_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -317,7 +320,7 @@ export const NOCApplication2 = getCommonCard({
         //  disabled:localStorage.getItem('duration').includes("month")===true?false:true
         disabled: true
       },
-      
+
       pattern: /^[1-9][0-9]{0,9}$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "Matserdata[0].perMonthPrice",
@@ -414,5 +417,36 @@ export const NOCApplication2 = getCommonCard({
     })
   })
 });
+const masterFormvalidate = () => {
 
+  let allAreFilled = true;
+  let isFormValid = true;
+  let hasFieldToaster = false;
+  document.getElementById("masterUpdateRate").querySelectorAll("input[type='text']").forEach(function (i) {
+    i.parentNode.classList.remove("MuiInput-error-853");
+    i.parentNode.parentNode.classList.remove("MuiFormLabel-error-844");
+    if (!i.value) {
+      i.focus();
+      allAreFilled = false;
+      i.parentNode.classList.add("MuiInput-error-853");
+      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+    }
+    if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+      i.parentNode.classList.add("MuiInput-error-853");
+      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+      allAreFilled = false;
+      isFormValid = false;
+      hasFieldToaster = true;
+    }
+  })
+  if (!allAreFilled) {
+    isFormValid = false;
+    hasFieldToaster = true;
+  }
+  else {
+    isFormValid = true;
+    hasFieldToaster = false;
+  }
+  return [isFormValid, hasFieldToaster]
+}
 

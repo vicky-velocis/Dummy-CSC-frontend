@@ -21,9 +21,9 @@ class PressInviteContainer extends React.Component {
     const { open, maxWidth, children } = this.props;
     return (
       <Dialog open={open} maxWidth={maxWidth} onClose={this.handleClose}>
-	  <span class="material-icons" onClick={this.handleClose} style={{width:" 40px",position:"absolute",right:"10%",   marginTop: "25px", fontSize:"18px", cursor:"pointer"}}>
+	  {/* <span class="material-icons" onClick={this.handleClose} style={{width:" 40px",position:"absolute",right:"0%",   marginTop: "25px", fontSize:"18px", cursor:"pointer"}}>
 				X
-		</span>
+		</span> */}
         <DialogContent children={children} />
       </Dialog>
     );

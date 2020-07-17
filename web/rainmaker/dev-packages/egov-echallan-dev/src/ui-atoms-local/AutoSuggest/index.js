@@ -48,11 +48,13 @@ const styles = theme => ({
   },
   ac_paper: {
     width: "80%",
+    position: "absolute",
+    zIndex: 9999,
     // maxHeight: "200px",
     // background: "#fff",
-    overflowY: "auto",
+    //overflowY: "auto",
     // marginTop: "0px",
-    marginTop: theme.spacing.unit
+    //marginTop: theme.spacing.unit
   },
   ac_divider: {
     height: theme.spacing.unit * 2
@@ -234,6 +236,7 @@ class IntegrationReactSelect extends React.Component {
 IntegrationReactSelect.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
+
 };
 
 export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);

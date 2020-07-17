@@ -1,5 +1,5 @@
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertEpochToDate, convertDateToEpoch, checkForRole, getMdmsSectorData } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, checkForRole, getMdmsEncroachmentSectorData } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchMasterChallanData, fetchMasterChallanHODAuction, fetchViewHistorytData } from "../../../../../ui-utils/commons";
@@ -18,10 +18,11 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
   let roles = JSON.parse(getUserInfo()).roles;
   let response = [];
   let auctionResponse = [];
-  await getMdmsSectorData(action, state, dispatch,true);
+  await getMdmsEncroachmentSectorData(action, state, dispatch,true);
 
   let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
-      
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+
   checkForRole(roles, 'challanHOD') ? response = await fetchMasterChallanHODAuction(requestBody) : '';
   checkForRole(roles, 'challanSM') ? auctionResponse = await fetchMasterChallanData(requestBody) : '';
   //}
@@ -37,9 +38,14 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
             return true;
         });
 
+        let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+          if (encroachRecord.code == item['encroachmentType'])
+            return true;
+        });    
+ 
         let temp = [];
         temp[0] = item['challanId'];
-        temp[1] = item['encroachmentType'];
+        temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
         temp[3] = item['violatorName'];
         temp[4] = __FOUND.name;
@@ -61,10 +67,14 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
           if (sectorRecord.code == item['sector'])
             return true;
         });
+        let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+          if (encroachRecord.code == item['encroachmentType'])
+            return true;
+        });    
 
         let temp = [];
         temp[0] = item['challanId'];
-        temp[1] = item['encroachmentType'];
+        temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
         temp[3] = item['violatorName'];
         temp[4] = __FOUND.name;

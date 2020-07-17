@@ -10,7 +10,7 @@ import { eventDescription } from "./applyResource/eventDescription";
 import jp from "jsonpath";
 
 import { EventFirstStepperTimeDetail } from "./applyResource/EventFirstStepperTimeDetail";
-import { EventFirstStepperDetail } from "./applyResource/EventFirstStepperDetail";
+import { EventFirstStepperDetail,EventFirstStepperDetailSCP} from "./applyResource/EventFirstStepperDetail";
 
 import { documentDetails, MultipleDocumentDetails } from "./applyResource/documentDetails";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
@@ -80,6 +80,7 @@ export const formwizardFirstStep = {
   props: {
     id: "apply_form1"
   },
+  
   children: {
     EventFirstStepperDetail,
     EventFirstStepperTimeDetail,
@@ -266,11 +267,53 @@ export const prepareEditFlow = async (
     }
   }
         dispatch(prepareFinalObject("EventDocuments", documentsPreview));
+
+        let mdmsBody = {
+          MdmsCriteria: {
+            tenantId: commonConfig.tenantId,
+            moduleDetails: [
+      
+              {
+                moduleName: "common-masters",
+                masterDetails: [
+                  {
+                    name: "Department"
+                  }
+                ]
+              },
+            ]
+          }
+        };
+          let payload = null;
+          payload = await httpRequest(
+            "post",
+            "/egov-mdms-service/v1/_search",
+            "_search",
+            [],
+            mdmsBody
+          );
+          
+      
+      
+          for(let i=0;i<payload.MdmsRes["common-masters"].Department.length;i++)
+          {
+            for(let j=0;j<response.ResponseBody.length;j++)
+            {
+      if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-masters"].Department[i].code)
+      {
+        response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department[i].name
+      }
+            }
+      
+          }
+
   let Refurbishresponse = furnishResponse(response);
   let startdate= response.ResponseBody[0].startDate
   startdate=startdate.split(" ")[0]
  
   dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", Refurbishresponse));
+  dispatch(prepareFinalObject("PublicRelation[0].SummaryEventDetails", Refurbishresponse));
+
   dispatch(
     handleField(
       "apply",
@@ -289,6 +332,13 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+
+ 
+    
+  
+    dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
+    dispatch(prepareFinalObject("EventDocuments",[]));
+
     localStorageSet("shoWHideCancel","apply")
     const eventuuId = getQueryArg(
       window.location.href,
@@ -302,6 +352,29 @@ const screenConfig = {
 
     // Set MDMS Data
     getMdmsData(action, state, dispatch).then(response => {
+         if(localStorageGet("modulecode")==="SCP")
+    {
+     
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.EventFirstStepperDetail.children.cardContent.children.propertyDetailsConatiner.children.committiee",
+        "props.disabled",
+        true
+      )
+    );
+  }
+  else{
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.EventFirstStepperDetail.children.cardContent.children.propertyDetailsConatiner.children.committiee",
+        "props.disabled",
+        false
+      )
+    );
+  }
+
 		if(eventuuId)
 		{
 			prepareEditFlow(state, dispatch, eventuuId, tenantId);
@@ -350,6 +423,7 @@ const screenConfig = {
         );
       }
     }
+
 
     return action;
   },

@@ -49,7 +49,9 @@ import {
   export const header = getCommonContainer({
     header: getCommonHeader({
       labelName: `Create Commitee`, //later use getFinancialYearDates
-      labelKey: "PR_CREATE_COMMITTEE"
+      labelKey: "PR_CREATE_COMMITTE_CARD"
+      
+      
     }),
 
   });
@@ -305,7 +307,10 @@ dispatch(
     uiFramework: "material-ui",
     name: "createCommitteeMaster",
     beforeInitScreen: (action, state, dispatch) => {
-     
+      dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
+      dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
+      dispatch(prepareFinalObject("CreateInvite", {}));
+      
      const tenantId = getQueryArg(window.location.href, "tenantId");
       const step = getQueryArg(window.location.href, "step");
       localStorageSet("committeelist",[]);

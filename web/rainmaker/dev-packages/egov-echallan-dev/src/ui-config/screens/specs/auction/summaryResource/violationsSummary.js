@@ -20,7 +20,8 @@ export const violationsSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 12,
+          sm: 8
         },
         ...getCommonSubHeader({
           labelName: "Violations Details",
@@ -38,7 +39,8 @@ export const violationsSummary = getCommonGrayCard({
         },
         visible:true,
         gridDefination: {
-          xs: 4,
+          xs: 12,
+          sm: 4,
           align: "right"
         },
         children: {
@@ -76,7 +78,7 @@ export const violationsSummary = getCommonGrayCard({
               labelKey: "EC_ECHALLAN_ENCROACHMENT_SEIZURE_CATEGORY_LABEL"
             },
             {
-              jsonPath: "eChallanDetail[0].encroachmentType"
+              jsonPath: "eChallanDetail[0].encroachmentTypeName"
               // callBack: value => {
               //   return value.split(".")[0];
               // }

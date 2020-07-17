@@ -2,7 +2,7 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {toggleSnackbar, handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter, validateFields } from "../../utils";
@@ -94,11 +94,14 @@ const callBackForNext = async (state, dispatch) => {
   switch (activeStep) {
     case 0:
 
+      //let licenseNo = get(state, 'screenConfiguration.preparedFinalObject.eChallan.licenseNoCov', '');
+
       let isviolationsDetailsContainer = validateFields(
         "components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children",
         state,
         dispatch
       );
+      //isviolationsDetailsContainer = licenseNo === '' ?  false : isviolationsDetailsContainer;
 
       //components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.NameofViolator
       let isapplicantnamevalid = validateFields(
@@ -151,7 +154,6 @@ const callBackForNext = async (state, dispatch) => {
         try {
           
           prepareDocumentsUploadData(state, dispatch, 'apply');
-          //getMdmsData(state, dispatch);
           let statuss = "CHALLAN ISSUED";
 
           let userResponse = await createCitizenBasedonMobileNumber(state, dispatch);

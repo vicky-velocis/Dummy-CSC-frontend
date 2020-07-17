@@ -11,13 +11,14 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData } from "../utils/index";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { searchResultsSummary, serachResultGridSM, searchResultsSummaryHOD, searchVehicleResultsSummary } from "./summaryResource/summaryGrid";
-import { footer } from "./summaryResource/footer";
+import { footer} from "./summaryResource/footer";
+import {titlebarfooter} from "./summaryResource/citizenFooter";
 import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchStoreItemHODMasterChallanData, fetchMdmsData } from "../../../../ui-utils/commons";
 import { setEncroachmentType, getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
@@ -30,41 +31,6 @@ let roles = JSON.parse(getUserInfo()).roles;
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
-
-const getMdmsData = async (action, state, dispatch) => {
-  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
-  let mdmsBody = {
-    MdmsCriteria: {
-      tenantId: tenantId,
-      moduleDetails: [
-        {
-          moduleName: "tenant",
-          masterDetails: [
-            {
-              name: "tenants"
-            }
-          ]
-        },
-        {
-          moduleName: "egec",
-          masterDetails: [
-            {
-              name: "EncroachmentType"
-            },
-            {
-              name: "paymentType"
-            },
-            {
-              name: "sector"
-            },
-          ]
-        },
-
-      ]
-    }
-  };
-  await fetchMdmsData(state, dispatch, mdmsBody, false);
-};
 
 const titleHeader = getCommonSubHeader(
   {
@@ -131,142 +97,6 @@ const titlebar = getCommonContainer({
     }
   },
 });
-
-const callbackforsummaryaction = async (state, dispatch) => {
-  const appendUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-echallan/my-challans`;
-  dispatch(setRoute(reviewUrl));
-
-};
-
-const callbackforsummaryactionpay = async (state, dispatch) => {
-
-  const applicationid = getQueryArg(window.location.href, "challanNumber");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  let appStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
-  let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'PENDING');
-  let encroachmentType = new Date(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType', ''));
-
-  if (appStatus !== 'CLOSED' && paymentStatus === 'PENDING') {
-    //make payment code
-    let violationDate = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date());
-
-    if (getDiffernceBetweenTodayDate(violationDate) <= 30) {
-      const appendUrl =
-        process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-      const reviewUrl = `${appendUrl}/egov-echallan/pay?challanNumber=${applicationid}&tenantId=${tenantId}`;
-      dispatch(setRoute(reviewUrl));
-
-    } else {
-      // alert("on else search")
-      if (encroachmentType === 'Seizure of Vehicles' && getDiffernceBetweenTodayDate(violationDate) <= 365) {
-        const appendUrl =
-          process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-        const reviewUrl = `${appendUrl}/egov-echallan/pay?challanNumber=${applicationid}&tenantId=${tenantId}`;
-        dispatch(setRoute(reviewUrl));
-      } else if (encroachmentType === 'Seizure of Vehicles' && getDiffernceBetweenTodayDate(violationDate) > 365) {
-        dispatch(toggleSnackbar(
-          true,
-          {
-            labelName: "Payment cannot be made after 365 days of voilation date",
-            labelKey: ""
-          },
-          "warning"
-        ));
-      } else {
-        dispatch(toggleSnackbar(
-          true,
-          {
-            labelName: "Payment cannot be made after 30 days of voilation date",
-            labelKey: ""
-          },
-          "warning"
-        ));
-      }
-    }
-  } else if (paymentStatus === 'PAID') {
-    dispatch(
-      toggleSnackbar(
-        true,
-        { labelName: "You have already paid for this Challan", labelKey: "TOASTER_SEARCH_PREVIEW_PAYMENT_SUCCESS" },
-        "success"
-      )
-    );
-  }
-
-}
-
-var titlebarfooter = getCommonContainer({
-  previousButton: {
-    componentPath: "Button",
-    props: {
-      variant: "outlined",
-      color: "primary",
-      style: {
-        height: "48px",
-        marginRight: "16px",
-        minWidth: "200px"
-
-
-      }
-    },
-    children: {
-      cancelButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_left"
-        }
-      },
-      previousButtonLabel: getLabel({
-        labelName: "Back",
-        labelKey: "EC_ECHALLAN_COMMON_BUTTON_BACK"
-      })
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforsummaryaction
-    },
-    visible: true
-  },
-  submitButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      nextButtonLabel: getLabel({
-        labelName: "Make Payment",
-        labelKey: "EC_PAYMENT_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callbackforsummaryactionpay
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["CITIZEN", "challanSI"],
-      action: "PAY"
-    },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
-  }
-});
-
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
@@ -457,9 +287,7 @@ const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appst
     }
   }
 }
-// const prepareDocumentsUploadRedux = (state, dispatch) => {
-//   dispatch(prepareFinalObject("documentsUploadRedux", documentsUploadRedux));
-// };
+
 
 const setReceiveButtonVisibleTrueFalse = (isVisible, dispatch, appstatus) => {
   switch (appstatus) {
@@ -732,7 +560,7 @@ const setSearchResponse = async (
   // const response = await getSearchResultsView([
   //   { key: "applicationNumber", value: applicationNumber }
   // ]);
-  await getMdmsData(action, state, dispatch);
+  await getMdmsEncroachmentSectorData(action, state, dispatch);
   const response = await getSearchResultsView(RequestBody);
   //
   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
@@ -742,7 +570,21 @@ const setSearchResponse = async (
     if (sectorRecord.code == sectorval.sector)
       return true;
   });
+
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == sectorval.encroachmentType)
+      return true;
+  });    
+
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
+
+  let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
+
+
 
   // Set Institution/Applicant info card visibility
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
@@ -1093,7 +935,7 @@ const createDemandforChallanCertificate = async (state, dispatch, tenantId) => {
 
     response.Calculations[0].taxHeadEstimates.forEach(element => {
 
-      if (element.taxHeadCode === 'ECHALLAN_FEE' && element.estimateAmount > 0) {
+      if (element.taxHeadCode === 'EC_ECHALLAN_FEE' && element.estimateAmount > 0) {
         searchBill(dispatch, applicationNumber, tenantId, paymentStatus);
         //generateBill(dispatch, applicationNumber, getTenantId());
       }

@@ -48,7 +48,7 @@ export const searchTextViewSeizureReport = getCommonCard({
         labelKey: "EC_REPORT_SEIZURE_ENCROACHMENT_TYPE_LABEL"
       },
       optionLabel: "name",
-      optionValue: "name",
+      optionValue: "code",
       placeholder: {
         labelName: "ENCROACHMENT TYPE",
         labelKey: "EC_REPORT_SEIZURE_ENCROACHMENT_TYPE_PLACEHOLDER"
@@ -63,47 +63,126 @@ export const searchTextViewSeizureReport = getCommonCard({
       jsonPath: "searchViewSeizureReport[0].EncroachmentType",
       required: false
     }),
-    Sector: getSelectField({
-      label: {
-        labelName: "Sector",
-        labelKey: "EC_REPORT_SEIZURE_SECTOR_LABEL"
-      },
-      optionLabel: "name",
-      optionValue: "code",
-      placeholder: {
-        labelName: "Sector",
-        labelKey: "EC_REPORT_SEIZURE_SECTOR_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-        md: 4
-      },
-      sourceJsonPath: "applyScreenMdmsData.egec.sector",
+    sector: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchViewSeizureReport[0].sector",
-      required: false
-    }),
-
-    SINameSelection: getSelectField({
-      label: {
-        labelName: "SI Name",
-        labelKey: "EC_REPORT_SEIZURE_SI_NAME_LABEL"
-      },
-      optionLabel: "name",
-      optionValue: "name",
-      placeholder: {
-        labelName: "Select SI Name",
-        labelKey: "EC_REPORT_SEIZURE_SI_NAME_PLACEHOLDER"
-      },
+      errorMessage: "EC_ERR_DEFAULT_INPUT_SECTOR_FIELD_MSG",
+      required: true,
+      // visible: true,
       gridDefination: {
         xs: 12,
         sm: 4,
-        md: 4
+        md: 4,
       },
-      sourceJsonPath: "applyScreenMdmsData.egec.SINameList",
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        label: { labelName: "Sector", labelKey: "EC_REPORT_SEIZURE_SECTOR_LABEL" },
+        placeholder: {
+          labelName: "select Violation Sector",
+          labelKey: "EC_REPORT_SEIZURE_SECTOR_PLACEHOLDER"
+        },
+        jsonPath: "searchViewSeizureReport[0].sector",
+        sourceJsonPath: "applyScreenMdmsData.egec.sector",
+        labelsFromLocalisation: true,
+        // setDataInField: true,
+        // suggestions: [],
+        fullwidth: true,
+        required: false,
+        inputLabelProps: {
+          shrink: true
+        },
+        // localePrefix: {
+        //   moduleName: "ACCESSCONTROL_ROLES",
+        //   masterName: "ROLES"
+        // },
+      },
+
+    },
+    // Sector: getSelectField({
+    //   label: {
+    //     labelName: "Sector",
+    //     labelKey: "EC_REPORT_SEIZURE_SECTOR_LABEL"
+    //   },
+    //   optionLabel: "name",
+    //   optionValue: "code",
+    //   placeholder: {
+    //     labelName: "Sector",
+    //     labelKey: "EC_REPORT_SEIZURE_SECTOR_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4,
+    //     md: 4
+    //   },
+    //   sourceJsonPath: "applyScreenMdmsData.egec.sector",
+    //   jsonPath: "searchViewSeizureReport[0].sector",
+    //   required: false
+    // }),
+    SINameSelection: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "AutosuggestContainer",
       jsonPath: "searchViewSeizureReport[0].SIName",
-      required: false
-    }),
+      errorMessage: "EC_ERR_DEFAULT_INPUT_SECTOR_FIELD_MSG",
+      required: true,
+      // visible: true,
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4,
+      },
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        label: { labelName: "SI Name", labelKey: "EC_REPORT_SEIZURE_SI_NAME_LABEL" },
+        placeholder: {
+          labelName: "select SI Name",
+          labelKey: "EC_REPORT_SEIZURE_SI_NAME_PLACEHOLDER"
+        },
+        jsonPath: "searchViewSeizureReport[0].SIName",
+        sourceJsonPath: "applyScreenMdmsData.egec.SINameList",
+        labelsFromLocalisation: true,
+        // setDataInField: true,
+        // suggestions: [],
+        fullwidth: true,
+        required: false,
+        inputLabelProps: {
+          shrink: true
+        },
+        // localePrefix: {
+        //   moduleName: "ACCESSCONTROL_ROLES",
+        //   masterName: "ROLES"
+        // },
+      },
+
+    },
+    // SINameSelection: getSelectField({
+    //   label: {
+    //     labelName: "SI Name",
+    //     labelKey: "EC_REPORT_SEIZURE_SI_NAME_LABEL"
+    //   },
+    //   optionLabel: "name",
+    //   optionValue: "name",
+    //   placeholder: {
+    //     labelName: "Select SI Name",
+    //     labelKey: "EC_REPORT_SEIZURE_SI_NAME_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4,
+    //     md: 4
+    //   },
+    //   sourceJsonPath: "applyScreenMdmsData.egec.SINameList",
+    //   jsonPath: "searchViewSeizureReport[0].SIName",
+    //   required: false
+    // }),
     StartDate: getDateField({
       label: { labelName: "Start Date", labelKey: "EC_REPORT_SEIZURE_START_DATE_LABEL" },
       placeholder: {

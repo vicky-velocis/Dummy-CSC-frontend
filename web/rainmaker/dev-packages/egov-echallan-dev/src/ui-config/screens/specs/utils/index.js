@@ -319,21 +319,6 @@ export const getReceiptData = async queryObject => {
   }
 };
 
-export const getMdmsData = async queryObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "egov-mdms-service/v1/_get",
-      "",
-      queryObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    return {};
-  }
-};
-
 
 export const createDemandForChallan = async (state, dispatch, tenantId) => {
   try {
@@ -780,20 +765,24 @@ export const getTextToLocalMapping = label => {
     case "imageofViolator":
     case "EC_ViolatorImage":
     case "EC_VIOLATOR_IMAGE":
+    case "VIOLATORIMAGE":
+    case "ViolatorImage":
       return getLocaleLabels(
-        "Violator Image", "EC_ViolatorImage", localisationLabels);
+        "Violator Image", "EC_VIOLATORIMAGE", localisationLabels);
 
     case "idProofofViolator":
     case "EC_ViolatorIdProof":
+    case "VIOLATORIDPROOF":
+    case "ViolatorIdProof":
     case "EC_ID_PROOF_OF_VIOLATOR":
       return getLocaleLabels(
-        "ID PROOF", "EC_ViolatorIdProof", localisationLabels);
+        "ID PROOF", "EC_VIOLATORIDPROOF", localisationLabels);
 
     case "violationDocuments":
     case "EC_violationDocuments":
     case "EC_imageofViolations":
       return getLocaleLabels(
-        "Violation Images", "EC_imageofViolations", localisationLabels);
+        "Violation Images", "EC_IMAGEOFVIOLATIONS", localisationLabels);
     case "StoreManagerUpload":
     case "EC_StoreManagerUpload":
       return getLocaleLabels(
@@ -1200,13 +1189,13 @@ export const getTextToLocalMappingVendorDetail = label => {
     case "streetVendorArea":
       return getLocaleLabels(
         'Sector',
-        'EC_Area_of_Street_Vending_Sector_Village',
+        'EC_AREA_OF_STREET_VENDING_SECTOR_VILLAGE',
         localisationLabels
       )
     case "transportMode":
       return getLocaleLabels(
         'Mode of Transport',
-        'EC_Mode_of_Transport',
+        'EC_MODE_OF_TRANSPORT',
         localisationLabels
       )
     case "remark":
@@ -1218,7 +1207,7 @@ export const getTextToLocalMappingVendorDetail = label => {
     case "tenantId":
       return getLocaleLabels(
         'Tenant Id',
-        'EC_Tenant_ID',
+        'EC_TENANT_ID',
         localisationLabels
       )
 
@@ -1291,13 +1280,13 @@ export const getTextToLocalMappingVendorErrorDetail = label => {
     case "streetVendorArea":
       return getLocaleLabels(
         'Sector',
-        'EC_Area_of_Street_Vending_Sector_Village',
+        'EC_AREA_OF_STREET_VENDING_SECTOR_VILLAGE',
         localisationLabels
       )
     case "transportMode":
       return getLocaleLabels(
         'Mode of Transport',
-        'EC_Mode_of_Transport',
+        'EC_MODE_OF_TRANSPORT',
         localisationLabels
       )
     case "remark":
@@ -1309,7 +1298,7 @@ export const getTextToLocalMappingVendorErrorDetail = label => {
     case "tenantId":
       return getLocaleLabels(
         'Tenant Id',
-        'EC_Tenant_ID',
+        'EC_TENANT_ID',
         localisationLabels
       )
 
@@ -1702,14 +1691,30 @@ export const resetAllFields = (children, dispatch, state, screenKey) => {
               false
             )
           );
-          dispatch(
-            handleField(
-              screenKey,
-              children[child].children[innerChild].componentJsonpath,
-              "props.value",
-              ""
-            )
-          );
+          if (get(
+            state.screenConfiguration.screenConfig[screenKey],
+            `${
+            children[child].children[innerChild].componentJsonpath
+            }.componentPath`
+          ) === 'AutosuggestContainer') {
+            dispatch(
+              handleField(
+                screenKey,
+                children[child].children[innerChild].componentJsonpath,
+                "props.value",
+                "0"
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                screenKey,
+                children[child].children[innerChild].componentJsonpath,
+                "props.value",
+                ""
+              )
+            );
+          }
           dispatch(
             handleField(
               screenKey,
@@ -1904,3 +1909,48 @@ export const sendReceiptBymail = async (state, dispatch, ReceiptLink, violatorDe
   }
 
 }
+
+export const getMdmsData = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "egov-mdms-service/v1/_get",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getMdmsEncroachmentSectorData = async (action, state, dispatch) => {
+  let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();;
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "egec",
+          masterDetails: [
+            {
+              name: "EncroachmentType"
+            },
+            {
+              name: "paymentType"
+            },
+            {
+              name: "paymentStatus"
+            },
+            {
+              name: "sector"
+            },
+          ]
+        },
+
+      ]
+    }
+  };
+  await fetchMdmsData(state, dispatch, mdmsBody, false);
+};

@@ -27,11 +27,10 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchBill } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 
 import { footer } from "./applyResource/employeeFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
-import { showHideAdhocPopup, showHideAdhocPopups,checkForRole } from "../utils";
+import { showHideAdhocPopup, showHideAdhocPopups, checkForRole } from "../utils";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocsPreview";
 import { adhocPopup5, adhocPopup1, adhocPopup2, adhocPopup3, adhocPopup4 } from "./payResource/adhocPopup";
 import {
@@ -64,7 +63,7 @@ const undertakingButton1 = getCommonContainer({
   addPenaltyRebateButton1: {
     componentPath: "Checkbox",
     props: {
-      checked:false,
+      checked: false,
       variant: "contained",
       color: "primary",
       style: {
@@ -92,10 +91,12 @@ const undertakingButton1 = getCommonContainer({
     props: {
       color: "primary",
       style: {
-     //   minWidth: "200px",
+        //   minWidth: "200px",
         height: "48px",
         marginRight: "40px",
-        paddingBottom: "14px"
+        paddingLeft: "0px",
+        paddingBottom: "14px",
+        textTransform: "capitalize"
       }
     },
     children: {
@@ -168,7 +169,7 @@ const titlebar = getCommonContainer({
         label: "Download",
         leftIcon: "cloud_download",
         rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
+        props: { variant: "outlined", style: { marginLeft: 10, marginTop: "5px" } },
         menu: []
       }
     }
@@ -295,23 +296,23 @@ const setSearchResponse = async (state, dispatch, action, applicationNumber, ten
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-  
+
   dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
   dispatch(prepareFinalObject("nocApplicationReceiptDetail", get(response, "nocApplicationDetail", [])));
   dispatch(prepareFinalObject("nocApplicationCertificateDetail", get(response, "nocApplicationDetail", [])));
-  
+
   dispatch(prepareFinalObject("PetNoc[0].PetNocDetails.Approve.badgeNumber", JSON.parse(response.nocApplicationDetail[0].applicationdetail).badgeNumber));
 
   let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   localStorageSet("app_noc_status", nocStatus);
-  
+
   HideshowEdit(action, nocStatus);
 
 
   prepareDocumentsView(state, dispatch);
-  
+
   if (checkForRole(roles, 'CITIZEN')) {
-    
+
     setSearchResponseForNocCretificate(state, dispatch, action, applicationNumber, tenantId);
   }
 
@@ -322,67 +323,67 @@ let httpLinkPET;
 let httpLinkPET_RECEIPT;
 
 const HideshowEdit
- = (action, nocStatus) => {
-   
-  let showEdit = false;
-  if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
-    showEdit = true;
-  }
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
-    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
-  );
+  = (action, nocStatus) => {
 
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
-    checkForRole(roles, 'CITIZEN')? showEdit === true ? true : false : false
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.immunizationSummary.children.cardContent.children.header.children.editSection.visible",
-    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
-  );
+    let showEdit = false;
+    if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
+      showEdit = true;
+    }
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.children.cardContent.children.header.children.editSection.visible",
+      checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
+    );
 
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
-     false
-  );
-
-  set(
-    action,
-    "screenConfig.components.div.children.footer.children.previousButton.visible",
-    checkForRole(roles, 'CITIZEN') ?
-            nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
-         true
-      :false
-    :false
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.nocSummary.children.cardContent.children.header.children.editSection.visible",
+      checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
     );
     set(
-    action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
-    nocStatus=== "DRAFT" ?true:false)
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.immunizationSummary.children.cardContent.children.header.children.editSection.visible",
+      checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+      checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
+    );
 
     set(
-      action,"screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
-      nocStatus=== "DRAFT" ?true:false)
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
+      false
+    );
+
+    set(
+      action,
+      "screenConfig.components.div.children.footer.children.previousButton.visible",
+      checkForRole(roles, 'CITIZEN') ?
+        nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" ?
+          true
+          : false
+        : false
+    );
+    set(
+      action, "screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1.visible",
+      nocStatus === "DRAFT" ? true : false)
+
+    set(
+      action, "screenConfig.components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton.visible",
+      nocStatus === "DRAFT" ? true : false)
     set(
       action,
       "screenConfig.components.div.children.footer.children.submitButton.visible",
       checkForRole(roles, 'CITIZEN') ?
-              nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN"?
-           true
-        :false
-      :false
-      );
+        nocStatus === "DRAFT" || nocStatus === "INITIATED" || nocStatus === "REASSIGN" ?
+          true
+          : false
+        : false
+    );
 
-}
+  }
 const setSearchResponseForNocCretificate = async (state, dispatch, action, applicationNumber, tenantId) => {
 
   let downloadMenu = [];
@@ -391,7 +392,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
   let nocRemarks = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", {});
   //let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
 
-  
+
   let nocRemark = "";
   let nocStatus = "";
 
@@ -422,7 +423,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
 
     let getFileStoreIdForPET = { "nocApplicationDetail": [get(response0PET, "nocApplicationDetail[0]", "")] }
     //dispatch(prepareFinalObject("nocApplicationCertificateDetail", get(response, "nocApplicationDetail", [])));
-    
+
     const response1PET = await getSearchResultsForNocCretificate([
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
@@ -434,7 +435,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
       { key: "filestoreIds", value: get(response1PET, "filestoreIds[0]", "") },
-      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
+      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
     ]);
     httpLinkPET = get(response2PET, get(response1PET, "filestoreIds[0]", ""), "")
 
@@ -444,13 +445,12 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
       link: () => {
         if (httpLinkPET != "")
           window.location.href = httpLinkPET;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };
 
   }
-   if (nocRemark == "PAID") {
+  if (nocRemark == "PAID") {
     //Receipts
     let getCertificateDataForPET_RECEIPT = { "applicationType": "PETNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "receiptData" } };
 
@@ -475,7 +475,7 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber },
       { key: "filestoreIds", value: get(response1PET_RECEIPT, "filestoreIds[0]", "") },
-      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
+      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
     ]);
     httpLinkPET_RECEIPT = get(response2PET_RECEIPT, get(response1PET_RECEIPT, "filestoreIds[0]", ""), "")
 
@@ -485,13 +485,12 @@ const setSearchResponseForNocCretificate = async (state, dispatch, action, appli
       link: () => {
         if (httpLinkPET_RECEIPT != "")
           window.location.href = httpLinkPET_RECEIPT;
-        //// generatePdf(state, dispatch, "certificate_download");
       },
       leftIcon: "book"
     };
 
   }
-  
+
   if (nocStatus == "APPROVED" && nocRemark == "PAID") {
     downloadMenu = [
       certificateDownloadObjectPET,
@@ -532,7 +531,7 @@ const screenConfig = {
       { key: "businessServices", value: "PETNOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    
+
 
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "opms");
@@ -600,8 +599,8 @@ const screenConfig = {
             nocSummary: nocSummary,
             immunizationSummary: immunizationSummary,
             documentsSummary: documentsSummary
-  
-          }) ,
+
+          }),
         // citizenFooter:
         //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
         footer: footer

@@ -22,8 +22,7 @@ import {
     handleScreenConfigurationFieldChange as handleField
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-  import { getGridData } from "./searchResource/citizenSearchFunctions";
-  import {EventFilter} from "./gridFilter/Filter";
+  
   import { LocalityWiseReport } from "./searchResource/Report";
   import { LocalityReportSearchResults } from "./searchResource/searchResults";
   import {  localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -83,9 +82,15 @@ import {
     
  let obj={}
  obj['name']="ALL"
+ obj['code']="ALL"
+ 
+  
+ let obj1={}
+ obj1['name']="Select Locality Name"
+ 
   let len=payload.MdmsRes["RAINMAKER-PR"].localityAreaName.length
   payload.MdmsRes["RAINMAKER-PR"].localityAreaName.unshift(obj)
-
+  payload.MdmsRes["RAINMAKER-PR"].localityAreaName.push(obj1)
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
     } catch (e) {
       console.log(e);
@@ -95,6 +100,8 @@ import {
     uiFramework: "material-ui",
     name: "LocalityReports",
     beforeInitScreen: (action, state, dispatch) => {
+      dispatch(prepareFinalObject("LocalityReport", {}));    
+      
       dispatch(prepareFinalObject("eventReport", {}));
       dispatch(prepareFinalObject("TimeseriesReport", {}));
       dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
