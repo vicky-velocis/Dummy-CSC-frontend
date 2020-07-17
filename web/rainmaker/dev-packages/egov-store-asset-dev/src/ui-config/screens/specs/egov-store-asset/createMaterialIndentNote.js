@@ -4,7 +4,7 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
   import { footer } from "./creatematerialindentnoteResource/footer";
-  import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
+  import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
   import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
   import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialindentnoteResource/other-details";
@@ -236,11 +236,16 @@ export const header = getCommonContainer({
     { 
       if(issueStore.code !== undefined)
       {
-        let IndentId = getQueryArg(window.location.href, "id");
+        let IndentId = getQueryArg(window.location.href, "IndentId");
+        alert(IndentId)
         dispatch(prepareFinalObject("materialIssues[0].toStore.code",issueStore.code));
         dispatch(prepareFinalObject("materialIssues[0].indent",indents.filter(x=> x.id === IndentId )));
+        console.log(indents.filter(x=> x.id === IndentId ))
+        console.log('pritam')
         dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
         dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+        //get Material based on Store
+       
       }
     
     else

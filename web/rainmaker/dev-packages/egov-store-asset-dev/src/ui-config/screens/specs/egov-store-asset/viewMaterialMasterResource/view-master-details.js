@@ -84,17 +84,6 @@ export const getMasterDetailsView = (isReview = true) => {
    
     break1: getBreak(),
     viewOne: getCommonContainer({
-      reviewMaterialCode: getLabelWithValue(
-        {
-          labelName: "Material Code",
-          labelKey: "STORE_MATERIAL_CODE"
-        },
-        { jsonPath: "materials[0].code" }
-      ),
-      reviewMaterialOldCode: getLabelWithValue(
-        { labelName: "Material Old Code", labelKey: "STORE_MATERIAL_OLD_CODE" },
-        { jsonPath: "materials[0].oldCode" }
-      ),
       reviewMaterialName: getLabelWithValue(
         {
           labelName: "Material Name",
@@ -102,6 +91,18 @@ export const getMasterDetailsView = (isReview = true) => {
         },
         { jsonPath: "materials[0].name" }
       ),
+      reviewMaterialCode: getLabelWithValue(
+        {
+          labelName: "Material Code",
+          labelKey: "STORE_MATERIAL_CODE"
+        },
+        { jsonPath: "materials[0].code" }
+      ),
+      // reviewMaterialOldCode: getLabelWithValue(
+      //   { labelName: "Material Old Code", labelKey: "STORE_MATERIAL_OLD_CODE" },
+      //   { jsonPath: "materials[0].oldCode" }
+      // ),
+      
       reviewMaterialDescription: getLabelWithValue(
         { labelName: "Material Description", labelKey: "STORE_MATERIAL_DESCRIPTION" },
         {
@@ -115,7 +116,7 @@ export const getMasterDetailsView = (isReview = true) => {
       reviewBaseUOMName: getLabelWithValue(
         { labelName: "Base UOM Name", labelKey: "STORE_BASE_UOM_NAME" },
         {
-          jsonPath: "materials[0].baseUom.name"
+          jsonPath: "materials[0].baseUom.code"
         }
       ),
       reviewInventryType: getLabelWithValue(
@@ -124,15 +125,15 @@ export const getMasterDetailsView = (isReview = true) => {
           jsonPath: "materials[0].inventoryType"
         }
       ),
-      reviewMaterialStatus: getLabelWithValue(
-        {
-          labelName: "Material Status",
-          labelKey: "STORE_MATERIAL_STATUS"
-        },
-        {
-          jsonPath: "materials[0].status"
-        }
-      )
+      // reviewMaterialStatus: getLabelWithValue(
+      //   {
+      //     labelName: "Material Status",
+      //     labelKey: "STORE_MATERIAL_STATUS"
+      //   },
+      //   {
+      //     jsonPath: "materials[0].status"
+      //   }
+      // )
     }),
 
   });

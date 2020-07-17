@@ -105,7 +105,7 @@ import {
               data: [
                 {
                   value: "HighUsage",
-                  label: "HighUsage"
+                  label: "High Usage"
                 },
                
               ],

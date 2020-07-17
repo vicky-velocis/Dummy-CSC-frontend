@@ -6,7 +6,7 @@ import {
 import { PriceListReviewDetails } from "./viewpricelistResource/pricelist-review";
 import { masterViewFooter } from "./viewpricelistResource/footer";
 import { getPriceLstData } from "./viewpricelistResource/functions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";  
+import { getQueryArg ,getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";  
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -50,6 +50,44 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
     console.log(e);
   }
 };
+const getFileUrl = async (action,dispatch,tenantId)=>{
+
+  let fileStoreId = "242e3bc6-7f42-444e-b562-6f23468f6e72"
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    console.log(fileRes)
+  });
+
+  // const queryObject = [
+  // 	{ key: "tenantId", value: tenantId },
+  //  // { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
+  //   { key: "fileStoreIds", value: fileStoreId }
+  // ];
+   let FileURL = "";
+  // try {
+  //   const fileUrl = await httpRequest(
+  //     "get",
+  //     "/filestore/v1/files/url",
+  //     "",
+  //     queryObject
+  //   );
+  //   FileURL = fileUrl;
+  //   console.log(fileUrl)
+  //   return fileUrl;
+  // } catch (e) {
+  //   console.log(e);
+  // }
+  let  documentsPreview= [
+    {
+      title: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
+      linkText: "VIEW", 
+      link:FileURL,//"https://chstage.blob.core.windows.net/fileshare/ch/undefined/July/15/1594826295177document.pdf?sig=R3nzPxT9MRMfROREe6LHEwuGfeVxB%2FKneAeWrDJZvOs%3D&st=2020-07-15T15%3A21%3A01Z&se=2020-07-16T15%3A21%3A01Z&sv=2016-05-31&sp=r&sr=b",
+        
+    },]
+   
+  dispatch(
+    prepareFinalObject("documentsPreview", documentsPreview)
+  );
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -60,6 +98,7 @@ const screenConfig = {
     getPriceLstData(state, dispatch, id, tenantId);
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
+   getFileUrl(action,dispatch,tenantId);
     return action;
   },
   components: {

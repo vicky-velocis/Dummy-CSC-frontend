@@ -15,7 +15,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["materialTypeName","materialName","storeName", "storeMappingInfo", "active"];
+  const textFields = ["materialName","materialType","store",];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-material-master.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -98,7 +98,7 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "store.stores",
       props: {
-        optionValue: "id",
+        optionValue: "code",
         optionLabel: "name",
       },
       

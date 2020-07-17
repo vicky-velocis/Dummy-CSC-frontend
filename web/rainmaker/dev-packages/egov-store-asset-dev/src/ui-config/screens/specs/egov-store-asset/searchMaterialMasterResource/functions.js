@@ -99,7 +99,13 @@ export const searchApiCall = async (state, dispatch) => {
 
         return {
           [getTextToLocalMapping("Material Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Material Type Name")]: get(item, "materialType.name", "-") || "-", 
+          [getTextToLocalMapping("Material Type Name")]: get(item, "materialType.name", "-") || "-",
+          [getTextToLocalMapping("Store Name")]:
+          get(item, "storeMapping", [])
+            .map(store => {
+              return ` ${store.store.code}`;
+            })
+            .join() || "-", 
          // [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
          // [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
           code: item.code,       

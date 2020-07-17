@@ -40,13 +40,13 @@ const storeCard = {
           
          }
         ),
-        reviewAccountCode: getLabelWithValue(
-          { labelName: "Account Code", labelKey: "STORE_MATERIAL_ACCOUNT_CODE" },
-          {
-            jsonPath: "materials[0].storeMapping[0].chartofAccount.glcode",
+        // reviewAccountCode: getLabelWithValue(
+        //   { labelName: "Account Code", labelKey: "STORE_MATERIAL_ACCOUNT_CODE" },
+        //   {
+        //     jsonPath: "materials[0].storeMapping[0].chartofAccount.glcode",
             
-          }
-        ),
+        //   }
+        // ),
         Active: getLabelWithValue(
           { labelName: "Active", labelKey: "MATERIAL_TYPE_ACTIVE" },
           {

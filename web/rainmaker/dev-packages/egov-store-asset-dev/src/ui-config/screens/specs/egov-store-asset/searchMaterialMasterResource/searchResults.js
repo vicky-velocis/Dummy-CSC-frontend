@@ -60,7 +60,7 @@ export const searchResults = {
     columns: [
       getTextToLocalMapping("Material Name"),
       getTextToLocalMapping("Material Type Name"),
-      //getTextToLocalMapping("Store Name"),     
+      getTextToLocalMapping("Store Name"),     
       //getTextToLocalMapping("Active"),
       {
         name: "code",
@@ -86,7 +86,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-material-master?code=${rowData[2]}&tenantId=${tenantId}`;
+  window.location.href = `view-material-master?code=${rowData[3]}&tenantId=${tenantId}`;
 };
 
 

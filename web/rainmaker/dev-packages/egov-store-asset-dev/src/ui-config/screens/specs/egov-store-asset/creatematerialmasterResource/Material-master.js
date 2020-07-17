@@ -47,14 +47,19 @@ import { filter } from "lodash";
         beforeFieldChange: (action, state, dispatch) => {
           let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
           let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
+          alert(action.value);
           // console.log(MaterialType[0])
           // alert(MaterialType[0].materialType.code);
           // alert(MaterialType[0].baseUom.code);
           // alert(MaterialType[0].purchaseUom.code);
+          if(MaterialType&MaterialType[0])
+          {
+          
           dispatch(prepareFinalObject("materials[0].name",MaterialType[0].name));
           dispatch(prepareFinalObject("materials[0].materialType.code",MaterialType[0].materialType.code));
           dispatch(prepareFinalObject("materials[0].baseUom.code",MaterialType[0].baseUom.code));
           dispatch(prepareFinalObject("materials[0].purchaseUom.code",MaterialType[0].baseUom.code));
+        }
         }
       },
       MaterialoldCode: {

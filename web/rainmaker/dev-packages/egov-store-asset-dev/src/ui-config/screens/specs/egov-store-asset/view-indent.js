@@ -15,8 +15,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `View Price List`,
-    labelKey: "STORE_VIEW_PRICE_LIST"
+    labelName: `Material  Indent Note`,
+    labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE"
   })
 });
 

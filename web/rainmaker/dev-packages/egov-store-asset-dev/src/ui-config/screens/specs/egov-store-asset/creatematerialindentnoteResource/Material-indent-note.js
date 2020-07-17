@@ -11,8 +11,33 @@ import {
  import set from "lodash/set";
  import get from "lodash/get";
  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
+import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommonsapi'
  import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
+
+ const getMaterialData = async (action, state, dispatch,storecode) => {
+  const tenantId = getTenantId();
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId(),
+    },
+  ];
+  queryObject.push({
+    key: "store",
+    value: storecode
+  });
+
+    
+  try {
+    let response = await getMaterialMasterSearchResults(queryObject, dispatch);
+    dispatch(prepareFinalObject("materials", response.materials));
+    console.log(response.materials)
+    console.log("response.materials")
+  } catch (e) {
+    console.log(e);
+  }
+};
   export const IndentMaterialIssueDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -59,6 +84,10 @@ import {
           dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
           dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
           dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));
+
+         
+          getMaterialData(action,state,dispatch)
+          
         }
       },
       IssueDate: {

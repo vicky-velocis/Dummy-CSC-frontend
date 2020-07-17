@@ -159,6 +159,7 @@ import {
               props: {
                 content: "STORE_PRICE_ACTIVE",
                 screenName: "createpricelist",
+                jsonPath: "priceLists[0].priceListDetails[0].active",
                 checkBoxPath:
                   "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.active",
               },

@@ -124,7 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
         return {
           [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
           [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "issueStore.code", "-") || "-", 
+         [getTextToLocalMapping("Indenting Store Name")]: get(item, "issueStore.name", "-") || "-", 
           [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
           [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
           id: item.id,       

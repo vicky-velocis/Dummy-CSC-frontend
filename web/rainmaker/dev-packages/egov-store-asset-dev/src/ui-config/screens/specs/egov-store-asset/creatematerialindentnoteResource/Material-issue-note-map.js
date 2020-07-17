@@ -10,7 +10,7 @@ import {
   import get from "lodash/get";
   import filter from "lodash/filter";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  
+  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   const arrayCrawler = (arr, n) => {
     if (n == 1) {
       return arr.map(item => {
@@ -40,11 +40,11 @@ import {
                   labelKey: "STORE_MATERIAL_NAME_SELECT"
                 },
                 required: true,               
-                jsonPath: "materialIssues.indent.indentDetails[0].material.id",
-                sourceJsonPath: "indents[0].indentDetails",
+                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code",
+                sourceJsonPath: "materials",
                 props: {
-                  optionValue: "material.code",
-                  optionLabel: "material.name",
+                  optionValue: "code",
+                  optionLabel: "name",
                   // optionValue: "id",
                   // optionLabel: "id",
                 },
@@ -52,20 +52,37 @@ import {
               beforeFieldChange: (action, state, dispatch) => {
                 let Material = get(
                   state.screenConfiguration.preparedFinalObject,
-                  `indents[0].indentDetails`,
+                  `materials`,
                   []
-                );
+                );               
+                Material =  Material.filter(x=> x.code === action.value)
                 console.log(Material)
-                let currentObject = filter(Material, {
-                  code: action.value
-                });
-                console.log(currentObject)
-                dispatch(
-                  prepareFinalObject(
-                    "Employees[0].disabilityPercentage",
-                    currentObject[0].value
-                  )
-                );
+                let indentDetails = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  `materialIssues[0].indent.indentDetails`,
+                  []
+                ); 
+                indentDetails = indentDetails.filter(x=> x.code === action.value)
+                if(Material && Material[0])
+                {
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.id",Material[0].id));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.getTenantId",getTenantId()));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.name",Material[0].name));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.description",Material[0].description));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.reorderLevel",Material[0].reorderLevel));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialType.id",Material[0].materialType.id));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialType.name",Material[0].materialType.name));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.baseUom.id",Material[0].baseUom.id));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.minQuantity",Material[0].minQuantity));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.stockingUom",Material[0].stockingUom));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.purchaseUom",Material[0].purchaseUom));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.inventoryType",Material[0].inventoryType));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialClass",Material[0].materialClass));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.maxQuantity",Material[0].maxQuantity));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.reorderQuantity",Material[0].reorderQuantity));                
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialControlType",Material[0].materialControlType));
+              }
+
               }
 
             },
@@ -84,7 +101,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.indentDetail.indentQuantity"
               })
             },
             BalanceQty: {
@@ -120,7 +137,7 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.indentDetail.indentQuantity"
               })
             },
             UOMName: {
