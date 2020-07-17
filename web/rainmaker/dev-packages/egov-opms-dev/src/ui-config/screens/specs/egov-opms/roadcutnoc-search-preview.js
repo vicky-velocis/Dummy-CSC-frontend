@@ -18,7 +18,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { fetchBill, searchBill, createDemandForRoadCutNOC } from "../utils/index";
 
-import { footer } from "./applyResource/employeeRoadCutFooter";
+import { footerEmp,takeactionfooter,footerCitizen } from "./applyResource/employeeRoadCutFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
 import {
   adhocPopupForJeRoadCutForward, adhocPopupForJeRoadCutReassign, adhocPopupForCeRoadCutApprove,
@@ -346,27 +346,36 @@ const HideshowEdit = (action, nocStatus, amount) => {
 
   set(
     action,
-    "screenConfig.components.div.children.footer.children.approve.visible",
+    "screenConfig.components.div.children.footerEmp.children.approve.visible",
     amount < 10000 && checkForRole(roles, 'EE') ? true
       : checkForRole(roles, 'CE') ? true : false
   );
 
   set(
     action,
-    "screenConfig.components.div.children.footer.children.reject.visible",
+    "screenConfig.components.div.children.footerEmp.children.reject.visible",
     amount < 10000 && checkForRole(roles, 'EE') ? true : checkForRole(roles, 'CE') ? true : false
   );
 
 
   set(
     action,
-    "screenConfig.components.div.children.footer.children.MakePayment.visible",
+    "screenConfig.components.div.children.footerEmp.children.MakePayment.visible",
     (checkForRole(roles, 'CITIZEN') && nocStatus === "APPROVED") ? true : false
   );
 
   set(
     action,
-    "screenConfig.components.div.children.footer.children.previousButton.visible",
+    "screenConfig.components.div.children.footerEmp.children.previousButton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+        true
+        : false
+      : false
+  );
+  set(
+    action,
+    "screenConfig.components.div.children.footerEmp.children.submitButton.visible",
     checkForRole(roles, 'CITIZEN') ?
       nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
         true
@@ -374,15 +383,15 @@ const HideshowEdit = (action, nocStatus, amount) => {
       : false
   );
 
-  set(
-    action,
-    "screenConfig.components.div.children.footer.children.submitButton.visible",
-    checkForRole(roles, 'CITIZEN') ?
-      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
-        true
-        : false
-      : false
-  );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footer.children.submitButton.visible",
+  //   checkForRole(roles, 'CITIZEN') ?
+  //     nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+  //       true
+  //       : false
+  //     : false
+  // );
 
 
 }
@@ -639,15 +648,18 @@ const screenConfig = {
           roadcutapplicantSummary: roadcutapplicantSummary,
           documentsSummary: documentsSummary,
           taskStatusSummary: taskStatusSummary,
+       //   footerCitizen
           //ReassignButton
         }) : getCommonCard({
           // estimateSummary: estimateSummary,
           roadcutapplicantSummary: roadcutapplicantSummary,
-          documentsSummary: documentsSummary
+          documentsSummary: documentsSummary,
+         
         }),
-        // citizenFooter:
-        //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
-        footer: footer
+        footerEmp  , 
+        takeactionfooter
+        
+        
 
       }
     },

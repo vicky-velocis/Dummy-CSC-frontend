@@ -412,7 +412,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
             }
           });
 
-          createDemandForAdvNOC(state, dispatch, applicationNumber, tenantId);
+       //   createDemandForAdvNOC(state, dispatch, applicationNumber, tenantId);
         }
       });
 
