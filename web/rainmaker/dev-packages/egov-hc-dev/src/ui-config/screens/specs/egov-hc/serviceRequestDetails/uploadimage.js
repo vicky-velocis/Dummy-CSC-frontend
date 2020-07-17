@@ -3,6 +3,7 @@ import {  handleScreenConfigurationFieldChange as handleField,  prepareFinalObje
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  furnishNocResponse,  getSearchResults} from "../../../../../ui-utils/commons";
+import "./index.css";
 
 export const uploadimage = getCommonCard({
   imageUpload : {

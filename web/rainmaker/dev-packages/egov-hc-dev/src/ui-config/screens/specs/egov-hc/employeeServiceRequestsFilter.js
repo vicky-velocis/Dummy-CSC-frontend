@@ -6,15 +6,24 @@ import { httpRequest } from "../../../../ui-utils";
 import { ServiceRequestFilterFormForEmployee } from "./searchResource/EmployeeServiceRequestsSearchForm";
 import { searchResultsServiceRequest } from "./searchResource/searchResults";
 import { resetFieldsForEmployeeFilter } from "./searchResource/citizenSearchFunctions";
+import "./index.css";
   
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
   enableButton = hasButton && hasButton === "false" ? false : true;
   
-  const header = getCommonHeader({
+  const header = getCommonHeader(
+    {
     labelName: "Service Requests",
     labelKey: "HC_SERVICE_REQUEST_HEADER"
-  });
+  },
+  // {
+  //   style : {
+  //     padding: 20
+  //   }
+  // },
+  
+  );
   
   const pageResetAndChange = (state, dispatch) => {
     dispatch(
@@ -103,10 +112,10 @@ import { resetFieldsForEmployeeFilter } from "./searchResource/citizenSearchFunc
   
             children: {
               header: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 6
-                },
+                // gridDefination: {
+                //   xs: 12,
+                //   sm: 6
+                // },
                 ...header
               },
               

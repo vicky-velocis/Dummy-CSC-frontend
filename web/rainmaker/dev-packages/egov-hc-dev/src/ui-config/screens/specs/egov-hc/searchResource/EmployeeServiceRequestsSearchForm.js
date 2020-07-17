@@ -1,7 +1,7 @@
 import { getCommonCard, getCommonContainer, getDateField, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCallForEmployeeFilter } from "./functions";
 import { resetFieldsForEmployeeFilter } from "./citizenSearchFunctions";
-
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 
@@ -27,7 +27,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
         },
         
         pattern: getPattern("BuildingStreet"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
         jsonPath: "serviceRequests.servicerequestid"
       })
     },
@@ -39,7 +39,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
         },
         placeholder: {
           labelName: "Enter Contact Number",
-          labelKey: "HC_OWNER_CONTACT_NUMBER_PLACEHOLDER"
+          labelKey: "HC_OWNER_CONTACT_NUMBER_LABLE_PLACEHOLDER"
         },
         gridDefination: {
           xs: 12,
@@ -49,7 +49,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
         // maxLength: 10,
         // maxValue : 9999999999,
         pattern: getPattern("HCMobileNoSearch"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_CONTACT_NO_FIELD_MSG",
         jsonPath: "serviceRequests.contactNumber"
       })
     },
@@ -77,7 +77,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
       moduleName: "egov-hc",
       componentPath: "AutosuggestContainer",
       jsonPath: "serviceRequests.servicetype",
-            required: true,
+      required: false,
             gridDefination: {
               xs: 12,
               sm: 6,
@@ -90,11 +90,9 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
     },
    
     className: "citizen-city-picker",
-    
     label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE" },
-
     placeholder: {
-      labelName: "TYPE_OF_SERVICE_REQUEST",
+      labelName: "Select Service Request Type",
       labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
     },
     sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
@@ -103,7 +101,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
     labelsFromLocalisation: false,
     suggestions: [],
     fullwidth: true,
-    required: true,
+    required: false,
     inputLabelProps: {
       shrink: true
     },
@@ -130,7 +128,16 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
       
 
       jsonPath: "serviceRequests.fromDate",
-      
+      afterFieldChange: (action, state, dispatch) => {
+        dispatch(
+          handleField(
+            "employeeServiceRequestsFilter",
+            "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.toDate",
+            "props.inputProps.min",
+            action.value
+          )
+        );
+        }
 
 
     }),
@@ -139,6 +146,11 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
       placeholder: {
         labelName: "To Date",
         labelKey: "HC_TO_DATE_PLACEHOLDER"
+      },
+      props: {
+        inputProps: {
+          min: ''
+        }
       },
       gridDefination: {
         xs: 12,
@@ -171,7 +183,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
       moduleName: "egov-hc",
       componentPath: "AutosuggestContainer",
       jsonPath: "serviceRequests.servicestatus",
-            required: true,
+            required: false,
             gridDefination: {
               xs: 12,
               sm: 6,
@@ -196,7 +208,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
     labelsFromLocalisation: false,
     suggestions: [],
     fullwidth: true,
-    required: true,
+    required: false,
     inputLabelProps: {
       shrink: true
     },
@@ -242,7 +254,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
       moduleName: "egov-hc",
       componentPath: "AutosuggestContainer",
       jsonPath: "serviceRequests.mohalla",
-            required: true,
+            required: false,
             gridDefination: {
               xs: 12,
               sm: 6,
@@ -269,7 +281,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
     labelsFromLocalisation: false,
     suggestions: [],
     fullwidth: true,
-    required: true,
+    required: false,
     inputLabelProps: {
       shrink: true
     },
