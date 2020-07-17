@@ -3,25 +3,25 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import { footer } from "./createPurchaseOrderResource/footer";
   import {purchaseOrderHeader  } from "./createPurchaseOrderResource/purchaseOrderHeader";
   import { contractDetails } from "./createPurchaseOrderResource/contractDetails";
   import { purchaseOrderDetails } from "./createPurchaseOrderResource/purchaseOrderDetails";
   import { poApprovalInfo } from "./createPurchaseOrderResource/poApprovalInfo";
-  
+  import commonConfig from '../../../../config/common';
 
   import get from "lodash/get";
   import map from "lodash/map";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+  import { getSearchResults } from "../../../../ui-utils/commons";
   
   export const stepsData = [
     { labelName: "Purchase Order", labelKey: "STORE_PO_HEADER" },
     { labelName: "Tender/Quotation/Rate Contract Detail",  labelKey: "STORE_PO_RC_DETAIL_HEADER"},
     { labelName: "Purchase Order Details", labelKey: "STORE_PO_DETAILS_HEADER" },
-    { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
+  //  { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
   ];
   export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
@@ -85,69 +85,15 @@ import {
   
 
   
-  const getMdmsData = async (state, dispatch, tenantId) => {
+  const getMdmsData = async (action, state, dispatch) => {
     let mdmsBody = {
       MdmsCriteria: {
-        tenantId: tenantId,
+        tenantId: commonConfig.tenantId,
         moduleDetails: [
           {
-            moduleName: "common-masters",
+            moduleName: "store-asset",
             masterDetails: [
-              {
-                name: "Department",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "Designation",
-                filter: "[?(@.active == true)]"
-              }
-            ]
-          },
-          {
-            moduleName: "ACCESSCONTROL-ROLES",
-            masterDetails: [
-              {
-                name: "roles",
-                filter: "$.[?(@.code!='CITIZEN')]"
-              }
-            ]
-          },
-          {
-            moduleName: "egov-location",
-            masterDetails: [
-              {
-                name: "TenantBoundary"
-                // filter: "$.*.hierarchyType"
-              }
-            ]
-          },
-          {
-            moduleName: "egov-hrms",
-            masterDetails: [
-              {
-                name: "Degree",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "EmployeeStatus",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "EmployeeType",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "DeactivationReason",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "EmploymentTest",
-                filter: "[?(@.active == true)]"
-              },
-              {
-                name: "Specalization",
-                filter: "[?(@.active == true)]"
-              }
+              { name: "RateType", filter: "[?(@.active == true)]" },
             ]
           }
         ]
@@ -161,74 +107,76 @@ import {
         [],
         mdmsBody
       );
-      dispatch(
-        prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes"))
-      );
-      setRolesList(state, dispatch);
-      setHierarchyList(state, dispatch);
-      return true;
+      dispatch( prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes")) );
     } catch (e) {
       console.log(e);
     }
   };
   
-  const getYearsList = (startYear, state, dispatch) => {
-    var currentYear = new Date().getFullYear(),
-      years = [];
-    startYear = startYear || 1980;
+  const getData = async (action, state, dispatch) => {
+    await getMdmsData(action, state, dispatch);
+    //fetching supplier master
+    const queryObject = [{ key: "tenantId", value: getTenantId()  }];
   
-    while (startYear <= currentYear) {
-      years.push({ value: (startYear++).toString() });
-    }
-  
-    dispatch(prepareFinalObject("yearsList", years));
-  };
-  
-  const setRolesList = (state, dispatch) => {
-    let rolesList = get(
-      state.screenConfiguration.preparedFinalObject,
-      `createScreenMdmsData.ACCESSCONTROL-ROLES.roles`,
-      []
-    );
-    let furnishedRolesList = rolesList.filter(item => {
-      return item.code;
+    getSearchResults(queryObject, dispatch,"supplier")
+    .then(response =>{
+      if(response){
+        const supplierNames = response.suppliers.map(item => {
+          let code = item.code;
+          let name = item.name;
+          return{code,name}
+        } )
+        dispatch(prepareFinalObject("searchMaster.supplierName", supplierNames));
+      }
     });
-    dispatch(
-      prepareFinalObject(
-        "createScreenMdmsData.furnishedRolesList",
-        furnishedRolesList
-      )
-    );
-  };
-  
-  const setHierarchyList = (state, dispatch) => {
-    let tenantBoundary = get(
-      state.screenConfiguration.preparedFinalObject,
-      `createScreenMdmsData.egov-location.TenantBoundary`,
-      []
-    );
-    let hierarchyList = map(tenantBoundary, "hierarchyType", []);
-    dispatch(
-      prepareFinalObject("createScreenMdmsData.hierarchyList", hierarchyList)
-    );
-  };
-  
-  const freezeEmployedStatus = (state, dispatch) => {
-    let employeeStatus = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Employee[0].employeeStatus"
-    );
-    if (!employeeStatus) {
-      dispatch(prepareFinalObject("Employee[0].employeeStatus", "EMPLOYED"));
+
+    //fetching store name
+    getSearchResults(queryObject, dispatch,"storeMaster")
+    .then(response =>{
+      if(response){
+        const storeNames = response.stores.map(item => {
+          let code = item.code;
+          let name = item.name;
+          return{code,name}
+        } )
+        dispatch(prepareFinalObject("searchMaster.storeNames", storeNames));
+      }
+    });
+
+    // fetching employee designation
+    const userInfo = JSON.parse(getUserInfo());
+    if(userInfo){
+      dispatch(prepareFinalObject("purchaseOrders[0].createdBy", userInfo.name));
+      const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+      try { 
+        const payload = await httpRequest(
+          "post",
+          "/egov-hrms/employees/_search",
+          "_search",
+          queryParams
+        );
+        if(payload){
+          const {designationsById} = state.common;
+          const empdesignation = payload.Employees[0].assignments[0].designation;
+          if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+          dispatch(prepareFinalObject("purchaseOrders[0].designation", desgnName[0].name));
+          }
+        }
+        
+      } catch (e) {
+        console.log(e);
+      }
     }
-  };
-  
+
+  }
   const screenConfig = {
     uiFramework: "material-ui",
     name: "create-purchase-order",
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
-     
+      getData(action, state, dispatch);
+
       return action;
     },
   
@@ -257,7 +205,7 @@ import {
           formwizardFirstStep,
           formwizardSecondStep,
           formwizardThirdStep,
-          formwizardFourthStep,
+        //  formwizardFourthStep,
           footer
         }
       }

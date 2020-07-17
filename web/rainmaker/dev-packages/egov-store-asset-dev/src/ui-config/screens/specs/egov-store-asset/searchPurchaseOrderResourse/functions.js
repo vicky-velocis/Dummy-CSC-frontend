@@ -76,13 +76,11 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.purchaseOrders.map((item) => {
   
         return {
-            [getTextToLocalMapping("Indent No")]: get(item, "purchaseOrderNumber", "-") || "-",
-            [getTextToLocalMapping("Indent Date")]: get(item, "purchaseOrderDate", "-") || "-",
+            [getTextToLocalMapping("Purchase Order Number")]: get(item, "purchaseOrderNumber", "-") || "-",
+            [getTextToLocalMapping("PO Date")]: get(item, "purchaseOrderDate", "-") || "-",
             [getTextToLocalMapping("Store Name")]: get(item, "store.name", "-") || "-",
-            [getTextToLocalMapping("Indent Purpose")]: get(item, "name", "-") || "-", // field not present
-            [getTextToLocalMapping("Inventory Type")]: get(item, "purchaseOrderDetails[0].material.inventoryType", "-") || "-",
-            [getTextToLocalMapping("Raised By")]: get(item, "name", "-") || "-",// field not present
-            [getTextToLocalMapping("Indent Status")]: get(item, "name", "-") || "-",// field not present
+            [getTextToLocalMapping("PO Rate Type")]: get(item, "rateType", "-") || "-",
+            [getTextToLocalMapping("Supplier")]: get(item, "supplier.name", "-") || "-",
         };
       });
 

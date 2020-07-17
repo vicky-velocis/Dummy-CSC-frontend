@@ -61,8 +61,8 @@ const MaterialTypeRelationDetailsCard = {
 
                 const storeObj = stores.filter(item => item.code === action.value);
 
-                let materialDeptPath = action.componentJsonpath.replace(".storeName", ".department");
-                //  dispatch(handleField("create-material-type", materialDeptPath,"props.value", storeObj[0].department));
+                let materialDeptPath = action.componentJsonpath.replace(".storeName", ".departmentName");
+                 dispatch(handleField("create-material-type", materialDeptPath,"props.value", storeObj[0].department.name));
 
               }
             }
@@ -78,7 +78,7 @@ const MaterialTypeRelationDetailsCard = {
             },
             //pattern: getPattern("non-empty-alpha-numeric"),
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "materialTypes[0].storeMapping[0].department",
+            jsonPath: "materialTypes[0].storeMapping[0].store.department.name",
           }),
           // chartofAccount: {
           //   ...getSelectField({

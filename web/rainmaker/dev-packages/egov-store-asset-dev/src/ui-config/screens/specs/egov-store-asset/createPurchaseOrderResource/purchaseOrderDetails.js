@@ -29,7 +29,7 @@ const purchaseOrderDetailsCard = {
               },
               required: true,
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.code",
-              sourceJsonPath: "createScreenMdmsData1.material-type.stores",
+              sourceJsonPath: "searchMaster.materialNames",
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
@@ -94,22 +94,19 @@ const purchaseOrderDetailsCard = {
             })
           },
           orderQuantity: {
-            ...getSelectField({
-              label: { labelName: "Order Quantity", labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY" },
+            ...getTextField({
+              label: {
+                labelName: "Order Quantity",
+                labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY"
+              },
               placeholder: {
-                labelName: "Select Order Quantity",
+                labelName: "Enter Order Quantity",
                 labelKey: "STORE_PURCHASE_ORDER_BLNC_ORDR_PLACEHOLDER"
               },
-              required: true,
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].orderQuantity",
-              sourceJsonPath: "createScreenMdmsData1.material-type.stores",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-              }
-            }),
-          }, 
+              pattern: getPattern("numeric-only"),
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].orderQuantity"
+            })
+          },
           uomName: {
             ...getTextField({
               label: {
@@ -232,7 +229,7 @@ const purchaseOrderDetailsCard = {
     headerName: "Purchase Order Details",
     headerJsonPath:
       "children.cardContent.children.header.children.head.children.Accessories.props.label",
-    sourceJsonPath: "Employee[0].assignments",
+    sourceJsonPath: "purchaseOrders[0].purchaseOrderDetails",
     prefixSourceJsonPath:
       "children.cardContent.children.poDetailsCardContainer.children",
    // disableDeleteIfKeyExists: "id"
@@ -247,7 +244,7 @@ export const purchaseOrderDetails = getCommonCard({
       labelKey: "STORE_PO_DETAILS_HEADER "
     },
     {
-      style: {
+      style: {  
         marginBottom: 18
       }
     }

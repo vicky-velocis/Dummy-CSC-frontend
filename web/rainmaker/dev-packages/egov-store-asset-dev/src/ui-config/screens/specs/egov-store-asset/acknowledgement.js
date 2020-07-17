@@ -73,8 +73,12 @@ let labelValue = "";
       labelName: "Material Indent Note Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
+    case "PURCHASEORDER": labelValue = {
+      labelName: "Material Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
     break;
-    default :  labelValue = {
+      default :  labelValue = {
       labelName: "Submitted Successfully",
       labelKey: "",
     }
@@ -99,6 +103,11 @@ const getApplicationDisplayCode =() => {
     case "SUPPLIERMASTER": labelValue = {
       labelName: "Supplier Name",
       labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME",
+    }
+    break;
+    case "PURCHASEORDER": labelValue = {
+      labelName: "Purchase Order Number",
+      labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
     }
     break;
     default :  labelValue = {
