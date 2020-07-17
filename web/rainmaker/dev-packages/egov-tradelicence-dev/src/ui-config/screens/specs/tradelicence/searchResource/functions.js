@@ -186,8 +186,8 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
           [getTextToLocalMapping("Application Type")]:
           item.applicationType || "Renew",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId,
-        ["status1"]: item.status || "-"
+        // ["tenantId"]: item.tenantId,
+        // ["status1"]: item.status || "-"
       }));
 
       dispatch(
