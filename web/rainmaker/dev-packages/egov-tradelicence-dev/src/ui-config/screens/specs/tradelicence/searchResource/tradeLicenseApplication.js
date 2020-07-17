@@ -11,6 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./functions";
 import { setServiceType } from "../applyResource/tradeDetails";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -218,28 +219,56 @@ export const tradeLicenseApplication = getCommonCard({
     // firstCont: {
 
     buttonContainer: getCommonContainer({
-      firstCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
+      // firstCont: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   }
+      // },
+      resetButton: {
+        componentPath: "Button",
         gridDefination: {
-          xs: 12,
-          sm: 4
+          xs: 6,
+          sm: 6
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            width: "70%",
+            height: "48px",
+            margin: "8px",
+            float: "right"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields
         }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 12,
-          sm: 4
+          xs: 6,
+          sm: 6
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-
+            margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "80%",
+            width: "220px",
             height: "48px"
           }
         },
@@ -254,14 +283,91 @@ export const tradeLicenseApplication = getCommonCard({
           callBack: searchApiCall
         }
       },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      }
+      // lastCont: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   }
+      // }
     })
   })
 });
+
+function resetFields(state, dispatch) {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.serviceType",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusContainer.children.tradeType",
+      "props.value",
+      ""
+    )
+  )
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.tradeLicenseNo",
+      "props.value",
+      ""
+    )
+  )
+
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.applicationType",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  )
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.tradeLicenseApplication.children.cardContent.children.applicationTypeAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  )
+}
