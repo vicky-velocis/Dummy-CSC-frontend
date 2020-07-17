@@ -14,7 +14,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import './index.css'
 import { callPGService } from "./footer";
 import { getOPMSPattern, checkForRole } from '../../utils/index';
 //let role_name = JSON.parse(getUserInfo()).roles[0].code
@@ -1251,7 +1251,7 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           },
           props: {
             style: {
-              width: "90%"
+              width: "100%"
             }
           },
           optionLabel: "element",
@@ -1473,6 +1473,12 @@ export const adhocPopup1 = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "PetNoc[0].PetNocDetails.additionalDetail.remarks"
 
         })
@@ -1665,6 +1671,12 @@ export const adhocPopup2 = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "PetNoc[0].PetNocDetails.Reaasign.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -1876,6 +1888,12 @@ export const adhocPopup3 = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "PetNoc[0].PetNocDetails.Approve.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2068,6 +2086,12 @@ export const adhocPopup4 = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "PetNoc[0].PetNocDetails.Reject.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2261,6 +2285,12 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].Forward.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2456,6 +2486,12 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].Reassign.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2649,6 +2685,12 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].Reject.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2839,6 +2881,12 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].Approve.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3061,6 +3109,12 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].WithdraApproval.Remark",
 
           required: true,
@@ -3253,6 +3307,12 @@ export const SellMeatForward = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "SellMeat[0].SellMeatDetails.Forward.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3445,6 +3505,12 @@ export const SellMeatReassign = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "SellMeat[0].SellMeatDetails.Reassign.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3633,6 +3699,12 @@ export const SellMeatApprove = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "SellMeat[0].SellMeatDetails.Approve.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3826,6 +3898,12 @@ export const SellMeatReject = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "SellMeat[0].SellMeatDetails.Reject.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4099,6 +4177,12 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4294,6 +4378,12 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4486,6 +4576,12 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4674,6 +4770,12 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4865,6 +4967,12 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -5054,6 +5162,12 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
               width: "100%"
             }
           },
+          props:{
+            
+                        className:"textfield-enterable-selection",
+                        multiline: true,
+                        rows: "4"
+                      },
           jsonPath: "advertisement[0].withdraw.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),

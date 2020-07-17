@@ -5,6 +5,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { furnishNocResponse, getSearchResults, findItemInArrayOfObject } from "../../../../../ui-utils/commons";
 import { getOPMSPattern } from "../../utils/index"
 import set from "lodash/set";
+import "./index.css";
 
 export const AdvtDetails = getCommonCard({
   header: getCommonTitle(
@@ -224,7 +225,7 @@ export const AdvtDetails = getCommonCard({
         },
         required: false,
         pattern: getOPMSPattern("cin"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "CIN_NO_INVALID",
         jsonPath: "ADVERTISEMENTNOC.cin",
       })
     },
@@ -257,8 +258,14 @@ export const AdvtDetails = getCommonCard({
           labelName: "APPLICANTADDR",
           labelKey: "ADV_APPLICANTADDR_NOC_PLACEHOLDER"
         },
+        props:{
+          
+                      className:"textfield-enterable-selection",
+                      multiline: true,
+                      rows: "2"
+                    },
         required: true,
-        pattern: getOPMSPattern("Address"),
+        pattern: getOPMSPattern("TexrearAddress"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         jsonPath: "ADVERTISEMENTNOC.applicantAddress",
       })
@@ -273,6 +280,7 @@ export const AdvtDetails = getCommonCard({
           labelName: "Landmark",
           labelKey: "ADV_LANDMARK_NOC_PLACEHOLDER"
         },
+        
         required: true,
         pattern: getOPMSPattern("Address"),
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",

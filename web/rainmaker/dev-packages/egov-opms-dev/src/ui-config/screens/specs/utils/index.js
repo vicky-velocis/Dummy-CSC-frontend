@@ -1082,14 +1082,20 @@ export const getOPMSPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,25}$/i;
     case "ROADCUTFEE":
       return /^\d{1,12}(\.\d{1,2})?$/i;
-    case "Remarks":
-      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,128}$/i;
+    // case "Remarks":
+    //   return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,128}$/i;
     case "BadgeNumber":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}&#,\[\]*.:;“”‘’]{1,50}$/i;
       case "typeofroadcut":
       return /^[a-zA-Z0-9-, ]{1,200}$/i;
       case "petnocIdentificationMark":
       return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,100}$/i;
+      
+      case "Remarks":
+      return /^[a-zA-Z0-9.',\n\r ]{1,128}$/i;
+      case "TexrearAddress":
+      return /^[a-zA-Z0-9-\/,()_'&.\"\n\r ]{1,128}$/i;
+      
   }
 };
 
