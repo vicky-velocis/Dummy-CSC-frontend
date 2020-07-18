@@ -10,7 +10,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { getTodaysDateInYMD } from "../../utils";
   import get from "lodash/get";
-  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { handleScreenConfigurationFieldChange as handleField , prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
   const arrayCrawler = (arr, n) => {
     if (n == 1) {
@@ -47,7 +47,16 @@ import {
                   optionValue: "code",
                   optionLabel: "description",
                 },
-              })
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+                let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
+                let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
+               
+                if(MaterialType[0])
+                {
+                dispatch(prepareFinalObject("indents[0].indentDetails[0].uom.code",MaterialType[0].baseUom.code));
+              }
+              }
             },
             MaterialDescription: {
               ...getTextField({
@@ -77,14 +86,13 @@ import {
                   labelName: "Select UOM Name",
                   labelKey: "STORE_MATERIAL_INDENT_UOM_NAME_SELECT"
                 },
-                props:{
-                  disabled:true
-                },
+               
                 required: false,
                 pattern: getPattern("Name") || null,
                 jsonPath: "indents[0].indentDetails[0].uom.code",
                 sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
                 props: {
+                  disabled:true,
                   optionLabel: "name",
                   optionValue: "code"
                 },

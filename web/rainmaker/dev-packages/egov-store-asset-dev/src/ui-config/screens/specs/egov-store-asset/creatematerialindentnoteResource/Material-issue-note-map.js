@@ -40,6 +40,8 @@ import {
        
         //BalanceQty
         dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty",materialReceipt[0].receiptDetails[0].userAcceptedQty));
+        //materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice
+        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",materialReceipt[0].receiptDetails[0].unitRate));
       }
       else
       {
@@ -192,22 +194,26 @@ import {
                 jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentIssuedQuantity"
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                alert(action.value)
-
-                
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",10));
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",10));
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue",10));
+                //alert(action.value)
+                // set total Qty and other Qty
+                //materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice
+                let UnitPrice = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice`,0)
+                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty`,0)
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",Number(UnitPrice)));
+                let BalanceQtyAfterIssue = BalanceQty - Number(action.value)
+                let TotalValue = Number(UnitPrice)* Number(action.value)
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",BalanceQtyAfterIssue));
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue",TotalValue));
               }
             },
             UOMName: {
               ...getTextField({
                 label: {
-                  labelName: "Total Indent Qty Required",
+                  labelName: "UOM",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"
                 },
                 placeholder: {
-                  labelName: "Total Indent Qty Required",
+                  labelName: "UOM",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"
                 },
                 props:{
@@ -276,7 +282,7 @@ import {
               ...getTextField({
                 label: {
                   labelName: "Assest Code",
-                  labelKey: "Assest Code"
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE"
                 },
                 placeholder: {
                   labelName: "Assest Code",
@@ -305,17 +311,17 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].AssestCode"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].ProjectCode"
               })
             },
             Remark: {
               ...getTextField({
                 label: {
                   labelName: "Remark",
-                  labelKey: "Enter Remark"
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
                 },
                 placeholder: {
-                  labelName: "Total Indent Qty Required",
+                  labelName: "Enter Remark",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
                 },
                 required: false,

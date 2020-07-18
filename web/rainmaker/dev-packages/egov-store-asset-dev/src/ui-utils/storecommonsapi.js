@@ -405,7 +405,7 @@ export const creatematerialissues = async (queryObject, payload, dispatch) => {
       "/store-asset-services/materialissues/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialIssues: payload }
     );
     return response;
   } catch (error) {
@@ -426,7 +426,7 @@ export const updatematerialissues = async (queryObject, payload, dispatch) => {
       "/store-asset-services/materialissues/_update",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialIssues: payload }
     );
     return response;
   } catch (error) {

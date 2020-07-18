@@ -6,7 +6,8 @@ import {
     getTextField,
     getSelectField,
     getCommonContainer,
-    getPattern
+    getPattern,
+    getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
  
@@ -28,7 +29,7 @@ import {
       header1: getCommonTitle(
         {
           labelName: "Purchasing Information",
-          labelKey: "STORE_MATERIAL_PURCHASING_INFORMATION"
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION"
         },
         {
           style: {
@@ -37,39 +38,98 @@ import {
         }
       ),
       ApprovalInformationContainer: getCommonContainer({
-        PurchaseUOMName: {
-          ...getSelectField({
+        ApprovalDate: {
+          ...getDateField({
             label: {
-              labelName: "Purchase UOM  Name",
-              labelKey: "STORE_MATERIAL_PURCHASE_UOM_NAME"
+              labelName: "Approval Date",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_DATE"
             },
             placeholder: {
-              labelName: "Select Purchase UOM  Name",
-              labelKey: "STORE_MATERIAL_PURCHASE_UOM_NAME_SELECT"
-            },
-            required: true,
-           
-            jsonPath: "materials[0].purchaseUom.code",
-            sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
-          props: {
-            optionLabel: "code",
-            optionValue: "name"
-          },
-          })
-        },
-        ExpenseAccountCode: {
-          ...getSelectField({
-            label: {
-              labelName: "Expense Account Code",
-              labelKey: "STORE_MATERIAL_EXPENSE_ACCOUNT_CODE"
-            },
-            placeholder: {
-              labelName: "Selet Expense Account Code",
-              labelKey: "STORE_MATERIAL_EXPENSE_ACCOUNT_CODE_SELECT"
+              labelName: "Enter Approval Date",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_DATE_PLACEHOLDER"
             },
             required: false,
+           props:{
+          disabled:true,
+           },
+            jsonPath: "materialIssues[0].ApprovalDate",
+            
+          
+          })
+        },
+        ApprovalName: {
+          ...getTextField({
+            label: {
+              labelName: "Approval Name",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_NAME"
+            },
+            placeholder: {
+              labelName: "Approval Name",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_NAME"
+            },
+            required: false,
+            props:{
+              disabled:true,
+                         },
             pattern: getPattern("Name") || null,
-            jsonPath: "materials[0].expenseAccount.glCode"
+            jsonPath: "materialIssues[0].ApprovalName"
+          })
+        },
+        ApprovalDEgignation: {
+          ...getTextField({
+            label: {
+              labelName: "Approval Designation",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_DESIGNATION"
+            },
+            placeholder: {
+              labelName: "Approval Designation",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_DESIGNATION"
+            },
+            required: false,
+            props:{
+              disabled:true,
+                         },
+            pattern: getPattern("Name") || null,
+            jsonPath: "materialIssues[0].ApprovalDEgignation"
+          })
+        },
+        ApprovalStatus: {
+          ...getTextField({
+            label: {
+              labelName: "Approval Status",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_STATUS"
+            },
+            placeholder: {
+              labelName: "Approval Status",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_STATUS"
+            },
+            required: false,
+            props:{
+              disabled:true,
+                         },
+            pattern: getPattern("Name") || null,
+            jsonPath: "materialIssues[0].ApprovalStatus"
+          })
+        }, 
+        ApprovalRemark: {
+          ...getTextField({
+            label: {
+              labelName: "Approval Remarks",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_REMARKS"
+            },
+            placeholder: {
+              labelName: "Enter Approval Remarks",
+              labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_REMARKS_PLACEHOLDER"
+            },
+            required: false,
+            props: {
+              disabled:true,
+              className: "applicant-details-error",
+              multiline: "multiline",
+              rowsMax: 2,
+            },
+            pattern: getPattern("Name") || null,
+            jsonPath: "materialIssues[0].ApprovalRemark"
           })
         },  
        

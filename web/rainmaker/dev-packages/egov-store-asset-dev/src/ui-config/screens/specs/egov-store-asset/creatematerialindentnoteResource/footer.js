@@ -12,13 +12,15 @@ import {
   epochToYmd,
   validateFields
 } from "../../utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 // import "./index.css";
 
 const moveToReview = dispatch => {
+  const IndentId = getQueryArg(window.location.href, "IndentId");
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/reviewmaterialmaster`
-      : `/egov-store-asset/reviewmaterialmaster`;
+      ? `/egov-ui-framework/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`
+      : `/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`;
   dispatch(setRoute(reviewUrl));
 };
 
