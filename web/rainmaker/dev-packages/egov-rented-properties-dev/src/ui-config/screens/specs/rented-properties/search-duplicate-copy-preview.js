@@ -9,12 +9,21 @@ import { getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
 import { getDuplicateCopyReviewPropertyAddressDetails , getDuplicateCopyPreviewApplicantDetails} from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
 
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Duplicate Copy Application",
       labelKey: "DUPLICATE_COPY_APPLICATION_HEADER"
-    })
-  });
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-rented-properties",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      }
+    }
+});
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
