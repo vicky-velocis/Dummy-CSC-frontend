@@ -275,7 +275,7 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=priceList&mode=create&code=123456`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=PRICELIST&mode=create&code=123456`));
        }
     } catch (error) {
       furnishPriceListData(state, dispatch);

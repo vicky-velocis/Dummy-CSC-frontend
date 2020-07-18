@@ -80,7 +80,7 @@ export const searchForm = getCommonCard({
       },
       sourceJsonPath: "store.stores",
       props: {
-        optionValue: "id",
+        optionValue: "code",
         optionLabel: "name",
       },
       

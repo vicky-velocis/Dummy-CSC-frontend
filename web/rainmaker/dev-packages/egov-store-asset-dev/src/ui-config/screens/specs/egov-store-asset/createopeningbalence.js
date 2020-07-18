@@ -87,8 +87,10 @@ import {
         value: tenantId
       });
     try {
-      let response = await getOpeningBalanceSearchResults(queryObject, dispatch);      
-      dispatch(prepareFinalObject("materialReceipt", response.materialReceipt));
+      let response = await getOpeningBalanceSearchResults(queryObject, dispatch);        
+     let  materialReceipt = response.materialReceipt
+     materialReceipt = materialReceipt.filter(x=>x.id === id)
+      dispatch(prepareFinalObject("materialReceipt", materialReceipt));
        
     } catch (e) {
       console.log(e);

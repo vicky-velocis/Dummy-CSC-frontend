@@ -101,6 +101,31 @@ const getApplicationDisplayCode =() => {
       labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME",
     }
     break;
+    case "PRICELIST": labelValue = {
+      labelName: "Price List",
+      labelKey: `STORE_SUPPLIER_MASTER_SUPPLIER_NAME`,
+    }
+    break;
+    case "MATERIALMASTER": labelValue = {
+      labelName: "Material Master",
+      labelKey: `STORE_COMMON_MATERIAL_MASTER`,
+    }
+    break;
+    case "OPENINGBALANCE": labelValue = {
+      labelName: "mrnNumber",
+      labelKey: `STORE_MATERIAL_NUMBER`,
+    }
+    break;
+    case "MATERIALINDENT": labelValue = {
+      labelName: "Indent Number",
+      labelKey: `STORE_INDENT_NUMBER`,
+    }
+    break;
+    case "MATERIALINDENTNOTE": labelValue = {
+      labelName: "Indent Number",
+      labelKey: `STORE_INDENT_NUMBER`,
+    }
+    break;
     default :  labelValue = {
       labelName: "Application No.",
       labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",

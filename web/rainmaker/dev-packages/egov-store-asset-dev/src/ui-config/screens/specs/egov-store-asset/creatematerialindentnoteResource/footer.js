@@ -9,6 +9,7 @@ import {
   getButtonVisibility,
   getCommonApplyFooter,
   ifUserRoleExists,
+  epochToYmd,
   validateFields
 } from "../../utils";
 // import "./index.css";
@@ -30,7 +31,7 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   if (activeStep === 0) {
     const isMaterialDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.MaterialMasterDetails.children.cardContent.children.MaterialDetailsContainer.children",
+      "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children",
       state,
       dispatch,
       "createMaterialIndentNote"
@@ -42,7 +43,7 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 1) {
     let storeDetailsCardPath =
-      "components.div.children.formwizardSecondStep.children.storeDetails.children.cardContent.children.storeDetailsCard.props.items";
+      "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
     let storeDetailsItems = get(
       state.screenConfiguration.screenConfig.createMaterialIndentNote,
       storeDetailsCardPath,
@@ -54,7 +55,7 @@ export const callBackForNext = async (state, dispatch) => {
         (storeDetailsItems[j].isDeleted === undefined ||
           storeDetailsItems[j].isDeleted !== false) &&
         !validateFields(
-          `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.storeDetailsCardContainer.children`,
+          `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.materialIssueCardContainer.children`,
           state,
           dispatch,
           "createMaterialIndentNote"
@@ -67,45 +68,34 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 2) {   
-    const isPuchasingInformationValid = validateFields(
+    let isPuchasingInformationValid = validateFields(
       "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View1.children.cardContent.children.PuchasingInformationContainer.children",
       state,
       dispatch,
       "createMaterialIndentNote"
     );
-    const isStockingInformationValid = validateFields(
-      "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View2.children.cardContent.children.StockingInformationContainer.children",
-      state,
-      dispatch,
-      "createMaterialIndentNote"
-    );
-    const isSpecificationValid = validateFields(
-      "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View3.children.cardContent.children.SpecificationContainer.children",
-      state,
-      dispatch,
-      "createMaterialIndentNote"
-    );
+    isPuchasingInformationValid = true;
     
-    if (!isPuchasingInformationValid || !isStockingInformationValid || !isSpecificationValid) {
+    if (!isPuchasingInformationValid) {
       isFormValid = false;
     }
     if(isFormValid)
     {
 
     // get max and min Qty and validate     
-    let MaxQty =0
-    let MinQty = 0
-    MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
-    MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
-    if(MaxQty> MinQty)
+    // let MaxQty =0
+    // let MinQty = 0
+    // MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
+    // MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
+    if(true)
     moveToReview(dispatch);
     else{
      // pop earnning Message
-     const errorMessage = {
-      labelName: "Maximun Qty is greater then Minimum Qty",
-      labelKey: "STORE_MATERIAL_MASTER_MAX_MIN_QTY_VALIDATION_MESSAGE"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    //  const errorMessage = {
+    //   labelName: "Maximun Qty is greater then Minimum Qty",
+    //   labelKey: "STORE_MATERIAL_MASTER_MAX_MIN_QTY_VALIDATION_MESSAGE"
+    // };
+    // dispatch(toggleSnackbar(true, errorMessage, "warning"));
 
     }
     
@@ -122,7 +112,39 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep !== 2) {
     if (isFormValid) {
-      changeStep(state, dispatch);
+      let toStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].toStore.code",'') 
+      let fromStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'') 
+      let expectedDeliveryDateValid = true   
+      const CurrentDate = new Date();
+      let issueDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialIssues[0].issueDate",
+        null
+      );
+      if(Number(issueDate))
+      issueDate = epochToYmd(issueDate)
+    const  issueDate_ = new Date(issueDate)
+      if(fromStore === toStore)
+      {
+        const errorMessage = {
+          labelName: "Intenting Store and Issuing Store can not be same ",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_STORE_SELECTION_VALIDATION"
+        }; 
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      }
+      else if (issueDate_>CurrentDate)
+      {
+        const errorMessage = {
+          labelName: "Intent Isue Date can not be greater then current date",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_VALIDATION"
+        };  
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      }
+      else{
+        changeStep(state, dispatch);
+
+      }
+     
     } else {
       const errorMessage = {
         labelName: "Please fill all fields",

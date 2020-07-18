@@ -224,24 +224,24 @@ export const header = getCommonContainer({
         IndentConfiguration().materialIssueStatus,
       )
     );
-    let issueStore = get(
+    let indents = get(
       state.screenConfiguration.preparedFinalObject,
-      `indents[0].issueStore`,
+      `indents`,
       []
     );
+    let IndentId = getQueryArg(window.location.href, "IndentId");
+    
+    indents = indents.filter(x=> x.id === IndentId)
     //designation
     dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
-    let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
-    if(issueStore)
+    //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
+    if(indents && indents[0] )
     { 
-      if(issueStore.code !== undefined)
-      {
-        let IndentId = getQueryArg(window.location.href, "IndentId");
-        alert(IndentId)
-        dispatch(prepareFinalObject("materialIssues[0].toStore.code",issueStore.code));
-        dispatch(prepareFinalObject("materialIssues[0].indent",indents.filter(x=> x.id === IndentId )));
-        console.log(indents.filter(x=> x.id === IndentId ))
-        console.log('pritam')
+      if(indents[0].issueStore.code !== undefined)
+      {    
+        dispatch(prepareFinalObject("materialIssues[0].toStore.code",indents[0].issueStore.code));
+        dispatch(prepareFinalObject("materialIssues[0].toStore.name",indents[0].issueStore.name));
+        dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
         dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
         dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
         //get Material based on Store

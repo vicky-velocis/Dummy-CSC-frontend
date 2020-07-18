@@ -12,10 +12,11 @@ import {
  import get from "lodash/get";
  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommonsapi'
- import { prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+ import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+ import { httpRequest } from "../../../../../ui-utils/api";
 
-
- const getMaterialData = async (action, state, dispatch,storecode) => {
+ const getMaterialData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let queryObject = [
     {
@@ -23,6 +24,7 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
       value: getTenantId(),
     },
   ];
+  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'')
   queryObject.push({
     key: "store",
     value: storecode
@@ -32,8 +34,34 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
   try {
     let response = await getMaterialMasterSearchResults(queryObject, dispatch);
     dispatch(prepareFinalObject("materials", response.materials));
-    console.log(response.materials)
-    console.log("response.materials")
+   //set materialIssues[0].issuedToEmployee
+   const queryParams = [{ key: "roles", value: "EMPLOYEE" },{ key: "tenantId", value:  getTenantId() }];
+   const payload = await httpRequest(
+     "post",
+     "/egov-hrms/employees/_search",
+     "_search",
+     queryParams,
+   );
+  
+   let stores = get(state,"screenConfiguration.preparedFinalObject.store.stores",[])
+   stores = stores.filter(x=>x.code === storecode)
+   //alert(stores[0].storeInCharge.code)
+   if(payload){
+     if (payload.Employees) {
+       const {screenConfiguration} = state;
+        // const {stores} = screenConfiguration.preparedFinalObject;
+       const empDetails =
+       payload.Employees.filter((item, index) =>  stores[0].storeInCharge.code === item.code);
+     
+       if(empDetails && empDetails[0] ){
+         //alert(empDetails[0].user.name)        
+         dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",empDetails[0].user.name));  
+       }
+       else{
+        dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",""));  
+       }
+     }
+   }
   } catch (e) {
     console.log(e);
   }
@@ -74,19 +102,27 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
           //alert(action.value)
           let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
           let fromstore = store.filter(x=> x.code === action.value)
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.code",fromstore[0].code));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.name",fromstore[0].name));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.department.id",fromstore[0].department));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
-          dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));
-
-         
-          getMaterialData(action,state,dispatch)
+          let toStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].toStore.code",'') 
+          if(action.value !== toStore)
+          {
+            if(fromstore&&fromstore[0])
+            {
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.code",fromstore[0].code));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.name",fromstore[0].name));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.department.id",fromstore[0].department));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));         
+                getMaterialData(action,state,dispatch)
+            }
+          }
+          else{
+           
+          }
           
         }
       },
@@ -100,7 +136,7 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
             labelName: "Enter Issue Date",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
           },
-          required: false,
+          required: true,
           pattern: getPattern("Date") || null,
           jsonPath: "materialIssues[0].issueDate"
         })
@@ -116,7 +152,7 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
             disabled: true,       
           },
           required: false,
-          jsonPath: "materialIssues[0].toStore.code",
+          jsonPath: "materialIssues[0].toStore.name",
           
         })
       },
@@ -147,19 +183,12 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
           placeholder: {
             labelName: "Select Issue To Employee",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
-          },
-          props: {
-            className: "applicant-details-error",
-            multiline: "multiline",
-            rowsMax: 4,
-          },
+          },         
           required: false,
-          jsonPath: "materialIssues[0].issuedToEmployee",
-          sourceJsonPath: "store.stores",
-            props: {
-              optionValue: "code",
-              optionLabel: "name",
-            },
+          jsonPath: "materialIssues[0].issuedToEmployee",         
+          props: {
+            disabled: true,       
+          },
         })
       },
       issuedToDesignation: {

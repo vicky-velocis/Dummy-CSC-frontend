@@ -11,6 +11,49 @@ import {
   import filter from "lodash/filter";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
+  const getBalanceQty = async (action, state, dispatch) => {
+    const tenantId = getTenantId();
+    const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId,
+      },
+    ];
+    queryObject.push({
+      key: "storeName",
+      value: storecode
+    });
+  
+      
+    try {
+      let response = await getOpeningBalanceSearchResults(queryObject, dispatch);
+      //let c = response.materialReceipt[0].receiptDetails[0].
+
+      let  materialReceipt = response.materialReceipt
+      console.log(materialReceipt[0].receiptDetails[0].userAcceptedQty)
+      let matcode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code", '' )
+      //alert(materialReceipt[0].receiptDetails[0].material.code +'_'+matcode)
+      if (matcode === materialReceipt[0].receiptDetails[0].material.code)
+      {
+       
+        //BalanceQty
+        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty",materialReceipt[0].receiptDetails[0].userAcceptedQty));
+      }
+      else
+      {
+        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity",0));
+      }
+      // materialReceipt = materialReceipt.filter(x=>x.receivingStore.code === storecode)
+      // console.log(materialReceipt[0])
+      
+     
+      
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const arrayCrawler = (arr, n) => {
     if (n == 1) {
       return arr.map(item => {
@@ -55,24 +98,25 @@ import {
                   `materials`,
                   []
                 );               
-                Material =  Material.filter(x=> x.code === action.value)
-                console.log(Material)
+                Material =  Material.filter(x=> x.code === action.value)               
                 let indentDetails = get(
                   state.screenConfiguration.preparedFinalObject,
                   `materialIssues[0].indent.indentDetails`,
                   []
                 ); 
-                indentDetails = indentDetails.filter(x=> x.code === action.value)
+               
+                indentDetails = indentDetails.filter(x=> x.material.code === action.value)
+                
                 if(Material && Material[0])
                 {
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.id",Material[0].id));
-                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.getTenantId",getTenantId()));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.tenantId",getTenantId()));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.name",Material[0].name));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.description",Material[0].description));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.reorderLevel",Material[0].reorderLevel));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialType.id",Material[0].materialType.id));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialType.name",Material[0].materialType.name));
-                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.baseUom.id",Material[0].baseUom.id));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.baseUom",Material[0].baseUom));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.minQuantity",Material[0].minQuantity));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.stockingUom",Material[0].stockingUom));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.purchaseUom",Material[0].purchaseUom));
@@ -81,6 +125,14 @@ import {
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.maxQuantity",Material[0].maxQuantity));
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.reorderQuantity",Material[0].reorderQuantity));                
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.materialControlType",Material[0].materialControlType));
+               
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].uom",indentDetails[0].uom));
+                dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].indentDetail.uom",indentDetails[0].uom));
+                // get set  from openning balence
+                getBalanceQty(action,state,dispatch)
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity",indentDetails[0].indentQuantity));
+                //dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty",10));
+                
               }
 
               }
@@ -101,7 +153,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.indentDetail.indentQuantity"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity"
               })
             },
             BalanceQty: {
@@ -119,7 +171,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty"
               })
             },
             QtyIssued: {
@@ -137,8 +189,16 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.indentDetail.indentQuantity"
-              })
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentIssuedQuantity"
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+                alert(action.value)
+
+                
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",10));
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",10));
+                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue",10));
+              }
             },
             UOMName: {
               ...getTextField({
@@ -155,7 +215,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].indentDetail.uom.code"
               })
             },
             UnitPrice: {
@@ -173,7 +233,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice"
               })
             },
             BalanceQtyAfterIssue: {
@@ -191,7 +251,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue"
               })
             },
             TotalValue: {
@@ -205,8 +265,11 @@ import {
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"
                 },
                 required: false,
+                props:{
+                  disabled:true
+                },
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue"
               })
             },
             AssestCode: {
@@ -224,7 +287,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].AssestCode"
               })
             },
             ProjectCode: {
@@ -242,7 +305,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].AssestCode"
               })
             },
             Remark: {
@@ -257,7 +320,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].storeMapping[0].department.name"
+                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].description"
               })
             },
            
