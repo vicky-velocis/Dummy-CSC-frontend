@@ -452,66 +452,51 @@ export const handleFileUpload = (event, handleDocument, props) => {
         }
       }
 	  
-      /* if (!fileValid) {
-        if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
-        {
-          alert(`Only image or pdf files can be uploaded`);
-          uploadDocument = false;
-        } 
-        else
-        {
-          alert(`File type not supported`);
-          uploadDocument = false;
-        }  
-      }
-      if (!isSizeValid) {
-        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
-        uploadDocument = false;
-      } */
 	  
 	  
 	  
-	  
-	  if (!fileValid) {
-        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-        {
-          // alert(`File type not supported`);
-          // uploadDocument = false; 
-          var msg=`File type not supported`
-          store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
-          uploadDocument = false;
-		  
-        } 
-        else
-        {
-			if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
-        {
-          alert(`Only image or pdf files can be uploaded`);
-          uploadDocument = false;
-		}
-		 else
-        {
-          alert(`File type not supported`);
-          uploadDocument = false;
-        } 
-		
-        }  
-      }
       
 
       
-      if (!isSizeValid) {
-       /// alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
-       if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-       {
-        var msg=`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`
+    
+
+    if (!fileValid) {
+      if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
+      {
+         
+        var msg=`File type not supported`
         store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
-       }
-       else{
-        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
-       }
         uploadDocument = false;
-      }
+    
+      } 
+      else
+      {
+    if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
+      {
+       
+        var msg=`Only image or pdf files can be uploaded`
+        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+        uploadDocument = false;
+
+  }
+   else
+      {
+     
+       var msg=`File type not supported`
+       store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+        uploadDocument = false;
+      } 
+  
+      }  
+    }
+     
+    if (!isSizeValid) {
+     
+       var msg=`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`
+       store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+   
+       uploadDocument = false;
+     }
       if (uploadDocument) {
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(

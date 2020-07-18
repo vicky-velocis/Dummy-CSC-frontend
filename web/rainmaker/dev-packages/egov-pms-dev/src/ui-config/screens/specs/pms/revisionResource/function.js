@@ -71,7 +71,7 @@ export const createRevisedPension = async (state, dispatch) => {
                   { 
                     ProcessInstances: [
                                         {
-                                        tenantId:tenantId,
+                                        tenantId:getTenantId(),
                                         pensioner:ProcessInstances[0].pensioner,
                                         pensionRevision:[ProcessInstances[0].pensionRevision[0]]
                                         }

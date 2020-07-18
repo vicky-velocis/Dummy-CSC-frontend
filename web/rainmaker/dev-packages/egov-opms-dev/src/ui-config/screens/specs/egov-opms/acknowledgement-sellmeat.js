@@ -2,8 +2,8 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
-import {PrintIcon} from '@material-ui/icons/Print';
+import { CloudDownloadIcon } from '@material-ui/icons/CloudDownload';
+import { PrintIcon } from '@material-ui/icons/Print';
 import {
   applicationSuccessFooter,
   //paymentSuccessFooter,
@@ -15,7 +15,6 @@ import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils"
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-//import  generatePdf from "../utils/receiptPdf";
 import { Icon } from "egov-ui-framework/ui-atoms";
 // import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
@@ -23,7 +22,7 @@ import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
 
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload  } from "../../../../ui-utils/commons";
+import { getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload } from "../../../../ui-utils/commons";
 import { getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 
 
@@ -44,22 +43,22 @@ export const header = getCommonContainer({
 });
 
 
-const getHeader=(applicationNumber)=>{
-return getCommonContainer({
-  header: getCommonHeader({
-    labelName: `Application for SELLMEAT NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: ""
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-opms",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number:applicationNumber
-    },
-    visible: true
-  }
-})
+const getHeader = (applicationNumber) => {
+  return getCommonContainer({
+    header: getCommonHeader({
+      labelName: `Application for SELLMEAT NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+      labelKey: ""
+    }),
+    applicationNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-opms",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: applicationNumber
+      },
+      visible: true
+    }
+  })
 }
 
 
@@ -76,7 +75,7 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     //loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header:getHeader(applicationNumber),
+      header: getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -89,10 +88,10 @@ const getAcknowledgementCard = (
               labelKey: "NOC_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-				labelName: "A notification regarding Application Submission has been sent to the applicant registered Mobile No.",
-				labelKey: "SELLMEAT_NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
-			},
-        
+              labelName: "A notification regarding Application Submission has been sent to the applicant registered Mobile No.",
+              labelKey: "SELLMEAT_NOC_APPLICATION_SUCCESS_MESSAGE_SUB"
+            },
+
             tailText: {
               labelName: "Application No.",
               labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
@@ -111,18 +110,17 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
-                    props:{
+
+                    props: {
                       iconName: "cloud_download",
-                    style:{
-                      marginTop: "7px",
-                      marginRight: "8px",
-                    }
-                  },
+                      style: {
+                        marginTop: "7px",
+                        marginRight: "8px",
+                      }
+                    },
                     onClick: {
                       action: "condition",
                       callBack: () => {
-                        // generatePdf(state, dispatch, "application_download");
                       },
                     },
                   },
@@ -135,7 +133,6 @@ const getAcknowledgementCard = (
                 onClickDefination: {
                   action: "condition",
                   callBack: () => {
-                    // generatePdf(state, dispatch, "application_download");
                   }
                 },
               },
@@ -146,21 +143,20 @@ const getAcknowledgementCard = (
                   div1: {
                     uiFramework: "custom-atoms",
                     componentPath: "Icon",
-                 
-                    props:{
+
+                    props: {
                       iconName: "local_printshop",
-                      style:{
+                      style: {
                         marginTop: "7px",
                         marginRight: "8px",
-                        marginLeft:"10px",
+                        marginLeft: "10px",
                       }
-                  },
-                   onClick: {
-                    action: "condition",
-                    callBack: () => {
-                      // generatePdf(state, dispatch, "application_print");
-                    }
-                  },
+                    },
+                    onClick: {
+                      action: "condition",
+                      callBack: () => {
+                      }
+                    },
 
                   },
                   div2: getLabel({
@@ -172,7 +168,6 @@ const getAcknowledgementCard = (
                 onClickDefination: {
                   action: "condition",
                   callBack: () => {
-                    // generatePdf(state, dispatch, "application_print");
                   }
                 },
               }
@@ -214,9 +209,9 @@ const getAcknowledgementCard = (
               labelKey: "NOC_PAYMENT_COLLECTION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-               labelName:
+              labelName:
                 "A notification regarding Payment Collection has been sent to the applicant at registered Mobile No.",
-              labelKey: "SELLMEAT_NOC_PAYMENT_SUCCESS_MESSAGE_SUB"		
+              labelKey: "SELLMEAT_NOC_PAYMENT_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Payment Receipt No.",
@@ -241,7 +236,7 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "SELLMEAT NOC Approved Successfully",
-              labelKey: "SELLMEAT_NOC_APPROVAL_CHECKLIST_MESSAGE_HEAD"		
+              labelKey: "SELLMEAT_NOC_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
               labelName:
@@ -269,11 +264,11 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-               labelName: "SELLMEAT NOC Application Rejected",
-              labelKey: "SELLMEAT_NOC_APPROVAL_REJ_MESSAGE_HEAD"		
+              labelName: "SELLMEAT NOC Application Rejected",
+              labelKey: "SELLMEAT_NOC_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
-             labelName:
+              labelName:
                 "A notification regarding SELLMEAT NOC Rejection has been sent to the applicant at registered Mobile No.",
               labelKey: "SELLMEAT_NOC_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
@@ -293,8 +288,8 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-             labelName: "SELLMEAT NOC Cancelled",
-              labelKey: "SELLMEAT_NOC_CANCELLED_MESSAGE_HEAD"	
+              labelName: "SELLMEAT NOC Cancelled",
+              labelKey: "SELLMEAT_NOC_CANCELLED_MESSAGE_HEAD"
             },
             body: {
               labelName:
@@ -302,8 +297,8 @@ const getAcknowledgementCard = (
               labelKey: "SELLMEAT_NOC_CANCELLED_MESSAGE_SUBHEAD"
             },
             tailText: {
-             labelName: "SELLMEAT NOC No.",
-              labelKey: "SELLMEAT_NOC_HOME_SEARCH_RESULTS_NOC_NO_LABEL"	
+              labelName: "SELLMEAT NOC No.",
+              labelKey: "SELLMEAT_NOC_HOME_SEARCH_RESULTS_NOC_NO_LABEL"
             },
             number: secondNumber
           })
@@ -468,7 +463,7 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
 const setSearchResponseForNocCretificate = async (applicationNumber, tenantId) => {
 
   //Receipts
-  let getCertificateDataFor_RECEIPT = { "applicationType":getapplicationType(), "tenantId": tenantId, "applicationId":applicationNumber, "dataPayload": { "requestDocumentType": "receiptData" } };
+  let getCertificateDataFor_RECEIPT = { "applicationType": getapplicationType(), "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "receiptData" } };
 
   //NOC_Receipts
   const response0_RECEIPT = await getSearchResultsForNocCretificate([
@@ -481,18 +476,18 @@ const setSearchResponseForNocCretificate = async (applicationNumber, tenantId) =
   let getFileStoreIdFor_RECEIPT = { "nocApplicationDetail": [get(response0_RECEIPT, "nocApplicationDetail[0]", "")] }
 
 
-let receiptName="";
-switch(getapplicationType()){
-  case "PETNOC":
-  receiptName="/pdf-service/v1/_create?key=pet-receipt&tenantId="+tenantId
-  break;
-  case "ROADCUTNOC":
-  receiptName="/pdf-service/v1/_create?key=roadcut-receipt&tenantId="+tenantId
-  break;
-  case "ADVERTISEMENTNOC":
-  receiptName="/pdf-service/v1/_create?key=advertisement-receipt&tenantId="+tenantId
-  break;
-}
+  let receiptName = "";
+  switch (getapplicationType()) {
+    case "PETNOC":
+      receiptName = "/pdf-service/v1/_create?key=pet-receipt&tenantId=" + tenantId
+      break;
+    case "ROADCUTNOC":
+      receiptName = "/pdf-service/v1/_create?key=roadcut-receipt&tenantId=" + tenantId
+      break;
+    case "ADVERTISEMENTNOC":
+      receiptName = "/pdf-service/v1/_create?key=advertisement-receipt&tenantId=" + tenantId
+      break;
+  }
   const response1_RECEIPT = await getSearchResultsForNocCretificate([
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber },
@@ -504,14 +499,14 @@ switch(getapplicationType()){
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber },
     { key: "filestoreIds", value: get(response1_RECEIPT, "filestoreIds[0]", "") },
-    { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
+    { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
   ]);
-  
+
   let httpLink_RECEIPT = get(response2_RECEIPT, get(response1_RECEIPT, "filestoreIds[0]", ""), "")
   //window.open(httpLink_RECEIPT,  "_blank");
-  if(httpLink_RECEIPT!="")
-  window.location.href = httpLink_RECEIPT;
-  
+  if (httpLink_RECEIPT != "")
+    window.location.href = httpLink_RECEIPT;
+
 };
 
 export const paymentSuccessFooter = (applicationNumber, tenant) => {
@@ -523,7 +518,7 @@ export const paymentSuccessFooter = (applicationNumber, tenant) => {
         variant: "outlined",
         color: "primary",
         style: {
-       //   minWidth: "200px",
+          //   minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -537,9 +532,8 @@ export const paymentSuccessFooter = (applicationNumber, tenant) => {
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-          //// generatePdf(state, dispatch, "receipt_download");
-          setSearchResponseForNocCretificate( applicationNumber, tenant);
-          
+          setSearchResponseForNocCretificate(applicationNumber, tenant);
+
         }
       }
     },
@@ -549,7 +543,7 @@ export const paymentSuccessFooter = (applicationNumber, tenant) => {
         variant: "contained",
         color: "primary",
         style: {
-      //    minWidth: "200px",
+          //    minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -567,7 +561,7 @@ export const paymentSuccessFooter = (applicationNumber, tenant) => {
             ? `/egov-ui-framework/egov-opms/search`
             : `/`
       },
-       visible: false
+      visible: false
     }
   });
 };

@@ -34,83 +34,78 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
     dispatch(setRoute(reviewUrl));
   }
   else {
-    // const appendUrl =
-    // process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-    // const reviewUrl = `${appendUrl}/egov-opms/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
-    // dispatch(setRoute(reviewUrl));
+   
     const appendUrl =
       process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
     const reviewUrl = `${appendUrl}/egov-opms/advertisement_summary?applicationNumber=${applnid}&tenantId=${tenantId}`;
     dispatch(setRoute(reviewUrl));
   }
 };
+
+
 const moveToReview = (state, dispatch, applnid) => {
-  if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
-  {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
-
-  let validateDocumentField = false;
-
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
-
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
-            validateDocumentField = true;
+  
+  
+   
+    if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
+      const documentsFormat = Object.values(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+      );
+  
+      let validateDocumentField = false;
+      for (let i = 0; i < 1; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i], "isDocumentTypeRequired");
+  
+        let documents = get(documentsFormat[i], "documents");
+        // if (isDocumentRequired) {
+        if (documents && documents.length > 0) {
+          if (isDocumentTypeRequired) {
+            if (get(documentsFormat[i], "dropdown.value")) {
+              validateDocumentField = true;
+            } else {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Please select type of Document!", labelKey: "" },
+                  "warning"
+                )
+              );
+              validateDocumentField = false;
+              break;
+            }
           } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
+            validateDocumentField = true;
           }
         } else {
-          validateDocumentField = true;
+          dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+              "warning"
+            )
+          );
+          validateDocumentField = false;
+          break;
         }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
+        // } else {
+        //   validateDocumentField = true;
+        // }
       }
-    } else {
-      validateDocumentField = true;
-    }
-  }
-
-  // alert("validateDocumentField1 : " + validateDocumentField + " " + applnid)
-  return validateDocumentField;
-}
-else {
-  dispatch(
-    toggleSnackbar(
-      true,
-      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-      "warning"
-    )
-  );
   
-}
-};
-
+      //validateDocumentField = true;
+  
+      return validateDocumentField;
+    }
+    else {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+          "warning"
+        ))
+    }
+  };
 const getMdmsData = async (state, dispatch) => {
   let tenantId = getOPMSTenantId();
   let mdmsBody = {
@@ -144,6 +139,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+
   let activeStep = get(
     state.screenConfiguration.screenConfig["advertisementApply"],
     "components.div.children.stepper.props.activeStep",
@@ -158,10 +154,12 @@ const callBackForNext = async (state, dispatch) => {
   hasFieldToaster = validatestepformflag[1];
 
   if (activeStep === 1) {
-    let isapplicantnamevalid = validateFields(
-      "components.div.children.formwizardSecondStep.children.nocDetails.children.cardContent.children",
+
+    let test = validateFields(
+      "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
       state,
-      dispatch
+      dispatch,
+      "advertisementApply"
     );
   }
 
@@ -190,7 +188,7 @@ const callBackForNext = async (state, dispatch) => {
               labelKey: "" //UPLOAD_FILE_TOAST
             };
             dispatch(toggleSnackbar(true, errorMessage, "success"));
-      
+
           }
           else {
             console.log(`Error Response : ` + response.message);

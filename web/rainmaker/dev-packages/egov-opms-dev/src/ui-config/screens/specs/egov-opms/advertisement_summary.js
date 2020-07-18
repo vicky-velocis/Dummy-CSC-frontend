@@ -29,6 +29,11 @@ import { getAccessToken, setapplicationType, getOPMSTenantId, getLocale, getUser
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { checkForRole } from "../utils";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {
+  
+  getCommonApplyFooter,
+ 
+} from "../utils";
 
 export const stepsData = [
   { labelName: "Applicant Details", labelKey: "ADV_APPLICANT_DETAILS_NOC" },
@@ -195,13 +200,14 @@ export const callbackforsummaryactionpay = async (state, dispatch) => {
   }
 }
 
-var titlebarfooter = getCommonContainer({
+var titlebarfooter = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
     props: {
       variant: "outlined",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
 
@@ -232,6 +238,7 @@ var titlebarfooter = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -261,6 +268,7 @@ var titlebarfooter = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -435,8 +443,8 @@ const screenConfig = {
           }),
         break: getBreak(),
         titlebarfooter,
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
+        // citizenFooter:
+        //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}
       }
     }
   }
