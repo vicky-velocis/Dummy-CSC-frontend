@@ -137,6 +137,7 @@ class ActionDialog extends React.Component {
     }
 
     const applicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).applicationState
+    const duplicateCopyApplicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).state
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -220,6 +221,7 @@ class ActionDialog extends React.Component {
                       placeholder={fieldConfig.comments.placeholder}
                     />
                   </Grid>
+    
                   {moduleName === "OwnershipTransferRP" && (applicationState === "PENDINGSAVERIFICATION" || applicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
@@ -230,6 +232,20 @@ class ActionDialog extends React.Component {
                       }
                       jsonPath={applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
                       placeholder={applicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
+                    />
+                  </Grid>
+                  )}
+
+                  {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
+                    <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
+                      onChange={e =>
+                        handleFieldChange(duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge` , e.target.value)
+                      }
+                      jsonPath={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge`}
+                      placeholder={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
                     />
                   </Grid>
                   )}
