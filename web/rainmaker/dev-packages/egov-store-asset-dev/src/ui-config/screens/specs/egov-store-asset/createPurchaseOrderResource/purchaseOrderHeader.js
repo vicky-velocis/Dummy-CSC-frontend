@@ -7,8 +7,9 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { httpRequest } from "../../../../../ui-utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const purchaseOrderHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -31,15 +32,43 @@ export const purchaseOrderHeader = getCommonCard({
         },
         required: true,
         jsonPath: "purchaseOrders[0].store.code",
-        sourceJsonPath: "createScreenMdmsData1.material-type.stores",
+        sourceJsonPath: "searchMaster.storeNames",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
           optionLabel: "name"
         }
       }),
+      beforeFieldChange: async (action, state, dispatch) => {
+        if(action.value){
+        const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "store", value: action.value}];
+          try {
+            let payload = await httpRequest(
+              "post",
+              "store-asset-services/materials/_search?",
+              "search",
+               queryObject,
+              {}
+            );
+        
+              if(payload){
+              const  materialNames = payload.materials.map(material => {
+                  const name = material.name;
+                  const code = material.code;
+                  return{
+                    name,
+                    code
+                  }
+              })
+                  dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
+           }
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      }
     },
-    poDate: {
+    purchaseOrderDate: {
       ...getDateField({
         label: {
           labelName: "PO Date",
@@ -49,6 +78,7 @@ export const purchaseOrderHeader = getCommonCard({
           labelName: "PO Date",
           labelKey: "STORE_PURCHASE_ORDER_DATE",
         },
+        required: true,
         pattern: getPattern("Date"),
         jsonPath: "purchaseOrders[0].purchaseOrderDate",
         props: {
@@ -64,7 +94,7 @@ export const purchaseOrderHeader = getCommonCard({
         },
         required: true,
         jsonPath: "purchaseOrders[0].rateType",
-        sourceJsonPath: "createScreenMdmsData1.material-type.stores",
+        sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
@@ -81,7 +111,7 @@ export const purchaseOrderHeader = getCommonCard({
         },
         required: true,
         jsonPath: "purchaseOrders[0].supplier.code",
-        sourceJsonPath: "createScreenMdmsData1.material-type.stores",
+        sourceJsonPath: "searchMaster.supplierName",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
@@ -99,7 +129,7 @@ export const purchaseOrderHeader = getCommonCard({
           labelName: "Enter Advance Percentage",
           labelKey: "STORE_PURCHASE_ORDER_ADVNC_PRCNT_PLACEHOLDER"
         },
-        pattern: getPattern("MobileNo"),
+        pattern: getPattern("Amount"),
         jsonPath: "purchaseOrders[0].advancePercentage"
       })
     },
@@ -192,23 +222,23 @@ export const purchaseOrderHeader = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "purchaseOrders[0].remarks",
     }),
-    status: {
-      ...getTextField({
-        label: {
-          labelName: "PO Status",
-          labelKey: "STORE_PURCHASE_ORDER_STATUS"
-        },
-        placeholder: {
-          labelName: "Enter PO Status",
-          labelKey: "STORE_PURCHASE_ORDER_STATUS_PLCEHLDER"
-        },
-        props: {
-          disabled: true
-        },
-       // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].status"
-      })
-    },
+    // status: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "PO Status",
+    //       labelKey: "STORE_PURCHASE_ORDER_STATUS"
+    //     },
+    //     placeholder: {
+    //       labelName: "Enter PO Status",
+    //       labelKey: "STORE_PURCHASE_ORDER_STATUS_PLCEHLDER"
+    //     },
+    //     props: {
+    //       disabled: true
+    //     },
+    //    // pattern: getPattern("Email"),
+    //     jsonPath: "purchaseOrders[0].status"
+    //   })
+    // },
     createdBy: {
       ...getTextField({
         label: {

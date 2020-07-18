@@ -37,14 +37,10 @@ import {
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "InventoryType", filter: "[?(@.active == true)]" }
+              { name: "RateType", filter: "[?(@.active == true)]" }
             ],
   
-          },
-          {
-            moduleName: "tenant",
-            masterDetails: [{ name: "tenants" }],
-          },
+          }
         ],
       },
     };
@@ -73,22 +69,30 @@ import {
     beforeInitScreen: (action, state, dispatch) => {
             // fetching store name for populating dropdown
             const queryObject = [{ key: "tenantId", value: getTenantId()  }];
-
+  
+            getSearchResults(queryObject, dispatch,"supplier")
+            .then(response =>{
+              if(response){
+                const supplierNames = response.suppliers.map(item => {
+                  let code = item.code;
+                  let name = item.name;
+                  return{code,name}
+                } )
+                dispatch(prepareFinalObject("searchMaster.supplierName", supplierNames));
+              }
+            });
+        
+            //fetching store name
             getSearchResults(queryObject, dispatch,"storeMaster")
-            .then(response =>{ 
-              const storeName =    response.stores.map((store,index) => {
-                  let name = store.name;
-                  let code = store.code;
-                  let department = store.department;
-                  return{
-                    id:index,
-                      name,
-                      code,
-                      department
-                  }
-              })
-      
-              dispatch(prepareFinalObject("searchScreenMdmsData1.purchase-order.stores", storeName));
+            .then(response =>{
+              if(response){
+                const storeNames = response.stores.map(item => {
+                  let code = item.code;
+                  let name = item.name;
+                  return{code,name}
+                } )
+                dispatch(prepareFinalObject("searchMaster.storeNames", storeNames));
+              }
             });
       
             // fetching MDMS data

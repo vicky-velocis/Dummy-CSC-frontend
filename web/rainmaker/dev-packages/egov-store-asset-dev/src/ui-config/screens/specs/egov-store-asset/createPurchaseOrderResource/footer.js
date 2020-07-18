@@ -13,10 +13,7 @@ import {
 //import "./index.css";
 
 const moveToReview = dispatch => {
-  const reviewUrl =
-    process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/hrms/review`
-      : `/hrms/review`;
+  const reviewUrl = "/egov-store-asset/review-purchase-order"
   dispatch(setRoute(reviewUrl));
 };
 
@@ -28,105 +25,74 @@ export const callBackForNext = async (state, dispatch) => {
   );
   let isFormValid = true;
   if (activeStep === 0) {
-    const isEmployeeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.employeeDetails.children.cardContent.children.employeeDetailsContainer.children",
+    const ispurchaseOrderHeaderValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.purchaseOrderHeader.children.cardContent.children.purchaseOrderHeaderContainer.children",
       state,
       dispatch,
       "create-purchase-order"
     );
-    const isProfessionalDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.professionalDetails.children.cardContent.children.employeeDetailsContainer.children",
-      state,
-      dispatch,
-      "create-purchase-order"
-    );
-    if (!(isEmployeeDetailsValid && isProfessionalDetailsValid)) {
+    if (!ispurchaseOrderHeaderValid) {
       isFormValid = false;
     }
   }
   if (activeStep === 1) {
-    let jurisdictionDetailsPath =
-      "components.div.children.formwizardSecondStep.children.jurisdictionDetails.children.cardContent.children.jurisdictionDetailsCard.props.items";
-    let jurisdictionDetailsItems = get(
-      state.screenConfiguration.screenConfig.create,
-      jurisdictionDetailsPath,
-      []
+
+    const isRCValid = validateFields(
+      "components.div.children.formwizardSecondStep.children.contractDetails.children.cardContent.children.contractDetailsContainer.children",
+      state,
+      dispatch,
+      "create-purchase-order"
     );
-    let isJurisdictionDetailsValid = true;
-    for (var j = 0; j < jurisdictionDetailsItems.length; j++) {
-      if (
-        (jurisdictionDetailsItems[j].isDeleted === undefined ||
-          jurisdictionDetailsItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${jurisdictionDetailsPath}[${j}].item${j}.children.cardContent.children.jnDetailsCardContainer.children`,
-          state,
-          dispatch,
-          "create"
-        )
-      )
-        isJurisdictionDetailsValid = false;
-    }
-    if (!isJurisdictionDetailsValid) {
+   
+    if (!isRCValid) {
       isFormValid = false;
     }
   }
-  // if (activeStep === 2) {
-  //   let assignmentDetailsPath =
-  //     "components.div.children.formwizardThirdStep.children.assignmentDetails.children.cardContent.children.assignmentDetailsCard.props.items";
-  //   let assignmentDetailsItems = get(
-  //     state.screenConfiguration.screenConfig.create,
-  //     assignmentDetailsPath,
-  //     []
-  //   );
-  //   let isAssignmentDetailsValid = true;
-  //   for (var j = 0; j < assignmentDetailsItems.length; j++) {
-  //     if (
-  //       (assignmentDetailsItems[j].isDeleted === undefined ||
-  //         assignmentDetailsItems[j].isDeleted !== false) &&
-  //       !validateFields(
-  //         `${assignmentDetailsPath}[${j}].item${j}.children.cardContent.children.asmtDetailsCardContainer.children`,
-  //         state,
-  //         dispatch,
-  //         "create"
-  //       )
-  //     )
-  //       isAssignmentDetailsValid = false;
-  //   }
-  //   let assignmentsData = get(
-  //     state.screenConfiguration.preparedFinalObject.Employee[0],
-  //     "assignments",
-  //     []
-  //   );
-  //   let atLeastOneCurrentAssignmentSelected = assignmentsData.some(
-  //     assignment => {
-  //       return assignment.isCurrentAssignment;
-  //     }
-  //   );
-  //   if (!atLeastOneCurrentAssignmentSelected) {
-  //     const errorMessage = {
-  //       labelName: "Please select at least one current assignment",
-  //       labelKey: "ERR_SELECT_CURRENT_ASSIGNMENT"
-  //     };
-  //     dispatch(toggleSnackbar(true, errorMessage, "warning"));
-  //     return;
-  //   }
-  //   if (!isAssignmentDetailsValid) {
-  //     isFormValid = false;
-  //   }
-  // }
-  if (activeStep === 4) {
-    moveToReview(dispatch);
+  if (activeStep === 2) {
+    let poDetailsPath =
+      "components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items";
+
+    let poDetailsItems = get(
+      state.screenConfiguration.screenConfig['create-purchase-order'],
+      poDetailsPath,
+      []
+    );
+    let isPoDetailsValid = true;
+    for (var j = 0; j < poDetailsItems.length; j++) {
+      if (
+        (poDetailsItems[j].isDeleted === undefined ||
+          poDetailsItems[j].isDeleted !== false) &&
+        !validateFields(
+          `${poDetailsPath}[${j}].item${j}.children.cardContent.children.poDetailsCardContainer.children`,
+          state,
+          dispatch,
+          "create-purchase-order"
+        )
+      )
+      isPoDetailsValid = false;
+    }
+  
+
+    if (!isPoDetailsValid) {
+      isFormValid = false;
+    }
   }
-  if (activeStep !== 4) {
+
     if (isFormValid) {
-      changeStep(state, dispatch);
+      if(activeStep === 2){
+        moveToReview(dispatch);
+      }
+      else{
+        changeStep(state, dispatch);
+      }
+     
     } else {
       const errorMessage = {
         labelName: "Please fill all fields",
         labelKey: "ERR_FILL_ALL_FIELDS"
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    }
+    
   }
 };
 
@@ -148,8 +114,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 4 ? true : false;
-  const isPayButtonVisible = activeStep === 4 ? true : false;
+  const isNextButtonVisible = activeStep < 2 ? true : false;
+  const isPayButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",

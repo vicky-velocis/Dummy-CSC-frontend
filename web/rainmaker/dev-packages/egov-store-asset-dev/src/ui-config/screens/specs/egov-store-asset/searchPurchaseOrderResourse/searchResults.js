@@ -6,16 +6,16 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
-    case "Indent No":
+    case "Purchase Order Number":
       return getLocaleLabels(
-        "Indent No",
-        "STORE_PURCHASE_ORDER_INDENT_NO",
+        "Purchase Order Number",
+        "STORE_PURCHASE_ORDER_NUMBER",
         localisationLabels
       );
-    case "Indent Date":
+    case "PO Date":
       return getLocaleLabels(
-        "Indent Date",
-        "STORE_PURCHASE_ORDER_INDENT_DATE",
+        "PO Date",
+        "STORE_PURCHASE_ORDER_DATE",
         localisationLabels
       );
     case "Store Name":
@@ -24,30 +24,18 @@ export const getTextToLocalMapping = (label) => {
         "STORE_DETAILS_STORE_NAME",
         localisationLabels
       );
-      case "Indent Purpose":
+      case "PO Rate Type":
         return getLocaleLabels(
-          "Indent Purpose",
-          "STORE_PURCHASE_ORDER_INDENT_PRPS",
+          "PO Rate Type",
+          "STORE_PURCHASE_ORDER_RATETYPE",
           localisationLabels
         );
-        case "Inventory Type":
+        case "Supplier":
       return getLocaleLabels(
-        "Inventory Type",
-        "STORE_INVENTRY_TYPE",
+        "Supplier",
+        "STORE_SUPPLIER_MASTER_SUPPLIER_NAME",
         localisationLabels
       );
-    case "Raised By":
-      return getLocaleLabels(
-        "Raised By",
-        "STORE_PURCHASE_ORDER_INDENT_RAISED",
-        localisationLabels
-      );
-      case "Indent Status":
-        return getLocaleLabels(
-          "Indent Status",
-          "STORE_PURCHASE_ORDER_INDENT_STATUS",
-          localisationLabels
-        );
     case "Search Results for Purchase Order":
       return getLocaleLabels(
         "Search Results for Purchase Order",
@@ -63,13 +51,11 @@ export const searchResults = {
   visible: true,
   props: {
     columns: [
-      getTextToLocalMapping("Indent No"),
-      getTextToLocalMapping("Indent Date"),
+      getTextToLocalMapping("Purchase Order Number"),
+      getTextToLocalMapping("PO Date"),
       getTextToLocalMapping("Store Name"),
-      getTextToLocalMapping("Indent Purpose"),
-      getTextToLocalMapping("Inventory Type"),
-      getTextToLocalMapping("Raised By"),
-      getTextToLocalMapping("Indent Status"),
+      getTextToLocalMapping("PO Rate Type"),
+      getTextToLocalMapping("Supplier"),
     ],
     title: getTextToLocalMapping("Search Results for Purchase Order"),
     options: {
@@ -87,7 +73,7 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view-material-type?tenantId=${getTenantId()}&code=${rowData[3]}`;
+  window.location.href = `view-material-type?tenantId=${getTenantId()}&code=${rowData[0]}`;
 };
 
 

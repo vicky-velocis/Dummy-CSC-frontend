@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["store", "purpose", "inventory","indentFromDate","indentToDate","raised"];
+  const textFields = ["store", "rateType", "supplierCode","purchaseOrderNumber"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-purchase-order.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -44,7 +44,27 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
+    purchaseOrderNumber: getTextField({
+      label: {
+        labelName: "Purchase Order Number",
+        labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
+      },
+      props: {
+        className: "applicant-details-error",
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+      placeholder: {
+        labelName: "Enter Purchase Order Number",
+        labelKey: `STORE_PURCHASE_ORDER_NUMBER_PLCHLDR`,
+      },
+     // pattern: getPattern("alpha-only"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
 
+      jsonPath: "searchScreen.purchaseOrderNumber",
+    }),
     store: getSelectField({
       label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
       placeholder: {
@@ -57,86 +77,51 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "searchScreenMdmsData1.purchase-order.stores",
+      sourceJsonPath: "searchMaster.storeNames",
       props: {
         optionValue: "code",
         optionLabel: "name",
       },
     }),  
-    purpose: getSelectField({
-      label: { labelName: "Indent Purpose", labelKey: "STORE_PURCHASE_ORDER_INDENT_PRPS" },
-      placeholder: {
-        labelName: "Select Indent Purpose",
-        labelKey: "STORE_PURCHASE_ORDER_INDENT_PRPS_HLDER",
-      },
-      required: false,
-      jsonPath: "searchScreen.purpose",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      sourceJsonPath: "searchScreenMdmsData1.purchase-order.stores",
-      props: {
-        optionValue: "code",
-        optionLabel: "name",
-      },
-    }),
-    inventory: getSelectField({
-      label: { labelName: "Store Inventory", labelKey: "STORE_INVENTRY_TYPE" },
-      placeholder: {
-        labelName: "Select store inventory",
-        labelKey: "STORE_INVENTRY_TYPE_SELECT",
-      },
-      required: false,
-      jsonPath: "searchScreen.inventory",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      sourceJsonPath: "searchScreenMdmsData.store-asset.InventoryType",
-      props: {
-        optionValue: "code",
-        optionLabel: "name",
-      },
-    }),
-    indentFromDate: {
-      ...getDateField({
-        label: {
-          labelName: "Indent Date From",
-          labelKey: "STORE_PURCHASE_ORDER_INDENT_DT_FRM",
-        },
+
+    rateType: {
+      ...getSelectField({
+        label: { labelName: "PO Rate Type", labelKey: "STORE_PURCHASE_ORDER_RATETYPE" },
         placeholder: {
-          labelName: "Indent Date From",
-          labelKey: "STORE_PURCHASE_ORDER_INDENT_DT_FRM",
-        },
-        pattern: getPattern("Date"),
-        jsonPath: "searchScreen.indentFromDate",
-        props: {
+          labelName: "Select PO Rate Type",
+          labelKey: "STORE_PURCHASE_ORDER_RATETYPE_SELECT"
         },
         gridDefination: {
           xs: 12,
           sm: 4,
         },
+        jsonPath: "searchScreen.rateType",
+        sourceJsonPath: "searchScreenMdmsData.store-asset.RateType",
+        props: {
+          className: "hr-generic-selectfield",
+          optionValue: "code",
+          optionLabel: "name"
+        }
       }),
     },
-    indentToDate: {
-      ...getDateField({
-        label: {
-          labelName: "Indent Date To",
-          labelKey: "STORE_PURCHASE_ORDER_INDENT_DT_TO",
-        },
+    supplierCode: {
+      ...getSelectField({
+        label: { labelName: "Supplier", labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME" },
         placeholder: {
-          labelName: "Indent Date To",
-          labelKey: "STORE_PURCHASE_ORDER_INDENT_DT_TO",
-        },
-        pattern: getPattern("Date"),
-        jsonPath: "searchScreen.indentToDate",
-        props: {
+          labelName: "Select supplier",
+          labelKey: "STORE_SUPPLIER_MASTER_NAME_SELECT"
         },
         gridDefination: {
           xs: 12,
           sm: 4,
         },
+        jsonPath: "searchScreen.supplierCode",
+        sourceJsonPath: "searchMaster.supplierName",
+        props: {
+          className: "hr-generic-selectfield",
+          optionValue: "code",
+          optionLabel: "name"
+        }
       }),
     },
   }),

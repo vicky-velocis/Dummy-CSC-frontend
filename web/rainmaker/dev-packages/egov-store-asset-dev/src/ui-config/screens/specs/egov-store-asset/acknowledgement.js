@@ -73,8 +73,12 @@ let labelValue = "";
       labelName: "Material Indent Note Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
+    case "PURCHASEORDER": labelValue = {
+      labelName: "Material Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
     break;
-    default :  labelValue = {
+      default :  labelValue = {
       labelName: "Submitted Successfully",
       labelKey: "",
     }
