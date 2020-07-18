@@ -1946,6 +1946,12 @@ export const getMdmsEncroachmentSectorData = async (action, state, dispatch) => 
             {
               name: "sector"
             },
+            {
+              name: "NumberOfViolation"
+            },
+            {
+              name: "VehicleType"
+            }
           ]
         },
 

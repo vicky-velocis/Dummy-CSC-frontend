@@ -85,7 +85,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     let card = {};
     card["code"] = doc.documentType;
     card["title"] = "",//getTextToLocalMapping(doc.documentType);
-    card["cards"] = [];
+      card["cards"] = [];
     tempDoc[doc.documentType] = card;
   });
 
@@ -251,13 +251,13 @@ const checkEffectiveDate = (state, dispatch, effectiveStartDate) => {
     });
     fineGridRecord.forEach(element => {
       if (gridCurrentRecord.hasOwnProperty('fineUuid')) {
-        if (element[1] === gridCurrentRecord.encroachmentType
+        if (element[8] === gridCurrentRecord.encroachmentType
           && element[2] === gridCurrentRecord.numberOfViolation
           && element[0] !== gridCurrentRecord.fineUuid) {
           curlistRecord.push(element);
         }
       } else {
-        if (element[1] === gridCurrentRecord.encroachmentType
+        if (element[8] === gridCurrentRecord.encroachmentType
           && element[2] === gridCurrentRecord.numberOfViolation) {
           curlistRecord.push(element);
         }
@@ -593,48 +593,62 @@ export const fetchVendorDetails = async (state, dispatch) => {
 };
 
 export const createVendorDetails = async (file) => {
-
+  let isCreateSuccess = true;
+  let isUpdateSuccess = true;
+  let response = [];
   let data = {
     RequestBody: {
-      vendorRegistrationList: file.insert
+      vendorRegistrationList: file.insert,
+      tenantId: getTenantId()
     }
   };
+
+  let updatedata = {
+    RequestBody: {
+      vendorRegistrationList: file.update,
+      tenantId: getTenantId()
+    }
+  };
+
   try {
-    const response = await httpRequest(
-      "post",
-      "/ec-services/vendor/_create",
-      "",
-      [],
-      data
-    );
-
-    let updatedata = {
-      RequestBody: {
-        vendorRegistrationList: file.update
+    if (file.insert.length > 0) {
+      let response = await httpRequest(
+        "post",
+        "/ec-services/vendor/_create",
+        "",
+        [],
+        data
+      );
+      if (response.ResponseInfo.status !== 'Success') {
+        isCreateSuccess = false;
       }
-    };
-    let updateresponse = await httpRequest(
-      "post",
-      "/ec-services/vendor/_update",
-      "",
-      [],
-      updatedata
-    );
+    }
 
 
-    if (response.ResponseInfo.status === 'Success' && updateresponse.ResponseInfo.status === 'Success') {
+    if (file.update.length > 0) {
+      let updateresponse = await httpRequest(
+        "post",
+        "/ec-services/vendor/_update",
+        "",
+        [],
+        updatedata
+      );
+
+      if (updateresponse.ResponseInfo.status !== 'Success') {
+        isUpdateSuccess = false
+      } else {
+        response = updateresponse;
+      }
+    }
+
+    if(isUpdateSuccess || isCreateSuccess){
       return { status: "success", message: response.responseInfo };
     } else {
       return { status: "fail", message: 'Error' };
     }
-
-    return response;
   } catch (error) {
-    //console.log("error", error);
-
+    console.log("error", error);
   }
-
-
 }
 
 export const createCitizenBasedonMobileNumber = async (state, dispatch) => {

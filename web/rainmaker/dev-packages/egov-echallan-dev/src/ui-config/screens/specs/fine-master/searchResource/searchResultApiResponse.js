@@ -1,7 +1,7 @@
 //import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 //import { getGridData1,getCategory1,getYear1,getMonth1,getrepotforproccessingTime1,getSectordata1,getSubCategory1,getUpdatePriceBook1,getMasterGridData1,getGridDataSellMeat1,getGridDataRoadcut1,getGridDataAdvertisement1} from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, getMdmsEncroachmentSectorData } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { validateFields, getTextToLocalMappingItemMaster } from "../../utils";
@@ -11,6 +11,7 @@ import { getFineMasterGridData } from "../../../../../ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchResultApiResponse = async (action, state, dispatch) => {
+  const mdmsresponse =  await getMdmsEncroachmentSectorData(action,state,dispatch);
   const response = await getFineMasterGridData('');
   try {
     let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
@@ -31,11 +32,10 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
         temp[5] = convertEpochToDate(item['effectiveStartDate']);
         temp[6] = convertEpochToDate(item['effectiveEndDate']);
         temp[7] = item['approvalStatus'];
-
-        temp[8] = "";
+        temp[8] = item['encroachmentType'];
+        temp[9]="";        
         // temp[7]="";    
         // temp[8]=item['fromDate'];          
-        // temp[9]=item['toDate'];        
         dataarray.push(temp);
       });
 

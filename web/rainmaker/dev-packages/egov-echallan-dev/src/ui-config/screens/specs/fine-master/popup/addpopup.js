@@ -339,7 +339,7 @@ export const adhocPopup = getCommonContainer({
             xs: 12,
             sm: 12
           },
-          jsonPath: "FineMaster.encroachmentType",
+          jsonPath: "FineMaster.encroachmentTypeName",
           visible: false,
           required: true,
           props: {
@@ -388,7 +388,6 @@ export const adhocPopup = getCommonContainer({
           },
           optionLabel: "name",
           optionValue: "code",
-
           sourceJsonPath: "applyScreenMdmsData.egec.EncroachmentType",
           jsonPath: "FineMaster.encroachmentType",
           required: true,
@@ -480,7 +479,7 @@ export const adhocPopup = getCommonContainer({
           sourceJsonPath: "applyScreenMdmsData.egec.Numberofvioalation-new",
           jsonPath: "FineMaster.numberOfViolation",
           required: true,
-          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_VIOLATION_COUNT_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_VIOLATION_COUNT_FIELD_MSG",
           optionLabel: "name",
           optionValue: "code",
           props: {
@@ -511,7 +510,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.penaltyAmount",
           required: true,
           pattern: getPattern("DecimalAmount"),///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "ERR_DEFAULT_INPUT_FINE_AMOUNT_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_AMOUNT_FIELD_MSG",
         }),
         addFineMasterStorageControl: getTextField({
           label: {
@@ -535,7 +534,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.storageCharges",
           required: true,
           pattern: getPattern("DecimalAmount"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_STORAGE_BASIS_AMOUNT_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_STORAGE_BASIS_AMOUNT_FIELD_MSG",
 
         }),
 
@@ -561,7 +560,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.effectiveStartDate",
           required: true,
           pattern: getPattern("Date"),///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_START_DATE_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_START_DATE_FIELD_MSG",
           beforeFieldChange: (action, state, dispatch) => {
             try {
               let gridCurrentRecord = get(state, 'screenConfiguration.preparedFinalObject.FineMaster', []);
@@ -618,7 +617,7 @@ export const adhocPopup = getCommonContainer({
           jsonPath: "FineMaster.effectiveEndDate",
           required: true,
           pattern: getPattern("Date"), ///^[ A-Za-z0-9_@./#&+- ]{1,250}$/i,
-          errorMessage: "EC_ERR_DEFAULT_INPUTFINE_END_DATE_FIELD_MSG",
+          errorMessage: "EC_ERR_DEFAULT_INPUT_FINE_END_DATE_FIELD_MSG",
         }),
       })
     },
