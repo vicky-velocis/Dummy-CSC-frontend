@@ -286,7 +286,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           )
           dispatch(
             handleField(
-              "apply",
+              "ownership-apply",
               "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
               "props.value",
               ""
@@ -386,8 +386,8 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           )
           dispatch(
             handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+              "duplicate-copy-apply",
+              "components.div.children.formwizardFirstStep.children.transitSiteDetails.children.cardContent.children.detailsContainer.children.transitNumber",
               "props.value",
               ""
             )

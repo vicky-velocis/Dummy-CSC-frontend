@@ -24,7 +24,7 @@ export const callPGService = async (state, dispatch, item) => {
   let callbackUrl = `${document.location.origin}${
     process.env.NODE_ENV === "production" ? "/citizen" : ""
   }/rented-properties-citizen/PaymentRedirectPage`;
-  const _businessService = "RENTED_PROPERTIES"
+  const _businessService = "OwnershipTransferRP"
 //   const _businessService = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].businessService", "");
   try {
     const queryObj = [

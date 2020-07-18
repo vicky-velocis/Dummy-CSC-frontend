@@ -1291,7 +1291,7 @@ export const createEstimateData = async (
     getQueryArg(href, "applicationNumber");
   const tenantId =
     get(OwnersData, "tenantId") || getQueryArg(href, "tenantId");
-  const businessService = get(OwnersData, "businessService", "") || "RENTED_PROPERTIES"
+  const businessService = get(OwnersData, "businessService", "") || "OwnershipTransferRP"
   const queryObj = [
     { key: "tenantId", value: tenantId },
     {
