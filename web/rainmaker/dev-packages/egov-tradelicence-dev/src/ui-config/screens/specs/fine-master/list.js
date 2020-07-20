@@ -336,7 +336,15 @@ const onRowClick = (row, businessService, screenKey, state, dispatch) => {
       id: row[7],
       tenantId: row[6]
   }
-  dispatch(prepareFinalObject("fineMasterEditData", fineMasterEditData))
+  dispatch(prepareFinalObject("fineMasterEditData", fineMasterEditData));
+
+  dispatch(handleField(
+    screenKey,
+    "components.adhocDialog.children.popup.children.rateCard.children.rateField",
+    "props.value",
+    fineMasterEditData.rate
+  ))
+
   dispatch(handleField(
     screenKey,
     "components.adhocDialog",
