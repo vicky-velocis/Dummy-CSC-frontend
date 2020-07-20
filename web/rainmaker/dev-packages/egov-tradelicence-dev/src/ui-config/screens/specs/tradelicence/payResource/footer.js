@@ -125,7 +125,7 @@ export const callPGService = async (state, dispatch, item) => {
     }
   } catch (e) {
     console.log(e);
-    if (e.message === "A transaction for this bill has been abruptly discarded, please retry after 15 mins"){
+    if (e.code === "A transaction for this bill has been abruptly discarded, please retry after 30 mins"){
       dispatch(
         toggleSnackbar(
           true,
