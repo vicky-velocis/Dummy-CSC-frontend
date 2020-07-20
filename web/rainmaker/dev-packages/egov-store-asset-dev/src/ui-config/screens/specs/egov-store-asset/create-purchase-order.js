@@ -89,11 +89,17 @@ import {
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
-        moduleDetails: [
+        moduleDetails: [ 
           {
             moduleName: "store-asset",
             masterDetails: [
               { name: "RateType", filter: "[?(@.active == true)]" },
+            ]
+          },
+          {
+            moduleName: "common-masters",
+            masterDetails: [
+              { name: "UOM", filter: "[?(@.active == true)]" },
             ]
           }
         ]

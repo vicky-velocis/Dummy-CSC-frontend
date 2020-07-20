@@ -70,7 +70,7 @@ export const getPurchaseOrderHeaderView = (isReview = true) => {
           labelName: "Store Name",
           labelKey: "STORE_DETAILS_STORE_NAME"
         },
-        { jsonPath: "purchaseOrders[0].store.code" }
+        { jsonPath: "purchaseOrders[0].store.name" }
       ),
       poDate: getLabelWithValue(
         { labelName: "PO Date", labelKey: "STORE_PURCHASE_ORDER_DATE" },
@@ -86,7 +86,7 @@ export const getPurchaseOrderHeaderView = (isReview = true) => {
       supplier: getLabelWithValue(
         { labelName: "Supplier", labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_NAME" },
         {
-          jsonPath: "purchaseOrders[0].supplier.code",
+          jsonPath: "purchaseOrders[0].supplier.name",
         }
       ),
       advancePercentage: getLabelWithValue(

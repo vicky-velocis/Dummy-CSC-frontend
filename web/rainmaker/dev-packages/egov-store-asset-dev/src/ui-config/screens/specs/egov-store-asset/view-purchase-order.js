@@ -55,9 +55,15 @@ import {
     uiFramework: "material-ui",
     name: "view-purchase-order",
     beforeInitScreen: (action, state, dispatch) => {
-    //   let employeeCode = getQueryArg(window.location.href, "employeeID");
-    //   let tenantId = getQueryArg(window.location.href, "tenantId");
-    //   showHideAdhocPopup(state, dispatch);
+      let poNumber = getQueryArg(window.location.href, "poNumber");
+      let tenantId = getQueryArg(window.location.href, "tenantId");
+      const queryObject = [{ key: "tenantId", value: tenantId},{ key: "purchaseOrderNumber", value: poNumber}];
+      getSearchResults(queryObject, dispatch,"purchaseOrder")
+      .then(response =>{
+        if(response){
+          dispatch(prepareFinalObject("purchaseOrders", [...response.purchaseOrders]));       
+       }
+      });     
     //   getMdmsData(action, state, dispatch, tenantId);
       return action;
     },

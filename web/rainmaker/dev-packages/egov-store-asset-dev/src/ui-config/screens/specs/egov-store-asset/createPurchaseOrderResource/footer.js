@@ -18,6 +18,8 @@ const moveToReview = dispatch => {
 };
 
 export const callBackForNext = async (state, dispatch) => {
+
+  const {purchaseOrders}  = state.screenConfiguration.preparedFinalObject;
   let activeStep = get(
     state.screenConfiguration.screenConfig["create-purchase-order"],
     "components.div.children.stepper.props.activeStep",
@@ -31,6 +33,18 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch,
       "create-purchase-order"
     );
+      const {advancePercentage} = purchaseOrders[0];
+
+      if(advancePercentage && ( 0 > parseInt(advancePercentage,10) || parseInt(advancePercentage,10) > 100 )){
+        const errorMessage = {
+          labelName: "Percentage should be between 0 and 100",
+          labelKey: "STORE_ERR_PERCENTAGE_IS_VALID"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        return;
+      }
+
+
     if (!ispurchaseOrderHeaderValid) {
       isFormValid = false;
     }

@@ -70,35 +70,35 @@ export const getRCDetailsView = (isReview = true) => {
           labelName: "Rate Contract/Tender/Quotation No.",
           labelKey: "STORE_PURCHASE_ORDER_RC_NO"
         },
-        { jsonPath: "purchaseOrders[0].rateContractNumber" }
+        { jsonPath: "purchaseOrders[0].priceList[0].rateContractNumber" }
       ),
       rateContractDate: getLabelWithValue(
         { labelName: "Rate Contract/Tender/Quotation Date", labelKey: "STORE_PURCHASE_ORDER_RC_DATE" },
-        { jsonPath: "purchaseOrders[0].rateContractDate" }
+        { jsonPath: "purchaseOrders[0].priceList[0].rateContractDate" }
       ),
       agreementNumber: getLabelWithValue(
         {
           labelName: "Agreement No.",
           labelKey: "STORE_PURCHASE_ORDER_AGRMENT_NO"
         },
-        { jsonPath: "purchaseOrders[0].agreementNumber" }
+        { jsonPath: "purchaseOrders[0].priceList[0].agreementNumber" }
       ),
       agreementDate: getLabelWithValue(
         { labelName: "Agreement Date", labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_DT" },
         {
-          jsonPath: "purchaseOrders[0].agreementDate",
+          jsonPath: "purchaseOrders[0].priceList[0].agreementDate",
         }
       ),
       agreementStartDate: getLabelWithValue(
         { labelName: "Agreement From Date", labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_FRM_DT" },
         {
-          jsonPath: "purchaseOrders[0].agreementStartDate"
+          jsonPath: "purchaseOrders[0].priceList[0].agreementStartDate"
         }
       ),
       agreementEndDate: getLabelWithValue(
         { labelName: "Agreement To Date", labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_TO_DT" },
         {
-          jsonPath: "purchaseOrders[0].agreementEndDate"
+          jsonPath: "purchaseOrders[0].priceList[0].agreementEndDate"
         }
       ),
     }),

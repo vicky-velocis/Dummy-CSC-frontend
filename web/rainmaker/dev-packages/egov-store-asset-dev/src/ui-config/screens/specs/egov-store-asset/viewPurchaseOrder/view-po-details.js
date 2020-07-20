@@ -24,7 +24,7 @@ const assignmentCard = {
             labelName: "Material Name",
             labelKey: "STORE_MATERIAL_NAME"
           },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.code" }
+          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.name" }
         ),
         indentNumber: getLabelWithValue(
           {

@@ -130,6 +130,11 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_INDENT_NUMBER`,
     }
     break;
+      case "PURCHASEORDER": labelValue = {
+      labelName: "Purchase Order Number",
+      labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
+    }
+    break;
     default :  labelValue = {
       labelName: "Application No.",
       labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",

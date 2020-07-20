@@ -141,7 +141,11 @@ export const createUpdatePO = async (state, dispatch, action) => {
     "purchaseOrders",
     []
   );
-  
+  let priceList = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchMaster.priceList",
+    []
+  );
   const tenantId =  getTenantId();
   purchaseOrders[0].tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
@@ -156,6 +160,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
   );
   for (let i = 0; i < poDetailArray.length; i++) {
     set(purchaseOrders[0], `purchaseOrderDetails[${i}].tenantId`, tenantId);
+    set(purchaseOrders[0], `purchaseOrderDetails[${i}].priceList`, priceList[0]);
   }
 
   set(
