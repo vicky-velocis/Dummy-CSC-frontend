@@ -29,18 +29,7 @@ export const searchResults = {
       getTextToLocalMapping("Colony"),
       getTextToLocalMapping("Owner"),
       getTextToLocalMapping("Status"),
-      {
-        name: "id",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "propertyId",
-        options: {
-          display: false
-        }
-      }
+      LAST_MODIFIED_ON
     ],
     options: {
       filter: false,
@@ -82,12 +71,10 @@ const onRowClick = rowData => {
 };
 
 const onTransferPropertyRowClick = rowData => {
-  console.log("=======row data======", rowData)
   window.location.href = `ownership-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
 const onDuplicateCopyRowClick = rowData => {
-  console.log("=======row data======", rowData)
   window.location.href = `search-duplicate-copy-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
@@ -118,7 +105,8 @@ export const duplicateCopySearchResult = {
       getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
-      STATUS
+      STATUS,
+      LAST_MODIFIED_ON
     ],
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {

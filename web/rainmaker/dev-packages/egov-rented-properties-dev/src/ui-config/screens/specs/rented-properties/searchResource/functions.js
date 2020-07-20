@@ -193,6 +193,7 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
         [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
         [OWNER_NAME]: item.applicant[0].name || "-",
         [STATUS]: getLocaleLabels(item.state, item.state) || "-",
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(
         handleField(
@@ -281,8 +282,7 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         [getTextToLocalMapping("Colony")]: getLocaleLabels(item.colony, item.colony) || "-",
         [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
         [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
-        ["id"]: item.id,
-        ["propertyId"]: item.propertyDetails.propertyId
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(
         handleField(
