@@ -299,28 +299,3 @@ export const duplicatefooter = getCommonApplyFooter({
       },
     }
   });
-
-  
-export const mortgagefooter = getCommonApplyFooter({
-  previousButton: {
-    ...previousButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForPreviousMortgage
-    },
-  },
-  nextButton: {
-    ...nextButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForNextMortgage
-    }
-  },
-  submitButton: {
-    ...submitButton,
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForNextMortgage
-    },
-  }
-});
