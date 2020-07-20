@@ -156,7 +156,7 @@ const applyLicense = {
                 formwizardFirstStep: formwizardDuplicateCopyFirstStep,
                 formwizardSecondStep: formwizardDuplicateCopySecondStep,
                 formwizardThirdStep: formwizardDuplicateCopyThirdStep,
-                duplicatefooter
+                footer: duplicatefooter
             }
         }
     }

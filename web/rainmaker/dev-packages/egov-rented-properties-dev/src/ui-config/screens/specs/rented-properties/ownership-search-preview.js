@@ -89,6 +89,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       status,
       applicationNumber,
       tenantId,
+      "OwnershipTransferRP"
     );
     process.env.REACT_APP_NAME === "Citizen"
         ? set(action, "screenConfig.components.div.children.footer", footer)

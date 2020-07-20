@@ -17,9 +17,10 @@ const getAcknowledgementCard = (
     tenant,
     transitNumber,
     applicationNumber,
-    type
+    type,
+    businessService
   ) => {
-    if ((purpose === "apply" || purpose === "forward" || purpose === "sendback" || purpose ==="reject" || purpose === "approve" || purpose === "submit" || purpose === "pay") && status === "success") {
+    if (status === "success") {
       const header = type === "OWNERSHIPTRANSFERRP" ? purpose === "apply" ? {
         labelName: "Ownership transfer application submitted successfully",
         labelKey: "RP_OWNER_SHIP_TRANSFER_SUCCESS_MESSAGE_MAIN"
@@ -136,8 +137,8 @@ const getAcknowledgementCard = (
           componentPath: "Div",
           children: {
             card: acknowledgementCard({
-              icon: "done",
-              backgroundColor: "#39CB74",
+              icon: "close",
+              backgroundColor: "#E54D42",
               header: {
                 labelName: "Payment is Failed!",
                 labelKey: "RP_PAYMENT_FAILED_MESSAGE_HEAD"
@@ -155,12 +156,12 @@ const getAcknowledgementCard = (
             })
           }
         },
-        paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
+        paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant, businessService)
       }
     }
 }
 
-const getData = async (action, state, dispatch, purpose, status, tenant, transitNumber,applicationNumber, type) => {
+const getData = async (action, state, dispatch, purpose, status, tenant, transitNumber,applicationNumber, type, businessService) => {
     const data = await getAcknowledgementCard(
       state,
       dispatch,
@@ -169,7 +170,8 @@ const getData = async (action, state, dispatch, purpose, status, tenant, transit
       tenant,
       transitNumber,
       applicationNumber,
-      type
+      type,
+      businessService
     );
     dispatch(
       handleField(
@@ -198,7 +200,8 @@ const screenConfig = {
       );
       const tenant = getQueryArg(window.location.href, "tenantId");
       const type = getQueryArg(window.location.href , "type")
-      getData(action, state, dispatch, purpose, status, tenant, transitNumber, applicationNumber, type)
+      const businessService = getQueryArg(window.location.href, "businessService")
+      getData(action, state, dispatch, purpose, status, tenant, transitNumber, applicationNumber, type, businessService)
       return action;
     },
     components: {

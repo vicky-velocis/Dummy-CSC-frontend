@@ -1,7 +1,7 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateOwnershipTransfer} from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateOwnershipTransfer, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
