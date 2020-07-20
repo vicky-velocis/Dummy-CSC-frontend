@@ -46,18 +46,20 @@ export const searchResults = {
           )
         }
       },
-      // {
-      //   name: "tenantId",
-      //   options: {
-      //     display: false
-      //   }
-      // },
-      // {
-      //   name:"status1",
-      //   options: {
-      //     display: false
-      //   }
-      // },
+      {
+        name: "tenantId",
+        options: {
+          display: false,
+          viewColumns: false
+        }
+      },
+      {
+        name:"status1",
+        options: {
+          display: false,
+          viewColumns: false
+        }
+      },
 
     ],
     options: {
