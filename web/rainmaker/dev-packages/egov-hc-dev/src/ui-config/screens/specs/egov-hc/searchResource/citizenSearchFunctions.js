@@ -127,7 +127,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
 };
 
 export const resetFields = (state, dispatch) => {
-  // screenConfiguration.screenConfig.myServiceRequests.components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId
+ //resetting from date
   dispatch(
     handleField(
       "myServiceRequests",
@@ -136,27 +136,7 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
-
-  dispatch(
-    handleField(
-      "myServiceRequests",
-      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId",
-      "props.value",
-      ""
-    )
-  );
-
-
-  dispatch(
-    handleField(
-      "myServiceRequests",
-      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
-      "props.value.label",
-      ""
-    )
-  );
-
-  
+  //resetting to date
   dispatch(
     handleField(
       "myServiceRequests",
@@ -165,70 +145,111 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
+      //resetting servicerequestt id 
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId",
+      "props.value",
+      ""
+    )
+  );
+//resetting service request type
+try{
+  var serviceRequestTypePlaceholderMyRequest = get(state, "screenConfiguration.screenConfig.myServiceRequests.components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType.props.placeholder")
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
+      "props.value",
+      serviceRequestTypePlaceholderMyRequest.labelKey
+    )
+  );
+}
+catch(e){
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
+      "props.value",
+      undefined
+    )
+  );
+}
+set(state, "screenConfiguration.preparedFinalObject.myServiceRequests", {});
+  
 };
 
 export const resetFieldsForEmployeeFilter = (state, dispatch) => {
-  // "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality"
-  //resetting locality using below 2 lines  of dispatch
-  // debugger
-  // var locality_path = JSON.parse(JSON.stringify({"style":{"width":"100%","cursor":"pointer"},"className":"citizen-city-picker","label":{"labelName":"Locality/Mohalla","labelKey":"HC_LOCALITY_MOHALLA_LABEL"},"placeholder":{"labelName":"Locality/Mohalla","labelKey":"HC_CHOOSE_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"},"sourceJsonPath":"applyScreenMdmsData.RAINMAKER-PGR.Sector","jsonPath":"serviceRequests.mohalla","labelsFromLocalisation":false,"suggestions":[],"fullwidth":true,"required":true,"inputLabelProps":{"shrink":true},"isMulti":false,"labelName":"name","valueName":"name"}))
-  // console.log("DDDDD"+JSON.parse({"style":{"width":"100%","cursor":"pointer"},"className":"citizen-city-picker","label":{"labelName":"Locality/Mohalla","labelKey":"HC_LOCALITY_MOHALLA_LABEL"},"placeholder":{"labelName":"Locality/Mohalla","labelKey":"HC_CHOOSE_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"},"sourceJsonPath":"applyScreenMdmsData.RAINMAKER-PGR.Sector","jsonPath":"serviceRequests.mohalla","labelsFromLocalisation":false,"suggestions":[],"fullwidth":true,"required":true,"inputLabelProps":{"shrink":true},"isMulti":false,"labelName":"name","valueName":"name"}))
-  // console.log("DDDDD"+JSON.stringify(locality_path))
-  // dispatch(
-  //   handleField(
-  //     "employeeServiceRequestsFilter",
-  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
-  //     "props",
-  //     locality_path
-  //   )
-  // );
+  
+  // var locality_path = get(state, "")
+  try
+  {
+ var  localityPlacehholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality.props.placeholder", {})
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
-      "props.value.label",
-      ""
+      "props.value",
+      localityPlacehholder.labelKey
     )
   );
-
+}
+catch(e){
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
+      "props.value",
+      undefined
+    )
+  );
+}
       //resetting servicerequeststatus using below 2 lines  of dispatch
-      
+   try   
+ { var  serviceRequestStatusPlaceholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus.props.placeholder", {})
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-      "props.value.label",
-      ""
+      "props.value",
+      serviceRequestStatusPlaceholder.labelKey
     )
-  );
-
-  // dispatch(
-  //   handleField(
-  //     "employeeServiceRequestsFilter",
-  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
+  );}
+catch(e)
+ { dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+      "props.value",
+      undefined
+    )
+  );}
 
     //resetting servicerequesttype using below 2 lines  of dispatch
+    try{
+      var serviceRequestTypePlaceholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType.props.placeholder", {})
+     dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+      "props.value",
+      serviceRequestTypePlaceholder.labelKey
+    )
+  );}
+  catch(e){
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
-      "props.value.label",
-      ""
+      "props.value",
+      undefined
     )
-  );
-  // dispatch(
-  //   handleField(
-  //     "employeeServiceRequestsFilter",
-  //     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
+  );}
 
+
+
+    //resetting from date
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -237,7 +258,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
-
+       //resetting to date
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -246,35 +267,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
-  
-//   try{dispatch(
-//     handleField(
-//       "employeeServiceRequestsFilter",
-//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-//       "props.value.label",
-//       ""
-//     )
-//   );
-//   dispatch(
-//     handleField(
-//       "employeeServiceRequestsFilter",
-//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-//       "props.value.value",
-//       ""
-//     )
-//   );
-
-// }
-
-//   catch (e){dispatch(
-//     handleField(
-//       "employeeServiceRequestsFilter",
-//       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-//       "props.value",
-//       ""
-//     )
-//   );}
-
+  //resetting serviceRequestID
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -285,7 +278,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
   );
 
   
-
+ //resetting contact number
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",

@@ -42,24 +42,28 @@
     .tl-download-button {
       margin-left: 5px;
       margin-right: 5px;
-      width: 178px;
-    }
+      min-width: 140px; }
     .tl-print-button {
       margin-left: 5px;
-      width: 140px;
-    }
+      min-width: 140px; }
     div#custom-atoms-rightdiv {
-      width: 100%;
-    }
-  }
+      width: 100%; } }
   
   @media only screen and (min-width: 768px) {
     .tl-download-button {
       margin-left: 10px;
-      width: 180px;
-    }
+      min-width: 100px; }
     .tl-print-button {
       margin-left: 10px;
-      width: 150px;
+      min-width: 100px; } }
+  
+  @media only screen and (max-width: 551px){
+  div#custom-atoms-rightdiv {
+      display: block !important;
+  }
+  .tl-download-button {
+    margin-top: 2px; }
+    .tl-print-button {
+      margin-top: 5px;
     }
   }

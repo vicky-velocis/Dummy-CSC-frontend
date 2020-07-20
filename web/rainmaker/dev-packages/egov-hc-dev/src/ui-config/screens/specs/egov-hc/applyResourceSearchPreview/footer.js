@@ -95,7 +95,7 @@ export const footerReviewTop = (
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -109,7 +109,7 @@ export const footerReviewTop = (
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -159,8 +159,13 @@ export const downloadPrintContainer = (
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
       myRequestDetails["documents"] = docs;
-      var demo = myRequestDetails["description"];
-      myRequestDetails["description"] = encodeURI(demo);
+      myRequestDetails["street_name"] = myRequestDetails["street_name"].toString().replace(/"/g, "''")
+      myRequestDetails["landmark"] = myRequestDetails["landmark"].toString().replace(/"/g, "''")
+      
+      var str_eg = myRequestDetails["description"];
+      str_eg = str_eg.toString().replace(/"/g, "''")
+      // myRequestDetails["description"] = myRequestDetails["description"].toString().replace(/"/g, "''")
+      myRequestDetails["description"] =str_eg.toString();
       const data= [myRequestDetails];
 
       downloadAcknowledgementForm(data, "download");
@@ -192,8 +197,14 @@ export const downloadPrintContainer = (
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
       myRequestDetails["documents"] = docs;
+      // var demo = myRequestDetails["description"];
+      // var str_eg = `test demo 'Single' sp - !@#$%^&*()_+ test's 'test' "Demo" `;
+      var str_eg = myRequestDetails["description"];
+      str_eg = str_eg.toString().replace(/"/g, "''")
+      myRequestDetails["description"] =str_eg.toString();
       const data= [myRequestDetails];
-      downloadAcknowledgementForm(data,'print');
+
+      downloadAcknowledgementForm(data, "print");
     },
     leftIcon: "assignment"
   };
@@ -218,7 +229,7 @@ export const downloadPrintContainer = (
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -232,7 +243,7 @@ export const downloadPrintContainer = (
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -283,7 +294,7 @@ export const downloadPrintContainerScreenDownload= (serviceRequestId)=>{
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -297,7 +308,7 @@ export const downloadPrintContainerScreenDownload= (serviceRequestId)=>{
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
