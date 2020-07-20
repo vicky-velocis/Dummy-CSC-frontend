@@ -51,6 +51,4 @@ export const mortgageReviewDetails = getCommonCard({
   header,
   reviewPropertyAddressDetailsMortgage,
   reviewApplicantDetailsMortgage,
-  
-
 })

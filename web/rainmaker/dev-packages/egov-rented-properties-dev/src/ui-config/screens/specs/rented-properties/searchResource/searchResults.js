@@ -78,6 +78,10 @@ const onDuplicateCopyRowClick = rowData => {
   window.location.href = `search-duplicate-copy-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
+const onMortgageRowClick = rowData => {
+  window.location.href = `mortgage-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
+}
+
 export const transferSearchResults = {
   ...searchResults,
   props: {...searchResults.props, 
@@ -111,6 +115,17 @@ export const duplicateCopySearchResult = {
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {
         onDuplicateCopyRowClick(row);
+      }
+    }
+  }
+}
+
+export const mortgageSearchResults = {
+  ...duplicateCopySearchResult,
+  props: {...duplicateCopySearchResult.props, 
+    options: {...searchResults.props.options,
+      onRowClick: (row, index) => {
+        onMortgageRowClick(row);
       }
     }
   }

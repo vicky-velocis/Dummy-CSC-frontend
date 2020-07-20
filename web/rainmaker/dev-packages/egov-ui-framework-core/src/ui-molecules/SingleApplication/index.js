@@ -164,6 +164,14 @@ class SingleApplication extends React.Component {
         default:
           setRoute(`/rented-properties/search-duplicate-copy-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
       }
+    } else if(moduleName === "MORTGAGERP") {
+      switch(item.state) {
+        case "INITIATED": 
+        setRoute(`/rented-properties-citizen/mortage-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+        break;
+        default:
+          setRoute(`/rented-properties/mortgage-search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+      }
     }
   };
 
