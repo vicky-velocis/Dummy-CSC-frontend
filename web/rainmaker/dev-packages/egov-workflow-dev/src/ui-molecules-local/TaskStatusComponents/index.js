@@ -28,6 +28,18 @@ export const getCurrentStatus = status => {
 
 const TaskStatusComponents = ({ currentObj, index }) => {
   if (currentObj.moduleName === 'HORTICULTURE'){
+    var role_name = ""
+    
+    
+    var current_assigner_roles = get(currentObj, "assigner")
+    for (var i = 0; i < current_assigner_roles.roles.length; i++) {
+      
+      {if (i!=  current_assigner_roles.roles.length-1)
+      {role_name += current_assigner_roles.roles[i].name + " | ";}
+      else{
+        role_name += current_assigner_roles.roles[i].name 
+      }}}
+      
     return (
     <Grid
       container={true}
@@ -126,9 +138,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         >
           <LabelContainer
             labelName={
-              get(currentObj, "assigner.roles[0].name")
-                ? get(currentObj, "assigner.roles[0].name")
-                : "NA"
+              role_name
+               
             }
           />
         </Typography>
@@ -143,12 +154,17 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         </Typography>
         <Typography
           variant="body2"
+          // classes={{
+          //   body2: "body2-word-wrap"
+          // }}
           className="bodydata-word-wrap"
+         
         >
           <LabelContainer labelName={get(currentObj, "comment")} />
         </Typography>
       </Grid>
-      {get(currentObj, "documents") && (
+      {get(currentObj, "documents") && (     
+
         <DownloadFileContainer
           data={get(currentObj, "documents")}
           className="review-documents"

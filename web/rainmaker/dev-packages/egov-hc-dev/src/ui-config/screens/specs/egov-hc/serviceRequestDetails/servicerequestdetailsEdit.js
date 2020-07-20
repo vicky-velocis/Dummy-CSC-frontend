@@ -1,6 +1,7 @@
 import { getBreak, getCommonCard, getCommonContainer, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import "./index.css";
 
 const getMapLocatorEdit = textSchema => {
   return {
@@ -91,14 +92,11 @@ export const servicerequestdetailsEdit = getCommonCard({
     },
    
     className: "citizen-city-picker",
-    label: {
-      labelName: "Type of Service Request",
-      labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
-    },  
+    label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE" },
     placeholder: {
-      labelName: "Select Type of Service Request",
-      labelKey: "HC_TYPE_OF_SERVICE_REQUEST_PLACEHOLDER"
-    }, 
+      labelName: "Select Service Request Type",
+      labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    },
     sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
     jsonPath: "SERVICEREQUEST.serviceType",
    
@@ -132,7 +130,7 @@ export const servicerequestdetailsEdit = getCommonCard({
         },
         required: true,
         pattern: getPattern("NoOfTree"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_NUMBER_OF_TREES_FIELD_MSG ",
         jsonPath: "SERVICEREQUEST.treeCount"
       })
     },
@@ -154,7 +152,7 @@ export const servicerequestdetailsEdit = getCommonCard({
         },
         required: true,
         pattern: getPattern("serviceRequestDescription"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_SERVICE_REQUEST_DESCRIPTION_FIELD_MSG",
         jsonPath: "SERVICEREQUEST.description"
       })
     },
@@ -172,7 +170,7 @@ export const servicerequestdetailsEdit = getCommonCard({
           jsonPath:
             "SERVICEREQUEST.address"
         },
-        jsonPath: "SERVICEREQUEST.latitude",
+        jsonPath: "SERVICEREQUEST.address",
         onClickDefination: {
           action: "condition",
           callBack: showHideMapPopupEdit
@@ -192,10 +190,10 @@ export const servicerequestdetailsEdit = getCommonCard({
               },
               placeholder: {
                 labelName: "Select your property location on map",
-                labelKey: "EC_VIOLATION_DETAILS_GIS_CORD_PLACEHOLDER"
+                labelKey: "HC_VIOLATION_DETAILS_GIS_CORD_PLACEHOLDER"
               },
               jsonPath:
-                "SERVICEREQUEST.latitude",
+                "SERVICEREQUEST.address",
               iconObj: {
                 iconName: "gps_fixed",
                 position: "end"
@@ -211,7 +209,7 @@ export const servicerequestdetailsEdit = getCommonCard({
                 disabled: true,
                 cursor: "pointer",
                 jsonPath:
-                  "SERVICEREQUEST.latitude"
+                  "SERVICEREQUEST.address"
               }
             })
           }
@@ -324,7 +322,7 @@ export const servicerequestdetailsEdit = getCommonCard({
         },
         required: true,
         pattern: getPattern("location"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_HOUSE_NO._STREET_NAME_FIELD_MSG",
         jsonPath: "SERVICEREQUEST.houseNoAndStreetName"
       })
     },
@@ -345,7 +343,7 @@ export const servicerequestdetailsEdit = getCommonCard({
           lg: 12
         },
         pattern: getPattern("location"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_LANDMARK_FIELD_MSG",
         jsonPath: "SERVICEREQUEST.landmark"
       }),
 

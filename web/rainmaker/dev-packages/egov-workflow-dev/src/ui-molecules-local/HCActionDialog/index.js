@@ -282,7 +282,7 @@ class HCActionDialog extends React.Component {
         open={open}
         onClose={onClose}
         maxWidth={false}
-        style={{zIndex:2000}}
+        // style={{zIndex:2000}}
       >
         <DialogContent
           children={
@@ -333,7 +333,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.roleName.label}
                         placeholder={fieldConfig.roleName.placeholder}
                         data={dropDownData}
@@ -358,7 +358,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeList}
@@ -385,7 +385,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfJE}
@@ -412,7 +412,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfSDO}
@@ -431,6 +431,7 @@ class HCActionDialog extends React.Component {
                 {/* code for comments is just here not anywhere else, after this, button code starts */}
                     <Grid item sm="12">
                     <TextFieldContainer
+                    style={{ marginRight: "15px", width: "100%" }}
                       InputLabelProps={{ shrink: true }}
                       label={fieldConfig.comments.label}
                       onChange={e =>
