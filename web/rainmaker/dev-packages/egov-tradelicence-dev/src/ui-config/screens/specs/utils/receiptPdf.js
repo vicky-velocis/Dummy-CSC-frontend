@@ -1,5 +1,6 @@
 import pdfMakeCustom from "pdfmake/build/pdfmake";
 import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import _ from "lodash";
 import {getMessageFromLocalization} from "./receiptTransformer";
 import pdfFonts from "./vfs_fonts";
@@ -13,7 +14,7 @@ import { downloadCertificateForm } from "./index";
 import { download } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 
-
+const userInfo = JSON.parse(getUserInfo());
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
