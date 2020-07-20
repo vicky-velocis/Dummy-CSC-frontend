@@ -1071,7 +1071,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
   }
 };
 
-const getEstimateData = (ResponseData, isPaid, OwnersData) => {
+const getEstimateData = (ResponseData, isPaid, data) => {
   if (ResponseData) {
     const { billAccountDetails } = ResponseData.billDetails[0];
     let transformedData = billAccountDetails.reduce((result, item) => {
@@ -1087,15 +1087,15 @@ const getEstimateData = (ResponseData, isPaid, OwnersData) => {
             value : item.amount,
             info: getToolTipInfo(
               item.accountDescription.split("-")[0],
-              OwnersData
+              data
             ) && {
                 value: getToolTipInfo(
                   item.accountDescription.split("-")[0],
-                  OwnersData
+                  data
                 ),
                 key: getToolTipInfo(
                   item.accountDescription.split("-")[0],
-                  OwnersData
+                  data
                 )
               }
           });
@@ -1108,9 +1108,9 @@ const getEstimateData = (ResponseData, isPaid, OwnersData) => {
             order: item.order,
             // value: getTaxValue(item),
             value : item.amount,
-            info: getToolTipInfo(item.taxHeadCode, OwnersData) && {
-              value: getToolTipInfo(item.taxHeadCode, OwnersData),
-              key: getToolTipInfo(item.taxHeadCode, OwnersData)
+            info: getToolTipInfo(item.taxHeadCode, data) && {
+              value: getToolTipInfo(item.taxHeadCode, data),
+              key: getToolTipInfo(item.taxHeadCode, data)
             }
           });
       } else {
@@ -1124,9 +1124,9 @@ const getEstimateData = (ResponseData, isPaid, OwnersData) => {
             value : item.amount,
             // value: getTaxValue(item),
             // value : get(ResponseData , "totalAmount"),
-            info: getToolTipInfo(item.taxHeadCode, OwnersData) && {
-              value: getToolTipInfo(item.taxHeadCode, OwnersData),
-              key: getToolTipInfo(item.taxHeadCode, OwnersData)
+            info: getToolTipInfo(item.taxHeadCode, data) && {
+              value: getToolTipInfo(item.taxHeadCode, data),
+              key: getToolTipInfo(item.taxHeadCode, data)
             }
           });
       }
@@ -1135,11 +1135,12 @@ const getEstimateData = (ResponseData, isPaid, OwnersData) => {
     transformedData = transformedData.sort((a, b) => {
       return a.order < b.order ? -1 : a.order > b.order ? 1 : a.value > b.value ? -1 : 0
     }).map(item => ({...item, value: item.value.toFixed(2)}))
-    return [
-      ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
-      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
-      // ...extraData
-    ];
+    return transformedData
+    // return [
+    //   ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
+    //   ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
+    //   // ...extraData
+    // ];
   }
 };
 
@@ -1280,18 +1281,17 @@ const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 };
 
 export const createEstimateData = async (
-  OwnersData,
+  data,
   jsonPath,
   dispatch,
   href = {},
+  _businessService
 ) => {
-  const workflowCode = get(OwnersData , "workflowCode") ? get(OwnersData , "workflowCode") : "OwnershipTransferRP"
-  const applicationNo =
-    get(OwnersData, "ownerDetails.applicationNumber") ||
-    getQueryArg(href, "applicationNumber");
+  const workflowCode = get(data , "workflowCode") ? get(data , "workflowCode") : _businessService
+  const applicationNo = getQueryArg(href, "applicationNumber");
   const tenantId =
-    get(OwnersData, "tenantId") || getQueryArg(href, "tenantId");
-  const businessService = get(OwnersData, "businessService", "") || "OwnershipTransferRP"
+    get(data, "tenantId") || getQueryArg(href, "tenantId");
+  const businessService = get(data, "businessService", "") || _businessService
   const queryObj = [
     { key: "tenantId", value: tenantId },
     {
@@ -1314,7 +1314,7 @@ export const createEstimateData = async (
       value: businessService
     }
   ];
-  const currentStatus = OwnersData.applicationState;
+  const currentStatus = data.applicationState || data.state;
   const isPAID = isApplicationPaid(currentStatus,workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
@@ -1329,9 +1329,9 @@ export const createEstimateData = async (
       getEstimateData(
         payload.Payments[0].paymentDetails[0].bill,
         isPAID,
-        OwnersData
+        data
       )
-      : payload && getEstimateData(payload, false, OwnersData)
+      : payload && getEstimateData(payload, false, data)
     : [];
   estimateData = estimateData || [];
   set(
@@ -1513,7 +1513,7 @@ export const getBaseURL = () => {
   }
 };
 
-export const fetchBill = async (action, state, dispatch) => {
+export const fetchBill = async (action, state, dispatch, businessService) => {
   //For Adhoc
   // Search License
   let queryObject = [
@@ -1527,21 +1527,44 @@ export const fetchBill = async (action, state, dispatch) => {
       value: getQueryArg(window.location.href, "consumerCode")
     }
   ];
-  const OwnersPayload = await getSearchResults(queryObject);
+  const response = await getSearchResults(queryObject);
   //get bill and populate estimate card
-  const payload =
-  OwnersPayload &&
-  OwnersPayload.Owners &&
-    (await createEstimateData(
-      OwnersPayload.Owners[0],
-      "OwnersTemp[0].estimateCardData",
-      dispatch,
-      window.location.href
-    ));
-  //set in redux to be used for adhoc
-  OwnersPayload &&
-    OwnersPayload.Owners &&
-    dispatch(prepareFinalObject("Owners[0]", OwnersPayload.Owners[0]));
+
+  let payload;
+  
+  switch(businessService) {
+    case "OwnershipTransferRP": {
+      payload =  response &&
+      response.Owners &&
+        (await createEstimateData(
+          response.Owners[0],
+          "OwnersTemp[0].estimateCardData",
+          dispatch,
+          window.location.href,
+          businessService
+        ));
+      //set in redux to be used for adhoc
+      response &&
+      response.Owners &&
+        dispatch(prepareFinalObject("Owners[0]", response.Owners[0]));
+      break
+    }
+    case "DuplicateCopyOfAllotmentLetterRP": {
+      payload = response && response.DuplicateCopyApplications && (
+        await createEstimateData(
+          response.DuplicateCopyApplications[0],
+          "DuplicateTemp[0].estimateCardData",
+          dispatch,
+          window.location.href,
+          businessService
+        )
+      )
+      response &&
+      response.DuplicateCopyApplications &&
+        dispatch(prepareFinalObject("DuplicateCopyApplications[0]", response.DuplicateCopyApplications[0]));
+      break
+    }
+  }
 
   //initiate receipt object
   payload &&

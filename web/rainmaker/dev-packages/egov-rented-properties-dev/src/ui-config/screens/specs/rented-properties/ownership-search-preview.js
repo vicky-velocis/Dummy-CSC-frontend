@@ -80,7 +80,8 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       response.Owners[0],
       "OwnersTemp[0].estimateCardData",
       dispatch,
-      {}
+      window.location.href,
+      "OwnershipTransferRP"
     );
     const footer = footerReview(
       action,

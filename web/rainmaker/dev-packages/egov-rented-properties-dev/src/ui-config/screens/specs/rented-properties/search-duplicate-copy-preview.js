@@ -1,13 +1,18 @@
 import {
     getCommonHeader,
     getCommonContainer,
-    getCommonCard
+    getCommonCard,
+    getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
 import { getDuplicateCopyReviewPropertyAddressDetails , getDuplicateCopyPreviewApplicantDetails} from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
+import { footerReview } from "./applyResource/reviewFooter";
+import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "../utils";
+import { set } from "lodash";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 const headerrow = getCommonContainer({
@@ -29,7 +34,14 @@ const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getDuplicateCopyReviewPropertyAddressDetails(false)
 const reviewDuplicateCopyDocuments = getReviewDocuments(false, "duplicate-copy-apply","DuplicateTemp[0].reviewDocData")
 
+const estimate = getCommonGrayCard({
+  estimateSection: getFeesEstimateCard({
+    sourceJsonPath: "DuplicateTemp[0].estimateCardData"
+  })
+});
+
 const duplicateReviewDetails = getCommonCard({
+    estimate,
     reviewPropertyAddressDetails,
     reviewApplicantDetails,
     reviewDuplicateCopyDocuments
@@ -37,6 +49,7 @@ const duplicateReviewDetails = getCommonCard({
 
   const beforeInitFn = async(action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId")
       if(!!applicationNumber) {
         const queryObject = [
           {key: "applicationNumber", value: applicationNumber}
@@ -48,6 +61,7 @@ const duplicateReviewDetails = getCommonCard({
         const removedDocs = applicationDocuments.filter(item => !item.active)
         applicationDocuments = applicationDocuments.filter(item => !!item.active)
         DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
+        const status = DuplicateCopyApplications[0].state
         dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
         dispatch(
           prepareFinalObject(
@@ -61,6 +75,38 @@ const duplicateReviewDetails = getCommonCard({
           "DuplicateTemp[0].reviewDocData",
           dispatch,'RP'
         );
+
+        createEstimateData(
+          response.DuplicateCopyApplications[0],
+          "DuplicateTemp[0].estimateCardData",
+          dispatch,
+          window.location.href,
+          "DuplicateCopyOfAllotmentLetterRP"
+        );
+        
+        const footer = footerReview(
+          action,
+          state,
+          dispatch,
+          status,
+          applicationNumber,
+          tenantId,
+          "DuplicateCopyOfAllotmentLetterRP"
+        );
+
+        process.env.REACT_APP_NAME === "Citizen"
+        ? set(action, "screenConfig.components.div.children.footer", footer)
+        : set(action, "screenConfig.components.div.children.footer", {});
+
+        const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
+        dispatch(
+          handleField(
+              "ownership-search-preview",
+              "components.div.children.transferReviewDetails.children.cardContent.children.estimate",
+              "visible",
+              showEstimate
+          )
+      );
         }
       }
     }

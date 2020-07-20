@@ -54,7 +54,7 @@ import {
       ];
       setPaymentMethods(action, state, dispatch)
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-      fetchBill(action, state, dispatch);
+      fetchBill(action, state, dispatch, businessService);
       return action;
     },
     components: {
