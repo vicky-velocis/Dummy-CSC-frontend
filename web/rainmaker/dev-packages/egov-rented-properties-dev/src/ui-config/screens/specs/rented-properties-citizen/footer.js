@@ -208,7 +208,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
     );
     isFormValid = await applyDuplicateOwnershipTransfer(state, dispatch);
       if (isFormValid) {
-          moveToSuccess(rentedData, dispatch, "DUPLICATECOPYRP");
+          moveToSuccess(rentedData, dispatch, "DUPLICATECOPYOFALLOTMENTLETTERRP");
       }
     }
     if(activeStep !== SUMMARY_STEP) {

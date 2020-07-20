@@ -156,6 +156,15 @@ class SingleApplication extends React.Component {
           setRoute(`/rented-properties/ownership-search-preview?applicationNumber=${item.ownerDetails.applicationNumber}&tenantId=${item.tenantId}`)
       }
     }
+    else if(moduleName === "DUPLICATECOPYOFALLOTMENTLETTERRP") {
+      switch (item.state) {
+        case "INITIATED": 
+          setRoute(`/rented-properties-citizen/duplicate-copy-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+          break;
+        default:
+          setRoute(`/rented-properties/search-duplicate-copy-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+      }
+    }
   };
 
   onButtonCLick = () => {
