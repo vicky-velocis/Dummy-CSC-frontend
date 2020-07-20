@@ -22,8 +22,8 @@ const header = getCommonHeader(
 
 const cardItems = [{
     label: {
-        labelKey: "Apply",
-        labelName: "Apply"
+        labelKey: "RP_APPLY_DUPLICATE_COPY",
+        labelName: "Apply for Duplicate Copy of Allotment Letter"
     },
     icon: <TradeLicenseIcon />,
     route: `duplicate-copy-apply`
