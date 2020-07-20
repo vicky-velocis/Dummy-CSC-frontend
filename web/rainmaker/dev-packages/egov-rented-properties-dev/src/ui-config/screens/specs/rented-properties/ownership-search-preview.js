@@ -82,15 +82,15 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       dispatch,
       {}
     );
-    // const footer = footerReview(
-    //   action,
-    //   state,
-    //   dispatch,
-    //   status,
-    //   applicationNumber,
-    //   tenantId,
-    //   "OwnershipTransferRP"
-    // );
+    const footer = footerReview(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId,
+      "OwnershipTransferRP"
+    );
     process.env.REACT_APP_NAME === "Citizen"
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
