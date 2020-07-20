@@ -36,7 +36,7 @@ export const employeeDetails = getCommonCard({
         },
         required: true,
         pattern: /^[a-zA-Z]{0,5}$/i,
-        jsonPath: "Employee[0].appellation"
+        jsonPath: "Employee[0].user.appellation"
       }),  
     },
     employeeName: {
@@ -222,7 +222,7 @@ export const professionalDetails = getCommonCard(
           }
         })
       },
-      superannuationDate: {
+      dateOfSuperannuation: {
         ...getDateField({
           label: {
             labelName: "Date of Superannuation",
@@ -234,7 +234,7 @@ export const professionalDetails = getCommonCard(
           },
           required: true,
           pattern: getPattern("Date"),
-          jsonPath: "Employee[0].superannuationDate",
+          jsonPath: "Employee[0].dateOfSuperannuation",
           props: {
             inputProps: {
               min: new Date().toISOString().slice(0, 10),
