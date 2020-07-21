@@ -39,20 +39,7 @@ const assignmentDetailsCard = {
                 }
               },
               beforeFieldChange: (action, state, dispatch) => {
-                let isPrimaryComponentPath = action.componentJsonpath.replace(
-                  ".assignFromDate",
-                  ".isPrimaryAssignment"
-                );
-
-                let isPrimaryValue = get(
-                  state.screenConfiguration.screenConfig.create,
-                  `${isPrimaryComponentPath}.props.value`,
-                  false
-                );
-
-                if(!isPrimaryValue){
-                  dispatch(handleField("create", isPrimaryComponentPath, "props.value",false));
-                }
+              
               }
             })
           },

@@ -580,32 +580,9 @@ export const prepareEditFlow = async (
 
 // set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isDuesPresent", false);
 // set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isDuesAmountDecided", false);
-let cardIndex=0;
- // Set default for dependent
- let dependents =
- get(response, "ProcessInstances[0].dependents",[]) 
-//  let isDuesPresent =
-//  get(response, "ProcessInstances[0].employeeOtherDetails.isDuesPresent") 
- console.log(dependents)
- console.log("dependents")
-if(dependents) 
-{
-//set gratuity text box and lable based on api responce
-for (let index = 0; index < dependents.length; index++) {
 
-//  alert(dependents[index].isEligibleForPension);
-//    set(action.screenConfig,
-//     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible.visible"
-//     ,dependents[index].isEligibleForPension);
-//     set(action.screenConfig,
-//           "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible.visible"
-//      ,dependents[index].isEligibleForGratuity);
-//      set(action.screenConfig,
-//        "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage.visible"
-//        ,dependents[index].isEligibleForGratuity);
-   
- }
-} 
+ 
+
 
 
 

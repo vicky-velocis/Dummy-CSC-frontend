@@ -293,98 +293,69 @@ if(validDependent && isDependentValidDOB)
        // dependents);
        //dispatch(prepareFinalObject("ProcessInstances", payload));      
       //set gratuity text box and lable based on api responce
-      for (let index = 0; index < response.ProcessInstances[0].dependents.length; index++) {
-        
-     
+      for (let index = 0; index < response.ProcessInstances[0].dependents.length; index++) {        
+        //alert(response.ProcessInstances[0].dependents[index].isEligibleForPension);
         set(state.screenConfiguration.screenConfig.dopDetails,
          "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible.visible"
          ,response.ProcessInstances[0].dependents[index].isEligibleForPension)
+         //
+         if(response.ProcessInstances[0].dependents[index].isEligibleForPension)
+         {
+         
+         dispatch(
+          handleField(
+          "dopDetails",
+          "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible",
+          "props.style",
+          { display: "inline-block" }
+          ));
+         }
+         if(response.ProcessInstances[0].dependents[index].isEligibleForGratuity)
+         {
+         
+         dispatch(
+          handleField(
+          "dopDetails",
+          "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible",
+          "props.style",
+          { display: "inline-block" }
+          ));
+          dispatch(
+            handleField(
+            "dopDetails",
+            "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage",
+            "props.style",
+            { display: "inline-block" }
+            ));
+         }
+          //
+          if(response.ProcessInstances[0].dependents[index].isEligibleForGratuity)
+          {
+         // set default 0 for gratuity amount ProcessInstances[0].dependents[0].gratuityPercentage
+         dispatch(prepareFinalObject(`ProcessInstances[0].dependents[${index}].gratuityPercentage`,0));
         set(state.screenConfiguration.screenConfig.dopDetails,
         "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible.visible"
         ,response.ProcessInstances[0].dependents[index].isEligibleForGratuity)
         set(state.screenConfiguration.screenConfig.dopDetails,
           "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage.visible"
           ,response.ProcessInstances[0].dependents[index].isEligibleForGratuity)
+          // dispatch(
+          //   handleField(
+          //   "dopDetails",
+          //   "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible",
+          //   "props.style",
+          //   { display: "inline-block" }
+          //   ));
+          //   dispatch(
+          //     handleField(
+          //     "dopDetails",
+          //     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage",
+          //     "props.style",
+          //     { display: "inline-block" }
+          //     ));
+        }
 
-          // anothr way
-          // if(true)
-          // {
-          //   let isEligibleForGratuity = get(
-          //     state,
-          //     `screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForGratuity`,
-          //     false
-          //   );
-          //   if(isEligibleForGratuity)
-          //   {
-          //     dispatch(
-          //       handleField(
-          //         "dopDetails",
-          //         "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible",
-          //         "props.style",
-          //         { display: "inline-block" }
-          //       )
-          //     ); 
-          //     // dispatch(
-          //     //   handleField(
-          //     //     "dopDetails",
-          //     //     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage",
-          //     //     "props.style",
-          //     //     { display: "inline-block" }
-          //     //   )
-          //     // ); 
-
-          //   }
-          //   else{
-          //     dispatch(
-          //       handleField(
-          //         "dopDetails",
-          //         "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible",
-          //         "props.style",
-          //         { display: "none" }
-          //       )
-          //     ); 
-          //     // dispatch(
-          //     //   handleField(
-          //     //     "dopDetails",
-          //     //     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage",
-          //     //     "props.style",
-          //     //     { display: "none" }
-          //     //   )
-          //     // ); 
-
-          //   }
-          //   let isEligibleForPension = get(
-          //     state,
-          //     `screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForPension`,
-          //     false
-          //   );
-          //   if(isEligibleForPension)
-          //   {
-          //     dispatch(
-          //       handleField(
-          //         "dopDetails",
-          //         "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible",
-          //         "props.style",
-          //         { display: "inline-block" }
-          //       )
-          //     ); 
-
-          //   }
-          //   else{
-          //     dispatch(
-          //       handleField(
-          //         "dopDetails",
-          //         "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible",
-          //         "props.style",
-          //         { display: "none" }
-          //       )
-          //     ); 
-
-          //   }
-           
-
-
-          // }
+          
                   
       }
       set(payload[0], 
@@ -843,13 +814,13 @@ const dependentUnitcard = {
               }
               for (let index = 0; index < dependent.length; index++) {        
      
-                set(state.screenConfiguration.screenConfig.doeDetails,
+                set(state.screenConfiguration.screenConfig.dopDetails,
                  "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible.visible"
                  ,dependent[index].isEligibleForPension)
-                set(state.screenConfiguration.screenConfig.doeDetails,
+                set(state.screenConfiguration.screenConfig.dopDetails,
                 "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible.visible"
                 ,dependent[index].isEligibleForGratuity)
-                set(state.screenConfiguration.screenConfig.doeDetails,
+                set(state.screenConfiguration.screenConfig.dopDetails,
                   "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage.visible"
                   ,dependent[index].isEligibleForGratuity)
                 }
@@ -1413,6 +1384,72 @@ const setFieldsOnAddItem = (state, multiItemContent) => {
         multiItemContent[variable].props.disabled = disabledValue;
       }
     }
+    else
+    {
+      //alert('i am in else'+variable+'value' +value)
+
+      if(variable ==='Name' && value === undefined)
+      {
+        
+        multiItemContent["gratuityEligible"].props.style = {display:"none"};
+        multiItemContent["PensionEligible"].props.style = {display:"none"};
+       
+      }
+      else if (variable ==='Name' && value)
+      {        
+        let index =multiItemContent.Name.index        
+       // let gratuityEligible = get();
+      const isEligibleForGratuity = get(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForGratuity`,false);
+      const isEligibleForPension = get(state,`screenConfiguration.preparedFinalObject.ProcessInstances[0].dependents[${index}].isEligibleForPension`,false);
+       if(isEligibleForGratuity)
+       {
+        multiItemContent["gratuityEligible"].props.style = {display:"inline-block"};
+        multiItemContent["gratuityPercentage"].props.style = {display:"inline-block"};
+       }
+       else
+       {
+        multiItemContent["gratuityEligible"].props.style = {display:"none"};
+        multiItemContent["gratuityPercentage"].props.style = {display:"none"};
+       }
+        if(isEligibleForPension)
+        {
+          multiItemContent["PensionEligible"].props.style = {display:"inline-block"};
+        }
+        else
+        {
+         multiItemContent["PensionEligible"].props.style = {display:"none"};
+        }
+      }
+      else if(variable ==='IsDisableOption' && value === undefined)
+      {
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+      else if(variable ==='IsHollyDependentOption' && value === undefined)
+      {
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+      else if(variable ==='IsNoSpauseNoChildrenOption' && value === undefined)
+      {
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+      else if(variable ==='IsGrandChildFromDeceasedSonOption' && value === undefined)
+      {
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+      else if(variable ==='maritalStatus' && value === undefined)
+      {
+        
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+      else if(variable ==='gratuityPercentage' && value === undefined)
+      {
+        
+        multiItemContent[variable].props.style = {display:"none"};
+      }
+     
+     
+      
+    }
   }
   return multiItemContent;
 };
@@ -1788,7 +1825,7 @@ return getCommonCard({
    
   }),
   break:getBreak(),
-  pensionCalculation: {
+  pensiondepCalculation: {
     componentPath: "Button",
     gridDefination: {
       xs: 12,

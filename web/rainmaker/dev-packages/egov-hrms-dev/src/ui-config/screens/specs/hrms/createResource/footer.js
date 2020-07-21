@@ -143,7 +143,7 @@ export const callBackForNext = async (state, dispatch) => {
     );
     let isserviceDetailsValid = true;
     const appntDate = new Date(state.screenConfiguration.preparedFinalObject.Employee[0].dateOfAppointment).getTime();
-    const annuationdate = new Date(state.screenConfiguration.preparedFinalObject.Employee[0].superannuationDate).getTime();
+    const annuationdate = new Date(state.screenConfiguration.preparedFinalObject.Employee[0].dateOfSuperannuation).getTime();
     let invalidFromDate ="Invalid Service from date for row: ", invalidToDate="Invalid Service To date for row: ",isInvalidFromDt=false, isInvalidToDt=false;
 
     for (var j = 0; j < serviceDetailsItems.length; j++) {
