@@ -195,7 +195,7 @@ export const callBackForNext = async (state, dispatch) => {
             let isRenewable;
             const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType");
             if(applicationType === "Renew") {
-              const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
+            const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
             const tenantId = getQueryArg(window.location.href, "tenantId");
             const queryObj = [
               {
@@ -240,7 +240,6 @@ export const callBackForNext = async (state, dispatch) => {
               isFormValid = false;
             }
           } else {
-            isFormValid = false;
             dispatch(
               toggleSnackbar(
                 true,
@@ -248,6 +247,7 @@ export const callBackForNext = async (state, dispatch) => {
                 "error"
               )
             );
+            return;
           }
           }
       }
@@ -1111,8 +1111,10 @@ export const footerReviewTop = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDINGAPPROVAL":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      // downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      // printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;
