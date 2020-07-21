@@ -15,17 +15,21 @@ import { searchMortgageApplication } from "./searchResource/rentedPropertyApplic
 import { searchMortgage } from "./searchResource/functions"
 import { mortgageSearchResults } from "./searchResource/searchResults";
 import { getColonyTypes } from "./apply";
+import { getStatusList } from "./search";
 
   const header = getCommonHeader({
     labelName: "Mortgage",
     labelKey: "MORTAGE_HEADER"
   });
-  const transferPropertiesSearchAndResult = {
+  const mortagageSearchAndResult = {
     uiFramework: "material-ui",
     name: "search-mortgage",
     beforeInitScreen: (action, state, dispatch) => {
+      const queryObject = [{ key: "tenantId", value: getTenantId() }, 
+                      { key: "businessServices", value: "PermissionToMortgage" }]
       dispatch(prepareFinalObject("searchScreen", {}))
       searchMortgage(state, dispatch, true)
+      getStatusList(action, state, dispatch, queryObject, "search-mortgage", "components.div.children.searchMortgageApplication.children.cardContent.children.statusContainer.children.status")
       return action
     },
     components: {
@@ -58,5 +62,5 @@ import { getColonyTypes } from "./apply";
     }
   };
   
-  export default transferPropertiesSearchAndResult;
+  export default mortagageSearchAndResult;
   
