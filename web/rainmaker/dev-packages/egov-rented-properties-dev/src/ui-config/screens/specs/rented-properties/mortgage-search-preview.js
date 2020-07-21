@@ -31,7 +31,7 @@ const headerrow = getCommonContainer({
 
 const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage(false);
 const reviewApplicantDetailsMortgage = getReviewApplicantDetailsMortgage(false);
-const reviewDocuments = getReviewDocuments(false, "mortage-apply", "MortgageTemp[0].reviewDocData")
+const reviewDocuments = getReviewDocuments(false, "mortage-apply", "MortgageApplicationsTemp[0].reviewDocData")
 
 const mortgageReviewDetails = getCommonCard({
     reviewPropertyAddressDetailsMortgage,
@@ -56,14 +56,14 @@ const beforeInitFn = async(action, state, dispatch) => {
       dispatch(prepareFinalObject("MortgageApplications", MortgageApplications))
       dispatch(
         prepareFinalObject(
-          "MortgageTemp[0].removedDocs",
+          "MortgageApplicationsTemp[0].removedDocs",
           removedDocs
         )
       );
       await setDocuments(
         response,
         "MortgageApplications[0].applicationDocuments",
-        "MortgageTemp[0].reviewDocData",
+        "MortgageApplicationsTemp[0].reviewDocData",
         dispatch,'RP'
       );
       }
