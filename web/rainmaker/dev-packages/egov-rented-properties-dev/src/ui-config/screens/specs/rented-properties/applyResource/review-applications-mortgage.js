@@ -42,14 +42,14 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "MortgageApplications[0].applicant.name" }
+                { jsonPath: "MortgageApplications[0].applicant[0].name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "MortgageApplications[0].applicant.relationship" }
+                { jsonPath: "MortgageApplications[0].applicant[0].relationship" }
             ),
             phone: getLabelWithValue(
                 {
@@ -57,7 +57,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "MortgageApplications[0].applicant.phone" 
+                    jsonPath: "MortgageApplications[0].applicant[0].phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -66,7 +66,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "MortgageApplications[0].applicant.email" 
+                    jsonPath: "MortgageApplications[0].applicant[0].email" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -75,7 +75,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "MortgageApplications[0].applicant.aadhaarNumber" 
+                    jsonPath: "MortgageApplications[0].applicant[0].aadhaarNumber" 
                 }
             )
         })
