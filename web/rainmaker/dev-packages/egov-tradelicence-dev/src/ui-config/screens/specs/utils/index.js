@@ -969,7 +969,9 @@ export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="downloa
     label: getLocaleLabels(item.name.labelName, item.name.labelKey)
   }))
   const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
-  const {owners} = Licenses[0].tradeLicenseDetail;
+  const {owners, additionalDetail = {}} = Licenses[0].tradeLicenseDetail;
+  let {businessStartDate} = additionalDetail;
+  businessStartDate = new Date(businessStartDate).getTime();
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
@@ -985,7 +987,7 @@ export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="downloa
   }, []);
   const age = calculateAge(owners[0].dob);
   let licenses = Licenses[0];
-  licenses = {...licenses, additionalDetails: {documents: myDocuments}, ownerDocument, age, feeEstimate: fees, totalAmount}
+  licenses = {...licenses, tradeLicenseDetail: {...Licenses[0].tradeLicenseDetail, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, age, feeEstimate: fees, totalAmount}
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",

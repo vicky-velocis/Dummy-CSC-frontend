@@ -195,7 +195,7 @@ export const callBackForNext = async (state, dispatch) => {
             let isRenewable;
             const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType");
             if(applicationType === "Renew") {
-              const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
+            const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
             const tenantId = getQueryArg(window.location.href, "tenantId");
             const queryObj = [
               {
