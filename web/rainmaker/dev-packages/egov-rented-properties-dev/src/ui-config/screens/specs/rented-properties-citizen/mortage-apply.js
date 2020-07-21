@@ -92,7 +92,7 @@ export const prepareOwnerShipDocuments = documents => {
             freshLicenceDocuments
         )
     );
-      dispatch(prepareFinalObject("MortgageApplications[0].applicationDocuments", documentTypes))
+      dispatch(prepareFinalObject("MortgageApplicationsTemp[0].applicationDocuments", documentTypes))
   }
   
   const getData = async(action, state, dispatch) => {
@@ -114,12 +114,12 @@ export const prepareOwnerShipDocuments = documents => {
           []
           )
           )
-      // dispatch(
-      //   prepareFinalObject(
-      //     "MortgageApplicationsTemp",
-      //     []
-      //   )
-      // )
+      dispatch(
+        prepareFinalObject(
+          "MortgageApplicationsTemp",
+          []
+        )
+      )
     }
     setDocumentData(action, state, dispatch)
   }

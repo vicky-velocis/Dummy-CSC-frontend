@@ -209,14 +209,15 @@ let userInfo = JSON.parse(getUserInfo());
         } else {
           if(activeIndex === 0) {
             set(queryObject[0], "action", "REINITIATE")
-          } else {
+          } 
+          else {
             set(queryObject[0], "action", "SUBMIT")
           }
-          let mortgageDocuments = get(queryObject[0], "MortgageApplications[0].applicationDocuments") || [];
+          let mortgageDocuments = get(queryObject[0], "applicationDocuments") || [];
           mortgageDocuments = mortgageDocuments.map(item => ({...item, active: true}))
           const removedDocs = get(state.screenConfiguration.preparedFinalObject, "MortgageApplicationsTemp[0].removedDocs") || [];
           mortgageDocuments = [...mortgageDocuments, ...removedDocs]
-          set(queryObject[0], "MortgageApplications[0].applicationDocuments", mortgageDocuments)
+          set(queryObject[0], "applicationDocuments", mortgageDocuments)
           response = await httpRequest(
             "post",
             "/csp/mortgage/_update",
@@ -230,6 +231,7 @@ let userInfo = JSON.parse(getUserInfo());
         const removedDocs = mortgageDocuments.filter(item => !item.active)
         mortgageDocuments = mortgageDocuments.filter(item => !!item.active)
         MortgageApplications = [{...MortgageApplications[0], mortgageDocuments}]
+        // MortgageApplications = [{...MortgageApplications[0], ownerDetails: {...MortgageApplications[0].ownerDetails, mortgageDocuments}}]
         dispatch(prepareFinalObject("MortgageApplications", MortgageApplications));
         dispatch(
           prepareFinalObject(

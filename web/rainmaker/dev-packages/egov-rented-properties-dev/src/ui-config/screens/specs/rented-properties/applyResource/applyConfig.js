@@ -95,7 +95,7 @@ export const stepper = getStepperObject(
         documentsJsonPath: "MortgageApplicationsTemp[0].applicationDocuments",
         uploadedDocumentsJsonPath: "MortgageApplicationsTemp[0].uploadedDocsInRedux",
         tenantIdJsonPath: "MortgageApplications[0].tenantId",
-        removedJsonPath: "MortgageApplications[0].removedDocs"
+        removedJsonPath: "MortgageApplicationsTemp[0].removedDocs"
       }
     }
   });
