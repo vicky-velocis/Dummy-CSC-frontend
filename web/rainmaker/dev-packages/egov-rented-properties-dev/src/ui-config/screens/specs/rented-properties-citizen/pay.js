@@ -13,7 +13,8 @@ import {
   import { fetchBill } from "../utils";
   import set from "lodash/set";
   import { getPaymentGateways } from "../../../../ui-utils/commons";
-  
+  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
   const header = getCommonContainer({
     header: getCommonHeader({
       labelName: "Application for Ownership Transfer",
@@ -41,12 +42,9 @@ import {
       set(action, "screenConfig.components.div.children.footer.children.makePayment.props.data.menu", paymentMethods)
     }
   }
-  
-  const screenConfig = {
-    uiFramework: "material-ui",
-    name: "pay",
-    beforeInitScreen: (action, state, dispatch) => {
-      const tenantId = getQueryArg(window.location.href, "tenantId");
+
+  const beforeScreenInit = async (action, state, dispatch) => {
+    const tenantId = getQueryArg(window.location.href, "tenantId");
       const businessService = getQueryArg(window.location.href, "businessService")
       const queryObject = [
         { key: "tenantId", value: tenantId },
@@ -54,7 +52,33 @@ import {
       ];
       setPaymentMethods(action, state, dispatch)
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-      fetchBill(action, state, dispatch, businessService);
+      await fetchBill(action, state, dispatch, businessService);
+      let sourceJsonPath;
+      switch(businessService) {
+        case "OwnershipTransferRP" : {
+          sourceJsonPath = "OwnersTemp[0].estimateCardData"
+          break
+        }
+        case "DuplicateCopyOfAllotmentLetterRP": {
+          sourceJsonPath = "DuplicateTemp[0].estimateCardData"
+          break
+        }
+      }
+      dispatch(
+        handleField(
+            "pay",
+            "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children",
+            "estimateDetails",
+            estimateDetails(sourceJsonPath)
+        )
+    );
+  }
+  
+  const screenConfig = {
+    uiFramework: "material-ui",
+    name: "pay",
+    beforeInitScreen: (action, state, dispatch) => {
+      beforeScreenInit(action, state, dispatch)
       return action;
     },
     components: {
@@ -87,7 +111,7 @@ import {
                   labelName: "Please review your fee and proceed to payment",
                   labelKey: "NOC_PAYMENT_HEAD"
                 }),
-                estimateDetails
+                // estimateDetails
               })
             }
           },

@@ -40,8 +40,9 @@ const mortgageReviewDetails = getCommonCard({
 })
 
 const beforeInitFn = async(action, state, dispatch) => {
-  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  const tenantId = getQueryArg(window.location.href, "tenantId")
+    dispatch(prepareFinalObject("workflow.ProcessInstances", []))
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    const tenantId = getQueryArg(window.location.href, "tenantId")
     if(!!applicationNumber) {
       const queryObject = [
         {key: "applicationNumber", value: applicationNumber}

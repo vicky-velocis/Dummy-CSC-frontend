@@ -17,7 +17,8 @@ const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMort
 const reviewFreshLicenceDocuments = getReviewDocuments(true, "ownership-apply", "OwnersTemp[0].reviewDocData")
 const reviewDuplicatePropertytDetails = getDuplicateCopyReviewPropertyAddressDetails()
 const reviewDuplicateApplicantDetails = getDuplicateCopyPreviewApplicantDetails()
-const reviewDupliateCopytDocuments = getReviewDocuments(true,"duplicate-copy-apply","DuplicateTemp[0].reviewDocData")
+const reviewDupliateCopyDocuments = getReviewDocuments(true,"duplicate-copy-apply","DuplicateTemp[0].reviewDocData")
+const reviewMortgageDocuments = getReviewDocuments(true, "mortage-apply", "MortgageApplicationsTemp[0].reviewDocData")
 const header = getCommonTitle({
   labelName: "Please review your Application and Submit",
   labelKey: "TL_SUMMARY_HEADER"
@@ -45,10 +46,11 @@ export const duplicateCopyDetails = getCommonCard({
     header,
     reviewDuplicatePropertytDetails,
     reviewDuplicateApplicantDetails,
-    reviewDupliateCopytDocuments
+    reviewDupliateCopyDocuments
 })
 export const mortgageReviewDetails = getCommonCard({
   header,
   reviewPropertyAddressDetailsMortgage,
   reviewApplicantDetailsMortgage,
+  reviewMortgageDocuments
 })

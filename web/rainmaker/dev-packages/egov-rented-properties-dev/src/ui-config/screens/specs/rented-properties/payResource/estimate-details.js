@@ -1,10 +1,12 @@
 import { getCommonGrayCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getFeesEstimateCard } from "../../utils";
 
-const estimate = getCommonGrayCard({
+const estimate = (sourceJsonPath) => {
+  return getCommonGrayCard({
   estimateSection: getFeesEstimateCard({
-    sourceJsonPath: "OwnersTemp[0].estimateCardData"
+    sourceJsonPath
   })
-});
+})
+}
 
 export default estimate;

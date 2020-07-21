@@ -62,6 +62,7 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
 }
 
 const beforeInitFn = async (action, state, dispatch, transitNumber) => {
+  dispatch(prepareFinalObject("workflow.ProcessInstances", []))
   if(transitNumber){
     await searchResults(action, state, dispatch, transitNumber)
   }

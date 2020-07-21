@@ -100,9 +100,6 @@ export const stepper = getStepperObject(
     }
   });
   
-
-
-
   export const formwizardFirstStep = {
     uiFramework: "custom-atoms",
     componentPath: "Form",
@@ -199,7 +196,6 @@ export const formwizardMortgageSecondStep = {
   },
   children: {
     mortgageDocumentsDetails
-
   },
   visible: false
 }

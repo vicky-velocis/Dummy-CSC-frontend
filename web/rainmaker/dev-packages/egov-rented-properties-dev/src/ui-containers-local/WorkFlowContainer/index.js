@@ -354,7 +354,7 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName
     // let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = moduleName === "OwnershipTransferRP" || moduleName === "DuplicateCopyOfAllotmentLetterRP" || moduleName === "PermissionToMortgage" ? get(data[data.length - 1], businessId) :
+    let businessId = moduleName === "OwnershipTransferRP" || moduleName === "DuplicateCopyOfAllotmentLetterRP" || moduleName === "PermissionToMortgage" ? get(data[data.length - 1], "businessId") :
     get(data[data.length - 1], "propertyDetails.propertyId");
     let filteredActions = [];
 

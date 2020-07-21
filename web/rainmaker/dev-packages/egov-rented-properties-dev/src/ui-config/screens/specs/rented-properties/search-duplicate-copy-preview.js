@@ -48,6 +48,7 @@ const duplicateReviewDetails = getCommonCard({
 })
 
   const beforeInitFn = async(action, state, dispatch) => {
+    dispatch(prepareFinalObject("workflow.ProcessInstances", []))
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId")
       if(!!applicationNumber) {

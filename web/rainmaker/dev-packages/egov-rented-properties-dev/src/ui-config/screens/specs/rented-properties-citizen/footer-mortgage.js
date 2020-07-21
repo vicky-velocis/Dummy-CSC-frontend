@@ -91,7 +91,7 @@ const callBackForNextMortgage = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "MortgageApplications[0]"
     );
-        moveToSuccess(rentedData, dispatch, "OWNERSHIPTRANSFERRP");
+        moveToSuccess(rentedData, dispatch, "PERMISSIONTOMORTGAGE");
     }
   }
   if(activeStep !== SUMMARY_STEP) {
