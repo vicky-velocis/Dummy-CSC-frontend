@@ -66,7 +66,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "MortgageApplications[0].applicant[0].eamil" 
+                    jsonPath: "MortgageApplications[0].applicant[0].email" 
                 }
             ),
             aadhar: getLabelWithValue(

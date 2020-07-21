@@ -11,6 +11,23 @@ import { set } from "lodash";
 import { getreviewPropertyAddressDetailsMortgage, getReviewApplicantDetailsMortgage } from "./applyResource/review-applications-mortgage";
 import { getMortgageSearchResults } from "../../../../ui-utils/commons";
 
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
+const headerrow = getCommonContainer({
+  header: getCommonHeader({
+    labelName: "Mortgage Application",
+    labelKey: "MORTGAGE_APPLICATION_HEADER"
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-rented-properties",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number: applicationNumber
+    }
+  }
+});
+
 const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage(false);
 const reviewApplicantDetailsMortgage = getReviewApplicantDetailsMortgage(false);
 
@@ -91,4 +108,4 @@ const mortgagePreviewDetails = {
     }
 }
 
-export default ownerShipDetailsPreview
+export default mortgagePreviewDetails
