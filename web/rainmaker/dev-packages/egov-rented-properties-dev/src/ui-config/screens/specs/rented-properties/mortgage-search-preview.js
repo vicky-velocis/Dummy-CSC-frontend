@@ -10,6 +10,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { set } from "lodash";
 import { getreviewPropertyAddressDetailsMortgage, getReviewApplicantDetailsMortgage } from "./applyResource/review-applications-mortgage";
 import { getMortgageSearchResults } from "../../../../ui-utils/commons";
+import { getReviewDocuments } from "./applyResource/review-documents";
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
@@ -30,27 +31,44 @@ const headerrow = getCommonContainer({
 
 const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage(false);
 const reviewApplicantDetailsMortgage = getReviewApplicantDetailsMortgage(false);
+const reviewDocuments = getReviewDocuments(false, "mortage-apply", "MortgageTemp[0].reviewDocData")
 
 const mortgageReviewDetails = getCommonCard({
     reviewPropertyAddressDetailsMortgage,
-    reviewApplicantDetailsMortgage
+    reviewApplicantDetailsMortgage,
+    reviewDocuments
 })
 
 const beforeInitFn = async(action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-    const tenantId = getQueryArg(window.location.href, "tenantId")
+  const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  const tenantId = getQueryArg(window.location.href, "tenantId")
     if(!!applicationNumber) {
-        const queryObject = [
-          {key: "applicationNumber", value: applicationNumber}
-        ]
-        const response = await getMortgageSearchResults(queryObject);
-        if(response && response.MortgageApplications){
-            let {MortgageApplications} = response;
-            dispatch(prepareFinalObject("MortgageApplications", MortgageApplications))
-        }
+      const queryObject = [
+        {key: "applicationNumber", value: applicationNumber}
+      ]
+      const response = await getMortgageSearchResults(queryObject);
+      if (response && response.MortgageApplications) {
+      let {MortgageApplications} = response
+      let applicationDocuments = MortgageApplications[0].applicationDocuments|| [];
+      const removedDocs = applicationDocuments.filter(item => !item.active)
+      applicationDocuments = applicationDocuments.filter(item => !!item.active)
+      MortgageApplications = [{...MortgageApplications[0], applicationDocuments}]
+      dispatch(prepareFinalObject("MortgageApplications", MortgageApplications))
+      dispatch(
+        prepareFinalObject(
+          "MortgageTemp[0].removedDocs",
+          removedDocs
+        )
+      );
+      await setDocuments(
+        response,
+        "MortgageApplications[0].applicationDocuments",
+        "MortgageTemp[0].reviewDocData",
+        dispatch,'RP'
+      );
+      }
     }
-}
-
+  }
 const mortgagePreviewDetails = {
     uiFramework: "material-ui",
     name: "mortgage-search-preview",
