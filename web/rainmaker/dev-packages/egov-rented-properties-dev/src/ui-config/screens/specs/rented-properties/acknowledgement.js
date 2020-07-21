@@ -65,6 +65,29 @@ const getAcknowledgementCard = (
         labelName: "Payment is collected successfully",
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
       } 
+
+      :type === "PERMISSIONTOMORTGAGE" ? purpose === "apply" ? {
+        labelName: "Mortgage Application Submitted Successfully",
+        labelKey: "RP_MORTGAGE_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "forward" ? {
+        labelName: "Mortgage Application Forwarded Successfully",
+        labelKey: "RP_MORTGAGE_FORWARD_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "sendback" ? {
+        labelName: "Mortgage Application is sent back Successfully",
+        labelKey: "RP_MORTGAGE_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+      } : purpose ==="reject" ? {
+        labelName: "Mortgage Application is Rejected",
+        labelKey: "RP_MORTGAGE_APPROVAL_REJ_MESSAGE_HEAD"
+      } : purpose === "approve" ? {
+        labelName: "Mortgage Application is Approved Successfully",
+        labelKey: "RP_MORTGAGE_APPROVAL_SUCCESS_MESSAGE_HEAD"
+      } : purpose === "submit" ? {
+        labelName: "Mortgage Application is Submitted Successfully",
+        labelKey: "RP_MORTGAGE_SUBMISSION_SUCCESS_MESSAGE_HEAD"
+      } : {
+        labelName: "Payment is collected successfully",
+        labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
+      } 
       : purpose === "apply" ? {
         labelName: "Rented Property Master Entry Submitted Successfully",
         labelKey: "RP_MASTER_ENTRY_SUCCESS_MESSAGE_MAIN"
@@ -88,7 +111,8 @@ const getAcknowledgementCard = (
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
       }
 
-      const tailText = type === "OWNERSHIPTRANSFERRP" || type === "DUPLICATECOPYOFALLOTMENTLETTERRP"  ? {
+      const tailText = type === "OWNERSHIPTRANSFERRP" || type === "DUPLICATECOPYOFALLOTMENTLETTERRP" 
+      || type === "PERMISSIONTOMORTGAGE" ? {
         labelName: "Application Number",
         labelKey: "RP_APPLICATION_NUMBER_LABEL"
       } : {

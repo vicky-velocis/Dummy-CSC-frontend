@@ -52,6 +52,7 @@ class WorkFlowContainer extends React.Component {
           queryObject = [...queryObject, { key: "businessIds", value: transitNumber }]
           break
         }
+        case "PermissionToMortgage":
         case "DuplicateCopyOfAllotmentLetterRP":
         case "OwnershipTransferRP": {
           queryObject = [...queryObject, { key: "businessIds", value: applicationNumber }]
@@ -161,6 +162,10 @@ class WorkFlowContainer extends React.Component {
             path = `&applicationNumber=${data[0].applicationNumber}&tenantId=${tenant}&type=DUPLICATECOPYOFALLOTMENTLETTERRP`
             break
           }
+          case "PermissionToMortgage": {
+            path = `&applicationNumber=${data[0].applicationNumber}&tenantId=${tenant}&type=PERMISSIONTOMORTGAGE`
+            break
+          }
         }
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
@@ -201,10 +206,12 @@ class WorkFlowContainer extends React.Component {
         set(data, `masterDataAction`, label);
         break;
       }
+      case "PermissionToMortgage":
       case "DuplicateCopyOfAllotmentLetterRP": {
           set(data, `Action`, label);
             break;
-      } 
+      }
+      
       case "OwnershipTransferRP": {
         set(data, `applicationAction`, label);
         break;
@@ -347,7 +354,7 @@ class WorkFlowContainer extends React.Component {
     } = this;
     let businessService = moduleName
     // let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
-    let businessId = moduleName === "OwnershipTransferRP" || moduleName === "DuplicateCopyOfAllotmentLetterRP" ? get(data[data.length - 1], businessId) :
+    let businessId = moduleName === "OwnershipTransferRP" || moduleName === "DuplicateCopyOfAllotmentLetterRP" || moduleName === "PermissionToMortgage" ? get(data[data.length - 1], businessId) :
     get(data[data.length - 1], "propertyDetails.propertyId");
     let filteredActions = [];
 

@@ -24,11 +24,6 @@ import { getStatusList } from "./search";
   const mortagageSearchAndResult = {
     uiFramework: "material-ui",
     name: "search-mortgage",
-    // beforeInitScreen: (action, state, dispatch) => {
-    //   dispatch(prepareFinalObject("searchScreen", {}))
-    //   searchMortgage(state, dispatch, true)
-    //   return action
-    // },
     beforeInitScreen: (action, state, dispatch) => {
       const queryObject = [{ key: "tenantId", value: getTenantId() }, 
                       { key: "businessServices", value: "PermissionToMortgage" }]

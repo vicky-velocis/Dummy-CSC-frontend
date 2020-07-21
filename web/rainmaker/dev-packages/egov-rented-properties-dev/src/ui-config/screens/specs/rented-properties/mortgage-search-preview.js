@@ -110,16 +110,16 @@ const mortgagePreviewDetails = {
                   }
                   }
                 },
-                // taskStatus: {
-                //   uiFramework: "custom-containers-local",
-                //   moduleName: "egov-rented-properties",
-                //   componentPath: "WorkFlowContainer",
-                //   props: {
-                //     dataPath: "Owners",
-                //     moduleName: "OwnershipTransferRP",
-                //     updateUrl: "/csp/ownership-transfer/_update"
-                //   }
-                // },
+                taskStatus: {
+                  uiFramework: "custom-containers-local",
+                  moduleName: "egov-rented-properties",
+                  componentPath: "WorkFlowContainer",
+                  props: {
+                    dataPath: "MortgageApplications",
+                    moduleName: "PermissionToMortgage",
+                    updateUrl: "/csp/mortgage/_update"
+                  }
+                },
                 mortgageReviewDetails
             }
           }
