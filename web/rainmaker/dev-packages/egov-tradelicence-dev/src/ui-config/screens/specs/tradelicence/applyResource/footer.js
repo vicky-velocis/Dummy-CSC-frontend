@@ -1111,8 +1111,10 @@ export const footerReviewTop = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDINGAPPROVAL":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      // downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      // printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;
