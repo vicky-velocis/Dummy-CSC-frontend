@@ -75,7 +75,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "MortgageApplications[0].applicant[0].aadhaarNumber" 
+                    jsonPath: "MortgageApplications[0].applicant[0].adhaarNumber" 
                 }
             )
         })
