@@ -32,7 +32,7 @@ import {
   } from "egov-ui-framework/ui-utils/commons";
   import commonConfig from "config/common.js";
   import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { getSearchResults } from "./commons";
+import { getSearchResults,getMortgageSearchResults } from "./commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 let userInfo = JSON.parse(getUserInfo());
@@ -167,6 +167,75 @@ let userInfo = JSON.parse(getUserInfo());
         dispatch(
           prepareFinalObject(
             "OwnersTemp[0].removedDocs",
+            removedDocs
+          )
+        );
+        return true;
+    } catch (error) {
+        dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+        console.log(error);
+        return false;
+    }
+  }
+
+  
+  export const applyOwnershipTransferMortgage = async (state, dispatch, activeIndex) => {
+    try {
+        let queryObject = JSON.parse(
+            JSON.stringify(
+              get(state.screenConfiguration.preparedFinalObject, "MortgageApplications", [])
+            )
+          );
+        
+        const userInfo = JSON.parse(getUserInfo())
+        const tenantId = userInfo.permanentCity;
+        // const tenantId = getQueryArg(window.location.href, "tenantId");
+        const id = get(queryObject[0], "id");
+        let response;
+        set(queryObject[0], "tenantId", tenantId);
+        set(queryObject[0], "state", "");
+        set(queryObject[0], "propertyDetails", "null");
+        set(queryObject[0], "applicant[0].phone", userInfo.userName);
+
+        if(!id) {
+          set(queryObject[0], "action", "INITIATE");
+          response = await httpRequest(
+            "post",
+            "/csp/mortgage/_create",
+            "",
+            [],
+            { MortgageApplications: queryObject }
+          );
+        } else {
+          if(activeIndex === 0) {
+            set(queryObject[0], "action", "REINITIATE")
+          } 
+          else {
+            set(queryObject[0], "action", "SUBMIT")
+          }
+          let mortgageDocuments = get(queryObject[0], "applicationDocuments") || [];
+          mortgageDocuments = mortgageDocuments.map(item => ({...item, active: true}))
+          const removedDocs = get(state.screenConfiguration.preparedFinalObject, "MortgageApplicationsTemp[0].removedDocs") || [];
+          mortgageDocuments = [...mortgageDocuments, ...removedDocs]
+          set(queryObject[0], "applicationDocuments", mortgageDocuments)
+          response = await httpRequest(
+            "post",
+            "/csp/mortgage/_update",
+            "",
+            [],
+            { MortgageApplications: queryObject }
+          );
+        }
+        let {MortgageApplications} = response
+        let mortgageDocuments = MortgageApplications[0].applicationDocuments || [];
+        const removedDocs = mortgageDocuments.filter(item => !item.active)
+        mortgageDocuments = mortgageDocuments.filter(item => !!item.active)
+        MortgageApplications = [{...MortgageApplications[0], mortgageDocuments}]
+        // MortgageApplications = [{...MortgageApplications[0], ownerDetails: {...MortgageApplications[0].ownerDetails, mortgageDocuments}}]
+        dispatch(prepareFinalObject("MortgageApplications", MortgageApplications));
+        dispatch(
+          prepareFinalObject(
+            "MortgageApplicationsTemp[0].removedDocs",
             removedDocs
           )
         );
@@ -347,6 +416,81 @@ export const getDetailsFromProperty = async (state, dispatch) => {
   }
 }
 
+
+export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
+  try {
+    
+    const transitNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MortgageApplications[0].property.transitNumber",
+      ""
+    );
+    if(!!transitNumber) {
+      let queryObject = [
+        { key: "transitNumber", value: transitNumber }
+      ];
+      const payload = await getSearchResults(queryObject)
+      if (
+        payload &&
+        payload.Properties
+      ) {
+        if (!payload.Properties.length) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Transit Number",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].property.transitNumber",
+              ""
+            )
+          )
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownershipAddressDetailsMortgage.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          const {Properties} = payload;
+          const {owners = []} = Properties[0]
+          const findOwner = owners.find(item => !!item.activeState) || {}
+         
+          dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].property.pincode",
+              Properties[0].propertyDetails.address.pincode
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].property.id",
+              Properties[0].propertyDetails.propertyId
+            )
+          )
+           dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].property.area",
+              Properties[0].propertyDetails.address.area
+            )
+          )
+          
+          return true
+        }
+    }
+  }
+ } catch (error) {
+  console.log(e);
+  }
+}
 
 
 export const getDuplicateDetailsFromProperty = async (state, dispatch) => {

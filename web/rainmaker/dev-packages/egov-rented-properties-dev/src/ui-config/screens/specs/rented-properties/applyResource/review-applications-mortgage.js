@@ -115,6 +115,13 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
                 },
                 {jsonPath: "MortgageApplications[0].allotmenNumber"}
             ),
+            // allotmentNumber: getLabelWithValue(
+            //     {
+            //         labelName: "Allotment Number",
+            //         labelKey: "RP_ALLOTMENT_NUMBER"
+            //     },
+            //     {jsonPath: "Owners[0].allotmenNumber"}
+            // ),
             transitNumber: getLabelWithValue(
                 {
                     labelName: "Transit Site/Plot number",

@@ -1,12 +1,10 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty } from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, getDetailsFromProperty,getDetailsFromPropertyMortgage,applyOwnershipTransferMortgage } from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-
 
 const callBackForNextMortgage = async(state, dispatch) => {
   let activeStep = get(
@@ -14,82 +12,90 @@ const callBackForNextMortgage = async(state, dispatch) => {
       "components.div.children.stepper.props.activeStep",
       0
   );
+  
   let isFormValid = true;
   let hasFieldToaster = true;
   if(activeStep === DETAILS_STEP) {
-    const isOwnerDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer",            
-      state,
-      dispatch,
-      "mortage-apply"
-    )
-    const isAddressDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer",            
-      state,
-      dispatch,
-      "mortage-apply"
-    )
-    if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
-            isFormValid = true;
-        } 
-    else {
-            isFormValid = false;
+      const isOwnerDetailsValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.applicantDetailsMortgage.children.cardContent.children.detailsContainer.children",            
+        state,
+        dispatch,
+        "mortage-apply"
+      )
+      
+      const isAddressDetailsValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.ownershipAddressDetailsMortgage.children.cardContent.children.detailsContainer.children",            
+        state,
+        dispatch,
+        "mortage-apply"
+      )
+      if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
+        const propertyId = get(state.screenConfiguration.preparedFinalObject, "MortgageApplications[0].property.id");
+        let res = true;
+        if(!propertyId) {
+          res = await getDetailsFromPropertyMortgage(state, dispatch)
         }
-}
-  if(activeStep === DOCUMENT_UPLOAD_STEP) {
-  //   const uploadedDocData = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     "Properties[0].propertyDetails.applicationDocuments",
-  //     []
-  // );
-
-  // const uploadedTempDocData = get(
-  //     state.screenConfiguration.preparedFinalObject,
-  //     "PropertiesTemp[0].applicationDocuments",
-  //     []
-  // );
-
-  // for (var y = 0; y < uploadedTempDocData.length; y++) {
-  //   if (
-  //       uploadedTempDocData[y].required &&
-  //       !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
-  //   ) {
-  //       isFormValid = false;
-  //   }
-  // }
-  // if(isFormValid) {
-  //   const reviewDocData =
-  //           uploadedDocData &&
-  //           uploadedDocData.map(item => {
-  //               return {
-  //                   title: `RP_${item.documentType}`,
-  //                   link: item.fileUrl && item.fileUrl.split(",")[0],
-  //                   linkText: "View",
-  //                   name: item.fileName
-  //               };
-  //           });
-  //           dispatch(
-  //             prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
-  //         );
-  // }
-      isFormValid = true;
+        if(!!res) {
+          const applyRes = applyOwnershipTransferMortgage(state, dispatch, activeStep)
+          if(!applyRes) {
+            return
+          }
+        } else {
+          return
+        }
+      } else {
+          isFormValid = false;
+      }
   }
+  if(activeStep === DOCUMENT_UPLOAD_STEP) {
+    const uploadedDocData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MortgageApplications[0].applicationDocuments",
+      []
+  );
 
+  const uploadedTempDocData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "MortgageApplicationsTemp[0].applicationDocuments",
+      []
+  );
+
+  for (var y = 0; y < uploadedTempDocData.length; y++) {
+    if (
+        uploadedTempDocData[y].required &&
+        !some(uploadedDocData, { documentType: uploadedTempDocData[y].name })
+    ) {
+        isFormValid = false;
+    }
+  }
+  if(isFormValid) {
+    const reviewDocData =
+            uploadedDocData &&
+            uploadedDocData.map(item => {
+                return {
+                    title: `RP_${item.documentType}`,
+                    link: item.fileUrl && item.fileUrl.split(",")[0],
+                    linkText: "View",
+                    name: item.fileName
+                };
+            });
+            dispatch(
+              prepareFinalObject("MortgageApplicationsTemp[0].reviewDocData", reviewDocData)
+          );
+  }
+  }
   if(activeStep === SUMMARY_STEP) {
-  isFormValid = true;
+  isFormValid = await applyOwnershipTransferMortgage(state, dispatch);
     if (isFormValid) {
       const rentedData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Properties[0]"
+        "MortgageApplications[0]"
     );
-        moveToSuccess(rentedData, dispatch);
+        moveToSuccess(rentedData, dispatch, "OWNERSHIPTRANSFERRP");
     }
-    
   }
-
   if(activeStep !== SUMMARY_STEP) {
       if (isFormValid) {
-        
           changeStep(state, dispatch, "mortage-apply");
       } else if (hasFieldToaster) {
           let errorMessage = {
@@ -116,7 +122,6 @@ const callBackForNextMortgage = async(state, dispatch) => {
       }
   }
 }
-
 
 export const callBackForPreviousMortgage = (state, dispatch) => {
   changeStep(state, dispatch, "mortage-apply", "previous");
