@@ -23,7 +23,7 @@ export const prepareOwnerShipDocuments = documents => {
         documentsArr.push({
           name: item.code,
           required: item.required,
-          jsonPath: `Duplicate[0].applicationDocuments[${ind}]`,
+          jsonPath: `DuplicateCopyApplications[0].applicationDocuments[${ind}]`,
           statement: item.description
         });
         return documentsArr;
@@ -63,7 +63,7 @@ const setDocumentData = async(action, state, dispatch) => {
     const documentTypes = prepareOwnerShipDocuments(masterDocuments);
     let applicationDocs = get(
       state.screenConfiguration.preparedFinalObject,
-      "Duplicate[0].applicationDocuments",
+      "DuplicateCopyApplications[0].applicationDocuments",
       []
     ) || [];
     applicationDocs = applicationDocs.filter(item => !!item)
@@ -79,7 +79,7 @@ const setDocumentData = async(action, state, dispatch) => {
     applicationDocsReArranged &&
       dispatch(
         prepareFinalObject(
-          "Duplicate[0].applicationDocuments",
+          "DuplicateCopyApplications[0].applicationDocuments",
           applicationDocsReArranged
         )
       );
@@ -102,17 +102,23 @@ const getData = async(action, state, dispatch) => {
       {key: "applicationNumber", value: applicationNumber}
     ]
     const response = await getDuplicateCopySearchResults(queryObject);
-    if (response && response.Duplicate) {
-    dispatch(prepareFinalObject("Duplicate", response.Duplicate))
+    if (response && response.DuplicateCopyApplications) {
+    dispatch(prepareFinalObject("DuplicateCopyApplications", response.DuplicateCopyApplications))
     }
-    setDocsForEditFlow(state, dispatch, "Duplicate[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
+    setDocsForEditFlow(state, dispatch, "DuplicateCopyApplications[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
   } else {
     dispatch(
       prepareFinalObject(
-        "Duplicate",
+        "DuplicateCopyApplications",
         []
         )
         )
+    dispatch(
+      prepareFinalObject(
+        "DuplicateTemp",
+        []
+      )
+    )
   }
   setDocumentData(action, state, dispatch)
 }
@@ -150,7 +156,7 @@ const applyLicense = {
                 formwizardFirstStep: formwizardDuplicateCopyFirstStep,
                 formwizardSecondStep: formwizardDuplicateCopySecondStep,
                 formwizardThirdStep: formwizardDuplicateCopyThirdStep,
-                duplicatefooter
+                footer: duplicatefooter
             }
         }
     }

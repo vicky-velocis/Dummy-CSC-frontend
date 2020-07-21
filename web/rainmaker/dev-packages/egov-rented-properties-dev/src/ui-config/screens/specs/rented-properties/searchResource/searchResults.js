@@ -16,6 +16,7 @@ export const APPLICATION_NO = getLocaleLabels("APPLICATION NUMBER", "RP_COMMON_T
 export const PROPERTY_ID = getLocaleLabels("PROPERTY ID", "RP_COMMON_TABLE_COL_PROPERTY_ID")
 export const OWNER_NAME = getLocaleLabels("APPLICANT NAME", "RP_COMMON_TABLE_COL_APPLICANT_NAME")
 export const STATUS = getLocaleLabels("APPLICATION STATUS", "RP_COMMON_TABLE_COL_APPLICATION_STATUS")
+export const LAST_MODIFIED_ON = getLocaleLabels("LAST MODIFIED ON", "RP_COMMON_TABLE_COL_LAST_MODIFIED_ON")
 
 
 export const searchResults = {
@@ -28,18 +29,7 @@ export const searchResults = {
       getTextToLocalMapping("Colony"),
       getTextToLocalMapping("Owner"),
       getTextToLocalMapping("Status"),
-      {
-        name: "id",
-        options: {
-          display: false
-        }
-      },
-      {
-        name: "propertyId",
-        options: {
-          display: false
-        }
-      }
+      LAST_MODIFIED_ON
     ],
     options: {
       filter: false,
@@ -81,13 +71,15 @@ const onRowClick = rowData => {
 };
 
 const onTransferPropertyRowClick = rowData => {
-  console.log("=======row data======", rowData)
   window.location.href = `ownership-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
 const onDuplicateCopyRowClick = rowData => {
-  console.log("=======row data======", rowData)
   window.location.href = `search-duplicate-copy-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
+}
+
+const onMortgageRowClick = rowData => {
+  window.location.href = `mortgage-search-preview?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}`
 }
 
 export const transferSearchResults = {
@@ -98,7 +90,8 @@ export const transferSearchResults = {
       getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
-      STATUS
+      STATUS,
+      LAST_MODIFIED_ON
     ],
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {
@@ -116,11 +109,23 @@ export const duplicateCopySearchResult = {
       getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
-      STATUS
+      STATUS,
+      LAST_MODIFIED_ON
     ],
     options: {...searchResults.props.options,
       onRowClick: (row, index) => {
         onDuplicateCopyRowClick(row);
+      }
+    }
+  }
+}
+
+export const mortgageSearchResults = {
+  ...duplicateCopySearchResult,
+  props: {...duplicateCopySearchResult.props, 
+    options: {...searchResults.props.options,
+      onRowClick: (row, index) => {
+        onMortgageRowClick(row);
       }
     }
   }

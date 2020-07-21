@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall, searchTransferProperties,searchDuplicateCopy} from "./functions";
+import { searchApiCall, searchTransferProperties,searchDuplicateCopy, searchMortgage} from "./functions";
 
 const colonyField = {
   label: {
@@ -280,6 +280,28 @@ export const searchDuplicateCopyApplication = getCommonCard(
           onClickDefination: {
             action: "condition",
             callBack: searchDuplicateCopy
+          }
+        }, lastCont: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }
+      })
+    })
+  }
+)
+
+export const searchMortgageApplication = getCommonCard(
+  {...commonSearchForm,
+    button: getCommonContainer({
+      buttonContainer: getCommonContainer(
+        {...buttonItem, searchButton: {...buttonItem.searchButton, 
+          onClickDefination: {
+            action: "condition",
+            callBack: searchMortgage
           }
         }, lastCont: {
           uiFramework: "custom-atoms",

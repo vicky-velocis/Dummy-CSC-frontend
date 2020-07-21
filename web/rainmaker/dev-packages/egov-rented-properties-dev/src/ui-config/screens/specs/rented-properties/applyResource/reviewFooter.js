@@ -15,6 +15,7 @@ import {
     status,
     applicationNumber,
     tenantId,
+    businessService
   ) => {
     /** MenuButton data based on status */
 
@@ -56,7 +57,7 @@ import {
                   callBack: () => {
                     dispatch(
                       setRoute(
-                       `/rented-properties-citizen/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                       `/rented-properties-citizen/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=${businessService}`
                       )
                     );
                   },

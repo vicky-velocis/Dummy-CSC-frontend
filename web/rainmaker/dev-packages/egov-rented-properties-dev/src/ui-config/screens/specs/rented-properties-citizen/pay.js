@@ -30,12 +30,13 @@ import {
   });
   
   const setPaymentMethods = async (action, state, dispatch) => {
+    const businessService = getQueryArg(window.location.href, "businessService")
     const response = await getPaymentGateways();
     if(!!response.length) {
       const paymentMethods = response.map(item => ({
         label: { labelName: item,
         labelKey: item},
-        link: () => callPGService(state, dispatch, item)
+        link: () => callPGService(state, dispatch, item, businessService)
       }))
       set(action, "screenConfig.components.div.children.footer.children.makePayment.props.data.menu", paymentMethods)
     }
@@ -46,13 +47,14 @@ import {
     name: "pay",
     beforeInitScreen: (action, state, dispatch) => {
       const tenantId = getQueryArg(window.location.href, "tenantId");
+      const businessService = getQueryArg(window.location.href, "businessService")
       const queryObject = [
         { key: "tenantId", value: tenantId },
-        { key: "businessServices", value: "OwnershipTransferRP" }
+        { key: "businessServices", value: businessService }
       ];
       setPaymentMethods(action, state, dispatch)
       setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-      fetchBill(action, state, dispatch);
+      fetchBill(action, state, dispatch, businessService);
       return action;
     },
     components: {

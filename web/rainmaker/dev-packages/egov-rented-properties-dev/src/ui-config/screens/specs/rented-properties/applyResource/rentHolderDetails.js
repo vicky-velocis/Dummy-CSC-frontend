@@ -339,7 +339,7 @@ const applicantNameFieldname = {
     minLength: 1,
     maxLength: 100,
     required: true,
-    jsonPath: "Duplicate[0].applicant[0].name"
+    jsonPath: "DuplicateCopyApplications[0].applicant[0].name"
 }
 
 
@@ -367,7 +367,7 @@ const applicantphoneNumberFieldduplicate = {
         value: userInfo.userName,
         disabled: true
       },
-    jsonPath: "Duplicate[0].applicant[0].phone"
+    jsonPath: "DuplicateCopyApplications[0].applicant[0].phone"
 }
 
 export const  applicantGenderLabel = {
@@ -420,7 +420,7 @@ const fatherOrHusbandsName = {
     minLength: 4,
     maxLength: 40,
     required: true,
-    jsonPath: "Duplicate[0].applicant[0].guardian"
+    jsonPath: "DuplicateCopyApplications[0].applicant[0].guardian"
 }
 
 const fatherOrHusbandsNameMortgage = {
@@ -444,7 +444,7 @@ const fatherOrHusbandsNameMortgage = {
 
 const ownerShipRelationShipduplicate = {
       ...getRelationshipRadioButton,
-      jsonPath: "Duplicate[0].applicant[0].relationship",
+      jsonPath: "DuplicateCopyApplications[0].applicant[0].relationship",
       props: {
           ...getRelationshipRadioButton.props,
           buttons: [
@@ -459,7 +459,7 @@ const ownerShipRelationShipduplicate = {
               value: "SPOUSE"
             }
           ],
-          jsonPath: "Duplicate[0].applicant[0].relationship"
+          jsonPath: "DuplicateCopyApplications[0].applicant[0].relationship"
       }
   }
 
@@ -492,7 +492,7 @@ const applicantEmailField = {
 
 const applicantEmailFieldduplicate = {
     ...emailConfig,
-    jsonPath: "Duplicate[0].applicant[0].email",
+    jsonPath: "DuplicateCopyApplications[0].applicant[0].email",
     required: false
 }
 
@@ -510,7 +510,7 @@ const applicantAadharField = {
 
 const applicantAadharFieldduplicate = {
     ...aadharFieldConfig,
-     jsonPath: "Duplicate[0].applicant[0].adhaarNumber"
+     jsonPath: "DuplicateCopyApplications[0].applicant[0].adhaarNumber"
 }
 
 const applicantAadharFieldMortgage = {

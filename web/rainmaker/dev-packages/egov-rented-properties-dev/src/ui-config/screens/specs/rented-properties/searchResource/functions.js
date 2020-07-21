@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults, getCount, getDuplicateCopySearchResults , getOwnershipSearchResults} from "../../../../..//ui-utils/commons";
+import { getSearchResults, getCount, getDuplicateCopySearchResults , getOwnershipSearchResults, getMortgageSearchResults} from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
@@ -13,7 +13,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../../ui-utils"
-import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS } from "./searchResults";
+import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS, LAST_MODIFIED_ON } from "./searchResults";
 
 export const getStatusList = async (state, dispatch, screen, path) => {
   const queryObject = [{ key: "tenantId", value: getTenantId() }, 
@@ -52,14 +52,14 @@ export const searchTransferProperties = async (state, dispatch, onInit, offset, 
     "components.div.children.ownerShipTransferApplication.children.cardContent.children.applicationNoContainer.children",
     state,
     dispatch,
-    "search"
+    "search-transfer-properties"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
     "components.div.children.ownerShipTransferApplication.children.cardContent.children.statusContainer.children",
     state,
     dispatch,
-    "search"
+    "search-transfer-properties"
   );
 
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid) && typeof onInit != "boolean") {
@@ -104,6 +104,7 @@ export const searchTransferProperties = async (state, dispatch, onInit, offset, 
         // [PROPERTY_ID]: item.property.id || "-",
         [OWNER_NAME]: item.ownerDetails.name || "-",
         [STATUS]: getLocaleLabels(item.applicationState, item.applicationState) || "-",
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(
         handleField(
@@ -117,6 +118,94 @@ export const searchTransferProperties = async (state, dispatch, onInit, offset, 
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
+    }
+  }
+}
+
+export const searchMortgage = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
+  !!hideTable && showHideTable(false, dispatch, "search-mortgage");
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: getTenantId()
+    },
+    { key: "offset", value: offset },
+    { key: "limit", value: limit }
+  ];
+  queryObject = queryObject.filter(({value}) => !!value)
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen",
+    {}
+  );
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.searchMortgageApplication.children.cardContent.children.applicationNoContainer.children",
+    state,
+    dispatch,
+    "search-mortgage"
+  );
+
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.searchMortgageApplication.children.cardContent.children.statusContainer.children",
+    state,
+    dispatch,
+    "search-mortgage"
+  );
+
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid) && typeof onInit != "boolean") {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill valid fields to start search",
+          labelKey: "ERR_FILL_VALID_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else if (
+    (Object.keys(searchScreenObject).length == 0 ||
+    Object.values(searchScreenObject).every(x => x === "")) && typeof onInit != "boolean"
+  ) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Please fill at least one field to start search",
+          labelKey: "ERR_FILL_ONE_FIELDS"
+        },
+        "warning"
+      )
+    );
+  } else {
+      for (var key in searchScreenObject) {
+        if (
+          searchScreenObject.hasOwnProperty(key) &&
+          searchScreenObject[key].trim() !== ""
+        ) {
+            queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        }
+    }
+    const response = await getMortgageSearchResults(queryObject);
+    try {
+      let data = response.MortgageApplications.map(item => ({
+        [APPLICATION_NO]: item.applicationNumber || "-",
+        [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
+        [OWNER_NAME]: item.applicant[0].name || "-",
+        [STATUS]: getLocaleLabels(item.state, item.state) || "-",
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
+      }));
+      dispatch(
+        handleField(
+          "search-mortgage",
+          "components.div.children.mortgageSearchResults",
+          "props.data",
+          data
+        )
+      );
+      !!hideTable && showHideTable(true, dispatch, "search-mortgage");
+    } catch (error) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
     }
   }
 }
@@ -141,14 +230,14 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
     "components.div.children.searchDuplicateCopyApplication.children.cardContent.children.applicationNoContainer.children",
     state,
     dispatch,
-    "search"
+    "search-duplicate-copy"
   );
 
   const isSearchBoxSecondRowValid = validateFields(
     "components.div.children.searchDuplicateCopyApplication.children.cardContent.children.statusContainer.children",
     state,
     dispatch,
-    "search"
+    "search-duplicate-copy"
   );
 
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid) && typeof onInit != "boolean") {
@@ -192,6 +281,7 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
         [getTextToLocalMapping("Transit No")]: item.property.transitNumber || "-",
         [OWNER_NAME]: item.applicant[0].name || "-",
         [STATUS]: getLocaleLabels(item.state, item.state) || "-",
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(
         handleField(
@@ -280,8 +370,7 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
         [getTextToLocalMapping("Colony")]: getLocaleLabels(item.colony, item.colony) || "-",
         [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
         [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
-        ["id"]: item.id,
-        ["propertyId"]: item.propertyDetails.propertyId
+        [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(
         handleField(

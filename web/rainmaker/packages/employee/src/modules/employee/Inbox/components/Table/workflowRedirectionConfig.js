@@ -12,6 +12,11 @@ export const getWFConfig = (module,businessService) => {
           INITIATED: "/rented-properties/ownership-search-preview",
           DEFAULT: "/rented-properties/ownership-search-preview",
         };
+      } else if(businessService === "DuplicateCopyOfAllotmentLetterRP") {
+        return {
+          INITIATED: "/rented-properties/search-duplicate-copy-preview",
+          DEFAULT: "/rented-properties/search-duplicate-copy-preview",
+        };
       } else {
         return {
           INITIATED: "/tradelicence/apply",
@@ -28,6 +33,11 @@ export const getWFConfig = (module,businessService) => {
       return {
         INITIATED: "/rented-properties/ownership-search-preview",
         DEFAULT: "/rented-properties/ownership-search-preview",
+      };
+    } else if(businessService === "DuplicateCopyOfAllotmentLetterRP") {
+      return {
+        INITIATED: "/rented-properties/search-duplicate-copy-preview",
+        DEFAULT: "/rented-properties/search-duplicate-copy-preview",
       };
     }
     }

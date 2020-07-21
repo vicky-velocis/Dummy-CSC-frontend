@@ -47,10 +47,10 @@ const screenConfig = {
                 label: "RP_COMMON_TABLE_COL_APPLICAITON_NUMBER",
                 jsonPath: "ownerDetails.applicationNumber"
               },
-              {
-                label: "RP_PROPERTY_ID_LABEL",
-                jsonPath: "property.id"
-              },
+              // {
+              //   label: "RP_PROPERTY_ID_LABEL",
+              //   jsonPath: "property.id"
+              // },
               {
                 label: "RP_ALLOTMENT_NUMBER",
                 jsonPath: "allotmenNumber",

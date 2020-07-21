@@ -216,12 +216,12 @@ export const updatePFOforSearchResults = async (
     );
   
   if (dob) {
-    const dobConverted = (convertEpochToDate(dob).replace(/\//g, "-")).split("-").reverse().join("-");
+    // const dobConverted = (convertEpochToDate(dob).replace(/\//g, "-")).split("-").reverse().join("-");
 
     set(
       payload,
       "Licenses[0].tradeLicenseDetail.owners[0].age",
-      calculateAge(dobConverted)
+      calculateAge(dob)
     )
 
     const age = get(
@@ -913,7 +913,7 @@ export const download = (receiptQueryString, Licenses, data, generateBy, mode = 
       let {billAccountDetails} = Payments[0].paymentDetails[0].bill.billDetails[0];
       billAccountDetails = billAccountDetails.map(({taxHeadCode, ...rest}) => ({
         ...rest,
-        taxHeadCode: taxHeadCode.includes("_FEE") ? "TL_FEE" : taxHeadCode.includes("_PENALTY") ? "TL_TIME_PENALTY" : taxHeadCode.includes("_TAX") ? "TL_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "TL_ROUNDOFF" : taxHeadCode
+        taxHeadCode: taxHeadCode.includes("_FEE") ? "TL_FEE" : taxHeadCode.includes("_PENALTY") ? "TL_TIME_PENALTY" : taxHeadCode.includes("_TAX") ? "TL_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "TL_ROUNDOFF" : taxHeadCode.includes("REHRI_REGISTRATION_CHARGES") ? "TL_CHARGES"  : taxHeadCode
       }))
       Payments = [{...Payments[0], paymentDetails: [{...Payments[0].paymentDetails[0], bill: {...Payments[0].paymentDetails[0].bill, billDetails: [{...Payments[0].paymentDetails[0].bill.billDetails[0],billAccountDetails }] } }]}]
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments, Licenses, data, generateBy }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })

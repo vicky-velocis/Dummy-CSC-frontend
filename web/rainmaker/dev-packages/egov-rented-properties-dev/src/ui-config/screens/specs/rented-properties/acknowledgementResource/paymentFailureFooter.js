@@ -12,7 +12,7 @@ const getCommonApplyFooter = children => {
   };
 };
 
-export const paymentFailureFooter = (applicationNumber, tenant) => {
+export const paymentFailureFooter = (applicationNumber, tenant, businessService) => {
   const roleExists = ifUserRoleExists("CITIZEN");
   const redirectionURL = roleExists ? "/rented-properties-citizen" : "/rented-properties";
 
@@ -36,7 +36,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
       },
       onClickDefination: {
         action: "page_change",
-        path: `${redirectionURL}/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`
+        path: `${redirectionURL}/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=${businessService}`
       }
     }
   });

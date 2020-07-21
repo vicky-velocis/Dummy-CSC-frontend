@@ -17,9 +17,10 @@ const getAcknowledgementCard = (
     tenant,
     transitNumber,
     applicationNumber,
-    type
+    type,
+    businessService
   ) => {
-    if ((purpose === "apply" || purpose === "forward" || purpose === "sendback" || purpose ==="reject" || purpose === "approve" || purpose === "submit" || purpose === "pay") && status === "success") {
+    if (status === "success") {
       const header = type === "OWNERSHIPTRANSFERRP" ? purpose === "apply" ? {
         labelName: "Ownership transfer application submitted successfully",
         labelKey: "RP_OWNER_SHIP_TRANSFER_SUCCESS_MESSAGE_MAIN"
@@ -38,6 +39,28 @@ const getAcknowledgementCard = (
       } : purpose === "submit" ? {
         labelName: "Ownership transfer application is Submitted Successfully",
         labelKey: "RP_OWNER_SHIP_SUBMISSION_SUCCESS_MESSAGE_HEAD"
+      } : {
+        labelName: "Payment is collected successfully",
+        labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
+      } :
+      type === "DUPLICATECOPYOFALLOTMENTLETTERRP" ? purpose === "apply" ? {
+        labelName: "Duplicate Copy Allotment application submitted successfully",
+        labelKey: "RP_DUPLICATE_COPY_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "forward" ? {
+        labelName: "Duplicate Copy Allotment application Forwarded Successfully",
+        labelKey: "RP_DUPLICATE_COPY_FORWARD_SUCCESS_MESSAGE_MAIN"
+      } : purpose === "sendback" ? {
+        labelName: "Duplicate Copy Allotment application is sent back Successfully",
+        labelKey: "RP_DUPLICATE_COPY_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+      } : purpose ==="reject" ? {
+        labelName: "Duplicate Copy Allotment application is Rejected",
+        labelKey: "RP_DUPLICATE_COPY_APPROVAL_REJ_MESSAGE_HEAD"
+      } : purpose === "approve" ? {
+        labelName: "Duplicate Copy Allotment application is Approved Successfully",
+        labelKey: "RP_DUPLICATE_COPY_APPROVAL_SUCCESS_MESSAGE_HEAD"
+      } : purpose === "submit" ? {
+        labelName: "Duplicate Copy Allotment application is Submitted Successfully",
+        labelKey: "RP_DUPLICATE_COPY_SUBMISSION_SUCCESS_MESSAGE_HEAD"
       } : {
         labelName: "Payment is collected successfully",
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
@@ -65,7 +88,7 @@ const getAcknowledgementCard = (
         labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
       }
 
-      const tailText = type === "OWNERSHIPTRANSFERRP" ? {
+      const tailText = type === "OWNERSHIPTRANSFERRP" || type === "DUPLICATECOPYOFALLOTMENTLETTERRP"  ? {
         labelName: "Application Number",
         labelKey: "RP_APPLICATION_NUMBER_LABEL"
       } : {
@@ -114,8 +137,8 @@ const getAcknowledgementCard = (
           componentPath: "Div",
           children: {
             card: acknowledgementCard({
-              icon: "done",
-              backgroundColor: "#39CB74",
+              icon: "close",
+              backgroundColor: "#E54D42",
               header: {
                 labelName: "Payment is Failed!",
                 labelKey: "RP_PAYMENT_FAILED_MESSAGE_HEAD"
@@ -133,12 +156,12 @@ const getAcknowledgementCard = (
             })
           }
         },
-        paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
+        paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant, businessService)
       }
     }
 }
 
-const getData = async (action, state, dispatch, purpose, status, tenant, transitNumber,applicationNumber, type) => {
+const getData = async (action, state, dispatch, purpose, status, tenant, transitNumber,applicationNumber, type, businessService) => {
     const data = await getAcknowledgementCard(
       state,
       dispatch,
@@ -147,7 +170,8 @@ const getData = async (action, state, dispatch, purpose, status, tenant, transit
       tenant,
       transitNumber,
       applicationNumber,
-      type
+      type,
+      businessService
     );
     dispatch(
       handleField(
@@ -176,7 +200,8 @@ const screenConfig = {
       );
       const tenant = getQueryArg(window.location.href, "tenantId");
       const type = getQueryArg(window.location.href , "type")
-      getData(action, state, dispatch, purpose, status, tenant, transitNumber, applicationNumber, type)
+      const businessService = getQueryArg(window.location.href, "businessService")
+      getData(action, state, dispatch, purpose, status, tenant, transitNumber, applicationNumber, type, businessService)
       return action;
     },
     components: {

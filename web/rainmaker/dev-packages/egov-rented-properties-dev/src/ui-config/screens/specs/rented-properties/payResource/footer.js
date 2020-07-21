@@ -18,13 +18,12 @@ import {
     getUserInfo,
   } from "egov-ui-kit/utils/localStorageUtils";
 
-export const callPGService = async (state, dispatch, item) => {
+export const callPGService = async (state, dispatch, item, _businessService) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
   let callbackUrl = `${document.location.origin}${
     process.env.NODE_ENV === "production" ? "/citizen" : ""
   }/rented-properties-citizen/PaymentRedirectPage`;
-  const _businessService = "RENTED_PROPERTIES"
 //   const _businessService = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].businessService", "");
   try {
     const queryObj = [
@@ -164,13 +163,14 @@ const moveToSuccess = (href, dispatch, receiptNumber) => {
 const moveToFailure = dispatch => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
+  const businessService = getQueryArg(window.location, "businessService")
   const status = "failure";
   const purpose = "pay";
   // const appendUrl =
   //   process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${consumerCode}&tenantId=${tenantId}`
+      `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${consumerCode}&tenantId=${tenantId}&businessService=${businessService}`
     )
   );
 };

@@ -11,9 +11,9 @@ import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils
 import { httpRequest } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
-import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
-import { searchApiCall } from "./searchResource/functions"
-import { searchResults } from "./searchResource/searchResults";
+import { searchMortgageApplication } from "./searchResource/rentedPropertyApplication";
+import { searchMortgage } from "./searchResource/functions"
+import { mortgageSearchResults } from "./searchResource/searchResults";
 import { getColonyTypes } from "./apply";
 
   const header = getCommonHeader({
@@ -22,11 +22,10 @@ import { getColonyTypes } from "./apply";
   });
   const transferPropertiesSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search",
+    name: "search-mortgage",
     beforeInitScreen: (action, state, dispatch) => {
       dispatch(prepareFinalObject("searchScreen", {}))
-      getColonyTypes(action, state, dispatch)
-      searchApiCall(state, dispatch, true)
+      searchMortgage(state, dispatch, true)
       return action
     },
     components: {
@@ -51,9 +50,9 @@ import { getColonyTypes } from "./apply";
               }
             }
           },
-          rentedPropertyApplication,
+          searchMortgageApplication,
           breakAfterSearch: getBreak(),
-          searchResults
+          mortgageSearchResults
         }
       }
     }

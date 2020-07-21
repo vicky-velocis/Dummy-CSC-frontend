@@ -251,7 +251,7 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
-              get(state.screenConfiguration.preparedFinalObject, "Duplicate", [])
+              get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", [])
             )
           );
           
@@ -280,11 +280,11 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
           } else {
             set(queryObject[0], "action", "SUBMIT")
           }
-          let duplicateCopyDocuments = get(queryObject[0], "Duplicate[0].applicationDocuments") || [];
-          duplicateCopyDocuments = duplicateCopyDocuments.map(item => ({...item, active: true}))
+          let applicationDocuments = get(queryObject[0], "applicationDocuments") || [];
+          applicationDocuments = applicationDocuments.map(item => ({...item, active: true}))
           const removedDocs = get(state.screenConfiguration.preparedFinalObject, "DuplicateTemp[0].removedDocs") || [];
-          duplicateCopyDocuments = [...duplicateCopyDocuments, ...removedDocs]
-          set(queryObject[0], "Duplicate[0].applicationDocuments", duplicateCopyDocuments)
+          applicationDocuments = [...applicationDocuments, ...removedDocs]
+          set(queryObject[0], "applicationDocuments", applicationDocuments)
           response = await httpRequest(
             "post",
             "/csp/duplicatecopy/_update",
@@ -294,11 +294,11 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
           );
         }
         let {DuplicateCopyApplications} = response
-        let duplicateCopyDocuments = DuplicateCopyApplications[0].applicationDocuments || [];
-        const removedDocs = duplicateCopyDocuments.filter(item => !item.active)
-        duplicateCopyDocuments = duplicateCopyDocuments.filter(item => !!item.active)
-        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], duplicateCopyDocuments}]
-        dispatch(prepareFinalObject("Duplicate", DuplicateCopyApplications));
+        let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments || [];
+        const removedDocs = applicationDocuments.filter(item => !item.active)
+        applicationDocuments = applicationDocuments.filter(item => !!item.active)
+        DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
+        dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications));
          dispatch(
           prepareFinalObject(
             "DuplicateTemp[0].removedDocs",
@@ -326,7 +326,8 @@ export const getDetailsFromProperty = async (state, dispatch) => {
     );
     if(!!transitNumber) {
       let queryObject = [
-        { key: "transitNumber", value: transitNumber }
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "APPROVED"}
       ];
       const payload = await getSearchResults(queryObject)
       if (
@@ -352,7 +353,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           )
           dispatch(
             handleField(
-              "apply",
+              "ownership-apply",
               "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
               "props.value",
               ""
@@ -495,12 +496,13 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
     
     const transitNumber = get(
       state.screenConfiguration.preparedFinalObject,
-      "Duplicate[0].property.transitNumber",
+      "DuplicateCopyApplications[0].property.transitNumber",
       ""
     );
     if(!!transitNumber) {
       let queryObject = [
-        { key: "transitNumber", value: transitNumber }
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "APPROVED" }
       ];
       const payload = await getSearchResults(queryObject)
       if (
@@ -520,14 +522,14 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           );
           dispatch(
             prepareFinalObject(
-              "Duplicate[0].property.transitNumber",
+              "DuplicateCopyApplications[0].property.transitNumber",
               ""
             )
           )
           dispatch(
             handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+              "duplicate-copy-apply",
+              "components.div.children.formwizardFirstStep.children.transitSiteDetails.children.cardContent.children.detailsContainer.children.transitNumber",
               "props.value",
               ""
             )
@@ -539,19 +541,19 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
          
           dispatch(
             prepareFinalObject(
-              "Properties[0].pincode",
+              "DuplicateCopyApplications[0].property.pincode",
               Properties[0].propertyDetails.address.pincode
             )
           )
           dispatch(
             prepareFinalObject(
-              "Duplicate[0].property.id",
+              "DuplicateCopyApplications[0].property.id",
               Properties[0].propertyDetails.propertyId
             )
           )
            dispatch(
             prepareFinalObject(
-              "Properties[0].colony",
+              "DuplicateCopyApplications[0].property.colony",
               Properties[0].propertyDetails.address.colony
             )
           )

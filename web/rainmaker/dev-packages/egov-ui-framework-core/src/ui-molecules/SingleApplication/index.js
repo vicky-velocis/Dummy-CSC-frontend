@@ -156,6 +156,23 @@ class SingleApplication extends React.Component {
           setRoute(`/rented-properties/ownership-search-preview?applicationNumber=${item.ownerDetails.applicationNumber}&tenantId=${item.tenantId}`)
       }
     }
+    else if(moduleName === "DUPLICATECOPYOFALLOTMENTLETTERRP") {
+      switch (item.state) {
+        case "INITIATED": 
+          setRoute(`/rented-properties-citizen/duplicate-copy-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+          break;
+        default:
+          setRoute(`/rented-properties/search-duplicate-copy-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+      }
+    } else if(moduleName === "MORTGAGERP") {
+      switch(item.state) {
+        case "INITIATED": 
+        setRoute(`/rented-properties-citizen/mortage-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+        break;
+        default:
+          setRoute(`/rented-properties/mortgage-search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+      }
+    }
   };
 
   onButtonCLick = () => {
@@ -263,7 +280,7 @@ class SingleApplication extends React.Component {
                         // setRoute(url);
                         }}>
                         <Label
-                          labelKey={ (item.status==="APPROVED"||item.status==="EXPIRED")&&moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL":"TL_VIEW_DETAILS"}
+                          labelKey={"TL_VIEW_DETAILS"}
                           textTransform={"uppercase"}
                           style={{
                             color: "#fe7a51",

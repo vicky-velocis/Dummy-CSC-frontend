@@ -1,12 +1,10 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateOwnershipTransfer} from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateOwnershipTransfer, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-
 
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
@@ -148,7 +146,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
           "duplicate-copy-apply"
         )
         if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
-          const propertyId = get(state.screenConfiguration.preparedFinalObject, "Duplicate[0].property.id");
+          const propertyId = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications[0].property.id");
           let res = true;
           if(!propertyId) {
             res = await getDuplicateDetailsFromProperty(state, dispatch)
@@ -169,7 +167,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
   
     const uploadedDocData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Duplicate[0].applicationDocuments",
+        "DuplicateCopyApplications[0].applicationDocuments",
         []
     );
 
@@ -206,11 +204,11 @@ const callBackForNextDuplicate = async(state, dispatch) => {
     if(activeStep === SUMMARY_STEP) {
       const rentedData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Duplicate[0]"
+        "DuplicateCopyApplications[0]"
     );
     isFormValid = await applyDuplicateOwnershipTransfer(state, dispatch);
       if (isFormValid) {
-          moveToSuccess(rentedData, dispatch, "OWNERSHIPTRANSFERRP");
+          moveToSuccess(rentedData, dispatch, "DUPLICATECOPYOFALLOTMENTLETTERRP");
       }
     }
     if(activeStep !== SUMMARY_STEP) {

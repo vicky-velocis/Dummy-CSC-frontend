@@ -15,16 +15,22 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   const id = get(rentedData, "id");
   const transitNumber = get(rentedData, "transitNumber")
   const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
+  const duplicateCopyApplicatioNumber =  get(rentedData, "applicationNumber")
   const tenantId = get(rentedData, "tenantId");
   const purpose = "apply";
   const status = "success";
+ 
   const path = type === "OWNERSHIPTRANSFERRP" ? 
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+  :type === "DUPLICATECOPYOFALLOTMENTLETTERRP" ? 
+  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`
   : `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
   dispatch(
     setRoute(path)
   );
 };
+
+
 
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(

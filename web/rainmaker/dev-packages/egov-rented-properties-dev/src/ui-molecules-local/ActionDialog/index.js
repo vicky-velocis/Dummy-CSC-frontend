@@ -42,14 +42,24 @@ const fieldConfig = {
       labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
   },
-  amount: {
+  applicationCharges: {
     label: {
-      labelName: "Extra Charges",
-      labelKey: "WF_EXTRA_CHARGES"
+      labelName: "Application Charges",
+      labelKey: "WF_APPLICATION_CHARGES"
     },
     placeholder: {
-      labelName: "Enter Extra Charges",
-      labelKey: "WF_EXTRA_CHARGES_PLACEHOLDER"
+      labelName: "Enter Application Charges",
+      labelKey: "WF_APPLICATION_CHARGES_PLACEHOLDER"
+    }
+  },
+  publicationCharges: {
+    label: {
+      labelName: "Publication Charges",
+      labelKey: "WF_PUBLICATION_CHARGES"
+    },
+    placeholder: {
+      labelName: "Enter Publication Charges",
+      labelKey: "WF_PUBLICATION_CHARGES_PLACEHOLDER"
     }
   }
 };
@@ -127,7 +137,7 @@ class ActionDialog extends React.Component {
     }
 
     const applicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).applicationState
-
+    const duplicateCopyApplicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).state
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -211,16 +221,31 @@ class ActionDialog extends React.Component {
                       placeholder={fieldConfig.comments.placeholder}
                     />
                   </Grid>
+    
                   {moduleName === "OwnershipTransferRP" && (applicationState === "PENDINGSAVERIFICATION" || applicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
-                      label={fieldConfig.amount.label}
+                      label={applicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
                         handleFieldChange(applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge` , e.target.value)
                       }
                       jsonPath={applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
-                      placeholder={fieldConfig.amount.placeholder}
+                      placeholder={applicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
+                    />
+                  </Grid>
+                  )}
+
+                  {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
+                    <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
+                      onChange={e =>
+                        handleFieldChange(duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge` , e.target.value)
+                      }
+                      jsonPath={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge`}
+                      placeholder={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
                     />
                   </Grid>
                   )}
