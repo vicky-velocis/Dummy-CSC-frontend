@@ -304,6 +304,24 @@ const applicantNameField = {
     required: true,
     jsonPath: "Owners[0].ownerDetails.name"
 }
+const applicantNameFieldMortgage = {
+    label: {
+        labelName: "Applicant Name",
+        labelKey: "RP_APPLICANT_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Applicant Name",
+        labelKey: "RP_APPLICANT_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 100,
+    required: true,
+    jsonPath: "MortgageApplications[0].applicant[0].name"
+}
 
 const applicantNameFieldname = {
     label: {
@@ -332,6 +350,15 @@ const applicantphoneNumberField = {
         disabled: true
       },
     jsonPath: "Properties[0].owners[0].ownerDetails.phone"
+}
+
+const applicantphoneNumberFieldMortgage = {
+    ...phoneNumberConfig,
+    props: {
+        value: userInfo.userName,
+        disabled: true
+      },
+    jsonPath: "MortgageApplications[0].applicant[0].phone"
 }
 
 const applicantphoneNumberFieldduplicate = {
@@ -396,6 +423,25 @@ const fatherOrHusbandsName = {
     jsonPath: "Duplicate[0].applicant[0].guardian"
 }
 
+const fatherOrHusbandsNameMortgage = {
+    label: {
+        labelName: "Father/ Husband's Name",
+        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Father/ Husband's Name",
+        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_NAME_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 4,
+    maxLength: 40,
+    required: true,
+    jsonPath: "MortgageApplications[0].applicant[0].guardian"
+}
+
 const ownerShipRelationShipduplicate = {
       ...getRelationshipRadioButton,
       jsonPath: "Duplicate[0].applicant[0].relationship",
@@ -417,6 +463,27 @@ const ownerShipRelationShipduplicate = {
       }
   }
 
+  const ownerShipRelationShipMortgage = {
+    ...getRelationshipRadioButton,
+    jsonPath: "MortgageApplications[0].applicant[0].relationship",
+    props: {
+        ...getRelationshipRadioButton.props,
+        buttons: [
+          {
+            labelName: "Legal Heir",
+            labelKey: "COMMON_RELATION_LEGAL_HEIR",
+            value: "LEGAL_HEIR"
+          },
+          {
+            label: "Spouse",
+            labelKey: "COMMON_RELATION_SPOUSE",
+            value: "SPOUSE"
+          }
+        ],
+        jsonPath: "MortgageApplications[0].applicant[0].relationship"
+    }
+}
+
 const applicantEmailField = {
     ...emailConfig,
     jsonPath: "Owners[0].ownerDetails.email",
@@ -429,6 +496,12 @@ const applicantEmailFieldduplicate = {
     required: false
 }
 
+const applicantEmailFieldMortgage = {
+    ...emailConfig,
+    jsonPath: "MortgageApplications[0].applicant[0].email",
+    required: false
+}
+
 
 const applicantAadharField = {
     ...aadharFieldConfig,
@@ -438,6 +511,11 @@ const applicantAadharField = {
 const applicantAadharFieldduplicate = {
     ...aadharFieldConfig,
      jsonPath: "Duplicate[0].applicant[0].adhaarNumber"
+}
+
+const applicantAadharFieldMortgage = {
+    ...aadharFieldConfig,
+     jsonPath: "MortgageApplications[0].applicant[0].adhaarNumber"
 }
 
 const applicantAddressField = {
@@ -473,6 +551,23 @@ const getApplicantDetails = () => {
     }
 }
 
+const getApplicantDetailsMortgage = () => {
+    return {
+        header: rentHolderHeader,
+        detailsContainer: getCommonContainer({
+            ownerName: getTextField(applicantNameFieldMortgage),
+            email: getTextField(applicantEmailFieldMortgage),
+            phone: getTextField(applicantphoneNumberFieldMortgage),
+            fatherOrHusband: getTextField(fatherOrHusbandsNameMortgage),
+            relationShip: ownerShipRelationShipMortgage,
+            aadhar: getTextField(applicantAadharFieldMortgage),
+            // deathOfAllotee: getDateField(deathField),
+            
+            
+        })
+    }
+}
+
 const getApplicantDetailsForDuplicateCopy = () => {
     return {
         header: rentHolderHeader,
@@ -488,7 +583,7 @@ const getApplicantDetailsForDuplicateCopy = () => {
 }
 
 export const applicantDetails = getCommonCard(getApplicantDetails())
-
+export const applicantDetailsMortgage = getCommonCard(getApplicantDetailsMortgage())
 
 export const rentHolderDetails = getCommonCard(getRentHolderDetails())
 

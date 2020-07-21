@@ -2,9 +2,10 @@ import {
     getCommonHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
-  import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
-  import {mortgagefooter} from './footer-mortgage';
-  import { getMdmsData } from "../rented-properties/apply";
+import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
+import {mortgagefooter} from './footer-mortgage';
+import { getMdmsData } from "../rented-properties/apply";
+import { getOwnershipSearchResults, setDocsForEditFlow ,getMortgageSearchResults} from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
@@ -23,7 +24,7 @@ export const prepareOwnerShipDocuments = documents => {
           documentsArr.push({
             name: item.code,
             required: item.required,
-            jsonPath: `Owners[0].ownerDetails.ownershipTransferDocuments[${ind}]`,
+            jsonPath: `MortgageApplications[0].applicationDocuments[${ind}]`,
             statement: item.description
           });
           return documentsArr;
@@ -41,7 +42,7 @@ export const prepareOwnerShipDocuments = documents => {
       const documentRes = await getMdmsData(dispatch, documentTypePayload);
       const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
       const {applications = []} = PropertyServices || {}
-      const findFreshLicenceItem = applications.find(item => item.code === "FRESHLICENSE")
+      const findFreshLicenceItem = applications.find(item => item.code === "MortgageRP")
       const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
       const freshLicenceDocuments = masterDocuments.map(item => ({
       type: item.code,
@@ -63,7 +64,7 @@ export const prepareOwnerShipDocuments = documents => {
       const documentTypes = prepareOwnerShipDocuments(masterDocuments);
       let applicationDocs = get(
         state.screenConfiguration.preparedFinalObject,
-        "Owners[0].ownerDetails.ownershipTransferDocuments",
+        "MortgageApplications[0].applicationDocuments",
         []
       ) || [];
       applicationDocs = applicationDocs.filter(item => !!item)
@@ -79,45 +80,46 @@ export const prepareOwnerShipDocuments = documents => {
       applicationDocsReArranged &&
         dispatch(
           prepareFinalObject(
-            "Owners[0].ownerDetails.ownershipTransferDocuments",
+            "MortgageApplications[0].applicationDocuments",
             applicationDocsReArranged
           )
         );
       dispatch(
         handleField(
-            "ownership-apply",
-            "components.div.children.formwizardSecondStep.children.ownershipTransferDocumentsDetails.children.cardContent.children.documentList",
+            "mortage-apply",
+            "components.div.children.formwizardSecondStep.children.mortgageDocumentsDetails.children.cardContent.children.documentList",
             "props.inputProps",
             freshLicenceDocuments
         )
     );
-      dispatch(prepareFinalObject("OwnersTemp[0].ownershipTransferDocuments", documentTypes))
+      dispatch(prepareFinalObject("MortgageApplications[0].applicationDocuments", documentTypes))
   }
   
   const getData = async(action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "MortgageRP");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     if(!!applicationNumber) {
       const queryObject = [
         {key: "applicationNumber", value: applicationNumber}
       ]
-      const response = await getOwnershipSearchResults(queryObject);
-      if (response && response.Owners) {
-      dispatch(prepareFinalObject("Owners", response.Owners))
+      const response = await getMortgageSearchResults(queryObject);
+      if (response && response.MortgageApplications) {
+      dispatch(prepareFinalObject("MortgageApplications", response.MortgageApplications))
       }
-      setDocsForEditFlow(state, dispatch, "Owners[0].ownerDetails.ownershipTransferDocuments", "OwnersTemp[0].uploadedDocsInRedux");
+      // setDocsForEditFlow(state, dispatch, "Owners[0].ownerDetails.ownershipTransferDocuments", "OwnersTemp[0].uploadedDocsInRedux");
+      setDocsForEditFlow(state, dispatch, "MortgageApplications[0].applicationDocuments", "MortgageApplicationsTemp[0].uploadedDocsInRedux");
     } else {
       dispatch(
         prepareFinalObject(
-          "Owners",
+          "MortgageApplications",
           []
           )
           )
-      dispatch(
-        prepareFinalObject(
-          "OwnersTemp",
-          []
-        )
-      )
+      // dispatch(
+      //   prepareFinalObject(
+      //     "MortgageApplicationsTemp",
+      //     []
+      //   )
+      // )
     }
     setDocumentData(action, state, dispatch)
   }
@@ -126,7 +128,7 @@ const applyLicense = {
     uiFramework: "material-ui",
     name: "mortage-apply",
     beforeInitScreen: (action, state, dispatch) => {
-        // getData(action, state, dispatch)
+        getData(action, state, dispatch)
         return action;
       },
     components: {

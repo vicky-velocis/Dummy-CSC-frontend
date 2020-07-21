@@ -119,14 +119,14 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelName: "Applicant Name",
                     labelKey: "RP_APPLICANT_NAME_LABEL"
                 },
-                { jsonPath: "Owners[0].ownerDetails.name" }
+                { jsonPath: "MortgageApplications[0].applicant[0].name" }
             ),
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
                     labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
                 },
-                { jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee" }
+                { jsonPath: "MortgageApplications[0].applicant[0].relationship" }
             ),
             phone: getLabelWithValue(
                 {
@@ -134,7 +134,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_MOBILE_NO_LABEL"
                 },
                 {
-                    jsonPath: "Owners[0].ownerDetails.phone" 
+                    jsonPath: "MortgageApplications[0].applicant[0].phone" 
                 }
             ),
             email: getLabelWithValue(
@@ -143,7 +143,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
                 },
                 {
-                    jsonPath: "Owners[0].ownerDetails.eamil" 
+                    jsonPath: "MortgageApplications[0].applicant[0].eamil" 
                 }
             ),
             aadhar: getLabelWithValue(
@@ -152,7 +152,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     labelKey: "RP_AADHAR_LABEL"
                 },
                 {
-                    jsonPath: "Owners[0].ownerDetails.aadhaarNumber" 
+                    jsonPath: "MortgageApplications[0].applicant[0].aadhaarNumber" 
                 }
             )
         })
@@ -242,30 +242,30 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
                     labelName: "Property Id",
                     labelKey: "RP_PROPERTY_ID"
                 },
-                {jsonPath: "Owners[0].property.id"}
+                {jsonPath: "MortgageApplications[0].property.id"}
             ),
-            allotmentNumber: getLabelWithValue(
-                {
-                    labelName: "Allotment Number",
-                    labelKey: "RP_ALLOTMENT_NUMBER"
-                },
-                {jsonPath: "Owners[0].allotmenNumber"}
-            ),
+            // allotmentNumber: getLabelWithValue(
+            //     {
+            //         labelName: "Allotment Number",
+            //         labelKey: "RP_ALLOTMENT_NUMBER"
+            //     },
+            //     {jsonPath: "Owners[0].allotmenNumber"}
+            // ),
             transitNumber: getLabelWithValue(
                 {
                     labelName: "Transit Site/Plot number",
                     labelKey: "RP_SITE_PLOT_LABEL"
                 },
-                { jsonPath: "Owners[0].property.transitNumber" }
-            )
-            // area: getLabelWithValue(
-            //     areaLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
-            // ),
-            // pincode: getLabelWithValue(
-            //     pincodeLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
-            // ),
+                { jsonPath: "MortgageApplications[0].property.transitNumber" }
+            ),
+            area: getLabelWithValue(
+                areaLabel,
+                { jsonPath: "MortgageApplications[0].property.area" }
+            ),
+            pincode: getLabelWithValue(
+                pincodeLabel,
+                { jsonPath: "MortgageApplications[0].property.pincode" }
+            ),
         })
     })
 }

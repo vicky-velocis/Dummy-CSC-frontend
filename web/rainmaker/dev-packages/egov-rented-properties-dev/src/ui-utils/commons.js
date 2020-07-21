@@ -123,6 +123,26 @@ export const getOwnershipSearchResults = async queryObject => {
   }
 }
 
+export const getMortgageSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/csp/mortgage/_search",
+      "",
+      queryObject
+    )
+    return response
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+  }
+}
+
 export const getDuplicateCopySearchResults = async queryObject => {
   try {
     const response = await httpRequest(

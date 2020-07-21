@@ -1,6 +1,6 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { transitNumberConfig, propertyHeader } from '../applyResource/propertyDetails'
-import { getDetailsFromProperty } from "../../../../../ui-utils/apply";
+import { getDetailsFromProperty,getDetailsFromPropertyMortgage } from "../../../../../ui-utils/apply";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const addressHeader = getCommonTitle(
@@ -112,6 +112,48 @@ const ownershipTransitNumberField = {
       }
 }
 
+const mortgageTransitNumberField = {
+  ...transitNumberConfig,
+  jsonPath: "MortgageApplications[0].property.transitNumber",
+  iconObj: {
+      iconName: "search",
+      position: "end",
+      color: "#FE7A51",
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          getDetailsFromPropertyMortgage(state, dispatch);
+        }
+      }
+    },
+    title: {
+      value:
+        "If you have already assessed your property, then please search your property by your transit Number",
+      key: "If you have already assessed your property, then please search your property by your transit Number"
+    },
+    infoIcon: "info_circle",
+    beforeFieldChange: (action, state, dispatch) => {
+      dispatch(
+          prepareFinalObject(
+            "MortgageApplications[0].property.id",
+            ""
+          )
+        )
+      dispatch(
+          prepareFinalObject(
+            "Properties[0].area",
+            ""
+          )
+        )
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].pincode",
+            ""
+          )
+        )
+    }
+}
+
 const getOwnershipAddressDetails = () => {
     return {
         header: propertyHeader,
@@ -123,5 +165,17 @@ const getOwnershipAddressDetails = () => {
     }
 }
 
+const getOwnershipAddressDetailsMortgage = () => {
+  return {
+      header: propertyHeader,
+      detailsContainer: getCommonContainer({
+          ownershipTransitNumber: getTextField(mortgageTransitNumberField),
+          areaName: getTextField({...areaNameField, jsonPath: "MortgageApplications[0].property.area", required: false, props: {...areaNameField.props, disabled: true}}),
+          pincode: getTextField({...pincodeField, jsonPath: "MortgageApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+      })
+  }
+}
+
 export const addressDetails = getCommonCard(getAddressDetails())
 export const ownershipAddressDetails = getCommonCard(getOwnershipAddressDetails())
+export const ownershipAddressDetailsMortgage = getCommonCard(getOwnershipAddressDetailsMortgage())

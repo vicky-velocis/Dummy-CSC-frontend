@@ -2,8 +2,8 @@ import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {propertyDetails, transitSiteDetails} from './propertyDetails';
-import {rentHolderDetails, applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
-import {addressDetails, ownershipAddressDetails} from './addressDetails';
+import {rentHolderDetails, applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
+import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage} from './addressDetails';
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
@@ -90,10 +90,10 @@ export const stepper = getStepperObject(
       ...documentList,
       props: {
         ...documentList.props,
-        documentsJsonPath: "OwnersTemp[0].ownershipTransferDocuments",
-        uploadedDocumentsJsonPath: "OwnersTemp[0].uploadedDocsInRedux",
-        tenantIdJsonPath: "Owners[0].tenantId",
-        removedJsonPath: "OwnersTemp[0].removedDocs"
+        documentsJsonPath: "MortgageApplicationsTemp[0].applicationDocuments",
+        uploadedDocumentsJsonPath: "MortgageApplicationsTemp[0].uploadedDocsInRedux",
+        tenantIdJsonPath: "MortgageApplications[0].tenantId",
+        removedJsonPath: "MortgageApplications[0].removedDocs"
       }
     }
   });
@@ -183,8 +183,8 @@ export const formwizardMortgageFirstStep = {
     id: "apply_form5"
   },
   children: {
-    ownershipAddressDetails,
-    applicantDetails
+    ownershipAddressDetailsMortgage,
+    applicantDetailsMortgage
     
   }
 }
