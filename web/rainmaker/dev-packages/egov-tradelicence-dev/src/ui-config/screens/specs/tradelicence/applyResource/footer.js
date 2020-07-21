@@ -240,7 +240,6 @@ export const callBackForNext = async (state, dispatch) => {
               isFormValid = false;
             }
           } else {
-            isFormValid = false;
             dispatch(
               toggleSnackbar(
                 true,
@@ -248,6 +247,7 @@ export const callBackForNext = async (state, dispatch) => {
                 "error"
               )
             );
+            return;
           }
           }
       }
