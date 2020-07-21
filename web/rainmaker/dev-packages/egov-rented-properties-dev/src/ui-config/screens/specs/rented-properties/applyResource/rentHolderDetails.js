@@ -321,9 +321,15 @@ const applicantNameFieldname = {
     minLength: 1,
     maxLength: 100,
     required: true,
+    
+}
+const duplicateapplicantNameFieldname = {
+    ...applicantNameFieldname,
+    props: {
+        disabled: true
+      },
     jsonPath: "DuplicateCopyApplications[0].applicant[0].name"
 }
-
 
 const applicantphoneNumberField = {
     ...phoneNumberConfig,
@@ -477,7 +483,7 @@ const getApplicantDetailsForDuplicateCopy = () => {
     return {
         header: rentHolderHeader,
         detailsContainer: getCommonContainer({
-            ownerName: getTextField(applicantNameFieldname),
+            ownerName: getTextField(duplicateapplicantNameFieldname),
             fatherOrHusband:getTextField(fatherOrHusbandsName),
             relationShip: ownerShipRelationShipduplicate,
             phone: getTextField(applicantphoneNumberFieldduplicate),

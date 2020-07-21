@@ -415,7 +415,12 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
               Properties[0].propertyDetails.address.colony
             )
           )
-          
+          dispatch(
+            prepareFinalObject(
+              "DuplicateCopyApplications[0].applicant[0].name",
+              findOwner.ownerDetails.name
+            )
+          )
           return true
         }
     }
