@@ -76,6 +76,12 @@ const SearchScreen = Loadable({
   loading: Loading
 });
 
+const AutoRoutingMapping = Loadable({
+  loader: () => import("../Screens/AutoRoutingMapping"),
+  loading: Loading
+});
+
+
 // import CreateEmployee from "modules/employee/pgr/CreateEmployee";
 const redirectionUrl = "/user/login";
 const routes = [
@@ -295,7 +301,17 @@ const routes = [
       title: "CS_COMMON_COMPLAINT_REOPENED",
       hideTitle: true
     }
-  }
+  },
+  {
+    path: "auto-routing",
+    component: AutoRoutingMapping,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "ES_AUTO_ROUTING_MAPPING_HEADER",
+      redirectionUrl
+    }
+  },
   // {
   //   path: "create-employee",
   //   component: CreateEmployee,

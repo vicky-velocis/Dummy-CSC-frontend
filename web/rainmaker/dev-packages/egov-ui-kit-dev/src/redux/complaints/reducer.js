@@ -25,6 +25,7 @@ const intialState = {
   byId: {},
   categoriesById: {},
   complaintDepartment : [],
+  AutoroutingEscalation : {},
   complaintSector:[],
   order: "",
 };
@@ -82,6 +83,16 @@ const complaintsReducer = (state = intialState, action) => {
             ...complaintDepartment,
           },
         };
+        case actionTypes.COMPLAINTS_AUTOROUTING_FETCH_SUCCESS:
+          let AutoroutingEscalation = transformById(action.payload.MdmsRes["RAINMAKER-PGR"].AutoroutingEscalationMap, "category");
+          return {
+            ...state,
+            loading: false,
+            AutoroutingEscalation: {
+              ...state.AutoroutingEscalation,
+              ...AutoroutingEscalation,
+            },
+          };
         case actionTypes.COMPLAINTS_SECTOR_FETCH_SUCCESS:
         let complaintSector = transformById(action.payload.MdmsRes["RAINMAKER-PGR"].Sector, "code");
         return {
