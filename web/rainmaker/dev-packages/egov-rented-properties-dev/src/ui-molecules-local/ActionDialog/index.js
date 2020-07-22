@@ -70,17 +70,8 @@ const fieldConfig = {
     placeholder: {
       labelName: "Enter Bank Name",
       labelKey: "WF_BANK_NAME_PLACEHOLDER"
-    }
-  },
-  mortageAmount:{
-    label: {
-      labelName: "Enter mortgage amount",
-      labelKey: "WF_MORTAGE_AMOUNT"
     },
-    placeholder: {
-      labelName: "Enter mortgage amount",
-      labelKey: "WF_MORTAGE_AMOUNT"
-    }
+    required: true
   },
   mortageAmount:{
     label: {
@@ -110,10 +101,20 @@ const fieldConfig = {
     placeholder: {
       labelName: "Enter Mortgage end date",
       labelKey: "WF_MORTAGAGEEND_DATE_PLACEHOLDER"
-    }
+    },
+    required: true
+  },
+  sanctioningDate:{
+    label: {
+      labelName: "Date of sanctioning",
+      labelKey: "WF_SANCTIONING_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Date of sanctioning",
+      labelKey: "WF_SANCTIONING_DATE_PLACEHOLDER"
+    },
+    required: true
   }
-
- 
   
   
 };
@@ -306,7 +307,7 @@ class ActionDialog extends React.Component {
 
                 {moduleName === "PermissionToMortgage" && (duplicateCopyApplicationState === "PENDINGGRANTDETAIL" ) && (
                     <Grid item sm="12">
-                    <TextFieldContainer
+                      <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.nameOfTheBank.label}
                       onChange={e =>
@@ -315,8 +316,47 @@ class ActionDialog extends React.Component {
                       jsonPath={`${dataPath}.ownerDetails.dueAmount`}
                       placeholder={fieldConfig.nameOfTheBank.placeholder }
                     />
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.mortageAmount.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      placeholder={fieldConfig.mortageAmount.placeholder }
+                    />
+                      <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.sanctionLetterNo.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      placeholder={fieldConfig.sanctionLetterNo.placeholder }
+                    />
+
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.mortageEndDate.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      placeholder={fieldConfig.mortageEndDate.placeholder }
+                    />
+                       <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.sanctioningDate.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      placeholder={fieldConfig.sanctioningDate.placeholder }
+                    />
+                     
                   </Grid>
                   )}
+                  
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
