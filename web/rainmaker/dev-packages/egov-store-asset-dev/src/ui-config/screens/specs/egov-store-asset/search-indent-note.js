@@ -19,7 +19,7 @@ import {
   
   const header = getCommonHeader({
     labelName: "Materisl Indent List",
-    labelKey: "STORE_VIEW_MATERIAL_INDENT",
+    labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE",
   });
   
   const createMaterialIndentHandle = async (state, dispatch) => {

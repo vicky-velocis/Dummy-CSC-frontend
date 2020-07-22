@@ -124,7 +124,7 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 export const handleCreateUpdatePO = (state, dispatch) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
-    "purchaseOrders[0].id",
+    "purchaseOrders[0].uuid",
     null
   );
   if (uuid) {
@@ -141,11 +141,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
     "purchaseOrders",
     []
   );
-  let priceList = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchMaster.priceList",
-    []
-  );
+  
   const tenantId =  getTenantId();
   purchaseOrders[0].tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
@@ -160,8 +156,6 @@ export const createUpdatePO = async (state, dispatch, action) => {
   );
   for (let i = 0; i < poDetailArray.length; i++) {
     set(purchaseOrders[0], `purchaseOrderDetails[${i}].tenantId`, tenantId);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].priceList`, priceList[0]);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].purchaseIndentDetails`, []);
   }
 
   set(
@@ -225,7 +219,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
        }
   
     } catch (error) {

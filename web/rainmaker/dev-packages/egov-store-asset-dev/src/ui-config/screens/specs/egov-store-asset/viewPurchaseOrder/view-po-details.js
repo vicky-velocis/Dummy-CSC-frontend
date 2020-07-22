@@ -6,14 +6,9 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-const indentNumber = getQueryArg(window.location.href, "indentNumber");
+
 const gotoCreatePage = (state, dispatch) => {
-  let createUrl="";
-  if(indentNumber)
-   createUrl = `/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}&step=2`;
-   else
-   createUrl = `/egov-store-asset/create-purchase-order?step=2`;
+  const createUrl = `/egov-store-asset/create-purchase-order?step=2`
   dispatch(setRoute(createUrl));
 };
 
@@ -29,7 +24,7 @@ const assignmentCard = {
             labelName: "Material Name",
             labelKey: "STORE_MATERIAL_NAME"
           },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.name" }
+          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.code" }
         ),
         indentNumber: getLabelWithValue(
           {

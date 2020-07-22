@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["issueStore","indentPurpose",  "indentdatefrom","indentdateto","RaisedBy"];
+  const textFields = ["issueStore",  "issueNoteNumber","issueDate","issuePurpose"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-indent-note.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -55,7 +55,7 @@ export const searchForm = getCommonCard({
           labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
         },
         required: false,
-        jsonPath: "searchScreen.code", 
+        jsonPath: "searchScreen.fromStore", 
         gridDefination: {
           xs: 12,
           sm: 4,
@@ -67,15 +67,15 @@ export const searchForm = getCommonCard({
         },
       })
     },
-    indentPurpose: {
-      ...getSelectField({
-        label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
+    issueNoteNumber: {
+      ...getTextField({
+        label: { labelName: "Issue Note Number", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER" },
         placeholder: {
           labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER"
         },
         required: false,
-        jsonPath: "searchScreen.indentPurpose",
+        jsonPath: "searchScreen.issueNoteNumber",
         gridDefination: {
           xs: 12,
           sm: 4,
@@ -94,33 +94,33 @@ export const searchForm = getCommonCard({
       },
       })
     },
-    RaisedBy: getSelectField({
-      label: { labelName: "Indent No.", labelKey: "STORE_MATERIAL_INDENT_NUMBER" },
-      placeholder: {
-        labelName: "Indent No.",
-        labelKey: "STORE_MATERIAL_INDENT_NUMBER",
-      },
-      required: false,
-      jsonPath: "searchScreen.indentNumber",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
+    // RaisedBy: getSelectField({
+    //   label: { labelName: "Indent No.", labelKey: "STORE_MATERIAL_INDENT_NUMBER" },
+    //   placeholder: {
+    //     labelName: "Indent No.",
+    //     labelKey: "STORE_MATERIAL_INDENT_NUMBER",
+    //   },
+    //   required: false,
+    //   jsonPath: "searchScreen.indentNumber",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4,
+    //   },
      
-    }),
-    indentdatefrom: {
+    // }),
+    issueDate: {
       ...getDateField({
         label: {
-          labelName: "Indent Date",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE"
+          labelName: "Issue Date",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE"
         },
         placeholder: {
-          labelName: "Enter Indent Date",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE_PLACEHOLDER"
+          labelName: "Enter Issue Date",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
         },
         required: false,
         pattern: getPattern("Date") || null,
-        jsonPath: "searchScreen.indentDate",
+        jsonPath: "searchScreen.issueDate",
         gridDefination: {
           xs: 12,
           sm: 4,
@@ -132,28 +132,31 @@ export const searchForm = getCommonCard({
         }
       })
     },
-    indentdateto: {
-      ...getDateField({
-        label: {
-          labelName: "Indent Date",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE"
-        },
+    issuePurpose: {
+      ...getSelectField({
+        label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
         placeholder: {
-          labelName: "Enter Indent Date",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE_PLACEHOLDER"
+          labelName: "Select Indent Purpose",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
         },
         required: false,
-        pattern: getPattern("Date") || null,
-        jsonPath: "searchScreen.indentDate",
+        jsonPath: "searchScreen.issuePurpose",
         gridDefination: {
           xs: 12,
           sm: 4,
         },
-        props: {
-          // inputProps: {
-          //   max: getTodaysDateInYMD()
-          // }
-        }
+        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+      props: {
+        data: [
+          {
+            code: "Consumption",
+            name: "Capital/Repair/Consumption"
+          },
+         
+        ],
+        optionValue: "code",
+        optionLabel: "name",
+      },
       })
     },
    

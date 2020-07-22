@@ -32,11 +32,8 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Rate Contract/Tender/Quotation No.",
           labelKey: "STORE_PURCHASE_ORDER_RC_NO_PLACEHOLDER"
         },
-        props: {
-          disabled: true
-        },
         pattern: getPattern("alpha-numeric"),
-        jsonPath: "purchaseOrders[0].priceList[0].rateContractNumber"
+        jsonPath: "purchaseOrders[0].rateContractNumber"
       })
     },
     rateContractDate: {
@@ -50,12 +47,9 @@ export const contractDetails = getCommonCard({
           labelKey: "STORE_PURCHASE_ORDER_RC_DATE",
         },
         pattern: getPattern("Date"),
+        jsonPath: "purchaseOrders[0].rateContractDate",
         props: {
-          inputProps: {
-            disabled: true
-          }
         },
-        jsonPath: "purchaseOrders[0].priceList[0].rateContractDate",
       }),
     },
     agreementNumber: {
@@ -68,11 +62,8 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Agreement No.",
           labelKey: "STORE_PURCHASE_ORDER_AGRMENT_NO_PLACEHOLDER"
         },
-        props: {
-          disabled: true
-        },
         pattern: getPattern("alpha-numeric"),
-        jsonPath: "purchaseOrders[0].priceList[0].agreementNumber"
+        jsonPath: "purchaseOrders[0].agreementNumber"
       })
     },
     agreementDate: {
@@ -86,10 +77,9 @@ export const contractDetails = getCommonCard({
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_DT"
         },
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].priceList[0].agreementDate",
+        jsonPath: "purchaseOrders[0].agreementDate",
         props: {
           inputProps: {
-            disabled: true
         //    max: getTodaysDateInYMD()
           }
         }
@@ -106,10 +96,10 @@ export const contractDetails = getCommonCard({
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_FRM_DT"
         },
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].priceList[0].agreementStartDate",
+        jsonPath: "purchaseOrders[0].agreementStartDate",
         props: {
           inputProps: {
-            disabled: true
+        //    max: getTodaysDateInYMD()
           }
         }
       })
@@ -125,10 +115,10 @@ export const contractDetails = getCommonCard({
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_TO_DT"
         },
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].priceList[0].agreementEndDate",
+        jsonPath: "purchaseOrders[0].agreementEndDate",
         props: {
           inputProps: {
-            disabled: true
+        //    max: getTodaysDateInYMD()
           }
         }
       })

@@ -112,8 +112,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.name",fromstore[0].name));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
-                dispatch(prepareFinalObject("materialIssues[0].fromStore.department.id",fromstore[0].department));
-                dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.department",fromstore[0].department));
+                //dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));         
@@ -137,7 +137,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
           },
           required: true,
-          pattern: getPattern("Date") || null,
+          pattern: getPattern("Date") ,
           jsonPath: "materialIssues[0].issueDate"
         })
       },

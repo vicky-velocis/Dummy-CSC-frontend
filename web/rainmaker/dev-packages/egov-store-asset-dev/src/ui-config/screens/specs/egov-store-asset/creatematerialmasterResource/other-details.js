@@ -172,7 +172,7 @@ import {
               labelKey: "STORE_MATERIAL_RE_ORDER_LAVEL"
             },
             required: true,
-            pattern: getPattern("Name") || null,
+            pattern: getPattern("Amount") || null,
             jsonPath: "materials[0].reorderLevel"
           })
         },
@@ -274,7 +274,7 @@ import {
             },
             required: true,
             pattern: getPattern("Name") || null,
-            jsonPath: "materials[0].ManufracturerPartNo"
+            jsonPath: "materials[0].manufracturerPartNo"
           })
         },
   
@@ -295,7 +295,7 @@ import {
               rowsMax: 2,
             },
             pattern: getPattern("eventDescription") || null,
-            jsonPath: "materials[0].TechnicalSpecifications"
+            jsonPath: "materials[0].technicalSpecifications"
           })
         },
         TermsOfDelivery: {
@@ -315,7 +315,7 @@ import {
               rowsMax: 2,
             },
             pattern: getPattern("eventDescription") || null,
-            jsonPath: "materials[0].TermsOfDelivery"
+            jsonPath: "materials[0].termsOfDelivery"
           })
         },
   

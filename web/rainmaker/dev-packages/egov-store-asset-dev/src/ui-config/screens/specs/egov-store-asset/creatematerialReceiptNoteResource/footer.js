@@ -12,31 +12,31 @@ import {
   epochToYmd,
   validateFields
 } from "../../utils";
-  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 // import "./index.css";
 
 const moveToReview = dispatch => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`
-      : `/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`;
+      ? `/egov-ui-framework/egov-store-asset/reviewmaterialreceipt?step=0`
+      : `/egov-store-asset/reviewmaterialreceipt?step=0`;
   dispatch(setRoute(reviewUrl));
 };
 
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["createMaterialIndentNote"],
+    state.screenConfiguration.screenConfig["createMaterialReceiptNote"],
     "components.div.children.stepper.props.activeStep",
     0
   );
   let isFormValid = true;
   if (activeStep === 0) {
     const isMaterialDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children",
+      "components.div.children.formwizardFirstStep.children.MaterialReceiptNote.children.cardContent.children.MaterialReceiptNoteContainer.children",
       state,
       dispatch,
-      "createMaterialIndentNote"
+      "createMaterialReceiptNote"
     );
     
     if (!(isMaterialDetailsValid)) {
@@ -45,9 +45,9 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 1) {
     let storeDetailsCardPath =
-      "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
+      "components.div.children.formwizardSecondStep.children.materialReceiptDetail.children.cardContent.children.materialReceiptCard.props.items";
     let storeDetailsItems = get(
-      state.screenConfiguration.screenConfig.createMaterialIndentNote,
+      state.screenConfiguration.screenConfig.createMaterialReceiptNote,
       storeDetailsCardPath,
       []
     );
@@ -57,10 +57,10 @@ export const callBackForNext = async (state, dispatch) => {
         (storeDetailsItems[j].isDeleted === undefined ||
           storeDetailsItems[j].isDeleted !== false) &&
         !validateFields(
-          `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.materialIssueCardContainer.children`,
+          `${storeDetailsCardPath}[${j}].item${j}.children.cardContent.children.materialReceiptCardContainer.children`,
           state,
           dispatch,
-          "createMaterialIndentNote"
+          "createMaterialReceiptNote"
         )
       )
         isstoreDetailsValid = false;
@@ -74,7 +74,7 @@ export const callBackForNext = async (state, dispatch) => {
       "components.div.children.formwizardThirdStep.children.otherDetails.children.cardContent.children.View1.children.cardContent.children.PuchasingInformationContainer.children",
       state,
       dispatch,
-      "createMaterialIndentNote"
+      "createMaterialReceiptNote"
     );
     isPuchasingInformationValid = true;
     
@@ -84,17 +84,13 @@ export const callBackForNext = async (state, dispatch) => {
     if(isFormValid)
     {
 
-    // get max and min Qty and validate     
-    // let MaxQty =0
-    // let MinQty = 0
-    // MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
-    // MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
-   // if(true)
+    
+    if(true)
     moveToReview(dispatch);
-    // else{
+    else{
     
 
-    // }
+    }
     
   }
     else{
@@ -109,40 +105,64 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep !== 2) {
     if (isFormValid) {
-      let toStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].toStore.code",'') 
-      let fromStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'') 
-      let expectedDeliveryDateValid = true   
+        
       const CurrentDate = new Date();
-      let issueDate = get(
+
+      let receiptDate = get(
         state.screenConfiguration.preparedFinalObject,
-        "materialIssues[0].issueDate",
+        "materialReceipt[0].receiptDate",
         null
       );
-      if(Number(issueDate))
-      issueDate = epochToYmd(issueDate)
-    const  issueDate_ = new Date(issueDate)
-      if(fromStore === toStore)
-      {
-        const errorMessage = {
-          labelName: "Intenting Store and Issuing Store can not be same ",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_STORE_SELECTION_VALIDATION"
-        }; 
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      }
-      else if (issueDate_>CurrentDate)
-      {
-        const errorMessage = {
-          labelName: "Intent Isue Date can not be greater then current date",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_VALIDATION"
-        };  
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      }
-      else{
+      let supplierBillDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialReceipt[0].supplierBillDate",
+        null
+      );
+      let challanDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialReceipt[0].challanDate",
+        null
+      );
+      let inspectionDate = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialReceipt[0].inspectionDate",
+        null
+      );
+    
+      if(Number(receiptDate))
+      receiptDate = epochToYmd(receiptDate)
+      if(Number(supplierBillDate))
+      supplierBillDate = epochToYmd(supplierBillDate)
+      if(Number(challanDate))
+      challanDate = epochToYmd(challanDate)
+      if(Number(inspectionDate))
+      inspectionDate = epochToYmd(inspectionDate)
+      const  receiptDate_ = new Date(receiptDate)
+      const  supplierBillDate_ = new Date(supplierBillDate)
+      const  challanDate_ = new Date(challanDate)
+      const  inspectionDate_ = new Date(inspectionDate)
+      let IsValidDate = true
+      let IsValidStartDate = true  
+      if(receiptDate_>CurrentDate || supplierBillDate_> CurrentDate|| challanDate_> CurrentDate|| inspectionDate_> CurrentDate)
+    {
+      IsValidDate = false
+    }
+    if(IsValidDate)
+    {
         changeStep(state, dispatch);
 
       }
+      else{
+        const errorMessage = {
+          labelName: "Input Date Must be less then or equal to current date",
+          labelKey: "STORE_MATERIAL_MASTER_CURRENT_DATE_VALIDATION"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+      }
      
-    } else {
+    } 
+    else {
       const errorMessage = {
         labelName: "Please fill all fields",
         labelKey: "ERR_FILL_ALL_FIELDS"
@@ -159,7 +179,7 @@ export const changeStep = (
   defaultActiveStep = -1
 ) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["createMaterialIndentNote"],
+    state.screenConfiguration.screenConfig["createMaterialReceiptNote"],
     "components.div.children.stepper.props.activeStep",
     0
   );
@@ -194,7 +214,7 @@ export const changeStep = (
       value: isPayButtonVisible
     }
   ];
-  dispatchMultipleFieldChangeAction("createMaterialIndentNote", actionDefination, dispatch);
+  dispatchMultipleFieldChangeAction("createMaterialReceiptNote", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
 };
 
@@ -202,7 +222,7 @@ export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
-        "createMaterialIndentNote",
+        "createMaterialReceiptNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFirstStep"
         ),
@@ -211,7 +231,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 1:
       dispatchMultipleFieldChangeAction(
-        "createMaterialIndentNote",
+        "createMaterialReceiptNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
         ),
@@ -220,7 +240,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 2:
       dispatchMultipleFieldChangeAction(
-        "createMaterialIndentNote",
+        "createMaterialReceiptNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardThirdStep"
         ),
@@ -229,7 +249,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 3:
       dispatchMultipleFieldChangeAction(
-        "createMaterialIndentNote",
+        "createMaterialReceiptNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFourthStep"
         ),
@@ -238,7 +258,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     default:
       dispatchMultipleFieldChangeAction(
-        "createMaterialIndentNote",
+        "createMaterialReceiptNote",
         getActionDefinationForStepper(
           "components.div.children.formwizardFifthStep"
         ),

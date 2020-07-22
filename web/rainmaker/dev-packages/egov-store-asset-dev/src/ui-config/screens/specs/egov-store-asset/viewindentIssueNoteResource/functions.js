@@ -207,6 +207,17 @@ export const createUpdateIndent = async (state, dispatch, action) => {
   issueDate = convertDateToEpoch(issueDate);
   set(materialIssues[0],"issueDate", issueDate);
 
+
+  let indentDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].indent.indentDate",0) 
+  indentDate = convertDateToEpoch(indentDate);
+  set(materialIssues[0],"indent.indentDate", indentDate);
+
+  let expectedDeliveryDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].expectedDeliveryDate",0) 
+  expectedDeliveryDate = convertDateToEpoch(expectedDeliveryDate);
+  set(materialIssues[0],"indent.expectedDeliveryDate", expectedDeliveryDate);
+
   
 
   //set defailt value
@@ -252,6 +263,7 @@ export const createUpdateIndent = async (state, dispatch, action) => {
         dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
        }
     } catch (error) {
+      //alert('123')
       furnishindentData(state, dispatch);
     }
   } else if (action === "UPDATE") {

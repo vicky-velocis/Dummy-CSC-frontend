@@ -73,7 +73,7 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view-purchase-order?tenantId=${getTenantId()}&poNumber=${rowData[0]}`;
+  window.location.href = `view-material-type?tenantId=${getTenantId()}&code=${rowData[0]}`;
 };
 
 

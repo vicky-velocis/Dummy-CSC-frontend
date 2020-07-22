@@ -12,8 +12,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
 const purchaseOrderDetailsCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -37,20 +36,6 @@ const purchaseOrderDetailsCard = {
                 optionLabel: "name"
               }
             }),
-            beforeFieldChange: async (action, state, dispatch) => {
-              if(action.value){
-                const {materialNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
-                const matObj =  materialNames.filter(ele => ele.code === action.value);
-                if(matObj){
-                 const index= action.componentJsonpath.indexOf("items[");
-                 if(index !== -1){
-                  const itemIndex = action.componentJsonpath.charAt(index + 6);
-                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.name`, matObj[0].name)); 
-                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.description`, matObj[0].description));          
-                 }
-                }
-              }
-            }
           }, 
           indentNumber: {
             ...getTextField({
@@ -62,7 +47,7 @@ const purchaseOrderDetailsCard = {
                 labelName: "Enter Indent No.",
                 labelKey: "STORE_PURCHASE_ORDER_INDENT_NO_PLACEHOLDER"
               },
-              //pattern: getPattern("alpha-numeric"),
+              pattern: getPattern("alpha-numeric"),
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentNumber"
             })
           },
@@ -104,7 +89,6 @@ const purchaseOrderDetailsCard = {
                 labelName: "Enter Balance Quantity",
                 labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY_PLACEHOLDER"
               },
-              required: true,
               pattern: getPattern("numeric-only"),
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity"
             })
@@ -122,36 +106,21 @@ const purchaseOrderDetailsCard = {
               pattern: getPattern("numeric-only"),
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].orderQuantity"
             })
-          },  
+          },
           uomName: {
-            ...getSelectField({
-              label: { labelName: "UOM Name", labelKey: "STORE_PURCHASE_ORDER_UOM" },
-              placeholder: {
-                labelName: "Enter UOM Name",
+            ...getTextField({
+              label: {
+                labelName: "UOM Name",
                 labelKey: "STORE_PURCHASE_ORDER_UOM"
               },
+              placeholder: {
+                labelName: "Enter UOM Name",
+                labelKey: "STORE_PURCHASE_ORDER_UOM_PLACEHOLDER"
+              },
               required: true,
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].uom.code",
-              sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-              }
-            }),
-            beforeFieldChange: async (action, state, dispatch) => {
-              if(action.value){
-                const {UOM} = state.screenConfiguration.preparedFinalObject.createScreenMdmsData['common-masters'];
-                const uomObj =  UOM.filter(ele => ele.code === action.value);
-                if(uomObj){
-                  const index= action.componentJsonpath.indexOf("items[");
-                  if(index !== -1){
-                   const itemIndex = action.componentJsonpath.charAt(index + 6);
-                   dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].uom.name`, uomObj[0].name));          
-                  }        
-                }
-              }
-            }
+              pattern: getPattern("alpha-numeric"),
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].uom.name"
+            })
           },
           unitPrice: {
             ...getTextField({
@@ -159,7 +128,6 @@ const purchaseOrderDetailsCard = {
                 labelName: "Unit Price",
                 labelKey: "STORE_PURCHASE_ORDER_UNIT_PRC"
               },
-              required: true,
               placeholder: {
                 labelName: "Enter Unit Price",
                 labelKey: "STORE_PURCHASE_ORDER_UNIT_PRC_PLACEHOLDER"
@@ -178,7 +146,6 @@ const purchaseOrderDetailsCard = {
                 labelName: "Enter value",
                 labelKey: "STORE_PURCHASE_ORDER_TOTAL_VALUE_PLACEHOLDER"
               },
-              required: true,
               pattern: getPattern("numeric-only"),
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].receivedQuantity"
             })
@@ -220,36 +187,40 @@ const purchaseOrderDetailsCard = {
         }
       )
     }),
-    onMultiItemAdd: (state, muliItemContent) => {
-      let indentNumber="";
-       indentNumber = getQueryArg(window.location.href, "indentNumber");
-      if(indentNumber){
-        
-        let preparedFinalObject = get(
-          state,
-          "screenConfiguration.preparedFinalObject",
-          {}
-        );
-        let cardIndex = get(muliItemContent, "materialName.index");
-        if(preparedFinalObject){
-          set(preparedFinalObject.purchaseOrders[0],`purchaseOrderDetails[${cardIndex}].indentNumber` , indentNumber);
-        }
-     
-
-        Object.keys(muliItemContent).forEach(key => {
-          if ( key === "indentNumber") {
-            set(muliItemContent[key], "props.disabled", true);
-            set(muliItemContent[key], "props.value", indentNumber);
-          } else {
-            set(muliItemContent[key], "props.disabled", false);
-          }
-        });
-
-
-      }
-        //console.log("click on add");
-      return muliItemContent;
-    },
+    // onMultiItemAdd: (state, muliItemContent) => {
+    //   let preparedFinalObject = get(
+    //     state,
+    //     "screenConfiguration.preparedFinalObject",
+    //     {}
+    //   );
+    //   let cardIndex = get(muliItemContent, "assignFromDate.index");
+    //   let cardId = get(
+    //     preparedFinalObject,
+    //     `Employee[0].assignments[${cardIndex}].id`
+    //   );
+    //   if (cardId) {
+    //     let isCurrentAssignment = get(
+    //       preparedFinalObject,
+    //       `Employee[0].assignments[${cardIndex}].isCurrentAssignment`
+    //     );
+    //     Object.keys(muliItemContent).forEach(key => {
+    //       if (isCurrentAssignment && key === "currentAssignment") {
+    //         set(muliItemContent[key], "props.disabled", false);
+    //       } else {
+    //         set(muliItemContent[key], "props.disabled", true);
+    //       }
+    //     });
+    //   } else {
+    //     Object.keys(muliItemContent).forEach(key => {
+    //       if (key === "dummyDiv") {
+    //         set(muliItemContent[key], "props.disabled", true);
+    //       } else {
+    //         set(muliItemContent[key], "props.disabled", false);
+    //       }
+    //     });
+    //   }
+    //   return muliItemContent;
+    // },
     items: [],
     addItemLabel: {
       labelName: "ADD",

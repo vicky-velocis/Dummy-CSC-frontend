@@ -7,6 +7,8 @@ import {
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import get from "lodash/get";
+  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { getTodaysDateInYMD } from "../../utils";
   
   export const MaterialIndentDetails = getCommonCard({
@@ -33,13 +35,23 @@ import {
             labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
           },
           required: true,
-          jsonPath: "indents[0].issueStore.code",         
+          jsonPath: "indents[0].indentStore.code",         
           sourceJsonPath: "store.stores",
           props: {
             optionValue: "code",
             optionLabel: "name",
           },
-        })
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let store = get(
+            state.screenConfiguration.preparedFinalObject,
+            `store.stores`,
+            []
+          ); 
+          store =  store.filter(x=> x.code === action.value)   
+          dispatch(prepareFinalObject("indents[0].indentStore.name",store[0].name));
+          
+        }
       },
       IndentDate: {
         ...getDateField({

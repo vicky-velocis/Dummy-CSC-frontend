@@ -45,7 +45,7 @@ import {
                 sourceJsonPath: "materials.materials",
                 props: {
                   optionValue: "code",
-                  optionLabel: "description",
+                  optionLabel: "name",
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
@@ -54,7 +54,9 @@ import {
                
                 if(MaterialType[0])
                 {
+                  dispatch(prepareFinalObject("indents[0].indentDetails[0].material.name",MaterialType[0].name));
                 dispatch(prepareFinalObject("indents[0].indentDetails[0].uom.code",MaterialType[0].baseUom.code));
+                dispatch(prepareFinalObject("indents[0].indentDetails[0].uom.name",MaterialType[0].baseUom.name));
               }
               }
             },

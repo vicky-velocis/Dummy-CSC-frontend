@@ -6,10 +6,10 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  createPriceList,
-  getMaterialMasterSearchResults,
+  creatreceiptnotes,
+  getmaterialissuesSearchResults,
   getPriceListSearchResults,
-  UpdatePriceList
+  updatereceiptnotes
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -147,43 +147,45 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
   set(jsonObject, jsonPath, modifiedArray);
 };
 
-export const furnishPriceListData = (state, dispatch) => {
-  let priceLists = get(
+export const furnishindentData = (state, dispatch) => {
+  let materialReceipt = get(
     state.screenConfiguration.preparedFinalObject,
-    "priceLists",
+    "materialReceipt",
     []
   );
-  setDateInYmdFormat(priceLists[0], ["agreementDate", "agreementEndDate","agreementStartDate","rateContractDate"]);
-  // setAllDatesInYmdFormat(priceLists[0], [
-  //   { object: "assignments", values: ["fromDate", "toDate"] },
-   
-  // ]);
-  // setAllYears(priceLists[0], [
+   setDateInYmdFormat(materialReceipt[0], ["inspectionDate","receiptDate","challanDate", "supplierBillDate" ]);
+  setAllDatesInYmdFormat(materialReceipt[0], [
+   // { object: "indent.materialIssueDetails[0]", values: ["ManufacturerDate",] },
+    { object: "receiptDetails[0].receiptDetailsAddnInfo[0]", values: ["manufactureDate","expiryDate"] },
+    
+  ]);
+  // setAllYears(materialReceipt[0], [
   //   { object: "education", values: ["yearOfPassing"] },
   //   { object: "tests", values: ["yearOfPassing"] }
   // ]);
-  // setRolesData(priceLists[0]);
+  // setRolesData(materialReceipt[0]);
   // setRolesList(state, dispatch);
-  dispatch(prepareFinalObject("priceLists", priceLists));
+  dispatch(prepareFinalObject("materialReceipt", materialReceipt));
 };
 
-export const handleCreateUpdatePriceList = (state, dispatch) => {
+export const handleCreateUpdateMaterialReceipt = (state, dispatch) => {
   let id = get(
     state.screenConfiguration.preparedFinalObject,
-    "priceLists[0].id",
+    "materialReceipt[0].id",
     null
   );
   if (id) {
-    createUpdatePriceList(state, dispatch, "UPDATE");
+    
+    createUpdateMR(state, dispatch, "UPDATE");
   } else {
-    createUpdatePriceList(state, dispatch, "CREATE");
+    createUpdateMR(state, dispatch, "CREATE");
   }
 };
 
-export const createUpdatePriceList = async (state, dispatch, action) => {
+export const createUpdateMR = async (state, dispatch, action) => {
   const pickedTenant = get(
     state.screenConfiguration.preparedFinalObject,
-    "priceLists[0].tenantId"
+    "materialReceipt[0].tenantId"
   );
   const tenantId =  getTenantId();
   let queryObject = [
@@ -193,68 +195,71 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     }
   ];
  
-  let priceLists = get(
+  let materialReceipt = get(
     state.screenConfiguration.preparedFinalObject,
-    "priceLists",
+    "materialReceipt",
     []
   );
-  set(priceLists[0], "tenantId", tenantId);
-  set(priceLists[0], "status", true);
+  set(materialReceipt[0], "tenantId", tenantId);
   // get set date field into epoch
 
-  let rateContractDate =
-  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].rateContractDate",0) 
-  rateContractDate = convertDateToEpoch(rateContractDate);
-  set(priceLists[0],"rateContractDate", rateContractDate);
+  let receiptDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].receiptDate",0) 
+  receiptDate = convertDateToEpoch(receiptDate);
+  set(materialReceipt[0],"receiptDate", receiptDate);
+  let supplierBillDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].supplierBillDate",0) 
+  supplierBillDate = convertDateToEpoch(supplierBillDate);
+  set(materialReceipt[0],"supplierBillDate", supplierBillDate);
+  let challanDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].challanDate",0) 
+  challanDate = convertDateToEpoch(challanDate);
+  set(materialReceipt[0],"challanDate", challanDate);
+  let inspectionDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].inspectionDate",0) 
+  inspectionDate = convertDateToEpoch(inspectionDate);
+  set(materialReceipt[0],"inspectionDate", inspectionDate);
 
-  let agreementDate =
-  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementDate",0) 
-  agreementDate = convertDateToEpoch(agreementDate);
-  set(priceLists[0],"agreementDate", agreementDate);
 
-  let agreementStartDate =
-  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementStartDate",0) 
-  agreementStartDate = convertDateToEpoch(agreementStartDate);
-  set(priceLists[0],"agreementStartDate", agreementStartDate);
-
-  let agreementEndDate =
-  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].agreementEndDate",0) 
-  agreementEndDate = convertDateToEpoch(agreementEndDate);
-  set(priceLists[0],"agreementEndDate", agreementEndDate);
-  // priceLists[0].priceListDetails[0].uom.code
-  let UOMList = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.common-masters.UOM",[]) 
-  let UOM =  get(state, "screenConfiguration.preparedFinalObject.priceLists[0].priceListDetails[0].uom.code",'') 
-
-  let conversionFactor = UOMList.filter(x=> x.code === UOM)
-  set(priceLists[0],"priceListDetails[0].uom.conversionFactor", conversionFactor[0].conversionFactor);
-  let fileStoreId =
-  get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",0)  
-  set(priceLists[0],"fileStoreId", fileStoreId);
   // set date to epoch in  price list material name
-  let priceListDetails = returnEmptyArrayIfNull(
-    get(priceLists[0], "priceListDetails", [])
+  let receiptDetails = returnEmptyArrayIfNull(
+    get(materialReceipt[0], "receiptDetails[0].receiptDetailsAddnInfo", [])
   );
-  // for (let i = 0; i < priceListDetails.length; i++) {
-  //   set(
-  //     priceLists[0],
-  //     `priceListDetails[${i}].fromDate`,
-  //     convertDateToEpoch(
-  //       get(priceLists[0], `priceListDetails[${i}].fromDate`),
-  //       "dayStart"
-  //     )
-  //   );
-  //   set(
-  //     priceLists[0],
-  //     `priceListDetails[${i}].toDate`,
-  //     convertDateToEpoch(
-  //       get(priceLists[0], `priceListDetails[${i}].toDate`),
-  //       "dayStart"
-  //     )
-  //   );
-  // }
-  //handleDeletedCards(priceLists[0], "storeMapping", "id");
- 
+  for (let i = 0; i < receiptDetails.length; i++) {
+    set(
+      materialReceipt[0],
+      `receiptDetails[${i}].receiptDetailsAddnInfo[0].manufactureDate`,
+      convertDateToEpoch(
+        get(materialReceipt[0], `receiptDetails[${i}].receiptDetailsAddnInfo[0].manufactureDate`),
+        "dayStart"
+      )
+    );
+    set(
+      materialReceipt[0],
+      `receiptDetails[${i}].receiptDetailsAddnInfo[0].expiryDate`,
+      convertDateToEpoch(
+        get(materialReceipt[0], `receiptDetails[${i}].receiptDetailsAddnInfo[0].expiryDate`),
+        "dayStart"
+      )
+    );
+  }
 
+  
+
+  //set defailt value
+  let id = get(
+    state.screenConfiguration.preparedFinalObject,
+    "materialReceipt[0].id",
+    null
+  );
+  if(id === null)
+  {
+    // set(materialReceipt[0],"indentNumber", "");
+    // set(materialReceipt[0],"indentType", "Indent");
+    // set(materialReceipt[0],"materialHandOverTo", "Test");
+    // set(materialReceipt[0],"designation", "");
+  }
+ 
   
 
 
@@ -263,47 +268,37 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
     try {
       console.log(queryObject)
       console.log("queryObject")
-      let response = await createPriceList(
+      let response = await creatreceiptnotes(
         queryObject,        
-        priceLists,
+        materialReceipt,
         dispatch
       );
-      // let employeeId = get(response, "Employees[0].code");
-      // const acknowledgementUrl =
-      //   process.env.REACT_APP_SELF_RUNNING === "true"
-      //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`
-      //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
-      // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=PRICELIST&mode=create&code=`));
+        let mrnNumber = response.materialReceipt[0].mrnNumber
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
        }
     } catch (error) {
-      furnishPriceListData(state, dispatch);
+      furnishindentData(state, dispatch);
     }
   } else if (action === "UPDATE") {
     try {
-      let response = await UpdatePriceList(
+      let response = await updatereceiptnotes(
         queryObject,
-        priceLists,
+        materialReceipt,
         dispatch
       );
-      // let employeeId = response && get(response, "Employees[0].code");
-      // const acknowledgementUrl =
-      //   process.env.REACT_APP_SELF_RUNNING === "true"
-      //     ? `/egov-ui-framework/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`
-      //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
-      // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=priceList&mode=update&code=`));
+        let mrnNumber = response.materialReceipt[0].mrnNumber
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
        }
     } catch (error) {
-      furnishPriceListData(state, dispatch);
+      furnishindentData(state, dispatch);
     }
   }
 
 };
 
-export const getMaterialmasterData = async (
+export const getMaterialIndentData = async (
   state,
   dispatch,
   code,
@@ -320,53 +315,19 @@ export const getMaterialmasterData = async (
     }
   ];
 
- let response = await getMaterialMasterSearchResults(queryObject, dispatch);
+ let response = await getmaterialissuesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("materials", get(response, "materials")));
+  dispatch(prepareFinalObject("materialReceipt", get(response, "materialReceipt")));
   dispatch(
     handleField(
       "create",
       "components.div.children.headerDiv.children.header.children.header.children.key",
       "props",
       {
-        labelName: "Edit Material Maste",
-        labelKey: "STORE_EDITMATERIAL_MASTER_HEADER"
+        labelName: "Edit Material Indent",
+        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
       }
     )
   );
- // furnishPriceListData(state, dispatch);
-};
-
-export const getPriceLstData = async (
-  state,
-  dispatch,
-  id,
-  tenantId
-) => {
-  let queryObject = [
-    {
-      key: "id",
-      value: id
-    },
-    {
-      key: "tenantId",
-      value: tenantId
-    }
-  ];
-
- let response = await getPriceListSearchResults(queryObject, dispatch);
-// let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
-  // dispatch(
-  //   handleField(
-  //     "create",
-  //     "components.div.children.headerDiv.children.header.children.header.children.key",
-  //     "props",
-  //     {
-  //       labelName: "Edit Material Maste",
-  //       labelKey: "STORE_EDITMATERIAL_MASTER_HEADER"
-  //     }
-  //   )
-  // );
-  furnishPriceListData(state, dispatch);
+  furnishindentData(state, dispatch);
 };

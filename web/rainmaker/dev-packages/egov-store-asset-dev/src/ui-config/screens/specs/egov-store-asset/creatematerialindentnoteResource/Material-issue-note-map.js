@@ -35,18 +35,18 @@ import {
       console.log(materialReceipt[0].receiptDetails[0].userAcceptedQty)
       let matcode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code", '' )
       //alert(materialReceipt[0].receiptDetails[0].material.code +'_'+matcode)
-      if (matcode === materialReceipt[0].receiptDetails[0].material.code)
-      {
+      // if (matcode === materialReceipt[0].receiptDetails[0].material.code)
+      // {
        
         //BalanceQty
-        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty",materialReceipt[0].receiptDetails[0].userAcceptedQty));
-        //materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice
-        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",materialReceipt[0].receiptDetails[0].unitRate));
-      }
-      else
-      {
-        dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity",0));
-      }
+        dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty",materialReceipt[0].receiptDetails[0].userAcceptedQty));
+        //materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice
+        dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice",materialReceipt[0].receiptDetails[0].unitRate));
+      // }
+      // else
+      // {
+      //   dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity",0));
+      // }
       // materialReceipt = materialReceipt.filter(x=>x.receivingStore.code === storecode)
       // console.log(materialReceipt[0])
       
@@ -85,8 +85,9 @@ import {
                   labelKey: "STORE_MATERIAL_NAME_SELECT"
                 },
                 required: true,               
-                jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code",
-                sourceJsonPath: "materials",
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.material.code",
+                //sourceJsonPath: "materials",
+                sourceJsonPath: "indentsmaterial",
                 props: {
                   optionValue: "code",
                   optionLabel: "name",
@@ -132,8 +133,12 @@ import {
                 dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].indentDetail.uom",indentDetails[0].uom));
                 // get set  from openning balence
                 getBalanceQty(action,state,dispatch)
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity",indentDetails[0].indentQuantity));
-                //dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty",10));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity",indentDetails[0].indentQuantity));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.code",Material[0].code));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].uom.code",Material[0].baseUom.code));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.uom.id",Material[0].baseUom.id));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].tenantId",getTenantId()));
+                //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty",10));
                 
               }
 
@@ -154,8 +159,8 @@ import {
                   disabled:true
                 },
                 required: false,
-                pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentQuantity"
+                pattern: getPattern("Amount") || null,
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
               })
             },
             BalanceQty: {
@@ -173,7 +178,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty"
               })
             },
             QtyIssued: {
@@ -191,19 +196,22 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.indentIssuedQuantity"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentIssuedQuantity"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                 //alert(action.value)
                 // set total Qty and other Qty
-                //materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice
-                let UnitPrice = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice`,0)
-                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQty`,0)
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice",Number(UnitPrice)));
+                //materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice
+                let UnitPrice = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice`,0)
+                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty`,0)
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice",Number(UnitPrice)));
                 let BalanceQtyAfterIssue = BalanceQty - Number(action.value)
                 let TotalValue = Number(UnitPrice)* Number(action.value)
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",BalanceQtyAfterIssue));
-                dispatch(prepareFinalObject("materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue",TotalValue));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",BalanceQtyAfterIssue));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue",TotalValue));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].userQuantityIssued",Number(action.value)));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.userQuantity",Number(action.value)));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].pendingIndentQuantity",BalanceQtyAfterIssue));
               }
             },
             UOMName: {
@@ -239,7 +247,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.UnitPrice"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice"
               })
             },
             BalanceQtyAfterIssue: {
@@ -257,7 +265,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue"
               })
             },
             TotalValue: {
@@ -275,7 +283,7 @@ import {
                   disabled:true
                 },
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].indentDetail.TotalValue"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue"
               })
             },
             AssestCode: {
@@ -293,7 +301,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].AssestCode"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].AssestCode"
               })
             },
             ProjectCode: {
@@ -311,7 +319,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].ProjectCode"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].ProjectCode"
               })
             },
             Remark: {
@@ -324,9 +332,9 @@ import {
                   labelName: "Enter Remark",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
                 },
-                required: false,
+                required: true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].indent.materialIssueDetails[0].description"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].description"
               })
             },
            

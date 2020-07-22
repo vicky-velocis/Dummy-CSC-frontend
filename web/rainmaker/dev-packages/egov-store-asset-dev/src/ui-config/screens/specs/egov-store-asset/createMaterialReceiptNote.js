@@ -3,11 +3,12 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
-  import { footer } from "./creatematerialindentnoteResource/footer";
+  import { footer } from "./creatematerialReceiptNoteResource/footer";
   import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
-  import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
-  import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
-  import { otherDetails } from "./creatematerialindentnoteResource/other-details";
+  import { getSearchResults } from "../../../../ui-utils/commons";
+  import { materialReceiptDetail } from "./creatematerialReceiptNoteResource/Material-receipt-details"; 
+  import { MaterialReceiptNote } from "./creatematerialReceiptNoteResource/Material-receipt-note"; 
+  import { otherDetails } from "./creatematerialReceiptNoteResource/other-details";
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -22,10 +23,10 @@ import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
   export const stepsData = [
-    { labelName: "Indent Material Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE" },
+    { labelName: "Material Receipt Note", labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_NOTE" },
     {
-      labelName: "Indent Material Issue Details",
-      labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE_DETAILS"
+      labelName: "Material Receipt Details",
+      labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_DETAILS"
     },
     { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
@@ -38,8 +39,8 @@ import {
   
 export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: `Indent Material Issue Note `,
-      labelKey: "STORE_COMMON_CREATE_INDENT_MATERIAL_ISSUE_NOTE"
+      labelName: `Material Receipt Note `,
+      labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_NOTE"
     })
   });
   
@@ -50,7 +51,7 @@ export const header = getCommonContainer({
       id: "apply_form1"
     },
     children: {
-      IndentMaterialIssueDetails
+      MaterialReceiptNote
     }
   };
   
@@ -61,7 +62,7 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
-      materialIssue
+      materialReceiptDetail
     },
     visible: false
   };
@@ -156,6 +157,34 @@ export const header = getCommonContainer({
       console.log(e);
     }
   };
+  const getSupllierData = async (  action, state,dispatch,)=>{
+    const tenantId = getTenantId();
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }];
+    try {
+      let response = await getSearchResults(queryObject, dispatch,"supplier");
+      dispatch(prepareFinalObject("supplier", response));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  const getpurchaseOrder = async (  action, state,dispatch,)=>{
+    const tenantId = getTenantId();
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }];
+    try {
+      let response = await getSearchResults(queryObject, dispatch,"purchaseOrder");
+      dispatch(prepareFinalObject("purchaseOrder", response));
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const getYearsList = (startYear, state, dispatch) => {
     var currentYear = new Date().getFullYear(),
       years = [];
@@ -209,70 +238,42 @@ export const header = getCommonContainer({
   
   const screenConfig = {
     uiFramework: "material-ui",
-    name: "createMaterialIndentNote",
+    name: "createMaterialReceiptNote",
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
      
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
+      const SupllierData = getSupllierData(action,state, dispatch);
+      const purchaseOrder = getpurchaseOrder(action,state, dispatch);
      // SEt Default data
 
      dispatch(
       prepareFinalObject(
-        "materialIssues[0].materialIssueStatus",
-        IndentConfiguration().materialIssueStatus,
+        "materialReceipt[0].receiptType",
+        "PURCHASE RECEIPT",
       )
     );
     dispatch(
       prepareFinalObject(
-        "materialIssues[0].issueType",
-        IndentConfiguration().IssueType.INDENTISSUE,
+        "materialReceipt[0].designation",
+        "ASST-ENG",
       )
     );
-    let indents = get(
-      state.screenConfiguration.preparedFinalObject,
-      `indents`,
-      []
+    dispatch(
+      prepareFinalObject(
+        "materialReceipt[0].receivedBy",
+        "sanjeev",
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "materialReceipt[0].inspectedBy",
+        "Ramesh",
+      )
     );
 
-    let IndentId = getQueryArg(window.location.href, "IndentId");
-    
-    indents = indents.filter(x=> x.id === IndentId)
-    //designation
-    dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
-    //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
-    if(indents && indents[0] )
-    { 
-      if(indents[0].issueStore.code !== undefined)
-      {    
-        dispatch(prepareFinalObject("materialIssues[0].toStore.code",indents[0].issueStore.code));
-        dispatch(prepareFinalObject("materialIssues[0].toStore.name",indents[0].issueStore.name));
-        dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
-        dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
-        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
-        //get Material based on Indent
-        let material =[]
-        let indentDetails = get(
-          indents[0],
-          `indentDetails`,
-          []
-        );
-        for (let index = 0; index < indentDetails.length; index++) {
-          const element = indentDetails[index];
-          material.push( element.material)
-          
-        }
-        dispatch(prepareFinalObject("indentsmaterial",material));
-       
-      }
-    
-    else
-    dispatch(setRoute(`/egov-store-asset/search-indent`));
-    }
-    else{
-      dispatch(setRoute(`/egov-store-asset/search-indent`));
-    }
       return action;
     },
   

@@ -27,7 +27,7 @@ import {
               labelName: "Material Nmae",
                   labelKey: "STORE_MATERIAL_NAME"
             },
-            { jsonPath: "indents[0].indentDetails[0].material.code",          
+            { jsonPath: "indents[0].indentDetails[0].material.name",          
           }
           ),
           MaterialDescription: getLabelWithValue(

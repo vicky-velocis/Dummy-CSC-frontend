@@ -9,7 +9,7 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getSearchResults } from "../../../../ui-utils/commons";
+  
   export const header = getCommonContainer({
     header: getCommonHeader({
       labelName: `View Purchase Order`,
@@ -55,34 +55,9 @@ import {
     uiFramework: "material-ui",
     name: "view-purchase-order",
     beforeInitScreen: (action, state, dispatch) => {
-      let poNumber = getQueryArg(window.location.href, "poNumber");
-      let tenantId = getQueryArg(window.location.href, "tenantId");
-      const queryObject = [{ key: "tenantId", value: tenantId},{ key: "purchaseOrderNumber", value: poNumber}];
-      getSearchResults(queryObject, dispatch,"purchaseOrder")
-      .then(response =>{
-        if(response){
-          dispatch(prepareFinalObject("purchaseOrders", [...response.purchaseOrders]));       
-      
-      if(response.purchaseOrders && response.purchaseOrders[0].supplier.code){
-        const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "suppliers", value: response.purchaseOrders[0].supplier.code}];
-       
-        getSearchResults(queryObject, dispatch,"priceList")
-        .then(response =>{
-          if(response){
-            let priceList = [{rateContractNumber:"",rateContractDate:"",agreementNumber:"",agreementDate:"",agreementStartDate:"",agreementEndDate:""}];
-            priceList[0].rateContractNumber  =  response.priceLists[0].rateContractNumber;
-            priceList[0].rateContractDate   = new Date(response.priceLists[0].rateContractDate).toISOString().substr(0,10);
-            priceList[0].agreementNumber   =   response.priceLists[0].agreementNumber;
-            priceList[0].agreementDate   =   new Date(response.priceLists[0].agreementDate).toISOString().substr(0,10);
-            priceList[0].agreementStartDate   = new Date(response.priceLists[0].agreementStartDate).toISOString().substr(0,10);
-            priceList[0].agreementEndDate   =  new Date(response.priceLists[0].agreementEndDate).toISOString().substr(0,10);
-            dispatch(prepareFinalObject("searchMaster.priceList", response.priceLists));  
-                dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));          
-           }  
-        });     
-       }
-      }
-    });  
+    //   let employeeCode = getQueryArg(window.location.href, "employeeID");
+    //   let tenantId = getQueryArg(window.location.href, "tenantId");
+    //   showHideAdhocPopup(state, dispatch);
     //   getMdmsData(action, state, dispatch, tenantId);
       return action;
     },

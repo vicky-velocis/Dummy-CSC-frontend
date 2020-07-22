@@ -8,12 +8,8 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { httpRequest } from "../../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
-let indentNumber="";
-indentNumber = getQueryArg(window.location.href, "indentNumber");
 export const purchaseOrderHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -27,35 +23,6 @@ export const purchaseOrderHeader = getCommonCard({
     }
   ),
   purchaseOrderHeaderContainer: getCommonContainer({
-    purchaseType: {
-      ...getSelectField({
-        label: { labelName: "Purchase Type", labelKey: "STORE_PURCHASE_ORDER_TYPE" },
-        placeholder: {
-          labelName: "Select Purchase Type",
-          labelKey: "STORE_PURCHASE_ORDER_TYPE_SELECT"
-        },
-       
-        required: true,
-        jsonPath: "purchaseOrders[0].purchaseType",
-       // sourceJsonPath: "searchMaster.storeNames",
-        props: {
-          disabled : indentNumber ? true : false,
-          className: "hr-generic-selectfield",
-          optionValue: "value",
-          optionLabel: "label",
-          data: [
-            {
-              value: "Indent",
-              label: "Indent"
-            },
-            {
-              value: "Non Indent",
-              label: "Non Indent"
-            }
-          ],
-        }
-      }),
-    },
     storeName: {
       ...getSelectField({
         label: { labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
@@ -75,25 +42,28 @@ export const purchaseOrderHeader = getCommonCard({
       beforeFieldChange: async (action, state, dispatch) => {
         if(action.value){
         const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "store", value: action.value}];
-        getSearchResults(queryObject, dispatch,"materials")
-        .then(response =>{
-          if(response){
-            const  materialNames = response.materials.map(material => {
-                const name = material.name;
-                const code = material.code;
-                const description = material.description;
-                return{ name, code,description }
-            })
-                dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
-         }
-          
-        });   
-        if(state.screenConfiguration.preparedFinalObject.searchMaster){
-            const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
-            const storebj =  storeNames.filter(ele => ele.code === action.value);
-            if(storebj){
-              dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name));         
-            }
+          try {
+            let payload = await httpRequest(
+              "post",
+              "store-asset-services/materials/_search?",
+              "search",
+               queryObject,
+              {}
+            );
+        
+              if(payload){
+              const  materialNames = payload.materials.map(material => {
+                  const name = material.name;
+                  const code = material.code;
+                  return{
+                    name,
+                    code
+                  }
+              })
+                  dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
+           }
+          } catch (e) {
+            console.log(e);
           }
         }
       }
@@ -112,10 +82,7 @@ export const purchaseOrderHeader = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "purchaseOrders[0].purchaseOrderDate",
         props: {
-          inputProps: {
-            max: new Date().toISOString().slice(0, 10),
-          }
-        }
+        },
       }),
     },
     rateType: {
@@ -151,33 +118,6 @@ export const purchaseOrderHeader = getCommonCard({
           optionLabel: "name"
         }
       }),
-      beforeFieldChange: async (action, state, dispatch) => {
-        if(action.value){
-        const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "suppliers", value: action.value}];
-       
-        getSearchResults(queryObject, dispatch,"priceList")
-        .then(response =>{
-          if(response){
-            let priceList = [{rateContractNumber:"",rateContractDate:"",agreementNumber:"",agreementDate:"",agreementStartDate:"",agreementEndDate:""}];
-            priceList[0].rateContractNumber  =  response.priceLists[0].rateContractNumber;
-            priceList[0].rateContractDate   = new Date(response.priceLists[0].rateContractDate).toISOString().substr(0,10);
-            priceList[0].agreementNumber   =   response.priceLists[0].agreementNumber;
-            priceList[0].agreementDate   =   new Date(response.priceLists[0].agreementDate).toISOString().substr(0,10);
-            priceList[0].agreementStartDate   = new Date(response.priceLists[0].agreementStartDate).toISOString().substr(0,10);
-            priceList[0].agreementEndDate   =  new Date(response.priceLists[0].agreementEndDate).toISOString().substr(0,10);
-            dispatch(prepareFinalObject("searchMaster.priceList", response.priceLists));  
-                dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));          
-           }  
-           if(state.screenConfiguration.preparedFinalObject.searchMaster){
-           const {supplierName} = state.screenConfiguration.preparedFinalObject.searchMaster;
-           const supplierObj =  supplierName.filter(ele => ele.code === action.value);
-           if(supplierObj){
-             dispatch(prepareFinalObject("purchaseOrders[0].supplier.name", supplierObj[0].name));         
-           }
-          }
-        });     
-       }
-     }
     },
     advancePercentage: {
       ...getTextField({
@@ -222,7 +162,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].expectedDeliveryDate",
         props: {
           inputProps: {
-            min: new Date().toISOString().slice(0, 10),
+        //    max: getTodaysDateInYMD()
           }
         }
       })

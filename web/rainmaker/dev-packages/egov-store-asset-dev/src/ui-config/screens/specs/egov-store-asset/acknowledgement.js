@@ -106,13 +106,17 @@ const getApplicationDisplayCode =() => {
     }
     break;
     case "PRICELIST": labelValue = {
-      labelName: "Price List",
-      labelKey: `STORE_SUPPLIER_MASTER_SUPPLIER_NAME`,
+      // labelName: "Price List",
+      // labelKey: `STORE_SUPPLIER_MASTER_SUPPLIER_NAME`,
+      labelName: "",
+      labelKey: ``,
     }
     break;
     case "MATERIALMASTER": labelValue = {
-      labelName: "Material Master",
-      labelKey: `STORE_COMMON_MATERIAL_MASTER`,
+      // labelName: "Material Master",
+      // labelKey: `STORE_COMMON_MATERIAL_MASTER`,
+      labelName: "",
+      labelKey: ``,
     }
     break;
     case "OPENINGBALANCE": labelValue = {
@@ -130,11 +134,12 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_INDENT_NUMBER`,
     }
     break;
-      case "PURCHASEORDER": labelValue = {
-      labelName: "Purchase Order Number",
-      labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
+    case "MATERIALRECEIPT": labelValue = {
+      labelName: "mrnNumber",
+      labelKey: `STORE_MATERIAL_NUMBER`,
     }
     break;
+    
     default :  labelValue = {
       labelName: "Application No.",
       labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",

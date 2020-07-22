@@ -6,10 +6,10 @@ import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
-    case "Indent No.":
+    case "Indent Issue No":
       return getLocaleLabels(
-        "Indent No.",
-        "STORE_MATERIAL_INDENT_NUMBER",
+        "Indent Issue No",
+        "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER",
         localisationLabels
       );
 //Raised By
