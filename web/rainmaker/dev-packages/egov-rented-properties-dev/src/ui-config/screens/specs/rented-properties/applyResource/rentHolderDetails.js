@@ -455,15 +455,15 @@ const ownerShipRelationShipduplicate = {
           ...getRelationshipRadioButton.props,
           buttons: [
             {
-              labelName: "Legal Heir",
-              labelKey: "COMMON_RELATION_LEGAL_HEIR",
-              value: "LEGAL_HEIR"
-            },
-            {
-              label: "Spouse",
-              labelKey: "COMMON_RELATION_SPOUSE",
-              value: "SPOUSE"
-            }
+                labelName: "Father",
+                labelKey: "COMMON_RELATION_FATHER",
+                value: "FATHER"
+              },
+              {
+                label: "Husband",
+                labelKey: "COMMON_RELATION_HUSBAND",
+                value: "HUSBAND"
+              }
           ],
           jsonPath: "DuplicateCopyApplications[0].applicant[0].relationship"
       }
@@ -475,16 +475,16 @@ const ownerShipRelationShipduplicate = {
     props: {
         ...getRelationshipRadioButton.props,
         buttons: [
-          {
-            labelName: "Legal Heir",
-            labelKey: "COMMON_RELATION_LEGAL_HEIR",
-            value: "LEGAL_HEIR"
-          },
-          {
-            label: "Spouse",
-            labelKey: "COMMON_RELATION_SPOUSE",
-            value: "SPOUSE"
-          }
+            {
+                labelName: "Father",
+                labelKey: "COMMON_RELATION_FATHER",
+                value: "FATHER"
+              },
+              {
+                label: "Husband",
+                labelKey: "COMMON_RELATION_HUSBAND",
+                value: "HUSBAND"
+              }
         ],
         jsonPath: "MortgageApplications[0].applicant[0].relationship"
     }
