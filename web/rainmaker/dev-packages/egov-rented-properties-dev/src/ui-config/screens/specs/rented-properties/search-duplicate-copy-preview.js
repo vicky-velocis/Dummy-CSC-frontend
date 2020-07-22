@@ -102,8 +102,8 @@ const duplicateReviewDetails = getCommonCard({
         const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
         dispatch(
           handleField(
-              "ownership-search-preview",
-              "components.div.children.transferReviewDetails.children.cardContent.children.estimate",
+              "search-duplicate-copy-preview",
+              "components.div.children.duplicateReviewDetails.children.cardContent.children.estimate",
               "visible",
               showEstimate
           )
