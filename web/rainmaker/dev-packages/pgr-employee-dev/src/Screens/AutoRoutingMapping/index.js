@@ -25,6 +25,7 @@ class AutoRoutingMapping extends Component {
             officerlevel2 :[],
             categoriesArr : [],
             sectorArr :[],
+            unAllocatedSector:[],
             autoRouting : [{id: new Date().getTime() ,sector:[],employee:""}] 
         }
         this.multiDropdownStyle = {
@@ -109,13 +110,18 @@ class AutoRoutingMapping extends Component {
             })
         }
         else if(officer === "sector") {
+          const unAllocatedSector = this.state.unAllocatedSector;
            const newAutoRoutingArr = this.state.autoRouting.map(data => {
              if(data.id === autoroute.id)
-                 data.sector = selectedList;
-            
+                 data.sector = selectedList;            
             return data;
            })
-           this.setState({autoRouting : newAutoRoutingArr})
+
+           let index = unAllocatedSector.findIndex(sec => sec.value === selectedItem.value);
+           if (index > -1) {
+                 unAllocatedSector.splice(index, 1);
+           }
+           this.setState({autoRouting : newAutoRoutingArr,unAllocatedSector})
         }
       }
   
@@ -132,13 +138,19 @@ class AutoRoutingMapping extends Component {
               })
            }
            else if(officer === "sector") {
+            const unAllocatedSector = this.state.unAllocatedSector;
             const newAutoRoutingArr = this.state.autoRouting.map(data => {
               if(data.id === autoroute.id)
                   data.sector = selectedList;
-             
              return data;
             })
-            this.setState({autoRouting : newAutoRoutingArr})
+
+            let index = unAllocatedSector.findIndex(sec => sec.value === removedItem.value);
+            if (index < 0) {
+              unAllocatedSector.push(removedItem);
+            }
+               
+            this.setState({autoRouting : newAutoRoutingArr,unAllocatedSector})
          }
     }
 
@@ -177,6 +189,7 @@ class AutoRoutingMapping extends Component {
     generateActualDataSource(rawdata){
         const {empDetails,sectors} = this.props;
         if(rawdata){
+          let allocatedSectors = [];
           const escalationOfficer1 = rawdata[0].escalationOfficer1.map(code => {
                                         return empDetails.find(emp => emp.value === code)
                                         }).filter(result => result)
@@ -184,7 +197,7 @@ class AutoRoutingMapping extends Component {
           const escalationOfficer2 = rawdata[0].escalationOfficer2.map(code => {
                                         return empDetails.find(emp => emp.value === code)
                                         }).filter(result => result)
-
+                                  
           const autoRouting =   rawdata[0].autoRouting &&  rawdata[0].autoRouting.map((detail,index) => {
             let sectorEmpDetail ={}
             let employee ="";
@@ -199,14 +212,23 @@ class AutoRoutingMapping extends Component {
                 }
 
                 sectorEmpDetail.sector = detail.Sector.map(code =>{
-                   return sectors.find(sec => sec.value === code)
+                  
+                   return sectors.find(sec =>{
+                     if(sec.value === code){
+                      if(!allocatedSectors.includes(code))
+                           allocatedSectors.push(code)
+                     return sec.value === code
+                     }
+                   })
                    }).filter(result => result)
 
                    return sectorEmpDetail;
                 
-          })
+          });
 
-          this.setState({officerlevel1 : escalationOfficer1, officerlevel2:escalationOfficer2,autoRouting})
+          const unAllocatedSector = sectors.filter(sec => (!allocatedSectors.includes(sec.value)));
+
+          this.setState({officerlevel1 : escalationOfficer1, officerlevel2:escalationOfficer2,autoRouting,unAllocatedSector})
         }
     }
 
@@ -229,7 +251,7 @@ class AutoRoutingMapping extends Component {
                 SectorArr.push(sec.value)
               }
               else{
-                duplicateSector.push(sec.value);
+                duplicateSector.push(sec.label);
                 isDataValid = false;
               }
               return sec.value;
@@ -238,10 +260,10 @@ class AutoRoutingMapping extends Component {
             return autoroute;
         });
         if(duplicateSector.length>1){
-          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_ONE")}`
+          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_MORE")}` 
         }
         else{
-          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_MORE")}`
+          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_ONE")}`
         }
         if(!isDataValid){
           e.preventDefault();
@@ -353,7 +375,14 @@ class AutoRoutingMapping extends Component {
                 handleEmployeeChange = {this.onEmployeeChange}
                 getLocalizedLabel={this.getLocalizedLabel} 
               />
-
+              <Card 
+                textChildren={
+                  <div>
+                        <Label  label="Unallocated Sector's"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                    <p>{this.state.unAllocatedSector.map(sec =>  sec.label+" , ")}</p>
+                  </div>
+                }
+              />
                 <div className="responsive-action-button-cont">
               <Button
                 id="sumit-button-autorouting"
