@@ -226,34 +226,21 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
             }
         },
         viewFour: getCommonContainer({
-            propertyId: getLabelWithValue(
-                {
-                    labelName: "Property Id",
-                    labelKey: "RP_PROPERTY_ID"
-                },
-                {jsonPath: "DuplicateCopyApplications[0].property.id"}
-            ),
-            allotmentNumber: getLabelWithValue(
-                {
-                    labelName: "Allotment Number",
-                    labelKey: "RP_ALLOTMENT_NUMBER"
-                },
-                {jsonPath: "DuplicateCopyApplications[0].allotmenNumber"}
-            ),
+           
             transitNumber: getLabelWithValue(
                 {
                     labelName: "Transit Site/Plot number",
                     labelKey: "RP_SITE_PLOT_LABEL"
                 },
                 { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
-            )
-            // area: getLabelWithValue(
+            ),
+            // colony: getLabelWithValue(
             //     areaLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
+            //     { jsonPath: "DuplicateCopyApplications[0].property.colony" }
             // ),
             // pincode: getLabelWithValue(
             //     pincodeLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
+            //     { jsonPath: "DuplicateCopyApplications[0].property.pincode" }
             // ),
         })
     })
