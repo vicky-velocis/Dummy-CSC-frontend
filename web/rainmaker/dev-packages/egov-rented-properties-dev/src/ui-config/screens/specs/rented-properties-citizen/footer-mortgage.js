@@ -1,7 +1,7 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty,getDetailsFromPropertyMortgage,applyOwnershipTransferMortgage } from "../../../../ui-utils/apply";
+import { getDetailsFromPropertyMortgage,applyMortgage } from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -36,7 +36,7 @@ const callBackForNextMortgage = async(state, dispatch) => {
           res = await getDetailsFromPropertyMortgage(state, dispatch)
         }
         if(!!res) {
-          const applyRes = applyOwnershipTransferMortgage(state, dispatch, activeStep)
+          const applyRes = applyMortgage(state, dispatch, activeStep)
           if(!applyRes) {
             return
           }
@@ -85,7 +85,7 @@ const callBackForNextMortgage = async(state, dispatch) => {
   }
   }
   if(activeStep === SUMMARY_STEP) {
-  isFormValid = await applyOwnershipTransferMortgage(state, dispatch);
+  isFormValid = await applyMortgage(state, dispatch);
     if (isFormValid) {
       const rentedData = get(
         state.screenConfiguration.preparedFinalObject,

@@ -62,7 +62,7 @@ let userInfo = JSON.parse(getUserInfo());
         set(queryObject[0], "owners[0].ownerDetails.payment[0].amountDue", "")
         set(queryObject[0], "owners[0].ownerDetails.payment[0].receiptNumber", "")
         if(!id) {
-          set(queryObject[0], "masterDataAction", "INITIATE");
+          set(queryObject[0], "masterDataAction", "DRAFT");
           response = await httpRequest(
             "post",
             "/csp/property/_create",
@@ -123,7 +123,6 @@ let userInfo = JSON.parse(getUserInfo());
         const id = get(queryObject[0], "id");
         let response;
         set(queryObject[0], "tenantId", tenantId);
-        set(queryObject[0], "applicationState", "");
         set(queryObject[0], "ownerDetails.phone", userInfo.userName)
         set(queryObject[0], "ownerDetails.permanent", false)
         set(queryObject[0], "isPrimaryOwner", true);
@@ -131,7 +130,8 @@ let userInfo = JSON.parse(getUserInfo());
         set(queryObject[0], "ownerDetails.applicationType", "CitizenApplication")
         set(queryObject[0], "ownerDetails.dateOfDeathAllottee", convertDateToEpoch(queryObject[0].ownerDetails.dateOfDeathAllottee))
         if(!id) {
-          set(queryObject[0], "applicationAction", "INITIATE");
+          set(queryObject[0], "applicationState", "");
+          set(queryObject[0], "applicationAction", "DRAFT");
           response = await httpRequest(
             "post",
             "/csp/ownership-transfer/_create",
@@ -179,7 +179,7 @@ let userInfo = JSON.parse(getUserInfo());
   }
 
   
-  export const applyOwnershipTransferMortgage = async (state, dispatch, activeIndex) => {
+  export const applyMortgage = async (state, dispatch, activeIndex) => {
     try {
         let queryObject = JSON.parse(
             JSON.stringify(
@@ -193,12 +193,12 @@ let userInfo = JSON.parse(getUserInfo());
         const id = get(queryObject[0], "id");
         let response;
         set(queryObject[0], "tenantId", tenantId);
-        set(queryObject[0], "state", "");
         set(queryObject[0], "propertyDetails", "null");
         set(queryObject[0], "applicant[0].phone", userInfo.userName);
 
         if(!id) {
-          set(queryObject[0], "action", "INITIATE");
+          set(queryObject[0], "state", "");
+          set(queryObject[0], "action", "DRAFT");
           response = await httpRequest(
             "post",
             "/csp/mortgage/_create",
@@ -213,11 +213,11 @@ let userInfo = JSON.parse(getUserInfo());
           else {
             set(queryObject[0], "action", "SUBMIT")
           }
-          let mortgageDocuments = get(queryObject[0], "applicationDocuments") || [];
-          mortgageDocuments = mortgageDocuments.map(item => ({...item, active: true}))
+          let applicationDocuments = get(queryObject[0], "applicationDocuments") || [];
+          applicationDocuments = applicationDocuments.map(item => ({...item, active: true}))
           const removedDocs = get(state.screenConfiguration.preparedFinalObject, "MortgageApplicationsTemp[0].removedDocs") || [];
-          mortgageDocuments = [...mortgageDocuments, ...removedDocs]
-          set(queryObject[0], "applicationDocuments", mortgageDocuments)
+          applicationDocuments = [...applicationDocuments, ...removedDocs]
+          set(queryObject[0], "applicationDocuments", applicationDocuments)
           response = await httpRequest(
             "post",
             "/csp/mortgage/_update",
@@ -227,11 +227,10 @@ let userInfo = JSON.parse(getUserInfo());
           );
         }
         let {MortgageApplications} = response
-        let mortgageDocuments = MortgageApplications[0].applicationDocuments || [];
-        const removedDocs = mortgageDocuments.filter(item => !item.active)
-        mortgageDocuments = mortgageDocuments.filter(item => !!item.active)
-        MortgageApplications = [{...MortgageApplications[0], mortgageDocuments}]
-        // MortgageApplications = [{...MortgageApplications[0], ownerDetails: {...MortgageApplications[0].ownerDetails, mortgageDocuments}}]
+        let applicationDocuments = MortgageApplications[0].applicationDocuments || [];
+        const removedDocs = applicationDocuments.filter(item => !item.active)
+        applicationDocuments = applicationDocuments.filter(item => !!item.active)
+        MortgageApplications = [{...MortgageApplications[0], applicationDocuments}]
         dispatch(prepareFinalObject("MortgageApplications", MortgageApplications));
         dispatch(
           prepareFinalObject(
@@ -248,7 +247,7 @@ let userInfo = JSON.parse(getUserInfo());
   }
   
 
-export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeIndex) => {
+export const applyDuplicateCopy = async (state, dispatch, activeIndex) => {
  
     try {
         let queryObject = JSON.parse(
@@ -263,12 +262,12 @@ export const applyDuplicateOwnershipTransfer = async (state, dispatch, activeInd
         const id = get(queryObject[0], "id");
         let response;
         set(queryObject[0], "tenantId", tenantId);
-        set(queryObject[0], "state", "");
         set(queryObject[0], "propertyDetails", "null");
         set(queryObject[0], "applicant[0].phone", userInfo.userName);
         
         if(!id) {
-          set(queryObject[0], "action", "INITIATE");
+          set(queryObject[0], "state", "");
+          set(queryObject[0], "action", "DRAFT");
           response = await httpRequest(
             "post",
             "/csp/duplicatecopy/_create",
@@ -329,7 +328,7 @@ export const getDetailsFromProperty = async (state, dispatch) => {
     if(!!transitNumber) {
       let queryObject = [
         { key: "transitNumber", value: transitNumber },
-        { key: "state", value: "APPROVED"}
+        { key: "state", value: "PM_APPROVED"}
       ];
       const payload = await getSearchResults(queryObject)
       if (
@@ -427,7 +426,8 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
     );
     if(!!transitNumber) {
       let queryObject = [
-        { key: "transitNumber", value: transitNumber }
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "PM_APPROVED" }
       ];
       const payload = await getSearchResults(queryObject)
       if (
@@ -504,7 +504,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
     if(!!transitNumber) {
       let queryObject = [
         { key: "transitNumber", value: transitNumber },
-        { key: "state", value: "APPROVED" }
+        { key: "state", value: "PM_APPROVED" }
       ];
       const payload = await getSearchResults(queryObject)
       if (

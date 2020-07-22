@@ -99,7 +99,7 @@ const duplicateReviewDetails = getCommonCard({
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
 
-        const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
+        const showEstimate = status !== "DC_DRAFTED" && status !== "DC_PENDINGCLVERIFICATION" && status !== "DC_PENDINGJAVERIFICATION" && status !== "DC_PENDINGSAVERIFICATION"
         dispatch(
           handleField(
               "search-duplicate-copy-preview",

@@ -149,7 +149,7 @@ class SingleApplication extends React.Component {
       }
     } else if(moduleName === "OWNERSHIPTRANSFERRP") {
       switch (item.applicationState) {
-        case "INITIATED": 
+        case "OT_DRAFTED": 
           setRoute(`/rented-properties-citizen/ownership-apply?applicationNumber=${item.ownerDetails.applicationNumber}&tenantId=${item.tenantId}`)
           break;
         default:
@@ -158,7 +158,7 @@ class SingleApplication extends React.Component {
     }
     else if(moduleName === "DUPLICATECOPYOFALLOTMENTLETTERRP") {
       switch (item.state) {
-        case "INITIATED": 
+        case "DC_DRAFTED": 
           setRoute(`/rented-properties-citizen/duplicate-copy-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
           break;
         default:
@@ -166,7 +166,7 @@ class SingleApplication extends React.Component {
       }
     } else if(moduleName === "MORTGAGERP") {
       switch(item.state) {
-        case "INITIATED": 
+        case "MG_DRAFTED": 
         setRoute(`/rented-properties-citizen/mortage-apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
         break;
         default:

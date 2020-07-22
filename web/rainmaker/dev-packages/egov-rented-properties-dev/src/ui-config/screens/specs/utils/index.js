@@ -464,7 +464,7 @@ export const getButtonVisibility = (status, button) => {
   if (status === "APPROVED" && button === "CANCEL TRADE LICENSE") return true;
   if (status === "APPROVED" && button === "APPROVED") return true;
   if (status === "EXPIRED" && button === "EXPIRED") return true;
-  if (status === "PENDINGPAYMENT" && button === "PENDINGPAYMENT") return true;
+  if ((status === "OT_PENDINGPAYMENT" || status === "DC_PENDINGPAYMENT") && button === "PENDINGPAYMENT") return true;
   return false;
 };
 

@@ -6,7 +6,7 @@ let userInfo = JSON.parse(getUserInfo());
 
 const rentHolderHeader = getCommonTitle(
     {
-        abelName: "Rent holder Particulars",
+        labelName: "Rent holder Particulars",
         labelKey: "RP_RENT_HOLDER_PARTICULAR_HEADER"
     },
     {
@@ -16,6 +16,19 @@ const rentHolderHeader = getCommonTitle(
         }
     }
   )
+
+const applicantHeader = getCommonTitle(
+    {
+        labelName: "Applicant Details",
+        labelKey: "RP_APPLICANT_DETAILS_HEADER"
+    },
+    {
+        style: {
+                marginBottom: 18,
+                marginTop: 18
+        }
+    }
+)
 
 export const getGenderLabel = {
     uiFramework: "custom-containers",
@@ -559,7 +572,7 @@ const getApplicantDetails = () => {
 
 const getApplicantDetailsMortgage = () => {
     return {
-        header: rentHolderHeader,
+        header: applicantHeader,
         detailsContainer: getCommonContainer({
             ownerName: getTextField(applicantNameFieldMortgage),
             email: getTextField(applicantEmailFieldMortgage),
@@ -576,7 +589,7 @@ const getApplicantDetailsMortgage = () => {
 
 const getApplicantDetailsForDuplicateCopy = () => {
     return {
-        header: rentHolderHeader,
+        header: applicantHeader,
         detailsContainer: getCommonContainer({
             ownerName: getTextField(duplicateapplicantNameFieldname),
             fatherOrHusband:getTextField(fatherOrHusbandsName),

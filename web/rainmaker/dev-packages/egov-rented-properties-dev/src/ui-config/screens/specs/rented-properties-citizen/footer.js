@@ -1,7 +1,7 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateOwnershipTransfer, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateCopy, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -152,7 +152,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
             res = await getDuplicateDetailsFromProperty(state, dispatch)
           }
           if(!!res) {
-            const applyRes = applyDuplicateOwnershipTransfer(state, dispatch, activeStep)
+            const applyRes = applyDuplicateCopy(state, dispatch, activeStep)
             if(!applyRes) {
               return
             }
@@ -206,7 +206,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject,
         "DuplicateCopyApplications[0]"
     );
-    isFormValid = await applyDuplicateOwnershipTransfer(state, dispatch);
+    isFormValid = await applyDuplicateCopy(state, dispatch);
       if (isFormValid) {
           moveToSuccess(rentedData, dispatch, "DUPLICATECOPYOFALLOTMENTLETTERRP");
       }
