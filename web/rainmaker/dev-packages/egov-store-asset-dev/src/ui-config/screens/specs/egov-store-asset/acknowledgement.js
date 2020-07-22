@@ -139,6 +139,11 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_MATERIAL_NUMBER`,
     }
     break;
+       case "PURCHASEORDER": labelValue = {
+      labelName: "Purchase Order Number",
+      labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
+    }
+    break;
     
     default :  labelValue = {
       labelName: "Application No.",

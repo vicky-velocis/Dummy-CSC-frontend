@@ -4,9 +4,9 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { handleCreateUpdatePO } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const employeeCode = getQueryArg(window.location.href, "employeeID");
+  const poNumber = getQueryArg(window.location.href, "poNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
-  const createUrl = `/egov-store-asset/create-purchase-order?employeeCode=${employeeCode}&tenantId=${tenantId}`;
+  const createUrl = `/egov-store-asset/create-purchase-order?poNumber=${poNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(createUrl));
 };
 

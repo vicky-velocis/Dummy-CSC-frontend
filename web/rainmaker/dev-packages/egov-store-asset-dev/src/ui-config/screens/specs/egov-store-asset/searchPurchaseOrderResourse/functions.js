@@ -74,10 +74,9 @@ export const searchApiCall = async (state, dispatch) => {
     let response = await getSearchResults(queryObject, dispatch,"purchaseOrder");
     try {
       let data = response.purchaseOrders.map((item) => {
-  
         return {
             [getTextToLocalMapping("Purchase Order Number")]: get(item, "purchaseOrderNumber", "-") || "-",
-            [getTextToLocalMapping("PO Date")]: get(item, "purchaseOrderDate", "-") || "-",
+            [getTextToLocalMapping("PO Date")]: get(item, "purchaseOrderDate", "")? new Date(get(item, "purchaseOrderDate", "-")).toISOString().substr(0,10) : "-",
             [getTextToLocalMapping("Store Name")]: get(item, "store.name", "-") || "-",
             [getTextToLocalMapping("PO Rate Type")]: get(item, "rateType", "-") || "-",
             [getTextToLocalMapping("Supplier")]: get(item, "supplier.name", "-") || "-",
