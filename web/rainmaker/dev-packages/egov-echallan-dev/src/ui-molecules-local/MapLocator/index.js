@@ -7,7 +7,7 @@ import { Button, Icon } from "egov-ui-framework/ui-atoms";
 import isEmpty from "lodash/isEmpty";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.scss";
+import "./index.css";
 
 const pickBtn = {
   display: "block"
@@ -179,6 +179,7 @@ class MapLocator extends Component {
             style={{
               ...pickBtn,
               width: "200px",
+              background: "#fff",
               height: "48px",
               marginRight: "16px"
             }}

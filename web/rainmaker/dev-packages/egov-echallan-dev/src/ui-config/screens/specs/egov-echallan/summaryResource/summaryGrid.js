@@ -29,7 +29,8 @@ export const searchResultsSummary = {
     options: {
       filter: false,
       download: false,
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       selectableRows: false,
       hover: true,
       print: false,
@@ -61,7 +62,8 @@ export const searchVehicleResultsSummary = {
     options: {
       filter: false,
       download: false,
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       selectableRows: false,
       hover: true,
       print: false,
@@ -133,6 +135,7 @@ export const serachResultGridSM = {
 
             return (
               <FormControlLabel
+              style={{ fontSize: "medium", paddingLeft: "15px" }}
                 control={<TextField value={value || ''} type='number' />}
                 onChange={event => {
                   let state = store.getState();
@@ -178,7 +181,7 @@ export const serachResultGridSM = {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
             <FormControlLabel
-              style={{ fontSize: "medium" }}
+              style={{ fontSize: "medium", paddingLeft: "15px" }}
               labelPlacement='end'
               control={<TextField value={value || ''} type='number' />}
               onChange={event => {
@@ -233,6 +236,7 @@ export const serachResultGridSM = {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => (
             <FormControlLabel
+            style={{ fontSize: "medium", paddingLeft: "15px" }}
               control={<TextField value={value || ''} type='string' inputProps={{ maxLength: 256 }} />}
               onChange={event => {
                 let state = store.getState();
@@ -282,7 +286,8 @@ export const serachResultGridSM = {
       print: false,
       download: false,
       // responsive: "scrollMaxHeight",
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,
@@ -492,7 +497,8 @@ export const searchResultsSummaryHOD = {
       filter: false,
       print: false,
       download: false,
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,

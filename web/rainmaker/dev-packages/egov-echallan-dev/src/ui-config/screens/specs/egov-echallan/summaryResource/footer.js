@@ -255,13 +255,7 @@ const callBackAddToStore = async (state, dispatch, isVerified) => {
       {
         labelName: intactDamageMessage,
         labelKey: ""
-      }, "warning"));
-    // dispatch(toggleSnackbar(true,
-    //   {
-    //     labelName: "Intact quantity & Damage quantity should be equal to Seized quantity at items " + finalcommaseperatedItem,
-    //     labelKey: ""
-    //   },
-    //   "warning"));
+      }, "warning"));    
   } else if (isdamageqtyavailable) {
     showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
     set(state,

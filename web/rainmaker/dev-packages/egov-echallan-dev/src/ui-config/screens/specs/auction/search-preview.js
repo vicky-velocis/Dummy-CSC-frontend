@@ -24,7 +24,7 @@ import { getSearchResultsView, fetchStoreItemHODMasterChallanData, fetchauctionH
 import { setEncroachmentType, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { AuctionGridHistoryDetails } from "./auctionHistory/serachResultGrid"
 import { searchResultApiResponseViewHistory } from "./searchResource/searchResultApiResponse"
-import { getTextToLocalMapping, checkForRole, fetchRoleCode, getMdmsEncroachmentSectorData } from "../utils";
+import { getTextToLocalMapping, checkForRole, fetchRoleCode, getMdmsEncroachmentSectorData, truncData } from "../utils";
 import { showHideAdhocPopupAuction } from "../utils/index";
 import {titlebarfooter} from "./footer/footer";
 
@@ -180,7 +180,7 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
         if (item['violationItemUuid'] === element['violationItemUuid']) {
           let defectqty = parseInt(item['quantity']) - parseInt(item['auctionedQuantity']);
 
-          temp[0] = item['itemName'];
+          temp[0] = truncData(item['itemName'],25);
           temp[1] = element['quantity'];
           temp[2] = element['remark'];
           temp[3] = item['quantity'];
@@ -234,7 +234,7 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
               const seizedelement = SeizedItemDetailList[index];
               if (storeelement.violationItemUuid === seizedelement.violationItemUuid) {
                 let temp = [];
-                temp[0] = storeelement['itemName'];
+                temp[0] = truncData(storeelement['itemName'],25);
                 temp[1] = seizedelement['quantity'].toString();
                 temp[2] = storeelement['quantity'].toString();
                 temp[3] = auctionelement['auctionDate'] === null ? '' : auctionelement['auctionDate'];

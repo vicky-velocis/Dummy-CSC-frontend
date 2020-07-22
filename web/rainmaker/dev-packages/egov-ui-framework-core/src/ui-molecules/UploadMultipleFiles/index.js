@@ -44,6 +44,7 @@ class UploadMultipleFiles extends Component {
         documents.push({
           fileName: file.name,
           fileStoreId,
+          fileSize: file.size,
           documentType: `Document - ${documents && documents.length + 1}`
         });
       }
@@ -83,7 +84,8 @@ class UploadMultipleFiles extends Component {
             style: { marginLeft: 0, marginTop: 10 }
           }}
           handleFileUpload={e =>
-            handleFileUpload(e, this.handleDocument, this.props)
+            {
+            handleFileUpload(e, this.handleDocument, this.props)}
           }
           inputProps={{ multiple: true, ...this.props.inputProps }}
           classes={this.props.classes}

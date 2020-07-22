@@ -247,9 +247,9 @@ class UploadExcelFile extends React.Component {
       <form onSubmit={this.onFormSubmit}>
         <div>
         <div
-            className="col-md-7"></div>
+            className="col-md-6"></div>
           <div
-            className="col-md-3 col-sm-10 col-xs-12">
+            className="col-md-4 col-sm-10 col-xs-12">
             <input
               type="file"
               accept=".xlsx,.xls"
@@ -257,7 +257,9 @@ class UploadExcelFile extends React.Component {
               style={{ 
                 margin: "20px 0px",
                 borderRadius: "2px",
-                minWidth: "250px",
+                minWidth: "200px",
+                maxWidth: "250px",
+                wordBreak:"break-all",
                 // height: "50px",
                 // float: "right"
                 

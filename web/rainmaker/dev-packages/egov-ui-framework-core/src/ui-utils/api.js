@@ -1,6 +1,6 @@
 import axios from "axios";
 import { fetchFromLocalStorage, addQueryArg, getDateInEpoch } from "./commons";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../ui-redux/store";
 import {
   getAccessToken,
@@ -9,7 +9,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL:window.location.origin,   
+  baseURL: window.location.origin,
   headers: {
     "Content-Type": "application/json"
   }
@@ -139,7 +139,7 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
       : getTenantId().split(".")[0]
     : "";
   const uploadInstance = axios.create({
-    baseURL:window.location.origin,   
+    baseURL: window.location.origin,
     headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -165,15 +165,8 @@ export const uploadFile = async (endPoint, module, file, ulbLevel) => {
     }
   } catch (error) {
     store.dispatch(toggleSpinner());
-    if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-        {
-    var msg=`File size exceed the limit`
-    store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
-        }
-        else{
-          alert("File size exceed the limit");
-
-        }
-    //throw new Error(error);
+      let FileExceedMessage = "File size exceeded the limit in service";
+      store.dispatch(toggleSnackbar(true, { labelName: FileExceedMessage }, "warning"));
+      alert(FileExceedMessage); 
   }
 };
