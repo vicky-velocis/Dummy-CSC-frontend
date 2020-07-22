@@ -34,7 +34,7 @@ const style = {
     display: "flex",
     minHeight: "106px",
     justifyContent: "center",
-    alignItems: "center"
+    // alignItems: "center"
   }
 };
 
