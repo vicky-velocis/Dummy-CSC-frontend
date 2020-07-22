@@ -121,8 +121,44 @@ const phoneNumberField = {
   jsonPath: "searchScreen.phone"
 }
 
+const duplicateCopyPhoneNumberField = {
+  label: {
+      labelName: "Mobile No.",
+      labelKey: "RP_MOBILE_NO_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Mobile No.",
+      labelKey: "RP_MOBILE_NO_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  iconObj: {
+    label: "+91 |",
+    position: "start"
+  },
+  required: false,
+  pattern: getPattern("MobileNo"),
+  jsonPath: "searchScreen.applicantMobNo"
+}
+
+
+
 const applicantMobileNumberField = {
   ...phoneNumberField,
+  label: {
+    labelName: "Applicant Mobile No.",
+    labelKey: "RP_APPLICANT_MOBILE_NO_LABEL"
+},
+placeholder: {
+    labelName: "Enter Applicant Mobile No.",
+    labelKey: "RP_APPLICANT_MOBILE_NO_PLACEHOLDER"
+},
+}
+
+const duplicateCopyApplicantMobileNumberField = {
+  ...duplicateCopyPhoneNumberField,
   label: {
     labelName: "Applicant Mobile No.",
     labelKey: "RP_APPLICANT_MOBILE_NO_LABEL"
@@ -268,12 +304,44 @@ const commonSearchForm = {
   })
 }
 
+const duplicateCopySearchForm = {
+  subParagraph: getCommonParagraph({
+    labelName: "Please provide atleast one parameter to search Application",
+    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_APPLICATION_LABEL"
+  }),
+  applicationNoContainer: getCommonContainer({
+    applicationNo: getTextField(applicationNoField),
+    transitNumber: getTextField(transitNumberField),
+  }),
+  statusContainer: getCommonContainer({
+    mobileNo: getTextField(duplicateCopyApplicantMobileNumberField),
+    status: getSelectField(ownershipStatusField)
+  }),
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer(
+      {...buttonItem, searchButton: {...buttonItem.searchButton, 
+        onClickDefination: {
+          action: "condition",
+          callBack: searchTransferProperties
+        }
+      }, lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  })
+}
+
 export const ownerShipTransferApplication = getCommonCard(
   commonSearchForm
 )
 
 export const searchDuplicateCopyApplication = getCommonCard(
-  {...commonSearchForm,
+  {...duplicateCopySearchForm,
     button: getCommonContainer({
       buttonContainer: getCommonContainer(
         {...buttonItem, searchButton: {...buttonItem.searchButton, 
