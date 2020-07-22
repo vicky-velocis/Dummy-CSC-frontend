@@ -81,7 +81,8 @@ const fieldConfig = {
     placeholder: {
       labelName: "Enter mortgage amount",
       labelKey: "WF_MORTAGE_AMOUNT"
-    }
+    },
+    required: true,
   },
   sanctionLetterNo:{
     label: {
@@ -91,7 +92,8 @@ const fieldConfig = {
     placeholder: {
       labelName: "Enter Sanction letter number",
       labelKey: "WF_SANCTION_LETTER_PLACEHOLDER"
-    }
+    },
+    required: true,
   },
   mortageEndDate:{
     datepicker: true,
@@ -311,6 +313,7 @@ class ActionDialog extends React.Component {
                     <Grid item sm="12">
                       <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
+                      required={true}  
                       label= {fieldConfig.nameOfTheBank.label}
                       onChange={e =>
                         handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].bankName` , e.target.value)
@@ -320,6 +323,7 @@ class ActionDialog extends React.Component {
                     />
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
+                      required={true}
                       label= {fieldConfig.mortageAmount.label}
                       onChange={e =>
                         handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageAmount` , e.target.value)
@@ -328,6 +332,7 @@ class ActionDialog extends React.Component {
                       placeholder={fieldConfig.mortageAmount.placeholder }
                     />
                       <TextFieldContainer
+                      required={true}
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.sanctionLetterNo.label}
                       onChange={e =>
@@ -337,8 +342,9 @@ class ActionDialog extends React.Component {
                       placeholder={fieldConfig.sanctionLetterNo.placeholder }
                     />
                     <TextFieldContainer
+                      required={true}
                        type="date"
-                       defaultValue="2017-05-24"
+                       defaultValue={new Date()}
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.sanctioningDate.label}
                        onChange={e =>
@@ -348,7 +354,8 @@ class ActionDialog extends React.Component {
                        />
                         <TextFieldContainer
                        type="date"
-                       defaultValue="2017-05-24"
+                       required={true}
+                       defaultValue={new Date()}
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.mortageEndDate.label}
                        onChange={e =>
