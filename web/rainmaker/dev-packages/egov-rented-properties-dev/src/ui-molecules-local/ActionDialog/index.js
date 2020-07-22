@@ -61,7 +61,61 @@ const fieldConfig = {
       labelName: "Enter Publication Charges",
       labelKey: "WF_PUBLICATION_CHARGES_PLACEHOLDER"
     }
+  },
+  nameOfTheBank:{
+    label: {
+      labelName: "Name of the bank (Text field)",
+      labelKey: "WF_BANK_NAME"
+    },
+    placeholder: {
+      labelName: "Enter Bank Name",
+      labelKey: "WF_BANK_NAME_PLACEHOLDER"
+    }
+  },
+  mortageAmount:{
+    label: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    }
+  },
+  mortageAmount:{
+    label: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    }
+  },
+  sanctionLetterNo:{
+    label: {
+      labelName: "Sanction letter number",
+      labelKey: "WF_SANCTION_LETTER_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Sanction letter number",
+      labelKey: "WF_SANCTION_LETTER_PLACEHOLDER"
+    }
+  },
+  mortageEndDate:{
+    label: {
+      labelName: "Mortgage end date ",
+      labelKey: "WF_MORTAGAGEEND_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Mortgage end date",
+      labelKey: "WF_MORTAGAGEEND_DATE_PLACEHOLDER"
+    }
   }
+
+ 
+  
+  
 };
 
 class ActionDialog extends React.Component {
@@ -105,7 +159,7 @@ class ActionDialog extends React.Component {
     }
   };
 
-  render() {  
+  render() { 
     let {
       open,
       onClose,
@@ -246,6 +300,20 @@ class ActionDialog extends React.Component {
                       }
                       jsonPath={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge`}
                       placeholder={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
+                    />
+                  </Grid>
+                  )}
+
+                {moduleName === "PermissionToMortgage" && (duplicateCopyApplicationState === "PENDINGGRANTDETAIL" ) && (
+                    <Grid item sm="12">
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.nameOfTheBank.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      placeholder={fieldConfig.nameOfTheBank.placeholder }
                     />
                   </Grid>
                   )}
