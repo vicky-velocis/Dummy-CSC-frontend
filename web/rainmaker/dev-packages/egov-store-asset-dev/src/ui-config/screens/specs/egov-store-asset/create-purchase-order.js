@@ -14,9 +14,9 @@ import {
   import get from "lodash/get";
   import map from "lodash/map";
   import { httpRequest } from "../../../../ui-utils";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getSearchResults } from "../../../../ui-utils/commons";
-  
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   export const stepsData = [
     { labelName: "Purchase Order", labelKey: "STORE_PO_HEADER" },
     { labelName: "Tender/Quotation/Rate Contract Detail",  labelKey: "STORE_PO_RC_DETAIL_HEADER"},
@@ -182,7 +182,12 @@ import {
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
-
+      let indentNumber="";
+      indentNumber = getQueryArg(window.location.href, "indentNumber");
+      if(indentNumber){     
+          dispatch(prepareFinalObject("purchaseOrders[0].purchaseType", "Indent"));   
+          dispatch(prepareFinalObject("purchaseOrders[0].indentNumbers", [indentNumber]));
+      }
       return action;
     },
   

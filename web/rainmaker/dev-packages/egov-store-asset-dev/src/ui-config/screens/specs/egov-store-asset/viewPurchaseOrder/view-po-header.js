@@ -7,12 +7,16 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+const indentNumber = getQueryArg(window.location.href, "indentNumber");
 const gotoCreatePage = (state, dispatch) => {
-  const createUrl = `/egov-store-asset/create-purchase-order?step=0`
+  let createUrl="";
+  if(indentNumber)
+   createUrl = `/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}&step=0`;
+   else
+   createUrl = `/egov-store-asset/create-purchase-order?step=0`;
   dispatch(setRoute(createUrl));
 };
-
 
 export const getPurchaseOrderHeaderView = (isReview = true) => {
   return getCommonGrayCard({
@@ -65,6 +69,13 @@ export const getPurchaseOrderHeaderView = (isReview = true) => {
       }
     },
     viewOne: getCommonContainer({
+      poType: getLabelWithValue(
+        {
+          labelName: "Purchase Type",
+          labelKey: "STORE_PURCHASE_ORDER_TYPE"
+        },
+        { jsonPath: "purchaseOrders[0].purchaseType" }
+      ),
       storeName: getLabelWithValue(
         {
           labelName: "Store Name",

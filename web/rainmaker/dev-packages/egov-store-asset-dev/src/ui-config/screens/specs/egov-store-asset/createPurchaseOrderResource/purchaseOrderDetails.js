@@ -13,7 +13,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 const purchaseOrderDetailsCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -45,7 +45,8 @@ const purchaseOrderDetailsCard = {
                  const index= action.componentJsonpath.indexOf("items[");
                  if(index !== -1){
                   const itemIndex = action.componentJsonpath.charAt(index + 6);
-                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.name`, matObj[0].name));          
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.name`, matObj[0].name)); 
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.description`, matObj[0].description));          
                  }
                 }
               }
@@ -219,40 +220,36 @@ const purchaseOrderDetailsCard = {
         }
       )
     }),
-    // onMultiItemAdd: (state, muliItemContent) => {
-    //   let preparedFinalObject = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject",
-    //     {}
-    //   );
-    //   let cardIndex = get(muliItemContent, "assignFromDate.index");
-    //   let cardId = get(
-    //     preparedFinalObject,
-    //     `Employee[0].assignments[${cardIndex}].id`
-    //   );
-    //   if (cardId) {
-    //     let isCurrentAssignment = get(
-    //       preparedFinalObject,
-    //       `Employee[0].assignments[${cardIndex}].isCurrentAssignment`
-    //     );
-    //     Object.keys(muliItemContent).forEach(key => {
-    //       if (isCurrentAssignment && key === "currentAssignment") {
-    //         set(muliItemContent[key], "props.disabled", false);
-    //       } else {
-    //         set(muliItemContent[key], "props.disabled", true);
-    //       }
-    //     });
-    //   } else {
-    //     Object.keys(muliItemContent).forEach(key => {
-    //       if (key === "dummyDiv") {
-    //         set(muliItemContent[key], "props.disabled", true);
-    //       } else {
-    //         set(muliItemContent[key], "props.disabled", false);
-    //       }
-    //     });
-    //   }
-    //   return muliItemContent;
-    // },
+    onMultiItemAdd: (state, muliItemContent) => {
+      let indentNumber="";
+       indentNumber = getQueryArg(window.location.href, "indentNumber");
+      if(indentNumber){
+        
+        let preparedFinalObject = get(
+          state,
+          "screenConfiguration.preparedFinalObject",
+          {}
+        );
+        let cardIndex = get(muliItemContent, "materialName.index");
+        if(preparedFinalObject){
+          set(preparedFinalObject.purchaseOrders[0],`purchaseOrderDetails[${cardIndex}].indentNumber` , indentNumber);
+        }
+     
+
+        Object.keys(muliItemContent).forEach(key => {
+          if ( key === "indentNumber") {
+            set(muliItemContent[key], "props.disabled", true);
+            set(muliItemContent[key], "props.value", indentNumber);
+          } else {
+            set(muliItemContent[key], "props.disabled", false);
+          }
+        });
+
+
+      }
+        //console.log("click on add");
+      return muliItemContent;
+    },
     items: [],
     addItemLabel: {
       labelName: "ADD",

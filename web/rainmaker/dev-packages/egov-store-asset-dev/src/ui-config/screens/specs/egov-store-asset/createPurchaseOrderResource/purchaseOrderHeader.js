@@ -10,6 +10,10 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+
+let indentNumber="";
+indentNumber = getQueryArg(window.location.href, "indentNumber");
 export const purchaseOrderHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -30,10 +34,12 @@ export const purchaseOrderHeader = getCommonCard({
           labelName: "Select Purchase Type",
           labelKey: "STORE_PURCHASE_ORDER_TYPE_SELECT"
         },
+       
         required: true,
         jsonPath: "purchaseOrders[0].purchaseType",
        // sourceJsonPath: "searchMaster.storeNames",
         props: {
+          disabled : indentNumber ? true : false,
           className: "hr-generic-selectfield",
           optionValue: "value",
           optionLabel: "label",
@@ -75,18 +81,20 @@ export const purchaseOrderHeader = getCommonCard({
             const  materialNames = response.materials.map(material => {
                 const name = material.name;
                 const code = material.code;
-                return{ name, code }
+                const description = material.description;
+                return{ name, code,description }
             })
                 dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
          }
           
         });   
+        if(state.screenConfiguration.preparedFinalObject.searchMaster){
             const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
             const storebj =  storeNames.filter(ele => ele.code === action.value);
             if(storebj){
               dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name));         
             }
-        
+          }
         }
       }
     },
@@ -145,7 +153,7 @@ export const purchaseOrderHeader = getCommonCard({
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         if(action.value){
-        const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "materialCode", value: "MAT02"}];
+        const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "suppliers", value: action.value}];
        
         getSearchResults(queryObject, dispatch,"priceList")
         .then(response =>{
@@ -160,12 +168,13 @@ export const purchaseOrderHeader = getCommonCard({
             dispatch(prepareFinalObject("searchMaster.priceList", response.priceLists));  
                 dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));          
            }  
-           
+           if(state.screenConfiguration.preparedFinalObject.searchMaster){
            const {supplierName} = state.screenConfiguration.preparedFinalObject.searchMaster;
            const supplierObj =  supplierName.filter(ele => ele.code === action.value);
            if(supplierObj){
              dispatch(prepareFinalObject("purchaseOrders[0].supplier.name", supplierObj[0].name));         
            }
+          }
         });     
        }
      }

@@ -10,10 +10,15 @@ import {
   ifUserRoleExists,
   validateFields
 } from "../../utils";
-//import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const moveToReview = dispatch => {
-  const reviewUrl = "/egov-store-asset/review-purchase-order"
+  let indentNumber="",reviewUrl="";
+  indentNumber = getQueryArg(window.location.href, "indentNumber");
+  if(indentNumber)
+    reviewUrl = `/egov-store-asset/review-purchase-order?indentNumber=${indentNumber}`;
+  else
+  reviewUrl = "/egov-store-asset/review-purchase-order";
   dispatch(setRoute(reviewUrl));
 };
 

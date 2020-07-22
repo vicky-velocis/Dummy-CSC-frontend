@@ -6,9 +6,14 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+const indentNumber = getQueryArg(window.location.href, "indentNumber");
 const gotoCreatePage = (state, dispatch) => {
-  const createUrl = `/egov-store-asset/create-purchase-order?step=2`
+  let createUrl="";
+  if(indentNumber)
+   createUrl = `/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}&step=2`;
+   else
+   createUrl = `/egov-store-asset/create-purchase-order?step=2`;
   dispatch(setRoute(createUrl));
 };
 
