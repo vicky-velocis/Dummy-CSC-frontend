@@ -157,7 +157,7 @@ class ActionDialog extends React.Component {
       case "PAY":
         return "Pay";
       case "SENDBACK":
-        return "Send Back";
+        return "Send Back"; 
       default:
         return label;
     }
@@ -175,6 +175,7 @@ class ActionDialog extends React.Component {
       state
     } = this.props;
     console.log(dataPath)
+    console.log(this.props)
     const {
       buttonLabel,
       showEmployeeList,
