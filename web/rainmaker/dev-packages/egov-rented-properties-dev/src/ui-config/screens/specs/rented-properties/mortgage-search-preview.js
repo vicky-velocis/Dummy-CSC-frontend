@@ -118,7 +118,7 @@ const mortgagePreviewDetails = {
                   props: {
                     dataPath: "MortgageApplications",
                     moduleName: "PermissionToMortgage",
-                    updateUrl: "//csp/mortgage/_update"
+                    updateUrl: "/csp/mortgage/_update"
                   }
                 },
                 mortgageReviewDetails

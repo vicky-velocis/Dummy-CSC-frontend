@@ -94,6 +94,7 @@ const fieldConfig = {
     }
   },
   mortageEndDate:{
+    datepicker: true,
     label: {
       labelName: "Mortgage end date ",
       labelKey: "WF_MORTAGAGEEND_DATE_LABEL"
@@ -171,6 +172,7 @@ class ActionDialog extends React.Component {
       dataPath,
       state
     } = this.props;
+    console.log(dataPath)
     const {
       buttonLabel,
       showEmployeeList,
@@ -311,27 +313,27 @@ class ActionDialog extends React.Component {
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.nameOfTheBank.label}
                       onChange={e =>
-                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].bankName` , e.target.value)
                       }
-                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].bankName`}
                       placeholder={fieldConfig.nameOfTheBank.placeholder }
                     />
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.mortageAmount.label}
                       onChange={e =>
-                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageAmount` , e.target.value)
                       }
-                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageAmount`}
                       placeholder={fieldConfig.mortageAmount.placeholder }
                     />
                       <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.sanctionLetterNo.label}
                       onChange={e =>
-                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionLetterNumber` , e.target.value)
                       }
-                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionLetterNumber`}
                       placeholder={fieldConfig.sanctionLetterNo.placeholder }
                     />
 
@@ -339,18 +341,18 @@ class ActionDialog extends React.Component {
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.mortageEndDate.label}
                       onChange={e =>
-                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
                       }
-                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
                       placeholder={fieldConfig.mortageEndDate.placeholder }
                     />
                        <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
                       label= {fieldConfig.sanctioningDate.label}
                       onChange={e =>
-                        handleFieldChange( `${dataPath}.ownerDetails.dueAmount` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , e.target.value)
                       }
-                      jsonPath={`${dataPath}.ownerDetails.dueAmount`}
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate`}
                       placeholder={fieldConfig.sanctioningDate.placeholder }
                     />
                      
