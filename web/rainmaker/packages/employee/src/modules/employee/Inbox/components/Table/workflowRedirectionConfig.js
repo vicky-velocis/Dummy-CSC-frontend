@@ -6,6 +6,16 @@ export const getWFConfig = (module,businessService) => {
         INITIATED: "/tradelicence/apply",
         DEFAULT: "/tradelicence/search-preview",
       };
+    case "WS-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
+    case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
     case "FIRENOC":
       return {
         INITIATED: "/fire-noc/apply",

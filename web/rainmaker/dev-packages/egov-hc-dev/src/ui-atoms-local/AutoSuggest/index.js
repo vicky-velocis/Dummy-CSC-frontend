@@ -50,11 +50,14 @@ const styles = theme => ({
     color: "rgba(162, 162, 162, 0.77)"
   },
   ac_paper: {
+    width: "80%",
     position: "absolute",
-    zIndex: 1105,
-    marginTop: theme.spacing.unit,
-    left: 0,
-    right: 0
+    zIndex: 9999,
+    // position: "absolute",
+    // zIndex: 1105,
+    // marginTop: theme.spacing.unit,
+    // left: 0,
+    // right: 0
   },
   ac_divider: {
     height: theme.spacing.unit * 2
@@ -166,7 +169,7 @@ function Menu(props) {
       {...props.innerProps}
       style={{ overflowX: "scroll" }}
     >
-      <div style={{ width: 800 }}>{props.children}</div>
+      <div style={{ minWidth: 400 }}>{props.children}</div>
     </Paper>
   );
 }

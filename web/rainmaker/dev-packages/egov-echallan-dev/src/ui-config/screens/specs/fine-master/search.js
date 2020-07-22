@@ -3,7 +3,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { adhocPopup } from "./popup/addpopup"
 import { serachResultGrid, disabledFieldsAddEdit } from "./searchResource/serachResultGrid";
 import { searchResultApiResponse } from './searchResource/searchResultApiResponse'
-import { setapplicationType, getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils/";
+import { setapplicationType, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils/";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject, toggleSnackbar, toggleSpinner
@@ -11,7 +11,7 @@ import {
 import store from "ui-redux/store";
 import { showHideAdhocPopup, clearlocalstorageAppDetails, checkForRole } from "../utils";
 import get from "lodash/get";
-import {footer} from "./searchResource/footer";
+import { footer } from "./searchResource/footer";
 import { fetchMdmsData } from "../../../../ui-utils/commons";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
@@ -21,7 +21,7 @@ enableButton = hasButton && hasButton === "false" ? false : true;
 const pageResetAndChange = (state, dispatch, screenKey) => {
   let userInfo = JSON.parse(getUserInfo());
   const roles = get(userInfo, "roles");
-if(checkForRole(roles,'challanEAO')){
+  if (checkForRole(roles, 'challanEAO')) {
     isVisibility(true)
   }
 
@@ -35,16 +35,16 @@ if(checkForRole(roles,'challanEAO')){
   disabledFieldsAddEdit(false);
   showHideAdhocPopup(state, dispatch, screenKey)
 };
-const isVisibility=(isVisible)=>{ 
-  if(isVisible){
-   store.dispatch(
-          handleField(
-            "search",
-            "components.adhocDialog.children.popup.children.header.children.div1.children.div",
-            "props.visible",
-            isVisible
-          )
-      ),
+const isVisibility = (isVisible) => {
+  if (isVisible) {
+    store.dispatch(
+      handleField(
+        "search",
+        "components.adhocDialog.children.popup.children.header.children.div1.children.div",
+        "props.visible",
+        isVisible
+      )
+    ),
       store.dispatch(
         handleField(
           "search",
@@ -53,43 +53,12 @@ const isVisibility=(isVisible)=>{
           false
         )
       )
-    }
-  };
+  }
+};
 const header = getCommonHeader({
   labelName: "Fine Master",
   labelKey: "EC_FINE_MASTER_HEADER"
 });
-
-const getMdmsData = async (action, state, dispatch) => {
-  
-  try {
-    let tenantId =  getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          {
-            moduleName: "egec",
-            masterDetails: [
-              {
-                name: "NumberOfViolation"
-              },
-              {
-                name: "EncroachmentType"
-              },
-              {
-                name: "VehicleType"
-              }
-            ]
-          }
-        ]
-      }
-    };
-    await fetchMdmsData(state, dispatch, mdmsBody,false);
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const FineMasterSearchAndResult = {
   uiFramework: "material-ui",
@@ -97,7 +66,6 @@ const FineMasterSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     clearlocalstorageAppDetails(state);
     setapplicationType('Fine-Master');
-    getMdmsData(action, state, dispatch);
     searchResultApiResponse(action, state, dispatch);
     return action;
   },
@@ -126,7 +94,7 @@ const FineMasterSearchAndResult = {
         breakAfterSearch: getBreak(),
         serachResultGrid,
         breakAfterSearch: getBreak(),
-        footer        
+        footer
       }
     },
     adhocDialog: {

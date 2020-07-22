@@ -1,17 +1,108 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
 import './index.css'
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels,
+} from "egov-ui-framework/ui-utils/commons";
+const localisationLabels = getTransformedLocalStorgaeLabels();
+export const getTextToLocalMapping = (label) => {
+  switch (label) {
+    case "Consumer No":
+      return getLocaleLabels(
+        "Consumer No",
+        "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        localisationLabels
+      );
+    case "Application No":
+      return getLocaleLabels(
+        "Application No",
+        "WS_COMMON_TABLE_COL_APP_NO_LABEL",
+        localisationLabels
+      );
+    case "Application Type":
+      return getLocaleLabels(
+        "Application Type",
+        "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+        localisationLabels
+      );
+    case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "WS_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        localisationLabels
+      );
+    case "Application Status":
+      return getLocaleLabels(
+        "Application Status",
+        "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL",
+        localisationLabels
+      );
+    case "Address":
+      return getLocaleLabels(
+        "Address",
+        "WS_COMMON_TABLE_COL_ADDRESS",
+        localisationLabels
+      );
+    case "tenantId":
+      return getLocaleLabels(
+        "tenantId",
+        "WS_COMMON_TABLE_COL_TENANTID_LABEL",
+        localisationLabels
+      );
+    case "service":
+      return getLocaleLabels(
+        "service",
+        "WS_COMMON_TABLE_COL_SERVICE_LABEL",
+        localisationLabels
+      );
+    case "connectionType":
+      return getLocaleLabels(
+        "connectionType",
+        "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
+        localisationLabels
+      );
+      case "Status":
+        return getLocaleLabels(
+          "Status",
+          "WS_COMMON_TABLE_COL_STATUS_LABEL",
+          localisationLabels
+        );
+      case "Due":
+        return getLocaleLabels(
+          "Due",
+          "WS_COMMON_TABLE_COL_DUE_LABEL",
+          localisationLabels
+        );
+        case "Due Date":
+          return getLocaleLabels(
+            "Due Date",
+            "WS_COMMON_TABLE_COL_DUE_DATE_LABEL",
+            localisationLabels
+          );
+        case "Action":
+          return getLocaleLabels(
+            "Action",
+            "WS_COMMON_TABLE_COL_ACTION_LABEL",
+            localisationLabels
+          );
+    case "Search Results for Water & Sewerage Application":
+      return getLocaleLabels(
+        "Search Results for Water & Sewerage Application",
+        "WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+  }
+};
 
 export const searchApplicationResults = {
   uiFramework: "custom-molecules",
-  moduleName: "egov-wns",
   componentPath: "Table",
   visible: false,
   props: {
     columns: [
       {
-        name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        name: getTextToLocalMapping("Consumer No"),
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -30,8 +121,7 @@ export const searchApplicationResults = {
         }
       },
       {
-        name: "Application No",
-        labelKey: "WS_COMMON_TABLE_COL_APP_NO_LABEL", 
+        name: getTextToLocalMapping("Application No"),
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -50,8 +140,7 @@ export const searchApplicationResults = {
         }
       },
       {
-        name: "Application Type",
-        labelKey: "WS_COMMON_TABLE_COL_APP_TYPE_LABEL",
+        name: getTextToLocalMapping("Application Type"),
         options: {
           filter: false,
           customBodyRender: value => (
@@ -61,32 +150,29 @@ export const searchApplicationResults = {
           )
         }
       },
-      {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Application Status",labelKey: "WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL" },
-      {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Application Status"),
+      getTextToLocalMapping("Address"),
       {
-        name: "tenantId",
-        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
+        name:   getTextToLocalMapping("tenantId"),
         options: {
           display: false
         }
       },
       {
-        name: "service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
+        name:  getTextToLocalMapping("service"), 
         options: {
           display: false
         }
       },
       {
-        name: "connectionType",
-        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
+        name:   getTextToLocalMapping("connectionType"),
         options: {
           display: false
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_APPLICATION_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Application"},
+    title: getTextToLocalMapping("Search Results for Water & Sewerage Application"),
     options: {
       filter: false,
       download: false,

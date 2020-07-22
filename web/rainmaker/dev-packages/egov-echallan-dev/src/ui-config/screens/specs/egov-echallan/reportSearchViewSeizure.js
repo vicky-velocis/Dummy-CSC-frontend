@@ -3,7 +3,7 @@ import { searchViewSeizureReport } from "./searchReportResource/serachResultGrid
 import { searchTextViewSeizureReport } from "./searchReportResource/searchTextViewSeizureReport"
 import { setapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils/";
 import { fetchMdmsData, fetchSIName } from "../../../../ui-utils/commons";
-import { resetAllFields } from "../utils";
+import { resetAllFields, getMdmsEncroachmentSectorData } from "../utils";
 import get from "lodash/get";
 
 const header = getCommonHeader({
@@ -27,34 +27,6 @@ const getSiNameDetails = async (action, state, dispatch) => {
 
 };
 
-const getMdmsData = async (action, state, dispatch) => {
-  try {
-    let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          {
-            moduleName: "egec",
-            masterDetails: [
-              {
-                name: "EncroachmentType"
-              },
-              {
-                name: "sector"
-              }
-            ]
-          }
-        ]
-      }
-    };
-
-    await fetchMdmsData(state, dispatch, mdmsBody, false);
-
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const VIEWSIZURESearchAndResult = {
   uiFramework: "material-ui",
@@ -69,7 +41,7 @@ const VIEWSIZURESearchAndResult = {
     );
     resetAllFields(children, dispatch, state, 'reportSearchViewSeizure');
     // Set MDMS Data
-    getMdmsData(action, state, dispatch).then(response => {
+    getMdmsEncroachmentSectorData(action, state, dispatch).then(response => {
       getSiNameDetails(action, state, dispatch);
     });
     return action;

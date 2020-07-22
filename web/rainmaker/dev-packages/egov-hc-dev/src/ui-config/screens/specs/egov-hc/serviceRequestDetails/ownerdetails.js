@@ -35,7 +35,7 @@ export const ownerdetails = getCommonCard({
          required:true,
          pattern:getPattern("HCOwnerName"),
         
-         errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
+         errorMessage:"ERR_INVALID_OWNER_NAME_FIELD_MSG",
          jsonPath:"SERVICEREQUEST.ownerName",
          props:{
           className:"applicant-details-error"
@@ -61,7 +61,7 @@ export const ownerdetails = getCommonCard({
         },
          required:true,
          pattern:getPattern("HCMobileNo"),
-         errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
+         errorMessage:"ERR_INVALID_CONTACT_NO_FIELD_MSG",
          jsonPath:"SERVICEREQUEST.contactNumber"
       })
     },
@@ -83,7 +83,7 @@ export const ownerdetails = getCommonCard({
           },
            required:true,
            pattern:getPattern("HCEmail"),
-           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+           errorMessage: "ERR_INVALID_EMAIL_FIELD_MSG",
            jsonPath:"SERVICEREQUEST.email"
         })
       },

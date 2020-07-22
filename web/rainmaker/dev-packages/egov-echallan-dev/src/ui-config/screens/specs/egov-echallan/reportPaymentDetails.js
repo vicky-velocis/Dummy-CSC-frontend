@@ -3,7 +3,7 @@ import { serachReportPaymentDetailGrid } from "./searchReportResource/serachResu
 import { searchTextPaymentDetailsreport } from "./searchReportResource/searchTextPaymentDetailsreport";
 import { setapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils/";
 import { fetchMdmsData } from "../../../../ui-utils/commons";
-import { resetAllFields } from "../utils";
+import { resetAllFields, getMdmsEncroachmentSectorData } from "../utils";
 import get from "lodash/get";
 
 const header = getCommonHeader({
@@ -11,33 +11,6 @@ const header = getCommonHeader({
   labelKey: "EC_PAYMENT_DETAIL_REPORT_HEADER"
 });
 
-const getMdmsData = async (action, state, dispatch) => {
-  try {
-    let tenantId = getTenantId().length > 2 ? getTenantId().split('.')[0] : getTenantId();
-    let mdmsBody = {
-      MdmsCriteria: {
-        tenantId: tenantId,
-        moduleDetails: [
-          {
-            moduleName: "egec",
-            masterDetails: [
-              {
-                name: "paymentStatus"
-              },
-              {
-                name : "sector"
-              }
-            ]
-          }
-        ]
-      }
-    };
-    await fetchMdmsData(state, dispatch, mdmsBody, false);
-
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const PAYMENTDETAILSearchAndResult = {
   uiFramework: "material-ui",
@@ -52,7 +25,7 @@ const PAYMENTDETAILSearchAndResult = {
   );
   resetAllFields(children, dispatch, state, 'reportPaymentDetails');
   
-    getMdmsData(action, state, dispatch);
+    getMdmsEncroachmentSectorData(action, state, dispatch);
 
     return action;
   },

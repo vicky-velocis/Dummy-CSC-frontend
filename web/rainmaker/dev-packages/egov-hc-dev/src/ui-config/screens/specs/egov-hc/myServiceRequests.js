@@ -2,14 +2,21 @@ import { getCommonCard, getCommonContainer, getCommonHeader, getDateField, getLa
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
+import "./index.css";
 import { fetchData, fetchDataForFilterFields, resetFields } from "./searchResource/citizenSearchFunctions";
-import { resetFieldsForEmployeeFilter } from "./searchResource/citizenSearchFunctions";
+
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const header = getCommonHeader(
   {
     labelName: "My Service Request",
     labelKey: "HC_MY_SERVICE_REQUEST_HEADER"
+  },
+  {
+    style : {
+      padding: 0
+    }
   },
   {
     classes: {
@@ -42,7 +49,7 @@ export const FieldsForFilterForm = getCommonCard({
 
         //  required:true,
         pattern: getPattern("BuildingStreet"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
         jsonPath: "myServiceRequests[0].servicerequestid"
       })
     },
@@ -62,6 +69,16 @@ export const FieldsForFilterForm = getCommonCard({
 
       jsonPath: "myServiceRequests[0].FromDate",
       sourceJsonPath: "myServiceRequests[0].FromDate",
+      afterFieldChange: (action, state, dispatch) => {
+        dispatch(
+          handleField(
+            "myServiceRequests",
+            "components.div.children.form.children.cardContent.children.masterContainer.children.ToDate",
+            "props.inputProps.min",
+            action.value
+          )
+        );
+                }
 
 
     }),
@@ -78,7 +95,11 @@ export const FieldsForFilterForm = getCommonCard({
         md: 4
       },
       pattern: getPattern("Date"),
-
+      props: {
+        inputProps: {
+          min: ''
+        }
+      },
 
       jsonPath: "myServiceRequests[0].ToDate",
       sourceJsonPath: "myServiceRequests[0].ToDate",
@@ -110,7 +131,7 @@ export const FieldsForFilterForm = getCommonCard({
       moduleName: "egov-hc",
       componentPath: "AutosuggestContainer",
       jsonPath: "myServiceRequests[0].servicetype",
-            required: true,
+      required: false,
             gridDefination: {
               xs: 12,
               sm: 4,
@@ -136,7 +157,7 @@ export const FieldsForFilterForm = getCommonCard({
     labelsFromLocalisation: false,
     suggestions: [],
     fullwidth: true,
-    required: true,
+    required: false,
     inputLabelProps: {
       shrink: true
     },
@@ -306,8 +327,27 @@ const screenConfig = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
+      props: {
+        className: "common-div-css",
+        id: "myServiceRequests"
+      },
       children: {
-        header: header,
+        // header: header,
+        headerDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+
+          children: {
+            header: {
+              // gridDefination: {
+              //   xs: 12,
+              //   sm: 6
+              // },
+              ...header
+            },
+            
+          }
+        },
         form: FieldsForFilterForm,
         applicationsCard: {
           uiFramework: "custom-molecules",
