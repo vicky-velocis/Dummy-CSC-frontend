@@ -336,27 +336,27 @@ class ActionDialog extends React.Component {
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionLetterNumber`}
                       placeholder={fieldConfig.sanctionLetterNo.placeholder }
                     />
-
                     <TextFieldContainer
-                      InputLabelProps={{ shrink: true }}
-                      label= {fieldConfig.mortageEndDate.label}
-                      onChange={e =>
-                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
-                      }
-                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
-                      placeholder={fieldConfig.mortageEndDate.placeholder }
-                    />
-                       <TextFieldContainer
-                      InputLabelProps={{ shrink: true }}
-                      label= {fieldConfig.sanctioningDate.label}
-                      onChange={e =>
+                       type="date"
+                       defaultValue="2017-05-24"
+                       InputLabelProps={{ shrink: true }}
+                       label= {fieldConfig.sanctioningDate.label}
+                       onChange={e =>
                         handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , e.target.value)
                       }
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate`}
-                      placeholder={fieldConfig.sanctioningDate.placeholder }
-                    />
-                     
-                  </Grid>
+                       />
+                        <TextFieldContainer
+                       type="date"
+                       defaultValue="2017-05-24"
+                       InputLabelProps={{ shrink: true }}
+                       label= {fieldConfig.mortageEndDate.label}
+                       onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
+                       />   
+                     </Grid>
                   )}
                   
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
