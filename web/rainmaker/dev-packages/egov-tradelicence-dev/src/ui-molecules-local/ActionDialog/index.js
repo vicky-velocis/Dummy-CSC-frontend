@@ -119,7 +119,7 @@ class ActionDialog extends React.Component {
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={false}
+        maxWidth="sm"
         style={{zIndex:2000}}
       >
         <DialogContent
@@ -168,7 +168,7 @@ class ActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "90%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={dropDownData}
