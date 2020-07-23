@@ -17,6 +17,11 @@ export const getWFConfig = (module,businessService) => {
           INITIATED: "/rented-properties/search-duplicate-copy-preview",
           DEFAULT: "/rented-properties/search-duplicate-copy-preview",
         };
+      } else if(businessService === "PermissionToMortgage") {
+        return {
+          INITIATED: "/rented-properties/mortgage-search-preview",
+          DEFAULT: "/rented-properties/mortgage-search-preview",
+        };
       } else {
         return {
           INITIATED: "/tradelicence/apply",
@@ -38,6 +43,11 @@ export const getWFConfig = (module,businessService) => {
       return {
         INITIATED: "/rented-properties/search-duplicate-copy-preview",
         DEFAULT: "/rented-properties/search-duplicate-copy-preview",
+      };
+    } else if(businessService === "PermissionToMortgage") {
+      return {
+        INITIATED: "/rented-properties/mortgage-search-preview",
+        DEFAULT: "/rented-properties/mortgage-search-preview",
       };
     }
     }

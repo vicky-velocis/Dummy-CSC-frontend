@@ -99,11 +99,11 @@ const duplicateReviewDetails = getCommonCard({
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
 
-        const showEstimate = status !== "INITIATED" && status !== "PENDINGCLVERIFICATION" && status !== "PENDINGJAVERIFICATION" && status !== "PENDINGSAVERIFICATION"
+        const showEstimate = status !== "DC_DRAFTED" && status !== "DC_PENDINGCLVERIFICATION" && status !== "DC_PENDINGJAVERIFICATION" && status !== "DC_PENDINGSAVERIFICATION"
         dispatch(
           handleField(
-              "ownership-search-preview",
-              "components.div.children.transferReviewDetails.children.cardContent.children.estimate",
+              "search-duplicate-copy-preview",
+              "components.div.children.duplicateReviewDetails.children.cardContent.children.estimate",
               "visible",
               showEstimate
           )

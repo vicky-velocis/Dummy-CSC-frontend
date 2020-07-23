@@ -61,7 +61,65 @@ const fieldConfig = {
       labelName: "Enter Publication Charges",
       labelKey: "WF_PUBLICATION_CHARGES_PLACEHOLDER"
     }
+  },
+  nameOfTheBank:{
+    label: {
+      labelName: "Name of the bank (Text field)",
+      labelKey: "WF_BANK_NAME"
+    },
+    placeholder: {
+      labelName: "Enter Bank Name",
+      labelKey: "WF_BANK_NAME_PLACEHOLDER"
+    },
+    required: true
+  },
+  mortageAmount:{
+    label: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    },
+    placeholder: {
+      labelName: "Enter mortgage amount",
+      labelKey: "WF_MORTAGE_AMOUNT"
+    },
+    required: true,
+  },
+  sanctionLetterNo:{
+    label: {
+      labelName: "Sanction letter number",
+      labelKey: "WF_SANCTION_LETTER_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Sanction letter number",
+      labelKey: "WF_SANCTION_LETTER_PLACEHOLDER"
+    },
+    required: true,
+  },
+  mortageEndDate:{
+    datepicker: true,
+    label: {
+      labelName: "Mortgage end date ",
+      labelKey: "WF_MORTAGAGEEND_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Mortgage end date",
+      labelKey: "WF_MORTAGAGEEND_DATE_PLACEHOLDER"
+    },
+    required: true
+  },
+  sanctioningDate:{
+    label: {
+      labelName: "Date of sanctioning",
+      labelKey: "WF_SANCTIONING_DATE_LABEL"
+    },
+    placeholder: {
+      labelName: "Enter Date of sanctioning",
+      labelKey: "WF_SANCTIONING_DATE_PLACEHOLDER"
+    },
+    required: true
   }
+  
+  
 };
 
 class ActionDialog extends React.Component {
@@ -99,13 +157,13 @@ class ActionDialog extends React.Component {
       case "PAY":
         return "Pay";
       case "SENDBACK":
-        return "Send Back";
+        return "Send Back"; 
       default:
         return label;
     }
   };
 
-  render() {  
+  render() { 
     let {
       open,
       onClose,
@@ -116,6 +174,8 @@ class ActionDialog extends React.Component {
       dataPath,
       state
     } = this.props;
+    console.log(dataPath)
+    console.log(this.props)
     const {
       buttonLabel,
       showEmployeeList,
@@ -222,33 +282,91 @@ class ActionDialog extends React.Component {
                     />
                   </Grid>
     
-                  {moduleName === "OwnershipTransferRP" && (applicationState === "PENDINGSAVERIFICATION" || applicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
+                  {moduleName === "OwnershipTransferRP" && (applicationState === "OT_PENDINGSAVERIFICATION" || applicationState === "OT_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
-                      label={applicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
+                      label={applicationState === "OT_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
-                        handleFieldChange(applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge` , e.target.value)
+                        handleFieldChange(applicationState === "OT_PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge` , e.target.value)
                       }
-                      jsonPath={applicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
-                      placeholder={applicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
+                      jsonPath={applicationState === "OT_PENDINGSAVERIFICATION" ? `${dataPath}.ownerDetails.dueAmount` : `${dataPath}.ownerDetails.aproCharge`}
+                      placeholder={applicationState === "OT_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
                     />
                   </Grid>
                   )}
 
-                  {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
+                  {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "DC_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
-                      label={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
+                      label={duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
-                        handleFieldChange(duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge` , e.target.value)
+                        handleFieldChange(duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge` , e.target.value)
                       }
-                      jsonPath={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge`}
-                      placeholder={duplicateCopyApplicationState === "PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
+                      jsonPath={duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? `${dataPath}.applicant[0].feeAmount` : `${dataPath}.applicant[0].aproCharge`}
+                      placeholder={duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.placeholder : fieldConfig.publicationCharges.placeholder}
                     />
                   </Grid>
                   )}
+
+                {moduleName === "PermissionToMortgage" && (duplicateCopyApplicationState === "MG_PENDINGGRANTDETAIL" ) && (
+                    <Grid item sm="12">
+                      <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      required={true}  
+                      label= {fieldConfig.nameOfTheBank.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].bankName` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].bankName`}
+                      placeholder={fieldConfig.nameOfTheBank.placeholder }
+                    />
+                    <TextFieldContainer
+                      InputLabelProps={{ shrink: true }}
+                      required={true}
+                      label= {fieldConfig.mortageAmount.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageAmount` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageAmount`}
+                      placeholder={fieldConfig.mortageAmount.placeholder }
+                    />
+                      <TextFieldContainer
+                      required={true}
+                      InputLabelProps={{ shrink: true }}
+                      label= {fieldConfig.sanctionLetterNo.label}
+                      onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionLetterNumber` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionLetterNumber`}
+                      placeholder={fieldConfig.sanctionLetterNo.placeholder }
+                    />
+                    <TextFieldContainer
+                      required={true}
+                       type="date"
+                       defaultValue={new Date()}
+                       InputLabelProps={{ shrink: true }}
+                       label= {fieldConfig.sanctioningDate.label}
+                       onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate`}
+                       />
+                        <TextFieldContainer
+                       type="date"
+                       required={true}
+                       defaultValue={new Date()}
+                       InputLabelProps={{ shrink: true }}
+                       label= {fieldConfig.mortageEndDate.label}
+                       onChange={e =>
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
+                      }
+                      jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
+                       />   
+                     </Grid>
+                  )}
+                  
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}

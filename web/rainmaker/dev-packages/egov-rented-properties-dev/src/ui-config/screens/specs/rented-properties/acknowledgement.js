@@ -115,9 +115,12 @@ const getAcknowledgementCard = (
       || type === "PERMISSIONTOMORTGAGE" ? {
         labelName: "Application Number",
         labelKey: "RP_APPLICATION_NUMBER_LABEL"
-      } : {
+      } : !!transitNumber ? {
         labelName: "Transit Number",
         labelKey: "RP_SITE_PLOT_LABEL"
+      } : {
+        labelName: "Application Number",
+        labelKey: "RP_APPLICATION_NUMBER_LABEL"
       }
 
       return {
@@ -130,8 +133,8 @@ const getAcknowledgementCard = (
           componentPath: "Div",
           children: {
             card: acknowledgementCard({
-              icon: "done",
-              backgroundColor: "#39CB74",
+              icon: purpose ==="reject" ? "close" : "done",
+              backgroundColor: purpose ==="reject" ? "#E54D42" : "#39CB74",
               header,
             //   body: {
             //     labelName:

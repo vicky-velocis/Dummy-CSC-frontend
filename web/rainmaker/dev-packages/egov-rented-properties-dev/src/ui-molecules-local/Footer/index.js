@@ -77,21 +77,22 @@ class Footer extends React.Component {
       let assignee = [];
       switch(moduleName) {
         case "MasterRP": {
-          if(!!action && dataPath[0].masterDataState !== "PENDINGJAVERIFICATION") {
+          if(!!action && dataPath[0].masterDataState !== "PM_PENDINGJAVERIFICATION") {
             const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
             assignee = !!assigner.uuid ? [assigner.uuid] : []
           }
           break
         }
         case "OwnershipTransferRP": {
-          if(!!action && dataPath[0].applicationState !== "PENDINGCLVERIFICATION") {
+          if(!!action && dataPath[0].applicationState !== "OT_PENDINGCLVERIFICATION") {
             const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
             assignee = !!assigner.uuid ? [assigner.uuid] : []
           }
           break
         }
+        case "PermissionToMortgage":
         case "DuplicateCopyOfAllotmentLetterRP": {
-          if(!!action && dataPath[0].state !== "PENDINGCLVERIFICATION") {
+          if(!!action && (dataPath[0].state !== "DC_PENDINGCLVERIFICATION" || dataPath[0].state !== "MG_PENDINGCLVERIFICATION")) {
             const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
             assignee = !!assigner.uuid ? [assigner.uuid] : []
           }

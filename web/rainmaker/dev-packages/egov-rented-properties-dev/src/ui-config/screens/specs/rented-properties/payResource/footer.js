@@ -120,7 +120,7 @@ export const callPGService = async (state, dispatch, item, _businessService) => 
 
       dispatch(
         setRoute(
-          `/rented-properties/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${transactionId}`
+          `/rented-properties/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}`
         )
       );
     } else {
@@ -155,7 +155,7 @@ const moveToSuccess = (href, dispatch, receiptNumber) => {
   const status = "success";
   dispatch(
     setRoute(
-      `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
+      `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}`
     )
   );
 };

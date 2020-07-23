@@ -307,7 +307,7 @@ export const callBackForNext = async (state, dispatch) => {
                   return {
                       title: `TL_${item.documentType}`,
                       link: item.fileUrl && item.fileUrl.split(",")[0],
-                      linkText: "View",
+                      linkText: "Download",
                       name: item.fileName
                   };
               });
