@@ -66,6 +66,11 @@ const LandingPage = Loadable({
   loading: () => <Loading />
 });
 
+const ImageUploadMolecule = Loadable({
+  loader: () => import("./ImageUploadMolecule"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -78,5 +83,6 @@ export {
   HowItWorks,
   ActionDialog,
   Footer,
-  LandingPage
+  LandingPage,
+  ImageUploadMolecule
 };
