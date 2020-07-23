@@ -349,7 +349,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         moduleName: "egov-tradelicence",
         componentPath: "ApplicationNoContainer",
         props: {
-          number: applicationNumber
+          number: applicationNumber,
+          style: {
+           "margin-left": "0px",
+           "margin-top": "5px"
+          } 
         }
       },
       licenceNumber: {
