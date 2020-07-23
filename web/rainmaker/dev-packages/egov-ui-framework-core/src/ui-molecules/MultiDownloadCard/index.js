@@ -45,7 +45,7 @@ function MultiCardDownloadGrid(props) {
           <Grid
             item
             container
-            xs={6}
+            xs={12}
             sm={4}
             className={
               props.backgroundGrey

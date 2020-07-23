@@ -1,7 +1,7 @@
 //import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 //import { getGridData1,getCategory1,getYear1,getMonth1,getrepotforproccessingTime1,getSectordata1,getSubCategory1,getUpdatePriceBook1,getMasterGridData1,getGridDataSellMeat1,getGridDataRoadcut1,getGridDataAdvertisement1} from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch, fetchRoleCode } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, fetchRoleCode, truncData } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { validateFields, getMdmsEncroachmentSectorData } from "../../utils";
@@ -52,7 +52,7 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
         temp[0] = item['challanId'];
         temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
-        temp[3] = item['violatorName'];
+        temp[3] = truncData(item['violatorName'],25);
         temp[4] = __FOUND.name;
         temp[5] = item['contactNumber'];
         temp[6] = item['siName'];

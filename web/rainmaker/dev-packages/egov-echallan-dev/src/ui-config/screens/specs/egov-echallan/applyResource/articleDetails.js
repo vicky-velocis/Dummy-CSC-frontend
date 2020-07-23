@@ -350,47 +350,99 @@ const AddArticletoGrid = async (state, dispatch) => {
 const articleDetailData = () => {
   return {
     ArticleDetils: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "articleSeizedDetails.ItemName",
+      errorMessage: "EC_ERR_SEIZED_ITEM_NAME_VEHICLE_TYPE_LIST_DEFAULT_INPUT_FIELD_MSG",
+      required: true,
+      // visible: true,
+      gridDefination: {
+        xs: 12,
+        sm: 12,
+        md: 6
+      },
+      props: {
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
         label: {
           labelName: "Item Name / Vehicle Type",
           labelKey: "EC_SEIZED_ITEM_NAME_VEHICLE_TYPE_LIST_LABEL"
         },
-        optionLabel: "name",
-        optionValue: "name",
         placeholder: {
           labelName: "Select Article / Item",
           labelKey: "EC_SELECT_ITEM_NAME_LIST_PLACEHOLDER"
         },
         sourceJsonPath: "applyScreenMdmsData.egec.ViolationItemList",
         jsonPath: "articleSeizedDetails.ItemName",
+        optionValue:"label",
+        labelsFromLocalisation: true,
+        // setDataInField: true,
+        // suggestions: [],
+        fullwidth: true,
         required: true,
-        //  pattern: getPattern("VillageName"),
-
-        errorMessage: "EC_ERR_SEIZED_ITEM_NAME_VEHICLE_TYPE_LIST_DEFAULT_INPUT_FIELD_MSG",
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 6
+        inputLabelProps: {
+          shrink: true
         },
-        props: {
-          className: "applicant-details-error"
-        },
-        beforeFieldChange: (action, state, dispatch) => {
-          try {
-            dispatch(prepareFinalObject("articleSeizedDetails", {}));
-            let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
-            if (action.value === 'Other' || encroachmentType === 'Seizure of Vehicles') {
-              otherFieldDisabled(dispatch, true, false);
-            } else {
-              otherFieldDisabled(dispatch, false, true);
-            }
-          } catch (e) {
-            console.log(e);
+      },
+      beforeFieldChange: (action, state, dispatch) => {
+        try {
+          dispatch(prepareFinalObject("articleSeizedDetails", {}));
+          let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
+          if (action.value === 'Other' || encroachmentType === 'Seizure of Vehicles') {
+            otherFieldDisabled(dispatch, true, false);
+          } else {
+            otherFieldDisabled(dispatch, false, true);
           }
+        } catch (e) {
+          console.log(e);
         }
-
-      })
+      }
     },
+    // ArticleDetils: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Item Name / Vehicle Type",
+    //       labelKey: "EC_SEIZED_ITEM_NAME_VEHICLE_TYPE_LIST_LABEL"
+    //     },
+    //     optionLabel: "name",
+    //     optionValue: "name",
+    //     placeholder: {
+    //       labelName: "Select Article / Item",
+    //       labelKey: "EC_SELECT_ITEM_NAME_LIST_PLACEHOLDER"
+    //     },
+    //     sourceJsonPath: "applyScreenMdmsData.egec.ViolationItemList",
+    //     jsonPath: "articleSeizedDetails.ItemName",
+    //     required: true,
+    //     //  pattern: getPattern("VillageName"),
+
+    //     errorMessage: "EC_ERR_SEIZED_ITEM_NAME_VEHICLE_TYPE_LIST_DEFAULT_INPUT_FIELD_MSG",
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 12,
+    //       md: 6
+    //     },
+    //     props: {
+    //       className: "applicant-details-error"
+    //     },
+    //     beforeFieldChange: (action, state, dispatch) => {
+    //       try {
+    //         dispatch(prepareFinalObject("articleSeizedDetails", {}));
+    //         let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
+    //         if (action.value === 'Other' || encroachmentType === 'Seizure of Vehicles') {
+    //           otherFieldDisabled(dispatch, true, false);
+    //         } else {
+    //           otherFieldDisabled(dispatch, false, true);
+    //         }
+    //       } catch (e) {
+    //         console.log(e);
+    //       }
+    //     }
+
+    //   })
+    // },
 
     Others: {
       ...getTextField({

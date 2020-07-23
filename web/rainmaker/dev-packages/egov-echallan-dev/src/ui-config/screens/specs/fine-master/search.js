@@ -18,9 +18,10 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
+let userInfo = JSON.parse(getUserInfo());
+const roles = get(userInfo, "roles");
+
 const pageResetAndChange = (state, dispatch, screenKey) => {
-  let userInfo = JSON.parse(getUserInfo());
-  const roles = get(userInfo, "roles");
   if (checkForRole(roles, 'challanEAO')) {
     isVisibility(true)
   }
@@ -94,7 +95,7 @@ const FineMasterSearchAndResult = {
         breakAfterSearch: getBreak(),
         serachResultGrid,
         breakAfterSearch: getBreak(),
-        footer
+        footer : checkForRole(roles, 'challanEAO') ?  footer : {}
       }
     },
     adhocDialog: {

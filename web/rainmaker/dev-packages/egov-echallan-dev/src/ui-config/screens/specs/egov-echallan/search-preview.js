@@ -11,7 +11,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData, truncData } from "../utils/index";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
@@ -62,6 +62,22 @@ const titlebar = getCommonContainer({
       number: getQueryArg(window.location.href, "challanNumber")
     }
   },
+  applicationStatus: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-echallan",
+    componentPath: "ApplicationStatusContainer",
+    props: {
+      status: "Status : " + getQueryArg(window.location.href, "challanNumber")
+    }
+  },
+  paymentStatus: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-echallan",
+    componentPath: "ApplicationStatusContainer",
+    props: {
+      status: "Payment Status : "
+    }
+  },
   downloadMenu: {
     uiFramework: "custom-atoms",
     componentPath: "MenuButton",
@@ -80,23 +96,8 @@ const titlebar = getCommonContainer({
     },
 
   },
-  applicationStatus: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-echallan",
-    componentPath: "ApplicationStatusContainer",
-    props: {
-      status: "Status : " + getQueryArg(window.location.href, "challanNumber")
-    }
-  },
-  paymentStatus: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-echallan",
-    componentPath: "ApplicationStatusContainer",
-    props: {
-      status: "Payment Status : "
-    }
-  },
 });
+
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
 
@@ -190,7 +191,7 @@ const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appst
           if (item['violationItemUuid'] === element['violationItemUuid']) {
             let defectqty = parseInt(element['quantity']) - parseInt(item['quantity']);
 
-            temp[0] = item['itemName'];
+            temp[0] = truncData(item['itemName'],25);
             temp[1] = element['quantity'];
             temp[2] = element['remark'];
             temp[3] = item['quantity'];
@@ -214,7 +215,7 @@ const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appst
     } else {
       SeizedItemDetailList.map(function (item, index) {
         let temp = [];
-        temp[0] = item['itemName'];
+        temp[0] = truncData(item['itemName'],25);
         temp[1] = item['quantity'];
         temp[2] = item['remark'];
         temp[3] = '';
@@ -951,8 +952,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    setapplicationType("egov-echallan");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    setapplicationType('eChallan');
 
     //searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
@@ -977,7 +978,7 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 10
+                sm: 12
 
               },
               ...titlebar

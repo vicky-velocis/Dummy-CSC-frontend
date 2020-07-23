@@ -1799,7 +1799,6 @@ export const fetchRoleCode = (iscalledforInnerGrid, appstatus) => {
     if (checkForRole(userRoleInfo, 'challanEAO')) {
       isChallanEAO = true;
     }
-
     if (!isChallanSM && !isChallanHOD && isChallanSI) {
       rolecode = 'challanSI';
     }
@@ -1821,29 +1820,27 @@ export const fetchRoleCode = (iscalledforInnerGrid, appstatus) => {
     if (!isChallanSM && isChallanHOD && isChallanSI) {
       rolecode = 'challanSI';
     }
-
-
   } else {
-    userRoleInfo.forEach(element => {
-      if (checkForRole(userRoleInfo, 'challanSM')) {
-        rolecode = 'challanSM';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'challanSI')) {
-        rolecode = 'challanSI';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'challanHOD')) {
-        rolecode = 'challanHOD';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'CITIZEN')) {
-        rolecode = 'CITIZEN';
-      }
-      else if (checkForRole(userRoleInfo, 'challanEAO')) {
-        rolecode = 'challanEAO';
-      }
-    });
+    //userRoleInfo.forEach(element => {
+    if (checkForRole(userRoleInfo, 'challanSM')) {
+      rolecode = 'challanSM';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'challanSI')) {
+      rolecode = 'challanSI';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'challanHOD')) {
+      rolecode = 'challanHOD';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'CITIZEN')) {
+      rolecode = 'CITIZEN';
+    }
+    if (checkForRole(userRoleInfo, 'challanEAO')) {
+      rolecode = 'challanEAO';
+    }
+    //});
   }
 
   return si_Counter > 1 ? iscalledforInnerGrid
@@ -1959,4 +1956,19 @@ export const getMdmsEncroachmentSectorData = async (action, state, dispatch) => 
     }
   };
   await fetchMdmsData(state, dispatch, mdmsBody, false);
+};
+
+
+export const truncData = (str, length, ending) => {
+  if (length == null) {
+    length = 20;
+  }
+  if (ending == null) {
+    ending = '...';
+  }
+  if (str.length > length) {
+    return str.substring(0, length - ending.length) + ending;
+  } else {
+    return str;
+  }
 };

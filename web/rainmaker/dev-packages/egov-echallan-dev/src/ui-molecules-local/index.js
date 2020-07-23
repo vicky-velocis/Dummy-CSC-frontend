@@ -52,11 +52,20 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
-const ImageUploadMolecule = Loadable({
-  loader: () => import("./ImageUpload"),
+const ImageUploadViolatorImageMolecule = Loadable({
+  loader: () => import("./ImageUploadViolatorImage"),
   loading: () => <Loading />
 });
 
+const ImageUploadViolatorIdProofMolecule = Loadable({
+  loader: () => import("./ImageUploadViolatorIdProof"),
+  loading: () => <Loading />
+});
+
+const ImageUploadViolationMolecule = Loadable({
+  loader: () => import("./ImageUploadViolation"),
+  loading: () => <Loading />
+});
 const CustomizeTable = Loadable({
   loader: () => import("./CustomizeTable"),
   loading: () => <Loading />
@@ -88,7 +97,9 @@ export {
   FeesEstimateCard,
   DividerWithLabel,
   HowItWorks,
-  ImageUploadMolecule,
+  ImageUploadViolatorImageMolecule,
+  ImageUploadViolatorIdProofMolecule,
+  ImageUploadViolationMolecule,
   UploadExcelFile,
   CustomizeTable,
   CustomizedLandingPage,
