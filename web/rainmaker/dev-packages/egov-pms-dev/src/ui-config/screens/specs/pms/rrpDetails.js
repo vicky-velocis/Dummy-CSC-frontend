@@ -518,7 +518,7 @@ export const prepareEditFlow = async (
  
    if(reasonForRetirement ==='ABOLITION_OF_POST')
    {
-     alert('123')
+    
     dispatch(
       handleField(
         "rrpDetails",
