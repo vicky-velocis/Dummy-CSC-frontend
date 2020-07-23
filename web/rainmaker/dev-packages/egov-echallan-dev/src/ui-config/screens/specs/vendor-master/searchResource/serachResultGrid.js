@@ -108,10 +108,10 @@ export const serachVendorResultGrid = {
       "Search Results for Vendor-Detail"
     ),
     options: {
-      filter: false,
+      filter: true,
       print: false,
       download: true,
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       hover: true,

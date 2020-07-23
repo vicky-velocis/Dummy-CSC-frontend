@@ -152,11 +152,11 @@ export const serachResultGrid = {
     ],
     title: getTextToLocalMappingItemMaster('EC_COMMON_TABLE_HEADER_ITEM_MASTER'),
     options: {
-      filter: false,
+      filter: true,
       print: true,
       download: true,
       // responsive: "scrollMaxHeight",
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,

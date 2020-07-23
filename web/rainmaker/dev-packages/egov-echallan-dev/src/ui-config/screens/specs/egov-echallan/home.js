@@ -3,7 +3,7 @@ import { getCommonHeader, getCommonContainer, getLabel } from "egov-ui-framework
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  getUserInfo, localStorageSet, localStorageGet, getTenantId
+  getUserInfo, localStorageSet, localStorageGet, getTenantId, setapplicationType
 } from "egov-ui-kit/utils/localStorageUtils";
 import {
   prepareFinalObject,
@@ -139,6 +139,7 @@ const eChallanPermissionManagement = {
   uiFramework: "material-ui",
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
+    setapplicationType("egov-echallan");
     geteChallanCount(action, state, dispatch).then(response => {
       let countDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0]', {});
       let userInfo = JSON.parse(getUserInfo());

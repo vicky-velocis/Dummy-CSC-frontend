@@ -40,11 +40,11 @@ export const AuctionGridDetails = {
       getTextToLocalMappingAuctionGrid("amount"),
     ],
     options: {
-      filter: false,
+      filter: true,
       print: false,
       download: false,
       // responsive: "scrollMaxHeight",
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,

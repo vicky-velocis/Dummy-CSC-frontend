@@ -704,8 +704,8 @@ const screenConfig = {
     const applicationNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    setapplicationType('eChallan');
-    let responsecreateDemand = '';
+    set(state,'form',{});
+     let responsecreateDemand = '';
     //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
     // //calculate search Bill called\
     //searchBill(dispatch, applicationNumber, tenantId);

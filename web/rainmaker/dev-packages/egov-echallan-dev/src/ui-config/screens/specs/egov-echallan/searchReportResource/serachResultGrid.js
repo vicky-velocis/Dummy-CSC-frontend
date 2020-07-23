@@ -77,10 +77,10 @@ export const serachReportPaymentDetailGrid = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
       print: true,
       download: true,
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,
@@ -190,11 +190,11 @@ export const searchViewSeizureReport = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
       download: true,
       print: true,
       // responsive: "scrollMaxHeight",
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       hover: true,
@@ -287,11 +287,11 @@ export const serachReportInventoryDetailGrid = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
       download: true,
       print: true,
       // responsive: "scrollMaxHeight",
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       hover: true,

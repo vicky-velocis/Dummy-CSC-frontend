@@ -1822,24 +1822,24 @@ export const fetchRoleCode = (iscalledforInnerGrid, appstatus) => {
     }
   } else {
     //userRoleInfo.forEach(element => {
-      if (checkForRole(userRoleInfo, 'challanSM')) {
-        rolecode = 'challanSM';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'challanSI')) {
-        rolecode = 'challanSI';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'challanHOD')) {
-        rolecode = 'challanHOD';
-        si_Counter += 1
-      }
-      else if (checkForRole(userRoleInfo, 'CITIZEN')) {
-        rolecode = 'CITIZEN';
-      }
-      else if (checkForRole(userRoleInfo, 'challanEAO')) {
-        rolecode = 'challanEAO';
-      }
+    if (checkForRole(userRoleInfo, 'challanSM')) {
+      rolecode = 'challanSM';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'challanSI')) {
+      rolecode = 'challanSI';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'challanHOD')) {
+      rolecode = 'challanHOD';
+      si_Counter += 1
+    }
+    if (checkForRole(userRoleInfo, 'CITIZEN')) {
+      rolecode = 'CITIZEN';
+    }
+    if (checkForRole(userRoleInfo, 'challanEAO')) {
+      rolecode = 'challanEAO';
+    }
     //});
   }
 

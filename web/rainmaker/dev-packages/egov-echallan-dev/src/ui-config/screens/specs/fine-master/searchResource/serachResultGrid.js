@@ -175,11 +175,11 @@ export const serachResultGrid = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
       print: true,
       download: true,
       // responsive: "scrollMaxHeight",
-      viewColumns: false,
+      viewColumns: true,
       responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,

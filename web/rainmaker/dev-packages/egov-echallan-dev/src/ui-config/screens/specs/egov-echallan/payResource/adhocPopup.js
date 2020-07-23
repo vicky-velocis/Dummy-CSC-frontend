@@ -531,6 +531,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
+            set(state,'form',{});
             set(state,
               "screenConfiguration.preparedFinalObject.violationDocuments",
               ""
@@ -785,6 +786,7 @@ export const adhocPopupReceivePayment = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupReceivePayment(state, dispatch, "search-preview");
+            set(state,'form',{});
             resetField(state, dispatch);
             //  const objectJsonPath = `components.receivePayment.children.popup`;
 

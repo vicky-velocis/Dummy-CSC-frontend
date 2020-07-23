@@ -99,10 +99,10 @@ export const serachResultGrid = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
+      viewColumns: true,
       print: true,
       download: true,
-      viewColumns: false,
       responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,

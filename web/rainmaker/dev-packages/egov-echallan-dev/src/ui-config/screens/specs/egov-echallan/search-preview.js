@@ -952,8 +952,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    setapplicationType("egov-echallan");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    setapplicationType('eChallan');
 
     //searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
