@@ -7,7 +7,33 @@ import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
+export const getDeptName = (state, codes) => {
+  let deptMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Department",
+    []
+  );
+  let codeNames = deptMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+  codeNames = codeNames[0].name;
+  else
+  codeNames ='-';
+  return codeNames;
+};
 
+export const getDesigName = (state, codes) => {
+  let desigMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Designation",
+    []
+  );
+  let codeNames = desigMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames ='-';
+    return codeNames;
+};
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -131,7 +157,23 @@ export const searchApiCall = async (state, dispatch) => {
             //break;
       }
         let data = response.Pensioners.map(item => {
-          
+           // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE
+        let currentDesignations = get(item, "assignments", [])
+        .filter(assignment => {
+          return assignment.isCurrentAssignment;
+        })
+        .map(assignment => {
+          return assignment.designation;
+        });
+
+      // GET ALL CURRENT DEPARTMENTS OF EMPLOYEE
+      let currentDepartments = get(item, "assignments", [])
+        .filter(assignment => {
+          return assignment.isCurrentAssignment;
+        })
+        .map(assignment => {
+          return assignment.department;
+        });
       
           return {
            // [getTextToLocalMapping("Action")]: get(item, "action", "-") || "-",
@@ -145,6 +187,10 @@ export const searchApiCall = async (state, dispatch) => {
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",
             //[getTextToLocalMapping("Appointment Date")]: convertEpochToDate(item.dateOfAppointment, "dateOfAppointment", "-") || "-",
             [getTextToLocalMapping("pensionerNumber")]: get(item, "pensionerNumber", "-") || "-", 
+            [getTextToLocalMapping("Designation")]:
+            getDesigName(state, get(item, "designation", "-")) || "-",
+          [getTextToLocalMapping("Department")]:
+            getDeptName(state, get(item, "department", "-")) || "-",  
             tenantId: item.tenantId,
             //pensionNotificationRegisterId:item.pensionNotificationRegisterId,
            // pensionEmployeeId:item.pensionEmployeeId,

@@ -41,6 +41,7 @@ const getMDMSData = async (action, state, dispatch) => {
           moduleName: "common-masters",
           masterDetails: [
             { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
            
           ]
         },

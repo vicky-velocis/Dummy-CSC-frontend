@@ -16,6 +16,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "searchPension",
+      "components.div.children.SearchPensionApplication.children.cardContent.children.ApplicationSearchContainer.children.department",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "searchPension",
       "components.div.children.searchResults",
       "visible",
       false
@@ -109,6 +117,29 @@ export const SearchPensionApplication = getCommonCard({
       visible:true,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
+    }),
+    department: getSelectField({
+      label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
+      placeholder: {
+        labelName: "Select Department",
+        labelKey: "HR_DEPT_PLACEHOLDER"
+      },
+      required: false,
+      jsonPath: "searchScreen.departments",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      props: {
+        optionLabel: "name",
+        optionValue: "code"
+        // hasLocalization: false
+      },
+      // localePrefix: {
+      //   moduleName: "common-masters",
+      //   masterName: "Department"
+      // }
     }),
     // applicationNo: getSelectField({
     //   label: {

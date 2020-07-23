@@ -288,6 +288,14 @@ export const getMdmsData = async (action, state, dispatch) => {
           ]
         },
         { moduleName: "Pension_RRP", masterDetails: [{ name: "Documents" }] },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
         { 
           moduleName: "pension", 
           masterDetails: 
@@ -508,14 +516,15 @@ export const prepareEditFlow = async (
  let isAnyMisconductInsolvencyInefficiency =
  get(response, "ProcessInstances[0].employeeOtherDetails.isAnyMisconductInsolvencyInefficiency",false) 
  
-   if(reasonForRetirement ==='ABOLISHION_OF_POST')
+   if(reasonForRetirement ==='ABOLITION_OF_POST')
    {
+     alert('123')
     dispatch(
       handleField(
         "rrpDetails",
         "components.div.children.formwizardFirstStep.children.employeeOtherDetails.children.cardContent.children.employeeAOPDtailCobainer",
         "props.style",
-        { display: "inline-block" }
+        { display: "flex" }
         
       )
     );
@@ -570,6 +579,44 @@ export const prepareEditFlow = async (
       DuesPresent
     )
   );
+  //get set department and degignation
+  let department =
+  get(response, "ProcessInstances[0].employee.assignments[0].department",'') 
+  let degignation =
+  get(response, "ProcessInstances[0].employee.assignments[0].designation",'') 
+
+  if(department)
+  {
+    let deptMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.Department",
+      []
+    );
+    let codeNames = deptMdmsData.filter(x=>x.code ===department)
+    
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames =department;
+
+    set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employee.assignments[0].department", codeNames);
+  }
+  if(degignation)
+  {
+    let desigMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.Designation",
+      []
+    );
+    let codeNames = desigMdmsData.filter(x=>x.code ===degignation)
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames =degignation;
+  
+    set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employee.assignments[0].designation", codeNames);
+    
+  }
 
   // set value for AOP case
   let isTakenMonthlyPensionAndGratuity =

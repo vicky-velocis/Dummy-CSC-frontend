@@ -118,6 +118,8 @@ export const searchResults = {
       getTextToLocalMapping("pensionerNumber"),
       getTextToLocalMapping("Name"),
       getTextToLocalMapping("gender"),
+      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Department"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"),
      // getTextToLocalMapping("Designation"),

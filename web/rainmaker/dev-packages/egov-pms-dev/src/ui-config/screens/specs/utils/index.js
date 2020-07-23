@@ -746,6 +746,18 @@ export const getLocalizationCodeValue =lable =>{
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    // case "Designation":
+    //   return getLocaleLabels(
+    //     "Designation",
+    //     "HR_COMMON_TABLE_COL_DESG",
+    //     localisationLabels
+    //   );
+    case "Department":
+      return getLocaleLabels(
+        "Department",
+        "HR_COMMON_TABLE_COL_DEPT",
+        localisationLabels
+      );
     /// for recomputation
     case "recomputedBusinessId":
       return getLocaleLabels(

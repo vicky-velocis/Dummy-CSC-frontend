@@ -11,6 +11,33 @@ import {
   ActionCloseApplication,
   ActionPensionReview
   } from "../../../../../ui-utils/PensionResponce";
+  export const getDeptName = (state, codes) => {
+    let deptMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.common-masters.Department",
+      []
+    );
+    let codeNames = deptMdmsData.filter(x=>x.code ===codes)
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames ='-';
+    return codeNames;
+  };
+  
+  export const getDesigName = (state, codes) => {
+    let desigMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.common-masters.Designation",
+      []
+    );
+    let codeNames = desigMdmsData.filter(x=>x.code ===codes)
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames ='-';
+    return codeNames;
+  };
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -134,7 +161,23 @@ export const searchApiCall = async (state, dispatch) => {
            // break;
       }
         let data = response.ProcessInstances.map(item => {       
-        
+         // GET ALL CURRENT DESIGNATIONS OF EMPLOYEE
+         let currentDesignations = get(item, "assignments", [])
+         .filter(assignment => {
+           return assignment.isCurrentAssignment;
+         })
+         .map(assignment => {
+           return assignment.designation;
+         });
+
+       // GET ALL CURRENT DEPARTMENTS OF EMPLOYEE
+       let currentDepartments = get(item, "assignments", [])
+         .filter(assignment => {
+           return assignment.isCurrentAssignment;
+         })
+         .map(assignment => {
+           return assignment.department;
+         });
       
           return {
            // [getTextToLocalMapping("Action")]: get(item, "action", "-") || "-",
@@ -144,6 +187,10 @@ export const searchApiCall = async (state, dispatch) => {
             [getTextToLocalMapping("recomputedBusinessId")]: get(item, "recomputedBusinessId", "") || "",                   
             [getTextToLocalMapping("applicationDate")]: convertEpochToDate(item.applicationDate, "applicationDate", "-") || "-",  
            // [getTextToLocalMapping("lastModifiedDate")]: convertEpochToDate(item.lastModifiedDate, "lastModifiedDate", "-") || "-",         
+          //  [getTextToLocalMapping("Designation")]:
+          //   getDesigName(state, get(item, "designation", "-")) || "-",
+          // [getTextToLocalMapping("Department")]:
+          //   getDeptName(state, get(item, "department", "-")) || "-",  
             tenantId: item.tenantId,
             businessService: item.businessService,
            // id: item.recomputedBusinessId,

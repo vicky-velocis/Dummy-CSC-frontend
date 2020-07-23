@@ -46,6 +46,8 @@ export const searchResults = {
       getTextToLocalMapping("Application Number"),
       getTextToLocalMapping("recomputedBusinessId"),
       getTextToLocalMapping("applicationDate"),
+      // getTextToLocalMapping("Designation"),
+      // getTextToLocalMapping("Department"),
     //  getTextToLocalMapping("lastModifiedDate"),     
       {
         name: "tenantId",
@@ -160,7 +162,7 @@ const InitiateNPWorkflow = async (rowData) => {
 
 const onRowClick = rowData => {
   console.log(rowData)
-let step = `WF_${rowData[6]}_CLOSE`
+let step = `WF_${rowData[8]}_CLOSE`
 let pmsModule = 'RRP_SERVICE'
 let  id= rowData[3];
 
