@@ -196,6 +196,7 @@ export const callBackForNext = async (state, dispatch) => {
             const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType");
             if(applicationType === "Renew") {
             const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
+            const appliationNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber")
             const tenantId = getQueryArg(window.location.href, "tenantId");
             const queryObj = [
               {
@@ -209,7 +210,7 @@ export const callBackForNext = async (state, dispatch) => {
             ]
 
           const applicationsData = await getSearchResults(queryObj);
-          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "APPROVED");
+          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => (item.status !== "REJECTED" || item.status !== "APPROVED") && (!!appliationNumber ? appliationNumber !==item.applicationNumber : true));
           isRenewable = !isRenewable.length
           } else {
             isRenewable = true
@@ -619,7 +620,7 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     ]
 
   const applicationsData = await getSearchResults(queryObj);
-  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "APPROVED");
+  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "REJECTED" || item.status !== "APPROVED");
 
  if(!isRenewable.length) {
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
