@@ -8,8 +8,9 @@ div#menu- {
 }
 
 .comments {
-  max-width: 80%;
+  max-width: 90%;
   resize: none;
+  margin-bottom: 10px;
 }
 .commentsLabel {
   font-size: 16px;
@@ -40,6 +41,6 @@ div#menu- {
 
 @media only screen and (min-width: 768px) {
   .bottom-button {
-    margin-right: 45px;
+    margin-right: 54px;
   }
 }

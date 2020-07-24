@@ -276,6 +276,38 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "approve" && status === "success") {
     return {
+      header: getCommonHeader({
+        labelName: `Application for Trade License ${financialYearText}`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Approved Successfully",
+              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+    /* return {
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
@@ -316,9 +348,36 @@ const getAcknowledgementCard = (
         }
       },
       approvalSuccessFooter
-    };
+    }; */
   } else if (purpose === "sendback" && status === "success") {
     return {
+      header: getCommonHeader({
+        labelName: `Application for Trade License ${financialYearText}`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back Successfully",
+              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+    /* return {
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
@@ -359,7 +418,7 @@ const getAcknowledgementCard = (
         }
       },
       approvalSuccessFooter
-    };
+    }; */
   }else if (purpose === "sendbacktocitizen" && status === "success") {
     return {
       header: getCommonContainer({
