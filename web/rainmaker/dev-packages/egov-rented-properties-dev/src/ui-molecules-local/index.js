@@ -67,8 +67,10 @@ const LandingPage = Loadable({
 });
 
 const ImageUploadMolecule = Loadable({
-  loader: () => import("./ImageUploadMolecule")
+  loader: () => import("./ImageUploadMolecule"),
+  loading: () => <Loading />
 });
+
 const MultipleOwners = Loadable({
   loader: () => import("./MultipleOwners"),
   loading: () => <Loading />

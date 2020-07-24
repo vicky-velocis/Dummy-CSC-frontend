@@ -41,6 +41,7 @@ const Placeholder = ({ className, onFilePicked, inputProps, hide }) => {
 
 class ImageUpload extends Component {
   fillPlaceholder = (images, onFilePicked, inputProps) => {
+    const {imageLength = 3} = this.props
     const placeholders = [];
     if(getapplicationType() === "HORTICULTURE")
     {
@@ -49,7 +50,7 @@ class ImageUpload extends Component {
       }
     }
     else{
-      for (let i = 0; i < 3 - images.length; i++) {
+      for (let i = 0; i < imageLength - images.length; i++) {
         placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
       }
     }
@@ -62,15 +63,15 @@ class ImageUpload extends Component {
   };
 
   onFilePicked = (file, imageUri) => {
-    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText, MAX_IMAGE_SIZE = 5000 } = this.props;
+    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText, MAX_IMAGE_SIZE = 5000, imageLength,labelKey = "ERR_FILE_MORE_THAN_FIVEMB" } = this.props;
     const fileSize = getFileSize(file);
     const isImage = isFileImage(file);
     if (!isImage) {
       toggleSnackbarAndSetText(true, { labelName: "The file is not a valid image", labelKey: "ERR_NOT_VALID_IMAGE" }, "error");
     } else if (fileSize > MAX_IMAGE_SIZE) {
-      toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: "ERR_FILE_MORE_THAN_FIVEMB" },"error");
+      toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: labelKey },"error");
     } else {
-      if (images.length < 5) {
+      if (images.length < imageLength) {
         fileUpload(formKey, fieldKey, { module, file, imageUri });
       }
     }
@@ -78,7 +79,7 @@ class ImageUpload extends Component {
 
   render() {
     const { onFilePicked, removeImage } = this;
-    const { images, loading } = this.props;
+    const { images, loading , labelKey = "ERR_FILE_MORE_THAN_FIVEMB"} = this.props;
     let {imageLength =  3} = this.props ;
     if(getapplicationType() === "HORTICULTURE"){
       imageLength = 5 ;
@@ -113,7 +114,7 @@ class ImageUpload extends Component {
           </div>
           </div>
         )}
-        <Label label="ERR_FILE_MORE_THAN_FIVEMB" labelStyle={inlineLabelStyle} fontSize="12px" />
+        <Label label={labelKey} labelStyle={inlineLabelStyle} fontSize="12px" />
       </div>
       
     );

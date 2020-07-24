@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ImageUpload from "egov-ui-kit/common/common/ImageUpload";
+import { rest } from "lodash";
 
 
 class ImageUploadMolecule extends Component {
@@ -8,10 +9,10 @@ class ImageUploadMolecule extends Component {
   }
 
   render() {
-    const { formKey, imageLength, MAX_IMAGE_SIZE } = this.props;
+    const { formKey, ...rest } = this.props;
     return (
         <div>
-        <ImageUpload module="egov-rented-properties" formKey={formKey} imageLength={imageLength} MAX_IMAGE_SIZE={MAX_IMAGE_SIZE} fieldKey="media" />
+        <ImageUpload module="egov-rented-properties" formKey={formKey} {...rest} fieldKey="media" />
       </div>
         );
   }

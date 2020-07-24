@@ -10,6 +10,7 @@ const uploadimage = getCommonCard({
     formKey: `newapplication`,
     imageLength: 6,
     MAX_IMAGE_SIZE: 6000,
+    labelKey: "ERR_FILE_MORE_THAN_SIXMB"
     },
     visible: true,
     // required: true
