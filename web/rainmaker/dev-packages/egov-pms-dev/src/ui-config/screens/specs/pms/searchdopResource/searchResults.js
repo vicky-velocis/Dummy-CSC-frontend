@@ -34,12 +34,12 @@ export const searchResults = {
   props: {
     // data: [],
     columns: [
-      getTextToLocalMapping("Code"),
+     // getTextToLocalMapping("Code"),
+      getTextToLocalMapping("pensionerNumber"),
       getTextToLocalMapping("Name"),
       getTextToLocalMapping("gender"),
       getTextToLocalMapping("Date Of Birth"),
-      getTextToLocalMapping("Retirement Date"),
-      getTextToLocalMapping("pensionerNumber"),
+      getTextToLocalMapping("Retirement Date"),     
       getTextToLocalMapping("Designation"),
       getTextToLocalMapping("Department"),
      // getTextToLocalMapping("Designation"),
@@ -94,6 +94,6 @@ const onRowClick = rowData => {
   // InitiateNPWorkflow(rowData).then(response => {
   // });//
   console.log(rowData);
-  window.location.href = `applydop?employeeID=${rowData[5]}&tenantId=${rowData[8]}`;//&pensionerNumber=${rowData[6]}`;
+  window.location.href = `applydop?employeeID=${rowData[0]}&tenantId=${rowData[7]}`;//&pensionerNumber=${rowData[6]}`;
 //window.location.href = `applydop?employeeID=${rowData[0]}&tenantId=${rowData[6]}&pensionerNumber=${rowData[5]}`;
 };

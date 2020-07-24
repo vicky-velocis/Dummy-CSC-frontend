@@ -140,7 +140,7 @@ export const RRPApplication = getCommonCard({
         labelKey: "HR_DEPT_PLACEHOLDER"
       },
       required: false,
-      visible:false,
+      visible:true,
       jsonPath: "searchScreen.departments",
       gridDefination: {
         xs: 12,

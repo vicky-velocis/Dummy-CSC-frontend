@@ -178,7 +178,8 @@ export const searchApiCall = async (state, dispatch) => {
           return {
            // [getTextToLocalMapping("Action")]: get(item, "action", "-") || "-",
             
-           [getTextToLocalMapping("Code")]: get(item, "code", "-") || "-", 
+          // [getTextToLocalMapping("Code")]: get(item, "code", "-") || "-", 
+           [getTextToLocalMapping("pensionerNumber")]: get(item, "pensionerNumber", "-") || "-", 
            [getTextToLocalMapping("Name")]: get(item, "name", "-") || "-",
             [getTextToLocalMapping("gender")]: get(item, "gender", "-") || "-", 
            // [getTextToLocalMapping("employee Status")]: get(item, "employeeStatus", "-") || "-", 
@@ -186,7 +187,7 @@ export const searchApiCall = async (state, dispatch) => {
             [getTextToLocalMapping("Date Of Birth")]: convertEpochToDate(item.dob, "dob", "-") || "-",         
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",
             //[getTextToLocalMapping("Appointment Date")]: convertEpochToDate(item.dateOfAppointment, "dateOfAppointment", "-") || "-",
-            [getTextToLocalMapping("pensionerNumber")]: get(item, "pensionerNumber", "-") || "-", 
+           
             [getTextToLocalMapping("Designation")]:
             getDesigName(state, get(item, "designation", "-")) || "-",
           [getTextToLocalMapping("Department")]:
