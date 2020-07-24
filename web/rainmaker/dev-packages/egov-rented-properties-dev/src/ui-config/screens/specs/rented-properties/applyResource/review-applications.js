@@ -133,11 +133,11 @@ export const getreviewPropertyAddressDetails = (isEditable = true) => {
             ),
             area: getLabelWithValue(
                 areaLabel,
-                { jsonPath: "Owners[0].property.address.area" }
+                { jsonPath: "Owners[0].property.area" }
             ),
             pincode: getLabelWithValue(
                 pincodeLabel,
-                { jsonPath: "Owners[0].property.address.pincode" }
+                { jsonPath: "Owners[0].property.pincode" }
             ),
         })
     })
