@@ -105,7 +105,7 @@ export const PensionReviewApplication = getCommonCard({
         xs: 12,
         sm: 4
       },
-      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      sourceJsonPath: "applyScreenMdmsData.common-masters.Department",
       props: {
         optionLabel: "name",
         optionValue: "code"
