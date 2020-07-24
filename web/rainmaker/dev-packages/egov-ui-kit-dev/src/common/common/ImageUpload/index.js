@@ -62,8 +62,7 @@ class ImageUpload extends Component {
   };
 
   onFilePicked = (file, imageUri) => {
-    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText } = this.props;
-    const MAX_IMAGE_SIZE = 5000;
+    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText, MAX_IMAGE_SIZE = 5000 } = this.props;
     const fileSize = getFileSize(file);
     const isImage = isFileImage(file);
     if (!isImage) {
@@ -80,7 +79,7 @@ class ImageUpload extends Component {
   render() {
     const { onFilePicked, removeImage } = this;
     const { images, loading } = this.props;
-    let imageLength = 3 ;
+    let {imageLength =  3} = this.props ;
     if(getapplicationType() === "HORTICULTURE"){
       imageLength = 5 ;
     }

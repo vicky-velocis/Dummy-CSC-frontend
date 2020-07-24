@@ -152,52 +152,74 @@ export const getReviewOwner = (isEditable = true) => {
                 editSection: masterEntryEditSection(isEditable)
             }
         },
-        viewFour: getCommonContainer({
-                ownerName: getLabelWithValue(
-                    {
-                        labelName: "Owner Name",
-                        labelKey: "RP_OWNER_NAME_LABEL"
-                    },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.name" }
-                ),
-                ownerMobile: getLabelWithValue(
-                    {
-                        labelName: "Mobile No",
-                        labelKey: "RP_MOBILE_NO_LABEL"
-                    },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.phone" }
-                ),
-                ownerFatherOrHusband: getLabelWithValue(
-                    {
-                        labelName: "Father/ Husband's Name",
-                        labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
-                    },
-                    {jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"}
-                ),
-                ownerRelationShip: getLabelWithValue(
-                    {
-                        labelName: "Relationship",
-                        labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
-                    },
-                    {
-                        jsonPath:"Properties[0].owners[0].ownerDetails.relation"
-                    }
-                ),
-                ownerEmail: getLabelWithValue(
-                    {
-                        labelName: "Email",
-                        labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
-                    },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.email" }
-                ),
-                ownerAadhaarNo: getLabelWithValue(
-                    {
-                        labelName: "Aadhar Number",
-                        labelKey: "RP_AADHAR_LABEL"
-                    },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber" }
-                )
-        })
+        viewFour: {
+            uiFramework: "custom-containers-local",
+            componentPath: "MultipleOwnerContainer",
+            moduleName: "egov-rented-properties",
+            props: {
+                contents: [
+                    {label: "RP_OWNER_NAME_LABEL",
+                    jsonPath: "ownerDetails.name"},
+                    {label: "RP_MOBILE_NO_LABEL",
+                    jsonPath: "ownerDetails.phone"},
+                    {label: "TL_FATHER_OR_HUSBANDS_NAME_LABEL",
+                    jsonPath: "ownerDetails.fatherOrHusband"},
+                    {label: "TL_COMMON_RELATIONSHIP_LABEL",
+                    jsonPath: "ownerDetails.relation"},
+                    {label: "RP_OWNER_DETAILS_EMAIL_LABEL",
+                    jsonPath: "ownerDetails.email"},
+                    {label: "RP_AADHAR_LABEL",
+                    jsonPath: "ownerDetails.aadhaarNumber"}
+                ],
+                jsonPath: "Properties[0].owners"
+            }
+        }
+        // viewFour: getCommonContainer({
+        //         ownerName: getLabelWithValue(
+        //             {
+        //                 labelName: "Owner Name",
+        //                 labelKey: "RP_OWNER_NAME_LABEL"
+        //             },
+        //             { jsonPath: "Properties[0].owners[0].ownerDetails.name" }
+        //         ),
+        //         ownerMobile: getLabelWithValue(
+        //             {
+        //                 labelName: "Mobile No",
+        //                 labelKey: "RP_MOBILE_NO_LABEL"
+        //             },
+        //             { jsonPath: "Properties[0].owners[0].ownerDetails.phone" }
+        //         ),
+        //         ownerFatherOrHusband: getLabelWithValue(
+        //             {
+        //                 labelName: "Father/ Husband's Name",
+        //                 labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
+        //             },
+        //             {jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"}
+        //         ),
+        //         ownerRelationShip: getLabelWithValue(
+        //             {
+        //                 labelName: "Relationship",
+        //                 labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+        //             },
+        //             {
+        //                 jsonPath:"Properties[0].owners[0].ownerDetails.relation"
+        //             }
+        //         ),
+        //         ownerEmail: getLabelWithValue(
+        //             {
+        //                 labelName: "Email",
+        //                 labelKey: "RP_OWNER_DETAILS_EMAIL_LABEL"
+        //             },
+        //             { jsonPath: "Properties[0].owners[0].ownerDetails.email" }
+        //         ),
+        //         ownerAadhaarNo: getLabelWithValue(
+        //             {
+        //                 labelName: "Aadhar Number",
+        //                 labelKey: "RP_AADHAR_LABEL"
+        //             },
+        //             { jsonPath: "Properties[0].owners[0].ownerDetails.aadhaarNumber" }
+        //         )
+        // })
     })
 }
 

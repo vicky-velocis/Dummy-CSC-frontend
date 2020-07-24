@@ -234,14 +234,14 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                 },
                 { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
             ),
-            // colony: getLabelWithValue(
-            //     areaLabel,
-            //     { jsonPath: "DuplicateCopyApplications[0].property.colony" }
-            // ),
-            // pincode: getLabelWithValue(
-            //     pincodeLabel,
-            //     { jsonPath: "DuplicateCopyApplications[0].property.pincode" }
-            // ),
+            colony: getLabelWithValue(
+                areaLabel,
+                { jsonPath: "DuplicateCopyApplications[0].property.colony" }
+            ),
+            pincode: getLabelWithValue(
+                pincodeLabel,
+                { jsonPath: "DuplicateCopyApplications[0].property.pincode" }
+            ),
         })
     })
 }

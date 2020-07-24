@@ -101,12 +101,12 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
             }
         },
         viewFour: getCommonContainer({
-            propertyId: getLabelWithValue(
+            transitNumber: getLabelWithValue(
                 {
-                    labelName: "Property Id",
-                    labelKey: "RP_PROPERTY_ID"
+                    labelName: "Transit Site/Plot number",
+                    labelKey: "RP_SITE_PLOT_LABEL"
                 },
-                {jsonPath: "MortgageApplications[0].property.id"}
+                { jsonPath: "MortgageApplications[0].property.transitNumber" }
             ),
             allotmentNumber: getLabelWithValue(
                 {
@@ -115,28 +115,14 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
                 },
                 {jsonPath: "MortgageApplications[0].allotmenNumber"}
             ),
-            // allotmentNumber: getLabelWithValue(
-            //     {
-            //         labelName: "Allotment Number",
-            //         labelKey: "RP_ALLOTMENT_NUMBER"
-            //     },
-            //     {jsonPath: "Owners[0].allotmenNumber"}
-            // ),
-            transitNumber: getLabelWithValue(
-                {
-                    labelName: "Transit Site/Plot number",
-                    labelKey: "RP_SITE_PLOT_LABEL"
-                },
-                { jsonPath: "MortgageApplications[0].property.transitNumber" }
-            )
-            // area: getLabelWithValue(
-            //     areaLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.area" }
-            // ),
-            // pincode: getLabelWithValue(
-            //     pincodeLabel,
-            //     { jsonPath: "Properties[0].propertyDetails.address.pincode" }
-            // ),
+            area: getLabelWithValue(
+                areaLabel,
+                { jsonPath: "MortgageApplications[0].property.area" }
+            ),
+            pincode: getLabelWithValue(
+                pincodeLabel,
+                { jsonPath: "MortgageApplications[0].property.pincode" }
+            ),
         })
     })
 }
