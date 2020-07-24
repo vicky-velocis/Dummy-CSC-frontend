@@ -7,7 +7,9 @@ const uploadimage = getCommonCard({
     componentPath: "ImageUploadMolecule",
     // componentPath: "ImageUploadMolecule",
     props: {
-    formKey: `newapplication`
+    formKey: `newapplication`,
+    imageLength,
+    MAX_IMAGE_SIZE,
     },
     visible: true,
     // required: true

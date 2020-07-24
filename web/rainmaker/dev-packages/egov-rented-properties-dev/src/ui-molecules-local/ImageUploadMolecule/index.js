@@ -9,9 +9,11 @@ class ImageUploadMolecule extends Component {
 
   render() {
     const { formKey } = this.props;
+    const { imageLength } = this.props;
+    const { MAX_IMAGE_SIZE } = this.props;
     return (
         <div>
-        <ImageUpload module="egov-rented-properties" formKey={formKey} fieldKey="media" />
+        <ImageUpload module="egov-rented-properties" formKey={formKey} imageLength={imageLength} MAX_IMAGE_SIZE={MAX_IMAGE_SIZE} fieldKey="media" />
       </div>
         );
   }
