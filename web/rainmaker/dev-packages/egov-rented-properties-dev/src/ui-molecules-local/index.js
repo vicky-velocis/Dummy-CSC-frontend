@@ -66,6 +66,11 @@ const LandingPage = Loadable({
   loading: () => <Loading />
 });
 
+const MultipleOwners = Loadable({
+  loader: () => import("./MultipleOwners"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -78,5 +83,6 @@ export {
   HowItWorks,
   ActionDialog,
   Footer,
-  LandingPage
+  LandingPage,
+  MultipleOwners
 };
