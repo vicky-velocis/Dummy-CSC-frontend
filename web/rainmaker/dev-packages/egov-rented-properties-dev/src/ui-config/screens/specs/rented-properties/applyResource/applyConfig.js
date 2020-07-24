@@ -3,7 +3,8 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {propertyDetails, transitSiteDetails} from './propertyDetails';
 import {rentHolderDetails, applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
-import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage} from './addressDetails';
+import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite} from './addressDetails';
+import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
@@ -184,6 +185,20 @@ export const formwizardMortgageFirstStep = {
   children: {
     ownershipAddressDetailsMortgage,
     applicantDetailsMortgage
+    
+  }
+}
+
+export const formwizardTransitSiteImagesFirstStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form1"
+  },
+  children: {
+    ownershipAddressDetails,
+    // applicantDetailsMortgage
+    imageUploadDetailsProperties
     
   }
 }

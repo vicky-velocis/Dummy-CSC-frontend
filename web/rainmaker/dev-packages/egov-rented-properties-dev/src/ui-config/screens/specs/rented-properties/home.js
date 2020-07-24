@@ -78,7 +78,7 @@ const header = getCommonHeader(
         labelName: "Capturing Transit Site Images"
     },
     icon: <FormIcon />,
-    route: "search-transfer-properties"
+    route: "transit-site-images"
   }
 ]
 

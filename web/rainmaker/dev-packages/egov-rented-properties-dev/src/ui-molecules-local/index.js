@@ -66,10 +66,13 @@ const LandingPage = Loadable({
   loading: () => <Loading />
 });
 
+const ImageUploadMolecule = Loadable({
+  loader: () => import("./ImageUploadMolecule")
+});
 const MultipleOwners = Loadable({
   loader: () => import("./MultipleOwners"),
   loading: () => <Loading />
-})
+});
 
 export {
   TestMolecules,
@@ -84,5 +87,6 @@ export {
   ActionDialog,
   Footer,
   LandingPage,
+  ImageUploadMolecule,
   MultipleOwners
-};
+}
