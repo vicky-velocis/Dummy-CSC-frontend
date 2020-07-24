@@ -303,7 +303,7 @@ const routes = [
     }
   },
   {
-    path: "auto-routing",
+    path: "master/auto-routing",
     component: AutoRoutingMapping,
     needsAuthentication: true,
     options: {
