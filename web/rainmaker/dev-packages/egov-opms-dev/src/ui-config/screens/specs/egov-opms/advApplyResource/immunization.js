@@ -21,10 +21,12 @@ const undertakingButton1 = getCommonContainer({
 
   exemptionradio: {
     uiFramework: "custom-containers",
-    componentPath: "RadioGroupContainer",
     gridDefination: {
-      xs: 12
+      xs: 12,
+      sm: 6
     },
+    componentPath: "RadioGroupContainer",
+  
     jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
     props: {
       required: true,
@@ -392,22 +394,7 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.advertisementVillageSubSector",
       })
     },
-    advertisementMatterDescription: {
-      ...getTextField({
-        label: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
-        },
-        placeholder: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getOPMSPattern("Address"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
-      })
-    },
+    
     enterSpace: {
       ...getTextField({
         label: {
@@ -427,22 +414,29 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.space",
       })
     },
-    advertisementMatterDescription: {
-      ...getTextField({
-        label: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
-        },
-        placeholder: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getOPMSPattern("Address"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
-      })
-    },
+    // advertisementMatterDescription: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Advertisement Matter Description",
+    //       labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
+    //     },
+    //     placeholder: {
+    //       labelName: "Advertisement Matter Description",
+    //       labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
+    //     },
+    //     props:{
+          
+    //                   className:"textfield-enterable-selection",
+    //                   multiline: true,
+    //                   rows: "4"
+    //                 },
+    //     required: true,
+    //     pattern: getOPMSPattern("Address"),
+    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
+    //   })
+    // },
+    
     date: {
       ...getTextField({
         label: {
@@ -462,6 +456,35 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.date",
       })
     },
+    advertisementMatterDescription: {
+      ...getTextField({
+        label: {
+          labelName: "Advertisement Matter Description",
+          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
+        },
+        placeholder: {
+          labelName: "Advertisement Matter Description",
+          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
+        },
+        
+              props:{
+          
+                      className:"textfield-enterable-selection",
+                      multiline: true,
+                      rows: "2",
+
+
+                 
+                  },
+                 
+        required: true,
+        pattern: getOPMSPattern("TexrearAddress"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
+      })
+    },
+    exemptedCategory: undertakingButton1,
+    
     // date: getDateField({
     //   label: {
     //     labelName: "Date",
@@ -491,7 +514,7 @@ const commonBuildingData = buildingType => {
     //   }
 
     // }),
-    exemptedCategory: undertakingButton1,
+   
 
   };
 };
@@ -510,6 +533,10 @@ export const immunizationDetails = getCommonCard({
   ),
   break: getBreak(),
   immunizationDetailsConatiner: getCommonContainer({
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
     buildingDataCard: getCommonContainer({
       singleBuildingContainer: {
         uiFramework: "custom-atoms",

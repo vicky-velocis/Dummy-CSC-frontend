@@ -86,19 +86,6 @@ const titlebar = getCommonContainer({
       number: getQueryArg(window.location.href, "challanNumber")
     }
   },
-  downloadMenu: {
-    uiFramework: "custom-atoms",
-    componentPath: "MenuButton",
-    props: {
-      data: {
-        label: "Download",
-        leftIcon: "cloud_download",
-        rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 8, marginRight: 0, marginTop: "5px" } },
-        menu: []
-      }
-    }
-  },
   applicationStatus: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-echallan",
@@ -113,6 +100,19 @@ const titlebar = getCommonContainer({
     componentPath: "ApplicationStatusContainer",
     props: {
       status: "Payment Status : "
+    }
+  },
+  downloadMenu: {
+    uiFramework: "custom-atoms",
+    componentPath: "MenuButton",
+    props: {
+      data: {
+        label: "Download",
+        leftIcon: "cloud_download",
+        rightIcon: "arrow_drop_down",
+        props: { variant: "outlined", style: { marginLeft: 8, marginRight: 0, marginTop: "5px" } },
+        menu: []
+      }
     }
   },
 });
@@ -704,8 +704,8 @@ const screenConfig = {
     const applicationNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    setapplicationType('eChallan');
-    let responsecreateDemand = '';
+    set(state,'form',{});
+     let responsecreateDemand = '';
     //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
     // //calculate search Bill called\
     //searchBill(dispatch, applicationNumber, tenantId);
@@ -736,10 +736,10 @@ const screenConfig = {
           componentPath: "Container",
           children: {
             header: {
-              // gridDefination: {
-              //   xs: 12,
-              //   sm: 10
-              // },
+              gridDefination: {
+                xs: 12,
+                sm: 12
+              },
               ...titlebar
             }
           }

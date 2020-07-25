@@ -126,6 +126,8 @@ export const searchResults = {
      // getTextToLocalMapping("gender"),
      // getTextToLocalMapping("employee Status"),
      // getTextToLocalMapping("employee Type"),
+     getTextToLocalMapping("Designation"),
+     getTextToLocalMapping("Department"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"), 
       {
@@ -231,7 +233,7 @@ const onRowClick = rowData => {
  console.log(rowData)
  console.log("rowData")
  console.log(rowData);
- window.location.href = `applydisability?tenantId=${rowData[4]}&employeeID=${rowData[0]}`;
+ window.location.href = `applydisability?tenantId=${rowData[6]}&employeeID=${rowData[0]}`;
   // InitiateNPWorkflow(rowData).then(response => {
   // });
   // toggleSnackbarAndSetText(true, {

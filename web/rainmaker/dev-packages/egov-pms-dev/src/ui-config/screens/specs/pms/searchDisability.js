@@ -24,6 +24,7 @@ import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import {  
   Actiongetlocalization,  
   } from "../../../../ui-utils/LocalizationCode";
+  import { httpRequest } from "../../../../ui-utils";
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : false;
@@ -33,7 +34,40 @@ const header = getCommonHeader({
   labelKey: Actiongetlocalization().localization[0].PENSION_DISABILITY_HEADER.key
 });
 
-
+const getMDMSData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
+       
+      ]
+    }
+  };
+  try {
+    const payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getData = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
 
 const NOCSearchAndResult = {
   uiFramework: "material-ui",
@@ -41,6 +75,7 @@ const NOCSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();
+    getData(action, state, dispatch);
     //set search param blank
 dispatch(prepareFinalObject("searchScreen",{}));
     return action;

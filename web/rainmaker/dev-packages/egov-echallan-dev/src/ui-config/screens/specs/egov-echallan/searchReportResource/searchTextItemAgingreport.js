@@ -46,14 +46,15 @@ export const searchTextItemAgingreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
       sourceJsonPath: "itemAgingReport[0].FromDate",
       jsonPath: "itemAgingReport[0].FromDate",
       required: false,
-      visible: false
+      visible: false,
+      errorMessage: "EC_ERR_DEFAULT_INPUT_START_FIELD_MSG"
     }),
 
     EndDate: getDateField({
@@ -64,7 +65,7 @@ export const searchTextItemAgingreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
@@ -72,6 +73,7 @@ export const searchTextItemAgingreport = getCommonCard({
       jsonPath: "itemAgingReport[0].ToDate",
       required: false,
       visible: false,
+      errorMessage: "EC_ERR_DEFAULT_INPUT_END_FIELD_MSG"
     }),
     timeLineSelect: getSelectField({
       label: {
@@ -86,7 +88,7 @@ export const searchTextItemAgingreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       sourceJsonPath: "applyScreenMdmsData.egec.TimeLine",
@@ -101,7 +103,7 @@ export const searchTextItemAgingreport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {
@@ -130,7 +132,7 @@ export const searchTextItemAgingreport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {

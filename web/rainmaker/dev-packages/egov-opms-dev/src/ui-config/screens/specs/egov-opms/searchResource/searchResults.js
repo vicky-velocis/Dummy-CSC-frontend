@@ -398,6 +398,8 @@ export const searchResultsMaser = {
         name: getTextToLocalMapping("Price Book Id"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
 
         }
       },
@@ -410,20 +412,7 @@ export const searchResultsMaser = {
       getTextToLocalMapping("effectiveFromDate"),
       getTextToLocalMapping("effectiveToDate"),
 
-      {
-        name: getTextToLocalMapping(),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-
-            <span>
-              {/* <a href="masterUpdateRate?applicationNumber="> <i class="material-icons"  >history</i></a> */}
-              {/* <a onClick={onMasterRowClick}> <i class="material-icons"  >history</i></a> */}
-
-            </span>
-          )
-        },
-      },
+      
 
     ],
     //title: getTextToLocalMapping("Search Results for Egov-OPMS-NOC Applications"),

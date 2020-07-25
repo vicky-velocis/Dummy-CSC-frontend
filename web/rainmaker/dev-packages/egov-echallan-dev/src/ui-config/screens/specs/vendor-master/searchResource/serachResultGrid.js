@@ -108,10 +108,11 @@ export const serachVendorResultGrid = {
       "Search Results for Vendor-Detail"
     ),
     options: {
-      filter: false,
+      filter: true,
       print: false,
       download: true,
-      responsive: "stacked",
+      viewColumns: true,
+      responsive: 'stacked',
       selectableRows: false,
       hover: true,
       fixedHeaderOptions: {
@@ -184,10 +185,18 @@ export const serachVendorErrorResultGrid = {
       {
         name: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
         label: getTextToLocalMappingVendorErrorDetail("fatherSpouseName"),
+        options: {
+          filter: false,
+          display: "excluded"
+        }
       },
       {
         name: getTextToLocalMappingVendorErrorDetail("address"),
         label: getTextToLocalMappingVendorErrorDetail("address"),
+        options: {
+          filter: false,
+          display: "excluded"
+        }
       },
       {
         name: getTextToLocalMappingVendorErrorDetail("contactNumber"),
@@ -217,7 +226,8 @@ export const serachVendorErrorResultGrid = {
       filter: false,
       print: false,
       download: false,
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       resizableColumns:false,
       selectableRows: false,
       hover: true,

@@ -1,8 +1,13 @@
 import React from "react";
 import { sortByEpoch, getEpochForDate } from "../../utils";
 import './index.css'
+import {getTextToLocalMapping} from "./searchApplicationResults"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels,
+} from "egov-ui-framework/ui-utils/commons";
+const localisationLabels = getTransformedLocalStorgaeLabels();
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -12,8 +17,7 @@ export const searchResults = {
   props: {
     columns: [
       {
-        name: "Service",
-        labelKey: "WS_COMMON_TABLE_COL_SERVICE_LABEL", 
+        name: getTextToLocalMapping("service"),
         options: {
           filter: false,
           customBodyRender: value => (
@@ -24,8 +28,8 @@ export const searchResults = {
         }
       },
       {
-        name: "Consumer No",
-        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL", 
+        name:getTextToLocalMapping("Consumer No"),
+        labelKey: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
         options: {
           filter: false,
           customBodyRender: (value, index) => (
@@ -35,14 +39,14 @@ export const searchResults = {
           )
         }
       },
-      {name : "Owner Name",labelKey: "WS_COMMON_TABLE_COL_OWN_NAME_LABEL" },
-      {name : "Status",labelKey: "WS_COMMON_TABLE_COL_STATUS_LABEL" },
-      {name : "Due",labelKey: "WS_COMMON_TABLE_COL_DUE_LABEL" },
-      {name : "Address",labelKey: "WS_COMMON_TABLE_COL_ADDRESS" },
-      {name : "Due Date",labelKey: "WS_COMMON_TABLE_COL_DUE_DATE_LABEL" },
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Status"),
+      getTextToLocalMapping("Due"),
+      getTextToLocalMapping("Address"),
+      getTextToLocalMapping("Due Date"),
+
       {
-        name: "Action",
-        labelKey: "WS_COMMON_TABLE_COL_ACTION_LABEL",
+        name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -72,21 +76,19 @@ export const searchResults = {
         }
       },
       {
-        name: "tenantId",
-        labelKey: "WS_COMMON_TABLE_COL_TENANTID_LABEL",
+        name:  getTextToLocalMapping("tenantId"),
         options: {
           display: false
         }
       },
       {
-        name: "connectionType",
-        labelKey: "WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL",
+        name: getTextToLocalMapping("connectionType"),
         options: {
           display: false
         }
       }
     ],
-    title: {labelKey:"WS_HOME_SEARCH_RESULTS_TABLE_HEADING", labelName:"Search Results for Water & Sewerage Connections"},
+    title: getLocaleLabels("Search Results for Water & Sewerage Connections", "WS_HOME_SEARCH_RESULTS_TABLE_HEADING", localisationLabels),
     options: {
       filter: false,
       download: false,

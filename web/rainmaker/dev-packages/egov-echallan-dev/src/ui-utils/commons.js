@@ -85,7 +85,7 @@ export const prepareDocumentsUploadData = (state, dispatch) => {
     let card = {};
     card["code"] = doc.documentType;
     card["title"] = "",//getTextToLocalMapping(doc.documentType);
-    card["cards"] = [];
+      card["cards"] = [];
     tempDoc[doc.documentType] = card;
   });
 
@@ -251,13 +251,13 @@ const checkEffectiveDate = (state, dispatch, effectiveStartDate) => {
     });
     fineGridRecord.forEach(element => {
       if (gridCurrentRecord.hasOwnProperty('fineUuid')) {
-        if (element[1] === gridCurrentRecord.encroachmentType
+        if (element[8] === gridCurrentRecord.encroachmentType
           && element[2] === gridCurrentRecord.numberOfViolation
           && element[0] !== gridCurrentRecord.fineUuid) {
           curlistRecord.push(element);
         }
       } else {
-        if (element[1] === gridCurrentRecord.encroachmentType
+        if (element[8] === gridCurrentRecord.encroachmentType
           && element[2] === gridCurrentRecord.numberOfViolation) {
           curlistRecord.push(element);
         }
@@ -370,10 +370,11 @@ export const fetchItemListMasterData = async (action, state, dispatch) => {
     const response = await httpRequest("post", "/ec-services/item/_get", "", [], data);
     let data = response.ResponseBody.map(item => ({
       // alert(item)
-      'code': item['itemUuid'] || "-",
+      'id': item['itemUuid'] || "-",
+      'code': item['itemName'] || "-",
       'name': item['itemName'] || "-"
     }));
-    data.push({ 'code': 'Other', 'name': 'Other' })
+    data.push({'id': 'Other', 'code': 'Other', 'name': 'Other' })
 
     store.dispatch(prepareFinalObject("applyScreenMdmsData.egec.ItemList", data));
     //this is kept purposely if the data does not get at the load then it would be assigned.
@@ -593,48 +594,62 @@ export const fetchVendorDetails = async (state, dispatch) => {
 };
 
 export const createVendorDetails = async (file) => {
-
+  let isCreateSuccess = true;
+  let isUpdateSuccess = true;
+  let response = [];
   let data = {
     RequestBody: {
-      vendorRegistrationList: file.insert
+      vendorRegistrationList: file.insert,
+      tenantId: getTenantId()
     }
   };
+
+  let updatedata = {
+    RequestBody: {
+      vendorRegistrationList: file.update,
+      tenantId: getTenantId()
+    }
+  };
+
   try {
-    const response = await httpRequest(
-      "post",
-      "/ec-services/vendor/_create",
-      "",
-      [],
-      data
-    );
-
-    let updatedata = {
-      RequestBody: {
-        vendorRegistrationList: file.update
+    if (file.insert.length > 0) {
+      let response = await httpRequest(
+        "post",
+        "/ec-services/vendor/_create",
+        "",
+        [],
+        data
+      );
+      if (response.ResponseInfo.status !== 'Success') {
+        isCreateSuccess = false;
       }
-    };
-    let updateresponse = await httpRequest(
-      "post",
-      "/ec-services/vendor/_update",
-      "",
-      [],
-      updatedata
-    );
+    }
 
 
-    if (response.ResponseInfo.status === 'Success' && updateresponse.ResponseInfo.status === 'Success') {
+    if (file.update.length > 0) {
+      let updateresponse = await httpRequest(
+        "post",
+        "/ec-services/vendor/_update",
+        "",
+        [],
+        updatedata
+      );
+
+      if (updateresponse.ResponseInfo.status !== 'Success') {
+        isUpdateSuccess = false
+      } else {
+        response = updateresponse;
+      }
+    }
+
+    if (isUpdateSuccess || isCreateSuccess) {
       return { status: "success", message: response.responseInfo };
     } else {
       return { status: "fail", message: 'Error' };
     }
-
-    return response;
   } catch (error) {
-    //console.log("error", error);
-
+    console.log("error", error);
   }
-
-
 }
 
 export const createCitizenBasedonMobileNumber = async (state, dispatch) => {
@@ -742,58 +757,94 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
 
     let payload = get(state.screenConfiguration.preparedFinalObject, "eChallan", []);
     let notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[0]", {});
-    let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
-    let violationDocuments = get(state, "screenConfiguration.preparedFinalObject.violationDocuments", {});
+    // let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    // let violationDocuments = get(state, "screenConfiguration.preparedFinalObject.violationDocuments", {});
     let violationItemList = [];
 
     // Set owners & other documents
     let ownerDocuments = [];
+    let violatorsmedia = [];
     let Remarks = "";
-    jp.query(reduxDocuments, "$.*").forEach(doc => {
-      if (doc.documents && doc.documents.length > 0) {
-        if (doc.documentCode === "EC_VIOLATORIMAGE" || doc.documentCode === "ViolatorImage" || doc.documentCode === "imageofViolator") {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.documents[0].fileStoreId,
-              documentName: doc.documents[0].fileName,
-              documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
-              tenantId: getTenantId(),
-              isActive: true,
-            }
-          ];
-        }
-        else if (doc.documentCode === "EC_VIOLATORIDPROOF" || doc.documentCode === "ViolatorIdProof" || doc.documentCode === "idProofofViolator") {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.documents[0].fileStoreId,
-              documentName: doc.documents[0].fileName,
-              documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
-              tenantId: getTenantId(),
-              isActive: true,
-            }
-          ];
-        }
-      }
-    });
-    if (violationDocuments !== "") {
-      jp.query(violationDocuments, "$.*").forEach(doc => {
-        if (doc.documentType !== null) {
-          ownerDocuments = [
-            ...ownerDocuments,
-            {
-              fileStoreId: doc.fileStoreId,
-              documentName: doc.fileName,
-              documentType: "violationDocuments - " + doc.documentType,
-              tenantId: getTenantId(),
-              isActive: true,
-            }
-          ];
 
-        }
+    let violatorImage = get(state, "form.apply_Violator_Image.files.echallanViolaterImage", []);
+    let violatorIdProofImage = get(state, "form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage", []);
+    let violationsImage = get(state, "form.apply_Violations_Image.files.echallanViolationImage", []);
+    violatorImage.map((item, index) => {
+      violatorsmedia.push({
+        fileStoreId: item.fileStoreId,
+        documentName: item.file.name || "",
+        documentType: "ViolatorImage",
+        tenantId: getTenantId(),
+        isActive: true,
       });
-    }
+    });
+
+    violatorIdProofImage.map((item, index) => {
+      violatorsmedia.push({
+        fileStoreId: item.fileStoreId,
+        documentName: item.file.name || "",
+        documentType: "ViolatorIdProof",
+        tenantId: getTenantId(),
+        isActive: true,
+
+      });
+    });
+
+    violationsImage.map((item, index) => {
+      violatorsmedia.push({
+        fileStoreId: item.fileStoreId,
+        documentName: item.file.name || "",
+        documentType: `violationDocuments - Document - ${index + 1}`,
+        tenantId: getTenantId(),
+        isActive: true,
+      });
+    });
+
+    // jp.query(reduxDocuments, "$.*").forEach(doc => {
+    //   if (doc.documents && doc.documents.length > 0) {
+    //     if (doc.documentCode === "EC_VIOLATORIMAGE" || doc.documentCode === "ViolatorImage" || doc.documentCode === "imageofViolator") {
+    //       ownerDocuments = [
+    //         ...ownerDocuments,
+    //         {
+    //           fileStoreId: doc.documents[0].fileStoreId,
+    //           documentName: doc.documents[0].fileName,
+    //           documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
+    //           tenantId: getTenantId(),
+    //           isActive: true,
+    //         }
+    //       ];
+    //     }
+    //     else if (doc.documentCode === "EC_VIOLATORIDPROOF" || doc.documentCode === "ViolatorIdProof" || doc.documentCode === "idProofofViolator") {
+    //       ownerDocuments = [
+    //         ...ownerDocuments,
+    //         {
+    //           fileStoreId: doc.documents[0].fileStoreId,
+    //           documentName: doc.documents[0].fileName,
+    //           documentType: doc.documentType === undefined ? doc.documentCode : doc.documentType,
+    //           tenantId: getTenantId(),
+    //           isActive: true,
+    //         }
+    //       ];
+    //     }
+    //   }
+    // });
+    // if (violationDocuments !== "") {
+    //   jp.query(violationDocuments, "$.*").forEach(doc => {
+    //     if (doc.documentType !== null) {
+    //       ownerDocuments = [
+    //         ...ownerDocuments,
+    //         {
+    //           fileStoreId: doc.fileStoreId,
+    //           documentName: doc.fileName,
+    //           documentType: "violationDocuments - " + doc.documentType,
+    //           tenantId: getTenantId(),
+    //           isActive: true,
+    //         }
+    //       ];
+
+    //     }
+    //   });
+    // }
     //Set Violation List 
     /** This logic is used for creating the obj
      *  temp[0] = obj['ItemName'];
@@ -832,7 +883,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
     // set(payload, "violationDate", day + "/" + month + "/" + violatorDate.getFullYear());
     set(payload, "location", payload.latitude + ',' + payload.longitude);
     set(payload, 'siName', JSON.parse(getUserInfo()).name)
-    set(payload, "document", ownerDocuments);
+    set(payload, "document", violatorsmedia); //ownerDocuments);
     set(payload, "violationItem", violationItemList);
     set(payload, "remarks", Remarks);
     set(payload, 'status', getapplicationMode())
@@ -1043,27 +1094,22 @@ export const addToStoreViolationData = async (state, dispatch, status) => {
     var month = storeItemDate.getMonth() + 1 < 10 ? "0" + (storeItemDate.getMonth() + 1) : storeItemDate.getMonth() + 1;
     var day = storeItemDate.getDate() < 10 ? "0" + storeItemDate.getDate() : storeItemDate.getDate();
     let storeItemDateprocess = day + "/" + month + "/" + storeItemDate.getFullYear();
-    let violationDocuments = get(state, "screenConfiguration.preparedFinalObject.violationDocuments", {});
+    let violationsImage = get(state, "form.apply_Violations_Discrepancy_Image.files.echallanViolationDiscrepancyImage", []);
 
     let storeItemRegister = [];
     let payload = {};
     let file = [];
-    if (violationDocuments !== "") {
-      jp.query(violationDocuments, "$.*").forEach(doc => {
-        if (doc.documentType !== null) {
-          file = [
-            ...file,
-            {
-              fileStoreId: doc.fileStoreId,
-              documentName: doc.fileName,
-              documentType: "StoreManagerUpload - " + doc.documentType,
-              tenantId: getTenantId(),
-              isActive: true,
-            }
-          ]
-        }
+
+    violationsImage.map((item, index) => {
+      file.push({
+        fileStoreId: item.fileStoreId,
+        documentName: item.file.name || "",
+        documentType: `StoreManagerUpload - Document - ${index + 1}`,
+        tenantId: getTenantId(),
+        isActive: true,
       });
-    }
+    });
+
     addStoreItemList.forEach(element => {
       payload = {
         tenantId: getTenantId(),

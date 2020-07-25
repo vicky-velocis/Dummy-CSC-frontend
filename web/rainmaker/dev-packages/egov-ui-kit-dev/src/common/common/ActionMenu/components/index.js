@@ -91,7 +91,7 @@ class ActionMenuComp extends Component {
       .split("/")
       .pop();
     if (url !== "inbox" && menuPath) {
-      debugger
+     
       const menupathArray = menuPath && menuPath.split(".");
       if (menupathArray && menupathArray.length > 1) {
         menupathArray.pop();
@@ -263,7 +263,7 @@ class ActionMenuComp extends Component {
             iconLeft = item.leftIcon.split(":");
           }
           if (!item.url) {
-            debugger
+           
             return (
               <div className="sideMenuItem">
                 {/* <Tooltip

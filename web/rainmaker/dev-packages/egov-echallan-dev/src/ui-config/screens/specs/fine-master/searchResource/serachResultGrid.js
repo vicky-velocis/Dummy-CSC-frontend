@@ -104,6 +104,14 @@ export const serachResultGrid = {
           filter: true
         }
       },
+      {
+        name: getTextToLocalMappingFineMaster("encroachmentType"),
+        label: getTextToLocalMappingFineMaster("encroachmentType"),
+        options: {
+          filter: false,
+          display: "excluded"
+        }
+      },
 
 
       {
@@ -167,11 +175,12 @@ export const serachResultGrid = {
     ),
 
     options: {
-      filter: false,
+      filter: true,
       print: true,
       download: true,
       // responsive: "scrollMaxHeight",
-      responsive: "stacked",
+      viewColumns: true,
+      responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: true,
       resizableColumns: false,
@@ -255,7 +264,8 @@ const onRowClick = rowData => {
 
     store.dispatch(prepareFinalObject("FineMaster", {}));
     store.dispatch(prepareFinalObject("FineMaster.fineUuid", rowData[0]));
-    store.dispatch(prepareFinalObject("FineMaster.encroachmentType", rowData[1]));
+    store.dispatch(prepareFinalObject("FineMaster.encroachmentTypeName", rowData[1]));
+    store.dispatch(prepareFinalObject("FineMaster.encroachmentType", rowData[8]));
     store.dispatch(prepareFinalObject("FineMaster.numberOfViolation", rowData[2]));
     store.dispatch(prepareFinalObject("FineMaster.penaltyAmount", rowData[3]));
     store.dispatch(prepareFinalObject("FineMaster.storageCharges", rowData[4]));

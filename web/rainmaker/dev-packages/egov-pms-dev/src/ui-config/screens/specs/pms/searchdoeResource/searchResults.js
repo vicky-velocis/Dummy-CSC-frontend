@@ -39,6 +39,8 @@ export const searchResults = {
       getTextToLocalMapping("Code"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"),
+      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Department"),
      // getTextToLocalMapping("Code"),
       {
         name: "tenantId",
@@ -85,7 +87,7 @@ const onRowClick = rowData => {
  
   // InitiateNPWorkflow(rowData).then(response => {
   // });
-  window.location.href = `applydoe?employeeID=${rowData[1]}&tenantId=${rowData[4]}`;
+  window.location.href = `applydoe?employeeID=${rowData[1]}&tenantId=${rowData[6]}`;
 
 };
 

@@ -17,7 +17,7 @@ import { resetAllFields } from "../../utils";
 
 
 const resetAll = async (state, dispatch) => {
-  
+
   const objectJsonPath = `components.div.children.searchTextViewSeizureReport.children.cardContent.children`;
   const children = get(
     state.screenConfiguration.screenConfig["reportSearchViewSeizure"],
@@ -55,7 +55,7 @@ export const searchTextViewSeizureReport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4,
 
       },
@@ -73,7 +73,7 @@ export const searchTextViewSeizureReport = getCommonCard({
       // visible: true,
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4,
       },
       props: {
@@ -133,7 +133,7 @@ export const searchTextViewSeizureReport = getCommonCard({
       // visible: true,
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4,
       },
       props: {
@@ -191,14 +191,14 @@ export const searchTextViewSeizureReport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
       sourceJsonPath: "searchViewSeizureReport[0].FromDate",
       jsonPath: "searchViewSeizureReport[0].FromDate",
-       required: true,
-   
+      required: true,
+      errorMessage: "EC_ERR_DEFAULT_INPUT_START_FIELD_MSG"
     }),
 
     EndDate: getDateField({
@@ -209,14 +209,14 @@ export const searchTextViewSeizureReport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
       sourceJsonPath: "searchViewSeizureReport[0].ToDate",
       jsonPath: "searchViewSeizureReport[0].ToDate",
       required: true,
-      errorMessage: "EC_ERR_DEFAULT_INPUT_TIME_FIELD_MSG"
+      errorMessage: "EC_ERR_DEFAULT_INPUT_END_FIELD_MSG"
     }),
   }),
 
@@ -226,7 +226,7 @@ export const searchTextViewSeizureReport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {
@@ -255,7 +255,7 @@ export const searchTextViewSeizureReport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {

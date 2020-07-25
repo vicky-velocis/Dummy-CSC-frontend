@@ -1,5 +1,5 @@
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertEpochToDate, convertDateToEpoch, checkForRole, getMdmsEncroachmentSectorData } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, checkForRole, getMdmsEncroachmentSectorData, truncData } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchMasterChallanData, fetchMasterChallanHODAuction, fetchViewHistorytData } from "../../../../../ui-utils/commons";
@@ -47,7 +47,7 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
         temp[0] = item['challanId'];
         temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
-        temp[3] = item['violatorName'];
+        temp[3] = truncData(item['violatorName'],25);
         temp[4] = __FOUND.name;
         temp[5] = item['contactNumber'];
         temp[6] = item['siName'];
@@ -76,7 +76,7 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
         temp[0] = item['challanId'];
         temp[1] = __FOUNDENCROACH.name;
         temp[2] = convertEpochToDate(item['violationDate']);
-        temp[3] = item['violatorName'];
+        temp[3] = truncData(item['violatorName'],25);
         temp[4] = __FOUND.name;
         temp[5] = item['contactNumber'];
         temp[6] = item['siName'];
@@ -104,7 +104,6 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
   }
 };
 
-
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
@@ -115,7 +114,6 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
     )
   );
 };
-
 
 export const searchResultApiResponseViewHistory = async (action, state, dispatch, challanUuid, tenantId) => {
 
@@ -131,7 +129,7 @@ export const searchResultApiResponseViewHistory = async (action, state, dispatch
     datastorage.map(function (item, index) {
       let temp = [];
       temp[0] = item['itemName'];
-      temp[1] = item['purchaserName'];
+      temp[1] = truncData(item['purchaserName'],25);
       temp[2] = convertEpochToDate(item['auctionDate']);
       temp[3] = item['auctionQuantity'];
       temp[4] = item['purchaserContactNo'];

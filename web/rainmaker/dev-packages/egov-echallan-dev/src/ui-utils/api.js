@@ -12,8 +12,8 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-	baseURL: window.location.origin, 
-    headers: {
+  baseURL: window.location.origin, 
+  headers: {
     "Content-Type": "application/json"
   }
 });

@@ -283,8 +283,8 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
-          xs: 10,
-          sm: 10
+          xs: 12,
+          sm: 12
         },
         props: {
           style: {
@@ -461,8 +461,8 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
-          xs: 10,
-          sm: 10
+          xs: 12,
+          sm: 12
         },
         props: {
           style: {
@@ -483,52 +483,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
             }
           )
         }
-      },
-      div2: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 2,
-          sm: 2
-        },
-        props: {
-          style: {
-            width: "100%",
-            float: "right",
-            cursor: "pointer"
-          }
-        },
-        children: {
-          closeButton: {
-            componentPath: "Button",
-            props: {
-              style: {
-                float: "right",
-                color: "rgba(0, 0, 0, 0.60)"
-              }
-            },
-            children: {
-              previousButtonIcon: {
-                uiFramework: "custom-atoms",
-                componentPath: "Icon",
-                props: {
-                  iconName: "close"
-                }
-              }
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) => {
-                showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
-                set(state,
-                  "screenConfiguration.preparedFinalObject.violationDocuments",
-                  ""
-                )
-              }
-            }
-          }
-        }
-      }
+      },      
     }
   },
 
@@ -538,11 +493,11 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
         documentDetails,
       })
     },
-    {
-      style: {
-        marginTop: "-30px"
-      }
-    }
+    // {
+    //   style: {
+    //     marginTop: "-30px"
+    //   }
+    // }
   ),
   div: {
     uiFramework: "custom-atoms",
@@ -576,6 +531,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
+            set(state,'form',{});
             set(state,
               "screenConfiguration.preparedFinalObject.violationDocuments",
               ""
@@ -830,6 +786,7 @@ export const adhocPopupReceivePayment = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupReceivePayment(state, dispatch, "search-preview");
+            set(state,'form',{});
             resetField(state, dispatch);
             //  const objectJsonPath = `components.receivePayment.children.popup`;
 

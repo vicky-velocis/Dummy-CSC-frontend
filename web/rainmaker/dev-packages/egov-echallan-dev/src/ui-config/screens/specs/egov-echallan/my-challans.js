@@ -1,5 +1,4 @@
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { setapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 import { searchResultCitizenApiResponse } from './searchResource/searchResultApiResponse';
 
 const header = getCommonHeader(
@@ -18,7 +17,6 @@ const screenConfig = {
     uiFramework: "material-ui",
     name: "my-challans",
     beforeInitScreen: (action, state, dispatch) => {
-        setapplicationType('eChallan');
         searchResultCitizenApiResponse(action, state, dispatch);
         //fetchData(action, state, dispatch);
         return action;

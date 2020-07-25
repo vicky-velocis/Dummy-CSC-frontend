@@ -119,6 +119,8 @@ export const searchResults = {
       getTextToLocalMapping("Name"),
       getTextToLocalMapping("gender"),
       getTextToLocalMapping("Date Of Birth"),
+      getTextToLocalMapping("Designation"),     
+      getTextToLocalMapping("Department"),
       getTextToLocalMapping("Retirement Date"),
      // getTextToLocalMapping("Designation"),
       {
@@ -220,5 +222,5 @@ const onRowClick = rowData => {
   // InitiateNPWorkflow(rowData).then(response => {
   // });//
   console.log(rowData);
-  window.location.href = `revision?pensionerNumber=${rowData[6]}&tenantId=${rowData[5]}`;
+  window.location.href = `revision?pensionerNumber=${rowData[8]}&tenantId=${rowData[7]}`;
 };
