@@ -168,24 +168,29 @@ let  id= rowData[3];
 
 //  identify workflow and redirect to workfloe detail page of existing application
 //   move to workflow detail page
+const reviewUrl =
+process.env.REACT_APP_SELF_RUNNING === "true"
+  ? `/egov-ui-framework/pms`
+  : `/pms`;
   switch (rowData[6].toUpperCase()) {
+ 
     case WFConfig().businessServiceRRP:
       if(id === null)
-      window.location.href = `/pms/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `${reviewUrl}/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `${reviewUrl}/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOE:
       if(id === null)
-      window.location.href = `/pms/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `${reviewUrl}/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `${reviewUrl}/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOP:
       if(id === null)
-      window.location.href = `/pms/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `${reviewUrl}/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `${reviewUrl}/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
       break;
    } 
