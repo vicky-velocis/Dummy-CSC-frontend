@@ -63,6 +63,10 @@ const ResolveSuccess = Loadable({
   loader: () => import("../Screens/ResolveSuccess"),
   loading: Loading
 });
+const AutoRoutingSuccess = Loadable({
+  loader: () => import("../Screens/AutoRoutingSuccess"),
+  loading: Loading
+});
 const ReassignSuccess = Loadable({
   loader: () => import("../Screens/ReassignSuccess"),
   loading: Loading
@@ -167,6 +171,18 @@ const routes = [
       hideBackButton: true,
       hideFooter: true,
       title: "CS_COMPLAINT_DETAILS_COMPLAINT_RESOLVED",
+      hideTitle: true,
+      redirectionUrl
+    }
+  },   
+  {
+    path: "master/autoRouting-success",
+    component: AutoRoutingSuccess,
+    needsAuthentication: true,
+    options: {
+      hideBackButton: true,
+      hideFooter: true,
+      title: "ES_AUTO_ROUTING_MAPPING_HEADER",
       hideTitle: true,
       redirectionUrl
     }

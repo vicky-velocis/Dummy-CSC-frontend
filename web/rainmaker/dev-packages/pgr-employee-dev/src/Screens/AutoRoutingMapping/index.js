@@ -13,6 +13,7 @@ import {   prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configu
 import { fetchComplaintAutoRouting } from "egov-ui-kit/redux/complaints/actions";
 import MultiItemCard from './multiItemCard';
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { result } from "lodash";
 class AutoRoutingMapping extends Component {
     constructor(props){
@@ -26,7 +27,8 @@ class AutoRoutingMapping extends Component {
             categoriesArr : [],
             sectorArr :[],
             unAllocatedSector:[],
-            autoRouting : [{id: new Date().getTime() ,sector:[],employee:""}] 
+            autoRouting : [{id: new Date().getTime() ,sector:[],employee:""}] ,
+            searchResponse: {},
         }
         this.multiDropdownStyle = {
             chips: {
@@ -179,11 +181,19 @@ class AutoRoutingMapping extends Component {
       this.setState ({autoRouting : [...autoRouting , {id:new Date().getTime(),sector:[],employee:""}]})
     }
 
-    populatingAutoRoutingData = (category) => {
+    populatingAutoRoutingData = async(category) => {
         const {AutoroutingEscalation} = this.props;
+        // api call for fething autRouting
+        const queryParams  = [{ key: "tenantId", value: getTenantId() }, { key: "category", value: category.value } ];
+        const response = await httpRequest("/rainmaker-pgr/v1/masters/autorouting/_fetch", "_search", queryParams);
 
-        const rawdata = Object.values(AutoroutingEscalation).filter(ele => ele.category === category.value);
-        this.generateActualDataSource(rawdata);
+        if(response && response.autoroutingmap &&  response.autoroutingmap.autorouting){
+          const rawdata =  response.autoroutingmap.autorouting;
+          this.generateActualDataSource(rawdata);
+          this.setState({searchResponse : response.autoroutingmap })
+        }
+      //  const rawdata = Object.values(AutoroutingEscalation).filter(ele => ele.category === category.value);
+        
     }
 
     generateActualDataSource(rawdata){
@@ -277,9 +287,26 @@ class AutoRoutingMapping extends Component {
           );
         }  
         else{
-          const requestBody = {AutoroutingEscalationMap}
-       //  const response = await httpRequest("egov-mdms-service/v1", "_search", [], requestBody);
-       console.log("requestbody",requestBody )
+          const {searchResponse} = this.state
+          let autoroutingmap = {autorouting:{}};
+          autoroutingmap.tenantId = getTenantId();
+          autoroutingmap.autorouting.active = true;
+          autoroutingmap.autorouting.category = AutoroutingEscalationMap.category;
+          autoroutingmap.autorouting.autoRouting = AutoroutingEscalationMap.autoRouting;
+          autoroutingmap.autorouting.escalationOfficer1 = AutoroutingEscalationMap.escalationOfficer1;
+          autoroutingmap.autorouting.escalationOfficer2 = AutoroutingEscalationMap.escalationOfficer2;
+
+          const requestBody = {autoroutingmap}
+           //  console.log("requestbody",requestBody )
+           try {
+          const response = await httpRequest("rainmaker-pgr/v1/masters/autorouting/_update", "_search", [], requestBody);
+            if(response){
+              window.location.href = "/employee/master/autoRouting-success";
+            }
+           }
+           catch (e) {
+            console.log(e);
+          }
         }
 
        
