@@ -176,21 +176,21 @@ process.env.REACT_APP_SELF_RUNNING === "true"
  
     case WFConfig().businessServiceRRP:
       if(id === null)
-      window.location.href = `${reviewUrl}/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `${reviewUrl}/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOE:
       if(id === null)
-      window.location.href = `${reviewUrl}/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `${reviewUrl}/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOP:
       if(id === null)
-      window.location.href = `${reviewUrl}/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `${reviewUrl}/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
       break;
    } 
