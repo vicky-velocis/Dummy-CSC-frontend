@@ -29,8 +29,7 @@ export const getCurrentStatus = status => {
 const TaskStatusComponents = ({ currentObj, index }) => {
   if (currentObj.moduleName === 'HORTICULTURE'){
     var role_name = ""
-    
-    
+
     var current_assigner_roles = get(currentObj, "assigner")
     for (var i = 0; i < current_assigner_roles.roles.length; i++) {
       
@@ -52,7 +51,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer labelName="Date" labelKey="HC_DATE_LABEL" />
@@ -71,7 +70,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -89,7 +88,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={3}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -122,7 +121,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -145,7 +144,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         </Typography>
       </Grid>
       
-      <Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: 15 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: 15, wordBreak: "break-all" }}>
         <Typography variant="caption">
           <LabelContainer
             labelName="Comments"
