@@ -89,6 +89,7 @@ class AutoRoutingMapping extends Component {
   }
      employee = {
       id: "employee",
+      required: true,
       jsonPath: "services[0].employee",
       floatingLabelText: this.getLocalizedLabel("PGR_AUTOROUTE_MAPPING_EMPLOYEE"),
       hintText: this.getLocalizedLabel("PGR_AUTOROUTE_MAPPING_EMPLOYEE_PLACEHOLDER"),
@@ -187,7 +188,7 @@ class AutoRoutingMapping extends Component {
         const queryParams  = [{ key: "tenantId", value: getTenantId() }, { key: "category", value: category.value } ];
         const response = await httpRequest("/rainmaker-pgr/v1/masters/autorouting/_fetch", "_search", queryParams);
 
-        if(response && response.autoroutingmap &&  response.autoroutingmap.autorouting){
+        if(response && response.autoroutingmap &&  response.autoroutingmap.autorouting.length>0){
           const rawdata =  response.autoroutingmap.autorouting;
           this.generateActualDataSource(rawdata);
           this.setState({searchResponse : response.autoroutingmap })
@@ -212,7 +213,7 @@ class AutoRoutingMapping extends Component {
             let sectorEmpDetail ={}
             let employee ="";
             sectorEmpDetail.id = new Date().getTime()+index;
-                if(detail.Employee.trim()){
+                if(detail.Employee && detail.Employee.trim()){
                     employee = empDetails.find(emp => emp.value === detail.Employee)
                 }
                 if(employee){
@@ -240,6 +241,22 @@ class AutoRoutingMapping extends Component {
 
           this.setState({officerlevel1 : escalationOfficer1, officerlevel2:escalationOfficer2,autoRouting,unAllocatedSector})
         }
+    }
+
+    formValidation = (form) => {
+      let isValid = true;
+
+        if(!form.escalationOfficer1.length>0 || !form.escalationOfficer2.length>0 || !form.category){
+          isValid = false;
+        };
+
+        if(form.autoRouting.length>0 ){
+          form.autoRouting.forEach(row => {
+              if(!row.Employee || !row.Sector.length>0)
+                isValid = false;
+          })
+        }
+      return isValid;
     }
 
     onSubmit = async(e) => {
@@ -275,6 +292,10 @@ class AutoRoutingMapping extends Component {
         else{
           sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_ONE")}`
         }
+
+      // form validation 
+       const  isFormValid = this.formValidation(AutoroutingEscalationMap);
+          
         if(!isDataValid){
           e.preventDefault();
           toggleSnackbarAndSetText(
@@ -286,6 +307,17 @@ class AutoRoutingMapping extends Component {
             "error"
           );
         }  
+        else if(!isFormValid){
+          e.preventDefault();
+          toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "Please fill all fields",
+              labelKey: "ERR_FILL_ALL_FIELDS"
+            },
+            "warning"
+          );
+        }
         else{
           const {searchResponse} = this.state
           let autoroutingmap = {autorouting:{}};
@@ -353,6 +385,10 @@ class AutoRoutingMapping extends Component {
                 <div className="col-sm-6 col-xs-12"></div>
                 <div className="col-sm-12 col-md-12 col-xs-12" style={{display:"flex"}} >   
                 <Label  label="PGR_AUTOROUTE_MAPPING_ESCALATION_OFFICER1"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                <span style={{color:"red",marginTop:4}}>
+                  {" "}
+                  *
+                </span>
                   <Multiselect   
                     options={empDetails}  
                     closeIcon="close"      
@@ -369,6 +405,10 @@ class AutoRoutingMapping extends Component {
                   </div>   
                   <div className="col-sm-12 col-md-12 col-xs-12" style={{display:"flex"}} >   
                   <Label  label="PGR_AUTOROUTE_MAPPING_ESCALATION_OFFICER2"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                  <span style={{color:"red",marginTop:4}}>
+                  {" "}
+                  *
+                 </span>
                   <Multiselect   
                     options={empDetails}  
                     closeIcon="close"      
