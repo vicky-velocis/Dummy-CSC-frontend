@@ -66,7 +66,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     console.log(e);
   }
 };
-  export const MaterialReceiptNote = getCommonCard({
+  export const MaterialReceiptMiscNote = getCommonCard({
     header: getCommonTitle(
       {
         labelName: "Miscellaneous Material Receipt",

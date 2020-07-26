@@ -153,7 +153,7 @@ export const furnishindentData = (state, dispatch) => {
     "materialIssues",
     []
   );
-   setDateInYmdFormat(materialIssues[0], ["IssueDate", ]);
+   setDateInYmdFormat(materialIssues[0], ["issueDate", ]);
   // setAllDatesInYmdFormat(materialIssues[0], [
   //   { object: "assignments", values: ["fromDate", "toDate"] },
   //   { object: "priceListDetails", values: ["serviceFrom", "serviceTo"] }

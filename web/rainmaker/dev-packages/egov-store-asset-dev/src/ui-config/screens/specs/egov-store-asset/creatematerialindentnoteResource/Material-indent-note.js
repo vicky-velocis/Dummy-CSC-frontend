@@ -11,7 +11,7 @@ import {
  import set from "lodash/set";
  import get from "lodash/get";
  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommonsapi'
+import{getMaterialBalanceRateResults} from '../../../../../ui-utils/storecommonsapi'
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
@@ -26,14 +26,42 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
   ];
   let storecode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'')
   queryObject.push({
-    key: "store",
+    key: "issueingStore",
     value: storecode
   });
 
+  //get Material based on Indent
+  let material =[]
+  let  indents =  get(
+    state.screenConfiguration.preparedFinalObject,
+    `indents`,
+    []
+  );
+  let indentDetails = get(
+    indents[0],
+    `indentDetails`,
+    []
+  );
+  for (let index = 0; index < indentDetails.length; index++) {
+    const element = indentDetails[index];
+    material.push( element.material.code)
+    
+  }
+  let matcodes= material.map(itm => {
+                return `${itm}`;
+              })
+              .join() || "-"
+ // dispatch(prepareFinalObject("indentsmaterial",material));
+  queryObject.push({
+    key: "material",
+    value: matcodes
+  });
+console.log(matcodes)
     
   try {
-    let response = await getMaterialMasterSearchResults(queryObject, dispatch);
-    dispatch(prepareFinalObject("materials", response.materials));
+    let response = await getMaterialBalanceRateResults(queryObject, dispatch);
+
+    dispatch(prepareFinalObject("indentsmaterial", response.MaterialBalanceRate));
    //set materialIssues[0].issuedToEmployee
    const queryParams = [{ key: "roles", value: "EMPLOYEE" },{ key: "tenantId", value:  getTenantId() }];
    const payload = await httpRequest(

@@ -16,6 +16,7 @@ import {
   import { commonTransform, objectArrayToDropdown } from "../utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { NULMConfiguration } from "../../../../ui-utils/sampleResponses";
   //import { getEmployeeData } from "./viewResource/functions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import {
@@ -127,21 +128,14 @@ export const header = getCommonContainer({
       );
       // document type 
 
-     let  DocumentType_PriceList= [
-        {
-            code: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
-            isMandatory: true, 
-            required:true,
-            documentType:"STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION"  ,         
-            active: true
-        },]
+     let  DocumentType_PriceList= NULMConfiguration().DocumentType_SEP;
         dispatch(
           prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes"))
         );
       dispatch(
-        prepareFinalObject("DocumentType_PriceList", DocumentType_PriceList)
+        prepareFinalObject("applyScreenMdmsData.SEPApplication.sepdocument", DocumentType_PriceList)
       );
-      prepareDocumentsUploadData(state, dispatch, 'pricelist');
+      prepareDocumentsUploadData(state, dispatch, 'SEPApplication');
       setRolesList(state, dispatch);
       setHierarchyList(state, dispatch);
       return true;

@@ -42,7 +42,7 @@ export const callBackForNext = async (state, dispatch) => {
     );
     
     if (!(isSupplierDetailsValid)) {
-      isFormValid = false;
+      isFormValid = true;
     }
    // prepareDocumentsUploadData(state, dispatch,"pricelist");
   }

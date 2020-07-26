@@ -82,7 +82,7 @@ import {
           },
           required: true,
           jsonPath: "indents[0].indentPurpose",
-          //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+          //sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
         props: {
           data: [
             {

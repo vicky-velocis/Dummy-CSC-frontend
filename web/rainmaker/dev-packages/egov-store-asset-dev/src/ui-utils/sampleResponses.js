@@ -484,3 +484,18 @@ export const IndentConfiguration =()=>{
     
   }
 }
+
+export const NonIndentConfiguration =()=>{
+
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+  issuePurpose :"RETURNTOSUPPLIER"
+    
+  }
+}

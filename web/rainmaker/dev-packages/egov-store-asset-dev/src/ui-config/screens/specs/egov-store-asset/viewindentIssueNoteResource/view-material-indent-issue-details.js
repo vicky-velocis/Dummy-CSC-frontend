@@ -28,7 +28,7 @@ import {
               labelName: "Material Nmae",
                   labelKey: "STORE_MATERIAL_NAME"
             },
-            { jsonPath: "materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code",          
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.material.name",          
           }
           ),
           TotalIndentQty: getLabelWithValue(
@@ -45,7 +45,7 @@ import {
               labelName: "Balance Qty",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_BALANCE_QTY"
             },
-            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty"
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue"
             
            }
           ),
@@ -54,7 +54,7 @@ import {
               labelName: "Qty Issued",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_QTY_ISSUED"
             },
-            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentIssuedQuantity"
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.userQuantity"
             
            }
           ),
@@ -70,7 +70,7 @@ import {
             { labelName: "Unit Price",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_UNIT_PRICE"},
             {
-              jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.unitRate"
              
             }
           ),

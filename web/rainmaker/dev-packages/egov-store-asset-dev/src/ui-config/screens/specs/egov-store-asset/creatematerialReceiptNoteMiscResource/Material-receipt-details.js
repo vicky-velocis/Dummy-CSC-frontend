@@ -232,8 +232,8 @@ import {
       }),
       items: [],
       addItemLabel: {
-        labelName: "Add Material Indent Note",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ADD_MATERIAL_INDENT"
+        labelName: "Add ",
+        labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
       },
       headerName: "Material Indent Note",
       headerJsonPath:
@@ -245,7 +245,7 @@ import {
     type: "array"
   };
   
-  export const materialReceiptDetail = getCommonCard({
+  export const materialReceiptMiscDetail = getCommonCard({
     header: getCommonTitle(
       {
         labelName: "Miscellaneous Material Receipt Details",

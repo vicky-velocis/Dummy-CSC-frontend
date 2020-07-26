@@ -144,7 +144,7 @@ import {
                   disabled:true
                 },
                 required: false,
-                visible:false,
+                visible:true,
                 pattern: getPattern("Name") || null,
                 jsonPath: "indents[0].indentDetails[0].project.code",
                 //sourceJsonPath: "createScreenMdmsData.common-masters.UOM",

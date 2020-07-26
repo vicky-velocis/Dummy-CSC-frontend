@@ -84,7 +84,7 @@ import {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "priceLists[0].priceListDetails",
+      sourceJsonPath: "materialReceipt[0].receiptDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.MaterialIssueCardContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

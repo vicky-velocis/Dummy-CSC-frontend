@@ -246,10 +246,10 @@ export const updateOpeningBalance = async (queryObject, payload, dispatch) => {
 };
 export const prepareDocumentsUploadData = async (state, dispatch, type) => {
   let documents = '';
-  if (type == "pricelist") {
+  if (type == "SEPApplication") {
     documents = get(
       state,
-      "screenConfiguration.preparedFinalObject.DocumentType_PriceList",
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.SEPApplication.sepdocument",
       []
     );
   }

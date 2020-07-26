@@ -263,7 +263,7 @@ export const header = getCommonContainer({
           material.push( element.material)
           
         }
-        dispatch(prepareFinalObject("indentsmaterial",material));
+        dispatch(prepareFinalObject("IndentMaterial",material));
        
       }
     

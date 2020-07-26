@@ -143,8 +143,10 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
   );
   if(id === null)
   {
+    // const CurrentDate_ = new Date();
+    // let receiptDate = convertDateToEpoch(CurrentDate_);
   set(materialReceiptObject[0],"mrnNumber","");
-  set(materialReceiptObject[0],"receiptDate","");
+  set(materialReceiptObject[0],"receiptDate",receivedDate);
   set(materialReceiptObject[0],"mrnStatus","CREATED");
   set(materialReceiptObject[0],"receiptDetails[0].material.description","");
   }

@@ -398,6 +398,30 @@ export const getmaterialissuesSearchResults = async queryObject => {
   }
 
 };
+export const getMaterialBalanceRateResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/receiptnotes/_balance",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
 export const creatematerialissues = async (queryObject, payload, dispatch) => {
   try {
     const response = await httpRequest(
@@ -556,6 +580,74 @@ export const updatemiscellaneousreceiptnotes = async (queryObject, payload, disp
     const response = await httpRequest(
       "post",
       "/store-asset-services/miscellaneousreceiptnotes/_update",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+//Non-Indent Material Issue Note
+export const getNonIndentMaterialIssueSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_create",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updateNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_update",
       "",
       queryObject,
       { materialReceipt: payload }

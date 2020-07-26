@@ -33,7 +33,7 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   if (activeStep === 0) {
     const isMaterialDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.MaterialReceiptNote.children.cardContent.children.MaterialReceiptNoteContainer.children",
+      "components.div.children.formwizardFirstStep.children.MaterialReceiptMiscNote.children.cardContent.children.MaterialReceiptNoteContainer.children",
       state,
       dispatch,
       "createMaterialReceiptNoteMisc"
@@ -45,7 +45,7 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep === 1) {
     let storeDetailsCardPath =
-      "components.div.children.formwizardSecondStep.children.materialReceiptDetail.children.cardContent.children.materialReceiptCard.props.items";
+      "components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items";
     let storeDetailsItems = get(
       state.screenConfiguration.screenConfig.createMaterialReceiptNoteMisc,
       storeDetailsCardPath,

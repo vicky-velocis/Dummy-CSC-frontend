@@ -104,7 +104,24 @@ import {
                 purchaseOrder =  purchaseOrder.filter(x=> x.id === action.value) 
                 if(purchaseOrder && purchaseOrder[0])  
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.name",purchaseOrder[0].purchaseOrderNumber));
-
+                //set material dropdown based on po selection
+                let material=[];
+                let purchaseOrderDetails =get(
+                  purchaseOrder[0],
+                  `purchaseOrderDetails`,
+                  []
+                );
+                for (let index = 0; index < purchaseOrderDetails.length; index++) {
+                  const element = purchaseOrderDetails[index];
+                  material.push( element.material)
+                  
+                }
+                dispatch(prepareFinalObject("ReceiptMaterial",material));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",purchaseOrderDetails[0].uom.code));
+                //set AvailableQty from  po purchaseOrderDetails 0 index receivedQuantity,orderQuantity,unitPrice(unitRate)
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].AvailableQty",purchaseOrderDetails[0].receivedQuantity));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].orderQuantity",purchaseOrderDetails[0].orderQuantity));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].unitRate",purchaseOrderDetails[0].unitPrice));
               }
 
             },
@@ -120,7 +137,8 @@ import {
                 },
                 required: true,               
                 jsonPath: "materialReceipt[0].receiptDetails[0].material.code",
-                sourceJsonPath: "createScreenMdmsData.store-asset.Material",
+                //sourceJsonPath: "createScreenMdmsData.store-asset.Material",
+                sourceJsonPath:"ReceiptMaterial",
                 props: {
                   optionValue: "code",
                   optionLabel: "name",
@@ -132,13 +150,13 @@ import {
                 
                 let materials = get(
                   state.screenConfiguration.preparedFinalObject,
-                  `createScreenMdmsData.store-asset.Material`,
+                  `ReceiptMaterial`,
                   []
                 ); 
                 materials =  materials.filter(x=> x.code === action.value)   
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].name));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].MaterialNameDesc",materials[0].description));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].baseUom.code));
+                //dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].baseUom.code));
                // dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",materials[0].name));
 
               }
@@ -198,7 +216,7 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].AvailableQty"
               })
             },
-            OrderedQty: {
+            orderQuantity: {
               ...getTextField({
                 label: {
                   labelName: "Ordered Qty",
@@ -213,7 +231,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].OrderedQty"
+                jsonPath: "materialReceipt[0].receiptDetails[0].orderQuantity"
               })
             },
             QtyasperChallan: {
@@ -314,9 +332,12 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].acceptedQty"
               }),
               beforeFieldChange: (action, state, dispatch) => {
+                let receivedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].receivedQty`,0)
+                let QtyRejected = Number(receivedQty) - Number(action.value)
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].QtyRejected",QtyRejected));
                      }
             },
-            UnitRate: {
+            unitRate: {
               ...getTextField({
                 label: {
                   labelName: "Unit Rate",
@@ -387,9 +408,14 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].indentDetail.acceptedQty"
+                jsonPath: "materialReceipt[0].receiptDetails[0].ValueofQtyaccepted"
               }),
               beforeFieldChange: (action, state, dispatch) => {
+                let acceptedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].acceptedQty`,0)
+                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                let ValueofQtyaccepted = Number(acceptedQty) * Number(unitRate)
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].ValueofQtyaccepted",Number(ValueofQtyaccepted)));
+
                      }
             },
             lotNo: {
@@ -494,8 +520,8 @@ import {
       }),
       items: [],
       addItemLabel: {
-        labelName: "Add Material Indent Note",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ADD_MATERIAL_INDENT"
+        labelName: "Add ",
+        labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
       },
       headerName: "Material Indent Note",
       headerJsonPath:
@@ -510,8 +536,8 @@ import {
   export const materialReceiptDetail = getCommonCard({
     header: getCommonTitle(
       {
-        labelName: "Indent Material Issue Details",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE_DETAILS"
+        labelName: "Material Receipt Details",
+        labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_DETAILS"
       },
       {
         style: {

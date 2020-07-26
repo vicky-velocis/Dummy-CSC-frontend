@@ -3,12 +3,12 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
-  import { footer } from "./creatematerialReceiptNoteResource/footer";
+  import { footer } from "./creatematerialReceiptNoteMiscResource/footer";
   import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
   import { getSearchResults } from "../../../../ui-utils/commons";
-  import { materialReceiptDetail } from "./creatematerialReceiptNoteResource/Material-receipt-details"; 
-  import { MaterialReceiptNote } from "./creatematerialReceiptNoteResource/Material-receipt-note"; 
-  import { otherDetails } from "./creatematerialReceiptNoteResource/other-details";
+  import { materialReceiptMiscDetail } from "./creatematerialReceiptNoteMiscResource/Material-receipt-details"; 
+  import { MaterialReceiptMiscNote } from "./creatematerialReceiptNoteMiscResource/Material-receipt-note"; 
+  import { otherDetails } from "./creatematerialReceiptNoteMiscResource/other-details";
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -51,7 +51,7 @@ export const header = getCommonContainer({
       id: "apply_form1"
     },
     children: {
-      MaterialReceiptNote
+      MaterialReceiptMiscNote
     }
   };
   
@@ -62,7 +62,7 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
-      materialReceiptDetail
+      materialReceiptMiscDetail
     },
     visible: false
   };
