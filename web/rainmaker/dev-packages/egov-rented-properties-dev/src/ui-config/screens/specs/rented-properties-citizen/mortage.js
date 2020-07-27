@@ -4,6 +4,7 @@ import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
 import "../utils/index.css";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getTenantId();
 
@@ -37,9 +38,19 @@ const cardItems = [{
   }
 ]
 
+const getData = async (action, state, dispatch) => {
+  const queryObject = [{ key: "tenantId", value: getTenantId() }, 
+                      { key: "businessServices", value: "PermissionToMortgage" }]
+  await setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+}
+
 const mortageHome = {
     uiFramework: "material-ui",
     name: "mortage",
+    beforeInitScreen: (action, state, dispatch) => {
+      getData(action, state, dispatch)
+      return action
+    },
     components: {
         div: {
           uiFramework: "custom-atoms",
