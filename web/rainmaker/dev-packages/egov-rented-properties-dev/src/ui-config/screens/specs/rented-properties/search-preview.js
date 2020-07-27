@@ -1,13 +1,20 @@
 import {
     getCommonHeader,
     getCommonContainer,
+    getLabel,
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
 import { getReviewDocuments } from "./applyResource/review-documents";
+import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+
+const userInfo = JSON.parse(getUserInfo());
+const {roles = []} = userInfo
+const findItem = roles.find(item => item.code === "CTL_CLERK");
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
@@ -118,6 +125,38 @@ const rentedPropertiesDetailPreview = {
               dataPath: "Properties",
               moduleName: "MasterRP",
               updateUrl: "/csp/property/_update"
+            }
+          },
+          searchButton: {
+            componentPath: "Button",
+            visible: !!findItem,
+            gridDefination: {
+              xs: 12,
+              sm: 4,
+              align: "right"
+            },
+            props: {
+              variant: "contained",
+              style: {
+                color: "white",
+                backgroundColor: "#fe7a51",
+                borderColor:"#fe7a51",
+                borderRadius: "2px",
+                width: "50%",
+                height: "48px",
+              }
+            },
+            children: {
+              buttonLabel: getLabel({
+                labelName: "Notice Violation",
+                labelKey: "RP_NOTICE_VIOLATION_BUTTON"
+              })
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: (state, dispatch) => {
+                dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`));
+              }
             }
           },
         propertyReviewDetails

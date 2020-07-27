@@ -105,18 +105,6 @@ import {
                     dispatch(setRoute(`/rented-properties/apply?tenantId=${getTenantId()}`));
                   }
                 },
-                children: {
-                  buttonLabel: getLabel({
-                    labelName: "MASTER ADD",
-                    labelKey: "RP_HOME_ghj_BUTTON"
-                  })
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: (state, dispatch) => {
-                    dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`));
-                  }
-                }
               }
             }
           },
