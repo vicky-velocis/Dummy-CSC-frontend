@@ -942,6 +942,10 @@ const fullAddressField = {
   },
   minLength: 1,
   maxLength: 100,
+  props:{
+        multiline: true,
+        rows: "2"
+      },
   required: true,
   visible: false,
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
