@@ -427,7 +427,7 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
     if(!!transitNumber) {
       let queryObject = [
         { key: "transitNumber", value: transitNumber },
-        { key: "state", value: "PM_APPROVED" }
+        { key: "state", value: "APPROVED(PM)" }
       ];
       const payload = await getSearchResults(queryObject)
       if (
