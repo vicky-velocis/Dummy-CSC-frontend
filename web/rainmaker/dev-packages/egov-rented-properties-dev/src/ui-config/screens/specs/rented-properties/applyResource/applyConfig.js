@@ -1,12 +1,12 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {propertyDetails, transitSiteDetails} from './propertyDetails';
-import {rentHolderDetails, applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
+import {propertyDetails, transitSiteDetails,transitSiteDetailsNotice} from './propertyDetails';
+import {rentHolderDetails, applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties,rentHolderDetailsForDuplicatePropertiesNotice} from './rentHolderDetails';
 import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite} from './addressDetails';
 import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
 import {rentDetails} from './rentDetails';
-import {paymentDetails} from './paymentDetails'
+import {paymentDetails,paymentDetailsNotice} from './paymentDetails'
 import {documentList} from './documentList'
 
 import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails,duplicateCopyDetails} from './reviewDetails'
@@ -265,3 +265,16 @@ export const formwizardDuplicateCopyThirdStep = {
   },
   visible: false
 };
+export const recoveryNoticeFirstStep ={
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    transitSiteDetailsNotice,
+    rentHolderDetailsForDuplicatePropertiesNotice,
+    paymentDetailsNotice
+    //ownershipAddressDetails
+  }
+}

@@ -213,6 +213,24 @@ const transitNumberField = {
         }
     }
   }
+  const memoDateField = {
+    label: {
+        labelName: "Memo Date",
+        labelKey: "RP_MEMO_DATE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Date of Possession",
+        labelKey: "RP_MEMO_DATE_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("Date"),
+    jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
 
 const getPropertyDetails = () => {
     return {
@@ -252,5 +270,20 @@ const getTransitSiteDetails = () => {
     }
 }
 
+const getTransitSiteDetailsNotice = () => {
+    return {
+        header: transitSiteHeader,
+        detailsContainer: getCommonContainer({
+            // transitNumber: getTextField(ownershipTransitNumberField),
+            // colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            // pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+            transitNumber: getTextField(transitNumberField),
+            allotmentNumber: getTextField(allotmentNumberField),
+            posessionDate: getDateField(memoDateField)
+        })
+    }
+}
+
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
+export const transitSiteDetailsNotice= getCommonCard(getTransitSiteDetailsNotice())

@@ -556,6 +556,80 @@ const applicantAddressField = {
     jsonPath: "OwnerShipLicenses[0].owners[0].correspondenceAddress"
 }
 
+
+const originalAllotteField = {
+    label: {
+        labelName: "Original Allottee",
+        labelKey: "RP_ORIGINAL_ALLOTTEE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Original Allottee Name",
+        labelKey: "RP_ORIGINAL_ALLOTTEE_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 4,
+    maxLength: 40,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.orignalAllottee"
+}
+const getDocumentField = {
+    label: {
+        labelName: "Documents Given",
+        labelKey: "RP_DOCUMENTS_GIVEN_LABEL"
+    },
+    placeholder: {
+        labelName: "Documents Given",
+        labelKey: "RP_DOCUMENTS_GIVEN_LABEL"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 4,
+    maxLength: 40,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.documentsGiven" 
+}
+const getViolationField = {
+    label: {
+        labelName: "Violations",
+        labelKey: "RP_VIOLATIONS_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Comments",
+        labelKey: "RP_VIOLATIONS_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 4,
+    maxLength: 40,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
+}
+const getEditorField = {
+    label: {
+        labelName: "Editor",
+        labelKey: "RP_Editor_LABEL"
+    },
+    placeholder: {
+        labelName: "Editor",
+        labelKey: "RP_Editor_LABEL"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 4,
+    maxLength: 40,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
+}
+
 const getApplicantDetails = () => {
     return {
         header: rentHolderHeader,
@@ -601,9 +675,24 @@ const getApplicantDetailsForDuplicateCopy = () => {
     }
 }
 
+
+const getApplicantDetailsForDuplicateCopyNotice = () => {
+    return {
+        header: applicantHeader,
+        detailsContainer: getCommonContainer({
+        fatherOrHusband:getTextField(fatherOrHusbandsName),
+        originalAllotte :getTextField(originalAllotteField),
+        violations:getTextField(getViolationField),
+        editor : getTextField(getEditorField),
+        })
+    }
+}
+
 export const applicantDetails = getCommonCard(getApplicantDetails())
 export const applicantDetailsMortgage = getCommonCard(getApplicantDetailsMortgage())
 
 export const rentHolderDetails = getCommonCard(getRentHolderDetails())
 
 export const rentHolderDetailsForDuplicateProperties = getCommonCard(getApplicantDetailsForDuplicateCopy())
+
+export const rentHolderDetailsForDuplicatePropertiesNotice=getCommonCard(getApplicantDetailsForDuplicateCopyNotice())
