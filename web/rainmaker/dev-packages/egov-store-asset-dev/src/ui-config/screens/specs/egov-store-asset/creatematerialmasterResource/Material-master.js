@@ -54,7 +54,7 @@ import { filter } from "lodash";
           // alert(MaterialType[0].purchaseUom.code);
           if(MaterialType[0])
           {
-        
+            dispatch(prepareFinalObject("materials[0].description",MaterialType[0].description));
           dispatch(prepareFinalObject("materials[0].name",MaterialType[0].name));
           dispatch(prepareFinalObject("materials[0].materialType.code",MaterialType[0].materialType.code));
           dispatch(prepareFinalObject("materials[0].baseUom.code",MaterialType[0].baseUom.code));

@@ -15,7 +15,7 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
-
+ import { getSearchResults } from "../../../../../ui-utils/commons";
  const getMaterialData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let queryObject = [
@@ -66,6 +66,30 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     console.log(e);
   }
 };
+const getmrnNumber = async (  action, state,dispatch,)=>{
+  const tenantId = getTenantId();
+  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
+  let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.code",'')
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }];
+    queryObject.push({
+      key: "store",
+      value: storecode
+    });
+    queryObject.push({
+      key: "stsupplierCodeore",
+      value: suppliercode
+    });
+  try {
+    let response = await getSearchResults(queryObject, dispatch,"mrnNumber");
+    dispatch(prepareFinalObject("mrnNumber", response));
+  } catch (e) {
+    console.log(e);
+  }
+}
   export const MaterialReceiptMiscNote = getCommonCard({
     header: getCommonTitle(
       {
@@ -106,6 +130,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           ); 
           store =  store.filter(x=> x.code === action.value)   
           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name",store[0].name));
+          // call api to get mrnNumber List
+          getmrnNumber(action,state, dispatch)
           
         }
       },

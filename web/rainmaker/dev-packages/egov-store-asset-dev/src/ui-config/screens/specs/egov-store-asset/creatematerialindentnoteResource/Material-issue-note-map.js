@@ -232,6 +232,8 @@ import {
                 dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",BalanceQtyAfterIssue));
                 dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue",TotalValue)); 
                 dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].pendingIndentQuantity",pendingIndentQuantity));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.indentIssuedQuantity",0));
+                //indentIssuedQuantity
               }
             },
             uomCode: {
@@ -372,6 +374,7 @@ import {
         labelName: "Add ",
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
       },
+      
       headerName: "Material Indent Note",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",

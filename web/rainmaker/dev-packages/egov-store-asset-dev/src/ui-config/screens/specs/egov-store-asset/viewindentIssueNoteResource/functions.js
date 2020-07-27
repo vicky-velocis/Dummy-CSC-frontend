@@ -232,6 +232,29 @@ export const createUpdateIndent = async (state, dispatch, action) => {
     // set(materialIssues[0],"indentType", "Indent");
     // set(materialIssues[0],"materialHandOverTo", "Test");
     // set(materialIssues[0],"designation", "");
+
+      //get and set indentDetail id from indent --> indentDetail objet
+
+      let indentDetails = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialIssues[0].indent.indentDetails",
+        []
+      );
+      let materialIssueDetails = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialIssues[0].materialIssueDetails",
+        []
+      );
+      for (let index = 0; index < materialIssueDetails.length; index++) {
+        const element = materialIssueDetails[index];
+        dispatch(
+          prepareFinalObject(
+            `materialIssues[0].materialIssueDetails[${index}].indentDetail.id`,
+            indentDetails[index].id,
+          )
+        );
+        
+      }
   }
   
 
@@ -259,7 +282,7 @@ export const createUpdateIndent = async (state, dispatch, action) => {
         dispatch
       );
       if(response){
-        let indentNumber = response.materialIssues[0].indentNumber
+        let indentNumber = response.materialIssues[0].issueNumber
         dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
        }
     } catch (error) {

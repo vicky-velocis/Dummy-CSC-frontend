@@ -171,20 +171,7 @@ export const header = getCommonContainer({
       console.log(e);
     }
   }
-  const getpurchaseOrder = async (  action, state,dispatch,)=>{
-    const tenantId = getTenantId();
-    let queryObject = [
-      {
-        key: "tenantId",
-        value: tenantId
-      }];
-    try {
-      let response = await getSearchResults(queryObject, dispatch,"purchaseOrder");
-      dispatch(prepareFinalObject("purchaseOrder", response));
-    } catch (e) {
-      console.log(e);
-    }
-  }
+
   const getYearsList = (startYear, state, dispatch) => {
     var currentYear = new Date().getFullYear(),
       years = [];
@@ -246,7 +233,7 @@ export const header = getCommonContainer({
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
       const SupllierData = getSupllierData(action,state, dispatch);
-      const purchaseOrder = getpurchaseOrder(action,state, dispatch);
+     // const purchaseOrder = getpurchaseOrder(action,state, dispatch);
      // SEt Default data
 
      dispatch(

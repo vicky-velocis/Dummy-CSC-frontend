@@ -11,6 +11,8 @@ import {
   ifUserRoleExists,
   validateFields
 } from "../../utils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { set } from "lodash";
 // import "./index.css";
 
 const moveToReview = dispatch => {
@@ -98,7 +100,63 @@ export const callBackForNext = async (state, dispatch) => {
     MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
     MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
     if(MaxQty> MinQty)
-    moveToReview(dispatch);
+    {
+      let IsDuplicatItem = false
+      if(!IsDuplicatItem)
+      {
+        let  materials =  get(
+          state.screenConfiguration.preparedFinalObject,
+          `materials[0]`,
+          []
+        ); 
+        let  storeMapping =  get(
+          state.screenConfiguration.preparedFinalObject,
+          `materials[0].storeMapping`,
+          []
+        ); 
+        let id = get(
+          state.screenConfiguration.preparedFinalObject,
+          `materials[0].id`,
+          0
+        ); 
+        if(id)
+        {       
+          for (let index = 0; index < storeMapping.length; index++) {
+            const element = storeMapping[index];
+            if(element.isDeleted === false)
+            {
+              //set Active false
+             // set(materials[0], `storeMapping[${index}].active`, false);
+              dispatch(
+                prepareFinalObject(
+                  `materials[0].storeMapping[${index}].active`,
+                  false,
+                )
+              );
+            }
+            
+          }
+         // storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+        }
+        else{
+          alert('Create')
+          storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+
+        }
+        
+       moveToReview(dispatch);
+      }   
+      else
+      {
+        const errorMessage = {
+          labelName: "Duplicate Material Added",
+          labelKey: "STORE_MATERIAL_DUPLICATE_VALIDATION"
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+      }
+    }
+ 
     else{
      // pop earnning Message
      const errorMessage = {
@@ -122,8 +180,129 @@ export const callBackForNext = async (state, dispatch) => {
   }
   if (activeStep !== 2) {
     if (isFormValid) {
+      let IsDuplicatItem = false
+       // check duplicat Item 
+       let cardJsonPath =
+       "components.div.children.formwizardSecondStep.children.storeDetails.children.cardContent.children.storeDetailsCard.props.items";
+     let CardItem = get(
+       state.screenConfiguration.screenConfig.creatematerialmaster,
+       cardJsonPath,
+       []
+     );
+
+    // CardItem = CardItem.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+    // console.log(CardItem)
+    let matcode =[];
+     for (let index = 0; index < CardItem.length; index++) {
+       
+       if(CardItem[index].isDeleted === undefined ||
+        CardItem[index].isDeleted !== false)
+        {
+          let code = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'')        
+          matcode.push(code)
+        }
+        else{
+          let code_ = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'')        
+        }      
+     } 
+        var uniq = matcode
+      .map((name) => {
+        return {
+          count: 1,
+          name: name
+        }
+      })
+      .reduce((a, b) => {
+        a[b.name] = (a[b.name] || 0) + b.count
+        return a
+      }, {})    
+
+      var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+      var unoque = Object.keys(uniq).filter((a) => uniq[a] === 1)
+      if(duplicates.length>0)
+      {
+      duplicates= duplicates.map(itm => {
+          return `${itm}`;
+        })
+        .join() || "-"
+        IsDuplicatItem = true;
+        
+      }     
+      if(!IsDuplicatItem)
+      {
+        // remove duplicate item form card
+        // //CardItem = CardItem.filter(x=x.)
+        // CardItem = CardItem.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+        var storeMappingTemp = [];
+        let  storeMapping =  get(
+          state.screenConfiguration.preparedFinalObject,
+          `materials[0].storeMapping`,
+          []
+        );
+        for(var i = 0; i < storeMapping.length; i++){
+            if(storeMappingTemp.indexOf(storeMapping[i]) == -1){
+              storeMappingTemp.push(storeMapping[i]);
+            }
+        }
+        //materials[0].storeMapping
+        let id = get(
+          state.screenConfiguration.preparedFinalObject,
+          `materials[0].id`,
+          0
+        ); 
+        if(id)
+        {
+          
+          let  materials =  get(
+            state.screenConfiguration.preparedFinalObject,
+            `materials[0]`,
+            []
+          ); 
+          for (let index = 0; index < storeMappingTemp.length; index++) {
+            const element = storeMappingTemp[index];
+            if(element.isDeleted === false)
+            {
+              //set Active false
+             // set(materials[0], `storeMapping[${index}].active`, false);
+              dispatch(
+                prepareFinalObject(
+                  `materials[0].storeMapping[${index}].active`,
+                  false,
+                )
+              );
+            }
+            
+          }
+         // storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+        }
+        else{
+          alert('Create')
+          storeMappingTemp = storeMappingTemp.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+
+        }
+        
+
+        if(storeMappingTemp.length>0)
+        {
+           dispatch(
+          prepareFinalObject(
+            "materials[0].storeMapping",
+            storeMappingTemp,
+          )
+        );
+          }
       changeStep(state, dispatch);
-    } else {
+      }
+      else{
+        const errorMessage = {
+          labelName: "Duplicate Material Added",
+          labelKey:   `STORE_MATERIAL_DUPLICATE_VALIDATION ${duplicates}`
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+      }
+    } 
+    else {
       const errorMessage = {
         labelName: "Please fill all fields",
         labelKey: "ERR_FILL_ALL_FIELDS"

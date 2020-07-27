@@ -130,8 +130,8 @@ const getApplicationDisplayCode =() => {
     }
     break;
     case "MATERIALINDENTNOTE": labelValue = {
-      labelName: "Indent Number",
-      labelKey: `STORE_INDENT_NUMBER`,
+      labelName: "Issue Number",
+      labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
     }
     break;
     case "MATERIALRECEIPT": labelValue = {

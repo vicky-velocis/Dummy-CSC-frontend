@@ -234,7 +234,7 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].orderQuantity"
               })
             },
-            QtyasperChallan: {
+            qtyasperChallan: {
               ...getTextField({
                 label: {
                   labelName: "Qty. as per Challan",
@@ -247,14 +247,14 @@ import {
                 props:{
                   disabled:false
                 },
-                required: true,
+                required: false,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].QtyasperChallan"
+                jsonPath: "materialReceipt[0].receiptDetails[0].qtyasperChallan"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                   }
             },
-            Rateperunit: {
+            rateperunit: {
               ...getTextField({
                 label: {
                   labelName: "Qty Rate per unit",
@@ -267,9 +267,9 @@ import {
                 props:{
                   disabled:false
                 },
-                required: true,
+                required: false,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].Rateperunit"
+                jsonPath: "materialReceipt[0].receiptDetails[0].rateperunit"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                  }
@@ -335,6 +335,7 @@ import {
                 let receivedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].receivedQty`,0)
                 let QtyRejected = Number(receivedQty) - Number(action.value)
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].QtyRejected",QtyRejected));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].quantity",Number(action.value)));
                      }
             },
             unitRate: {
@@ -355,7 +356,7 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].unitRate"
               })
             },
-            QtyRejected: {
+            qtyRejected: {
               ...getTextField({
                 label: {
                   labelName: "Qty. Rejected",
@@ -370,7 +371,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].QtyRejected"
+                jsonPath: "materialReceipt[0].receiptDetails[0].qtyRejected"
               })
             },
             Rejectionremarks: {
@@ -462,11 +463,11 @@ import {
               ...getTextField({
                 label: {
                   labelName: "Batch No.",
-                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED"
+                  labelKey: "STORE_MATERIAL_RECEIPT_BATCH_NO"
                 },
                 placeholder: {
                   labelName: "Enter Batch No.",
-                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED_PLACEHOLDER"
+                  labelKey: "STORE_MATERIAL_RECEIPT_BATCH_NO_PLACEHOLDER"
                 },
                 props:{
                   disabled:false
