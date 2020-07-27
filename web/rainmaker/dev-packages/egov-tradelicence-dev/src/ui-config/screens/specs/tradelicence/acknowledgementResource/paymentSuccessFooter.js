@@ -123,7 +123,7 @@ export const paymentSuccessFooter = (
                   // label: "Download",
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { height: "48px", color : "#FE7A51" }, className: "tl-download-button" },
+                  props: { variant: "outlined", style: { height: "48px", color : "#FE7A51", marginRight: "10px" }, className: "tl-download-button" },
                   menu: downloadMenu
                 }
               }
