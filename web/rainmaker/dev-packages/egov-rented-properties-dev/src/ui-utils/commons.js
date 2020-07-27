@@ -29,7 +29,7 @@ import {
   getFileUrl,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import {
   setBusinessServiceDataToLocalStorage,
   getMultiUnits,
@@ -103,8 +103,13 @@ export const getSearchResults = async queryObject => {
   }
 };
 
-export const getOwnershipSearchResults = async queryObject => {
+export const getOwnershipSearchResults = async (queryObject = []) => {
   try {
+    const userInfo = JSON.parse(getUserInfo())
+    const tenantId = userInfo.permanentCity;
+    queryObject = [...queryObject, 
+      { key: "tenantId", value: tenantId || getTenantId() }
+    ]
     const response = await httpRequest(
       "post",
       "/csp/ownership-transfer/_search",
@@ -123,8 +128,13 @@ export const getOwnershipSearchResults = async queryObject => {
   }
 }
 
-export const getMortgageSearchResults = async queryObject => {
+export const getMortgageSearchResults = async (queryObject = []) => {
   try {
+    const userInfo = JSON.parse(getUserInfo())
+    const tenantId = userInfo.permanentCity;
+    queryObject = [...queryObject, 
+      { key: "tenantId", value: tenantId || getTenantId() }
+    ]
     const response = await httpRequest(
       "post",
       "/csp/mortgage/_search",
@@ -143,8 +153,13 @@ export const getMortgageSearchResults = async queryObject => {
   }
 }
 
-export const getDuplicateCopySearchResults = async queryObject => {
+export const getDuplicateCopySearchResults = async (queryObject = []) => {
   try {
+    const userInfo = JSON.parse(getUserInfo())
+    const tenantId = userInfo.permanentCity;
+    queryObject = [...queryObject, 
+      { key: "tenantId", value: tenantId || getTenantId() }
+    ]
     const response = await httpRequest(
       "post",
       "/csp/duplicatecopy/_search",
