@@ -210,7 +210,7 @@ export const callBackForNext = async (state, dispatch) => {
             ]
 
           const applicationsData = await getSearchResults(queryObj);
-          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => (item.status !== "REJECTED" || item.status !== "APPROVED") && (!!appliationNumber ? appliationNumber !==item.applicationNumber : true));
+          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => (item.status !== "REJECTED" && item.status !== "APPROVED") && (!!appliationNumber ? appliationNumber !==item.applicationNumber : true));
           isRenewable = !isRenewable.length
           } else {
             isRenewable = true
@@ -238,7 +238,8 @@ export const callBackForNext = async (state, dispatch) => {
                 )
               );
             } else {
-              isFormValid = false;
+              return
+              // isFormValid = false;
             }
           } else {
             dispatch(
@@ -620,7 +621,7 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     ]
 
   const applicationsData = await getSearchResults(queryObj);
-  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "REJECTED" || item.status !== "APPROVED");
+  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "REJECTED" && item.status !== "APPROVED");
 
  if(!isRenewable.length) {
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
