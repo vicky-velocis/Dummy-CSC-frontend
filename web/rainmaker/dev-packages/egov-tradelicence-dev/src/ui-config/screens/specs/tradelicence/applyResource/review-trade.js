@@ -468,7 +468,7 @@ export const getReviewTrade = (isEditable = true) => {
           children: {
               header: {
                   gridDefination: {
-                      xs: 12,
+                      xs: 8,
                       sm: 10
                   },
                   ...getCommonSubHeader({
@@ -479,11 +479,15 @@ export const getReviewTrade = (isEditable = true) => {
               editSection: {
                   componentPath: "Button",
                   props: {
-                      color: "primary"
+                      color: "primary",
+                      style: {
+                        padding: "0px 16px",
+                        minHeight: "initial"
+                      }
                   },
                   visible: isEditable,
                   gridDefination: {
-                      xs: 12,
+                      xs: 4,
                       sm: 2,
                       align: "right"
                   },
@@ -597,7 +601,7 @@ export const getReviewOwner = (isEditable = true) => {
             children: {
                 header: {
                     gridDefination: {
-                        xs: 12,
+                        xs: 8,
                         sm: 10
                     },
                     ...getCommonSubHeader({
@@ -608,11 +612,15 @@ export const getReviewOwner = (isEditable = true) => {
                 editSection: {
                     componentPath: "Button",
                     props: {
-                        color: "primary"
+                        color: "primary",
+                        style: {
+                            padding: "0px 16px",
+                            minHeight: "initial"
+                        }
                     },
                     visible: isEditable,
                     gridDefination: {
-                        xs: 12,
+                        xs: 4,
                         sm: 2,
                         align: "right"
                     },
