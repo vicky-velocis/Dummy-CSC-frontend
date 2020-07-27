@@ -225,12 +225,11 @@ const transitNumberField = {
         labelKey: "RP_MEMO_DATE_LABEL"
     },
     placeholder: {
-        labelName: "Enter Date of Possession",
+        labelName: "Enter Memo Date",
         labelKey: "RP_MEMO_DATE_PLACEHOLDER"
     },
-    required: true,
     pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
+    jsonPath: "Properties[0].owners[0].ownerDetails.memoDate",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()

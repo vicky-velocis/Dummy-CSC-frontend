@@ -171,7 +171,6 @@ const originalAllotteField = {
     },
     minLength: 4,
     maxLength: 40,
-    required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.orignalAllottee"
 }
 
@@ -190,7 +189,6 @@ const getDocumentField = {
     },
     minLength: 4,
     maxLength: 40,
-    required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.documentsGiven" 
 }
 
@@ -209,18 +207,17 @@ const getViolationField = {
     },
     minLength: 4,
     maxLength: 40,
-    required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
 }
 
 const getEditorField = {
     label: {
         labelName: "Editor",
-        labelKey: "RP_Editor_LABEL"
+        labelKey: "RP_EDITOR_LABEL"
     },
     placeholder: {
         labelName: "Editor",
-        labelKey: "RP_Editor_LABEL"
+        labelKey: "RP_EDITOR_LABEL"
     },
     gridDefination: {
         xs: 12,
@@ -228,7 +225,6 @@ const getEditorField = {
     },
     minLength: 4,
     maxLength: 40,
-    required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
 }
 
