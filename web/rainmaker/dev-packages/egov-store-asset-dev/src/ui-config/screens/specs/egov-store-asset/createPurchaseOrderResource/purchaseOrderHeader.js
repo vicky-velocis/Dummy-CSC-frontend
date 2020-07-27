@@ -127,7 +127,7 @@ export const purchaseOrderHeader = getCommonCard({
         },
         required: true,
         jsonPath: "purchaseOrders[0].rateType",
-        sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+        sourceJsonPath: "createScreenMdmsData.store-asset.PORateType",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",

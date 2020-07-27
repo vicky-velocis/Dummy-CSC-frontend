@@ -95,7 +95,7 @@ import {
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "RateType", filter: "[?(@.active == true)]" },
+              { name: "PORateType", filter: "[?(@.active == true)]" },
             ]
           },
           {
