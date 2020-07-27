@@ -21,6 +21,11 @@ const styles = theme => ({
   }
 });
 
+const getEpochForDate = (date) => {
+  const dateSplit = date.split("-");
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+};
+
 const fieldConfig = {
   approverName: {
     label: {
@@ -174,8 +179,6 @@ class ActionDialog extends React.Component {
       dataPath,
       state
     } = this.props;
-    console.log(dataPath)
-    console.log(this.props)
     const {
       buttonLabel,
       showEmployeeList,
@@ -349,7 +352,7 @@ class ActionDialog extends React.Component {
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.sanctioningDate.label}
                        onChange={e =>
-                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , getEpochForDate(e.target.value))
                       }
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate`}
                        />
@@ -360,7 +363,7 @@ class ActionDialog extends React.Component {
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.mortageEndDate.label}
                        onChange={e =>
-                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , getEpochForDate(e.target.value))
                       }
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
                        />   
