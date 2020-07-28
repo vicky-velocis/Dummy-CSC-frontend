@@ -7,10 +7,10 @@ import { getQueryArg ,setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {onTabChange, headerrow, tabs} from './search-preview'
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { getReviewDocuments } from "./applyResource/review-documents";
+import { getReviewImages } from "./applyResource/review-transit-images";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
-const reviewDocumentDetails = getReviewDocuments(false, "property-transitImages")
+const reviewDocumentDetails = getReviewImages(false, "property-transitImages")
 
 export const transitSiteImages = getCommonCard({
   reviewDocumentDetails
