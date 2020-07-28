@@ -8,10 +8,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
 import { getReviewDocuments } from "./applyResource/review-documents";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
-const headerrow = getCommonContainer({
+export const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES"
@@ -68,6 +69,32 @@ const beforeInitFn = async (action, state, dispatch, transitNumber) => {
   }
 }
 
+export const onTabChange = async(tabIndex, dispatch, state) => {
+  transitNumber = getQueryArg(window.location.href, "transitNumber");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  let path = ""
+  if(tabIndex === 0) {
+    path = `/rented-properties/search-preview?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  } else if(tabIndex === 1) {
+    path = `/rented-properties/property-transitImages?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  } else if(tabIndex === 2) {
+    path = `/rented-properties/notices?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  }
+  dispatch(setRoute(path))
+}
+
+export const tabs = [
+  {
+    tabButton: { labelName: "Property Details", labelKey: "RP_PROPERTY_DETAILS" },
+  },
+  {
+    tabButton: { labelName: "Transit Site Image", labelKey: "RP_TRANSIT_SITE_IMAGES" },
+  },
+  {
+    tabButton: { labelName: "Notices", labelKey: "RP_NOTICES" },
+  }
+]
+
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -110,6 +137,17 @@ const rentedPropertiesDetailPreview = {
             }
             }
           },
+          tabSection: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-rented-properties",
+            componentPath: "CustomTabContainer",
+            props: {
+              tabs,
+              activeIndex: 0,
+              onTabChange
+            },
+            type: "array",
+          },
           taskStatus: {
             uiFramework: "custom-containers-local",
             moduleName: "egov-rented-properties",
@@ -125,5 +163,5 @@ const rentedPropertiesDetailPreview = {
     }
   }
 };
-export default rentedPropertiesDetailPreview;
 
+export default rentedPropertiesDetailPreview;

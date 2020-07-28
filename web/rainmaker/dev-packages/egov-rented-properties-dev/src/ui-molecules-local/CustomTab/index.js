@@ -21,7 +21,7 @@ class NavPills extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: props.active
+      active: props.activeIndex || props.active
     };
   }
   handleChange = (event, active) => {
@@ -82,15 +82,15 @@ class NavPills extends React.Component {
           <GridItem item {...horizontal.tabsGrid}>
             {tabButtons}
           </GridItem>
-          <GridItem item {...horizontal.contentGrid}>
+          {/* <GridItem item {...horizontal.contentGrid}>
             {tabContent}
-          </GridItem>
+          </GridItem> */}
         </GridContainer>
       </div>
     ) : (
       <div className={classes.root}>
         {tabButtons}
-        {tabContent}
+        {/* {tabContent} */}
       </div>
     );
   }
