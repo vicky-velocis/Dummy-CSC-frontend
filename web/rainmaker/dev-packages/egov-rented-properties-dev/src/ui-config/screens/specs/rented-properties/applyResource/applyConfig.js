@@ -1,8 +1,9 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {propertyDetails, transitSiteDetails , noticePropertyDetails} from './propertyDetails';
-import {rentHolderDetails, ownerDetailsForNotice,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
+import {propertyDetails, transitSiteDetails } from './propertyDetails';
+import {noticePropertyDetails,ownerDetailsForNotice} from './noticeDetails'
+import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
 import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite} from './addressDetails';
 import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
 import {rentDetails} from './rentDetails';

@@ -219,24 +219,6 @@ const transitNumberField = {
     }
   }
 
-  const memoDateField = {
-    label: {
-        labelName: "Memo Date",
-        labelKey: "RP_MEMO_DATE_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Memo Date",
-        labelKey: "RP_MEMO_DATE_PLACEHOLDER"
-    },
-    pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.memoDate",
-    props: {
-        inputProps: {
-            max: getTodaysDateInYMD()
-        }
-    }
-  }
-
 const getPropertyDetails = () => {
     return {
         header: propertyHeader,
@@ -278,17 +260,3 @@ const getTransitSiteDetails = () => {
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
 
-const getPropertyDetailsForNotice = () => {
-    return {
-        header: propertyHeader,
-        detailsContainer: getCommonContainer({
-            transitNumber: getTextField(transitNumberField),
-            allotmentNumber: getTextField(allotmentNumberField),
-            memoDate: getDateField(memoDateField),
-
-        })
-    }
-}
-
-
-export const noticePropertyDetails = getCommonCard(getPropertyDetailsForNotice())
