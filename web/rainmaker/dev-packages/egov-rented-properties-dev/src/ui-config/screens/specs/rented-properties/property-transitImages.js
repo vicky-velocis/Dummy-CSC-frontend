@@ -3,12 +3,18 @@ import {
     getCommonContainer,
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg ,setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {onTabChange, headerrow, tabs} from './search-preview'
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getReviewDocuments } from "./applyResource/review-documents";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
+const reviewDocumentDetails = getReviewDocuments(false, "property-transitImages")
+
+export const transitSiteImages = getCommonCard({
+  reviewDocumentDetails
+});
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {
   let queryObject = [
@@ -16,27 +22,27 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   ];
   let payload = await getSearchResults(queryObject);
   console.log(payload)
-  // if(payload) {
-  //   let properties = payload.Properties;
+  if(payload) {
+    let properties = payload.Properties;
 
-  //   let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
-  //   const removedDocs = applicationDocuments.filter(item => !item.active)
-  //   applicationDocuments = applicationDocuments.filter(item => !!item.active)
-  //   properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
-  //   dispatch(prepareFinalObject("Properties[0]", properties[0]));
-  //   dispatch(
-  //     prepareFinalObject(
-  //       "PropertiesTemp[0].removedDocs",
-  //       removedDocs
-  //     )
-  //   );
-  //   await setDocuments(
-  //     payload,
-  //     "Properties[0].propertyDetails.applicationDocuments",
-  //     "PropertiesTemp[0].reviewDocData",
-  //     dispatch,'RP'
-  //   );
-  // }
+    let applicationDocuments = properties[0].propertyImages[0].applicationDocuments || [];
+    const removedDocs = applicationDocuments.filter(item => !item.active)
+    applicationDocuments = applicationDocuments.filter(item => !!item.active)
+    properties = [{...properties[0], propertyDetails: {...properties[0].propertyImages[0], applicationDocuments}}]
+    dispatch(prepareFinalObject("Properties[0]", properties[0]));
+    dispatch(
+      prepareFinalObject(
+        "PropertiesTemp[0].removedDocs",
+        removedDocs
+      )
+    );
+    await setDocuments(
+      payload,
+      "Properties[0].propertyImages[0].applicationDocuments",
+      "PropertiesTemp[0].reviewDocData",
+      dispatch,'RP'
+    );
+  }
 }
 
 const beforeInitFn = async (action, state, dispatch, transitNumber) => {
@@ -104,7 +110,7 @@ const propertyTransitImages = {
               },
               type: "array",
             },
-            // write code for transit images
+            transitSiteImages
         }
       }
     }
