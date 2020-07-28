@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {TaskStatusContainer} from "egov-workflow/ui-containers-local";
+import TaskStatusContainer from "../TaskStatusContainer/";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { Footer } from "../../ui-molecules-local";
 import {
