@@ -42,6 +42,9 @@
   div#custom-atoms-rightdiv {
     width: 100%; } }
 
+textarea#custom-containers-fullAddress {
+  line-height: 1.3 !important; }
+
 @media only screen and (min-width: 768px) {
   .tl-download-button {
     margin-left: 10px;
