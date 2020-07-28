@@ -6,13 +6,57 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {onTabChange, headerrow, tabs} from './search-preview'
+import { getSearchResults } from "../../../../ui-utils/commons";
+
+let transitNumber = getQueryArg(window.location.href, "transitNumber");
+
+export const searchResults = async (action, state, dispatch, transitNumber) => {
+  let queryObject = [
+    { key: "transitNumber", value: transitNumber }
+  ];
+  let payload = await getSearchResults(queryObject);
+  console.log(payload)
+  // if(payload) {
+  //   let properties = payload.Properties;
+
+  //   let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
+  //   const removedDocs = applicationDocuments.filter(item => !item.active)
+  //   applicationDocuments = applicationDocuments.filter(item => !!item.active)
+  //   properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
+  //   dispatch(prepareFinalObject("Properties[0]", properties[0]));
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "PropertiesTemp[0].removedDocs",
+  //       removedDocs
+  //     )
+  //   );
+  //   await setDocuments(
+  //     payload,
+  //     "Properties[0].propertyDetails.applicationDocuments",
+  //     "PropertiesTemp[0].reviewDocData",
+  //     dispatch,'RP'
+  //   );
+  // }
+}
+
+const beforeInitFn = async (action, state, dispatch, transitNumber) => {
+  dispatch(prepareFinalObject("workflow.ProcessInstances", []))
+  if(transitNumber){
+    await searchResults(action, state, dispatch, transitNumber)
+  }
+}
+
 
 const propertyTransitImages = {
     uiFramework: "material-ui",
     name: "property-transitImages",
+    // beforeInitScreen: (action, state, dispatch) => {
+    // //   transitNumber = getQueryArg(window.location.href, "transitNumber");
+    // //   beforeInitFn(action, state, dispatch, transitNumber);
+    //   return action;
+    // },
     beforeInitScreen: (action, state, dispatch) => {
-    //   transitNumber = getQueryArg(window.location.href, "transitNumber");
-    //   beforeInitFn(action, state, dispatch, transitNumber);
+      beforeInitFn(action, state, dispatch, transitNumber);
       return action;
     },
     components: {
