@@ -72,80 +72,8 @@ const paymentModeField = {
   }
 
 
-  const paymentAmountFieldNotice = {
-    label: {
-        labelName: "Payment Amount",
-        labelKey: "RP_PAYMENT_AMOUNT_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Payment Amount",
-        labelKey: "RP_PAYMENT_AMOUNT"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    // minLength: 1,
-    // maxLength: 100,
-    // required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid"
-  }
-  const demandNoticeFromDate = {
-    label: {
-        labelName: "Demand Notice First Date",
-        labelKey: "RP_DEMAND_NOTICE_FIRST_DATE"
-    },
-    placeholder: {
-        labelName: "Demand Notice First Date",
-        labelKey: "RP_DEMAND_DATE_PLACEHOLDER"
-    },
-    required: true,
-    pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.demandStartdate",
-    props: {
-        inputProps: {
-            max: getTodaysDateInYMD()
-        }
-    }
-  }
-
-  const demandNoticeLastDate = {
-    label: {
-        labelName: "Demand Notice Last Date",
-        labelKey: "RP_DEMAND_NOTICE_LAST_DATE"
-    },
-    placeholder: {
-        labelName: "Demand Notice Last Date",
-        labelKey: "RP_DEMAND_DATE_PLACEHOLDER"
-    },
-    required: true,
-    pattern: getPattern("Date"),
-    jsonPath: "Properties[0].owners[0].ownerDetails.demandlastdate",
-    props: {
-        inputProps: {
-            max: getTodaysDateInYMD()
-        }
-    }
-  }
-  const recoveryType = {
-    label: {
-        labelName: "Recovery Type",
-        labelKey: "RP_RECOVERY_TYPE"
-    },
-    placeholder: {
-        labelName: "Enter Recovery Type",
-        labelKey: "RP_RECOVERY_TYPE_PLACEHOLDER"
-    },
-    required: true,
-    jsonPath: "Properties[0].colony",
-    optionValue: "code",
-    optionLabel: "label",
-    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-}
+  
+ 
 
 const getPaymentDetails = () => {
     return {
@@ -158,18 +86,6 @@ const getPaymentDetails = () => {
     }
 }
 
-const getPaymentDetailsNotice = () => {
-    return {
-        header: paymentHeader,
-        detailsContainer: getCommonContainer({
-            
-            demandNoticeFromDate: getDateField(demandNoticeFromDate),
-            demandNoticeLastDate: getDateField(demandNoticeLastDate),
-            recoveryType: getSelectField(recoveryType),
-            paymentAmount: getTextField(paymentAmountFieldNotice),
-        })
-    }
-}
+
 
 export const paymentDetails = getCommonCard(getPaymentDetails())
-export const paymentDetailsNotice=getCommonCard(getPaymentDetailsNotice())
