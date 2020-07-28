@@ -172,7 +172,8 @@ class Footer extends React.Component {
   };
 
   onClose = () => {
-    
+    var {state} = this.props;
+    set(state, "form.workflow.files.wfDocuments", []),
     this.setState({
       open: false
     });
