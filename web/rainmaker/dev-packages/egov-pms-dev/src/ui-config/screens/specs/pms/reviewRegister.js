@@ -18,6 +18,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { footer } from "./reviewRegisterResource/footer";
+import { httpRequest } from "../../../../ui-utils";
 export const prepareEditFlow = async (
   state,
   dispatch,
@@ -52,6 +53,40 @@ export const prepareEditFlow = async (
    
   }
 };
+const getMDMSData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [       
+        {
+          moduleName: "pension",
+          masterDetails: [
+            { name: "PensionConfig", },
+          
+           
+          ]
+        },
+       
+      ]
+    }
+  };
+  try {
+    const payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getData = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
 const header = getCommonHeader({
   labelName: "PENSION_MANNUAL_REGISTER",
   labelKey: "PENSION_MANNUAL_REGISTER"
@@ -66,6 +101,7 @@ const DOEapplyResult = {
       window.location.href,
       "employeeID"
     );
+    getData(action, state, dispatch);
    //get Eployee details data
 prepareEditFlow(state, dispatch, employeeID, tenantId).then(res=>
   {

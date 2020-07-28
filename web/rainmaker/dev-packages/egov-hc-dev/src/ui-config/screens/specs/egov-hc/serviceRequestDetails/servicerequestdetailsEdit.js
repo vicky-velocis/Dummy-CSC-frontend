@@ -134,26 +134,31 @@ export const servicerequestdetailsEdit = getCommonCard({
         jsonPath: "SERVICEREQUEST.treeCount"
       })
     },
-    details: {
+    details:{
       ...getTextField({
-        label: {
-          labelName: "Service Request Additional Details",
-          labelKey: "HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL"
-        },
-        placeholder: {
-          labelName: "Service Request Additional Details",
-          labelKey: "HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL_PLACEHOLDER"
-        },
-        gridDefination: {
+         label:{
+            labelName:"Service Request Additional Details",
+            labelKey:"HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL"
+         },
+         placeholder:{
+            labelName:"Enter Service Request Additional Details",
+            labelKey:"HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL_PLACEHOLDER"
+         },
+         gridDefination: {
           xs: 12,
           sm: 12,
           md: 12,
-          lg: 12
+          lg:12
         },
-        required: true,
-        pattern: getPattern("serviceRequestDescription"),
-        errorMessage: "ERR_INVALID_SERVICE_REQUEST_DESCRIPTION_FIELD_MSG",
-        jsonPath: "SERVICEREQUEST.description"
+        props:{
+          className: "textfield-enterable-selection",
+          multiline: true,
+          rows: "4"
+        },
+         required:true,
+         pattern:getPattern("serviceRequestDescription"),
+         errorMessage:"ERR_INVALID_SERVICE_REQUEST_DESCRIPTION_FIELD_MSG",
+         jsonPath:"SERVICEREQUEST.description"
       })
     },
     SILocationDetailsConatiner: getCommonContainer({

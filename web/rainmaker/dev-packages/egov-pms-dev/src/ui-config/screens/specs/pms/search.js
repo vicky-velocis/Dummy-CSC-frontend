@@ -15,8 +15,41 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
-
+import { httpRequest } from "../../../../ui-utils";
+const getMDMSData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
+       
+      ]
+    }
+  };
+  try {
+    const payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getData = async (action, state, dispatch) => {
+  await getMDMSData(action, state, dispatch);
+};
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : false;
@@ -38,6 +71,7 @@ const NOCSearchAndResult = {
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
+  getData(action, state, dispatch);
     const tenantId = getTenantId();
 //set search param blank
 dispatch(prepareFinalObject("searchScreen",{}));

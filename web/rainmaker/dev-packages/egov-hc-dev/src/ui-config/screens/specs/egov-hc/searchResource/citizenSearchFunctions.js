@@ -279,12 +279,22 @@ catch(e)
 
   
  //resetting contact number
+//  var contactnoPlaceholder = get(state, 'screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno.props.placeholder', {})
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno",
       "props.value",
-      ""
+       ""
+    )
+  );
+
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno",
+      "props.value",
+       ""
     )
   );
 

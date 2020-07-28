@@ -28,10 +28,10 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
 
   
   let media =[]
-  // let uploadImage = get(state, "form.newapplication.files.media", []);
-  // uploadImage.map((item, index) => {
-  //   media.push(item.fileStoreId)
-  // });
+  let uploadImage = get(state, "form.newapplication.files.media", []);
+  uploadImage.map((item, index) => {
+    media.push(item.fileStoreId)
+  });
 
   
 
@@ -40,22 +40,13 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
   let validatestepformflag;
   let validationPaused;
 
-  // debugger;
+
   if (typeOfService== ""){
     typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
   } 
    
 
-  // if(media.length === 0)
-  // {
-  //   // dispatch(
-  //   //   toggleSnackbar(
-  //   //     true,
-  //   //     { labelName: "ERROR", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
-  //   //     "warning"
-  //   //   )
-  //   // );
-  // }else 
+  
   if(!typeOfService){
     dispatch(
       toggleSnackbar(
