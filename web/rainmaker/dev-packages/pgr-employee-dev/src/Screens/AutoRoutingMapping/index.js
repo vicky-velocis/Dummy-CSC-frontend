@@ -480,8 +480,8 @@ const mapStateToProps = state => {
       employeeToAssignById &&
       Object.values(employeeToAssignById).map((item, index) => {
           const deptCode = item.assignments[0] && item.assignments[0].department;
-          const empCode = item.code;
-          const empName = `${item.name} (${item.code})`;
+          const empCode = item.userName;
+          const empName = `${item.name} (${item.userName})`;
         return {
                 value : empCode,
                 label : empName,
