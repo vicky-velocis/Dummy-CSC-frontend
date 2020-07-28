@@ -52,7 +52,7 @@ const moveToSuccess = async(Action, dispatch) => {
   doj = new Date(doj);
  let Emp_doj =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].dateOfJoining", '');//ProcessInstances[0].name
  Emp_doj = new Date(epochToYmdDate(Emp_doj))
-alert(doj +'_'+Emp_doj)
+//alert(doj +'_'+Emp_doj)
  if(Emp_doj < doj)
  {
   try {
