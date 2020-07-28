@@ -915,6 +915,13 @@ export const getTextToLocalMappingItemMaster = label => {
 export const getTextToLocalMappingManageChallan = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+
+    case "manageChallan":
+      return getLocaleLabels(
+        "manage Challan ",
+        "EC_COMMON_TABLE_HEADER_MANAGE_CHALLAN",
+        localisationLabels
+      );
     case "challanId":
       return getLocaleLabels(
         "challan No",
@@ -1408,6 +1415,12 @@ export const showHideAdhocPopupForwardUploadDocs = (state, dispatch, screenKey) 
 export const getTextToLocalMappingInventoryDetail = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    case "Inventoy_Report_Header":
+      return getLocaleLabels(
+        "Ageing Report",
+        "EC_REPORT_INVENTORY_COMMON_TABLE_HED_AGEING",
+        localisationLabels
+      );
     case "challanId":
       return getLocaleLabels(
         "Challan No",
@@ -1450,6 +1463,15 @@ export const getTextToLocalMappingInventoryDetail = label => {
 export const getTextToLocalMappingPaymentDetail = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+
+
+    case "EC_VIEW_PAYMENT_REPORT_TITLE_HEADER":
+      return getLocaleLabels(
+        "payment Report",
+        "EC_VIEW_PAYMENT_REPORT_TITLE_HEADER",
+        localisationLabels
+      );
+
     case "challanId":
       return getLocaleLabels(
         "Challan No",
@@ -1486,7 +1508,12 @@ export const getTextToLocalMappingPaymentDetail = label => {
         "EC_COMMON_TABLE_COL_PAYMENT_MAPPING_PAYMENT_MODE",
         localisationLabels
       );
-
+    case "encroachmentType":
+      return getLocaleLabels(
+        "EncroachmentType",
+        "EC_COMMON_TABLE_COL_PAYMENT_MAPPING_ENCROACHMENT_TYPE",
+        localisationLabels
+      );
     case "paymentStatus":
       return getLocaleLabels(
         "Status",
@@ -1511,6 +1538,12 @@ export const getTextToLocalMappingPaymentDetail = label => {
 export const getTextToLocalMappingViewSeizure = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    case "EC_VIEW_SEIZURE_REPORT_TITLE_HEADER":
+      return getLocaleLabels(
+        "seizureReport",
+        "EC_VIEW_SEIZURE_REPORT_TITLE_HEADER",
+        localisationLabels
+      );
     case "challanId":
       return getLocaleLabels(
         "Challan No",
@@ -1886,16 +1919,19 @@ export const sendReceiptBymail = async (state, dispatch, ReceiptLink, violatorDe
     if (isReceipt) {
       notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[1]", {});
       body = notificationTemplate.body.replace('<ChallanId>', payload.challanId);
+      notificationTemplate.attachments[0].url = ReceiptLink;
     } else {
       notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[0]", {});
       body = notificationTemplate.body.replace('<ChallanId>', payload.challanId).replace('<EnchroachmentType>', payload.encroachmentType).replace('<Date and Time>', payload.violationDate + " " + payload.violationTime).replace('<Link>', '<Link>');
+      notificationTemplate.attachments[0].url = ReceiptLink
     }
 
     receiptlin.push(ReceiptLink);
     RequestBody.email = payload.emailId;
     RequestBody.subject = notificationTemplate.subject;
     RequestBody.body = body;
-    RequestBody.attachmentUrls = receiptlin;
+    //RequestBody.attachmentUrls = receiptlin;
+    RequestBody.attachments = notificationTemplate.attachments
     RequestBody.isHtml = notificationTemplate.isHtml;
     RequestBody.tenantId = getTenantId();
 

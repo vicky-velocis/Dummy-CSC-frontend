@@ -29,9 +29,9 @@ class UploadExcelFile extends React.Component {
   }
   onFormSubmit(e) {
     e.preventDefault(); // Stop form submit
-    
+
     if (!this.state.isuploaded) {
-      this.setState({isuploaded : true});
+      this.setState({ isuploaded: true });
       store.dispatch(toggleSpinner());
       if (this.state.file.length > 0) {
         // lSRemoveItem('eChallanMasterGrid');
@@ -72,7 +72,7 @@ class UploadExcelFile extends React.Component {
   }
   onChange(e) {
     let files = e.target.files;
-    
+
     store.dispatch(toggleSpinner());
     var f = files[0];
     let reader = new FileReader();
@@ -206,7 +206,7 @@ class UploadExcelFile extends React.Component {
         existingRecords.find(function (existingRecord, index) {
 
           if (rec["covNo"].toString().trim() === existingRecord["COV Number"].toString().trim()) {
-            
+
             rec["vendorUuid"] = existingRecord["Vendor Id"]
             updatedVendorList.push(rec);
           }
@@ -219,7 +219,29 @@ class UploadExcelFile extends React.Component {
         }
       });
 
-      this.setState({ fileInsert: insertedVendorList });
+      const uniqueVendor = [];
+      const map = new Map();
+      for (const item of insertedVendorList) {
+        if (!map.has(item.covNo)) {
+          map.set(item.covNo, true);    // set any value to Map
+          uniqueVendor.push({
+            fatherSpouseName: item.fatherSpouseName,
+            address: item.address,
+            contactNumber: item.contactNumber,
+            covNo: item.covNo,
+            isActive: item.isActive,
+            name: item.name,
+            passNo: item.passNo,
+            streetVendorArea: item.streetVendorArea,
+            tenantId: item.tenantId,
+            transportMode: item.transportMode,
+            vendorCategory: item.vendorCategory,
+            vendorUuid:item.vendorUuid,
+          });
+        }
+      }
+
+      this.setState({ fileInsert: uniqueVendor });
       this.setState({ fileUpdate: updatedVendorList });
 
       this.setState({ file: getData });
@@ -230,7 +252,7 @@ class UploadExcelFile extends React.Component {
   }
 
   async fileUpload(file) {
-    
+
     let ExcelUpload = {
 
       insert: this.state.fileInsert,
@@ -246,7 +268,7 @@ class UploadExcelFile extends React.Component {
     return (
       <form onSubmit={this.onFormSubmit}>
         <div>
-        <div
+          <div
             className="col-md-6"></div>
           <div
             className="col-md-4 col-sm-10 col-xs-12">
@@ -254,15 +276,15 @@ class UploadExcelFile extends React.Component {
               type="file"
               accept=".xlsx,.xls"
               onChange={this.onChange}
-              style={{ 
+              style={{
                 margin: "20px 0px",
                 borderRadius: "2px",
                 minWidth: "200px",
                 maxWidth: "250px",
-                wordBreak:"break-all",
+                wordBreak: "break-all",
                 // height: "50px",
                 // float: "right"
-                
+
               }}
             />
           </div>

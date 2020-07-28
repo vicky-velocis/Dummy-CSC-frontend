@@ -16,6 +16,7 @@ import {
   createCitizenBasedonMobileNumber,
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const setReviewPageRoute = (state, dispatch) => {
 
@@ -138,8 +139,30 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = isFormValid === true ? false : true;
       break;
     case 2:
+      isFormValid = false; //moveToReview(state, dispatch);
+      let isviolatorImage = false;
+      let isviolatorIdProofImage = false;
 
-      isFormValid = true; //moveToReview(state, dispatch);
+      let violatorImage = get(state, "form.apply_Violator_Image.files.echallanViolaterImage", []);
+      let violatorIdProofImage = get(state, "form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage", []);
+      let violationsImage = get(state, "form.apply_Violations_Image.files.echallanViolationImage", []);
+      if (violatorImage.length > 0) {
+        isviolatorImage = true;
+      }
+      else {
+        isviolatorImage = false;
+      }
+      if (violatorIdProofImage.length > 0) {
+        isviolatorIdProofImage = true;
+      } else {
+        isviolatorIdProofImage = false;
+      }
+      if (isviolatorImage === false || isviolatorIdProofImage === false) {
+        isFormValid = false;
+      }else {
+        isFormValid = true;
+      }
+
       hasFieldToaster = isFormValid === true ? false : true;
       break;
 
@@ -169,7 +192,6 @@ const callBackForNext = async (state, dispatch) => {
             //}
           }
           else {
-
             console.log(`Error Response : ` + response.message.message);
             let errorMessage = {
               labelName: response.message.message, // "Submission Falied, Try Again later!",
@@ -201,6 +223,12 @@ const callBackForNext = async (state, dispatch) => {
             labelName:
               "Please fill all mandatory fields for Seized Details, then proceed!",
             labelKey: "EC_ERR_FILL_ALL_MANDATORY_FIELDS_ITEM_SEIZED_TOAST"
+          };
+          break;
+        case 2:
+          errorMessage = {
+            labelName: "Upload At least One Image..!",
+            labelKey: "EC_ERR_UPLOAD_IMAGE_NOT_FOUND"
           };
           break;
       }

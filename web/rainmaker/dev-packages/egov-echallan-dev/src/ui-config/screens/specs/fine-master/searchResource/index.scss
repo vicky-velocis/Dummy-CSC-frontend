@@ -15,6 +15,9 @@ tr#MUIDataTableBodyRow-0 {
 form#serachVendorResultGrid>div:last-child {
   overflow: auto;
 }
+.apply-wizard-footer {
+  z-index: 101 !important;
+}
 /************************ ECHALLAN CSS END *************************/
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {

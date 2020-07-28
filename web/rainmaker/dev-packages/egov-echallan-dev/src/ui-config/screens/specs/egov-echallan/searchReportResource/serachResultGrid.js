@@ -24,19 +24,27 @@ export const serachReportPaymentDetailGrid = {
         options: {
           filter: true,
         }
-      }, {
+      },
+      {
+        name: getTextToLocalMappingPaymentDetail("encroachmentType"),
+        label: getTextToLocalMappingPaymentDetail("encroachmentType"),
+        options: {
+          filter: true,
+        }
+      },
+      {
         name: getTextToLocalMappingPaymentDetail("violatorName"),
         label: getTextToLocalMappingPaymentDetail("violatorName"),
         options: {
           filter: true,
         }
-      },{
+      }, {
         name: getTextToLocalMappingPaymentDetail("paymentAmount"),
         label: getTextToLocalMappingPaymentDetail("paymentAmount"),
         options: {
           filter: true,
         }
-      },{
+      }, {
         name: getTextToLocalMappingPaymentDetail("violationDate"),
         label: getTextToLocalMappingPaymentDetail("violationDate"),
         options: {
@@ -72,10 +80,9 @@ export const serachReportPaymentDetailGrid = {
         }
       },
     ],
-    title: getTextToLocalMappingPaymentDetail(
-      "Search Results for Item - Master"
-    ),
-
+   title: getTextToLocalMappingPaymentDetail(
+     "EC_VIEW_PAYMENT_REPORT_TITLE_HEADER" 
+   ),
     options: {
       filter: true,
       print: true,
@@ -185,9 +192,8 @@ export const searchViewSeizureReport = {
         }
       }
     ],
-    title: getTextToLocalMappingViewSeizure(
-      "Search Results for Item - Master"
-    ),
+    title: getTextToLocalMappingViewSeizure("EC_VIEW_SEIZURE_REPORT_TITLE_HEADER"),
+ 
 
     options: {
       filter: true,
@@ -283,9 +289,10 @@ export const serachReportInventoryDetailGrid = {
       },
     ],
     title: getTextToLocalMappingInventoryDetail(
-      "Search Results for Inventory_Detail"
+      "Inventoy_Report_Header"
     ),
-
+    
+  
     options: {
       filter: true,
       download: true,

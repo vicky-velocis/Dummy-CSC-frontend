@@ -576,6 +576,7 @@ export const fetchVendorDetails = async (state, dispatch) => {
         address: vendor.address,
         fatherSpouseName: vendor.fatherSpouseName,
         contactNumber: vendor.contactNumber,
+        numberOfViolation:vendor.numberOfViolation,
       }
       vendordata.push(vendormodified);
 
@@ -666,6 +667,7 @@ export const createCitizenBasedonMobileNumber = async (state, dispatch) => {
       mobileNumber: payload.contactNumber,
       active: true,
       tenantId: tenantId,
+      permanentCity : tenantId,
       type: 'CITIZEN',
       permanentAddress: payload.address,
       correspondenceAddress: payload.address,

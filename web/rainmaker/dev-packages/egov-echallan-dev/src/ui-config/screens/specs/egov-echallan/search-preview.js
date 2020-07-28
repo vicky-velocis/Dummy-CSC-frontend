@@ -801,6 +801,10 @@ const setSearchResponseForNocCretificate = async (
       get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].address", "NA")
     );
 
+    data.siName = nullToNa(
+      get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].siName", "NA")
+    );
+
     if (data.encroachmentType !== "Seizure of Vehicles") {
       let violationitemList = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", [])
       for (let index = 0; index < violationitemList.length; index++) {
@@ -858,7 +862,8 @@ const setSearchResponseForNocCretificate = async (
       "amount": violatorDetails.challanAmount, //get(state, 'screenConfiguration.preparedFinalObject.echallanDetail.challanAmount', '0'),
       "amountInWord": numbertowords,
       "paymentMode": violatorDetails.paymentDetails.paymentMode,
-      "memoNo": violatorDetails.challanId
+      "memoNo": violatorDetails.challanId,
+      //"smName" : nullToNa(JSON.parse(getUserInfo()).name, 'NA')
     }
 
     let getFileStoreIdFor_RECEIPT = { "paymentEchallan": [paymentdata] }
