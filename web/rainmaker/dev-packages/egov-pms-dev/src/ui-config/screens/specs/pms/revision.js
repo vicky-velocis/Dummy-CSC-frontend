@@ -7,6 +7,7 @@ import {
   getCommonApplyFooter
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getSearchPensionerForPensionRevision } from "../../../../ui-utils/commons";
+import { httpRequest } from "../../../../ui-utils";
 import { getSearchPensioner } from "../../../../ui-utils/commons";
 import {empDetails} from "./revisionResource/employeeDetails"
 import {pensionerBasicDetails} from "./revisionResource/pensionerBasicData"

@@ -1,5 +1,5 @@
 
- import { getCommonApplyFooter, } from "../../utils";
+ import { getCommonApplyFooter,epochToYmdDate } from "../../utils";
  import { getLabel} from "egov-ui-framework/ui-config/screens/specs/utils";
  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
  import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -36,7 +36,25 @@ const moveToSuccess = async(Action, dispatch) => {
       }       
   ]
   };
- 
+
+  // validation  for DOJ
+
+  let doj = '';
+  let PensionConfig = get(state.screenConfiguration.preparedFinalObject,"searchScreenMdmsData.pension.PensionConfig", [])
+  for (let index = 0; index < PensionConfig.length; index++) {
+    const element = PensionConfig[index].key;
+    if(PensionConfig[index].key ==="PENSION_ELIGIBILITY_JOINING_DATE")
+    {
+      doj= PensionConfig[index].value;
+      break;
+    }
+  } 
+  doj = new Date(doj);
+ let Emp_doj =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].dateOfJoining", '');//ProcessInstances[0].name
+ Emp_doj = new Date(epochToYmdDate(Emp_doj))
+alert(doj +'_'+Emp_doj)
+ if(Emp_doj < doj)
+ {
   try {
     let payload = null;
     
@@ -68,6 +86,16 @@ const moveToSuccess = async(Action, dispatch) => {
      // moveToSuccess("PUSH_MANNUAL",dispatch)
     
   }
+}
+else{
+  const errorMessage = {
+    labelName: "Date of Joining of an Employee can not be Greater then 2004-01-01",
+    labelKey: "PENSION_REGISTER_DOJ_VALIDATION"
+  };
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+
+}
  }
 
  export const footer = () => {

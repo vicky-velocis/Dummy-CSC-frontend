@@ -45,6 +45,14 @@ const getMDMSData = async (action, state, dispatch) => {
            
           ]
         },
+        {
+          moduleName: "pension",
+          masterDetails: [
+            { name: "PensionConfig", },
+          
+           
+          ]
+        },
        
       ]
     }
