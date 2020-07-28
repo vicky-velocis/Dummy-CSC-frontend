@@ -183,7 +183,7 @@ export const searchApiCall = async (state, dispatch) => {
             getDesigName(state, get(item, "designation", "-")) || "-",
           [getTextToLocalMapping("Department")]:
             getDeptName(state, get(item, "department", "-")) || "-",       
-            [getTextToLocalMapping("Date Of Birth")]: convertEpochToDate(item.dob, "dob", "-") || "-",  
+            [getTextToLocalMapping("Date of Joining")]: convertEpochToDate(item.dateOfJoining, "dateOfJoining", "-") || "-",  
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",         
             tenantId: item.tenantId
            

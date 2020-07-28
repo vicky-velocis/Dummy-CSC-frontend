@@ -15,7 +15,7 @@ const MultiItemCard = (props) => {
 
            return ( <Card 
              textChildren={
-                 <div>
+                 <div>  
                         <div xs={12} align="right">
                           <IconButton
                             style={{
@@ -42,6 +42,13 @@ const MultiItemCard = (props) => {
                 dataSource={empDetails}
                 value = {item.employee.label}
                 />
+                </div>
+                <div  className="col-sm-12 col-md-12 col-xs-12" style={{display:"flex"}}>
+                <Label  label="PGR_AUTOROUTE_MAPPING_SECTOR"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                  <span style={{color:"red",marginTop:4}}>
+                  {" "}
+                  *
+                 </span>
                 </div>
                 <div className="col-sm-12 col-md-12 col-xs-12" >   
                   <Multiselect   
