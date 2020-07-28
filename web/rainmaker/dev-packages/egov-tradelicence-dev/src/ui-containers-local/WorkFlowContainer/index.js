@@ -478,7 +478,8 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances,
       prepareFinalObject,
       dataPath,
-      moduleName
+      moduleName,
+      style
     } = this.props;
     const workflowContract =
       ProcessInstances &&
@@ -491,7 +492,7 @@ class WorkFlowContainer extends React.Component {
          showFooter=process.env.REACT_APP_NAME === "Citizen" ? false : true;
       }
     return (
-      <div>
+      <div style={style}>
         {ProcessInstances && ProcessInstances.length > 0 && (
           <TaskStatusContainer ProcessInstances={ProcessInstances} />
         )}
