@@ -2,7 +2,7 @@ import {
   getCommonGrayCard,
   getCommonSubHeader,
   getCommonContainer,
-  getLabelWithValue,
+  getLabelWithValue as _getLabelWithValue,
   getDivider,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
@@ -12,6 +12,12 @@ import { convertEpochToDate, calculateAge, getLicensePeriod } from "../../utils"
 import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICENSE_DHOBI_GHAT, RENEWAL_RENT_DEED_SHOP } from "../../../../../ui-constants";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import set from "lodash/set";
+
+function getLabelWithValue(...params) {
+    const label = _getLabelWithValue(...params);
+    label.gridDefination.xs = 12;
+    return label;
+}
 
 export const CONST_VALUES = {REGISTRATION_CERTIFICATE_FOR_PEDAL_RICKSHAW_LOADING_REHRI : RC_PEDAL_RICKSHAW_LOADING_REHRI, 
     DRIVING_LICENSE_FOR_PEDAL_RICKSHAW_LOADING_REHRI : DL_PEDAL_RICKSHAW_LOADING_REHRI,
