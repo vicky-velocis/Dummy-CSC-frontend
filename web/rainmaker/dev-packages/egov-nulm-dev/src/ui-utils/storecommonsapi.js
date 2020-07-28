@@ -1,7 +1,7 @@
 
-import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar,toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getFileUrlFromAPI, getMultiUnits, getQueryArg,   } from "egov-ui-framework/ui-utils/commons";
-import {  getTenantId, getUserInfo,  } from "egov-ui-kit/utils/localStorageUtils";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrlFromAPI, getMultiUnits, getQueryArg, } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, getUserInfo, } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -15,7 +15,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 const role_name = JSON.parse(getUserInfo()).roles[0].code
 export const getstoreTenantId = () => {
   let gettenantId = getTenantId()
-  gettenantId = gettenantId.split('.')  
+  gettenantId = gettenantId.split('.')
   return gettenantId[0];
 };
 export const getMaterialMasterSearchResults = async queryObject => {
@@ -24,7 +24,7 @@ export const getMaterialMasterSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/materials/_search",     
+      "/store-asset-services/materials/_search",
       "",
       queryObject
     );
@@ -38,7 +38,7 @@ export const getMaterialMasterSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -90,7 +90,7 @@ export const getStoresSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "store-asset-services/stores/_search",     
+      "store-asset-services/stores/_search",
       "",
       queryObject
     );
@@ -116,7 +116,7 @@ export const getPriceListSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/pricelists/_search",     
+      "/store-asset-services/pricelists/_search",
       "",
       queryObject
     );
@@ -130,7 +130,7 @@ export const getPriceListSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -184,7 +184,7 @@ export const getOpeningBalanceSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/openingbalance/_search",     
+      "/store-asset-services/openingbalance/_search",
       "",
       queryObject
     );
@@ -198,7 +198,7 @@ export const getOpeningBalanceSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -249,18 +249,11 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
   if (type == "SEPApplication") {
     documents = get(
       state,
-      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.SEPApplication.sepdocument",
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NULM.SEPDocuments",
       []
     );
   }
 
-  else {
-    documents = get(
-      state,
-      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.store.Documents",
-      []
-    );
-  }
 
   documents = documents.filter(item => {
     return item.active;
@@ -277,25 +270,25 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
 
   documents.forEach(doc => {
     // Handle the case for multiple muildings
- 
-      let card = {};
-      card["name"] = doc.code;
-      card["code"] = doc.code;
-      card["required"] = doc.required ? true : false;
-      if (doc.hasDropdown && doc.dropdownData) {
-        let dropdown = {};
-        dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
-        dropdown.required = true;
-        dropdown.menu = doc.dropdownData.filter(item => {
-          return item.active;
-        });
-        dropdown.menu = dropdown.menu.map(item => {
-          return { code: item.code, label: getTransformedLocale(item.code) };
-        });
-        card["dropdown"] = dropdown;
-      }
-      tempDoc[doc.documentType].cards.push(card);
-    
+
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropdownData) {
+      let dropdown = {};
+      dropdown.label = "NOC_SELECT_DOC_DD_LABEL";
+      dropdown.required = true;
+      dropdown.menu = doc.dropdownData.filter(item => {
+        return item.active;
+      });
+      dropdown.menu = dropdown.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropdown"] = dropdown;
+    }
+    tempDoc[doc.documentType].cards.push(card);
+
   });
 
   Object.keys(tempDoc).forEach(key => {
@@ -312,7 +305,7 @@ export const getMaterialIndentSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/indents/_search",     
+      "/store-asset-services/indents/_search",
       "",
       queryObject
     );
@@ -326,7 +319,7 @@ export const getMaterialIndentSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -380,7 +373,7 @@ export const getmaterialissuesSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/materialissues/_search",     
+      "/store-asset-services/materialissues/_search",
       "",
       queryObject
     );
@@ -394,7 +387,7 @@ export const getmaterialissuesSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -446,7 +439,7 @@ export const getreceiptnotesSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/receiptnotes/_search",     
+      "/store-asset-services/receiptnotes/_search",
       "",
       queryObject
     );
@@ -460,7 +453,7 @@ export const getreceiptnotesSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
@@ -512,7 +505,7 @@ export const getmiscellaneousreceiptnotesSearchResults = async queryObject => {
     store.dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "/store-asset-services/miscellaneousreceiptnotes/_search",     
+      "/store-asset-services/miscellaneousreceiptnotes/_search",
       "",
       queryObject
     );
@@ -526,7 +519,7 @@ export const getmiscellaneousreceiptnotesSearchResults = async queryObject => {
         "error"
       )
     );
-   // throw error;
+    // throw error;
   }
 
 };
