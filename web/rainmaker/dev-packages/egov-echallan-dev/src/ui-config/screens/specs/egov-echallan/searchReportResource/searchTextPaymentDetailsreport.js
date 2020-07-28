@@ -47,14 +47,14 @@ export const searchTextPaymentDetailsreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
       sourceJsonPath: "paymentdetailReport[0].FromDate",
       jsonPath: "paymentdetailReport[0].FromDate",
-      required: true
-
+      required: true,
+      errorMessage: "EC_ERR_DEFAULT_INPUT_START_FIELD_MSG"
     }),
 
     EndDate: getDateField({
@@ -65,13 +65,14 @@ export const searchTextPaymentDetailsreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       pattern: getPattern("Date"),
       sourceJsonPath: "paymentdetailReport[0].ToDate",
       jsonPath: "paymentdetailReport[0].ToDate",
-      required: true
+      required: true,
+      errorMessage: "EC_ERR_DEFAULT_INPUT_END_FIELD_MSG"
     }),
     PaymentStatus: getSelectField({
       label: {
@@ -86,7 +87,7 @@ export const searchTextPaymentDetailsreport = getCommonCard({
       },
       gridDefination: {
         xs: 12,
-        sm: 4,
+        sm: 6,
         md: 4
       },
       sourceJsonPath: "applyScreenMdmsData.egec.paymentStatus",
@@ -103,7 +104,7 @@ export const searchTextPaymentDetailsreport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {
@@ -132,7 +133,7 @@ export const searchTextPaymentDetailsreport = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4,
+          sm: 6,
           md: 4
         },
         props: {

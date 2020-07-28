@@ -28,7 +28,7 @@ export const headerChallan = getCommonApplyHeader({
       color: "primary",
       style: {
         minWidth: "200px",
-        height: "36px",
+        height: "48px",
         marginRight: "36px",
         borderRadius: "inherit"
       }

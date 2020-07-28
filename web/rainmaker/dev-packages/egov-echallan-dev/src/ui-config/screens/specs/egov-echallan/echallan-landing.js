@@ -2,8 +2,10 @@ import { getCommonHeader, getLabel, getBreak } from "egov-ui-framework/ui-config
 import { serachResultGrid } from "./searchResource/serachResultGrid";
 import { searchResultApiResponse } from './searchResource/searchResultApiResponse'
 import { footer } from "./challanManage/footer/manageChallanFooter"
-import { setapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils/";
-import { clearlocalstorageAppDetails } from "../utils";
+import { getTenantId, getUserInfo, setapplicationType } from "egov-ui-kit/utils/localStorageUtils/";
+import { clearlocalstorageAppDetails, checkForRole } from "../utils";
+
+let roles = JSON.parse(getUserInfo()).roles;
 
 const header = getCommonHeader({
   labelName: "Manage Challan",
@@ -15,7 +17,7 @@ const MANAGECHALLANSearchAndResult = {
   name: "echallan-landing",
   beforeInitScreen: (action, state, dispatch) => {
     clearlocalstorageAppDetails(state);
-    setapplicationType('e-Challan');
+    setapplicationType('egov-echallan');
     searchResultApiResponse(action, state, dispatch);
     return action;
   },
@@ -40,7 +42,8 @@ const MANAGECHALLANSearchAndResult = {
               },
               ...header
             },
-            footer: footer
+            
+            footer: checkForRole(roles, 'challanSI') ? footer: {}
           }
         },
         breakAfterSearch: getBreak(),

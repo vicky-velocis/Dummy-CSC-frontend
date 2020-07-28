@@ -2,7 +2,7 @@ import {
   dispatchMultipleFieldChangeAction,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {toggleSnackbar, handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { getCommonApplyFooter, validateFields } from "../../utils";
@@ -18,7 +18,7 @@ import {
 } from "../../../../../ui-utils/commons";
 
 const setReviewPageRoute = (state, dispatch) => {
-  
+
   let tenantId = getTenantId();
   const applicationNumber = get(
     state,
@@ -31,7 +31,7 @@ const setReviewPageRoute = (state, dispatch) => {
 };
 
 const moveToReview = (state, dispatch) => {
-  
+
   const documentsFormat = Object.values(
     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
   );
@@ -81,7 +81,7 @@ const moveToReview = (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
-  
+
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -90,7 +90,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
 
-  
+
   switch (activeStep) {
     case 0:
 
@@ -118,7 +118,7 @@ const callBackForNext = async (state, dispatch) => {
       break;
     case 1:
       let ArticleGridDataAvailable = get(state, 'screenConfiguration.preparedFinalObject.articleSeizedGridDetails', []);
-     
+
       if (ArticleGridDataAvailable.length > 0) {
         isFormValid = true;
       } else if (ArticleGridDataAvailable.length === 0) {
@@ -138,8 +138,8 @@ const callBackForNext = async (state, dispatch) => {
       hasFieldToaster = isFormValid === true ? false : true;
       break;
     case 2:
-      
-      isFormValid = moveToReview(state, dispatch);
+
+      isFormValid = true; //moveToReview(state, dispatch);
       hasFieldToaster = isFormValid === true ? false : true;
       break;
 
@@ -152,24 +152,24 @@ const callBackForNext = async (state, dispatch) => {
       let responseStatus = "success";
       if (activeStep === 2) {
         try {
-          
+
           prepareDocumentsUploadData(state, dispatch, 'apply');
           let statuss = "CHALLAN ISSUED";
 
           let userResponse = await createCitizenBasedonMobileNumber(state, dispatch);
           console.log("resu : " + userResponse);
-          
+
           let response = await createUpdateGenerateChallanApplication(state, dispatch, statuss);
           responseStatus = get(response, "status", "");
           let applicationId = get(response, "challanId", "");
           if (responseStatus == 'SUCCESS' || responseStatus == 'success') {
-            isFormValid = moveToReview(state, dispatch, applicationId);
-            if (isFormValid) {
-              setReviewPageRoute(state, dispatch, applicationId);
-            }
+            //isFormValid = moveToReview(state, dispatch, applicationId);
+            //if (isFormValid) {
+            setReviewPageRoute(state, dispatch, applicationId);
+            //}
           }
           else {
-            
+
             console.log(`Error Response : ` + response.message.message);
             let errorMessage = {
               labelName: response.message.message, // "Submission Falied, Try Again later!",

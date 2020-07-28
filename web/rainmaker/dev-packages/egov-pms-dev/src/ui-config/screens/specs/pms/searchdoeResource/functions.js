@@ -6,7 +6,33 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+export const getDeptName = (state, codes) => {
+  let deptMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Department",
+    []
+  );
+  let codeNames = deptMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+  codeNames = codeNames[0].name;
+  else
+  codeNames ='-';
+  return codeNames;
+};
 
+export const getDesigName = (state, codes) => {
+  let desigMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Designation",
+    []
+  );
+  let codeNames = desigMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames ='-';
+    return codeNames;
+};
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -154,6 +180,10 @@ export const searchApiCall = async (state, dispatch) => {
             [getTextToLocalMapping("Date Of Birth")]: convertEpochToDate(item.dob, "dob", "-") || "-",         
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",
            // [getTextToLocalMapping("Designation")]: get(item, "designationName", "-") || "-" ,
+           [getTextToLocalMapping("Designation")]:
+            getDesigName(state, get(item, "designation", "-")) || "-",
+          [getTextToLocalMapping("Department")]:
+            getDeptName(state, get(item, "department", "-")) || "-",  
             tenantId: item.tenantId,
             //code:item.code,
            // pensionEmployeeId:item.pensionEmployeeId,

@@ -162,8 +162,10 @@ export const downloadPrintContainer = (
       myRequestDetails["street_name"] = myRequestDetails["street_name"].toString().replace(/"/g, "''")
       myRequestDetails["landmark"] = myRequestDetails["landmark"].toString().replace(/"/g, "''")
       
+      
       var str_eg = myRequestDetails["description"];
       str_eg = str_eg.toString().replace(/"/g, "''")
+      str_eg = str_eg.toString().replace(/[\r\n]+/g," ");
       // myRequestDetails["description"] = myRequestDetails["description"].toString().replace(/"/g, "''")
       myRequestDetails["description"] =str_eg.toString();
       const data= [myRequestDetails];

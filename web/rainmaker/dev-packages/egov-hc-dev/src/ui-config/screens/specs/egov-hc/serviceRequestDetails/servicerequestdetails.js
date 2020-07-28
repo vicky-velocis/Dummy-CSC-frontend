@@ -149,6 +149,11 @@ export const servicerequestdetails = getCommonCard({
         md: 12,
         lg:12
       },
+      props:{
+        className: "textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
+      },
        required:true,
        pattern:getPattern("serviceRequestDescription"),
        errorMessage:"ERR_INVALID_SERVICE_REQUEST_DESCRIPTION_FIELD_MSG",

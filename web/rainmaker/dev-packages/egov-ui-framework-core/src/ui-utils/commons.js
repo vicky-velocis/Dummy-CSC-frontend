@@ -123,8 +123,8 @@ export const getImageUrlByFile = file => {
   });
 };
 
-export const getFileSize = file => {
-  const size = parseFloat(file.size / 1024).toFixed(2);
+export const getFileSize = fileSize => {
+  const size = parseFloat(fileSize / 1024).toFixed(2);
   return size;
 };
 
@@ -410,24 +410,29 @@ export const handleFileUpload = (event, handleDocument, props) => {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { inputProps, maxFileSize, moduleName } = props;
+  const { inputProps, maxFileSize, moduleName, documents, maxFiles } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
+    let existingfileSize = 0
+    if (moduleName === 'egov-echallan' && maxFiles > 1) {
+      documents && documents.forEach(doc => {
+        existingfileSize += parseFloat(doc.fileSize);
+      });
+    }
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
       let fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
-      const isSizeValid = getFileSize(file) <= maxFileSize;
-	  
-	  
-	        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-      {
-         
-        if(localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined')
-        {
-         
-            switch(localStorage.getItem("libdocindex"))
-            {
+      let isSizeValid = 0;
+      if (moduleName === 'egov-echallan' && maxFiles > 1) {
+        existingfileSize += parseFloat(file.size)
+        isSizeValid = getFileSize(existingfileSize) <= maxFileSize;
+      } else {
+        isSizeValid = getFileSize(file.size) <= maxFileSize;
+      }
+      if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP") {
+        if (localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined') {
+          switch (localStorage.getItem("libdocindex")) {
               case "0" :
                  fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
               break;
@@ -452,36 +457,22 @@ export const handleFileUpload = (event, handleDocument, props) => {
         }
       }
 	  
-	  
-	  
-	  
-      
-
-      
-    
-
     if (!fileValid) {
-      if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-      {
-         
+        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP") {
         var msg=`File type not supported`
         store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
         uploadDocument = false;
     
       } 
-      else
-      {
-    if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
-      {
+        else {
+          if (file.type.match(/^image\//) || file.type.match(/^pdf\//)) {
        
         var msg=`Only image or pdf files can be uploaded`
         store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
         uploadDocument = false;
 
   }
-   else
-      {
-     
+          else {
        var msg=`File type not supported`
        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
         uploadDocument = false;
@@ -491,10 +482,8 @@ export const handleFileUpload = (event, handleDocument, props) => {
     }
      
     if (!isSizeValid) {
-     
        var msg=`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`
        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
-   
        uploadDocument = false;
      }
       if (uploadDocument) {

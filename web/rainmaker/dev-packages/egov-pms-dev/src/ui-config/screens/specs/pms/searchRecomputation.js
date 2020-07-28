@@ -22,6 +22,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { ActionBusinessService} from "../../../../ui-utils/PensionResponce";
+
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : false;
@@ -48,11 +50,16 @@ export const getMdmsData = async (action, state, dispatch) => {
           moduleName: "pension", 
           masterDetails: 
           [{ name: "BusinessService" 
-          },
-          
-         
-          
-        ] }
+          }, 
+        ] },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
       ]
     }
   };

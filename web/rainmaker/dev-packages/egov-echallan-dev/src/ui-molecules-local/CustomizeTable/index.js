@@ -236,7 +236,8 @@ class CustomizeTable extends React.Component {
     const options_new = {
       filter: true,
       download: true,
-      responsive: "stacked",
+      viewColumns: false,
+      responsive: 'stacked',
       selectableRows: false,
       disableToolbarSelect: false,
       resizableColumns: true,

@@ -11,6 +11,26 @@ import {
   ActionEmployee,
   ActionPensionReview
   } from "../../../../../ui-utils/PensionResponce";
+
+  export const getDeptName = (state, codes) => {
+    let deptMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.common-masters.Department",
+      []
+    );
+    let codeNames = deptMdmsData.filter(x=>x.code ===codes)
+    return codeNames[0].name;
+  };
+  
+  export const getDesigName = (state, codes) => {
+    let desigMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenMdmsData.common-masters.Designation",
+      []
+    );
+    let codeNames = desigMdmsData.filter(x=>x.code ===codes)
+    return codeNames[0].name;
+  };
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -158,7 +178,11 @@ export const searchApiCall = async (state, dispatch) => {
             [getTextToLocalMapping("Name")]: get(item, "name", "-") || "-",           
             //[getTextToLocalMapping("gender")]: get(item, "gender", "-") || "-", 
             //[getTextToLocalMapping("employee Status")]: get(item, "employeeStatus", "-") || "-", 
-            //[getTextToLocalMapping("employee Type")]: get(item, "employeeType", "-") || "-",         
+            //[getTextToLocalMapping("employee Type")]: get(item, "employeeType", "-") || "-",  
+            [getTextToLocalMapping("Designation")]:
+            getDesigName(state, get(item, "designation", "-")) || "-",
+          [getTextToLocalMapping("Department")]:
+            getDeptName(state, get(item, "department", "-")) || "-",       
             [getTextToLocalMapping("Date Of Birth")]: convertEpochToDate(item.dob, "dob", "-") || "-",  
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",         
             tenantId: item.tenantId

@@ -1,5 +1,5 @@
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, truncData } from "../../utils/index";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
@@ -117,7 +117,7 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
           });    
     
           temp[0] = item['challanId'];
-          temp[1] = item['violatorName'];
+          temp[1] = truncData(item['violatorName'],25);
           temp[2] = convertEpochToDate(item['violationDate']);
           temp[3] = __FOUNDENCROACH.name;
           temp[4] = item['siName'];
@@ -247,7 +247,7 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
           });
 
           temp[0] = item['challanId'] || "-";
-          temp[1] = item['violatorName'] || "-";
+          temp[1] = truncData(item['violatorName'],25) || "-";
           temp[2] = item['paymentAmount'] || "-";
           temp[3] = convertEpochToDate(item['violationDate']) || "-";
           temp[4] = item['siName'] || "-";
@@ -352,7 +352,7 @@ export const searchResultInventoryDetailApiResponse = async (state, dispatch) =>
         InventoryReport.map(function (item, index) {
           let temp = [];
           temp[0] = item['challanId'] || "-";
-          temp[1] = item['itemName'] || "-";
+          temp[1] = truncData(item['itemName'],25) || "-";
           temp[2] = item['itemQuantity'] || "0";
           temp[3] = convertEpochToDate(item['itemStoreDepositDate']) || "-";
           temp[4] = item['challanStatus'] || "-";

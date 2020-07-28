@@ -13,6 +13,7 @@ import {   prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configu
 import { fetchComplaintAutoRouting } from "egov-ui-kit/redux/complaints/actions";
 import MultiItemCard from './multiItemCard';
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { result } from "lodash";
 class AutoRoutingMapping extends Component {
     constructor(props){
@@ -25,7 +26,9 @@ class AutoRoutingMapping extends Component {
             officerlevel2 :[],
             categoriesArr : [],
             sectorArr :[],
-            autoRouting : [{id: new Date().getTime() ,sector:[],employee:""}] 
+            unAllocatedSector:[],
+            autoRouting : [{id: new Date().getTime() ,sector:[],employee:""}] ,
+            searchResponse: {},
         }
         this.multiDropdownStyle = {
             chips: {
@@ -86,6 +89,7 @@ class AutoRoutingMapping extends Component {
   }
      employee = {
       id: "employee",
+      required: true,
       jsonPath: "services[0].employee",
       floatingLabelText: this.getLocalizedLabel("PGR_AUTOROUTE_MAPPING_EMPLOYEE"),
       hintText: this.getLocalizedLabel("PGR_AUTOROUTE_MAPPING_EMPLOYEE_PLACEHOLDER"),
@@ -109,13 +113,18 @@ class AutoRoutingMapping extends Component {
             })
         }
         else if(officer === "sector") {
+          const unAllocatedSector = this.state.unAllocatedSector;
            const newAutoRoutingArr = this.state.autoRouting.map(data => {
              if(data.id === autoroute.id)
-                 data.sector = selectedList;
-            
+                 data.sector = selectedList;            
             return data;
            })
-           this.setState({autoRouting : newAutoRoutingArr})
+
+           let index = unAllocatedSector.findIndex(sec => sec.value === selectedItem.value);
+           if (index > -1) {
+                 unAllocatedSector.splice(index, 1);
+           }
+           this.setState({autoRouting : newAutoRoutingArr,unAllocatedSector})
         }
       }
   
@@ -132,13 +141,19 @@ class AutoRoutingMapping extends Component {
               })
            }
            else if(officer === "sector") {
+            const unAllocatedSector = this.state.unAllocatedSector;
             const newAutoRoutingArr = this.state.autoRouting.map(data => {
               if(data.id === autoroute.id)
                   data.sector = selectedList;
-             
              return data;
             })
-            this.setState({autoRouting : newAutoRoutingArr})
+
+            let index = unAllocatedSector.findIndex(sec => sec.value === removedItem.value);
+            if (index < 0) {
+              unAllocatedSector.push(removedItem);
+            }
+               
+            this.setState({autoRouting : newAutoRoutingArr,unAllocatedSector})
          }
     }
 
@@ -167,16 +182,25 @@ class AutoRoutingMapping extends Component {
       this.setState ({autoRouting : [...autoRouting , {id:new Date().getTime(),sector:[],employee:""}]})
     }
 
-    populatingAutoRoutingData = (category) => {
+    populatingAutoRoutingData = async(category) => {
         const {AutoroutingEscalation} = this.props;
+        // api call for fething autRouting
+        const queryParams  = [{ key: "tenantId", value: getTenantId() }, { key: "category", value: category.value } ];
+        const response = await httpRequest("/rainmaker-pgr/v1/masters/autorouting/_fetch", "_search", queryParams);
 
-        const rawdata = Object.values(AutoroutingEscalation).filter(ele => ele.category === category.value);
-        this.generateActualDataSource(rawdata);
+        if(response && response.autoroutingmap &&  response.autoroutingmap.autorouting.length>0){
+          const rawdata =  response.autoroutingmap.autorouting;
+          this.generateActualDataSource(rawdata);
+          this.setState({searchResponse : response.autoroutingmap })
+        }
+      //  const rawdata = Object.values(AutoroutingEscalation).filter(ele => ele.category === category.value);
+        
     }
 
     generateActualDataSource(rawdata){
         const {empDetails,sectors} = this.props;
         if(rawdata){
+          let allocatedSectors = [];
           const escalationOfficer1 = rawdata[0].escalationOfficer1.map(code => {
                                         return empDetails.find(emp => emp.value === code)
                                         }).filter(result => result)
@@ -184,12 +208,12 @@ class AutoRoutingMapping extends Component {
           const escalationOfficer2 = rawdata[0].escalationOfficer2.map(code => {
                                         return empDetails.find(emp => emp.value === code)
                                         }).filter(result => result)
-
+                                  
           const autoRouting =   rawdata[0].autoRouting &&  rawdata[0].autoRouting.map((detail,index) => {
             let sectorEmpDetail ={}
             let employee ="";
             sectorEmpDetail.id = new Date().getTime()+index;
-                if(detail.Employee.trim()){
+                if(detail.Employee && detail.Employee.trim()){
                     employee = empDetails.find(emp => emp.value === detail.Employee)
                 }
                 if(employee){
@@ -199,15 +223,40 @@ class AutoRoutingMapping extends Component {
                 }
 
                 sectorEmpDetail.sector = detail.Sector.map(code =>{
-                   return sectors.find(sec => sec.value === code)
+                  
+                   return sectors.find(sec =>{
+                     if(sec.value === code){
+                      if(!allocatedSectors.includes(code))
+                           allocatedSectors.push(code)
+                     return sec.value === code
+                     }
+                   })
                    }).filter(result => result)
 
                    return sectorEmpDetail;
                 
-          })
+          });
 
-          this.setState({officerlevel1 : escalationOfficer1, officerlevel2:escalationOfficer2,autoRouting})
+          const unAllocatedSector = sectors.filter(sec => (!allocatedSectors.includes(sec.value)));
+
+          this.setState({officerlevel1 : escalationOfficer1, officerlevel2:escalationOfficer2,autoRouting,unAllocatedSector})
         }
+    }
+
+    formValidation = (form) => {
+      let isValid = true;
+
+        if(!form.escalationOfficer1.length>0 || !form.escalationOfficer2.length>0 || !form.category){
+          isValid = false;
+        };
+
+        if(form.autoRouting.length>0 ){
+          form.autoRouting.forEach(row => {
+              if(!row.Employee || !row.Sector.length>0)
+                isValid = false;
+          })
+        }
+      return isValid;
     }
 
     onSubmit = async(e) => {
@@ -229,7 +278,7 @@ class AutoRoutingMapping extends Component {
                 SectorArr.push(sec.value)
               }
               else{
-                duplicateSector.push(sec.value);
+                duplicateSector.push(sec.label);
                 isDataValid = false;
               }
               return sec.value;
@@ -238,11 +287,15 @@ class AutoRoutingMapping extends Component {
             return autoroute;
         });
         if(duplicateSector.length>1){
-          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_ONE")}`
+          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_MORE")}` 
         }
         else{
-          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_MORE")}`
+          sectroErrMsg = `${duplicateSector.join()}  ${this.getLocalizedLabel("PGR_AUTOROUTE_MAPPINGR_DUPLICATE_SECTOR_ONE")}`
         }
+
+      // form validation 
+       const  isFormValid = this.formValidation(AutoroutingEscalationMap);
+          
         if(!isDataValid){
           e.preventDefault();
           toggleSnackbarAndSetText(
@@ -254,10 +307,38 @@ class AutoRoutingMapping extends Component {
             "error"
           );
         }  
+        else if(!isFormValid){
+          e.preventDefault();
+          toggleSnackbarAndSetText(
+            true,
+            {
+              labelName: "Please fill all fields",
+              labelKey: "ERR_FILL_ALL_FIELDS"
+            },
+            "warning"
+          );
+        }
         else{
-          const requestBody = {AutoroutingEscalationMap}
-       //  const response = await httpRequest("egov-mdms-service/v1", "_search", [], requestBody);
-       console.log("requestbody",requestBody )
+          const {searchResponse} = this.state
+          let autoroutingmap = {autorouting:{}};
+          autoroutingmap.tenantId = getTenantId();
+          autoroutingmap.autorouting.active = true;
+          autoroutingmap.autorouting.category = AutoroutingEscalationMap.category;
+          autoroutingmap.autorouting.autoRouting = AutoroutingEscalationMap.autoRouting;
+          autoroutingmap.autorouting.escalationOfficer1 = AutoroutingEscalationMap.escalationOfficer1;
+          autoroutingmap.autorouting.escalationOfficer2 = AutoroutingEscalationMap.escalationOfficer2;
+
+          const requestBody = {autoroutingmap}
+           //  console.log("requestbody",requestBody )
+           try {
+          const response = await httpRequest("rainmaker-pgr/v1/masters/autorouting/_update", "_search", [], requestBody);
+            if(response){
+              window.location.href = "/employee/master/autoRouting-success";
+            }
+           }
+           catch (e) {
+            console.log(e);
+          }
         }
 
        
@@ -304,6 +385,10 @@ class AutoRoutingMapping extends Component {
                 <div className="col-sm-6 col-xs-12"></div>
                 <div className="col-sm-12 col-md-12 col-xs-12" style={{display:"flex"}} >   
                 <Label  label="PGR_AUTOROUTE_MAPPING_ESCALATION_OFFICER1"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                <span style={{color:"red",marginTop:4}}>
+                  {" "}
+                  *
+                </span>
                   <Multiselect   
                     options={empDetails}  
                     closeIcon="close"      
@@ -320,6 +405,10 @@ class AutoRoutingMapping extends Component {
                   </div>   
                   <div className="col-sm-12 col-md-12 col-xs-12" style={{display:"flex"}} >   
                   <Label  label="PGR_AUTOROUTE_MAPPING_ESCALATION_OFFICER2"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                  <span style={{color:"red",marginTop:4}}>
+                  {" "}
+                  *
+                 </span>
                   <Multiselect   
                     options={empDetails}  
                     closeIcon="close"      
@@ -353,7 +442,14 @@ class AutoRoutingMapping extends Component {
                 handleEmployeeChange = {this.onEmployeeChange}
                 getLocalizedLabel={this.getLocalizedLabel} 
               />
-
+              <Card 
+                textChildren={
+                  <div>
+                        <Label  label="Unallocated Sector's"  fontSize={14}  dark={true} bold={true}  style={{flex: 1}}  />
+                    <p>{this.state.unAllocatedSector.map(sec =>  sec.label+" , ")}</p>
+                  </div>
+                }
+              />
                 <div className="responsive-action-button-cont">
               <Button
                 id="sumit-button-autorouting"
@@ -384,8 +480,8 @@ const mapStateToProps = state => {
       employeeToAssignById &&
       Object.values(employeeToAssignById).map((item, index) => {
           const deptCode = item.assignments[0] && item.assignments[0].department;
-          const empCode = item.code;
-          const empName = `${item.name} (${item.code})`;
+          const empCode = item.userName;
+          const empName = `${item.name} (${item.userName})`;
         return {
                 value : empCode,
                 label : empName,

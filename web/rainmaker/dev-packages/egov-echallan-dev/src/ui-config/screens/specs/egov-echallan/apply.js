@@ -10,13 +10,13 @@ import { footer } from "./applyResource/footer";
 import { violationsDetails, violatorDetails } from "./applyResource/violationDetail";
 import { ArticleDetails } from "./applyResource/articleDetails";
 import { ArticleGridDetails } from "./applyResource/articleGridDetails"
-import { documentDetails, violationDocumentDetails } from "./applyResource/documentDetails";
+import { ViolationDocumentDetailsUpload, ViolatorIDProofUpload, ViolatorImageIDUpload } from "./applyResource/documentDetails";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, setapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
@@ -85,8 +85,9 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children: {
-    documentDetails,
-    violationDocumentDetails,
+    ViolatorImageIDUpload,
+    ViolatorIDProofUpload,
+    ViolationDocumentDetailsUpload,
   },
   visible: false
 };
@@ -140,7 +141,7 @@ const getMdmsData = async (action, state, dispatch) => {
         ]
       }
     };
-    await fetchMdmsData(state, dispatch, mdmsBody,false);
+    await fetchMdmsData(state, dispatch, mdmsBody, false);
   } catch (e) {
     console.log(e);
   }
@@ -161,8 +162,8 @@ const screenConfig = {
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
     clearlocalstorageAppDetails(state);
+    setapplicationType('egov-echallan');
     dispatch(prepareFinalObject("eChallan", {}));
-
     const step = getQueryArg(window.location.href, "step");
     //Set Module Name
     set(state, "screenConfiguration.moduleName", "eChallan");

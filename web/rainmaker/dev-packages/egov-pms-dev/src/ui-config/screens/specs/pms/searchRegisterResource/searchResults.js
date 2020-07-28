@@ -44,6 +44,8 @@ export const searchResults = {
       //getTextToLocalMapping("gender"),
       //getTextToLocalMapping("employee Status"),
       //getTextToLocalMapping("employee Type"),
+      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Department"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"),
       {
