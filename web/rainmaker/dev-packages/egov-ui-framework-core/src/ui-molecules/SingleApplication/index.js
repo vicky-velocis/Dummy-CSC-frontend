@@ -59,6 +59,8 @@ class SingleApplication extends React.Component {
       await this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
+        case "MODIFIED":
+        case "PENDINGCLARIFICATION":
           setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           break
         default:
