@@ -165,7 +165,7 @@ class ActionDialog extends React.Component {
       return
     }
   } else if(this.props.moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "DC_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT")) {
-    const value = applicationState === "DC_PENDINGSAVERIFICATION" ? data.applicant[0].feeAmount : data.applicant[0].aproCharge
+    const value = duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? data.applicant[0].feeAmount : data.applicant[0].aproCharge
     if(!value) {
       toggleSnackbar(
               true,
@@ -333,6 +333,7 @@ class ActionDialog extends React.Component {
                   {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "DC_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
+                      required={true}
                       InputLabelProps={{ shrink: true }}
                       label={duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
@@ -400,7 +401,7 @@ class ActionDialog extends React.Component {
                        />   
                      </Grid>
                   )}
-                  {moduleName === "OwnershipTransferRP" && applicationState === "OT_PENDINGCLAPPROVAL" && buttonLabel === "REJECT" && (<Grid item sm="12">
+                  {((moduleName === "OwnershipTransferRP" && applicationState === "OT_PENDINGCLAPPROVAL") || (moduleName === "DuplicateCopyOfAllotmentLetterRP" && duplicateCopyApplicationState === "DC_PENDINGCLAPPROVAL")) && buttonLabel === "REJECT" && (<Grid item sm="12">
                   <Typography
                       component="h3"
                       variant="subheading"
