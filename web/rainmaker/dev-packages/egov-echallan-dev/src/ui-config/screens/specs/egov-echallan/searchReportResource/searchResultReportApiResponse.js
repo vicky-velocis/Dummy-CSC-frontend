@@ -227,6 +227,7 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
       if (response.ResponseBody === null) {
         data = {
           [getTextToLocalMappingPaymentDetail("challanId")]: "-",
+          [getTextToLocalMappingPaymentDetail("encroachmentType")]: "-",
           [getTextToLocalMappingPaymentDetail("violationDate")]: "-",
           [getTextToLocalMappingPaymentDetail("siName")]: "-",
           [getTextToLocalMappingPaymentDetail("paymentMode")]: "-",
@@ -247,13 +248,14 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
           });
 
           temp[0] = item['challanId'] || "-";
-          temp[1] = truncData(item['violatorName'],25) || "-";
-          temp[2] = item['paymentAmount'] || "-";
-          temp[3] = convertEpochToDate(item['violationDate']) || "-";
-          temp[4] = item['siName'] || "-";
-          temp[5] = item['paymentMode'] || "NA";
-          temp[6] = item['paymentStatus'] === 'PENDING' ? 'UNPAID' : 'PAID' || "-";
-          temp[7] = __FOUND.name || "-";
+          temp[1] = item['encroachmentType'] || "-";
+          temp[2] = truncData(item['violatorName'],25) || "-";
+          temp[3] = item['paymentAmount'] || "-";
+          temp[4] = convertEpochToDate(item['violationDate']) || "-";
+          temp[5] = item['siName'] || "-";
+          temp[6] = item['paymentMode'] || "NA";
+          temp[7] = item['paymentStatus'] === 'PENDING' ? 'UNPAID' : 'PAID' || "-";
+          temp[8] = __FOUND.name || "-";
           data.push(temp);
         });
 
@@ -300,6 +302,10 @@ export const searchResultInventoryDetailApiResponse = async (state, dispatch) =>
     "itemAgingReport[0].itemAgeingTimeline", ''
   )
   let itemsAgeFrom, itemsAgeTo;
+  if (timeLine === "All") {
+    itemsAgeFrom = "All";
+    itemsAgeTo = 0;
+  }
 
   if (timeLine === "0-10") {
     itemsAgeFrom = 0;

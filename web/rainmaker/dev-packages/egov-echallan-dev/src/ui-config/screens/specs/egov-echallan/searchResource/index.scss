@@ -13,6 +13,9 @@ form#serachReportInventoryDetailGrid tbody {
 }
 form#serachReportPaymentDetailGrid tbody {
   word-break: break-all; }
+  .apply-wizard-footer {
+    z-index: 101 !important;
+  }
 /************************ ECHALLAN CSS END *************************/
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {
