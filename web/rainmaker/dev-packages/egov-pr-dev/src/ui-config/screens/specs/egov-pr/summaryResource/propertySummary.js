@@ -15,6 +15,7 @@ import { httpRequest } from "../../../../../ui-utils";
 import set from "lodash/set";
 import get from "lodash/get";
 import store from "../../../../../ui-redux/store";
+import "./index.css";
 const state = store.getState();
 import { Link } from "react-router-dom";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import MyApplicationIcon from "../../../../ui-atoms-local/Icons/MyApplicationIcon";
-import { getRequiredDocData, clearlocalstorageAppDetails ,checkForRole} from "../utils";
+import { getRequiredDocData, clearlocalstorageAppDetails, checkForRole } from "../utils";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -25,22 +25,22 @@ const header = getCommonHeader(
   }
 );
 let cardItems = [];
-if(checkForRole(roles, 'CITIZEN')){
+if (checkForRole(roles, 'CITIZEN')) {
   const cardlist = [
     {
       label: {
         labelKey: "Apply a Permission to Keep Pet Dog",
         labelName: "Apply a Permission to Keep Pet Dog"
       },
-      icon: <i 
-      viewBox="0 -8 35 42"
-      color="primary"
-      font-size="40px"
-      class="material-icons module-page-icon" style={{fontSize:"48px"}}>
-      pets
+      icon: <i
+        viewBox="0 -8 35 42"
+        color="primary"
+        font-size="40px"
+        class="material-icons module-page-icon" style={{ fontSize: "48px" }}>
+        pets
       </i>,
       route: "apply"
-      
+
     },
     {
       label: {
@@ -50,8 +50,8 @@ if(checkForRole(roles, 'CITIZEN')){
       icon: <MyApplicationIcon />,
       route: "my-applications"
     },
-   
-  
+
+
   ];
   cardItems = cardlist;
 }
@@ -63,7 +63,7 @@ const tradeLicenseSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     clearlocalstorageAppDetails(state);
     setapplicationType('PETNOC');
-    
+
     return action;
   },
   components: {
@@ -79,11 +79,6 @@ const tradeLicenseSearchAndResult = {
             items: cardItems,
             history: {}
           }
-        },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-opms",
-          componentPath: "HowItWorks"
         }
       }
     },

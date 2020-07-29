@@ -9,14 +9,170 @@ import {
     getSelectField,
     getTextField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import "./index.css";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { TimeSeriesReportSearch,EventReportSearch,LocalityReportSearch } from "./functions";
   import {
     getTodaysDateInYMD,
     getStartDateValue
     }  from "../../utils";
+    import get from "lodash/get";
+    
   
+    export const ResetTimeseriesField = async (state, dispatch) =>{
+      let month=get(
+        state.screenConfiguration.preparedFinalObject,
+        "TimeseriesReport.Month"
+      )
+      let year=get(
+        state.screenConfiguration.preparedFinalObject,
+        "TimeseriesReport.Year"
+      )
+      let Aggrigate=get(
+        state.screenConfiguration.preparedFinalObject,
+        "TimeseriesReport.AggrigatedBy"
+      )
+      if((Aggrigate!==undefined ) )
+      {
+     
+          
+       
+        dispatch(
+          handleField(
+            "TimeSeriesReport",
+            "components.div.children.TimeSeriesReport.children.cardContent.children.TimeseriesReportContainer.children.AggrigatedBy",
+            "props.value",
+            undefined
+          )
+        );
   
+         
+
+        }
+         if(month!==undefined  )
+        {
+
+         
+  
+          dispatch(
+            handleField(
+              "TimeSeriesReport",
+              "components.div.children.TimeSeriesReport.children.cardContent.children.TimeseriesReportContainer.children.Month",
+              "props.value",
+              undefined
+            )
+          );
+
+        }
+         if( year!==undefined  )
+        {
+
+         
+          dispatch(
+            handleField(
+              "TimeSeriesReport",
+              "components.div.children.TimeSeriesReport.children.cardContent.children.TimeseriesReportContainer.children.Year",
+              "props.value",
+              undefined
+            )
+          );
+        
+        }
+     
+          
+         
+  
+
+        
+          
+        }
+        export const ResetEventField = async (state, dispatch) =>{
+          
+              
+          let dept=get(
+            state.screenConfiguration.preparedFinalObject,
+            "eventReport.dept"
+          )
+if(dept!=undefined )
+{
+
+
+              dispatch(
+                handleField(
+                  "EventReport",
+                  "components.div.children.EventWiseReport.children.cardContent.children.EventReportContainer.children.DepartmentName",
+                  "props.value",
+                  undefined
+                )
+              );
+            }
+  
+              
+            }
+
+          export const ResetLocalityField = async (state, dispatch) =>{
+           
+            let fromDate=get(
+              state.screenConfiguration.preparedFinalObject,
+              "LocalityReport.fromDate"
+            )
+            let todate=get(
+              state.screenConfiguration.preparedFinalObject,
+              "LocalityReport.toDate"
+            )
+            let localityName=get(
+              state.screenConfiguration.preparedFinalObject,
+              "LocalityReport.localityname"
+            )
+            if((fromDate!==undefined ) )
+            {
+           
+                
+                
+                dispatch(
+                  handleField(
+                    "LocalityReports",
+                    "components.div.children.LocalityWiseReport.children.cardContent.children.LocalityReportContainer.children.fromDate",
+                    "props.value",
+                    undefined
+                  )
+                );
+        
+               
+    
+              }
+               if(todate!==undefined  )
+              {
+
+               
+        
+                dispatch(
+                  handleField(
+                    "LocalityReports",
+                    "components.div.children.LocalityWiseReport.children.cardContent.children.LocalityReportContainer.children.toDate",
+                    "props.value",
+                    undefined
+                  )
+                );
+
+              }
+               if( localityName!==undefined  )
+              {
+
+                dispatch(
+                  handleField(
+                    "LocalityReports",
+                    "components.div.children.LocalityWiseReport.children.cardContent.children.LocalityReportContainer.children.LocalityName",
+                    "props.value",
+                    undefined
+                  )
+                );
+              
+              }
+              
+                
+              }
+              
   export const TimeSeriesReport = getCommonCard({
     
     
@@ -72,7 +228,7 @@ import {
         },
         placeholder: {
           labelName: "Select AggrigatedBy",
-          labelKey: "PR_REPORT_AGGRIGATEDBY_LABEL"
+          labelKey: "PR_REPORT_AGGRIGATEDBY_LABEL_PLACEHOLDER"
         },
         optionValue:"name",
         optionLabel:"name",
@@ -94,17 +250,18 @@ import {
           componentPath: "Button",
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 4,
+            md: 4
             // align: "center"
           },
           props: {
             variant: "contained",
             style: {
               color: "white",
-              margin: "8px",
+              marginRight: "8px",
               backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
               borderRadius: "2px",
-              width: "220px",
+             width: "80%",
               height: "48px"
             }
           },
@@ -118,6 +275,39 @@ import {
             action: "condition",
             callBack: TimeSeriesReportSearch
           }
+        },
+        ResetButton: {
+          componentPath: "Button",
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            md: 4
+            // align: "center",
+            // id: "search-btn"
+          },
+  
+          props: {
+            variant: "contained",
+            style: {
+              // marginLeft: "8px",
+              backgroundColor: "unset",
+              color: "rgb(254, 122, 81)",
+              border: "1px solid rgb(254, 122, 81)",
+              borderRadius: "2px",
+             width: "80%",
+              height: "48px"
+            }
+          },
+          children: {
+            buttonLabel: getLabel({
+              labelName: "RESET",
+              labelKey: "PR_BUTTON_RESET"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+          callBack: ResetTimeseriesField
+          }
         }
       })
     })
@@ -129,28 +319,69 @@ import {
     
     
     EventReportContainer: getCommonContainer({
-      DepartmentName: getSelectField({
-        label: {
-          labelName: "Department Name",
-          labelKey: "PR_REPORT_DEPARTMENTNAME_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Department Name",
-          labelKey: "PR_REPORT_DEPARTMENTNAME_PLACEHOLDER"
-        },
-        optionValue:"code",
-        optionLabel:"name",
+      // DepartmentName: getSelectField({
+      //   label: {
+      //     labelName: "Department Name",
+      //     labelKey: "PR_REPORT_DEPARTMENTNAME_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Select Department Name",
+      //     labelKey: "PR_REPORT_DEPARTMENTNAME_PLACEHOLDER"
+      //   },
+      //   optionValue:"code",
+      //   optionLabel:"name",
   
-        sourceJsonPath: "applyScreenMdmsData['common-masters'].Department",
-        jsonPath: "eventReport.dept",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
+      //   sourceJsonPath: "applyScreenMdmsData['common-masters'].Department",
+      //   jsonPath: "eventReport.dept",
+      //   required: true,
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   }
       
-      }),
+      // }),
   
+      DepartmentName: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pr",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "eventReport.dept",
+        
+              required: true,
+     gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+      props: {
+      style: {
+      width: "100%",
+      cursor: "pointer",
+      },
+     
+      className: "citizen-city-picker",
+      label: {
+        labelName: "Department Name",
+        labelKey: "PR_REPORT_DEPARTMENTNAME_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Department Name",
+        labelKey: "PR_REPORT_DEPARTMENTNAME_PLACEHOLDER"
+      },   
+      sourceJsonPath: "applyScreenMdmsData['common-masters'].Department",
+      jsonPath: "eventReport.dept",
+     
+      labelsFromLocalisation: false,
+      suggestions: [],
+      fullwidth: true,
+      required: true,
+      inputLabelProps: {
+        shrink: true
+      },
+      isMulti: false,
+    // labelName: "name",
+    //  valueName: "name"
+      },
+    },
       
      
     }),
@@ -162,17 +393,18 @@ import {
           componentPath: "Button",
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 4,
+            md: 4
             // align: "center"
           },
           props: {
             variant: "contained",
             style: {
               color: "white",
-              margin: "8px",
+              marginRight: "8px",
               backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
               borderRadius: "2px",
-              width: "220px",
+             width: "80%",
               height: "48px"
             }
           },
@@ -186,6 +418,39 @@ import {
             action: "condition",
             callBack: EventReportSearch
           }
+        },
+        ResetButton: {
+          componentPath: "Button",
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            md: 4
+            // align: "center",
+            // id: "search-btn"
+          },
+  
+          props: {
+            variant: "contained",
+            style: {
+              // marginLeft: "8px",
+              backgroundColor: "unset",
+              color: "rgb(254, 122, 81)",
+              border: "1px solid rgb(254, 122, 81)",
+              borderRadius: "2px",
+             width: "80%",
+              height: "48px"
+            }
+          },
+          children: {
+            buttonLabel: getLabel({
+              labelName: "RESET",
+              labelKey: "PR_BUTTON_RESET"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+          callBack: ResetEventField
+          }
         }
       })
     })
@@ -197,15 +462,7 @@ import {
 
 
   export const LocalityWiseReport = getCommonCard({
-    // subHeader: getCommonTitle({
-    //   labelName: "Search NOC Application",
-    //   labelKey: "PR_HOME_SEARCH_RESULTS_HEADING"
-    // }),
-    // subParagraph: getCommonParagraph({
-    //   labelName: "Provide at least one parameter to search for an application",
-    //   labelKey: "PR_HOME_SEARCH_RESULTS_DESC"
-    // }),
-    //screenConfiguration.preparedFinalObject.applyScreenMdmsData["RAINMAKER-PR"].localityAreaName
+ 
     LocalityReportContainer: getCommonContainer({
       fromDate: getDateField({
         label: { labelName: "From Date", labelKey: "PR_EVENT_CREATE_DATE_LABEL" },
@@ -255,27 +512,74 @@ import {
         errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         required: true
       }),
-      LocalityName: getSelectField({
-        label: {
-          labelName: "Locality Name",
-          labelKey: "PR_REPORT_LOCALITYNAME_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Locality Name",
-          labelKey: "PR_REPORT_LOCALITYNAME_LABEL"
-        },
-  optionLabel:"name",
-  optionValue:"name",
+  //     LocalityName: getSelectField({
+  //       label: {
+  //         labelName: "Locality Name",
+  //         labelKey: "PR_REPORT_LOCALITYNAME_LABEL"
+  //       },
+  //       placeholder: {
+  //         labelName: "Select Locality Name",
+  //         labelKey: "PR_REPORT_LOCALITYNAME_LABEL_PLACEHOLDER"
+  //       },
+  // optionLabel:"name",
+  // optionValue:"name",
   
-        jsonPath: "LocalityReport.localityname",
-     sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].localityAreaName",
-        required: true,
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
+  //       jsonPath: "LocalityReport.localityname",
+  //    sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].localityAreaName",
+  //       required: true,
+  //       gridDefination: {
+  //         xs: 12,
+  //         sm: 4
+  //       }
       
-      }),
+  //     }),
+
+      LocalityName: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pr",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "LocalityReport.localityname",
+        
+              required: true,
+     gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+      props: {
+      style: {
+      width: "100%",
+      cursor: "pointer",
+      
+
+      },
+     
+      className: "citizen-city-picker",
+      label: {
+        labelName: "Locality Name",
+        labelKey: "PR_REPORT_LOCALITYNAME_LABEL"
+      },
+      placeholder: {
+        labelName: "Select Locality Name",
+        labelKey: "PR_REPORT_LOCALITYNAME_LABEL_PLACEHOLDER"
+      },    
+      jsonPath: "LocalityReport.localityname",
+      sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].localityAreaName",
+     
+      labelsFromLocalisation: false,
+      suggestions: [],
+      fullwidth: true,
+      required: true,
+      inputLabelProps: {
+        shrink: true
+      },
+      isMulti: false,
+    labelName: "name",
+     valueName: "name"
+      },
+    },
+
+
+
     }),
   
     button: getCommonContainer({
@@ -285,17 +589,18 @@ import {
           componentPath: "Button",
           gridDefination: {
             xs: 12,
-            sm: 6
+            sm: 4,
+            md: 4
             // align: "center"
           },
           props: {
             variant: "contained",
             style: {
               color: "white",
-              margin: "8px",
+              marginRight: "8px",
               backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
               borderRadius: "2px",
-              width: "220px",
+             width: "80%",
               height: "48px"
             }
           },
@@ -308,6 +613,39 @@ import {
           onClickDefination: {
             action: "condition",
             callBack: LocalityReportSearch
+          }
+        },
+        ResetButton: {
+          componentPath: "Button",
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+            md: 4
+            // align: "center",
+            // id: "search-btn"
+          },
+  
+          props: {
+            variant: "contained",
+            style: {
+              // marginLeft: "8px",
+              backgroundColor: "unset",
+              color: "rgb(254, 122, 81)",
+              border: "1px solid rgb(254, 122, 81)",
+              borderRadius: "2px",
+             width: "80%",
+              height: "48px"
+            }
+          },
+          children: {
+            buttonLabel: getLabel({
+              labelName: "RESET",
+              labelKey: "PR_BUTTON_RESET"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+          callBack: ResetLocalityField
           }
         }
       })

@@ -192,7 +192,7 @@ class MultiSelect extends Component {
   render() {
    // const { selectedValues } = this.state;
     return (
-      <div className="App selectemployeebox col-md-7 col-sm-7 col-xs-12">
+      <div className="App selectemployeebox col-md-10 col-sm-10 col-xs-12">
         
         {/* <div className="col-xs-12 "> */}
          

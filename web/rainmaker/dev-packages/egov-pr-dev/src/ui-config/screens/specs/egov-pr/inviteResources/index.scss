@@ -1,3 +1,22 @@
+div#material-ui-cardContent div thead tr th {
+  padding-left: 22px !important;
+}
+div#material-ui-cardContent tbody {
+  word-break: break-all !important;
+}
+form#apply_form1 tbody {
+  word-break: break-all !important;
+}
+// span[class*="MUIDataTableBody-emptyTitle"] {
+//   color: red !important;
+// }
+
+// @media only screen and (max-width: 900px) {
+//   span[class*="MUIDataTableBody-emptyTitle"] {
+//   margin-left: -100% !important;
+//   margin-top: 8% !important;
+// }}
+
 @media only screen and (min-width: 551px) {
   .apply-wizard-footer {
     z-index: 101 !important;

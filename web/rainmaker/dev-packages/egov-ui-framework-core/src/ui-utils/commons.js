@@ -5,15 +5,20 @@ import {
   localStorageSet,
   localStorageGet,
   getLocalization,
-  getLocale
+  getLocale,
+  getTenantId,
+  getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-import { toggleSnackbar,toggleSpinner,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, toggleSpinner, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
 import get from "lodash/get";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getRequiredDocuments } from "egov-ui-framework/ui-containers/RequiredDocuments/reqDocs";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import store from "redux/store";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -118,8 +123,8 @@ export const getImageUrlByFile = file => {
   });
 };
 
-export const getFileSize = file => {
-  const size = parseFloat(file.size / 1024).toFixed(2);
+export const getFileSize = fileSize => {
+  const size = parseFloat(fileSize / 1024).toFixed(2);
   return size;
 };
 
@@ -209,7 +214,8 @@ export const replaceStrInPath = (inputString, search, replacement) => {
 
 export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: tenantId||commonConfig.tenantId },
+  	//{ key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -404,24 +410,29 @@ export const handleFileUpload = (event, handleDocument, props) => {
     endPoint: "filestore/v1/files"
   };
   let uploadDocument = true;
-  const { inputProps, maxFileSize, moduleName } = props;
+  const { inputProps, maxFileSize, moduleName, documents, maxFiles } = props;
   const input = event.target;
   if (input.files && input.files.length > 0) {
     const files = input.files;
+    let existingfileSize = 0
+    if (moduleName === 'egov-echallan' && maxFiles > 1) {
+      documents && documents.forEach(doc => {
+        existingfileSize += parseFloat(doc.fileSize);
+      });
+    }
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
       let fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
-      const isSizeValid = getFileSize(file) <= maxFileSize;
-	  
-	  
-	        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP")
-      {
-         
-        if(localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined')
-        {
-         
-            switch(localStorage.getItem("libdocindex"))
-            {
+      let isSizeValid = 0;
+      if (moduleName === 'egov-echallan' && maxFiles > 1) {
+        existingfileSize += parseFloat(file.size)
+        isSizeValid = getFileSize(existingfileSize) <= maxFileSize;
+      } else {
+        isSizeValid = getFileSize(file.size) <= maxFileSize;
+      }
+      if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP") {
+        if (localStorage.getItem("libdocindex") != null && localStorage.getItem("libdocindex") != 'undefined') {
+          switch (localStorage.getItem("libdocindex")) {
               case "0" :
                  fileValid = isFileValid(file, ["pdf","jpg","jpeg","png"]);
               break;
@@ -446,22 +457,35 @@ export const handleFileUpload = (event, handleDocument, props) => {
         }
       }
 	  
-      if (!fileValid) {
-        if (file.type.match(/^image\//) || file.type.match(/^pdf\//))
-        {
-          alert(`Only image or pdf files can be uploaded`);
-          uploadDocument = false;
-        } 
-        else
-        {
-          alert(`File type not supported`);
-          uploadDocument = false;
-        }  
-      }
-      if (!isSizeValid) {
-        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+    if (!fileValid) {
+        if (localStorageGet("modulecode") === "PR" || localStorageGet("modulecode") === "SCP") {
+        var msg=`File type not supported`
+        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
         uploadDocument = false;
-      }
+    
+      } 
+        else {
+          if (file.type.match(/^image\//) || file.type.match(/^pdf\//)) {
+       
+        var msg=`Only image or pdf files can be uploaded`
+        store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+        uploadDocument = false;
+
+  }
+          else {
+       var msg=`File type not supported`
+       store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+        uploadDocument = false;
+      } 
+  
+      }  
+    }
+     
+    if (!isSizeValid) {
+       var msg=`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`
+       store.dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+       uploadDocument = false;
+     }
       if (uploadDocument) {
         if (file.type.match(/^image\//)) {
           const fileStoreId = await uploadFile(
@@ -675,4 +699,149 @@ export const getUserDataFromUuid = async bodyObject => {
 export const getCommonPayUrl = (dispatch, applicationNo, tenantId) => {
   const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
   dispatch(setRoute(url));
+};
+
+
+export const getTodaysDateInYMD = () => {
+  let date = new Date();
+  let month = date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  return date;
+};
+
+export const isPublicSearch = () => {
+  return location && location.pathname && location.pathname.includes("/withoutAuth");
+}
+
+export const getStatusKey = (status) => {
+  switch (status) {
+    case "ACTIVE":
+      return { labelName: "Active", labelKey: "ACTIVE" };
+    case "INACTIVE":
+      return { labelName: "Inactive", labelKey: "INACTIVE" };
+    case "INITIATED":
+      return { labelName: "Initiated", labelKey: "INITIATED" };
+    case "APPLIED":
+      return { labelName: "Applied", labelKey: "APPLIED" };
+    case "PAID":
+      return { labelName: "Paid", labelKey: "PAID" };
+
+    case "APPROVED":
+      return { labelName: "Approved", labelKey: "APPROVED" };
+    case "REJECTED":
+      return { labelName: "Rejected", labelKey: "REJECTED" };
+    case "CANCELLED":
+      return { labelName: "Cancelled", labelKey: "CANCELLED" };
+    case "PENDINGAPPROVAL ":
+      return {
+        labelName:
+          "Pending for Approval",
+        labelKey:
+          "PENDINGAPPROVAL"
+      };
+    case "PENDINGPAYMENT":
+      return {
+        labelName:
+          "Pending payment",
+        labelKey:
+          "PENDINGPAYMENT"
+      };
+    case "DOCUMENTVERIFY":
+      return {
+        labelName:
+          "Pending for Document Verification",
+        labelKey: "DOCUMENTVERIFY"
+      };
+    case "FIELDINSPECTION":
+      return {
+        labelKey:
+          "FIELDINSPECTION", labelName:
+          "Pending for Field Inspection"
+      };
+    default:
+      return {
+        labelName: status, labelKey: status
+      }
+
+  }
+}
+
+export const getRequiredDocData = async (action, dispatch, moduleDetails) => {
+  let tenantId =
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: moduleDetails[0].moduleName === "ws-services-masters" ? commonConfig.tenantId : tenantId,
+      moduleDetails: moduleDetails
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    const moduleName = moduleDetails[0].moduleName;
+    let documents = get(
+      payload.MdmsRes,
+      `${moduleName}.Documents`,
+      []
+    );
+
+    if (moduleName === "PropertyTax") {
+      payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
+    }
+    const reqDocuments = getRequiredDocuments(documents, moduleName, footerCallBackForRequiredDataModal(moduleName));
+    set(
+      action,
+      "screenConfig.components.adhocDialog.children.popup",
+      reqDocuments
+    );
+    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const footerCallBackForRequiredDataModal = (moduleName) => {
+  switch (moduleName) {
+    case "FireNoc":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("FireNOCs", []));
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl =
+          process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/fire-noc/apply` : `/fire-noc/apply`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "PropertyTax":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("documentsUploadRedux", {}));
+        const applyUrl = `/property-tax/assessment-form`;
+        dispatch(setRoute(applyUrl));
+      };
+    case "ws-services-masters":
+      return (state, dispatch) => {
+        dispatch(prepareFinalObject("WaterConnection", []));
+        dispatch(prepareFinalObject("SewerageConnection", []));
+        dispatch(prepareFinalObject("applyScreen", {}));
+        dispatch(prepareFinalObject("searchScreen", {}));
+        const applyUrl = process.env.REACT_APP_NAME === "Citizen" ? `/wns/apply` : `/wns/apply`
+        dispatch(setRoute(applyUrl));
+      };
+  }
+}
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
 };

@@ -293,7 +293,7 @@ return getCommonCard({
         labelName: "LPD",
         labelKey: "PENSION_EMPLOYEE_PENSION_LPD"
       },
-      required: false,
+      required: true,
        minValue:0,
       maxLength:18,
       props: {

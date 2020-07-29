@@ -7,6 +7,33 @@ import { textToLocalMapping } from "./searchResults";
 import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
+export const getDeptName = (state, codes) => {
+  let deptMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Department",
+    []
+  );
+  let codeNames = deptMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames ='-';
+    return codeNames;
+};
+
+export const getDesigName = (state, codes) => {
+  let desigMdmsData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreenMdmsData.common-masters.Designation",
+    []
+  );
+  let codeNames = desigMdmsData.filter(x=>x.code ===codes)
+  if(codeNames && codeNames[0])
+  codeNames = codeNames[0].name;
+  else
+  codeNames ='-';
+  return codeNames;
+};
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -136,7 +163,11 @@ let ValidAPICall = true;
             [getTextToLocalMapping("Name")]: get(item, "name", "-") || "-",            
             //[getTextToLocalMapping("gender")]: get(item, "gender", "-") || "-", 
             //[getTextToLocalMapping("employee Status")]: get(item, "employeeStatus", "-") || "-", 
-            //[getTextToLocalMapping("employee Type")]: get(item, "employeeType", "-") || "-",         
+            //[getTextToLocalMapping("employee Type")]: get(item, "employeeType", "-") || "-", 
+              [getTextToLocalMapping("Designation")]:
+            getDesigName(state, get(item, "designation", "-")) || "-",
+          [getTextToLocalMapping("Department")]:
+            getDeptName(state, get(item, "department", "-")) || "-",          
             [getTextToLocalMapping("Date Of Birth")]: convertEpochToDate(item.dob, "dob", "-") || "-",         
             [getTextToLocalMapping("Retirement Date")]: convertEpochToDate(item.dateOfRetirement, "dateOfRetirement", "-") || "-",
            // [getTextToLocalMapping("Appointment Date")]: convertEpochToDate(item.dateOfAppointment, "dateOfAppointment", "-") || "-",

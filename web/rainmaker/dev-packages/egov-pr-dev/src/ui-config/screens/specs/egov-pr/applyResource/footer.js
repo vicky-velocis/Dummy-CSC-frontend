@@ -17,21 +17,38 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTenantId } from "../../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from '../../../../../config/common';
+import {
+  
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
-const setReviewPageRoute = (state, dispatch) => {
+
+
+const setReviewPageRoute = (state, dispatch,responseMessage) => {
 let id=getQueryArg(window.location.href, "eventuuId")            
 
 	if(id){
-		  let tenantId = getTenantId()
+      let tenantId = getTenantId()
+      const eventId = get(
+        state,
+        "screenConfiguration.preparedFinalObject.PublicRelation[0].SummaryEventDetails.eventId"
+      );
+     
+    
+      const eventStatus = get(
+        state,
+        "screenConfiguration.preparedFinalObject.PublicRelation[0].SummaryEventDetails.status"
+      );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-pr/summary?eventuuId=${id}&tenantId=${tenantId}&eventstatus=PUBLISHED`;
+  const reviewUrl = `${appendUrl}/egov-pr/summary?eventuuId=${id}&eventId=${eventId}&status=${eventStatus}&responseMessage=${responseMessage}&tenantId=${tenantId}&eventstatus=PUBLISHED`;
   dispatch(setRoute(reviewUrl));
 	}
 	else{
 	
 	
   let tenantId = getTenantId()
+ 
   const eventId = get(
     state,
     "screenConfiguration.preparedFinalObject.EVENT.ResponseBody.eventId"
@@ -48,7 +65,7 @@ let id=getQueryArg(window.location.href, "eventuuId")
   const page="apply"
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-pr/summary?eventId=${eventId}&eventuuId=${eventuuId}&page=${page}&status=${eventStatus}&eventstatus=PUBLISHED&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-pr/summary?eventId=${eventId}&eventuuId=${eventuuId}&page=${page}&status=${eventStatus}&responseMessage=${responseMessage}&eventstatus=PUBLISHED&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 	}
 };
@@ -143,6 +160,49 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
+  //screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1
+ let startDate= get(
+    state.screenConfiguration.preparedFinalObject,
+    "PublicRelation[0].CreateEventDetails.startDate1",
+    
+  );
+  let endDate= get(
+    state.screenConfiguration.preparedFinalObject,
+    "PublicRelation[0].CreateEventDetails.endDate1",
+    
+  );
+  var d = new Date();
+ 
+var currDate=d.toISOString().split('T')[0]
+if(startDate>endDate)
+{
+
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "From Date should be less than todate",
+        labelKey: "ERR_FILL_FROM_DATE_<_TODATE"
+      },
+      "warning"
+    )
+  );
+}
+else if(currDate>startDate){
+
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "From Date should be greater than current date",
+        labelKey: "ERR_FILL_STARTDATE_VALID"
+      },
+      "warning"
+    )
+  );
+}
+else{
+
   let activeStep = get(
     state.screenConfiguration.screenConfig["apply"],
     "components.div.children.stepper.props.activeStep",
@@ -166,55 +226,79 @@ let typeofevent=get(
   "PublicRelation[0].CreateEventDetails.eventType",
   
 );
-  let validatestepformflag = validatestepform(activeStep + 1,area,dept,typeofevent)
+
+  // let validatestepformflag = validatestepform(activeStep + 1,area,dept,typeofevent)
   
-    isFormValid = validatestepformflag[0];
-    hasFieldToaster = validatestepformflag[1];
+  //   isFormValid = validatestepformflag[0];
+  //   hasFieldToaster = validatestepformflag[1];
   if (activeStep === 0) {
-    let isPropertyLocationCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyLocationDetails.children.cardContent.children.propertyDetailsConatiner.children",
+
+    let startdate = get(	state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
+    {}
+  );
+  
+	
+
+let starttime = get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startTime",
+    {}
+  );		
+
+  var d = new Date(); // for now
+  d.getHours(); // => 9
+  d.getMinutes(); // =>  30
+  d.getSeconds();
+var currDate=d.toISOString().split('T')[0]
+var curTime=d.getHours()+':'+ d.getMinutes()        
+
+if(startdate==currDate && starttime < curTime)
+{
+localStorageSet("EventTimeINvalid","yes");
+dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Select correct time slot", labelKey: "PR_END_TIME_VALIDATION_MESSAGE" },
+      "warning"
+    )
+  );
+
+setTimeout(function(){
+dispatch(
+handleField(
+"apply",            "components.div.children.formwizardFirstStep.children.EventFirstStepperTimeDetail.children.cardContent.children.propertyDetailsConatiner.children.EndTime",
+"value",
+""
+)
+);
+}, 1000);
+}
+else{
+  localStorageSet("EventTimeINvalid","no");
+
+    let isEventDetailValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.EventFirstStepperDetail.children.cardContent.children.propertyDetailsConatiner.children",
       state,
       dispatch
     );
-    let isSinglePropertyCardValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children",
+    let isDescriptionvalid = validateFields(
+      "components.div.children.formwizardFirstStep.children.eventDescription.children.cardContent.children.propertyDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    let isTimeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.EventFirstStepperTimeDetail.children.cardContent.children.propertyDetailsConatiner.children",
       state,
       dispatch
     );
 
-    // Multiple buildings cards validations
-    let multiplePropertyCardPath =
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.multipleBuildingContainer.children.multipleBuilding.props.items";
-    let multiplePropertyCardItems = get(
-      state.screenConfiguration.screenConfig.apply,
-      multiplePropertyCardPath,
-      []
-    );
-    let isMultiplePropertyCardValid = true;
-    for (var j = 0; j < multiplePropertyCardItems.length; j++) {
-      if (
-        (multiplePropertyCardItems[j].isDeleted === undefined ||
-          multiplePropertyCardItems[j].isDeleted !== false) &&
-        !validateFields(
-          `${multiplePropertyCardPath}[${j}].item${j}.children.cardContent.children.multipleBuildingCard.children`,
-          state,
-          dispatch,
-          "apply"
-        )
-      )
-        isMultiplePropertyCardValid = false;
-    }
-
-    let noOfBuildings = get(
+    let isURLValid= validateFields(
+      "components.div.children.formwizardFirstStep.children.eventDetails.children.cardContent.children.propertyDetailsConatiner.children",
       state,
-      "screenConfiguration.preparedFinalObject.PublicRelations[0].PublicRelationDetails.noOfBuildings"
+      dispatch
     );
-    if (noOfBuildings === "SINGLE") {
-      isMultiplePropertyCardValid = true;
-    } else {
-      isSinglePropertyCardValid = true;
-    }
-
+    isFormValid=isEventDetailValid && isDescriptionvalid && isTimeValid && isURLValid
+    
+    
+  }
   
  }
 
@@ -225,15 +309,17 @@ let typeofevent=get(
   }
 
   if (activeStep !== 2) {
+  
 	if(localStorageGet("EventTimeINvalid") ? localStorageGet("EventTimeINvalid") === "yes" : true)
 	{
 		dispatch(
               toggleSnackbar(
                 true,
                 { labelName: "Select correct time slot", labelKey: "PR_END_TIME_VALIDATION_MESSAGE" },
-                "error"
+                "warning"
               )
             );
+            //PR_END_TIME_VALIDATION_MESSAGE
 	}
     else if (isFormValid) {
       let responseStatus = "success";
@@ -252,11 +338,12 @@ let typeofevent=get(
           "CREATE"
         );
         responseStatus = get(response, "status", "");
-       
+        let responseMessage = get(response, "message", "");
+        
         if(responseStatus === "success")
         {
           
-       setReviewPageRoute(state, dispatch);
+       setReviewPageRoute(state, dispatch,responseMessage);
         }
       }
       responseStatus === "success" && changeStep(state, dispatch);
@@ -284,8 +371,8 @@ let typeofevent=get(
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }
+}
 };
-
 export const changeStep = (
   state,
   dispatch,
@@ -512,6 +599,7 @@ export const footer = getCommonApplyFooter({
 
 
 export const validatestepform = (activeStep,area,dept,typeofevent, isFormValid, hasFieldToaster) => {
+  
    let allAreFilled = true;
   if (activeStep == 1) {
     document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
@@ -530,18 +618,36 @@ export const validatestepform = (activeStep,area,dept,typeofevent, isFormValid, 
       }
     })
 
-if(area===undefined || dept===undefined || typeofevent===undefined)
-{
+
+
+document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+ 
+  if (i.value !== "Select Sector" && i.value !== "Select Committee" && i.value !== "Select Organizer Employee") {
+  if (i.value == i.placeholder) {
+    if(area===undefined || dept===undefined || typeofevent===undefined)
+{    
+    i.focus();
     allAreFilled = false;
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
+    i.parentNode.classList.add("MuiInput-error-853");
+  //  i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+    i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+    allAreFilled = false;
+    isFormValid = false;
+    hasFieldToaster = true;
 
 
+ 
+  }
 }
-    document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
+  }
+});
+
+
+
+
+    // document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
      
-    })
+    // })
   } 
   if (allAreFilled == false) {
     isFormValid = false;

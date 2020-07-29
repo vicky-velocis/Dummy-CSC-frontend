@@ -62,7 +62,8 @@ const PRSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: cardItems,
-            history: {}
+            history: {},
+            module:"PR"
           }
         },
         

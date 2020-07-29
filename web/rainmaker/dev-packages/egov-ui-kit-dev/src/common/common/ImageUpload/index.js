@@ -45,7 +45,7 @@ class ImageUpload extends Component {
     if(getapplicationType() === "HORTICULTURE")
     {
       for (let i = 0; i < 5 - images.length; i++) {
-        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? false : false} />);
       }
     }
     else{
@@ -71,8 +71,14 @@ class ImageUpload extends Component {
     } else if (fileSize > MAX_IMAGE_SIZE) {
       toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: "ERR_FILE_MORE_THAN_FIVEMB" },"error");
     } else {
-      if (images.length < 5) {
-        fileUpload(formKey, fieldKey, { module, file, imageUri });
+      if(getapplicationType() === "HORTICULTURE"){
+        if (images.length < 5) {
+          fileUpload(formKey, fieldKey, { module, file, imageUri });
+        }
+      }else{
+        if (images.length < 3) {
+          fileUpload(formKey, fieldKey, { module, file, imageUri });
+        }
       }
     }
   };

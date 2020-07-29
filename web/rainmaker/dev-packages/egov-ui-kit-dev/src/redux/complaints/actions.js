@@ -97,6 +97,21 @@ const complaintDepartmentFetchError = (error) => {
   };
 };
 
+// complaint autoRoutingEscalation success
+const complaintAutoRouteFetchSucess = (payload) => {
+  return {
+    type: actionTypes.COMPLAINTS_AUTOROUTING_FETCH_SUCCESS,
+    payload,
+  };
+};
+
+const complaintAutoRouteFetchError = (error) => {
+  return {
+    type: actionTypes.COMPLAINTS_AUTOROUTING_FETCH_ERROR,
+    error,
+  };
+};
+
 // complaint Sector success
 const complaintSectorFetchSucess = (payload) => {
   return {
@@ -255,6 +270,33 @@ export const fetchComplaintDepartment = () => {
   };
 };
 
+export const fetchComplaintAutoRouting = () => {
+  //Fetching Complaint auto from MDMS
+  let requestBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "RAINMAKER-PGR",
+          masterDetails: [
+            {
+              name: "AutoroutingEscalationMap",
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  return async (dispatch) => {
+    try {
+      const payload = await httpRequest(CATEGORY.GET.URL, CATEGORY.GET.ACTION, [], requestBody);
+      dispatch(complaintAutoRouteFetchSucess(payload));
+    } catch (error) {
+      dispatch(complaintCategoriesFetchError(error.message));
+    }
+  };
+};
   export const fetchComplaintSector = () => {
     //Fetching Complaint Categories from MDMS
     let requestBody = {

@@ -45,6 +45,8 @@ export const searchResults = {
      // getTextToLocalMapping("gender"),
      // getTextToLocalMapping("employee Status"),
      // getTextToLocalMapping("employee Type"),
+      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Department"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"),
      // getTextToLocalMapping("Appointment Date"),
@@ -149,6 +151,6 @@ const InitiateNPWorkflow = async (rowData) => {
 };
 
 const onRowClick = rowData => {
- window.location.href = `applyrrp?employeeID=${rowData[0]}&tenantId=${rowData[4]}`;
+ window.location.href = `applyrrp?employeeID=${rowData[0]}&tenantId=${rowData[6]}`;
 };
 

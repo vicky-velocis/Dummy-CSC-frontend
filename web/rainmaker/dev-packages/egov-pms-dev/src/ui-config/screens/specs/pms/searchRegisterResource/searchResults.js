@@ -44,7 +44,9 @@ export const searchResults = {
       //getTextToLocalMapping("gender"),
       //getTextToLocalMapping("employee Status"),
       //getTextToLocalMapping("employee Type"),
-      getTextToLocalMapping("Date Of Birth"),
+      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Department"),
+      getTextToLocalMapping("Date of Joining"),
       getTextToLocalMapping("Retirement Date"),
       {
         name: "tenantId",
@@ -91,7 +93,7 @@ const onRowClick = rowData => {
 //  console.log("rowData")
 //   InitiateNPWorkflow(rowData).then(response => {
 //   });
-window.location.href = `reviewRegister?employeeID=${rowData[0]}&tenantId=${rowData[4]}`; 
+window.location.href = `reviewRegister?employeeID=${rowData[0]}&tenantId=${rowData[6]}`; 
 };
 
 

@@ -13,6 +13,11 @@ const header = getCommonHeader(
     labelKey: "ACTION_TEST_OPMS"
   },
   {
+    style: {
+      padding: "20px",
+    }
+  },
+  {
     classes: {
       root: "common-header-cont"
     }
@@ -208,13 +213,9 @@ const PermissionManagementSearchAndResult = {
           componentPath: "LandingPage",
           props: {
             items: finalCardList,
-            history: {}
+            history: {},
+            module:"PRSCP"
           }
-        },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-opms",
-          componentPath: "HowItWorks"
         }
       }
     },
@@ -225,7 +226,9 @@ const PermissionManagementSearchAndResult = {
       props: {
         open: false,
         maxWidth: false,
-        screenKey: "home"
+        screenKey: "home",
+       
+       
       },
       children: {
         popup: {}

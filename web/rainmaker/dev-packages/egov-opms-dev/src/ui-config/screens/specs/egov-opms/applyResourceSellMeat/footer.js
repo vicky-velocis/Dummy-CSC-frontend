@@ -40,77 +40,139 @@ const setReviewPageRoute = (state, dispatch, applnid) => {
   }
 };
 
+// const moveToReview = (state, dispatch, applnid) => {
+  
+//   if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
+//   {
+//   const documentsFormat = Object.values(
+//     get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+//   );
+
+//   let validateDocumentField = false;
+
+//   for (let i = 0; i < documentsFormat.length; i++) {
+//     let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+//     let isDocumentTypeRequired = get(
+//       documentsFormat[i],
+//       "isDocumentTypeRequired"
+//     );
+
+//     let documents = get(documentsFormat[i], "documents");
+//     if (isDocumentRequired) {
+//       if (documents && documents.length > 0) {
+//         if (isDocumentTypeRequired) {
+//           if (get(documentsFormat[i], "dropdown.value")) {
+//             validateDocumentField = true;
+//           } else {
+//             dispatch(
+//               toggleSnackbar(
+//                 true,
+//                 { labelName: "Please select type of Document!", labelKey: "" },
+//                 "warning"
+//               )
+//             );
+//             validateDocumentField = false;
+//             break;
+//           }
+//         } else {
+//           validateDocumentField = true;
+//         }
+//       } else {
+//         dispatch(
+//           toggleSnackbar(
+//             true,
+//             { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+//             "warning"
+//           )
+//         );
+//         validateDocumentField = false;
+//         break;
+//       }
+//     } else {
+//       validateDocumentField = true;
+//     }
+//   }
+
+//   /// Removed from here pls do not remove commented code 
+//   // if (validateDocumentField) {
+//   //   setReviewPageRoute(state, dispatch, applnid);
+//   // };
+//   return validateDocumentField;
+// }
+// else {
+//   dispatch(
+//     toggleSnackbar(
+//       true,
+//       { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+//       "warning"
+//     )
+//   );
+ 
+// }
+// };
 const moveToReview = (state, dispatch, applnid) => {
   
-  if(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")!==undefined)
-  {
-  const documentsFormat = Object.values(
-    get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
-  );
-
-  let validateDocumentField = false;
-
-  for (let i = 0; i < documentsFormat.length; i++) {
-    let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
-    let isDocumentTypeRequired = get(
-      documentsFormat[i],
-      "isDocumentTypeRequired"
-    );
-
-    let documents = get(documentsFormat[i], "documents");
-    if (isDocumentRequired) {
-      if (documents && documents.length > 0) {
-        if (isDocumentTypeRequired) {
-          if (get(documentsFormat[i], "dropdown.value")) {
-            validateDocumentField = true;
+  
+    //alert(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux"))
+    if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
+      const documentsFormat = Object.values(get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux")
+      );
+  
+      let validateDocumentField = false;
+      for (let i = 0; i < 1; i++) {
+        let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
+        let isDocumentTypeRequired = get(
+          documentsFormat[i], "isDocumentTypeRequired");
+  
+        let documents = get(documentsFormat[i], "documents");
+        // if (isDocumentRequired) {
+        if (documents && documents.length > 0) {
+          if (isDocumentTypeRequired) {
+            if (get(documentsFormat[i], "dropdown.value")) {
+              validateDocumentField = true;
+            } else {
+              dispatch(
+                toggleSnackbar(
+                  true,
+                  { labelName: "Please select type of Document!", labelKey: "" },
+                  "warning"
+                )
+              );
+              validateDocumentField = false;
+              break;
+            }
           } else {
-            dispatch(
-              toggleSnackbar(
-                true,
-                { labelName: "Please select type of Document!", labelKey: "" },
-                "warning"
-              )
-            );
-            validateDocumentField = false;
-            break;
+            validateDocumentField = true;
           }
         } else {
-          validateDocumentField = true;
+          dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+              "warning"
+            )
+          );
+          validateDocumentField = false;
+          break;
         }
-      } else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-            "warning"
-          )
-        );
-        validateDocumentField = false;
-        break;
+        // } else {
+        //   validateDocumentField = true;
+        // }
       }
-    } else {
-      validateDocumentField = true;
+  
+      //validateDocumentField = true;
+  
+      return validateDocumentField;
     }
-  }
-
-  /// Removed from here pls do not remove commented code 
-  // if (validateDocumentField) {
-  //   setReviewPageRoute(state, dispatch, applnid);
-  // };
-  return validateDocumentField;
-}
-else {
-  dispatch(
-    toggleSnackbar(
-      true,
-      { labelName: "Please uplaod mandatory documents!", labelKey: "" },
-      "warning"
-    )
-  );
- 
-}
-};
-
+    else {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+          "warning"
+        ))
+    }
+  };
 const getMdmsData = async (state, dispatch) => {
   let tenantId = getOPMSTenantId();
   /** get(

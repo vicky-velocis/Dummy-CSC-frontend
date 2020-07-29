@@ -21,10 +21,12 @@ const undertakingButton1 = getCommonContainer({
 
   exemptionradio: {
     uiFramework: "custom-containers",
-    componentPath: "RadioGroupContainer",
     gridDefination: {
-      xs: 12
+      xs: 12,
+      sm: 6
     },
+    componentPath: "RadioGroupContainer",
+  
     jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
     props: {
       required: true,
@@ -34,13 +36,13 @@ const undertakingButton1 = getCommonContainer({
           labelName: "Yes",
           labelKey: "Exempted_Yes",
           value: "1",
-          disabled: applicationNumberId != null ? true : false
+          disabled: false
         },
         {
           labelName: "No",
           labelKey: "Exempted_No",
           value: "0",
-          disabled: applicationNumberId != null ? true : false
+          disabled: false
         }
       ],
       jsonPath: "ADVERTISEMENTNOC.exemptedCategory",
@@ -80,8 +82,9 @@ const commonBuildingData = buildingType => {
           required: true,
           disabled: false
         },
-        beforeFieldChange: (action, state, dispatch) => {
+        afterFieldChange: (action, state, dispatch) => {
           try {
+
             let typecateID =
               get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement", []).filter(
                 item => item.name === action.value
@@ -101,7 +104,32 @@ const commonBuildingData = buildingType => {
                 "applyScreenMdmsData.egpm.duration-new", typecateID[0].durationDropdown
               )
             );
+            dispatch(
+              prepareFinalObject(
+                "ADVERTISEMENTNOC.duration", ""
+              )
+            );
 
+            dispatch(
+              prepareFinalObject(
+                "ADVERTISEMENTNOC.subTypeOfAdvertisement", ""
+              )
+            );
+
+            dispatch(
+              handleField(
+                "advertisementApply",
+                "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.subTypeOfAdvertisement",
+                "props.value", ""));
+            dispatch(
+              handleField(
+                "advertisementApply",
+                "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.duration",
+                "props.value", ""));
+
+
+
+            // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
             if (typecateID[0].id === "10010" || typecateID[0].id === "10012") {
               dispatch(
                 handleField(
@@ -163,8 +191,8 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.subTypeOfAdvertisement",
         required: true,
         props: {
-          className: "applicant-details-error",
-          required: true,
+          //className: "applicant-details-error",
+          //required: true,
           disabled: false
         },
         beforeFieldChange: (action, state, dispatch) => {
@@ -258,8 +286,8 @@ const commonBuildingData = buildingType => {
           labelKey: "ADV_DURATION_NOC_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        //pattern: getPattern("Name"),
+        //errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
         sourceJsonPath: "applyScreenMdmsData.egpm.duration-new",
 
         jsonPath: "ADVERTISEMENTNOC.duration",
@@ -366,22 +394,7 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.advertisementVillageSubSector",
       })
     },
-    advertisementMatterDescription: {
-      ...getTextField({
-        label: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
-        },
-        placeholder: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getOPMSPattern("Address"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
-      })
-    },
+    
     enterSpace: {
       ...getTextField({
         label: {
@@ -401,22 +414,29 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.space",
       })
     },
-    advertisementMatterDescription: {
-      ...getTextField({
-        label: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
-        },
-        placeholder: {
-          labelName: "Advertisement Matter Description",
-          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getOPMSPattern("Address"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
-      })
-    },
+    // advertisementMatterDescription: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Advertisement Matter Description",
+    //       labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
+    //     },
+    //     placeholder: {
+    //       labelName: "Advertisement Matter Description",
+    //       labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
+    //     },
+    //     props:{
+          
+    //                   className:"textfield-enterable-selection",
+    //                   multiline: true,
+    //                   rows: "4"
+    //                 },
+    //     required: true,
+    //     pattern: getOPMSPattern("Address"),
+    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
+    //   })
+    // },
+    
     date: {
       ...getTextField({
         label: {
@@ -436,6 +456,35 @@ const commonBuildingData = buildingType => {
         jsonPath: "ADVERTISEMENTNOC.date",
       })
     },
+    advertisementMatterDescription: {
+      ...getTextField({
+        label: {
+          labelName: "Advertisement Matter Description",
+          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC"
+        },
+        placeholder: {
+          labelName: "Advertisement Matter Description",
+          labelKey: "ADV_ADVERTISEMENT_MATTER_DESCRIPTION_NOC_PLACEHOLDER"
+        },
+        
+              props:{
+          
+                      className:"textfield-enterable-selection",
+                      multiline: true,
+                      rows: "2",
+
+
+                 
+                  },
+                 
+        required: true,
+        pattern: getOPMSPattern("TexrearAddress"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "ADVERTISEMENTNOC.advertisementMatterDescription",
+      })
+    },
+    exemptedCategory: undertakingButton1,
+    
     // date: getDateField({
     //   label: {
     //     labelName: "Date",
@@ -465,7 +514,7 @@ const commonBuildingData = buildingType => {
     //   }
 
     // }),
-    exemptedCategory: undertakingButton1,
+   
 
   };
 };
@@ -484,6 +533,10 @@ export const immunizationDetails = getCommonCard({
   ),
   break: getBreak(),
   immunizationDetailsConatiner: getCommonContainer({
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    },
     buildingDataCard: getCommonContainer({
       singleBuildingContainer: {
         uiFramework: "custom-atoms",

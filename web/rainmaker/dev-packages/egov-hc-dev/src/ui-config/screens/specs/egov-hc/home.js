@@ -30,7 +30,7 @@ if (role_name === 'CITIZEN' || role_name === "EE") {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon" style={{ fontSize: "50px" }}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         nature
     </i>,
       route: "servicerequest"
@@ -46,7 +46,7 @@ if (role_name === 'CITIZEN' || role_name === "EE") {
         viewBox="0 -8 35 42"
         color="primary"
         font-size="40px"
-        class="material-icons module-page-icon" style={{ fontSize: "50px" }}>
+        class="material-icons module-page-icon" style={{ fontSize: "42px" }}>
         library_books
     </i>,
       route: "myServiceRequests"
@@ -80,11 +80,11 @@ const horticultureSearchAndResult = {
             history: {}
           }
         },
-        listCard: {
-          uiFramework: "custom-molecules-local",
-          moduleName: "egov-hc",
-          componentPath: "HowItWorks"
-        }
+        // listCard: {
+        //   uiFramework: "custom-molecules-local",
+        //   moduleName: "egov-hc",
+        //   componentPath: "HowItWorks"
+        // }
       }
     },
   
