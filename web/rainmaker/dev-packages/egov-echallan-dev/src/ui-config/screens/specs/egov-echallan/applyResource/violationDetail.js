@@ -7,6 +7,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { getSearchResults, fetchItemListMasterData } from "../../../../../ui-utils/commons";
 import { resetAllFields } from "../../utils";
 import "./index.css";
+import { set } from "lodash";
 
 const getArticleData = async (action, state, dispatch) => {
   try {
@@ -112,24 +113,25 @@ export const violationsDetails = getCommonCard({
         errorMessage: "EC_ERR_DEFAULT_INPUT_ENCROACHMENT_TYPE_FIELD_MSG",
         beforeFieldChange: (action, state, dispatch) => {
           try {
-
+            let isEncroachmentchanged = false;
             dispatch(prepareFinalObject("articleSeizedDetails", []));
             let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
             if (action.value !== encroachmentType) {
+              isEncroachmentchanged = true;
               dispatch(prepareFinalObject("articleSeizedGridDetails", []));
               dispatch(
                 handleField(
                   "apply", "components.div.children.formwizardSecondStep.children.ArticleGridDetails",
                   "props.data", [])
               );
+              const objectJsonPath = `components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children`;
+              const children = get(
+                state.screenConfiguration.screenConfig["apply"],
+                objectJsonPath,
+                {}
+              );
+            resetAllFields(children, dispatch, state, 'apply');            
               if (action.value === 'Registered Street Vendors') {
-                const objectJsonPath = `components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children`;
-                const children = get(
-                  state.screenConfiguration.screenConfig["apply"],
-                  objectJsonPath,
-                  {}
-                );
-                resetAllFields(children, dispatch, state, 'apply');
                 dispatch(
                   handleField(
                     "apply",
@@ -283,12 +285,118 @@ export const violationsDetails = getCommonCard({
                   "visible", false));
 
             }
+            if(isEncroachmentchanged){
+              set(state, 'form.apply_Violator_Image.files.echallanViolaterImage', []);
+              set(state, 'form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage', []);
+              set(state, 'form.apply_Violations_Image.files.echallanViolationImage', []);
+            }
             // dispatch(pFO("Licenses[0].tradeLicenseDetail.structureType", null));
           } catch (e) {
             console.log(e);
           }
         }
       })
+    },
+    LicenseNo: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "eChallan.licenseNoCov",
+      errorMessage: "EC_ERR_DEFAULT_INPUT_LICENSE_NUMBER_FIELD_MSG",
+      required: false,
+      visible: false,
+      props: {
+        required: false,
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
+        label: { labelName: "Lisense No", labelKey: "EC_LICENSE_NUMBER_LABEL" },
+        placeholder: {
+          labelName: "Enter License Number",
+          labelKey: "EC_LICENSE_NUMBER_PLACEHOLDER"
+        },
+        errorMessage: "EC_ERR_DEFAULT_INPUT_LICENSE_NUMBER_FIELD_MSG",
+        jsonPath: "eChallan.licenseNoCov",
+        sourceJsonPath: "applyScreenMdmsData.egec.vendorList",
+        labelsFromLocalisation: true,
+        setDataInField: true,
+        suggestions: [],
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        },
+        // localePrefix: {
+        //   moduleName: "ACCESSCONTROL_ROLES",
+        //   masterName: "ROLES"
+        // },
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      afterFieldChange: (action, state, dispatch) => {
+        try {
+          let vendorvalue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.vendorList', []);
+          let __FOUND = vendorvalue.find(function (vendorRecord, index) {
+            if (vendorRecord.code == action.value)
+              return true;
+          });
+
+          //if (state.screenConfiguration.preparedFinalObject.eChallan.hasOwnProperty('violatorName')) {
+          dispatch(prepareFinalObject("eChallan.violatorName", __FOUND !== undefined ? __FOUND.fullname : ''));
+          dispatch(prepareFinalObject("eChallan.address", __FOUND !== undefined ? __FOUND.address : ''));
+          dispatch(prepareFinalObject("eChallan.fatherName", __FOUND !== undefined ? __FOUND.fatherSpouseName : ''));
+          dispatch(prepareFinalObject("eChallan.contactNumber", __FOUND !== undefined ? __FOUND.contactNumber : ''));
+          dispatch(prepareFinalObject("eChallan.numberOfViolation", __FOUND !== undefined ? __FOUND.numberOfViolation : '1'));
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.NameofViolator',
+              "props.value",
+              __FOUND !== undefined ? __FOUND.fullname : ''
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.Address',
+              "props.value",
+              __FOUND !== undefined ? __FOUND.address : ''
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.FatherName',
+              "props.value",
+              __FOUND !== undefined ? __FOUND.fatherSpouseName : ''
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.ContactNo',
+              "props.value",
+              __FOUND !== undefined ? __FOUND.contactNumber : ''
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.NumberOFviolations',
+              "props.value",
+              __FOUND !== undefined ? __FOUND.numberOfViolation : '1'
+            )
+          );
+
+          console.log("vcount", __FOUND);
+          //}
+        } catch (error) {
+          console.log('FetchLicense', error);
+        }
+      }
     },
     NumberOFviolations: {
       ...getSelectField({
@@ -434,97 +542,7 @@ export const violationsDetails = getCommonCard({
       }
 
     },
-    LicenseNo: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-echallan",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "eChallan.licenseNoCov",
-      errorMessage: "EC_ERR_DEFAULT_INPUT_LICENSE_NUMBER_FIELD_MSG",
-      required: false,
-      visible: false,
-      props: {
-        required: false,
-        style: {
-          width: "100%",
-          cursor: "pointer"
-        },
-        label: { labelName: "Lisense No", labelKey: "EC_LICENSE_NUMBER_LABEL" },
-        placeholder: {
-          labelName: "Enter License Number",
-          labelKey: "EC_LICENSE_NUMBER_PLACEHOLDER"
-        },
-        errorMessage: "EC_ERR_DEFAULT_INPUT_LICENSE_NUMBER_FIELD_MSG",
-        jsonPath: "eChallan.licenseNoCov",
-        sourceJsonPath: "applyScreenMdmsData.egec.vendorList",
-        labelsFromLocalisation: true,
-        setDataInField: true,
-        suggestions: [],
-        fullwidth: true,
-        required: true,
-        inputLabelProps: {
-          shrink: true
-        },
-        // localePrefix: {
-        //   moduleName: "ACCESSCONTROL_ROLES",
-        //   masterName: "ROLES"
-        // },
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 6
-      },
-      afterFieldChange: (action, state, dispatch) => {
-        try {
-          let vendorvalue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.vendorList', []);
-          let __FOUND = vendorvalue.find(function (vendorRecord, index) {
-            if (vendorRecord.code == action.value)
-              return true;
-          });
 
-          //if (state.screenConfiguration.preparedFinalObject.eChallan.hasOwnProperty('violatorName')) {
-          dispatch(prepareFinalObject("eChallan.violatorName", __FOUND !== undefined ? __FOUND.fullname : ''));
-          dispatch(prepareFinalObject("eChallan.address", __FOUND !== undefined ? __FOUND.address : ''));
-          dispatch(prepareFinalObject("eChallan.fatherName", __FOUND !== undefined ? __FOUND.fatherSpouseName : ''));
-          dispatch(prepareFinalObject("eChallan.contactNumber", __FOUND !== undefined ? __FOUND.contactNumber : ''));
-          dispatch(
-            handleField(
-              "apply",
-              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.NameofViolator',
-              "props.value",
-              __FOUND !== undefined ? __FOUND.fullname : ''
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.Address',
-              "props.value",
-              __FOUND !== undefined ? __FOUND.address : ''
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.FatherName',
-              "props.value",
-              __FOUND !== undefined ? __FOUND.fatherSpouseName : ''
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.ContactNo',
-              "props.value",
-              __FOUND !== undefined ? __FOUND.contactNumber : ''
-            )
-          );
-          console.log("vcount", __FOUND);
-          //}
-        } catch (error) {
-          console.log('FetchLicense', error);
-        }
-      }
-    },
 
   }),
 

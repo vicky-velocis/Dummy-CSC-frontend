@@ -45,7 +45,7 @@ class ImageUpload extends Component {
     if(getapplicationType() === "HORTICULTURE")
     {
       for (let i = 0; i < 5 - images.length; i++) {
-        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? false : false} />);
       }
     }
     else{

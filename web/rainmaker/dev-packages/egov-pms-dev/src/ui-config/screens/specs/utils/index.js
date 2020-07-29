@@ -887,6 +887,13 @@ export const getTextToLocalMapping = label => {
             //"PENSION_COMMON_TABLE_COL_DEGIGNATION",
             localisationLabels
           );
+          case "Date of Joining":
+            return getLocaleLabels(
+              "Date of Joining",
+              "PENSION_DOJ_EMPLOYEE",
+              //"PENSION_COMMON_TABLE_COL_DEGIGNATION",
+              localisationLabels
+            );
 
     case "Application Date":
       return getLocaleLabels(
@@ -1283,4 +1290,17 @@ export const checkValueForNA = value => {
 
 export const checkValueForNotAsigned = value => {
   return value ? value : getLocalizationCodeValue("PENSION_WORKFLOW_NOT_ASSIGNED");
+};
+export const epochToYmdDate = et => {
+  if (!et) return null;
+  if (typeof et === "string") return et;
+  let d = new Date(et),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
 };

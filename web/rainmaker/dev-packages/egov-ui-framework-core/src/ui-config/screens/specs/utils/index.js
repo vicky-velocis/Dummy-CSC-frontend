@@ -617,7 +617,7 @@ export const getPattern = type => {
     case "ECViolatorName":
       return /^[a-zA-Z ]{1,256}$/i;
     case "ECItemName":
-      return /^[a-zA-Z. ]{1,256}$/i;
+      return /^[a-zA-Z.@()/0-9 ]{1,256}$/i;
     case "ECItemDescription":
       return /^[a-zA-Z.0-9 @#/%&]{1,256}$/i;
     case "ECVehicleRegistrationNo":

@@ -23,21 +23,21 @@ export const documentDetails = getCommonCard({
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
     labelKey: "EC_VIOLATION_UPLOAD_SUBHEAD"
   }),
-  subText_format: getCommonParagraph(
-    {
-      labelName: "Only .jpg and .pdf files. 1MB max file size.",
-      labelKey: "EC_VIOLATION_BULK_UPLOAD_SUBHEAD"
-    },
-    {
-      style: {
-        fontSize: 12,
-        marginBottom: 0,
-        marginTop: 5,
-        width: "100%",
-        color: "rgba(0, 0, 0, 0.6000000238418579)"
-      }
-    }
-  ),
+  // subText_format: getCommonParagraph(
+  //   {
+  //     labelName: "Only .jpg and .pdf files. 1MB max file size.",
+  //     labelKey: "EC_VIOLATION_BULK_UPLOAD_SUBHEAD"
+  //   },
+  //   {
+  //     style: {
+  //       fontSize: 12,
+  //       marginBottom: 0,
+  //       marginTop: 5,
+  //       width: "100%",
+  //       color: "rgba(0, 0, 0, 0.6000000238418579)"
+  //     }
+  //   }
+  // ),
   break: getBreak(),
   imageUpload: {
     uiFramework: "custom-molecules-local",
