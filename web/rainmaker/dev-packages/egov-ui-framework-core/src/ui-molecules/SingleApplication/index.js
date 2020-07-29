@@ -173,7 +173,8 @@ class SingleApplication extends React.Component {
         break;
         default:
           setRoute(`/rented-properties/mortgage-search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
-    } else if (moduleName === "EGOV-ECHALLAN") {
+    }
+   } else if (moduleName === "EGOV-ECHALLAN") {
       switch (item.status) {
         case "INITIATED":
           setRoute(`/egov-echallan/apply?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
