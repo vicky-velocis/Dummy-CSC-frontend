@@ -734,7 +734,7 @@ export const getTextAdvertisement = (label, isWithdrawn) => {
     case "WITHDRAW":
       return 'Withdraw';
     case "PENDINGAPPROVAL":
-      return 'Pending Approval';
+      return isWithdrawn === "0" ? 'Pending Approval' : 'Withdraw Request';
     case "PENDINGAPPROVALFORWITHDRAW":
       return 'Withdraw Request';
     case "REJECTED":
@@ -753,6 +753,31 @@ export const getTextAdvertisement = (label, isWithdrawn) => {
       return isWithdrawn === "0" ? 'Reassign To OSD' : 'Withdraw Request';
     case "PAYMENTPENDING":
       return 'Payment Pending'
+    case "REVIEWOFJC":
+      return 'Review Of JC';
+    case "REVIEWOFAC":
+      return 'Review Of AC';
+    case "REVIEWOFSC":
+      return 'Review Of SC';
+    case "REVIEWOFSEC":
+      return 'Review Of SEC';
+    case "REASSIGNTOJC":
+      return isWithdrawn === "0" ? 'Reassigned Of JC' : 'Withdraw Request';
+    case "REASSIGNTOAC":
+      return isWithdrawn === "0" ? 'Reassigned Of AC' : 'Withdraw Request';
+    case "REASSIGNTOSC":
+      return isWithdrawn === "0" ? 'Reassigned Of SC' : 'Withdraw Request';
+    case "REASSIGNTOSEC":
+      return isWithdrawn === "0" ? 'Reassigned Of SEC' : 'Withdraw Request';
+    case "REVIEWOFJCFORWITHDRAW":
+      return 'Withdraw Request';
+    case "REVIEWOFACFORWITHDRAW":
+      return 'Withdraw Request';
+    case "REVIEWOFSCFORWITHDRAW":
+      return 'Withdraw Request';
+    case "REVIEWOFSECFORWITHDRAW":
+      return 'Withdraw Request';
+
     default:
       return '-'
   }
@@ -795,7 +820,28 @@ export const getTextForRoadCuttNoc = label => {
       return 'Reassign To EE'
     case "PAYMENTPENDING":
       return 'Payment Pending'
-    default:
+    case "REVIEWAPPROVEEE":
+      return 'Review Approve Of EE'
+    case "REVIEWAPPROVESE":
+      return 'Review Approve Of EE'
+    case "REASSIGNAPPROVEEE":
+      return 'Reassigned To SE'
+    case "REASSIGNAPPROVESE":
+      return 'Reassigned To SE'
+    case "VERIFYDOEE":
+      return 'Verfication Of DOEE'
+    case "VERIFYDOSE":
+      return 'Verfication Of DOSE'
+    case "VERIFYDOCE":
+      return 'Verfication Of DOCE'
+    case "REASSIGNDOEE":
+      return 'Reassigned To DOEE'
+    case "REASSIGNDOSE":
+      return 'Reassigned To DOSE'
+    case "REASSIGNDOCE":
+      return 'Reassigned To DOCE'
+
+	  default:
       return '-'
   }
 }

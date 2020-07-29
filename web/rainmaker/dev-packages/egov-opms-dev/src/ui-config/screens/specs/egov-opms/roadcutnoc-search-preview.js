@@ -18,7 +18,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { fetchBill, searchBill, createDemandForRoadCutNOC } from "../utils/index";
 
-import { footerEmp,takeactionfooter,footerCitizen } from "./applyResource/employeeRoadCutFooter";
+import { footerEmp, takeactionfooter, footerCitizen } from "./applyResource/employeeRoadCutFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
 import {
   adhocPopupForJeRoadCutForward, adhocPopupForJeRoadCutReassign, adhocPopupForCeRoadCutApprove,
@@ -35,15 +35,15 @@ import { checkForRole } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
 import {
   localStorageGet, localStorageSet, setapplicationNumber, getOPMSTenantId, setapplicationType,
-  getAccessToken, getLocale, getUserInfo, getapplicationType, getapplicationNumber
+  getAccessToken, getLocale, getUserInfo, getapplicationType, getapplicationNumber, setOPMSTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
 
 import {
   preparepopupDocumentsRoadCutUploadData, prepareDocumentsUploadData,
-  getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload
+  getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, setCurrentApplicationProcessInstance
 } from "../../../../ui-utils/commons";
 import { taskStatusSummary } from './summaryResource/taskStatusSummary';
-
+import { checkVisibility } from '../../../../ui-utils/commons'
 
 let roles = JSON.parse(getUserInfo()).roles
 
@@ -316,7 +316,7 @@ const setDownloadMenu = (state, dispatch) => {
   );
 };
 
-const HideshowEdit = (action, nocStatus, amount) => {
+const HideshowEdit = (state, action, nocStatus, amount, applicationNumber) => {
   // Hide edit buttons
   let showEdit = false;
   if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
@@ -344,19 +344,39 @@ const HideshowEdit = (action, nocStatus, amount) => {
     false
   );
 
-  set(
-    action,
-    "screenConfig.components.div.children.footerEmp.children.approve.visible",
-    amount < 10000 && checkForRole(roles, 'EE') ? true
-      : checkForRole(roles, 'CE') ? true : false
-  );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footerEmp.children.approve.visible",
+  //   amount < 50000 && checkForRole(roles, 'EE') ? true
+  //     : checkForRole(roles, 'CE') ? true : false
+  // );
+  //check visibile true
+  //amount and role combination
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footerEmp.children.reject.visible",
+  //   amount < 50000 && checkForRole(roles, 'EE') ? true : checkForRole(roles, 'CE') ? true : false
+  // );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footerEmp.children.nextButton.visible",
+  //   checkVisibility("INITIATED,REVIEWSDO,REVIEWOFSE,REVIEWOFEE") ? true : false
+  // );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footerEmp.children.reassign.visible",
+  //   checkVisibility("INITIATED,REASSIGNTOEE,REASSIGNTOJE,REASSIGNTOSDO,REASSIGNTOSE") ? true : false
+  // );            
+  set(state, 'screenConfiguration.preparedFinalObject.WFStatus', []);
+  checkVisibility(state, "REJECT,REJECTED", "reject", action, "screenConfig.components.div.children.footerEmp.children.reject.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
 
-  set(
-    action,
-    "screenConfig.components.div.children.footerEmp.children.reject.visible",
-    amount < 10000 && checkForRole(roles, 'EE') ? true : checkForRole(roles, 'CE') ? true : false
-  );
+  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footerEmp.children.approve.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
 
+  checkVisibility(state, "REASSIGN,REASSIGNAPPROVESE,REASSIGNAPPROVEEE,REASSIGNTOJE,REASSIGNTOSDO", "reassign", action, "screenConfig.components.div.children.footerEmp.children.reassign.visible", null)
+
+  checkVisibility(state, "REASSIGNDOEE,REASSIGNDOSE,REASSIGNDOCE", "reassignToDO", action, "screenConfig.components.div.children.footerEmp.children.reassignToDO.visible", null)
+
+  checkVisibility(state, "INITIATED,VERIFYDOEE,VERIFYDOSE,VERIFYDOCE,REVIEWSDO,REVIEWOFSE,REVIEWOFCE,REVIEWOFEE,REVIEWAPPROVEEE,REVIEWAPPROVESE,REVIEWOFWD,PENDINGAPPROVAL", "nextButton", action, "screenConfig.components.div.children.footerEmp.children.nextButton.visible", null)
 
   set(
     action,
@@ -412,7 +432,8 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   let amount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].amount", {});
   let performancebankguaranteecharges = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].performancebankguaranteecharges", {});
   let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
-  HideshowEdit(action, nocStatus, amount);
+  await setCurrentApplicationProcessInstance(state);
+  HideshowEdit(state, action, nocStatus, amount, applicationNumber);
   if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
     searchBill(dispatch, applicationNumber, tenantId);
   } else {
@@ -575,8 +596,8 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     setapplicationNumber(applicationNumber); //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
-
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    setOPMSTenantId(tenantId);
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
     //setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
@@ -588,20 +609,20 @@ const screenConfig = {
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    if (checkForRole(roles, 'JE')) {
-      set(
-        action,
-        "screenConfig.components.adhocDialogForward.children.popup",
-        adhocPopupForJeRoadCutForward
-      );
-    }
-    else {
-      set(
-        action,
-        "screenConfig.components.adhocDialogForward.children.popup",
-        adhocPopupForSeRoadCutForward
-      );
-    }
+    // if (checkForRole(roles, 'JE')) {
+    //   set(
+    //     action,
+    //     "screenConfig.components.adhocDialogForward.children.popup",
+    //     adhocPopupForJeRoadCutForward
+    //   );
+    // }
+    // else {
+    //   set(
+    //     action,
+    //     "screenConfig.components.adhocDialogForward.children.popup",
+    //     adhocPopupForSeRoadCutForward
+    //   );
+    // }
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'popup_rodcut');
     });
@@ -638,7 +659,6 @@ const screenConfig = {
           moduleName: "egov-workflow",
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "Licenses",
             moduleName: "ROADCUTNOC",
           }
 
@@ -648,18 +668,18 @@ const screenConfig = {
           roadcutapplicantSummary: roadcutapplicantSummary,
           documentsSummary: documentsSummary,
           taskStatusSummary: taskStatusSummary,
-       //   footerCitizen
+          //   footerCitizen
           //ReassignButton
         }) : getCommonCard({
           // estimateSummary: estimateSummary,
           roadcutapplicantSummary: roadcutapplicantSummary,
           documentsSummary: documentsSummary,
-         
+
         }),
-        footerEmp  , 
+        footerEmp,
         takeactionfooter
-        
-        
+
+
 
       }
     },
@@ -674,7 +694,7 @@ const screenConfig = {
       },
       children: {
 
-        popup: {}
+        popup: adhocPopupForJeRoadCutForward
         //popup:adhocPopup1
 
       }
@@ -692,7 +712,7 @@ const screenConfig = {
       },
       children: {
 
-        popup: {}
+        popup: adhocPopupForSeRoadCutForward
 
       }
     },
