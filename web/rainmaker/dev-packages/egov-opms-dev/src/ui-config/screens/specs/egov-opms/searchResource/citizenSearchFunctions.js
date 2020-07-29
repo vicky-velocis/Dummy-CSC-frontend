@@ -820,7 +820,28 @@ export const getTextForRoadCuttNoc = label => {
       return 'Reassign To EE'
     case "PAYMENTPENDING":
       return 'Payment Pending'
-    default:
+    case "REVIEWAPPROVEEE":
+      return 'Review Approve Of EE'
+    case "REVIEWAPPROVESE":
+      return 'Review Approve Of EE'
+    case "REASSIGNAPPROVEEE":
+      return 'Reassigned To SE'
+    case "REASSIGNAPPROVESE":
+      return 'Reassigned To SE'
+    case "VERIFYDOEE":
+      return 'Verfication Of DOEE'
+    case "VERIFYDOSE":
+      return 'Verfication Of DOSE'
+    case "VERIFYDOCE":
+      return 'Verfication Of DOCE'
+    case "REASSIGNDOEE":
+      return 'Reassigned To DOEE'
+    case "REASSIGNDOSE":
+      return 'Reassigned To DOSE'
+    case "REASSIGNDOCE":
+      return 'Reassigned To DOCE'
+
+	  default:
       return '-'
   }
 }
