@@ -138,15 +138,15 @@ import {
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {onTabChange, headerrow, tabs} from './search-preview'
   import { getSearchResults } from "../../../../ui-utils/commons";
-  import { getReviewImages } from "./applyResource/review-transit-images";
+  import { getReviewDocuments } from "./applyResource/review-transit-images";
 import { convertDateTimeToEpoch } from "../utils";
   
   let transitNumber = getQueryArg(window.location.href, "transitNumber");
-  // const reviewDocumentDetails = getReviewImages(false, "property-transitImages")
+  const reviewDocumentDetails = getReviewDocuments(false, "property-transitImages")
   
-  // export const transitSiteImages = getCommonCard({
-  //   reviewDocumentDetails
-  // });
+  export const transitSiteImages = getCommonCard({
+    reviewDocumentDetails
+  });
   
   const epochToDate = et => {
     if (!et) return null;
@@ -161,45 +161,33 @@ import { convertDateTimeToEpoch } from "../utils";
       { key: "transitNumber", value: transitNumber }
     ];
     let payload = await getSearchResults(queryObject);
+    let propertyImages = payload.Properties[0].propertyImages;
     if(payload) {
-      let applicationDocuments = payload.Properties[0].propertyImages[0].applicationDocuments;
-      let imagesByDate = applicationDocuments.reduce((date, item) => {
-      const group = (date[item.auditDetails.lastModifiedTime] || []);
-      group.push(item);
-      date[item.auditDetails.lastModifiedTime] = group;
-      return date;
-      }, {});
-      let imageArray = []
-      let image = {}
-      Object.keys(imagesByDate).forEach(function(key) {
-        image = {
-               "date":key,
-               "images" : imagesByDate[key]
-             }
-             imageArray.push(image)
-      });
-      
-    //   let properties = payload.Properties;
-    //   let applicationDocuments = properties[0].propertyImages[0].applicationDocuments || [];
-    //   const removedDocs = applicationDocuments.filter(item => !item.active)
-    //   applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    //   properties = [{...properties[0], propertyDetails: {...properties[0].propertyImages[0], applicationDocuments}}]
-    //   let date = properties[0].propertyImages[0].applicationDocuments[0].auditDetails.lastModifiedTime;
-    //   let updatedDate = epochToDate(date)
-  
-    //   dispatch(prepareFinalObject("Properties[0]", properties[0]));
-    //   dispatch(
-    //     prepareFinalObject(
-    //       "PropertiesTemp[0].removedDocs",
-    //       removedDocs
-    //     )
-    //   );
-    //   await setDocuments(
-    //     payload,
-    //     "Properties[0].propertyImages[0].applicationDocuments",
-    //     "PropertiesTemp[0].reviewDocData",
-    //     dispatch,'RP'
-    //   );
+        const imagesWithDocument = propertyImages.filter(function(image){
+              if(image.applicationDocuments != null){
+                return image
+              }
+        })
+        let properties = payload.Properties;
+       let applicationDocuments = imagesWithDocument || [];
+       const removedDocs = imagesWithDocument || []
+       properties = [{...properties[0], propertyImages: {...properties[0].propertyImages, applicationDocuments}}]
+      // let date = properties[0].propertyImages[0].applicationDocuments[0].auditDetails.lastModifiedTime;
+      // let updatedDate = epochToDate(date)
+      // let updatedDate = epochToDate(date)
+      dispatch(prepareFinalObject("Properties[0]", properties[0]));
+      dispatch(
+        prepareFinalObject(
+          "PropertiesTemp[0].removedDocs",
+          removedDocs
+        )
+      );
+      await setDocuments(
+        payload,
+        "Properties[0].propertyImages[0].applicationDocuments",
+        "PropertiesTemp[0].reviewDocData",
+        dispatch,'RP'
+      );
     }
     
    }
@@ -269,7 +257,7 @@ import { convertDateTimeToEpoch } from "../utils";
                 },
                 type: "array",
               },
-              // transitSiteImages
+              transitSiteImages
           }
         }
       }
