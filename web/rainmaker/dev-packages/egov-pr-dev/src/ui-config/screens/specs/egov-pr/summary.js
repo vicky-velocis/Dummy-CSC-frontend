@@ -34,7 +34,16 @@ const header = getCommonContainer({
     }
 
   },
-  status: getQueryArg(window.location.href, "status")==="null"?{}: {
+  status:getQueryArg(window.location.href, "eventstatus")==="CANCELLED"?getQueryArg(window.location.href, "status")==="null"?{}: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-pr",
+    componentPath: "StatusContainer",
+    props: {
+      number: "CANCELLED"
+    }
+
+  }:
+   getQueryArg(window.location.href, "status")==="null"?{}: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-pr",
     componentPath: "StatusContainer",
@@ -84,6 +93,11 @@ const HideshowEdit = (action, Status, ) => {
     "screenConfig.components.div.children.footer.children.testButton.visible",
     Status === 'UPCOMING' ?  true  : false 
   );
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.testButton.visible",
+    Status === 'ONGOING' ?  true  : false 
+  );
         
       
 }
@@ -97,7 +111,7 @@ const setSearchResponse = async (state, action, dispatch, tenantId,payload) => {
   
   let Status = get(state, "screenConfiguration.preparedFinalObject.EventSummary[0].status", {});
   
-  debugger
+  //
 
 
 localStorageGet("shoWHideCancel")==="apply"?'':HideshowEdit(action, Status);
@@ -114,13 +128,13 @@ const screenConfig = {
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.eventdetailsSummary.children.cardContent.children.header.children.editSection.visible",
-    (getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED")===true ?false:true )
+    (getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" || getQueryArg(window.location.href, "status")==="ONGOING")===true ?false:true )
 
     
     set(
       action,
       "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?false:true )
+      getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" || getQueryArg(window.location.href, "status")==="ONGOING" ?false:true )
     let payload={
       "requestBody":{
               "tenantId":getTenantId(),
@@ -133,10 +147,7 @@ const screenConfig = {
       
             }
 
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap"
-    );
+  
    
 
     setSearchResponse(state, action, dispatch, getTenantId(),payload);

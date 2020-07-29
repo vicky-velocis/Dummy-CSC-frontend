@@ -22,12 +22,11 @@ import {
  
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import "./index.css";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { getTenderGridData } from "../../../../../ui-utils/commons";
 import store from "ui-redux/store";
-
 const state = store.getState();
 
 const getLocalTextFromCode = localCode => {
@@ -35,6 +34,8 @@ const getLocalTextFromCode = localCode => {
     item => item.code === localCode
   );
 };
+
+
 
 
 export const searchResults = {
@@ -49,14 +50,9 @@ export const searchResults = {
       getTextToLocalMapping("Event Title"),
 	   {
         name: getTextToLocalMapping("Organizer Department"),
-        options: {
-          display: true,
-          customBodyRender: (value, tableMeta, updateValue) => (
-          <div>{value[0]} <br/><br/> {value[1]}</div>
-		  
-        )
-        }
+       
       },
+      getTextToLocalMapping("Organizer Employee"),
       getTextToLocalMapping("Date & Time"),
       getTextToLocalMapping("Schedule Status"),
       getTextToLocalMapping("Event Status"),
@@ -65,7 +61,8 @@ export const searchResults = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       }
     ],
@@ -76,7 +73,8 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-
+    
+     
       onRowClick: (row, index) => {
         onRowClick(row);
       }
@@ -114,7 +112,8 @@ export const searchResultsPressList = {
         name: getTextToLocalMapping("Press Note List UUID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       },
     ],
@@ -125,6 +124,7 @@ export const searchResultsPressList = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
+     
       onRowClick: (row, index) => {
         onRowClickpressnote(row);
       }
@@ -160,7 +160,7 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 			let selectedrows1=[];
 					
 			 let tempdata = localStorageGet("gridobj");
-		 console.log(tempdata);
+	//	 console.log(tempdata);
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
@@ -188,9 +188,9 @@ const onAllEmployeeselect = async (rowData, allrowdata,state,dispatch,action) =>
 		{
 			if(rowData.length == 0)
 			{
-				localStorageSet("PressNoteList",[]);
+				localStorageSet("PressNoteList","");
 			}
-			localStorageSet("PressNoteListAll", []);
+			localStorageSet("PressNoteListAll", "");
 			
 		}
 } 
@@ -208,6 +208,7 @@ const onEmployeeselect = async (type, rowData, allrowdata,index) => {
 	}
 	else
 	{	
+    
     console.log(type);
     console.log("Current" + rowData);
 		console.log( rowData);
@@ -215,7 +216,7 @@ const onEmployeeselect = async (type, rowData, allrowdata,index) => {
     let selectedrows = [];
     let selectedrows1=[];
 		let localinvdata = localStorageGet("PressNoteList");
-  	if(localinvdata === null || localinvdata === "undefined" )
+  	if(localinvdata === null || localinvdata === "undefined" || localinvdata === "[]" )
  // if(selectedrows1.length===0)
 		{
       
@@ -235,6 +236,8 @@ if(tempAll!==null)
           localStorageSet("PressNoteList", JSON.stringify(tempAll));	
           let selIndex1=[]
           let selIndex= JSON.parse(localStorageGet("PressNoteList"));
+          localStorageSet("PressNoteListAll","");	
+          
           selIndex.map((item,index)=>{
           
              selIndex1.push(item['index'])	
@@ -411,7 +414,8 @@ export const searchResultsPressMasterList = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       },
     ],
@@ -423,24 +427,22 @@ export const searchResultsPressMasterList = {
     rowsSelected: [],
     filterSelected: [],
     filterType: 'checkbox',
+    
+    selectToolbarPlacement: "none",
+    selectableRowsHeader:true,
     hover: true,
-     selectableRowsHeader : true,
+    disableToolbarSelect:false,
 	 selectableRowsOnClick : false,
     rowsPerPageOptions: [5, 10, 15, 20],
     onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
     onAllEmployeeselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
     },
+    customToolbarSelect: () => {},
     onRowClick: (row, index,state,dispatch,action) => {
     onEmployeeselect('rowdata',row,state,index)
     },
    
-    selectedRows: {
-    text: "row(s) selected",
-    delete: "Delete",
-    deleteAria: "Delete Selected Rows",
-    }
-    
-    },
+   
     },
     customSortColumn: {
       column: "Application Date",
@@ -457,6 +459,8 @@ export const searchResultsPressMasterList = {
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
+    }
+    
  
  
 };
@@ -500,9 +504,9 @@ const onAllPressselect = async (rowData, allrowdata,state,dispatch,action) => {
 		{
 			if(rowData.length == 0)
 			{
-				localStorageSet("PressTenderList",[]);
+				localStorageSet("PressTenderList","");
 			}
-			localStorageSet("PressTenderListAll", []);
+			localStorageSet("PressTenderListAll", "");
 			
 		}
 } 
@@ -523,7 +527,7 @@ const onEmployeeselect1 = async (type, rowData, allrowdata,index) => {
     let selectedrows = [];
     let selectedrows1=[];
 		let localinvdata = localStorageGet("PressTenderList");
-  	if(localinvdata === null || localinvdata === "undefined" )
+  	if(localinvdata === null || localinvdata === "undefined" || localinvdata === "[]" )
 
 		{
       
@@ -544,6 +548,7 @@ if(tempAll!==null)
           
       let selIndex1=[]
       let selIndex= JSON.parse(localStorageGet("PressTenderList"));
+      localStorageSet("PressTenderListAll", "");
       selIndex.map((item,index)=>{
       
          selIndex1.push(item['index'])	
@@ -739,7 +744,8 @@ export const PressMasterListForTender = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-          
+          filter: false,
+          display: "excluded",
         }
       },
     ],
@@ -751,12 +757,14 @@ export const PressMasterListForTender = {
     rowsSelected: [],
     filterSelected: [],
     filterType: 'checkbox',
+   
      selectableRowsHeader : true,
 	 selectableRowsOnClick : false,
     rowsPerPageOptions: [5, 10, 15, 20],
     onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
 		onAllPressselect(currentRowsSelected , allRowsSelected,state,dispatch,action)
    },
+    customToolbarSelect: () => {},
     onRowClick: (row, index,state,dispatch,action) => {
     onEmployeeselect1('rowdata',row,state,index)
     },
@@ -767,7 +775,6 @@ export const PressMasterListForTender = {
     deleteAria: "Delete Selected Rows",
     }
     
-    },
     },
     customSortColumn: {
       column: "Application Date",
@@ -784,6 +791,8 @@ export const PressMasterListForTender = {
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
     }
+    }
+    
  
  
 };
@@ -804,7 +813,8 @@ export const searchGridSecondstep = {
         name: getTextToLocalMapping("Press master UUID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       },
     ],
@@ -814,9 +824,15 @@ export const searchGridSecondstep = {
     responsive: "stacked",
     selectableRows: false,
     hover: true,
+   
     rowsPerPageOptions: [10, 15, 20],
     onRowClick: (row, index) => {
     }
+  },
+  selectedRows: {
+    text: "row(s) selectedaaaaaaaaaaaaaaaaa",
+    // delete: "Delete",
+    // deleteAria: "Delete Selected Rows",
   },
   customSortColumn: {
     column: "Application Date",
@@ -841,7 +857,7 @@ const onRowClick = rowData => {
   const page="search"
 
   
-    const reviewUrl = `summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&page=${page}&status=${rowData[4]}&eventstatus=${rowData[5]}&tenantId=`+getTenantId();
+    const reviewUrl = `summary?eventId=${rowData[0]}&eventuuId=${rowData[7]}&page=${page}&status=${rowData[5]}&eventstatus=${rowData[6]}&tenantId=`+getTenantId();
     
     
         window.location.href =reviewUrl;
@@ -864,14 +880,9 @@ export const searchResultsLibrary = {
       getTextToLocalMapping("Event Title"),
       {
         name: getTextToLocalMapping("Organizer Department"),
-        options: {
-          display: true,
-          customBodyRender: (value, tableMeta, updateValue) => (
-          <div>{value[0]} <br/><br/> {value[1]}</div>
-		  
-        )
-        }
+        
       },
+      getTextToLocalMapping("Organizer Employee"),
       getTextToLocalMapping("Date & Time"),
       getTextToLocalMapping("Schedule Status"),
       getTextToLocalMapping("Event Status"),
@@ -879,7 +890,8 @@ export const searchResultsLibrary = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       }
     ],
@@ -889,6 +901,7 @@ export const searchResultsLibrary = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+    
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onRowClicklibrary(row);
@@ -912,7 +925,7 @@ export const searchResultsLibrary = {
   }
 };
 const onRowClicklibrary = rowData => {
-  const reviewUrl = `library-summary?eventId=${rowData[0]}&eventuuId=${rowData[6]}&tenantId=`+getTenantId();
+  const reviewUrl = `library-summary?eventId=${rowData[0]}&eventuuId=${rowData[7]}&tenantId=`+getTenantId();
 window.location.href =reviewUrl;
  
 };
@@ -945,6 +958,7 @@ export const searchInviteGuest = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+     
       rowsPerPageOptions: [10, 15, 20],
      
     },
@@ -989,7 +1003,7 @@ export const searchResultsinvitesummary = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      
+    
     },
     customSortColumn: {
       column: "Application Date",
@@ -1030,6 +1044,7 @@ export const tenderSearchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+    
       rowsPerPageOptions: [10, 15, 20],
        onRowClick: (row, index) => {
          onTenderRowClick(row);
@@ -1090,6 +1105,8 @@ export const publishTenderSearchResults = {
       name: getTextToLocalMapping("Department User"),
       options: {
         display: false,
+        filter: false,
+        display: "excluded",
       
       }
       },
@@ -1097,6 +1114,8 @@ export const publishTenderSearchResults = {
         name: getTextToLocalMapping("tenderNoticeUuid"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
         
         }
       },
@@ -1108,13 +1127,29 @@ export const publishTenderSearchResults = {
       download: false,
       responsive: "stacked",
       selectableRows: false,
+    
+      
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
       onRowClick: (row, index) => {
         onPubTenderRowClick(row);
       }
     },
-   
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
   }
 };
 
@@ -1188,6 +1223,8 @@ export const masterGrid = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
        }
       }
     ],
@@ -1198,12 +1235,28 @@ export const masterGrid = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+    
+      
       rowsPerPageOptions: [5, 10, 15],
     onRowClick: (row, index) => {
   
       }
     },
-   
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
   }
 };
 
@@ -1233,13 +1286,23 @@ export const TimeSeriessearchResults = {
    
      
     ],
-  
+    title: "Time Series Report(Department)",
+    
     options: {
       filter: false,
       download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+     
+      downloadOptions: {
+        filename: "TimeSeriesReport(Department).csv",
+        separator: ",",
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: false,
+        },
+      },
       rowsPerPageOptions: [10, 15, 20],
       
     },
@@ -1283,12 +1346,23 @@ export const TimeSeriessearchEventResults = {
    
      
     ],
+    title: "Time Series Report(Event Type)",
+    
     options: {
       filter: false,
       download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      downloadOptions: {
+        filename: "TimeSeriesReport(Event Type).csv",
+        separator: ",",
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: false,
+        },
+      },
+      
       rowsPerPageOptions: [10, 15, 20],
     
     },
@@ -1329,16 +1403,46 @@ export const LocalityReportSearchResults = {
 
      
     ],
-  
+    title: "Locality Wise Report",
+    
     options: {
       filter: false,
       download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      downloadOptions: {
+        filename: "LocalityWiseReport.csv",
+        separator: ",",
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: false,
+        },
+      },
+      
       rowsPerPageOptions: [10, 15, 20],
       
-}}}
+},
+customSortColumn: {
+  column: "Application Date",
+  sortingFn: (data, i, sortDateOrder) => {
+    const epochDates = data.reduce((acc, curr) => {
+      acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+      return acc;
+    }, []);
+    const order = sortDateOrder === "asc" ? true : false;
+    const finalData = sortByEpoch(epochDates, !order).map(item => {
+      item.pop();
+      return item;
+    });
+    return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+  }
+}
+
+
+
+
+}}
 
 
 
@@ -1361,13 +1465,23 @@ export const EventReportSearchResults = {
     
      
     ],
- 
+    title: "Events Report",
+    
     options: {
       filter: false,
       download: true,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
+      downloadOptions: {
+        filename: "Eventreport.csv",
+        separator: ",",
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: false,
+        },
+      },
+      
       rowsPerPageOptions: [10, 15, 20],
       // onRowClick: (row, index) => {
       //   onRowClick(row);
@@ -1403,8 +1517,26 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
   let selectedrows1=[];
       
    let tempdata = localStorageGet("gridobj");
+   if(allRowsSelected.length == localStorageGet("gridobjlength"))
+   {
+   let avlData=localStorageGet("ResendInvitelistAll")
+   if(avlData)
+   {
+   	
+    localStorageSet("ResendInvitelistAll", "");	
+    localStorageSet("ResendInvitelist", "");	
+    
+   }
+  else{
    console.log('Presssssssstempdata');
    console.log(tempdata);
+  //  let avlData=localStorageGet("ResendInvitelistAll")
+  //  if(avlData)
+  //  {
+  //   localStorageSet("ResendInvitelistAll", []);	
+    
+  //  }
+  //  else{
   // let tempdata1 = tempdata.split('},{').join('}|');
    let tempdata1 = tempdata.split('},{').join('}|{');
    let tempdata2 = tempdata1.split('|')
@@ -1426,18 +1558,27 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
   })
   localStorageSet("ResendInvitelistAll", JSON.stringify(selectedrows));	
 
+   //}
 
-
-
+  }
+}
+  else{
+  localStorageSet("ResendInvitelistAll", "");	
+  //localStorageSet("ResendInvitelist", "");	
+  
+  if(allRowsSelected.length == 0)
+  {
+    localStorageSet("ResendInvitelist", "");
+  }
+}
 }
 const onPressselect = async (type, rowData,index) => {
 
-			console.log("ROwdata");
-			console.log( rowData);
-			
+
 			let selectedrows = [];
-			let localinvdata = localStorageGet("ResendInvitelist");
-			if(localinvdata === null || localinvdata === "undefined")
+      let localinvdata = localStorageGet("ResendInvitelist");
+      
+			if(localinvdata === null || localinvdata === "undefined" || localinvdata==="[]")
 			{
 
 
@@ -1454,6 +1595,8 @@ const onPressselect = async (type, rowData,index) => {
             localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
             let selIndex1=[]
             let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+            localStorageSet("ResendInvitelistAll", "");
+
             selIndex.map((item,index)=>{
             
                selIndex1.push(item[6])	
@@ -1610,6 +1753,8 @@ export const ResendPressInviteGrid = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
        }
       }
     ],
@@ -1618,16 +1763,33 @@ export const ResendPressInviteGrid = {
       download: false,
       responsive: "stacked",
       selectableRows: true,
+    
+      
       hover: true,
       rowsPerPageOptions: [5, 10, 15],
 	  onRowsSelect:(currentRowsSelected , allRowsSelected) =>{
-		//alert("Clicked");
+		
 		onPressselectAll('cell','','resend',currentRowsSelected , allRowsSelected)
-	  },
+    },
+    customToolbarSelect: () => {}	,
 	  onRowClick: (row, index) => {
 		onPressselect('row',row,index);
       }
     },
-   
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
   }
 };

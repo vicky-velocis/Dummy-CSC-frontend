@@ -59,6 +59,10 @@ import {
           
         }
       }
+        
+ let obj1={}
+ obj1['name']="Select Organizer Employee"
+ user.unshift(obj1)
       dispatch(prepareFinalObject("applyScreenMdmsData.employees", user));
     } catch (e) {
       console.log(e);
@@ -173,6 +177,329 @@ import {
          
           jsonPath: "PublicRelation[0].CreateEventDetails.eventTitle",
           required: true,
+         
+
+          pattern: getPattern("EventTitle"),
+          errorMessage: "PR_EVENT_TITLE_INVALID"
+        }),
+        
+        area: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pr",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "PublicRelation[0].CreateEventDetails.area",
+                required: true,
+       gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+        props: {
+        style: {
+        width: "100%",
+        cursor: "pointer"
+        },
+       
+        className: "citizen-city-picker",
+        label: { labelName: "Area", labelKey: "PR_AREA_LABEL" },
+        placeholder: {
+          labelName: "Select Area",
+          labelKey: "PR_AREA_PLACEHOLDER"
+        }, 
+        sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].localityAreaName",
+        jsonPath: "PublicRelation[0].CreateEventDetails.area",
+       
+        labelsFromLocalisation: false,
+        suggestions: [],
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        },
+        isMulti: false,
+      labelName: "name",
+       valueName: "name"
+        },
+      },
+        EventLocation: getTextField({
+          label: {
+            labelName: "Event Location",
+            labelKey: "PR_EVENT_LOCATION_LABEL"
+          },
+         
+          
+          placeholder: {
+            labelName: "Enter Event Location",
+            labelKey: "PR_EVENT_LOCATION_PLACEHOLDER"
+          },
+         
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventLocation",
+          required: true,
+          pattern: getPattern("AlphaNumValidationLocation"),
+          errorMessage: "PR_EVENT_LOCATION_INVALID"
+        }),
+        typeOfEvent: {
+          uiFramework: "custom-containers-local",
+          moduleName: "egov-pr",
+          componentPath: "AutosuggestContainer",
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventType",
+          
+                required: true,
+       gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+        props: {
+        style: {
+        width: "100%",
+        cursor: "pointer"
+        },
+       
+        className: "citizen-city-picker",
+        label: { labelName: "Type Of Event", labelKey: "PR_TYPE_OF_EVENT_LABEL" },
+        placeholder: {
+          labelName: "Select Type Of Event",
+          labelKey: "PR_TYPE_OF_EVENT_PLACEHOLDER"
+        },
+        sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventType",
+        jsonPath: "PublicRelation[0].CreateEventDetails.eventType",
+        labelsFromLocalisation: false,
+        suggestions: [],
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        },
+        isMulti: false,
+      labelName: "name",
+       valueName: "name"
+        },
+      },
+        
+           
+         
+            
+       
+      sector: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pr",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "PublicRelation[0].CreateEventDetails.sector",
+        
+              required: false,
+     gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+      props: {
+      style: {
+      width: "100%",
+      cursor: "pointer"
+      },
+     
+      className: "citizen-city-picker",
+      label: {
+        labelName: "Sector",
+        labelKey: "PR_SECTOR_LABEL"
+      },
+      placeholder: {
+        labelName: "Enter Sector",
+        labelKey: "PR_SECTOR_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].eventSector",
+      
+              jsonPath: "PublicRelation[0].CreateEventDetails.sector",
+      labelsFromLocalisation: false,
+      suggestions: [],
+      fullwidth: true,
+      required: false,
+      inputLabelProps: {
+        shrink: true
+      },
+      isMulti: false,
+    labelName: "name",
+     valueName: "name"
+      },
+    },
+      committiee: {
+        ...getSelectField({
+          label: { labelName: "Committiee", labelKey: "PR_COMMITTEE_LABEL" },
+         
+         
+          placeholder: {
+            labelName: "Select Committiee",
+            labelKey: "PR_COMMITTEE_PLACEHOLDER"
+          },
+          sourceJsonPath: "committieeData",
+          jsonPath: "PublicRelation[0].CreateEventDetails.committeeUuid",
+          required: false,
+          props: {
+            className:"applicant-details-error",
+            required: false,
+         disabled:false,
+         optionLabel: "committeeName",
+         optionValue:"committeeUuid",
+          }
+        }),
+      
+      },
+    
+      
+    
+      organizerDetail: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pr",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
+      required: true,
+     gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+      props: {
+      style: {
+      width: "100%",
+      cursor: "pointer"
+      },
+     
+      className: "citizen-city-picker",
+      label: { labelName: "Organizer Department", labelKey: "PR_ORGANIZER_DETAILS_LABEL" },
+      
+       placeholder: {
+         labelName: "Select Organizer Detail",
+         labelKey: "PR_ORGANIZER_DETAIL_PLACEHOLDER"
+       },
+    
+       id:'dept',
+       sourceJsonPath: "applyScreenMdmsData[common-masters].Department",   
+       jsonPath: "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
+      labelsFromLocalisation: false,
+      suggestions: [],
+      fullwidth: true,
+      required: true,
+      inputLabelProps: {
+        shrink: true
+      },
+      isMulti: false,
+    labelName: "name",
+     valueName: "name"
+      },
+      afterFieldChange: (action, state, dispatch) => {
+        
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFirstStep.children.EventFirstStepperDetail.children.cardContent.children.propertyDetailsConatiner.children.organizerEmployee",
+            "props.value",
+            undefined
+          )
+        );
+
+       
+       
+ GetEmployees(action, state, dispatch,action.value.value)            
+       }
+    },
+    organizerEmployee: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pr",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "PublicRelation[0].CreateEventDetails.organizerUsernName",
+      
+            required: false,
+   gridDefination: {
+    xs: 12,
+    sm: 6
+  },
+    props: {
+    style: {
+    width: "100%",
+    cursor: "pointer"
+    },
+   
+    className: "citizen-city-picker",
+    label: { labelName: "Organizer Employee", labelKey: "PR_ORGANIZER_EMPLOYEE_LABEL" },
+    
+      
+      placeholder: {
+        labelName: "Select Organizer Employee",
+        labelKey: "PR_ORGANIZER_EMPLOYEE_PLACEHOLDER"
+      },
+      sourceJsonPath: "applyScreenMdmsData.employees",
+     
+      jsonPath: "PublicRelation[0].CreateEventDetails.organizerUsernName",
+    labelsFromLocalisation: false,
+    suggestions: [],
+    fullwidth: true,
+    required: false,
+    inputLabelProps: {
+      shrink: true
+    },
+    isMulti: false,
+  labelName: "name",
+   valueName: "name"
+    },
+  },
+      
+  
+        
+        Eventbudjet: getTextField({
+          label: {
+            labelName: "Event Budjet",
+            labelKey: "PR_EVENT_BUDJET_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Event Budjet",
+            labelKey: "PR_EVENT_BUDGET_PLACEHOLDER"
+          },
+        //  required: true,
+          pattern: getPattern("budget"),
+          errorMessage: "PR_BUDGET_INVALID",
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventBudget"
+        }),
+        
+        
+      }),
+      
+     
+    },
+    {
+      style: { overflow: "visible" }
+    }
+  );
+  
+
+
+
+  export const EventFirstStepperDetailSCP= getCommonCard(
+    {
+      header: getCommonTitle(
+        {
+          labelName: "Event Details",
+          labelKey: "PR_EVENT_DETAILS_HEADER"
+        },
+        {
+          style: {
+            marginBottom: 18
+          }
+        }
+      ),
+  
+      propertyDetailsConatiner: getCommonContainer({
+        EventTitle: getTextField({
+          label: {
+            labelName: "Event Title",
+            labelKey: "PR_EVENT_TITLE_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Event Title",
+            labelKey: "PR_EVENT_TITLE_PLACEHOLDER"
+          },
+          
+         
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventTitle",
+          required: true,
+         
+
           pattern: getPattern("EventTitle"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
         }),
@@ -189,6 +516,7 @@ import {
             sourceJsonPath: "applyScreenMdmsData.[RAINMAKER-PR].localityAreaName",
             jsonPath: "PublicRelation[0].CreateEventDetails.area",
             required: true,
+            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             
             props: {
               className:"applicant-details-error",
@@ -198,6 +526,7 @@ import {
           }),
         
         },
+
         EventLocation: getTextField({
           label: {
             labelName: "Event Location",
@@ -233,6 +562,9 @@ import {
               className:"applicant-details-error",
              required: true
               // disabled: true
+			  
+			  
+			  
             }
           }),
         
@@ -259,27 +591,7 @@ import {
           jsonPath: "PublicRelation[0].CreateEventDetails.sector"
         })
       },
-      committiee: {
-        ...getSelectField({
-          label: { labelName: "Committiee", labelKey: "PR_COMMITTEE_LABEL" },
-         
-          optionLabel: "committeeName",
-          optionValue:"committeeUuid",
-          placeholder: {
-            labelName: "Select Committiee",
-            labelKey: "PR_COMMITTEE_PLACEHOLDER"
-          },
-          sourceJsonPath: "committieeData",
-          jsonPath: "PublicRelation[0].CreateEventDetails.committeeUuid",
-          required: false,
-          props: {
-            className:"applicant-details-error",
-            required: false,
-           disabled:localStorageGet("modulecode")==="PR"?false:true
-          }
-        }),
       
-      },
       organizerDetail: {
           ...getSelectField({
             label: { labelName: "Organizer Department", labelKey: "PR_ORGANIZER_DETAILS_LABEL" },
@@ -346,8 +658,10 @@ import {
           },
         //  required: true,
           pattern: getPattern("budget"),
-         
-          jsonPath: "PublicRelation[0].CreateEventDetails.eventBudget"
+          errorMessage: "PR_BUDGET_INVALID",
+          
+          jsonPath: "PublicRelation[0].CreateEventDetails.eventBudget",
+          
         }),
         
         
@@ -359,4 +673,3 @@ import {
       style: { overflow: "visible" }
     }
   );
-  

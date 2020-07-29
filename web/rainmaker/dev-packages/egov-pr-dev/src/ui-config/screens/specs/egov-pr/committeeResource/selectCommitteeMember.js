@@ -74,7 +74,7 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
       },
       {
         style: {
-          marginBottom: 18,
+          marginBottom: 15,
           fontSize: "12px"
         }
       }
@@ -105,9 +105,9 @@ const GetEmployees = async (action, state, dispatch,deptvalue) => {
 				labelKey: "PR_SEARCH_EMPLOYEE_"
 			  },
 			   gridDefination: {
-					xs: 8,
-					sm: 8,
-					md: 8
+					xs: 12,
+					sm: 12,
+					md: 12
 				  },
 				props: {
 				  style: {

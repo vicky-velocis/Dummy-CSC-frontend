@@ -1,4 +1,4 @@
-import {getCommonContainer,getCommonHeader,getStepperObject,getBreak} from "egov-ui-framework/ui-config/screens/specs/utils";
+import {getCommonContainer,getCommonHeader,getStepperObject,getCommonTitle ,getBreak} from "egov-ui-framework/ui-config/screens/specs/utils";
 import { tenderApplyfooter } from "./applyResource/tenderApplyfooter";
 import jp from "jsonpath";
 import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
@@ -47,10 +47,16 @@ export const formwizardFirstStep = {
     tenderDetails,
     break: getBreak(),
     break: getBreak(),
-    publicationheader: getCommonHeader({
+    publicationheader: getCommonTitle({
       labelName: "select publication list",
       labelKey: "PR_SELECT_PUBLICATION"
-    }),
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+    ),
     break: getBreak(),
     break: getBreak(),
     PressMasterListForTender,

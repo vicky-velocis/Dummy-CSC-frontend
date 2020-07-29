@@ -159,6 +159,10 @@ const getMdmsData = async (action, state, dispatch) => {
             {
               name: "duration"
             }
+            ,
+            {
+              name: "roadCutDivision"
+            }
           ]
         },
         { moduleName: "AdvNOC", masterDetails: [{ name: "AdvNOCDocuments" }] }
@@ -261,6 +265,18 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
         "advertisementApply",
         "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.duration",
         "props.disabled", applicationStatus === "REASSIGN" ? true : false));
+
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.exemptedCategory.children.exemptionradio",
+        "props.buttons[0].disabled", applicationStatus === "REASSIGN" ? true : false));
+
+    dispatch(
+      handleField(
+        "advertisementApply",
+        "components.div.children.formwizardSecondStep.children.immunizationDetails.children.cardContent.children.immunizationDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.exemptedCategory.children.exemptionradio",
+        "props.buttons[1].disabled", applicationStatus === "REASSIGN" ? true : false));
 
 
     let uploadVaccinationCertificate = advtnocdetail.hasOwnProperty('uploadDocuments') ?

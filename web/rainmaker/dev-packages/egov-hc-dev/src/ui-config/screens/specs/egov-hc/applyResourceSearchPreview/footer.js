@@ -95,7 +95,7 @@ export const footerReviewTop = (
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -109,7 +109,7 @@ export const footerReviewTop = (
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -155,14 +155,21 @@ export const downloadPrintContainer = (
         docs = docs + "Document "+img_cnt + " -   " +document_list[i];
         img_cnt = img_cnt+1;
       }
-      // alert(docs);
-    // alert("Doc :: "+ JSON.stringify(document_list));
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
-      // myRequestDetails["documents"] = docs;
       myRequestDetails["documents"] = docs;
+      myRequestDetails["street_name"] = myRequestDetails["street_name"].toString().replace(/"/g, "''")
+      myRequestDetails["landmark"] = myRequestDetails["landmark"].toString().replace(/"/g, "''")
+      
+      
+      var str_eg = myRequestDetails["description"];
+      str_eg = str_eg.toString().replace(/"/g, "''")
+      str_eg = str_eg.toString().replace(/[\r\n]+/g," ");
+      // myRequestDetails["description"] = myRequestDetails["description"].toString().replace(/"/g, "''")
+      myRequestDetails["description"] =str_eg.toString();
       const data= [myRequestDetails];
+
       downloadAcknowledgementForm(data, "download");
     },
     leftIcon: "assignment"
@@ -175,12 +182,31 @@ export const downloadPrintContainer = (
         "screenConfiguration.preparedFinalObject.documents_list",
         {}
       );
+      var docs = "";
+      var img_cnt =1;
+      for(var i=0;i<document_list.length;i++)
+      {
+        if(document_list[i].length <80){
+          while(document_list[i].length<130){
+            document_list[i] = document_list[i] + " ";
+          }
+        }
+        
+        docs = docs + "Document "+img_cnt + " -   " +document_list[i];
+        img_cnt = img_cnt+1;
+      }
       var { myRequestDetails } = state.screenConfiguration.preparedFinalObject;
       myRequestDetails["SLADays"] = getSLADays();
       myRequestDetails["Status"] = getServiceRequestStatus();
-      myRequestDetails["documents"] = document_list[0].toString();
-      var data= [myRequestDetails];
-      downloadAcknowledgementForm(data,'print');
+      myRequestDetails["documents"] = docs;
+      // var demo = myRequestDetails["description"];
+      // var str_eg = `test demo 'Single' sp - !@#$%^&*()_+ test's 'test' "Demo" `;
+      var str_eg = myRequestDetails["description"];
+      str_eg = str_eg.toString().replace(/"/g, "''")
+      myRequestDetails["description"] =str_eg.toString();
+      const data= [myRequestDetails];
+
+      downloadAcknowledgementForm(data, "print");
     },
     leftIcon: "assignment"
   };
@@ -205,7 +231,7 @@ export const downloadPrintContainer = (
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -219,7 +245,7 @@ export const downloadPrintContainer = (
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }
@@ -270,7 +296,7 @@ export const downloadPrintContainerScreenDownload= (serviceRequestId)=>{
               label: {labelName : "DOWNLOAD" , labelKey :"HC_DOWNLOAD"},
                leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-download-button" },
               menu: downloadMenu
             }
           }
@@ -284,7 +310,7 @@ export const downloadPrintContainerScreenDownload= (serviceRequestId)=>{
               label: {labelName : "PRINT" , labelKey :"HC_PRINT"},
               leftIcon: "print",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+              props: { variant: "outlined", style: { height: "45px", color : "#FE7A51" }, className: "tl-print-button" },
               menu: printMenu
             }
           }

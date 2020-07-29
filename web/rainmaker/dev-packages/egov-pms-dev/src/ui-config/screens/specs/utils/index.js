@@ -20,7 +20,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill, ApplicationConfiguration } from "../../../../ui-utils/sampleResponses";
 import axios from 'axios';
-import {  getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+//import {  getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -746,6 +746,18 @@ export const getLocalizationCodeValue =lable =>{
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
+    // case "Designation":
+    //   return getLocaleLabels(
+    //     "Designation",
+    //     "HR_COMMON_TABLE_COL_DESG",
+    //     localisationLabels
+    //   );
+    case "Department":
+      return getLocaleLabels(
+        "Department",
+        "HR_COMMON_TABLE_COL_DEPT",
+        localisationLabels
+      );
     /// for recomputation
     case "recomputedBusinessId":
       return getLocaleLabels(
@@ -875,6 +887,13 @@ export const getTextToLocalMapping = label => {
             //"PENSION_COMMON_TABLE_COL_DEGIGNATION",
             localisationLabels
           );
+          case "Date of Joining":
+            return getLocaleLabels(
+              "Date of Joining",
+              "PENSION_DOJ_EMPLOYEE",
+              //"PENSION_COMMON_TABLE_COL_DEGIGNATION",
+              localisationLabels
+            );
 
     case "Application Date":
       return getLocaleLabels(
@@ -1125,17 +1144,17 @@ if(isConfig)
    let ConfigValue = ApplicationConfiguration() 
   // ConfigValue= key;
   let tenantId = getQueryArg(window.location.href, "tenantId");
-  if(ConfigValue.IsRequiredValiadtion)
-  {
-    if(tenantId.includes("."))
-  {
+  // if(ConfigValue.IsRequiredValiadtion)
+  // {
+  //   if(tenantId.includes("."))
+  // {
  
-    var vStr = tenantId.split('.');
+  //   var vStr = tenantId.split('.');
 
-    tenantId = vStr[0];
-  }
+  //   tenantId = vStr[0];
+  // }
 
-  }
+  // }
  
   const queryStr = [
     { key: "key", value: key },
@@ -1154,7 +1173,7 @@ if(isConfig)
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,mode)
+            downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -1172,17 +1191,17 @@ export const downloadAcknowledgementLetter = (Application,key, isConfig,mode="do
   let ConfigValue = ApplicationConfiguration() 
  // ConfigValue= key;
  let tenantId = getQueryArg(window.location.href, "tenantId");
- if(ConfigValue.IsRequiredValiadtion)
- {
-   if(tenantId.includes("."))
- {
+//  if(ConfigValue.IsRequiredValiadtion)
+//  {
+//    if(tenantId.includes("."))
+//  {
 
-   var vStr = tenantId.split('.');
+//    var vStr = tenantId.split('.');
 
-   tenantId = vStr[0];
- }
+//    tenantId = vStr[0];
+//  }
 
- }
+//  }
 
  const queryStr = [
    { key: "key", value: key },
@@ -1200,7 +1219,7 @@ export const downloadAcknowledgementLetter = (Application,key, isConfig,mode="do
        res.filestoreIds[0]
        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
          res.filestoreIds.map(fileStoreId => {
-           downloadReceiptFromFilestoreID(fileStoreId,mode)
+           downloadReceiptFromFilestoreID(fileStoreId,mode,tenantId)
          })
        } else {
          console.log("Error In Acknowledgement form Download");
@@ -1211,8 +1230,28 @@ export const downloadAcknowledgementLetter = (Application,key, isConfig,mode="do
  }
 }
 }
-export const downloadReceiptFromFilestoreID=(fileStoreId,mode)=>{
-  getFileUrlFromAPI(fileStoreId).then(async(fileRes) => {
+
+// for file store id
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
+  const queryObject = [
+  	{ key: "tenantId", value: tenantId },
+   // { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/filestore/v1/files/url",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     if (mode === 'download') {
       var win = window.open(fileRes[fileStoreId], '_blank');
       if(win){
@@ -1251,4 +1290,17 @@ export const checkValueForNA = value => {
 
 export const checkValueForNotAsigned = value => {
   return value ? value : getLocalizationCodeValue("PENSION_WORKFLOW_NOT_ASSIGNED");
+};
+export const epochToYmdDate = et => {
+  if (!et) return null;
+  if (typeof et === "string") return et;
+  let d = new Date(et),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
 };

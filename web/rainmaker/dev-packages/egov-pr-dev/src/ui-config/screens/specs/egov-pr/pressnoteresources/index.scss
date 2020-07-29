@@ -1,3 +1,6 @@
+form#apply_form1 tbody {
+  word-break: break-all !important;
+}
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {
     z-index: 101 !important;

@@ -46,6 +46,8 @@ export const searchResults = {
       getTextToLocalMapping("Application Number"),
       getTextToLocalMapping("recomputedBusinessId"),
       getTextToLocalMapping("applicationDate"),
+      // getTextToLocalMapping("Designation"),
+      // getTextToLocalMapping("Department"),
     //  getTextToLocalMapping("lastModifiedDate"),     
       {
         name: "tenantId",
@@ -160,30 +162,35 @@ const InitiateNPWorkflow = async (rowData) => {
 
 const onRowClick = rowData => {
   console.log(rowData)
-let step = `WF_${rowData[6]}_CLOSE`
+let step = `WF_${rowData[8]}_CLOSE`
 let pmsModule = 'RRP_SERVICE'
 let  id= rowData[3];
 
 //  identify workflow and redirect to workfloe detail page of existing application
 //   move to workflow detail page
+const reviewUrl =
+process.env.REACT_APP_SELF_RUNNING === "true"
+  ? `/egov-ui-framework/pms`
+  : `/pms`;
   switch (rowData[6].toUpperCase()) {
+ 
     case WFConfig().businessServiceRRP:
       if(id === null)
-      window.location.href = `/pms/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `rrpDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOE:
       if(id === null)
-      window.location.href = `/pms/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `doeDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
     case WFConfig().businessServiceDOP:
       if(id === null)
-      window.location.href = `/pms/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
+      window.location.href = `dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}`
       else
-      window.location.href = `/pms/dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
+      window.location.href = `dopDetails?applicationNumber=${rowData[2]}&tenantId=${rowData[5]}&step=${step}&id=${id}`
          break
       break;
    } 

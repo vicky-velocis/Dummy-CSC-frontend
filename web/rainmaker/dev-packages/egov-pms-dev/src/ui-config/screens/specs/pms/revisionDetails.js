@@ -137,22 +137,32 @@ export const prepareEditFlow = async (
       pensionrevesion = response.ProcessInstances[0].pensionRevision.filter((item) => item.effectiveStartYear === Year && item.effectiveStartMonth === Month)
      }
      else{
+const index = response.ProcessInstances[0].pensionRevision.length;
+
        let pensionrevesionTemp =[{
         effectiveStartYear:Number(new Date().getFullYear()),
         effectiveStartMonth:Number(new Date().getMonth()+1),
-        basicPension:0,
-        overPayment:0,
-        da:0,
-        incomeTax:0,
-        commutedPension:0,
-        cess:0,
-        additionalPension:0,
-        pensionDeductions:0,
-        interimRelief:0,
-        fma:0,
-        miscellaneous:0,
-        attendantAllowance:0,
-        woundExtraordinaryPension:0,
+
+        basicPension:response.ProcessInstances[0].pensionRevision[index-1].basicPension,
+        totalPension:response.ProcessInstances[0].pensionRevision[index-1].totalPension,
+
+        da:response.ProcessInstances[0].pensionRevision[index-1].da,
+        overPayment:response.ProcessInstances[0].pensionRevision[index-1].overPayment,
+
+        commutedPension:response.ProcessInstances[0].pensionRevision[index-1].commutedPension,
+        incomeTax:response.ProcessInstances[0].pensionRevision[index-1].incomeTax,
+
+        additionalPension:response.ProcessInstances[0].pensionRevision[index-1].additionalPension,
+        cess:response.ProcessInstances[0].pensionRevision[index-1].cess,
+
+        fma:response.ProcessInstances[0].pensionRevision[index-1].fma,
+        netDeductions:response.ProcessInstances[0].pensionRevision[index-1].netDeductions,
+
+        miscellaneous:response.ProcessInstances[0].pensionRevision[index-1].miscellaneous,
+        finalCalculatedPension:response.ProcessInstances[0].pensionRevision[index-1].finalCalculatedPension,
+
+        woundExtraordinaryPension:response.ProcessInstances[0].pensionRevision[index-1].woundExtraordinaryPension,
+        attendantAllowance:response.ProcessInstances[0].pensionRevision[index-1].attendantAllowance,
         remarks:"",
 
 
@@ -183,6 +193,8 @@ export const prepareEditFlow = async (
             // IsRevisionEdit = pensionrevesion.isEditEnabled;
      dispatch(prepareFinalObject("ProcessInstances", data, []));
      dispatch(prepareFinalObject("pensionRevisionTemp", response.ProcessInstances[0].pensionRevision, []));
+
+     //set in case of add revesion default value of last records
    
 
   }

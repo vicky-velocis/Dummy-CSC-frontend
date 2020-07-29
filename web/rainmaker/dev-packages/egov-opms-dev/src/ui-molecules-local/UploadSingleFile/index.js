@@ -35,6 +35,7 @@ const UploadSingleFile = ({
                   <UploadedDocument
                     document={document}
                     removeDocument={removeDocument}
+                    moduleName="opms"
                   />
                 </div>
               );

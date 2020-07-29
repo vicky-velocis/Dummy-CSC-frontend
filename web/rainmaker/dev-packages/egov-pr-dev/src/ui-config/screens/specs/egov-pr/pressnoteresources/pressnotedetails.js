@@ -8,7 +8,7 @@ import {
     getTextField,
     getPattern,
     getLabel,
-   
+    getCommonParagraph,
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  import { documentDetails } from "./emaildocumentDetails";
@@ -22,12 +22,21 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
   import {  masterGrid} from "../searchResource/searchResults";
 
   
+  
+  
+  
 
   export const pressnotedetails = getCommonCard({
     subHeader: getCommonTitle({
         labelName: "Press note Details",
         labelKey: "PR_PRESS_NOTE_DETAILS"
-    }),
+    },
+    {
+      style: {
+        marginBottom: 18,
+      }
+    }
+    ),
     
     appStatusAndToFromDateContainer: getCommonContainer({
         
@@ -42,7 +51,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
             },
             required: true,
             pattern: getPattern("Date"),
-            errorMessage: "Invalid Date",
+            errorMessage: "PR_PRESS_NOTE_DATE_INVALID",
             jsonPath: "pressnote.date",
             gridDefination: {
               xs: 12,
@@ -64,7 +73,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
                 labelKey: "PR_PRESS_NOTE_FILE_NUMBER_PLACEHOLDER"
               },
               pattern:getPattern("fileNumber"),
-              errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+              errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
               required: true,
               jsonPath: "pressnote.fileNumber"
             })
@@ -87,7 +96,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
             labelKey: "PR_PRESS_NOTE_SUBJECT_PLACEHOLDER"
           },
           pattern:getPattern("subjectvalidation"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
           required: true,
           jsonPath: "pressnote.pressSubject",
           gridDefination: {
@@ -100,10 +109,16 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
       
     }),
     	
-	 subHeader: getCommonTitle({
+	 subHeader: getCommonParagraph({
         labelName: "Note",
         labelKey: "PR_PRESS_NOTE_NOTE"
-    }),
+    }, 
+    {
+      style: {
+        marginBottom: 18,
+      }
+    }
+    ),
   
 	pressnotetest : {
 		uiFramework: "custom-molecules-local",
@@ -137,7 +152,7 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
                 labelKey: "PRESS_NOTE_EMAIL_SUBJECT_PLACEHOLDER"
               },
              // pattern: /^[a-zA-Z0-9]*$/i,
-              errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+              errorMessage: "PR_PRESS_NOTE_EMAIL_SUBJECT_INVALID",
               required: true,
               jsonPath: "pressnote.emailsubject"
             })
@@ -204,7 +219,7 @@ export const EmailSmsContent = getCommonCard({
        labelName: "Subject",
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
-     pattern:getPattern("AlphaNumValidationsms"),
+     pattern:getPattern("subjectvalidation"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "pressnote.subjectemail",
@@ -225,7 +240,7 @@ export const EmailSmsContent = getCommonCard({
   //         props: { label : "subject"}
   // },
   break: getBreak(),	
-	headeremail: getCommonTitle(
+	headeremail: getCommonParagraph(
     {
       labelName: "Email Template",
       labelKey: "PR_EMAIL_TEMPLATE"
@@ -249,7 +264,7 @@ export const EmailSmsContent = getCommonCard({
   
     break: getBreak(),
    break: getBreak(),
-   headersms: getCommonTitle(
+   headersms:  getCommonParagraph(
     {
       labelName: "SMS Template",
       labelKey: "PR_SMS_TEMPLATE"
@@ -278,10 +293,15 @@ export const EmailSmsContent = getCommonCard({
         labelName: "SMS Template",
         labelKey: "PR_SMS_TEMPLATE"
       },
-      pattern: getPattern("AlphaNumValidationsms"),
+      pattern: getPattern("subjectvalidation"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "pressnote.SMSContent",
+      props:{
+        className:"textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
+      },
 	   gridDefination: {
           xs: 12,
           sm: 12,

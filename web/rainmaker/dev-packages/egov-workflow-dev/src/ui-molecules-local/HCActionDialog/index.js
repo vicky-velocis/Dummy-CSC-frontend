@@ -282,7 +282,7 @@ class HCActionDialog extends React.Component {
         open={open}
         onClose={onClose}
         maxWidth={false}
-        style={{zIndex:2000}}
+        // style={{zIndex:2000}}
       >
         <DialogContent
           children={
@@ -333,7 +333,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.roleName.label}
                         placeholder={fieldConfig.roleName.placeholder}
                         data={dropDownData}
@@ -358,7 +358,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeList}
@@ -385,7 +385,7 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfJE}
@@ -412,11 +412,11 @@ class HCActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "100%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={this.state.allEmployeeListOfSDO}
-                        optionValue="value"
+                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
                         // onClose={handleFieldChange(`${dataPath}.assignee`,[""])}
@@ -431,6 +431,7 @@ class HCActionDialog extends React.Component {
                 {/* code for comments is just here not anywhere else, after this, button code starts */}
                     <Grid item sm="12">
                     <TextFieldContainer
+                    style={{ marginRight: "15px", width: "100%" }}
                       InputLabelProps={{ shrink: true }}
                       label={fieldConfig.comments.label}
                       onChange={e =>
@@ -457,10 +458,7 @@ class HCActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
-                        <LabelContainer
-                          labelName="Supporting Documents"
-                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />
+                        
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -489,6 +487,10 @@ class HCActionDialog extends React.Component {
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
+                    <LabelContainer
+                        labelName="Upload Document Should be less than 5MB"
+                        labelKey="HC_UPLOAD_DOCUMENT_MSG_LABEL"
+                      />
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                                          <Button
                         variant={"contained"}
@@ -530,10 +532,6 @@ class HCActionDialog extends React.Component {
                       }}
                     >
                       <div className="rainmaker-displayInline">
-                        <LabelContainer
-                          labelName="Supporting Documents"
-                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
-                        />
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
                         )}
@@ -554,6 +552,7 @@ class HCActionDialog extends React.Component {
                       />
                     </div>
                     <ImageUpload module="egov-workflow"  formKey={"workflow"} fieldKey={`wfDocuments`} />
+                    
                     <Grid sm={12} style={{ textAlign: "right", marginTop: "16px", paddingTop:"10px"}} className="bottom-button-container">
                                          <Button
                         variant={"contained"}

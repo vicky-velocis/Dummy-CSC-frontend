@@ -8,7 +8,7 @@ import {
     getTextField,
     getPattern,
     getLabel,
-   
+    getCommonParagraph,
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  
@@ -32,6 +32,8 @@ import {
   import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
   
+  
+  
 
   export const tenderDetails = getCommonCard({
     subHeader: getCommonTitle({
@@ -53,7 +55,7 @@ import {
                 labelKey: "PR_TENDER_SIZE_OF_PUBLICATION_PLACEHOLDER"
               },
               pattern: getPattern("sizeofpublication"),
-              errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+              errorMessage: "PR_TENDER_SIZE_OF_PUBLICATION_INVALID",
               required: true,
               jsonPath: "tender.publicationsize"
             })
@@ -67,27 +69,7 @@ import {
   
   
 export const EmailSmsContent = getCommonCard({
-	//  subjectemail: getCommonTitle(
-  //   {
-  //     labelName: "Subject",
-  //     labelKey: "PR_EMAIL_Subject"
-  //   },
-  //   {
-  //    style: {
-  //       marginBottom: 20,
-	// 	marginTop: 20
-  //     }
-  //   }
-  // ),
-  // break: getBreak(),
-  //  break: getBreak(),
-  // Emailsubject: {
-  //    uiFramework: "custom-molecules-local",
-  //         moduleName: "egov-pr",
-  //         componentPath: "RichTextEditor",
-  //         props: { label : "subject"}
-  // },
-  // break: getBreak(),	
+	
 
   subjectemail: {
     ...getTextField({
@@ -99,8 +81,8 @@ export const EmailSmsContent = getCommonCard({
        labelName: "Subject",
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
-      pattern: getPattern("AlphaNumValidationsms"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      pattern: getPattern("subjectvalidation"),
+      errorMessage: "PR_TENDER_EMAIL_SUBJECT_INVALID",
       required: true,
       jsonPath: "tender.subjectemail",
 	   gridDefination: {
@@ -110,7 +92,7 @@ export const EmailSmsContent = getCommonCard({
         }
     })
   } ,
-	headeremail: getCommonTitle(
+	headeremail: getCommonParagraph(
     {
       labelName: "Email Template",
       labelKey: "PR_EMAIL_TEMPLATE"
@@ -135,7 +117,7 @@ export const EmailSmsContent = getCommonCard({
   
     break: getBreak(),
    break: getBreak(),
-   headersms: getCommonTitle(
+   headersms: getCommonParagraph(
     {
       labelName: "SMS Template",
       labelKey: "PR_SMS_TEMPLATE"
@@ -163,10 +145,15 @@ export const EmailSmsContent = getCommonCard({
         labelKey: "PR_SMS_TEMPLATE"
       },
      
-      pattern:getPattern("AlphaNumValidationsms"),
+      pattern:getPattern("subjectvalidation"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: true,
       jsonPath: "tender.SMSContent",
+      props:{
+        className:"textfield-enterable-selection",
+        multiline: true,
+        rows: "4"
+      },
 	   gridDefination: {
           xs: 12,
           sm: 12,
@@ -180,18 +167,22 @@ export const EmailSmsContent = getCommonCard({
 //  Resend Tender Invites
 
 const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected , allRowsSelected) => {
-	console.log("SELCT ALL CLICKKKKKKKKKKKKKKKKK Employee");
-	console.log(rowData)
-	console.log(allrowdata)
+
 	
-		if(allRowsSelected.length == localStorageGet("gridobjlength"))
-		{
+  if(allRowsSelected.length == localStorageGet("gridobjlength"))
+  {
 			let selectedrows = [];
 			let selectedrows1=[];
 					
 			 let tempdata = localStorageGet("gridobj");
-			// console.log(tempdata);
-			// let tempdata1 = tempdata.split('},{').join('}|');
+       let avlData=localStorageGet("ResendInvitelistAll")
+       if(avlData)
+       {
+        localStorageSet("ResendInvitelistAll", "");	
+       localStorageSet("ResendInvitelist", "");	
+        
+       }
+      else{
 			 let tempdata1 = tempdata.split('},{').join('}|{');
 			 let tempdata2 = tempdata1.split('|')
 					 
@@ -211,14 +202,15 @@ const onPressselectAll = async (type, rowData, allrowdata, currentRowsSelected ,
 	
 			})
 			localStorageSet("ResendInvitelistAll", JSON.stringify(selectedrows));	
-		}
+    }
+  }
 		else
 		{
-			if(currentRowsSelected.length == 0)
+			if(allRowsSelected.length == 0)
 			{
-				localStorageSet("ResendInvitelist",[]);
+				localStorageSet("ResendInvitelist","");
 			}
-			localStorageSet("ResendInvitelistAll", []);
+			localStorageSet("ResendInvitelistAll", "");
 			
 		}
 
@@ -244,7 +236,7 @@ const onPressselect = async (type, rowData, allrowdata, index) => {
 			;
 			let selectedrows = [];
 			let localinvdata = localStorageGet("ResendInvitelist");
-			if(localinvdata === null || localinvdata === "undefined")
+			if(localinvdata === null || localinvdata === "undefined" || localinvdata==="[]")
 			{
 
         let tempAll = JSON.parse(localStorageGet("ResendInvitelistAll"));
@@ -260,6 +252,8 @@ const onPressselect = async (type, rowData, allrowdata, index) => {
                 localStorageSet("ResendInvitelist", JSON.stringify(tempAll));	
                 let selIndex1=[]
                 let selIndex= JSON.parse(localStorageGet("ResendInvitelist"));
+                localStorageSet("ResendInvitelistAll", "");
+
                 selIndex.map((item,index)=>{
                 
                    selIndex1.push(item[6])	
@@ -569,6 +563,8 @@ export const ResendTenderInviteGrid = {
         name: getTextToLocalMapping("Event UUID"),
         options: {
           display: false,
+          filter: false,
+          display: "excluded",
        }
       }
     ],
@@ -578,20 +574,36 @@ export const ResendTenderInviteGrid = {
       responsive: "stacked",
       selectableRows: true,
       hover: true,
-	     selectableRowsHeader : true,
+       selectableRowsHeader : true,
+       
 	// disableToolbarSelect : true,
 	 selectableRowsOnClick : false,
       rowsPerPageOptions: [5, 10, 15],
 	  onRowsSelect:(currentRowsSelected , allRowsSelected,state,dispatch,action) =>{
 		
 		onPressselectAll('cell','','resend',currentRowsSelected , allRowsSelected)
-	  },
+    },
+    customToolbarSelect: () => {},
 	  onRowClick: (row, index) => {
 	    
 		onPressselect('rowdata',row,"resend",index)
       }
     },
-   
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
 
 
   }

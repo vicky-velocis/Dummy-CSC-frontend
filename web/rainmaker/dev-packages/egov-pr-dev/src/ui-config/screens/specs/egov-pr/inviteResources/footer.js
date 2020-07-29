@@ -18,6 +18,8 @@ import { invitationtoguests } from "../../../../../ui-utils/commons.js"
 import {localStorageGet, localStorageSet, lSRemoveItemlocal, lSRemoveItem} from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from '../../../../../config/common';
+import jp from "jsonpath";
+import { getFileUrlFromAPI  } from "egov-ui-framework/ui-utils/commons";
 
 import { watch } from "fs";
 let activeStepforbtn = 0;
@@ -148,8 +150,58 @@ const getMdmsData = async (state, dispatch) => {
 
 const callBackForNext = async (state, dispatch) => {
   
-  dispatch(prepareFinalObject("documentsUploadRedux", {}));
-
+ // dispatch(prepareFinalObject("documentsUploadRedux", {}));
+ let doc =localStorageGet("EmaildAttachment")
+if(doc!=="null" )
+{
+  
+  let documentsPreview = [];
+      
+      let fileStoreIds1 = JSON.parse(doc)
+      if(fileStoreIds1[0].fileStoreId!=="")
+      {
+      documentsPreview.push({
+      
+      fileStoreId:fileStoreIds1[0].fileStoreId ,
+      
+      })
+      
+      let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+      
+      let fileUrls =
+      fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+       documentsPreview = documentsPreview.map(function (doc, index) {
+      
+    doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+ //   doc["fileUrl"] ='aaa';
+      doc["fileName"] =
+      (fileUrls[doc.fileStoreId] &&
+        decodeURIComponent(
+          fileUrls[doc.fileStoreId]
+            .split(",")[0]
+            .split("?")[0]
+            .split("/")
+            .pop()
+            .slice(13)
+        )) ||
+      `Document - ${index + 1}`;
+      
+      return doc;
+      });
+      
+      dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+    }
+  }
+    //  screenConfiguration.screenConfig.createInvite.
+      //dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+      dispatch(
+        handleField(
+          "createInvite",
+          "components.div.children.formwizardSecondStep.children.EmailSmsContent.children.cardContent.children.subjectemail",
+          "props.value",
+          localStorageGet("EmailTemplatesubject")
+        )
+      );
   var x = document.getElementById("custom-atoms-footer");
   x.classList.remove("addpadding");
 
@@ -318,7 +370,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
-   // moveToReview(state, dispatch);
+  
     moveTosummary(state, dispatch);
   }
  
@@ -335,7 +387,10 @@ export const changeStep = (
     "components.div.children.stepper.props.activeStep",
     0
   );
-  
+
+  // if(mode === "previous"){
+  //   window.location.reload()
+  // }
   if (defaultActiveStep === -1) {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
    
@@ -347,6 +402,8 @@ export const changeStep = (
   const isNextButtonVisible = activeStep < 2 ? true : false;
   const isPayButtonVisible = activeStep === 2 ? true : false;
   const isinviteVisible = activeStep === 0 ? true : false;
+  const ispressinviteVisible = (activeStep === 0 &&  localStorageGet("modulecode") === "PR")? true : false;
+  
   const sendinviteVisible = activeStep === 1 ? true : false;
   const isactionButtonVisible = activeStep === 1 ? false : true;
   const actionDefination = [
@@ -373,7 +430,7 @@ export const changeStep = (
 	{
       path: "components.div.children.footer.children.pressguestbutton",
       property: "visible",
-      value: isinviteVisible
+      value: ispressinviteVisible
     },
 	{
       path: "components.div.children.footer.children.internalguestbutton",
@@ -501,7 +558,8 @@ export const footer = getCommonApplyFooter({
       style: {
         height: "48px",
         marginRight: "16px",
-        width: "30%"
+        // width: "30%"
+        minWidth: "220px"
       }
     },
     gridDefination: {
@@ -526,6 +584,7 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
        callBack: (state, dispatch) =>{
+        
             showHideAdhocPopupopmsReject(state, dispatch, "createInvite", "press")
     }
     },
@@ -539,7 +598,8 @@ export const footer = getCommonApplyFooter({
       style: {
         height: "48px",
         marginRight: "16px",
-        width: "30%"
+        // width: "30%"
+        minWidth: "220px"
       }
     },
     gridDefination: {
@@ -564,6 +624,8 @@ export const footer = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
         callBack: (state, dispatch) =>{ 
+          dispatch(prepareFinalObject("documentsUploadRedux", {}));
+
 		       showHideAdhocPopupopmsReject(state, dispatch, "createInvite","external")
     }
     },
@@ -577,7 +639,8 @@ export const footer = getCommonApplyFooter({
       style: {
         height: "48px",
         marginRight: "16px",
-        width: "30%"
+        // width: "30%"
+        minWidth: "220px"
       }
     },
     gridDefination: {
@@ -644,7 +707,8 @@ export const footer = getCommonApplyFooter({
       style: {
         height: "48px",
         marginRight: "16px",
-        width: "30%"
+        // width: "30%"
+        minWidth: "220px"
       }
     },
     gridDefination: {

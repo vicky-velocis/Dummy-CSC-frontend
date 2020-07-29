@@ -51,6 +51,16 @@ export const getWFConfig = (module,businessService) => {
       };
     }
     }
+    case "WS-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
+    case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
     case "FIRENOC":
       return {
         INITIATED: "/fire-noc/apply",

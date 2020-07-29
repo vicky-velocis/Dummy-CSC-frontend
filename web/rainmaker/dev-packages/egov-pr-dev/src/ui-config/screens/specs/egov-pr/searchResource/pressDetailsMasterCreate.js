@@ -14,7 +14,13 @@ export const pressDetailsApplication = getCommonCard({
     subHeader: getCommonTitle({
         labelName: "Press Master Details",
         labelKey: "PR_PRESS_DETAILS"
-    }),
+    },
+    {
+      style: {
+        marginBottom: 18,
+      }
+    }
+    ),
     
     appStatusAndToFromDateContainer: getCommonContainer({
       publicationName: {
@@ -28,33 +34,75 @@ export const pressDetailsApplication = getCommonCard({
             labelKey: "PR_PRESS_DETAILS_PUBLICATION_NAME"
           },
           pattern: getPattern("TextValidation"),
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          errorMessage: "PR_PUBLICATION_NAME_INVALID",
           required: true,
           jsonPath: "PRESSDETAILS.publicationName"
         })
       }, 
-      typeOfThePress: {
-        ...getSelectField({
-          label: {
-             labelName: "Type of the press", 
-             labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS" 
-            },
-          optionLabel: "name",
-          optionValue: "name",
-          placeholder: {
-            labelName: "Type of the press",
-            labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS"
-          },          
-          sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].pressType",
-          jsonPath: "PRESSDETAILS.typeOfThePress",
-          required: false,
-          props: {
-            className: "applicant-details-error",
-            required: true
-          },
+      // typeOfThePress: {
+      //   ...getSelectField({
+          
+      //     optionLabel: "name",
+      //     optionValue: "name",
+      //     label: {
+      //       labelName: "Type of the press", 
+      //       labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS" 
+      //      },
+      //     placeholder: {
+      //       labelName: "Type of the press",
+      //       labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS_PLACEHOLDER"
+      //     },   
+      //     errorMessage: "PR_TYPE_OF_PRESS_INVALID",       
+      //     sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].pressType",
+      //     jsonPath: "PRESSDETAILS.typeOfThePress",
+      //     required: true,
+      //     props: {
+      //       className: "applicant-details-error",
+      //       required: true
+      //     },
   
-        }),
+      //   }),
+      // },
+      typeOfThePress: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-pr",
+        componentPath: "AutosuggestContainer",
+        jsonPath: "PRESSDETAILS.typeOfThePress",
+              required: true,
+     gridDefination: {
+      xs: 12,
+      sm: 6
+    },
+      props: {
+      style: {
+      width: "100%",
+      cursor: "pointer"
       },
+     
+      className: "citizen-city-picker",
+      label: {
+        labelName: "Type of the press", 
+        labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS" 
+       },
+      placeholder: {
+        labelName: "Type of the press",
+        labelKey: "PR_PRESS_DETAILS_TYPE_OF_PRESS_PLACEHOLDER"
+      },     
+        sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].pressType",
+        jsonPath: "PRESSDETAILS.typeOfThePress",
+     
+      labelsFromLocalisation: false,
+      suggestions: [],
+      fullwidth: true,
+      required: true,
+      inputLabelProps: {
+        shrink: true
+      },
+      isMulti: false,
+    labelName: "name",
+     valueName: "name"
+      },
+    },
         name: {
             ...getTextField({
               label: {
@@ -66,7 +114,7 @@ export const pressDetailsApplication = getCommonCard({
                 labelKey: "PR_PRESS_DETAILS_PERSONNEL_NAME"
               },
               pattern: getPattern("TextValidation"),
-              errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+              errorMessage: "PR_PERSONNEL_NAME_INVALID",
               required: true,
               jsonPath: "PRESSDETAILS.name"
             })
@@ -83,7 +131,7 @@ export const pressDetailsApplication = getCommonCard({
               labelKey: "PR_PRESS_DETAILS_EMAILID"
             },
             pattern: getPattern("Email"),
-            errorMessage: "Invalid Email",
+            errorMessage: "PR_PRESS_EMAILID_INVALID",
             jsonPath:
               "PRESSDETAILS.emailId",
               required: true,
@@ -112,7 +160,7 @@ export const pressDetailsApplication = getCommonCard({
             },
             
             pattern: getPattern("MobileNo"),
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+            errorMessage: "PR_APPLICANT_MOBILE_NO_INVALID",
              jsonPath: "PRESSDETAILS.mobileNo",
                       
             gridDefination: {

@@ -27,3 +27,19 @@
 #custom-containers-propertyMohalla{div{p{
   font-size: 14px;
 }}}
+
+span[class^="MuiFormLabel-asterisk"] {
+  color: red; }
+
+span[class^="jss223"] {
+  color: red; }
+
+  .upload-photo-overlay {
+    overflow-x: auto !important;
+}
+div#material-ui-servicerequestdetails {
+  overflow: visible !important;
+}
+div#material-ui-servicerequestdetailsEdit {
+  overflow: visible !important;
+}

@@ -21,7 +21,7 @@ import "./index.css";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const uploadlibraryDocument = async (state, dispatch) => {
-  debugger
+  
   let response = '';
   let flag=false;
  
@@ -242,7 +242,7 @@ else{
   dispatch(
     toggleSnackbar(
     true,
-    { labelName: "Please uplaod AtLeat one document!", labelKey: "" },
+    { labelName: "Please uplaod AtLeat one document!", labelKey: "PR_LIBRARY_MANDATORY" },
     "warning"
     )
     );

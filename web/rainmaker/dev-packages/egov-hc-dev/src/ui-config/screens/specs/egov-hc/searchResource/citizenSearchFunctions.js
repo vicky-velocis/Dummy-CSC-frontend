@@ -22,7 +22,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   let flag_api_call = true;
   let fromdate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].FromDate")
   let Todate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].ToDate")
-  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype") 
+  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype.label") 
   let serviceRequestId = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicerequestid")
         
   var date1 = new Date(fromdate);
@@ -43,7 +43,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
       dispatch(
         toggleSnackbar(
           true,
-          { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" },
+          { labelName: "Please enter from date", labelKey: "ERR_FILL_FROM_DATE" },
           "warning"
         )
       );
@@ -59,7 +59,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
         dispatch(
           toggleSnackbar(
             true,
-            { labelName: "Please fill To Date", labelKey: "ERR_FILL_TO_DATE" },
+            { labelName: "Please enter to date", labelKey: "ERR_FILL_TO_DATE" },
             "warning"
           )
         );
@@ -84,12 +84,13 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
     
 
   var oneDayDifference = 60 * 60 * 24 * 1000;
+  toDateInTime = toDateInTime + oneDayDifference
   // var fromDateInTime = date1.getTime();
   // var toDateInTime = date2.getTime();
-  if(parseInt(fromDateInTime) === parseInt(toDateInTime))
-    {
-      toDateInTime = toDateInTime + oneDayDifference
-    }
+  // if(parseInt(fromDateInTime) === parseInt(toDateInTime))
+  //   {
+  //     toDateInTime = toDateInTime + oneDayDifference
+  //   }
 
   let filterdata = 
   {
@@ -103,7 +104,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   {
     
   const response = await getSearchResultsForFilters(filterdata);
-  console.log("^^^^^^^",response.services.length)
+  // console.log("^^^^^^^",response.services.length)
   // alert(JSON.stringify(response.services[0].createdtime));
   
   // let servicerequestDate = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST", []);
@@ -126,7 +127,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
 };
 
 export const resetFields = (state, dispatch) => {
-  // screenConfiguration.screenConfig.myServiceRequests.components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId
+ //resetting from date
   dispatch(
     handleField(
       "myServiceRequests",
@@ -135,27 +136,7 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
-
-  dispatch(
-    handleField(
-      "myServiceRequests",
-      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId",
-      "props.value",
-      ""
-    )
-  );
-
-
-  dispatch(
-    handleField(
-      "myServiceRequests",
-      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
-      "props.value",
-      ""
-    )
-  );
-
-  
+  //resetting to date
   dispatch(
     handleField(
       "myServiceRequests",
@@ -164,19 +145,111 @@ export const resetFields = (state, dispatch) => {
       ""
     )
   );
+      //resetting servicerequestt id 
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestId",
+      "props.value",
+      ""
+    )
+  );
+//resetting service request type
+try{
+  var serviceRequestTypePlaceholderMyRequest = get(state, "screenConfiguration.screenConfig.myServiceRequests.components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType.props.placeholder")
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
+      "props.value",
+      serviceRequestTypePlaceholderMyRequest.labelKey
+    )
+  );
+}
+catch(e){
+  dispatch(
+    handleField(
+      "myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestType",
+      "props.value",
+      undefined
+    )
+  );
+}
+set(state, "screenConfiguration.preparedFinalObject.myServiceRequests", {});
+  
 };
 
 export const resetFieldsForEmployeeFilter = (state, dispatch) => {
-  // "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality"
+  
+  // var locality_path = get(state, "")
+  try
+  {
+ var  localityPlacehholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality.props.placeholder", {})
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
       "props.value",
-      ""
+      localityPlacehholder.labelKey
     )
   );
+}
+catch(e){
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.locality",
+      "props.value",
+      undefined
+    )
+  );
+}
+      //resetting servicerequeststatus using below 2 lines  of dispatch
+   try   
+ { var  serviceRequestStatusPlaceholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus.props.placeholder", {})
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+      "props.value",
+      serviceRequestStatusPlaceholder.labelKey
+    )
+  );}
+catch(e)
+ { dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
+      "props.value",
+      undefined
+    )
+  );}
 
+    //resetting servicerequesttype using below 2 lines  of dispatch
+    try{
+      var serviceRequestTypePlaceholder = get(state, "screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType.props.placeholder", {})
+     dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+      "props.value",
+      serviceRequestTypePlaceholder.labelKey
+    )
+  );}
+  catch(e){
+  dispatch(
+    handleField(
+      "employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+      "props.value",
+      undefined
+    )
+  );}
+
+
+
+    //resetting from date
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -185,7 +258,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
-
+       //resetting to date
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -194,17 +267,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       ""
     )
   );
-
-  dispatch(
-    handleField(
-      "employeeServiceRequestsFilter",
-      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus",
-      "props.value",
-      null
-    )
-  );
-
-
+  //resetting serviceRequestID
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
@@ -214,12 +277,15 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
     )
   );
 
+  
+ //resetting contact number
+//  var contactnoPlaceholder = get(state, 'screenConfiguration.screenConfig.employeeServiceRequestsFilter.components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno.props.placeholder', {})
   dispatch(
     handleField(
       "employeeServiceRequestsFilter",
-      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.ServiceRequestType",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno",
       "props.value",
-      ""
+       ""
     )
   );
 
@@ -228,7 +294,7 @@ export const resetFieldsForEmployeeFilter = (state, dispatch) => {
       "employeeServiceRequestsFilter",
       "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children.contactno",
       "props.value",
-      ""
+       ""
     )
   );
 
