@@ -187,30 +187,13 @@ let userInfo = JSON.parse(getUserInfo());
             get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications",[])
           )
         );
-
       const filedata = get(state.form.newapplication, "files.media",[]);
-
       const tenantId = getTenantId()
-      // const tenantId = userInfo.permanentCity;
-      // const tenantId = getQueryArg(window.location.href, "tenantId");
-      // const id = get(queryObject[0], "id");
       let response;
       set(queryObject[0], "tenantId", tenantId);
       set(queryObject[0], "description", "");
-      // set(queryObject[0], )
-      // set(queryObject[0], "PropertyImagesApplications[0].property.transitNumber");
-      // set(queryObject[0], "PropertyImagesApplications[0].property.pincode");
-      // set(queryObject[0], "PropertyImagesApplications[0].property.area");
-      
-      // let applicationDocuments = get(
-      //   state.screenConfiguration.preparedFinalObject,
-      //   state.form.newapplication.files.media,
-      //   []
-      // ) || []
-      // applicationDocuments = applicationDocuments.filter(item => !!item.active)
-      // let fileStoreId = filedata.fileStoreId;
-      let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(","); // "f1,f2"
-      const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); // [object]
+      let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(",");
+      const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); 
       const output = filedata.map((fileitem,index) => 
       
         ({
@@ -235,9 +218,6 @@ let userInfo = JSON.parse(getUserInfo());
       dispatch(
         prepareFinalObject("PropertyImagesApplications[0].applicationDocuments", output)
       );
-  
-      
-      // setDocsForEditFlow(state, dispatch, "state.form.newapplication.files.media", "PropertyImagesApplications[0].applicationDocuments");
       response = await httpRequest(
         "post",
         "/csp/property-images/_create",
@@ -245,27 +225,6 @@ let userInfo = JSON.parse(getUserInfo());
         [],
         { PropertyImagesApplications: queryObject }
       );
-      // }
-      //  else {
-        // 
-        
-      //   // const removedDocs = get(state.screenConfiguration.preparedFinalObject, "OwnersTemp[0].removedDocs") || [];
-      //   
-      //   response = await httpRequest(
-      //     "post",
-      //     "/csp/property-images/_update",
-      //     "",
-      //     [],
-      //     { PropertyImagesApplications: queryObject }
-      //   );
-      // }
-      // let {PropertyImagesApplications} = response
-      // let PropertyImagesApplicationsDocs = PropertyImagesApplications.applicationDocuments || [];
-      // // const removedDocs = ownershipTransferDocuments.filter(item => !item.active)
-      // PropertyImagesApplicationsDocs = PropertyImagesApplicationsDocs.filter(item => !!item.active)
-      // 
-      // 
-      
       return true;
   } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

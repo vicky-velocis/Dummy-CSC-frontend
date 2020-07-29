@@ -32,6 +32,22 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   );
 };
 
+export const moveToSuccessTransit = (PropertyImagesApplications, dispatch, type) => {
+  const id = get(PropertyImagesApplications, "id");
+  const transitNumber = get(PropertyImagesApplications, "property.transitNumber")
+  const applicationNumber = get(PropertyImagesApplications, "applicationNumber")
+  const tenantId = get(PropertyImagesApplications, "tenantId");
+  const purpose = "TransitSiteapply";
+  const status = "success";
+ 
+  const path = type === "OWNERSHIPTRANSFERRP" ? 
+  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+  : `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
+  dispatch(
+    setRoute(path)
+  );
+};
+
 
 
 const callBackForNext = async(state, dispatch) => {

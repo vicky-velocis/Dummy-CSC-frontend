@@ -2,7 +2,7 @@ import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import { applyOwnershipTransfer, submittransitsiteimages ,getDetailsFromPropertyTransit ,getDetailsFromProperty ,applyDuplicateCopy, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
-import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP, submitButtontransit } from "../rented-properties/applyResource/footer";
+import { previousButton, submitButton, nextButton, changeStep, moveToSuccess,moveToSuccessTransit, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP, submitButtontransit } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -187,7 +187,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "PropertyImagesApplications[0]"
       );
-          moveToSuccess(transitData, dispatch);
+      moveToSuccessTransit(transitData, dispatch);
       }
 
     if (!isFormValid && !uploadFlag) {
