@@ -22,6 +22,8 @@ import {
   import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
+  let MrnNumber="";
+  MrnNumber = getQueryArg(window.location.href, "MrnNumber");
   export const stepsData = [
     { labelName: "Material Receipt Note", labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_NOTE" },
     {

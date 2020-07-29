@@ -12,7 +12,10 @@ import {
   epochToYmd,
   validateFields
 } from "../../utils";
+import{getmaterialissuesSearchResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import "./index.css";
 
 const moveToReview = dispatch => {
@@ -375,3 +378,86 @@ export const footer = getCommonApplyFooter({
     visible: false
   }
 });
+ export const handleSearchMaterial = async(state, dispatch)=>{
+
+  let matcode = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material","MAT02") 
+  //const issueNumber = get(state.preparedFinalObject)
+
+  let issueNumber = get(
+    state.screenConfiguration.preparedFinalObject,
+    `materialReceiptSearch[0].issueNumber`,
+    ''
+  ); 
+  if(issueNumber)
+  {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: getTenantId()
+      }];
+    queryObject.push({
+      key: "issueNoteNumber",
+      value: issueNumber
+    });
+    let response = await getmaterialissuesSearchResults(queryObject, dispatch);
+    try {
+
+      if(response.materialIssues.length===0)
+      {
+        dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "No Records found for Input parameter", labelKey: "STORE_NO_RECORDS_FOUND" },
+                "warning"
+              )
+            );
+           
+      }
+      else{
+        let material=[];
+       // GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material","MAT02")
+        let materialList = response.materialIssues[0].materialIssueDetails;
+        for (let index = 0; index < materialList.length; index++) {
+          const element = materialList[index];
+          material.push(
+            {
+              materialcode:element.material.code,
+              //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.name",GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode)));
+              materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
+              uom:element.uom,
+              id:element.id,
+              quantityIssued:element.quantityIssued,
+              orderNumber:element.orderNumber,
+              issuedToEmployee:response.materialIssues[0].issuedToEmployee,
+              issuedToDesignation:response.materialIssues[0].issuedToDesignation,
+              //unitRate://to be deside
+            }
+            
+          )
+        }
+        dispatch(prepareFinalObject("MiscMaterilList", material));
+
+
+     
+        }
+    } catch (error) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Unable to parse search results!" },
+          "error"
+        )
+      );
+    }
+
+  }
+  else{
+    const errorMessage = {
+      labelName: "Please Enter Issuen Number for Search",
+      labelKey: "STORE_ISSUENUMBER_SEARCH_VALIDATION"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+  }
+
+}

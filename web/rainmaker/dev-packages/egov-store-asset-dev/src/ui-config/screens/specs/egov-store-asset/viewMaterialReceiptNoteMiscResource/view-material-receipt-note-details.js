@@ -47,7 +47,7 @@ import {
             { labelName: "Available Qty",
             labelKey: "STORE_MATERIAL_RECEIPT_AVAILABLE_QTY"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].QtyIssued"
+              jsonPath: "materialReceipt[0].receiptDetails[0].qtyIssued"
              
             }
           ),
@@ -55,7 +55,7 @@ import {
             { labelName: "Ordered Qty",
             labelKey: "STORE_MATERIAL_RECEIPT_ORDERED_QTY"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].QtyReceiced"
+              jsonPath: "materialReceipt[0].receiptDetails[0].receivedQty"
              
             }
           ),
@@ -64,7 +64,7 @@ import {
             {    labelName: "Total Price",
             labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE" },
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].TotalValue",
+              jsonPath: "materialReceipt[0].receiptDetails[0].totalValue",
              
             }
           ),
@@ -73,7 +73,7 @@ import {
             {   labelName: "Remark",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK "},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].Remark",
+              jsonPath: "materialReceipt[0].receiptDetails[0].rejectionRemark",
              
             }
           ),

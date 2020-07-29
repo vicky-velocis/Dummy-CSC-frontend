@@ -11,8 +11,8 @@ import {
     const IndentId = getQueryArg(window.location.href, "IndentId");
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`
-    : `/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`;
+    ? `/egov-ui-framework/egov-store-asset/createMaterialNonIndentNote?step=0&IndentId=${IndentId}`
+    : `/egov-store-asset/createMaterialNonIndentNote?step=0&IndentId=${IndentId}`;
     dispatch(setRoute(createUrl));
   };
   
@@ -36,7 +36,7 @@ import {
               labelName: "Material Nmae",
                   labelKey: "STORE_MATERIAL_NAME"
             },
-            { jsonPath: "materialIssues[0].materialIssueDetails[0].material.name",          
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].material.code",          
           }
           ),
 
@@ -107,7 +107,7 @@ import {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "priceLists[0].priceListDetails",
+      sourceJsonPath: "materialIssues[0].materialIssueDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.MaterialIssueCardContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

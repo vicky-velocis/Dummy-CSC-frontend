@@ -5,12 +5,12 @@ import { showHideAdhocPopup } from "../../utils";
 import { handleCreateUpdateIndent } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const employeeCode = getQueryArg(window.location.href, "employeeID");
+  const issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/creatindent?tenantId=${tenantId}`
-      : `/egov-store-asset/creatindent?tenantId=${tenantId}`;
+      ? `/egov-ui-framework/egov-store-asset/createMaterialNonIndentNote?tenantId=${tenantId}&issueNoteNumber=${issueNoteNumber}`
+      : `/egov-store-asset/createMaterialNonIndentNote?tenantId=${tenantId}&issueNoteNumber=${issueNoteNumber}`;
   dispatch(setRoute(createUrl));
 };
 
@@ -82,7 +82,8 @@ export const masterViewFooter = () => {
       onClickDefination: {
         action: "condition",
         callBack: gotoCreateFlow
-      }
+      },
+      visible: true
     }
   });
 };

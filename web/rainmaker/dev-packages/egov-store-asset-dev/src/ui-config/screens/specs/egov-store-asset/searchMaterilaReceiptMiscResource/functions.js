@@ -4,7 +4,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getmiscellaneousreceiptnotesSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { getTextToLocalMapping } from "./searchResults";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { validateFields } from "../../utils";
@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
                 queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getMaterialIndentSearchResults(queryObject, dispatch);
+    let response = await getmiscellaneousreceiptnotesSearchResults(queryObject, dispatch);
     try {
 
       if(response.MaterialReceipt.length===0)
@@ -122,11 +122,11 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
-          [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "issueStore.name", "-") || "-", 
-          [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
-          [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
+          [getTextToLocalMapping("Material Receipt Number")]: get(item, "mrnNumber", "-") || "-",
+          [getTextToLocalMapping("Store Name")]:  get(item, "receivingStore.code", "-") || "-", 
+         [getTextToLocalMapping("Receipt Type")]: get(item, "receiptType", "-") || "-", 
+        //  [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
+          [getTextToLocalMapping("Status")]: get(item, "mrnStatus", "-") || "-",  
           id: item.id,       
          
         };
@@ -145,7 +145,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search-material-receipt-misc",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Indent")} (${
+          `${getTextToLocalMapping("Search Results for Non-Indent Material Issue Note")} (${
             response.MaterialReceipt.length
           })`
         )

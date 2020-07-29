@@ -310,13 +310,13 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 export const getMaterialIndentData = async (
   state,
   dispatch,
-  code,
+  issueNumber,
   tenantId
 ) => {
   let queryObject = [
     {
-      key: "code",
-      value: code
+      key: "issueNumber",
+      value: issueNumber
     },
     {
       key: "tenantId",
@@ -327,16 +327,6 @@ export const getMaterialIndentData = async (
  let response = await getmaterialissuesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
   dispatch(prepareFinalObject("materialIssues", get(response, "materialIssues")));
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.headerDiv.children.header.children.header.children.key",
-      "props",
-      {
-        labelName: "Edit Material Indent",
-        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
-      }
-    )
-  );
+ 
   furnishindentData(state, dispatch);
 };

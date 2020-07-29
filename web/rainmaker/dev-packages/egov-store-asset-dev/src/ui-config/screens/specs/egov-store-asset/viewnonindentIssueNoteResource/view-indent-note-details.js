@@ -12,8 +12,8 @@ const gotoCreatePage = (state, dispatch) => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const createUrl =
   process.env.REACT_APP_SELF_RUNNING === "true"
-  ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`
-  : `/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`;
+  ? `/egov-ui-framework/egov-store-asset/createMaterialNonIndentNote?step=0&IndentId=${IndentId}`
+  : `/egov-store-asset/createMaterialNonIndentNote?step=0&IndentId=${IndentId}`;
   dispatch(setRoute(createUrl));
 };
 

@@ -486,7 +486,6 @@ export const IndentConfiguration =()=>{
 }
 
 export const NonIndentConfiguration =()=>{
-
   return{
     IssueType:{
       
@@ -497,5 +496,26 @@ export const NonIndentConfiguration =()=>{
   materialIssueStatus:"CREATED",
   issuePurpose :"RETURNTOSUPPLIER"
     
+  }
+}
+
+export const WorkFllowStatus = () => {
+  return {
+    
+    WorkFllowStatus: [
+      {
+        code:"CREATED",
+        value:"CREATED",
+      },
+      // {
+      //   code:"REJECTED",
+      //   value:"REJECTED",
+      // },
+      // {
+      //   code:"APPROVED",
+      //   value:"APPROVED",
+      // }
+
+    ]
   }
 }

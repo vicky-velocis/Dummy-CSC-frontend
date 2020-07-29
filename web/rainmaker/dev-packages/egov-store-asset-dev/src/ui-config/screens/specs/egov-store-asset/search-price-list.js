@@ -12,7 +12,7 @@ import {
   import { searchResults } from "./searchPriceListResource/searchResults";
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-  
+  import { getSearchResults } from "../../../../ui-utils/commons";
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
   //enableButton = hasButton && hasButton === "false" ? false : true;

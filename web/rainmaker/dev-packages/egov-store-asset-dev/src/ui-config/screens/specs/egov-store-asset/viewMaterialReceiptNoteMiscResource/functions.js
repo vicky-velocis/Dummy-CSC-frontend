@@ -147,7 +147,7 @@ export const createUpdateMR = async (state, dispatch, action) => {
         dispatch
       );
       if(response){
-        let mrnNumber = response.materialReceipt[0].mrnNumber
+        let mrnNumber = response.MaterialReceipt[0].mrnNumber
         dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
        }
     } catch (error) {
@@ -161,7 +161,7 @@ export const createUpdateMR = async (state, dispatch, action) => {
         dispatch
       );
       if(response){
-        let mrnNumber = response.materialReceipt[0].mrnNumber
+        let mrnNumber = response.MaterialReceipt[0].mrnNumber
         dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
        }
     } catch (error) {
@@ -174,13 +174,13 @@ export const createUpdateMR = async (state, dispatch, action) => {
 export const getmiscellaneousreceiptnotes = async (
   state,
   dispatch,
-  code,
+  id,
   tenantId
 ) => {
   let queryObject = [
     {
-      key: "code",
-      value: code
+      key: "ids",
+      value: id
     },
     {
       key: "tenantId",
@@ -190,17 +190,9 @@ export const getmiscellaneousreceiptnotes = async (
 
  let response = await getmiscellaneousreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("materialReceipt", get(response, "materialReceipt")));
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.headerDiv.children.header.children.header.children.key",
-      "props",
-      {
-        labelName: "Edit Material Indent",
-        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
-      }
-    )
-  );
+let MaterialReceipt = response.MaterialReceipt.filter(x=>x.id === id)
+  dispatch(prepareFinalObject("materialReceipt", MaterialReceipt));
+  //dispatch(prepareFinalObject("materialReceipt", get(response, "MaterialReceipt")));
+ 
   furnishindentData(state, dispatch);
 };

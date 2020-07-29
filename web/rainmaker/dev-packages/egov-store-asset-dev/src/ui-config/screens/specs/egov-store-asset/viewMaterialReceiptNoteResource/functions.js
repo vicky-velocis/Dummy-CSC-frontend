@@ -7,7 +7,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   creatreceiptnotes,
-  getmaterialissuesSearchResults,
+  getreceiptnotesSearchResults,
   getPriceListSearchResults,
   updatereceiptnotes
 } from "../../../../../ui-utils/storecommonsapi";
@@ -156,7 +156,7 @@ export const furnishindentData = (state, dispatch) => {
    setDateInYmdFormat(materialReceipt[0], ["inspectionDate","receiptDate","challanDate", "supplierBillDate" ]);
   setAllDatesInYmdFormat(materialReceipt[0], [
    // { object: "indent.materialIssueDetails[0]", values: ["ManufacturerDate",] },
-    { object: "receiptDetails[0].receiptDetailsAddnInfo[0]", values: ["manufactureDate","expiryDate"] },
+    { object: "receiptDetails", values: ["receiptDetailsAddnInfo[0].manufactureDate","receiptDetailsAddnInfo[0].expiryDate"] },
     
   ]);
   // setAllYears(materialReceipt[0], [
@@ -301,13 +301,13 @@ export const createUpdateMR = async (state, dispatch, action) => {
 export const getMaterialIndentData = async (
   state,
   dispatch,
-  code,
+  id,
   tenantId
 ) => {
   let queryObject = [
     {
-      key: "code",
-      value: code
+      key: "ids",
+      value: id
     },
     {
       key: "tenantId",
@@ -315,19 +315,9 @@ export const getMaterialIndentData = async (
     }
   ];
 
- let response = await getmaterialissuesSearchResults(queryObject, dispatch);
+ let response = await getreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("materialReceipt", get(response, "materialReceipt")));
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.headerDiv.children.header.children.header.children.key",
-      "props",
-      {
-        labelName: "Edit Material Indent",
-        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
-      }
-    )
-  );
+  dispatch(prepareFinalObject("materialReceipt", get(response, "MaterialReceipt")));
+ 
   furnishindentData(state, dispatch);
 };

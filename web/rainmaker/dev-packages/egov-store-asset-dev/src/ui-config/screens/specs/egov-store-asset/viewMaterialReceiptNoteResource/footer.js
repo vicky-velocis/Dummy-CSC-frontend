@@ -5,12 +5,12 @@ import { showHideAdhocPopup } from "../../utils";
 import { handleCreateUpdateMaterialReceipt } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const employeeCode = getQueryArg(window.location.href, "employeeID");
+  const mrnNumber = getQueryArg(window.location.href, "mrnNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/createMaterialReceiptNote?tenantId=${tenantId}`
-      : `/egov-store-asset/createMaterialReceiptNote?tenantId=${tenantId}`;
+      ? `/egov-ui-framework/egov-store-asset/createMaterialReceiptNote?tenantId=${tenantId}&mrnNumber=${mrnNumber}`
+      : `/egov-store-asset/createMaterialReceiptNote?tenantId=${tenantId}&mrnNumber=${mrnNumber}`;
   dispatch(setRoute(createUrl));
 };
 

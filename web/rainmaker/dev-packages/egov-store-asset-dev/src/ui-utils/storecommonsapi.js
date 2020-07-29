@@ -629,7 +629,7 @@ export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch
       "/store-asset-services/materialissues-ni/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialIssues: payload }
     );
     return response;
   } catch (error) {
@@ -650,7 +650,7 @@ export const updateNonIndentMaterialIssue = async (queryObject, payload, dispatc
       "/store-asset-services/materialissues-ni/_update",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialIssues: payload }
     );
     return response;
   } catch (error) {
@@ -663,4 +663,15 @@ export const updateNonIndentMaterialIssue = async (queryObject, payload, dispatc
     );
     throw error;
   }
+};
+
+
+export const GetMdmsNameBycode = (state, dispatch,jsonpath, code) => {
+  //Material
+  let Obj  = get(state, `screenConfiguration.preparedFinalObject.${jsonpath}`,[]) 
+  let Name = code
+  Obj = Obj.filter(x=>x.code === code)
+  if(Obj &&Obj[0])
+  Name = Obj[0].name
+  return Name;
 };

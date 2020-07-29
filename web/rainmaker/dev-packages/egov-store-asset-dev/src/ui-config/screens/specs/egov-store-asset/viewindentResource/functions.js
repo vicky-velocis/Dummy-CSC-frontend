@@ -302,16 +302,6 @@ export const getMaterialIndentData = async (
  let response = await getMaterialIndentSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
   dispatch(prepareFinalObject("indents", get(response, "indents")));
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.headerDiv.children.header.children.header.children.key",
-      "props",
-      {
-        labelName: "Edit Material Indent",
-        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
-      }
-    )
-  );
+ 
   furnishindentData(state, dispatch);
 };

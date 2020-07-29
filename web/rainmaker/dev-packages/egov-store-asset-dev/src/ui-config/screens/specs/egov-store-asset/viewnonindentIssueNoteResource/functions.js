@@ -230,8 +230,8 @@ export const createUpdateIndent = async (state, dispatch, action) => {
         dispatch
       );
       if(response){
-        let indentNumber = response.materialIssues[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
+        let issueNumber = response.materialIssues[0].issueNumber
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=create&code=${issueNumber}`));
        }
     } catch (error) {
       //alert('123')
@@ -245,8 +245,8 @@ export const createUpdateIndent = async (state, dispatch, action) => {
         dispatch
       );
       if(response){
-        let indentNumber = response.materialIssues[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
+        let issueNumber = response.materialIssues[0].issueNumber
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=update&code=${issueNumber}`));
        }
     } catch (error) {
       furnishindentData(state, dispatch);
@@ -258,13 +258,13 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 export const getMaterialNonIndentData = async (
   state,
   dispatch,
-  code,
+  issueNoteNumber,
   tenantId
 ) => {
   let queryObject = [
     {
-      key: "code",
-      value: code
+      key: "issueNoteNumber",
+      value: issueNoteNumber
     },
     {
       key: "tenantId",

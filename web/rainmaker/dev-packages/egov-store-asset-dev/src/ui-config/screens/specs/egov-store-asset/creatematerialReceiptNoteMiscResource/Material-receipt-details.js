@@ -88,10 +88,10 @@ import {
                 },
                 required: true,               
                 jsonPath: "materialReceipt[0].receiptDetails[0].material.code",
-                sourceJsonPath: "createScreenMdmsData.store-asset.Material",
+                sourceJsonPath: "MiscMaterilList",
                 props: {
-                  optionValue: "code",
-                  optionLabel: "name",
+                  optionValue: "materialcode",
+                  optionLabel: "materialName",
                   // optionValue: "id",
                   // optionLabel: "id",
                 },
@@ -100,13 +100,33 @@ import {
                 
                 let materials = get(
                   state.screenConfiguration.preparedFinalObject,
-                  `createScreenMdmsData.store-asset.Material`,
+                  `MiscMaterilList`,
                   []
                 ); 
-                materials =  materials.filter(x=> x.code === action.value)   
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].name));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].MaterialNameDesc",materials[0].description));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].baseUom.code));
+                materials =  materials.filter(x=> x.materialcode === action.value)  
+                if(materials && materials[0]) 
+                {
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].materialName));
+               
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].uom.code));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].qtyIssued",materials[0].quantityIssued));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].unitRate",1));
+                // isScrapItem based on purpose selection
+                let receiptPurpose = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptPurpose`,'')
+                if(receiptPurpose ==="SCRAP")
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",true));
+                else
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",false));
+                dispatch(prepareFinalObject("materialReceipt[0].receivedBy", materials[0].issuedToEmployee,));
+                dispatch(prepareFinalObject("materialReceipt[0].inspectedBy", materials[0].issuedToEmployee,));
+                dispatch(prepareFinalObject("materialReceipt[0].designation", materials[0].issuedToDesignation,));
+
+              }
+              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.id",null));
+              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate",''));
+              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo",''));
+              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",''));
+              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].batchNo",''));
                // dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",materials[0].name));
 
               }
@@ -130,45 +150,49 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].uom.code"
               })
             },
-            QtyIssued: {
+            qtyIssued: {
               ...getTextField({
                 label: {
-                  labelName: "Available Qty",
-                  labelKey: "STORE_MATERIAL_RECEIPT_AVAILABLE_QTY"
+                  labelName: "Qty.  Issued",
+                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_ISSUED"
                 },
                 placeholder: {
-                  labelName: "Available Qty",
-                  labelKey: "STORE_MATERIAL_RECEIPT_AVAILABLE_QTY_PLACEHOLDER"
+                  labelName: "Qty.  Issued",
+                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_ISSUED"
                 },
                 props:{
                   disabled:true
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].AvailableQty"
+                jsonPath: "materialReceipt[0].receiptDetails[0].qtyIssued"
               })
             },
-            QtyReceiced: {
+            receivedQty: {
               ...getTextField({
                 label: {
-                  labelName: "Qty. Accepted",
-                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_ACCEPTED"
+                  labelName: "Qty. Received",
+                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED"
                 },
                 placeholder: {
-                  labelName: "Enter Qty. Accepted",
-                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_ACCEPTED_PLACEHOLDER"
+                  labelName: "Enter Qty. Received",
+                  labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED_PLACEHOLDER"
                 },
                 props:{
                   disabled:false
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].acceptedQty"
+                jsonPath: "materialReceipt[0].receiptDetails[0].receivedQty"
               }),
               beforeFieldChange: (action, state, dispatch) => {
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].acceptedQty",Number(action.value)));
+                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                 let totalValue = unitRate * Number(action.value)
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].totalValue",totalValue));
                      }
             },
-            UnitRate: {
+            unitRate: {
               ...getTextField({
                 label: {
                   labelName: "Unit Rate",
@@ -179,14 +203,14 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
                 },
                 props:{
-                  disabled:true
+                  disabled:false
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].unitRate"
               })
             },
-            TotalValue: {
+            totalValue: {
               ...getTextField({
                 label: {
                   labelName: "Total Value",
@@ -198,10 +222,10 @@ import {
                 },
                 required: false,
                 props:{
-                  disabled:true
+                  disabled:false
                 },
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].TotalValue"
+                jsonPath: "materialReceipt[0].receiptDetails[0].totalValue"
               })
             },
             Remark: {
@@ -216,7 +240,7 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].description"
+                jsonPath: "materialReceipt[0].receiptDetails[0].rejectionRemark"
               })
             },
 
@@ -238,7 +262,7 @@ import {
       headerName: "Material Indent Note",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
-      sourceJsonPath: "materialReceipt[0].receiptDetails[0]",
+      sourceJsonPath: "materialReceipt[0].receiptDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.materialIssueCardContainer.children"
     },

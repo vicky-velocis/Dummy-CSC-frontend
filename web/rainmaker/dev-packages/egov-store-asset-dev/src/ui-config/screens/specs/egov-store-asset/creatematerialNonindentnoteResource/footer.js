@@ -19,8 +19,8 @@ const moveToReview = dispatch => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`
-      : `/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`;
+      ? `/egov-ui-framework/egov-store-asset/reviewnonindentnote?step=0&IndentId=${IndentId}`
+      : `/egov-store-asset/reviewnonindentnote?step=0&IndentId=${IndentId}`;
   dispatch(setRoute(reviewUrl));
 };
 

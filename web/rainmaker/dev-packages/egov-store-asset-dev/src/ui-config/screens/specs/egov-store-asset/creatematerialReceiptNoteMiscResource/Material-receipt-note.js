@@ -1,6 +1,8 @@
 import {
     getCommonCard,
     getCommonTitle,
+    getBreak,
+    getLabel,
     getTextField,
     getDateField,
     getSelectField,
@@ -16,6 +18,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
  import { getSearchResults } from "../../../../../ui-utils/commons";
+ import {handleSearchMaterial} from './footer'
  const getMaterialData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let queryObject = [
@@ -66,9 +69,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     console.log(e);
   }
 };
-const getmrnNumber = async (  action, state,dispatch,)=>{
+const getmrnNumber = async (  action, state,dispatch,storecode)=>{
   const tenantId = getTenantId();
-  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
+  //let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
   let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.code",'')
   let queryObject = [
     {
@@ -76,16 +79,16 @@ const getmrnNumber = async (  action, state,dispatch,)=>{
       value: tenantId
     }];
     queryObject.push({
-      key: "store",
+      key: "receivingStore",
       value: storecode
     });
-    queryObject.push({
-      key: "stsupplierCodeore",
-      value: suppliercode
-    });
+    // queryObject.push({
+    //   key: "supplierCode",
+    //   value: suppliercode
+    // });
   try {
     let response = await getSearchResults(queryObject, dispatch,"mrnNumber");
-    dispatch(prepareFinalObject("mrnNumber", response));
+    dispatch(prepareFinalObject("mrnNumber", response.MaterialReceipt));
   } catch (e) {
     console.log(e);
   }
@@ -131,7 +134,7 @@ const getmrnNumber = async (  action, state,dispatch,)=>{
           store =  store.filter(x=> x.code === action.value)   
           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name",store[0].name));
           // call api to get mrnNumber List
-          getmrnNumber(action,state, dispatch)
+          getmrnNumber(action,state, dispatch,action.value)
           
         }
       },
@@ -156,23 +159,63 @@ const getmrnNumber = async (  action, state,dispatch,)=>{
           placeholder: {
             labelName: "Select Receipt Type",
             labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE_SELECT"
-          },
-          props: {
-            disabled: true,       
-          },
+          },         
           required: false,
           jsonPath: "materialReceipt[0].receiptType",
-          //sourceJsonPath: "store.stores",
-            props: {
-              data:[
-                {
-                  code: "SCRAP",
-                  name: "Scrap"
-                }
-              ],
-              optionValue: "code",
-              optionLabel: "name",
-            },
+           // sourceJsonPath: "store.stores",
+           props: {
+            disabled: true,  
+            data:[
+              {
+                code: "PURCHASE RECEIPT",
+                name: "Purchase Receipt"
+              },
+              {
+                code: "MISCELLANEOUS RECEIPT",
+                name: "Miscellaneous Receipt"
+              },
+              {
+                code: "INWARD RECEIPT",
+                name: "Inword Receipt"
+              },
+              {
+                code: "OPENING BALANCE",
+                name: "Opening Balance"
+              }
+            ],
+            optionValue: "code",
+            optionLabel: "name",
+          },
+          
+        })
+      },
+      receiptPurpose: {
+        ...getSelectField({
+          label: { labelName: "Receipt Purpose", labelKey: "STORE_MISC_RECEIPT_PURPOSE" },
+          placeholder: {
+            labelName: "Select Receipt Purpose",
+            labelKey: "STORE_MISC_RECEIPT_PURPOSE_SELECT"
+          },
+          
+          required: false,
+          jsonPath: "materialReceipt[0].receiptPurpose",
+           // sourceJsonPath: "store.stores",
+           props: {
+            disabled: false, 
+            data:[
+              {
+                code: "RETURN OF MATERIALS",
+                name: "Return of Material"
+              },
+              {
+                code: "SCRAP",
+                name: "Scrap"
+              },
+             
+            ],
+            optionValue: "code",
+            optionLabel: "name",
+          },
           
         })
       },
@@ -196,5 +239,60 @@ const getmrnNumber = async (  action, state,dispatch,)=>{
           jsonPath: "materialReceipt[0].description"
         })
       },     
+    })
+  });
+  export const MaterialSearch = getCommonCard({
+    
+    MaterialSearchContainer: getCommonContainer({
+ 
+      issueNumber: {
+        ...getTextField({
+          label: {
+            labelName: "Remark",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
+          },
+          placeholder: {
+            labelName: "Enter Remark",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
+          },
+          props: {
+            className: "applicant-details-error",
+           
+          },
+          required: false,
+          pattern: getPattern("eventDescription") || null,
+          jsonPath: "materialReceiptSearch[0].issueNumber"
+        })
+      }, 
+      Break:getBreak(),
+      ViewButton: {
+        componentPath: "Button",       
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            //minWidth: "200px",
+            height: "48px",
+            marginRight: "10px",
+    
+          }
+        },
+        children: {
+         
+          submitButtonLabel: getLabel({
+            labelName: "Submit",
+            labelKey: "STORE_SUBMIT_LABEL"
+          }),
+         
+         
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: handleSearchMaterial
+        },
+        visible: true
+      },
+
+
     })
   });

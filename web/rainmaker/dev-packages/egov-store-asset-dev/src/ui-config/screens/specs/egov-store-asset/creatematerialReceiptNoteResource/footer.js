@@ -12,8 +12,11 @@ import {
   epochToYmd,
   validateFields
 } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import "./index.css";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 
 const moveToReview = dispatch => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
@@ -23,7 +26,34 @@ const moveToReview = dispatch => {
       : `/egov-store-asset/reviewmaterialreceipt?step=0`;
   dispatch(setRoute(reviewUrl));
 };
-
+const getpurchaseOrder = async ( state,dispatch)=>{
+  const tenantId = getTenantId();
+  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
+  let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.code",'')
+ // alert(storecode +'_'+suppliercode)
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }];
+    queryObject.push({
+      key: "store",
+      value: storecode
+    });
+    if(suppliercode)
+    {
+    queryObject.push({
+      key: "supplierCode",
+      value: suppliercode
+    });
+  }
+  try {
+    let response = await getSearchResults(queryObject, dispatch,"purchaseOrder");
+    dispatch(prepareFinalObject("purchaseOrder", response));
+  } catch (e) {
+    console.log(e);
+  }
+}
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
     state.screenConfiguration.screenConfig["createMaterialReceiptNote"],
@@ -83,7 +113,6 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(isFormValid)
     {
-
     
     if(true)
     moveToReview(dispatch);
@@ -149,6 +178,15 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(IsValidDate)
     {
+      let activeStep = get(
+        state.screenConfiguration.screenConfig["createMaterialReceiptNote"],
+        "components.div.children.stepper.props.activeStep",
+        0
+      );
+        if(activeStep ===0)
+        {
+          getpurchaseOrder(state, dispatch);
+        }
         changeStep(state, dispatch);
 
       }

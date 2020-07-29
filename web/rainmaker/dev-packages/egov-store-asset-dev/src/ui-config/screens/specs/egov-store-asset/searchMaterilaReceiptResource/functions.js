@@ -4,7 +4,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getreceiptnotesSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { getTextToLocalMapping } from "./searchResults";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { validateFields } from "../../utils";
@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
                 queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getMaterialIndentSearchResults(queryObject, dispatch);
+    let response = await getreceiptnotesSearchResults(queryObject, dispatch);
     try {
 
       if(response.MaterialReceipt.length===0)
@@ -122,11 +122,11 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
-          [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "issueStore.name", "-") || "-", 
-          [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
-          [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
+          [getTextToLocalMapping("mrnNumber")]: get(item, "mrnNumber", "-") || "-",
+          [getTextToLocalMapping("receipt Date")]:  convertEpochToDate(Number(item.receiptDate,"receiptDate" ,"-")) || "-", 
+         [getTextToLocalMapping("receiving Store Name")]: get(item, "receivingStore.code", "-") || "-", 
+         // [getTextToLocalMapping("Indent Purpose")]: get(item, "receiptPurpose", "-") || "-",  
+          [getTextToLocalMapping("Status")]: get(item, "mrnStatus", "-") || "-",  
           id: item.id,       
          
         };

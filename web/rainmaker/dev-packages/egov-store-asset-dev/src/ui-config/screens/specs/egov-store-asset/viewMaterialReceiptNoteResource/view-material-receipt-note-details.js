@@ -58,46 +58,39 @@ import {
             
            }
           ),
-          AvailableQty: getLabelWithValue(
-            { labelName: "Available Qty",
-            labelKey: "STORE_MATERIAL_RECEIPT_AVAILABLE_QTY"},
-            {
-              jsonPath: "materialReceipt[0].receiptDetails[0].AvailableQty"
+          // AvailableQty: getLabelWithValue(
+          //   { labelName: "Available Qty",
+          //   labelKey: "STORE_MATERIAL_RECEIPT_AVAILABLE_QTY"},
+          //   {
+          //     jsonPath: "materialReceipt[0].receiptDetails[0].AvailableQty"
              
-            }
-          ),
+          //   }
+          // ),
           OrderedQty: getLabelWithValue(
             { labelName: "Ordered Qty",
             labelKey: "STORE_MATERIAL_RECEIPT_ORDERED_QTY"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].OrderedQty"
+              jsonPath: "materialReceipt[0].receiptDetails[0].orderQuantity"
              
             }
           ),
-          QtyasperChallan: getLabelWithValue(
-            {  labelName: "Qty. as per Challan",
-            labelKey: "STORE_MATERIAL_RECEIPT_QTY_AS_PER_CHALLAN"},
-            {
-              jsonPath: "materialReceipt[0].receiptDetails[0].QtyasperChallan"
+          // QtyasperChallan: getLabelWithValue(
+          //   {  labelName: "Qty. as per Challan",
+          //   labelKey: "STORE_MATERIAL_RECEIPT_QTY_AS_PER_CHALLAN"},
+          //   {
+          //     jsonPath: "materialReceipt[0].receiptDetails[0].QtyasperChallan"
              
-            }
-          ),
-          Rateperunit: getLabelWithValue(
-            {  labelName: "Qty Rate per unit",
-            labelKey: "STORE_MATERIAL_RECEIPT_RATE_PER_UNIT"},
-            {
-              jsonPath: "materialReceipt[0].receiptDetails[0].Rateperunit"
+          //   }
+          // ),
+          // Rateperunit: getLabelWithValue(
+          //   {  labelName: "Qty Rate per unit",
+          //   labelKey: "STORE_MATERIAL_RECEIPT_RATE_PER_UNIT"},
+          //   {
+          //     jsonPath: "materialReceipt[0].receiptDetails[0].Rateperunit"
              
-            }
-          ),
-          TotalPrice: getLabelWithValue(
-            {    labelName: "Total Price",
-            labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE" },
-            {
-              jsonPath: "materialReceipt[0].receiptDetails[0].TotalPrice",
-             
-            }
-          ),
+          //   }
+          // ),
+         
           receivedQty: getLabelWithValue(
             {   labelName: "Qty. Received",
             labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED"},
@@ -123,14 +116,22 @@ import {
              
             }
           ),
-          QtyRejected: getLabelWithValue(
-            {   labelName: "Qty. Rejected",
-            labelKey: "STORE_MATERIAL_RECEIPT_QTY_REJECTED"},
+           TotalPrice: getLabelWithValue(
+            {    labelName: "Total Price",
+            labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE" },
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].QtyRejected",
+              jsonPath: "materialReceipt[0].receiptDetails[0].TotalPrice",
              
             }
           ),
+          // QtyRejected: getLabelWithValue(
+          //   {   labelName: "Qty. Rejected",
+          //   labelKey: "STORE_MATERIAL_RECEIPT_QTY_REJECTED"},
+          //   {
+          //     jsonPath: "materialReceipt[0].receiptDetails[0].QtyRejected",
+             
+          //   }
+          // ),
           Rejectionremarks: getLabelWithValue(
             {   labelName: "Rejection remarks",
             labelKey: "STORE_MATERIAL_RECEIPT_REJECTION_REMARKS"},
@@ -139,19 +140,19 @@ import {
              
             }
           ),
-          ValueofQtyaccepted: getLabelWithValue(
-            {    labelName: "Value of Qty. accepted",
-            labelKey: "STORE_MATERIAL_RECEIPT_VALUE_OF_QTY_ACCEPTED"},
-            {
-              jsonPath: "materialReceipt[0].receiptDetails[0].acceptedQty",
+          // ValueofQtyaccepted: getLabelWithValue(
+          //   {    labelName: "Value of Qty. accepted",
+          //   labelKey: "STORE_MATERIAL_RECEIPT_VALUE_OF_QTY_ACCEPTED"},
+          //   {
+          //     jsonPath: "materialReceipt[0].receiptDetails[0].acceptedQty",
              
-            }
-          ),
+          //   }
+          // ),
           LOTNO: getLabelWithValue(
             {   labelName: "LOT No",
             labelKey: "STORE_MATERIAL_RECEIPT_LOT_NO"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].lotNo",
+              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].lotNo",
              
             }
           ),
@@ -159,7 +160,7 @@ import {
             {   labelName: "Serial No.",
             labelKey: "STORE_MATERIAL_RECEIPT_SERIAL_NO"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].serialNo",
+              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo",
              
             }
           ),
@@ -167,7 +168,7 @@ import {
             {   labelName: "Batch No.",
             labelKey: "STORE_MATERIAL_RECEIPT_QTY_RECEIVED"},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].batchNo",
+              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].batchNo",
              
             }
           ),
@@ -175,7 +176,7 @@ import {
             {   labelName: "Manufacturer Date",
             labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE "},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0]..manufactureDate",
+              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate",
              
             }
           ),
@@ -183,7 +184,7 @@ import {
             {   labelName: "Expiry Date",
             labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE "},
             {
-              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0]..expiryDate",
+              jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",
              
             }
           ),

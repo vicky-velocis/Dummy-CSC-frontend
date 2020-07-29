@@ -4,7 +4,7 @@ import {
     getCommonSubHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { IndentNoteReviewDetails } from "./viewnonindentIssueNoteResource/indent-note-review";
-  import { setRolesList } from "./viewMaterialMasterResource/functions";
+  import { setRolesList } from "./viewnonindentIssueNoteResource/functions";
   
   export const header = getCommonContainer({
     header: getCommonHeader({

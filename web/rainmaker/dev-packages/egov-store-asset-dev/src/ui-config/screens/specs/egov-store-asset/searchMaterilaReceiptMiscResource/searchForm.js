@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["mrnNumber","receiptType","receivingStore",  "receiptDateFrom","receiptDateTo"];
+  const textFields = ["mrnNumber","issuePurpose","receivingStore",  "receiptDateFrom","receiptDateTo"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-material-receipt-misc.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -58,15 +58,15 @@ export const searchForm = getCommonCard({
       },
      
     }),
-    receiptType: {
+    issuePurpose: {
       ...getSelectField({
-        label: { labelName: "Receipt Type", labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE" },
+        label: { labelName: "Receipt Purpose", labelKey: "STORE_MISC_RECEIPT_PURPOSE" },
         placeholder: {
-          labelName: "Select Receipt Type",
-          labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE_SELECT"
+          labelName: "Select Receipt Purpose",
+          labelKey: "STORE_MISC_RECEIPT_PURPOSE_SELECT"
         },
         required: false,
-        jsonPath: "searchScreen.receiptType",
+        jsonPath: "searchScreen.issuePurpose",
         gridDefination: {
           xs: 12,
           sm: 4,

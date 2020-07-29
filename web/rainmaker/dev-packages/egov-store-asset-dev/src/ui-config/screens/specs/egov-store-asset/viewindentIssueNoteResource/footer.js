@@ -5,12 +5,12 @@ import { showHideAdhocPopup } from "../../utils";
 import { handleCreateUpdateIndent } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const employeeCode = getQueryArg(window.location.href, "employeeID");
+  const issueNumber = getQueryArg(window.location.href, "issueNumber");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/creatindent?tenantId=${tenantId}`
-      : `/egov-store-asset/creatindent?tenantId=${tenantId}`;
+      ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?tenantId=${tenantId}&issueNumber=${issueNumber}`
+      : `/egov-store-asset/createMaterialIndentNote?tenantId=${tenantId}&issueNumber=${issueNumber}`;
   dispatch(setRoute(createUrl));
 };
 

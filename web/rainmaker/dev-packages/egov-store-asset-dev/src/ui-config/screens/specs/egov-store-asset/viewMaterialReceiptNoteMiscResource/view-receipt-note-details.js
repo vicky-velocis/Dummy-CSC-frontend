@@ -104,6 +104,12 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
         },
         { jsonPath: "materialReceipt[0].receiptType" }
       ),
+      ReceiptType: getLabelWithValue(
+        {
+          labelName: "Receipt Purpose", labelKey: "STORE_MISC_RECEIPT_PURPOSE"
+        },
+        { jsonPath: "materialReceipt[0].receiptPurpose" }
+      ),
      
 
       Remark: getLabelWithValue(

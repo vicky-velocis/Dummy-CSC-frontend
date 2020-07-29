@@ -122,12 +122,12 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Indent Issue No.")]: get(item, "issueNumber", "-") || "-",
-          [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"issueDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "fromStore.name", "-") || "-", 
-          [getTextToLocalMapping("Indent Purpose")]: get(item, "issuePurpose", "-") || "-", 
-          [getTextToLocalMapping("Raised By")]: get(item, "issuedToEmployee", "-") || "-",  
-          [getTextToLocalMapping("Indent Status")]: get(item, "materialIssueStatus", "-") || "-",  
+          [getTextToLocalMapping("Indent Issue No")]: get(item, "issueNumber", "-") || "-",
+          [getTextToLocalMapping("Issue Date")]:  convertEpochToDate(Number(item.issueDate,"issueDate" ,"-")) || "-", 
+         [getTextToLocalMapping("Indenting Store Name")]: get(item, "toStore.code", "-") || "-", 
+         // [getTextToLocalMapping("Indent Purpose")]: get(item, "issuePurpose", "-") || "-", 
+         // [getTextToLocalMapping("Raised By")]: get(item, "issuedToEmployee", "-") || "-",  
+          [getTextToLocalMapping("Status")]: get(item, "materialIssueStatus", "-") || "-",  
           id: item.id,       
          
         };
@@ -146,7 +146,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search-indent-note",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Indent")} (${
+          `${getTextToLocalMapping("Search Results for Material Indent Note")} (${
             response.materialIssues.length
           })`
         )

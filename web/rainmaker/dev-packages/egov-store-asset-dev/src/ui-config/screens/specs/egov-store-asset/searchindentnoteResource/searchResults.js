@@ -19,16 +19,16 @@ case "Raised By":
         "STORE_MATERIAL_INDENT_RAISED_BY",
         localisationLabels
       );
-      case "Indent Date":
+      case "Issue Date":
         return getLocaleLabels(
-          "Indent Date",
-          "STORE_MATERIAL_INDENT_INDENT_DATE",
+          "Issue Date",
+          "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE",
           localisationLabels
         );
     case "Indenting Store Name":
       return getLocaleLabels(
         "Indenting Store Name",
-        "STORE_MATERIAL_INDENT_STORE_NAME",
+        "STORE_DETAILS_STORE_NAME",
         localisationLabels
       );
       case "Indent Purpose":
@@ -37,17 +37,17 @@ case "Raised By":
           "STORE_MATERIAL_INDENT_INDENT_PURPOSE",
           localisationLabels
         );
-        case "Indent Status":
+        case "Status":
           return getLocaleLabels(
-            "Indent Status",
-            "STORE_MATERIAL_INDENT_INDENT_STATUS",
+            "Status",
+            "STORE_MATERIAL_INDENT_NOTE_STATUS",
             localisationLabels
           );
    
-    case "Search Results for Material Indent":
+    case "Search Results for Material Indent Note":
       return getLocaleLabels(
-        "Search Results for Material Indent",
-        "STORE_MATERIAL_INDENT_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for Material Indent Note",
+        "STORE_MATERIAL_INDENT_NOTE_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
   }
@@ -59,11 +59,11 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Indent No."),
-      getTextToLocalMapping("Indent Date"),
+      getTextToLocalMapping("Indent Issue No"),
+      getTextToLocalMapping("Issue Date"),
       getTextToLocalMapping("Indenting Store Name"),     
-      getTextToLocalMapping("Indent Purpose"),
-      getTextToLocalMapping("Indent Status"),
+      //getTextToLocalMapping("Indent Purpose"),
+      getTextToLocalMapping("Status"),
       {
         name: "id",
         options: {
@@ -71,7 +71,7 @@ export const searchResults = {
         }
       },
     ],
-    title: getTextToLocalMapping("Search Results for Material Indent"),
+    title: getTextToLocalMapping("Search Results for Material Indent Note"),
     options: {
       filter: false,
       download: false,
@@ -88,7 +88,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-indent?id=${rowData[5]}&tenantId=${tenantId}`;
+  window.location.href = `view-indent-note?issueNumber=${rowData[0]}&tenantId=${tenantId}&Status=${rowData[3]}`;
 };
 
 

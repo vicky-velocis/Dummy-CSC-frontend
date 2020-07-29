@@ -15,7 +15,31 @@ import{getMaterialBalanceRateResults, getStoresSearchResults} from '../../../../
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
-
+ import { getSearchResults } from "../../../../../ui-utils/commons";
+ const getmrnNumber = async (  action, state,dispatch,)=>{
+  const tenantId = getTenantId();
+  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'')
+  let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].supplier.code",'')
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }];
+    queryObject.push({
+      key: "receivingStore",
+      value: storecode
+    });
+    // queryObject.push({
+    //   key: "supplierCode",
+    //   value: suppliercode
+    // });
+  try {
+    let response = await getSearchResults(queryObject, dispatch,"mrnNumber");
+    dispatch(prepareFinalObject("mrnNumber", response.MaterialReceipt));
+  } catch (e) {
+    console.log(e);
+  }
+}
  const getMaterialData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let queryObject = [
@@ -92,7 +116,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));         
-                getMaterialData(action,state,dispatch)
+               // getMaterialData(action,state,dispatch)
+                  // call api to get mrnNumber List
+                getmrnNumber(action,state, dispatch)
             }
           }
           else{
@@ -129,8 +155,12 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
         props: {
           data: [
             {
-              code: "Consumption",
-              name: "Capital/Repair/Consumption"
+              code: "WRITEOFFORSCRAP",
+              name: "write-off of material in stock to be scrapped"
+            },
+            {
+              code: "RETURNTOSUPPLIER",
+              name: "return to supplier"
             },
            
           ],
@@ -165,6 +195,10 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             []
           ); 
           supplier =  supplier.filter(x=> x.code === action.value)   
+          if(supplier && supplier[0])
+          {
+
+        
           dispatch(prepareFinalObject("materialIssues[0].supplier.name",supplier[0].name));
           dispatch(prepareFinalObject("materialIssues[0].supplier.tenantId",getTenantId()));
           dispatch(prepareFinalObject("materialIssues[0].supplier.type",supplier[0].type));
@@ -173,6 +207,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           dispatch(prepareFinalObject("materialIssues[0].supplier.bankCode",supplier[0].bankCode));
           dispatch(prepareFinalObject("materialIssues[0].supplier.address",supplier[0].address));
           dispatch(prepareFinalObject("materialIssues[0].supplier.acctNo",supplier[0].acctNo));
+          //getmrnNumber(action,state, dispatch)
+        }
          
         }
       },

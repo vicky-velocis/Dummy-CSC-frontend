@@ -11,47 +11,55 @@ import {
   import filter from "lodash/filter";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
-  const getBalanceQty = async (action, state, dispatch) => {
+  import{getMaterialBalanceRateResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+
+
+  const getMaterialData = async (action, state, dispatch,mrnNumber_) => {   
     const tenantId = getTenantId();
-    const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
     let queryObject = [
       {
         key: "tenantId",
-        value: tenantId,
+        value: getTenantId(),
       },
     ];
+    let storecode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'')
     queryObject.push({
-      key: "storeName",
+      key: "issueingStore",
       value: storecode
     });
   
+    //get Material based on mrnNumber
+let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].materialIssueDetails[0].mrnNumber",'')
+    let material =[]
+    let  receiptDetails =  get(
+      state.screenConfiguration.preparedFinalObject,
+      `mrnNumber`,
+      []
+    );
+    receiptDetails = receiptDetails.filter(x=>x.mrnNumber === mrnNumber_)
+    receiptDetails = receiptDetails[0].receiptDetails
+
+    for (let index = 0; index < receiptDetails.length; index++) {
+      const element = receiptDetails[index];
+      material.push( element.material.code)      
+    }
+    let matcodes= material.map(itm => {
+                  return `${itm}`;
+                })
+                .join() || "-"
+
+    queryObject.push({
+      key: "material",
+      value: matcodes
+    });
+  console.log(matcodes)
       
     try {
-      let response = await getOpeningBalanceSearchResults(queryObject, dispatch);
-      //let c = response.materialReceipt[0].receiptDetails[0].
+      let response = await getMaterialBalanceRateResults(queryObject, dispatch);
+      let MaterialBalanceRate = response.MaterialBalanceRate.filter(x=>x.mrnNumber === mrnNumber_)
+      dispatch(prepareFinalObject("NonIndentsmaterial", MaterialBalanceRate));
+    
 
-      let  materialReceipt = response.materialReceipt
-      console.log(materialReceipt[0].receiptDetails[0].userAcceptedQty)
-      let matcode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.code", '' )
-      //alert(materialReceipt[0].receiptDetails[0].material.code +'_'+matcode)
-      // if (matcode === materialReceipt[0].receiptDetails[0].material.code)
-      // {
-       
-        //BalanceQty
-        dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQty",materialReceipt[0].receiptDetails[0].userAcceptedQty));
-        //materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice
-        dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.UnitPrice",materialReceipt[0].receiptDetails[0].unitRate));
-      // }
-      // else
-      // {
-      //   dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity",0));
-      // }
-      // materialReceipt = materialReceipt.filter(x=>x.receivingStore.code === storecode)
-      // console.log(materialReceipt[0])
-      
-     
-      
     } catch (e) {
       console.log(e);
     }
@@ -86,22 +94,25 @@ import {
                 },
                 required: true,               
                 jsonPath: "materialIssues[0].materialIssueDetails[0].mrnNumber",
-                //sourceJsonPath: "materials",
+                sourceJsonPath: "mrnNumber",
                // sourceJsonPath: "indentsmaterial",
                 props: {
-                  data: [
-                    {
-                      code: "MRN/00003/2017",
-                      name: "MRN/00003/2017"
-                    },
+                  // data: [
+                  //   {
+                  //     code: "MRN/00003/2017",
+                  //     name: "MRN/00003/2017"
+                  //   },
                    
-                  ],
-                  optionValue: "code",
-                  optionLabel: "name",
+                  // ],
+                  optionValue: "mrnNumber",
+                  optionLabel: "mrnNumber",
                   // optionValue: "id",
                   // optionLabel: "id",
                 },
               }),
+              beforeFieldChange: (action, state, dispatch) => {
+                getMaterialData(action,state, dispatch,action.value)
+              }
 
 
             },
@@ -118,9 +129,9 @@ import {
                 required: true,               
                 jsonPath: "materialIssues[0].materialIssueDetails[0].receiptId",
                 //sourceJsonPath: "materials",
-                sourceJsonPath: "indentsmaterial",
+                sourceJsonPath: "NonIndentsmaterial",
                 props: {
-                  optionValue: "materialCode",
+                  optionValue: "receiptId",
                   optionLabel: "materialName",
                   // optionValue: "id",
                   // optionLabel: "id",
@@ -129,16 +140,21 @@ import {
               beforeFieldChange: (action, state, dispatch) => {
                 let Material = get(
                   state.screenConfiguration.preparedFinalObject,
-                  `NonIndentMaterial`,
+                  `NonIndentsmaterial`,
                   []
                 ); 
+                Material = Material.filter(x=>x.receiptId === action.value)
                 if(Material && Material[0])
                 {
-                            
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.material.code",indentsmaterial[0].materialCode));                
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.uom.code",indentsmaterial[0].uomCode));                
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.balanceQty",indentsmaterial[0].balance));
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.unitRate",indentsmaterial[0].unitRate));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].balanceQty",Material[0].balance));         
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].tenantId",Material[0].tenantId));                
+               dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].uom.code",Material[0].uomCode)); 
+              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].unitRate",Material[0].unitRate));
+              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail",null)); 
+              //materialCode
+              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.code",Material[0].materialCode));
+              //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.name",GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode)));
+              //GetMdmsNameBycodelet matname = ''
                
                 
               }
@@ -181,20 +197,14 @@ import {
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialIssues[0].materialIssueDetails[0].userQuantityIssued"
               }),
-              beforeFieldChange: (action, state, dispatch) => {               
-                // let UnitPrice = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].indentDetail.unitRate`,0)
-                // let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].indentDetail.balanceQty`,0)               
-                // let BalanceQtyAfterIssue = BalanceQty - Number(action.value)
-                // let TotalValue = Number(UnitPrice)* Number(action.value)
-                // let pendingIndentQuantity = 0
-                // let indentQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity`,0)
-                // pendingIndentQuantity = indentQty- Number(action.value)
-                // dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].userQuantityIssued",Number(action.value)));
-                // dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.userQuantity",Number(action.value)));
-                // // calculation after input qty
-                // dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.BalanceQtyAfterIssue",BalanceQtyAfterIssue));
-                // dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue",TotalValue)); 
-                // dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].pendingIndentQuantity",pendingIndentQuantity));
+              beforeFieldChange: (action, state, dispatch) => { 
+                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].balanceQty`,0)
+                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].unitRate`,0)
+                let balanceQtyAfterIssue =BalanceQty - Number(action.value) 
+                let totalValue = unitRate *  Number(action.value)           
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].balanceQtyAfterIssue",balanceQtyAfterIssue));
+                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].totalValue",totalValue));
+                //totalValue
               }
             },
             uomCode: {
@@ -212,7 +222,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0]..materialIssueDetails[0].uom.code"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].uom.code"
               })
             },
             unitRate: {
@@ -233,7 +243,7 @@ import {
                 jsonPath: "materialIssues[0].materialIssueDetails[0].unitRate"
               })
             },
-            BalanceQtyAfterIssue: {
+            balanceQtyAfterIssue: {
               ...getTextField({
                 label: {
                   labelName: "Balance Qty After Issue",
@@ -248,10 +258,10 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].BalanceQtyAfterIssue"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].balanceQtyAfterIssue"
               })
             },
-            TotalValue: {
+            totalValue: {
               ...getTextField({
                 label: {
                   labelName: "Total Value",
@@ -266,7 +276,7 @@ import {
                   disabled:true
                 },
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].TotalValue"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].totalValue"
               })
             },
             Remark: {
@@ -301,7 +311,7 @@ import {
       headerName: "Material Indent Note",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
-      sourceJsonPath: "materialIssues[0].jurisdictions",
+      sourceJsonPath: "materialIssues[0].materialIssueDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.materialIssueCardContainer.children"
     },

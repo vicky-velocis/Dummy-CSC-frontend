@@ -7,7 +7,7 @@ import {
   import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
   import { getSearchResults } from "../../../../ui-utils/commons";
   import { materialReceiptMiscDetail } from "./creatematerialReceiptNoteMiscResource/Material-receipt-details"; 
-  import { MaterialReceiptMiscNote } from "./creatematerialReceiptNoteMiscResource/Material-receipt-note"; 
+  import { MaterialReceiptMiscNote ,MaterialSearch } from "./creatematerialReceiptNoteMiscResource/Material-receipt-note"; 
   import { otherDetails } from "./creatematerialReceiptNoteMiscResource/other-details";
   import set from "lodash/set";
   import get from "lodash/get";
@@ -51,6 +51,7 @@ export const header = getCommonContainer({
       id: "apply_form1"
     },
     children: {
+      MaterialSearch,
       MaterialReceiptMiscNote
     }
   };
@@ -62,6 +63,7 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
+      
       materialReceiptMiscDetail
     },
     visible: false
@@ -88,7 +90,7 @@ export const header = getCommonContainer({
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "Material", filter: "[?(@.active == true)]"},
+              { name: "Material",},
               { name: "ReceiptType", },
               
             ],
@@ -192,32 +194,20 @@ export const header = getCommonContainer({
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
      
-     // SEt Default data
+     // SEt Default data Start
 
-     dispatch(
-      prepareFinalObject(
-        "materialReceipt[0].receiptType",
-        "PURCHASE RECEIPT",
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "materialReceipt[0].designation",
-        "ASST-ENG",
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "materialReceipt[0].receivedBy",
-        "sanjeev",
-      )
-    );
-    dispatch(
-      prepareFinalObject(
-        "materialReceipt[0].inspectedBy",
-        "Ramesh",
-      )
-    );
+     dispatch(prepareFinalObject("materialReceipt[0].receiptType", "MISCELLANEOUS RECEIPT",));
+     dispatch(prepareFinalObject("materialReceipt[0].supplier.code", "",));
+     dispatch(prepareFinalObject("materialReceipt[0].mrnNumber", "",));
+     dispatch(prepareFinalObject("materialReceipt[0].supplierBillNo", "",));
+     dispatch(prepareFinalObject("materialReceipt[0].challanNo", "",));
+     dispatch(prepareFinalObject("materialReceipt[0].supplierBillDate", 1512365762000,));
+     dispatch(prepareFinalObject("materialReceipt[0].challanDate", 1512365762000,));
+     dispatch(prepareFinalObject("materialReceipt[0].inspectionDate", 45698756,));
+     dispatch(prepareFinalObject("materialReceipt[0].inspectionRemarks", '',));
+
+   
+     // SEt Default data End
 
       return action;
     },

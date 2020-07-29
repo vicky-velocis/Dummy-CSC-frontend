@@ -86,10 +86,10 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT_PO_NUMBER_SELECT"
                 },
                 required: true,               
-                jsonPath: "materialReceipt[0].receiptDetails[0].purchaseOrderDetail.id",
+                jsonPath: "materialReceipt[0].receiptDetails[0].purchaseOrderDetail.purchaseOrderNumber",
                 sourceJsonPath: "purchaseOrder.purchaseOrders",
                 props: {
-                  optionValue: "id",
+                  optionValue: "purchaseOrderNumber",
                   optionLabel: "purchaseOrderNumber",
                   // optionValue: "id",
                   // optionLabel: "id",
@@ -101,9 +101,9 @@ import {
                   `purchaseOrder.purchaseOrders`,
                   []
                 ); 
-                purchaseOrder =  purchaseOrder.filter(x=> x.id === action.value) 
-                if(purchaseOrder && purchaseOrder[0])  
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.name",purchaseOrder[0].purchaseOrderNumber));
+                purchaseOrder =  purchaseOrder.filter(x=> x.purchaseOrderNumber === action.value) 
+                //if(purchaseOrder && purchaseOrder[0])  
+                //dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.name",purchaseOrder[0].purchaseOrderNumber));
                 //set material dropdown based on po selection
                 let material=[];
                 let purchaseOrderDetails =get(
@@ -113,12 +113,22 @@ import {
                 );
                 for (let index = 0; index < purchaseOrderDetails.length; index++) {
                   const element = purchaseOrderDetails[index];
-                  material.push( element.material)
+                  if((element.orderQuantity-element.receivedQuantity)>0)
+                  {
+                    material.push( element.material)
+                  }
+                
+                  //material.push( purchaseOrderDetails:element.id)
                   
                 }
+                // set
+               // alert(purchaseOrderDetails[0].id);
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.id",purchaseOrderDetails[0].id));
                 dispatch(prepareFinalObject("ReceiptMaterial",material));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",purchaseOrderDetails[0].uom.code));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",purchaseOrderDetails[0].uom.name));
                 //set AvailableQty from  po purchaseOrderDetails 0 index receivedQuantity,orderQuantity,unitPrice(unitRate)
+                //
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].AvailableQty",purchaseOrderDetails[0].receivedQuantity));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].orderQuantity",purchaseOrderDetails[0].orderQuantity));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].unitRate",purchaseOrderDetails[0].unitPrice));
@@ -154,10 +164,13 @@ import {
                   []
                 ); 
                 materials =  materials.filter(x=> x.code === action.value)   
+                if(materials && materials[0])
+                {
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].name));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].MaterialNameDesc",materials[0].description));
                 //dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].baseUom.code));
                // dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",materials[0].name));
+                }
 
               }
 
@@ -212,6 +225,7 @@ import {
                   disabled:true
                 },
                 required: false,
+                visible:false,
                 pattern: getPattern("Name") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].AvailableQty"
               })
@@ -248,6 +262,7 @@ import {
                   disabled:false
                 },
                 required: false,
+                visible:false,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].qtyasperChallan"
               }),
@@ -268,31 +283,12 @@ import {
                   disabled:false
                 },
                 required: false,
+                visible:false,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].rateperunit"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                  }
-            },
-            TotalPrice: {
-              ...getTextField({
-                label: {
-                  labelName: "Total Price",
-                  labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE"
-                },
-                placeholder: {
-                  labelName: "Enter Total Price",
-                  labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE_PLACEHOLDER"
-                },
-                props:{
-                  disabled:false
-                },
-                required: true,
-                pattern: getPattern("Amount") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].TotalPrice"
-              }),
-              beforeFieldChange: (action, state, dispatch) => {
-                  }
             },
             QtyReceived: {
               ...getTextField({
@@ -333,9 +329,14 @@ import {
               }),
               beforeFieldChange: (action, state, dispatch) => {
                 let receivedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].receivedQty`,0)
+                let unitRate =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
                 let QtyRejected = Number(receivedQty) - Number(action.value)
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].QtyRejected",QtyRejected));
+                let totalAcceptedvalue = unitRate * Number(action.value)
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].qtyRejected",QtyRejected));
                 dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].quantity",Number(action.value)));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].userReceivedQty",receivedQty));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",false));
+                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].totalAcceptedvalue",totalAcceptedvalue));
                      }
             },
             unitRate: {
@@ -356,6 +357,26 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].unitRate"
               })
             },
+            TotalPrice: {
+              ...getTextField({
+                label: {
+                  labelName: "Total Price",
+                  labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE"
+                },
+                placeholder: {
+                  labelName: "Enter Total Price",
+                  labelKey: "STORE_MATERIAL_RECEIPT_TOTAL_PRICE_PLACEHOLDER"
+                },
+                props:{
+                  disabled:true
+                },
+                required: true,
+                pattern: getPattern("Amount") || null,
+                jsonPath: "materialReceipt[0].receiptDetails[0].totalAcceptedvalue"
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+                  }
+            }, 
             qtyRejected: {
               ...getTextField({
                 label: {
@@ -370,6 +391,7 @@ import {
                   disabled:true
                 },
                 required: false,
+                visible:false,
                 pattern: getPattern("Name") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].qtyRejected"
               })
@@ -408,6 +430,7 @@ import {
                   disabled:true
                 },
                 required: true,
+                visible:false,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].ValueofQtyaccepted"
               }),
@@ -527,7 +550,7 @@ import {
       headerName: "Material Indent Note",
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
-      sourceJsonPath: "materialReceipt[0].receiptDetails[0]",
+      sourceJsonPath: "materialReceipt[0].receiptDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.materialIssueCardContainer.children"
     },
