@@ -1,0 +1,84 @@
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels,
+} from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils"; 
+export const getTextToLocalMapping = (label) => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Application Id":
+      return getLocaleLabels(
+        "Application Id",
+        "NULM_SEP_APPLICATION_ID",
+        localisationLabels
+      );
+      case "Name of Applicant":
+        return getLocaleLabels(
+          "Name of Applicant",
+          "NULM_SEP_NAME_OF_APPLICANT",
+          localisationLabels
+        );
+    case "Application Status":
+      return getLocaleLabels(
+        "Application Status",
+        "NULM_SEP_APPLICATION_STATUS",
+        localisationLabels
+      );
+    case "Active":
+      return getLocaleLabels(
+        "Active",
+        "STORE_COMMON_TABLE_COL_ACTIVE",
+        localisationLabels
+      );
+      case "Code":
+        return getLocaleLabels(
+          "Code",
+          "STORE_MATERIAL_TYPE_CODE",
+          localisationLabels
+        );
+    case "Search Results for SEP":
+      return getLocaleLabels(
+        "Search Results for SEP",
+        "NULM_SEP_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+  }
+};
+
+export const searchResults = {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: true,
+  props: {
+    columns: [
+      getTextToLocalMapping("Application Id"),
+      getTextToLocalMapping("Name of Applicant"),
+      getTextToLocalMapping("Application Status"),
+      getTextToLocalMapping("Active"),
+      {
+        name: "code",
+        options: {
+          display: false
+        }
+      }
+    ],
+    title: getTextToLocalMapping("Search Results for SEP"),
+    options: {
+      filter: false,
+      download: false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => {
+        onRowClick(row);
+      },
+    },
+  },
+};
+
+const onRowClick = (rowData) => {
+  window.location.href = `view-sep?tenantId=${getTenantId()}&code=${rowData[4]}`;
+};
+
+

@@ -41,24 +41,15 @@ export const handleCardDelete = (prepareFinalObject , arrayPath , isActive = fal
   }
 
 
-export const getSearchResults = async (queryObject,dispatch,screenName) => {
+export const getSearchResults = async (queryObject=[],requestBody={},dispatch,screenName) => {
   let url =""
   switch(screenName){
-    case "storeMaster": url =  "/store-asset-services/stores/_search";
+    case "sep": url =  "/nulm-services/v1/sep/_get";
     break;
-    case "materialType": url = "store-asset-services/materialtypes/_search";
-    break;
-    case "supplier" : url = "store-asset-services/suppliers/_search";
-    break;
-    case "materials" : url = "store-asset-services/materials/_search";
-    break;
-     case "purchaseOrder" : url = "store-asset-services/purchaseorders/_search";
-    break;
-    case "priceList" : url = "store-asset-services/pricelists/_search";
-    break;
+
   }
   try {
-    const response = await httpRequest("post", url, "", queryObject, {} );
+    const response = await httpRequest("post", url, "", queryObject, requestBody );
     return response;
 
   } catch (error) {

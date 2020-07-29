@@ -8,7 +8,7 @@ import {
 } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -19,10 +19,7 @@ import {
 // import "./index.css";
 
   const moveToReview = dispatch => {
-    const reviewUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true"
-        ? `/egov-ui-framework/egov-store-asset/reviewpricelist`
-        : `/egov-store-asset/reviewpricelist`;
+    const reviewUrl =`/egov-nulm/review-sep`;
     dispatch(setRoute(reviewUrl));
   };
 
@@ -34,7 +31,9 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
+  const {NULMSEPRequest} = state.screenConfiguration.preparedFinalObject;
   let isFormValid = true;
+  let documentsPreview =[];
   if (activeStep === 0) {
     const isSepDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.SepDetails.children.cardContent.children.SepDetailsContainer.children",
@@ -43,6 +42,30 @@ export const callBackForNext = async (state, dispatch) => {
       "create-sep"
     );
     
+if(NULMSEPRequest && NULMSEPRequest.isMinority){
+  if(NULMSEPRequest.isMinority =="YES" && !NULMSEPRequest.minority ){
+    const errorMessage = {
+      labelName: "Please select the Minority",
+      labelKey: "ERR_NULM_MINORTY"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+}
+
+if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
+  if(NULMSEPRequest.isUrbanPoor =="YES" && !NULMSEPRequest.bplNo ){
+    const errorMessage = {
+      labelName: "Please fill BPL Number",
+      labelKey: "ERR_NULM_FILL_BPL_NUMBER"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+}
+
+
+
     if (!isSepDetailsValid) {
    //   isFormValid = false;
     }
@@ -58,6 +81,16 @@ export const callBackForNext = async (state, dispatch) => {
         
       uploadedDocs &&  Object.entries(uploadedDocs).forEach(ele => {         
         docArray[ele[0]] = ele[1];
+        if(ele[1] &&  ele[1].documents && ele[1].documents.length>0){
+          let obj = {
+            title: documents[ele[0]].title,
+            linkText: "VIEW", 
+            link:    ele[1].documents[0].fileUrl,       
+          }
+  
+          documentsPreview.push(obj)
+        }
+    
     })
 
         for(let i = 0 ; i < isDocRequired.length ; i++){
@@ -71,9 +104,6 @@ export const callBackForNext = async (state, dispatch) => {
                   } 
           }
         }
-
-
-
     }
 
     if(activeStep == 1 && !isFormValid){
@@ -84,121 +114,22 @@ export const callBackForNext = async (state, dispatch) => {
           "warning"
         ))
     }
-  else if(activeStep == 1 && !isFormValid){
+  else if(activeStep != 1 && !isFormValid){
     const errorMessage = {
       labelName: "Please fill all fields",
       labelKey: "ERR_FILL_ALL_FIELDS"
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
-else{
-  alert("all fields valid")
+else if(activeStep == 1 && isFormValid){
+
+  dispatch(
+    prepareFinalObject("documentsPreview", documentsPreview)
+  );
+  moveToReview(dispatch);
 }
-  
-  if (activeStep !== 1) {
-    if (isFormValid) {
-          // get date and validate     
-    const CurrentDate = new Date();
-    let agreementDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementDate",
-      null
-    );
-    let rateContractDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].rateContractDate",
-      null
-    );
-    let agreementStartDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementStartDate",
-      null
-    );
-    let agreementEndDate = get(
-      state.screenConfiguration.preparedFinalObject,
-      "priceLists[0].agreementEndDate",
-      null
-    );
-    if(Number(agreementEndDate))
-    {
-      //alert('i am number')
-      agreementEndDate = epochToYmd(agreementEndDate)
-    }
-    // else{
-    //   agreementEndDate = convertDateToEpoch(agreementEndDate);
-    // }
-    if(Number(agreementDate))
-    {
-      //alert('i am number')
-      agreementDate = epochToYmd(agreementDate)
-    }
-    // else{
-    //   AgreementDate = convertDateToEpoch(AgreementDate);
-    // }
-    if(Number(agreementStartDate))
-    {
-      //alert('i am number')
-      agreementStartDate = epochToYmd(agreementStartDate)
-    }
-    // else{
-    //   agreementStartDate = convertDateToEpoch(agreementStartDate);
-    // }
-    if(Number(rateContractDate))
-    {
-      //alert('i am number')
-      rateContractDate = epochToYmd(rateContractDate)
-    }
-    // else{
-    //   rateContractDate = convertDateToEpoch(rateContractDate);
-    // }
-    const  rateContractDate_ = new Date(rateContractDate)
-    const  AgreementDate_ = new Date(agreementDate)
-    const  agreementStartDate_ = new Date(agreementStartDate)
-    const  agreementEndDate_ = new Date(agreementEndDate)
-    let IsValidDate = true
-    let IsValidStartDate = true    
-    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate|| agreementEndDate_> CurrentDate)
-    {
-      IsValidDate = false
-    }
-    else{
-      if(agreementStartDate_>agreementEndDate_)
-      {
-        IsValidStartDate = false
-      }
-     
-
-    }
-    if(IsValidDate)
-    {
-      if(IsValidStartDate)
-      changeStep(state, dispatch);
-      else
-      {
-        const errorMessage = {
-          labelName: "Agreement start date Date is Less then End date",
-          labelKey: "STORE_MATERIAL_MASTER_AGREMENT_STARTT_DATE_VALIDATION"
-        };
-        dispatch(toggleSnackbar(true, errorMessage, "warning"));
-      }
-    }
-   
-    else{
-     // pop earnning Message
-     const errorMessage = {
-      labelName: "Input Date Must be less then or equal to current date",
-      labelKey: "STORE_MATERIAL_MASTER_CURRENT_DATE_VALIDATION"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-
-    }
-    } else {
-      const errorMessage = {
-        labelName: "Please fill all fields",
-        labelKey: "ERR_FILL_ALL_FIELDS"
-      };
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    }
+  else{
+    changeStep(state, dispatch);
   }
 };
 

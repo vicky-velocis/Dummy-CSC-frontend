@@ -35,7 +35,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].supplier.code",       
+        jsonPath: "NULMSEPRequest.name",       
       })
     },
 
@@ -45,7 +45,7 @@ export const SepDetails = getCommonCard({
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.gender",
       type: "array",
       props: {
         required: true,
@@ -86,7 +86,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("age") || null,
-        jsonPath: "priceLists[0].priceListDetails[0].quantity"
+        jsonPath: "NULMSEPRequest.age"
       })
     },
     
@@ -102,7 +102,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Date") || null,
-        jsonPath: "priceLists[0].rateContractDate",
+        jsonPath: "NULMSEPRequest.dob",
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
@@ -110,7 +110,7 @@ export const SepDetails = getCommonCard({
         }
       })
     },
-    adharnumber: {
+    adharNo: {
       ...getTextField({
         label: {
           labelName: "Adhar Number",
@@ -121,8 +121,8 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_ADHAR_NUMBER_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].rateContractNumber"
+        pattern: getPattern("numeric-only") || null,
+        jsonPath: "NULMSEPRequest.adharNo"
       })
     },
     
@@ -138,7 +138,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.motherName"
       })
     },
   
@@ -154,7 +154,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.fatherOrHusbandName"
       })
     },
 
@@ -170,11 +170,11 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.occupation"
       })
     },
 
-    addrss: {
+    address: {
       ...getTextField({
         label: {
           labelName: "Addrss",
@@ -186,7 +186,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Address") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.address"
       })
     },
 
@@ -202,7 +202,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("MobileNo") || null,
-        jsonPath: "priceLists[0].priceListDetails[0].quantity"
+        jsonPath: "NULMSEPRequest.contact"
       })
     },
 
@@ -217,8 +217,8 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_SINCE_HOW_LONG_IN_CHANDIGARH_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        pattern: getPattern("numeric-only") || null,
+        jsonPath: "NULMSEPRequest.sinceHowLongInChandigarh"
       })
     },
 
@@ -234,7 +234,7 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.qualification"
       })
     },
 
@@ -244,7 +244,7 @@ export const SepDetails = getCommonCard({
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.category",
       type: "array",
       props: {
         required: true,
@@ -272,24 +272,24 @@ export const SepDetails = getCommonCard({
             value:"OTHERS",           
           }
         ],
-        defaultValue: "SC"
+        defaultValue: "OTHERS"
       },
       type: "array",     
     },
 
 
-    urbanpoor: {
+    isUrbanPoor: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.isUrbanPoor",
       type: "array",
       props: {
         required: true,
        
-        label: { name: "Urban Poor", key: "NULM_SEP_URBAN_ROOR" },
+        label: { name: "Urban Poor", key: "NULM_SEP_URBAN_POOR" },
         buttons: [
           {
             labelName: "YES",
@@ -302,12 +302,12 @@ export const SepDetails = getCommonCard({
             value:"NO",           
           },        
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",     
     },
 
-   bplnumber: {
+    bplNo: {
       ...getTextField({
         label: {
           labelName: "BPL NULM_SEP_BPL_NUMBER",
@@ -319,17 +319,17 @@ export const SepDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("alpha-numeric") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.bplNo"
       })
     },
 
-    minority: {
+    isMinority: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.isMinority",
       type: "array",
       props: {
         required: true,
@@ -346,18 +346,18 @@ export const SepDetails = getCommonCard({
             value:"NO",           
           },        
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",     
     },
 
-    minorityreligion: {
+    minority: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 12
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.minority",
       type: "array",
       props: {
         required: false,
@@ -401,13 +401,13 @@ export const SepDetails = getCommonCard({
       type: "array",     
     },
 
-    handicapped: {
+    isHandicapped: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.isHandicapped",
       type: "array",
       props: {
         required: true,
@@ -425,7 +425,7 @@ export const SepDetails = getCommonCard({
             value:"NO",           
           },        
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",    
     },
@@ -442,11 +442,11 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.typeOfBusinessToBeStarted"
       })
     },
 
-    previousexperience: {
+    previousExperience: {
       ...getTextField({
         label: {
           labelName: "Previous experience in the line if any",
@@ -457,12 +457,12 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_PREVIOUS_EXPERIENCE_IN_THE_LINE_IF_ANY_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        pattern: getPattern("numeric-only") || null,
+        jsonPath: "NULMSEPRequest.previousExperience"
       })
     },
 
-    placeofwork: {
+    placeOfWork: {
       ...getTextField({
         label: {
           labelName: "Place of work whether the activity is proposed to be started",
@@ -474,11 +474,11 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.placeOfWork"
       })
     },
 
-    detailsofaccount: {
+    bankDetails: {
       ...getTextField({
         label: {
           labelName: "Details of account of beneficiary-bank Name/Branch/A/C name (Only in Chandigarh)",
@@ -490,12 +490,12 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.bankDetails"
       })
     },
 
 
-    nooffamilymembers: {
+    noOfFamilyMembers: {
       ...getTextField({
         label: {
           labelName: "No. of family members",
@@ -506,12 +506,12 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_NO_OF_FAMILY_MEMBERS_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("age") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        pattern: getPattern("numeric-only") || null,
+        jsonPath: "NULMSEPRequest.noOfFamilyMembers"
       })
     },
 
-    projectcost: {
+    projectCost: {
       ...getTextField({
         label: {
           labelName: "Project Cost",
@@ -523,11 +523,11 @@ export const SepDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("Amount") || null,
-        jsonPath: "priceLists[0].priceListDetails[0].quantity"
+        jsonPath: "NULMSEPRequest.projectCost"
       })
     },
 
-    loanrequired: {
+    loanAmount: {
       ...getTextField({
         label: {
           labelName: "Amount of Loan required",
@@ -539,12 +539,12 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Amount") || null,
-        jsonPath: "priceLists[0].priceListDetails[0].quantity"
+        jsonPath: "NULMSEPRequest.loanAmount"
       })
     },
 
 
-    amountrecomended: {
+    recommendedAmount: {
       ...getTextField({
         label: {
           labelName: "Amount Recommended by Task Force Committee",
@@ -556,17 +556,17 @@ export const SepDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Amount") || null,
-        jsonPath: "priceLists[0].priceListDetails[0].quantity"
+        jsonPath: "NULMSEPRequest.recommendedAmount"
       })
     },
 
-    takenloanfrom: {
+    isLoanFromBankinginstitute: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.isLoanFromBankinginstitute",
       type: "array",
       props: {
         required: true,  
@@ -584,18 +584,18 @@ export const SepDetails = getCommonCard({
             value:"NO",           
           },        
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",     
     },
 
-    repaymentmade: {
+    isRepaymentMade: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.isRepaymentMade",
       type: "array",
       props: {
         required: true,
@@ -614,18 +614,18 @@ export const SepDetails = getCommonCard({
             value:"NO",          
           },       
         ],    
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",     
     },
 
-    recommendedby: {
+    recommendedBy: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "ProcessInstances[0].employeeOtherDetails.isDuesPresent",
+      jsonPath: "NULMSEPRequest.recommendedBy",
       type: "array",
       props: {
         required: false,
@@ -661,7 +661,7 @@ export const SepDetails = getCommonCard({
       type: "array",
      
     },
-    representativename: {
+    representativeName: {
       ...getTextField({
         label: {
           labelName: "Particulars of representative Name",
@@ -672,11 +672,11 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_PARTICULARS_OF_REPRESENTATIVE_NAME_PLACEHOLDER"
         },
         pattern: getPattern("Name") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.representativeName"
       })
     },
 
-    representativeaddress: {
+    representativeAddress: {
       ...getTextField({
         label: {
           labelName: "Particulars of representative Address",
@@ -687,7 +687,7 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_PARTICULARS_OF_REPRESENTATIVE_ADDRESS_PLACEHOLDER"
         },
         pattern: getPattern("Address") || null,
-        jsonPath: "priceLists[0].agreementNumber"
+        jsonPath: "NULMSEPRequest.representativeAddress"
       })
     },
   })

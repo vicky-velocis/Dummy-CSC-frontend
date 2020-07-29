@@ -12,8 +12,8 @@ import {
   
   export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: `View Material Transfer Outward Note`,
-      labelKey: "STORE_MTON_VIEW"
+      labelName: `View SEP`,
+      labelKey: "NULM_SEP_VIEW"
     })
   });
   
