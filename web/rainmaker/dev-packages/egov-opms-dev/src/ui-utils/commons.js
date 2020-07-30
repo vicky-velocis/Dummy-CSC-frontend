@@ -1116,6 +1116,33 @@ export const getGridDataAdvertisement1 = async () => {
   }
 };
 
+export const getGridDataForSearchFilter = async (data) => {
+  let queryObject = [];
+  var requestBody = {
+    "tenantId": `${getOPMSTenantId()}`,
+    "applicationType": getapplicationType(),
+
+    "dataPayload": data
+    // {
+    //   "applicationType": 'ADVERTISEMENTNOC',
+    //   "applicationStatus": JSON.parse(getUserInfo()).roles[0].code == 'SI' ? 'INITIATE,REASSIGNTOSI,PAID,RESENT' : JSON.parse(getUserInfo()).roles[0].code == "MOH" ? 'FORWARD' : ''
+
+    // }
+
+  }
+  try {
+    const payload = await httpRequest(
+      "post",
+      "/pm-services/noc/_get",
+      "",
+      queryObject,
+      requestBody
+    );
+    return payload;
+  } catch (error) {
+  }
+};
+
 
 export const getGridDataRoadcut1 = async () => {
   let queryObject = [];

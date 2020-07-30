@@ -102,6 +102,52 @@ export const validateFields = (
   }
   return isFormValid;
 };
+export const validateFieldsAdv = (
+  objectJsonPath,
+  state,
+  dispatch,
+  screen = "apply"
+) => {
+
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+
+  let isFormValid = true;
+  for (var variable in fields) {
+    if(variable==="exemptedCategory")
+    {
+      
+    }
+    else{
+    if (fields.hasOwnProperty(variable)) {
+      if (
+        fields[variable] &&
+        fields[variable].props &&
+        (fields[variable].props.disabled === undefined ||
+          !fields[variable].props.disabled) &&
+        !validate(
+          screen,
+          {
+            ...fields[variable],
+            value: get(
+              state.screenConfiguration.preparedFinalObject,
+              fields[variable].jsonPath
+            )
+          },
+          dispatch,
+          true
+        )
+      ) {
+        isFormValid = false;
+      }
+    }
+  }
+}
+  return isFormValid;
+};
 
 export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"

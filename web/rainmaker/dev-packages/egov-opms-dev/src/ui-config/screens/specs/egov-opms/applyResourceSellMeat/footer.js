@@ -216,24 +216,18 @@ const callBackForNext = async (state, dispatch) => {
     0
   );
   
-  //alert("activestepsss asd : " + (activeStep+1))
-  // validatestepform(activeStep+1)
-  // console.log(activeStep);
-  let isFormValid = true;
+  let isFormValid = false;
   let hasFieldToaster = false;
   
-  let validatestepformflag = validatestepform(activeStep + 1)
-  
-  isFormValid = validatestepformflag[0];
-  hasFieldToaster = validatestepformflag[1];
-  // alert('activeStep final :'+activeStep)
+ 
   if (activeStep === 0) {
-    let isapplicantnamevalid = validateFields(
-      "components.div.children.formwizardSecondStep.children.nocDetails.children.cardContent.children",
+    isFormValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children",
       state,
-      dispatch
+      dispatch,
+      'applysellmeat'
     );
-
+    
   }
   if (activeStep === 1) {
   
@@ -262,12 +256,7 @@ const callBackForNext = async (state, dispatch) => {
           dispatch(toggleSnackbar(true, errorMessage, "success"));
 
         } else {
-          // let errorMessage = {
-          //   labelName:
-          //     "Submission Falied, Try Again!",
-          //   labelKey: "UPLOAD_FILES_TOAST"
-          // };
-          // dispatch(toggleSnackbar(true, errorMessage, "warning"));
+         
           let errorMessage = {
             labelName: "Submission Falied, Try Again later!",
             labelKey: "" //UPLOAD_FILE_TOAST
@@ -276,7 +265,7 @@ const callBackForNext = async (state, dispatch) => {
         }
       }
       responseStatus === "success" && changeStep(state, dispatch);
-    } else if (hasFieldToaster) {
+    } else  {
       let errorMessage = {
         labelName: "Please fill all mandatory fields !",
         labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
@@ -507,52 +496,3 @@ export const footer = getCommonApplyFooter({
   }
 });
 
-export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
-  let allAreFilled = true;
-  if (activeStep == 1) {
-    document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
-      //  alert(i+"::::"+i.value)
-      //  alert(i.getAttribute("aria-invalid"))
-      if (!i.value) {
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      }
-      if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-    })
-
-
-    document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
-      // alert("hidden "+i+"::::"+i.value)
-      //  alert(i.getAttribute("aria-invalid"))
-      if (i.value == i.placeholder) {
-        //	 alert(" inside hidden "+i+"::"+i.placeholder+"::"+i.value)
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-
-    })
-  } 
-  if (allAreFilled == false) {
-    //alert('Fill all fields')
-    isFormValid = false;
-    hasFieldToaster = true;
-  }
-  else {
-    isFormValid = true;
-    hasFieldToaster = false;
-  }
-  return [isFormValid, hasFieldToaster]
-};

@@ -201,7 +201,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -245,7 +247,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -286,7 +290,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -327,7 +333,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000'
       }
     },
     gridDefination: {
@@ -356,7 +364,7 @@ export const footerEmp = getCommonApplyFooter({
         showHideAdhocPopupopmsReassign(state, dispatch, "roadcutnoc-search-preview", "reject")
       }
     },
-    //    visible: checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'CE') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE') ? true : false
+    //    visible: checkForRolecheckForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'CE') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE') ? true : false
     visible: false
   },
   approve: {
@@ -368,7 +376,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -407,7 +417,9 @@ export const footerEmp = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius: "inherit"
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -481,7 +493,10 @@ export const footerEmp = getCommonApplyFooter({
       style: {
         minWidth: "180px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        borderRadius: "2px",
+        background: "#fff",
+        color: '#000',
       }
     },
     gridDefination: {
@@ -525,7 +540,7 @@ export const takeactionfooter = getCommonApplyFooter({
 
       pressguestbuttonLabel: getLabel({
         labelName: "Take Action",
-        labelKey: "PR_TAKE_ACTION"
+        labelKey: "PM_TAKE_ACTION"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",

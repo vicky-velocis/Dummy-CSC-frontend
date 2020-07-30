@@ -368,9 +368,9 @@ const HideshowEdit = (state, action, nocStatus, amount, applicationNumber) => {
   //   checkVisibility("INITIATED,REASSIGNTOEE,REASSIGNTOJE,REASSIGNTOSDO,REASSIGNTOSE") ? true : false
   // );            
   set(state, 'screenConfiguration.preparedFinalObject.WFStatus', []);
-  checkVisibility(state, "REJECT,REJECTED", "reject", action, "screenConfig.components.div.children.footerEmp.children.reject.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
+  checkVisibility(state, "REJECT,REJECTED", "reject", action, "screenConfig.components.div.children.footerEmp.children.reject.visible", (amount < 50000 && checkForRole(roles, 'EE') && (nocStatus == "REVIEWAPPROVEEE" || nocStatus == "REASSIGNAPPROVEEE")) || (amount < 200000 && checkForRole(roles, 'SE') && (nocStatus == "REVIEWAPPROVESE") || nocStatus == "REASSIGNAPPROVESE") || checkForRole(roles, 'CE'))
 
-  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footerEmp.children.approve.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
+  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footerEmp.children.approve.visible", (amount < 50000 && checkForRole(roles, 'EE') && (nocStatus == "REVIEWAPPROVEEE" || nocStatus == "REASSIGNAPPROVEEE")) || (amount < 200000 && checkForRole(roles, 'SE') && (nocStatus == "REVIEWAPPROVESE" || nocStatus == "REASSIGNAPPROVESE")) || checkForRole(roles, 'CE'))
 
   checkVisibility(state, "REASSIGN,REASSIGNAPPROVESE,REASSIGNAPPROVEEE,REASSIGNTOJE,REASSIGNTOSDO", "reassign", action, "screenConfig.components.div.children.footerEmp.children.reassign.visible", null)
 
@@ -403,17 +403,16 @@ const HideshowEdit = (state, action, nocStatus, amount, applicationNumber) => {
       : false
   );
 
-  // set(
-  //   action,
-  //   "screenConfig.components.div.children.footer.children.submitButton.visible",
-  //   checkForRole(roles, 'CITIZEN') ?
-  //     nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
-  //       true
-  //       : false
-  //     : false
-  // );
-
-
+  set(
+    action,
+    "screenConfig.components.div.children.takeactionfooter.children.actionbutton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" || nocStatus === "APPROVED" ?
+        true
+        : false
+      : true
+  );
+  //screenConfiguration.screenConfig["roadcutnoc-search-preview"].
 }
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
