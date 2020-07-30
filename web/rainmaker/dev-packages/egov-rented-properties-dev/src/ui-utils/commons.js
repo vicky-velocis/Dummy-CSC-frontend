@@ -198,6 +198,105 @@ export const getCount = async queryObject => {
   }
 }
 
+export const getMdmsData = async (dispatch, body) => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: body
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const prepareDocuments = (documents, jsonPath) => {
+  let documentsArr =
+    documents.length > 0
+      ? documents.reduce((documentsArr, item, ind) => {
+        documentsArr.push({
+          name: item.code,
+          required: item.required,
+          jsonPath: `${jsonPath}[${ind}]`,
+          statement: item.description
+        });
+        return documentsArr;
+      }, [])
+      : [];
+  return documentsArr;
+};
+
+export const setDocumentData = async(action, state, dispatch, {documentCode, jsonPath, screenKey, screenPath, tempJsonPath}) => {
+    const documentTypePayload = [{
+        moduleName: "PropertyServices",
+        masterDetails: [{name: "applications"}]
+      }
+    ]
+    const documentRes = await getMdmsData(dispatch, documentTypePayload);
+    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
+    const {applications = []} = PropertyServices || {}
+    const findFreshLicenceItem = applications.find(item => item.code === documentCode)
+    const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
+    const freshLicenceDocuments = masterDocuments.map(item => ({
+    type: item.code,
+    description: {
+      labelName: "Only .jpg and .pdf files. 6MB max file size.",
+      labelKey: item.fileType
+    },
+    formatProps :{
+      accept : item.accept || "image/*, .pdf, .png, .jpeg",
+    }, 
+    maxFileSize: 6000,
+    downloadUrl: item.downloadUrl,
+    moduleName: "RentedProperties",
+    statement: {
+        labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
+        labelKey: item.description
+    }
+    }))
+    const documentTypes = prepareDocuments(masterDocuments, jsonPath);
+    let applicationDocs = get(
+      state.screenConfiguration.preparedFinalObject,
+      jsonPath,
+      []
+    ) || [];
+    applicationDocs = applicationDocs.filter(item => !!item)
+    let applicationDocsReArranged =
+      applicationDocs &&
+      applicationDocs.length &&
+      documentTypes.map(item => {
+        const index = applicationDocs.findIndex(
+          i => i.documentType === item.name
+        );
+        return applicationDocs[index];
+      }).filter(item => !!item)
+    applicationDocsReArranged &&
+      dispatch(
+        prepareFinalObject(
+          jsonPath,
+          applicationDocsReArranged
+        )
+      );
+    dispatch(
+      handleField(
+          screenKey,
+          screenPath,
+          "props.inputProps",
+          freshLicenceDocuments
+      )
+  );
+    dispatch(prepareFinalObject(tempJsonPath, documentTypes))
+}
+
 export const setDocsForEditFlow = async (state, dispatch, sourceJsonPath, destinationJsonPath) => {
   let applicationDocuments = get(
     state.screenConfiguration.preparedFinalObject,
