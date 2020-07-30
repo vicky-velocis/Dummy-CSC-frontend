@@ -10,7 +10,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject, toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { localStorageGet, localStorageSet, setapplicationNumber, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, localStorageSet, setapplicationNumber, getapplicationNumber, setOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { gotoApplyWithStep } from "../utils/index";
 import {
   getFileUrlFromAPI,
@@ -43,7 +43,7 @@ import {
   getLocale,
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload } from "../../../../ui-utils/commons";
+import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, setCurrentApplicationProcessInstance, checkVisibility } from "../../../../ui-utils/commons";
 import { preparepopupDocumentsSellMeatUploadData, prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
 
@@ -53,16 +53,16 @@ let nocStatus = '';
 
 
 const undertakingsellmeatButton = getCommonContainer({
-  
-          downloadcard: {
-          uiFramework: "custom-molecules-local",
-              moduleName: "egov-opms",
-              componentPath: "SampleDownloadForSellMeat",
-      
-      visible:  false,
-    },
-   
-  });
+
+  downloadcard: {
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-opms",
+    componentPath: "SampleDownloadForSellMeat",
+
+    visible: false,
+  },
+
+});
 const undertakingButton1 = getCommonContainer({
   resendButton: {
     componentPath: "Button",
@@ -269,7 +269,7 @@ const setDownloadMenu = (state, dispatch) => {
   /** END */
 };
 
-const HideshowEdit = (action, nocStatus) => {
+const HideshowEdit = (state, action, nocStatus) => {
   // Hide edit buttons
   let showEdit = false;
   if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
@@ -311,12 +311,12 @@ const HideshowEdit = (action, nocStatus) => {
         : false
       : false
   );
-  
+
   set(
     action,
     "screenConfig.components.div.children.body.children.cardContent.children.undertakingsellmeatButton.children.downloadcard.visible",
     checkForRole(roles, 'CITIZEN') ?
-      nocStatus === "DRAFT"  ?
+      nocStatus === "DRAFT" ?
         true
         : false
       : true
@@ -326,6 +326,13 @@ const HideshowEdit = (action, nocStatus) => {
     "screenConfig.components.adhocDialog.children.popup",
     getRequiredDocuments()
   );
+
+  set(state, 'screenConfiguration.preparedFinalObject.WFStatus', []);
+  checkVisibility(state, "REJECTED", "reject", action, "screenConfig.components.div.children.footer.children.reject.visible", null)
+  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footer.children.approve.visible", null)
+  checkVisibility(state, "REASSIGN,REASSIGNTOSI,REASSIGNTOSUPERINTENDENT", "reassign", action, "screenConfig.components.div.children.footer.children.reassign.visible", null)
+  checkVisibility(state, "REVIEWOFSUPERINTENDENT,PENDINGAPPROVAL", "nextButton", action, "screenConfig.components.div.children.footer.children.nextButton.visible", null)
+
 }
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
@@ -338,8 +345,8 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
 
   nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   localStorageSet("app_noc_status", nocStatus);
-
-  HideshowEdit(action, nocStatus);
+  await setCurrentApplicationProcessInstance(state)
+  HideshowEdit(state, action, nocStatus);
 
   prepareDocumentsView(state, dispatch);
 
@@ -441,6 +448,7 @@ const screenConfig = {
     setapplicationNumber(applicationNumber); //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
     //localStorageSet('applicationsellmeatNumber',applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    setOPMSTenantId(tenantId);
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     // searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId);

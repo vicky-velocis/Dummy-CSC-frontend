@@ -598,9 +598,9 @@ const setSearchResponseForNocCretificate = async (
     //   get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].emailId", "NA")
     // );
 
-    // data.siName = nullToNa(
-    //   get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].siName", "NA")
-    // );
+    data.siName = nullToNa(
+      get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].siName", "NA")
+    );
 
     if (data.encroachmentType !== "Seizure of Vehicles") {
       let violationitemList = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", [])
@@ -704,7 +704,10 @@ const screenConfig = {
     const applicationNumber = getQueryArg(window.location.href, "challanNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    set(state,'form',{});
+    set(state, 'form.apply_Violator_Image.files.echallanViolaterImage', []);
+    set(state, 'form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage', []);
+    set(state, 'form.apply_Violations_Image.files.echallanViolationImage', []);
+
      let responsecreateDemand = '';
     //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
     // //calculate search Bill called\

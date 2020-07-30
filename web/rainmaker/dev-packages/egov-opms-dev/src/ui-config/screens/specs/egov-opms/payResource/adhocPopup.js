@@ -5,7 +5,7 @@ import { showHideAdhocPopupopmsForward, showHideAdhocPopup, getBill, showHideAdh
 import get from "lodash/get";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
-import { UpdateStatus } from "../../../../../ui-utils/commons";
+import { UpdateStatus, getWFStatus } from "../../../../../ui-utils/commons";
 import { documentDetails } from "./documentDetails";
 import { getAccessToken, getOPMSTenantId, getLocale, getUserInfo, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "redux/store";
@@ -18,6 +18,8 @@ import './index.css'
 import { callPGService } from "./footer";
 import { getOPMSPattern, checkForRole } from '../../utils/index';
 //let role_name = JSON.parse(getUserInfo()).roles[0].code
+import { validateFields } from "../../utils";
+
 let roles = JSON.parse(getUserInfo()).roles
 
 const popupvalidate = () => {
@@ -43,12 +45,12 @@ const popupvalidate = () => {
     }
   })
   if (!allAreFilled) {
-    //  alert('Fill all fields1')
+    //  //alert('Fill all fields1')
     isFormValid = false;
     hasFieldToaster = true;
   }
   else {
-    // alert('Submit1')
+    // //alert('Submit1')
 
     isFormValid = true;
     hasFieldToaster = false;
@@ -108,10 +110,17 @@ const moveToReview = (state, dispatch, applnid) => {
   }
 };
 const updateAdhoc1 = (state, dispatch) => {
+  // screenConfiguration.screenConfig["search-preview"].components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children
+  let validatePopup = validateFields(
+    "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let validatestepformflag = validatePopup
+  let isFormValid = validatestepformflag
+  // let hasFieldToaster = validatestepformflag[1];
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -156,12 +165,18 @@ const updateAdhoc1 = (state, dispatch) => {
         "badgeNumber": badgeNumber
       }
     }
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "nextButton";
+    });
+    //alert(wfstatus.status)
 
-    UpdateStatus(dispatch, '/egov-opms/search', [],
+    UpdateStatus(state, dispatch, '/egov-opms/search', [],
       {
         "applicationType": "PETNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": "FORWARD",
+        "applicationStatus": wfstatus.status,//"FORWARD",
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -216,15 +231,22 @@ const updateAdhocReaasign = (state, dispatch) => {
         "remarks": remarks,
       }
     }
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reassign";
+    });
+    //alert(wfstatus.status)
 
 
-    UpdateStatus(dispatch, '/egov-opms/search', [],
+
+    UpdateStatus(state, dispatch, '/egov-opms/search', [],
 
       {
 
         "applicationType": "PETNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'MOH') ? "REASSIGNTOSI" : '',
+        "applicationStatus": wfstatus.status,//checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'MOH') ? "REASSIGNTOSI" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -276,13 +298,20 @@ const updateAdhocReject = (state, dispatch) => {
         "remarks": remarks,
       }
     }
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reject";
+    });
+    //alert(wfstatus.status)
 
-    UpdateStatus(dispatch, '/egov-opms/search', [],
+
+    UpdateStatus(state, dispatch, '/egov-opms/search', [],
 
       {
         "applicationType": "PETNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": "REJECTED",
+        "applicationStatus": wfstatus.status,//"REJECTED",
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -310,13 +339,20 @@ const updateAdhocApprove = (state, dispatch) => {
       "PetNoc[0].PetNocDetails.Approve.remarks"
 
     );
-    UpdateStatus(dispatch, '/egov-opms/search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "approve";
+    });
+    //alert(wfstatus.status)
+
+    UpdateStatus(state, dispatch, '/egov-opms/search', [],
 
       {
 
         "applicationType": "PETNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": "APPROVED",
+        "applicationStatus": wfstatus.status,//"APPROVED",
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
@@ -344,9 +380,15 @@ const updateAdhocApprove = (state, dispatch) => {
 
 //Advertisement
 const updateAdhocAdvForward = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  // let validatestepformflag = popupvalidate()
+  // let isFormValid = validatestepformflag[0];
+  // let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialogForward.children.popup.children.adhocPopupAdvertisementForwardRemarkCard.children.advertisementForwardRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
 
   let file = get(
     state.screenConfiguration.preparedFinalObject,
@@ -378,11 +420,24 @@ const updateAdhocAdvForward = (state, dispatch) => {
 
       }
     }
-    UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = {};
+    if (get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")) {
+      wfstatus.status = get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")
+    } else {
+      wfstatus = wfstatuslist.find(item => {
+        return item.buttonName == "nextButton";
+      });
+    }
+
+    //alert(wfstatus.status)
+    UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'JEX') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "REVIEWOFOSD" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVAL" : '',
+        "applicationStatus": wfstatus.status,
+        //checkForRole(roles, 'JEX') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "REVIEWOFOSD" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
@@ -406,15 +461,23 @@ const updateAdhocAdvApprove = (state, dispatch) => {
 
   if (isFormValid) {
     dispatch(toggleSpinner());
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "approve";
+    });
+    //alert(wfstatus.status)
+
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].Approve.Remark");
-    UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
+    UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
 
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": localStorageGet('pms_iswithdrawn') === "yes" ? 'APPROVEFORWITHDRAW' : 'APPROVED',
+        "applicationStatus": wfstatus.status,
+        //localStorageGet('pms_iswithdrawn') === "yes" ? 'APPROVEFORWITHDRAW' : 'APPROVED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
@@ -464,12 +527,20 @@ const updateAdhocAdvReject = (state, dispatch) => {
         "remarks": remarks
       }
     }
-    UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reject";
+    });
+    //alert(wfstatus.status)
+
+    UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
 
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": localStorageGet('pms_iswithdrawn') === "yes" ? 'REJECTEFORWITHDRAW' : 'REJECTED',
+        "applicationStatus": wfstatus.status,
+        //localStorageGet('pms_iswithdrawn') === "yes" ? 'REJECTEFORWITHDRAW' : 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -522,11 +593,19 @@ const updateAdhocAdvReassign = (state, dispatch) => {
   }
   if (isFormValid) {
     dispatch(toggleSpinner());
-    UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    let wfstatus = "";
+    wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reassign";
+    });
+    //alert(wfstatus.status)
+
+    UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
       {
         "applicationType": "ADVERTISEMENTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'JEX') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOJEX" : checkForRole(roles, 'OSD') ? "REASSIGNTOSUPERINTENDENT" : checkForRole(roles, 'COMMISSIONER') ? "REASSIGNTOOSD" : '',
+        "applicationStatus": wfstatus.status,
+        //  checkForRole(roles, 'JEX') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOJEX" : checkForRole(roles, 'OSD') ? "REASSIGNTOSUPERINTENDENT" : checkForRole(roles, 'COMMISSIONER') ? "REASSIGNTOOSD" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -546,13 +625,27 @@ const updateAdhocAdvReassign = (state, dispatch) => {
 
 
 const updateAdhocAdvWithdrawApp = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  // let validatestepformflag = popupvalidate()
+  // let isFormValid = validatestepformflag[0];
+  // let hasFieldToaster = validatestepformflag[1];
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
   )
+  let isValidAmout = validateFields(
+    "components.adhocDialog.children.popup.children.adhocPopupAdvertisementOSDWithdraApprovalAmountCard.children.advertisementOSDWithdraApprovalAmountContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
+
+  let isValidRemarks = validateFields(
+    "components.adhocDialog.children.popup.children.adhocPopupAdvertisementCommissionerWithdrawApproveRemarkCard.children.advertisementCommissionerWithdrawApproveRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
+  let isFormValid = isValidAmout & isValidRemarks
   if (isFormValid) {
     dispatch(toggleSpinner());
     const Amount = get(
@@ -593,13 +686,25 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
 
 
     if (BillAmount != undefined && BillAmount != null && Amount < BillAmount) {
+      let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+      //    //alert(JSON.stringify(wfstatus))
+      let wfstatus = {};
+      if (get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")) {
+        wfstatus.status = get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")
+      } else {
+        wfstatus = wfstatuslist.find(item => {
+          return item.buttonName == "withdrawapprove";
+        });
+      }
 
-      UpdateStatus(dispatch, '/egov-opms/advertisement-search', [],
+      //alert(wfstatus.status)
+      UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
 
         {
           "applicationType": "ADVERTISEMENTNOC",
           "tenantId": getOPMSTenantId(),
-          "applicationStatus": checkForRole(roles, 'JEX') ? "REVIEWOFSPAFTERWITHDRAW" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVALFORWITHDRAW" : '',
+          "applicationStatus": wfstatus.status,
+          //checkForRole(roles, 'JEX') ? "REVIEWOFSPAFTERWITHDRAW" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVALFORWITHDRAW" : '',
           "applicationId": localStorage.getItem('ApplicationNumber'),
           "dataPayload": data
         }
@@ -643,7 +748,7 @@ const updateAdhocAdvWithdraw = (state, dispatch) => {
       "advertisement[0].withdraw.Remark");
 
 
-    UpdateStatus(dispatch, '/egov-opms/advertisementnoc-my-applications', [],
+    UpdateStatus(state, dispatch, '/egov-opms/advertisementnoc-my-applications', [],
 
       {
         "applicationType": "ADVERTISEMENTNOC",
@@ -705,13 +810,19 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
         "remarks": remarks
       }
     }
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "nextButton";
+    });
+    //alert(wfstatus.status)
 
-    UpdateStatus(dispatch, '/egov-opms/sellmeat-search', [],
+    UpdateStatus(state, dispatch, '/egov-opms/sellmeat-search', [],
 
       {
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'SI') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "PENDINGAPPROVAL" : '',
+        "applicationStatus": wfstatus.status,//checkForRole(roles, 'SI') ? "REVIEWOFSUPERINTENDENT" : checkForRole(roles, 'SUPERINTENDENT') ? "PENDINGAPPROVAL" : '',
 
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
@@ -740,12 +851,19 @@ const updateAdhocSellMeatApprove = (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "SellMeat[0].SellMeatDetails.Approve.remarks"
     );
-    UpdateStatus(dispatch, '/egov-opms/sellmeat-search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "approve";
+    });
+    //alert(wfstatus.status)
+
+    UpdateStatus(state, dispatch, '/egov-opms/sellmeat-search', [],
 
       {
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": 'APPROVED',
+        "applicationStatus": wfstatus.status,//'APPROVED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": {
           "remarks": remarks,
@@ -799,13 +917,19 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
       }
     }
 
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reject";
+    });
+    //alert(wfstatus.status)
 
-    UpdateStatus(dispatch, '/egov-opms/sellmeat-search', [],
+    UpdateStatus(state, dispatch, '/egov-opms/sellmeat-search', [],
 
       {
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": 'REJECTED',
+        "applicationStatus": wfstatus.status,//'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -857,14 +981,19 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
         "remarks": remarks
       }
     }
-
-    UpdateStatus(dispatch, '/egov-opms/sellmeat-search', [],
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = wfstatuslist.find(item => {
+      return item.buttonName == "reassign";
+    });
+    //alert(wfstatus.status)
+    UpdateStatus(state, dispatch, '/egov-opms/sellmeat-search', [],
 
       {
 
         "applicationType": "SELLMEATNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOSI" : checkForRole(roles, 'MOH') ? "REASSIGNTOSUPERINTENDENT" : '',
+        "applicationStatus": wfstatus.status,//checkForRole(roles, 'SI') ? "REASSIGN" : checkForRole(roles, 'SUPERINTENDENT') ? "REASSIGNTOSI" : checkForRole(roles, 'MOH') ? "REASSIGNTOSUPERINTENDENT" : '',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -893,6 +1022,8 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
   )
   if (isFormValid) {
     dispatch(toggleSpinner());
+    let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks"
@@ -911,7 +1042,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
     );
     let data = {}
     if (RoadCutForwardAmount > 0) {
-      if (checkForRole(roles, 'JE')) {
+      if (checkForRole(roles, 'JE') && nocStatus == "INITIATED") {
         if (file) {
           data = {
             "uploadDocuments": [{
@@ -963,13 +1094,21 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
           }
         }
       }
-      UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
+      let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+      //    //alert(JSON.stringify(wfstatus))
+      let wfstatus = wfstatuslist.find(item => {
+        return item.buttonName == "nextButton";
+      });
+      //alert(wfstatus.status)
+
+      UpdateStatus(state, dispatch, '/egov-opms/roadcut-search', [],
 
         {
 
           "applicationType": "ROADCUTNOC",
           "tenantId": getOPMSTenantId(),
-          "applicationStatus": checkForRole(roles, 'JE') ? "REVIEWSDO" : checkForRole(roles, 'SDO') ? "REVIEWOFEE" : checkForRole(roles, 'EE') ? "REVIEWOFSE" : checkForRole(roles, 'SE') ? "PENDINGAPRROVAL" : checkForRole(roles, 'CE') ? "PAYMENTPENDING" : '',
+          "applicationStatus": wfstatus.status,
+          //checkForRole(roles, 'JE') ? "REVIEWSDO" : checkForRole(roles, 'SDO') ? "REVIEWOFEE" : checkForRole(roles, 'EE') ? "REVIEWOFSE" : checkForRole(roles, 'SE') ? "PENDINGAPRROVAL" : checkForRole(roles, 'CE') ? "PAYMENTPENDING" : '',
 
           "applicationId": localStorage.getItem('ApplicationNumber'),
           "dataPayload": data
@@ -1006,7 +1145,7 @@ const updateAdhocRoadCutApprove = (state, dispatch) => {
     const remarks = get(
       state.screenConfiguration.preparedFinalObject,
       "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks");
-    UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
+    UpdateStatus(state, dispatch, '/egov-opms/roadcut-search', [],
 
       {
 
@@ -1065,12 +1204,11 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
       }
     }
 
-    UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
-
+    UpdateStatus(state, dispatch, '/egov-opms/roadcut-search', [],
       {
         "applicationType": "ROADCUTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'CE') ? "REJECT" : 'REJECTED',
+        "applicationStatus": 'REJECTED',
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -1122,13 +1260,29 @@ const updateAdhocRoadCutReassign = (state, dispatch) => {
         "remarks": remarks
       }
     }
+    let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+    //    //alert(JSON.stringify(wfstatus))
+    let wfstatus = "";
+    if (get(state, "screenConfiguration.preparedFinalObject.ROADCUTNOCWF.REASSIGNDO")) {
+      //alert("DO //alert")
+      wfstatus = wfstatuslist.find(item => {
+        return item.buttonName == "reassignToDO";
+      });
+    } else {
+      //alert("NOrmal Reasiign")
+      wfstatus = wfstatuslist.find(item => {
+        return item.buttonName == "reassign";
+      });
 
-
-    UpdateStatus(dispatch, '/egov-opms/roadcut-search', [],
+    }
+    // getWFStatus("REASSIGNTOEE,REASSIGNTOSE,REASSIGNTOCE", state)
+    // //alert(getWFStatus("REASSIGN,REASSIGNTOJE,REASSIGNTOSDO,REASSIGNTOSE,REASSIGNTOEE", state))
+    UpdateStatus(state, dispatch, '/egov-opms/roadcut-search', [],
       {
         "applicationType": "ROADCUTNOC",
         "tenantId": getOPMSTenantId(),
-        "applicationStatus": checkForRole(roles, 'JE') ? "REASSIGN" : checkForRole(roles, 'SDO') ? "REASSIGNTOJE" : checkForRole(roles, 'EE') ? "REASSIGNTOSDO" : checkForRole(roles, 'SE') ? "REASSIGNTOEE" : checkForRole(roles, 'CE') ? "REASSIGNTOSE" : '',
+        //        "applicationStatus": checkForRole(roles, 'JE') ? "REASSIGN" : checkForRole(roles, 'SDO') ? "REASSIGNTOJE" : checkForRole(roles, 'EE') ? "REASSIGNTOSDO" : checkForRole(roles, 'SE') ? "REASSIGNTOEE" : checkForRole(roles, 'CE') ? "REASSIGNTOSE" : '',
+        "applicationStatus": wfstatus.status,
         "applicationId": localStorage.getItem('ApplicationNumber'),
         "dataPayload": data
       }
@@ -1202,9 +1356,9 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
             componentPath: "Button",
             props: {
               style: {
-                float: "right",                
-                marginRight: "-15px",                 
-                paddingRight: "0px",                 
+                float: "right",
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -1392,9 +1546,9 @@ export const adhocPopup1 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1426,9 +1580,10 @@ export const adhocPopup1 = getCommonContainer({
 
   adhocRebateCard: getCommonContainer(
     {
+      documentDetails,
 
       rebateAmountAndReasonContainer: getCommonContainer({
-        documentDetails,
+
         rebateReason: getTextField({
           label: {
             labelName: "Enter badge Number",
@@ -1473,18 +1628,18 @@ export const adhocPopup1 = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "PetNoc[0].PetNocDetails.additionalDetail.remarks"
 
         })
 
       }),
-     
+
     },
     {
       style: {
@@ -1615,9 +1770,9 @@ export const adhocPopup2 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1671,12 +1826,12 @@ export const adhocPopup2 = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "PetNoc[0].PetNocDetails.Reaasign.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -1814,9 +1969,9 @@ export const adhocPopup3 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -1888,12 +2043,12 @@ export const adhocPopup3 = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "PetNoc[0].PetNocDetails.Approve.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2027,9 +2182,9 @@ export const adhocPopup4 = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -2086,12 +2241,12 @@ export const adhocPopup4 = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "PetNoc[0].PetNocDetails.Reject.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2174,6 +2329,208 @@ export const adhocPopup4 = getCommonContainer({
 });
 
 
+// export const adhocPopupAdvertisementForward = getCommonContainer({
+//   header: {
+//     uiFramework: "custom-atoms",
+//     componentPath: "Container",
+//     props: {
+//       style: {
+//         width: "100%",
+//         float: "right"
+//       }
+//     },
+//     children: {
+//       div1: {
+//         uiFramework: "custom-atoms",
+//         componentPath: "Div",
+//         gridDefination: {
+//           xs: 10,
+//           sm: 10
+//         },
+//         props: {
+//           style: {
+//             width: "100%",
+//             float: "right"
+//           }
+//         },
+//         children: {
+//           div: getCommonHeader(
+//             {
+//               labelName: "Remarks",
+//               labelKey: "NOC_REMARKS_ADVERTISEMENT"
+//             },
+//             {
+//               style: {
+//                 fontSize: "20px"
+//               }
+//             }
+//           )
+//         }
+//       },
+//       div2: {
+//         uiFramework: "custom-atoms",
+//         componentPath: "Div",
+//         gridDefination: {
+//           xs: 2,
+//           sm: 2
+//         },
+//         props: {
+//           style: {
+//             width: "100%",
+//             float: "right",
+//             cursor: "pointer"
+//           }
+//         },
+//         children: {
+//           closeButton: {
+//             componentPath: "Button",
+//             props: {
+//               style: {
+//                 float: "right",
+//                 marginRight: "-15px",
+//                 paddingRight: "0px",
+//                 color: "rgba(0, 0, 0, 0.60)"
+//               }
+//             },
+//             children: {
+//               previousButtonIcon: {
+//                 uiFramework: "custom-atoms",
+//                 componentPath: "Icon",
+//                 props: {
+//                   iconName: "close"
+//                 }
+//               }
+//             },
+//             onClickDefination: {
+//               action: "condition",
+//               callBack: (state, dispatch) => {
+//                 showHideAdhocPopupopmsForward(state, dispatch, "advertisementnoc-search-preview")
+//                 set(state,
+//                   "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+//                   ""
+//                 )
+//                 window.location.reload();
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   },
+
+//   adhocPopupAdvertisementJEXForwardRemarkCard: getCommonContainer(
+//     {
+//       advertisementJEXForwardRemarkContainer: getCommonContainer({
+//         documentDetails,
+//         advertisementJEXForwardRemarkField: getTextField({
+//           label: {
+//             labelName: "Enter Remarks",
+//             labelKey: "NOC_ADVERTISEMENT_JEX_FORWARD_REMARK_LABEL"
+//           },
+//           placeholder: {
+//             labelName: "Enter Remarks",
+//             labelKey: "NOC_ADVERTISEMENT_JEX_FORWARD_REMARK_LABEL"
+//           },
+//           gridDefination: {
+//             xs: 12,
+//             sm: 12
+//           },
+//           props: {
+//             style: {
+//               width: "100%"
+//             }
+//           },
+//           props: {
+
+//             className: "textfield-enterable-selection",
+//             multiline: true,
+//             rows: "4"
+//           },
+//           jsonPath: "advertisement[0].Forward.Remark",
+//           required: true,
+//           pattern: getOPMSPattern("Remarks"),
+
+//         }),
+
+//         downloadcard: {
+//           uiFramework: "custom-molecules-local",
+//           moduleName: "egov-opms",
+//           componentPath: "SampleDownload"
+//         },
+//       }),
+
+//     },
+//     {
+//       style: {
+//         marginTop: "24px"
+//       }
+//     }
+//   ),
+//   div: {
+//     uiFramework: "custom-atoms",
+//     componentPath: "Div",
+//     props: {
+//       style: {
+//         width: "100%",
+//         // textAlign: "right"
+//       }
+//     },
+//     children: {
+//       cancelButton: {
+//         componentPath: "Button",
+//         props: {
+//           variant: "outlined",
+//           color: "primary",
+//           style: {
+//             width: "180px",
+//             height: "48px",
+//             marginRight: "16px"
+//           }
+//         },
+//         children: {
+//           previousButtonLabel: getLabel({
+//             labelName: "CANCEL",
+//             labelKey: "NOC_CANCEL_ADVERTISEMENT"
+//           })
+//         },
+//         onClickDefination: {
+//           action: "condition",
+//           callBack: (state, dispatch) => {
+//             showHideAdhocPopupopmsForward(state, dispatch, "advertisementnoc-search-preview")
+//             set(state,
+//               "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+//               ""
+//             )
+//             window.location.reload();
+//           }
+//         }
+//       },
+//       addButton: {
+//         componentPath: "Button",
+//         props: {
+//           variant: "contained",
+//           color: "primary",
+//           style: {
+//             width: "180px",
+//             height: "48px"
+//           }
+//         },
+//         children: {
+//           previousButtonLabel: getLabel({
+//             labelName: "Submit",
+//             labelKey: "NOC_SUBMIT_ADVERTISEMENT"
+//           })
+//         },
+//         onClickDefination: {
+//           action: "condition",
+//           callBack: updateAdhocAdvForward
+//         }
+//       }
+//     }
+//   }
+// });
+
+//advertisement forward for OSD
 export const adhocPopupAdvertisementForward = getCommonContainer({
   header: {
     uiFramework: "custom-atoms",
@@ -2232,8 +2589,8 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2263,10 +2620,36 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
     }
   },
 
-  adhocPopupAdvertisementJEXForwardRemarkCard: getCommonContainer(
+  adhocPopupAdvertisementForwardRemarkCard: getCommonContainer(
     {
-      advertisementJEXForwardRemarkContainer: getCommonContainer({
-        documentDetails,
+      documentDetails,
+      advertisementForwardRemarkContainer: getCommonContainer({
+        employeeList: getSelectField({
+          label: {
+            labelName: "Select Role",
+            labelKey: "PM_SELECT_ADV_ROLE"
+          },
+          placeholder: {
+            labelName: "Select Role",
+            labelKey: "PM_SELECT_ADV_ROLE"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12
+          },
+          props: {
+            style: {
+              width: "100%"
+            }
+          },
+          optionLabel: "name",
+          optionValue: "status",
+          sourceJsonPath: "applyScreenMdmsData.egpm.AdvertisementEmployeeList",
+          jsonPath:
+            "OPMS.AdvertisementNOC.typeOfCommissioner",
+          visible: false,
+          required: false,
+        }),
         advertisementJEXForwardRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2285,25 +2668,21 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].Forward.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
-
         }),
-
         downloadcard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-opms",
           componentPath: "SampleDownload"
         },
       }),
-     
     },
     {
       style: {
@@ -2433,8 +2812,8 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2486,12 +2865,12 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].Reassign.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2632,8 +3011,8 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2685,12 +3064,12 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].Reject.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2831,8 +3210,8 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -2881,12 +3260,12 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].Approve.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -2965,6 +3344,236 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
   }
 });
 
+// export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
+//   header: {
+//     uiFramework: "custom-atoms",
+//     componentPath: "Container",
+//     props: {
+//       style: {
+//         width: "100%",
+//         float: "right"
+//       }
+//     },
+//     children: {
+//       div1: {
+//         uiFramework: "custom-atoms",
+//         componentPath: "Div",
+//         gridDefination: {
+//           xs: 10,
+//           sm: 10
+//         },
+//         props: {
+//           style: {
+//             width: "100%",
+//             float: "right"
+//           }
+//         },
+//         children: {
+//           div: getCommonHeader(
+//             {
+//               labelName: "Remarks",
+//               labelKey: "NOC_REMARKS_ADVERTISEMENT"
+//             },
+//             {
+//               style: {
+//                 fontSize: "20px"
+//               }
+//             }
+//           )
+//         }
+//       },
+//       div2: {
+//         uiFramework: "custom-atoms",
+//         componentPath: "Div",
+//         gridDefination: {
+//           xs: 2,
+//           sm: 2
+//         },
+//         props: {
+//           style: {
+//             width: "100%",
+//             float: "right",
+//             cursor: "pointer"
+//           }
+//         },
+//         children: {
+//           closeButton: {
+//             componentPath: "Button",
+//             props: {
+//               style: {
+//                 float: "right",
+//                 marginRight: "-15px",
+//                 paddingRight: "0px",
+//                 color: "rgba(0, 0, 0, 0.60)"
+//               }
+//             },
+//             children: {
+//               previousButtonIcon: {
+//                 uiFramework: "custom-atoms",
+//                 componentPath: "Icon",
+//                 props: {
+//                   iconName: "close"
+//                 }
+//               }
+//             },
+//             onClickDefination: {
+//               action: "condition",
+//               callBack: (state, dispatch) => {
+//                 showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+//                 window.location.reload();
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   },
+
+//   adhocPopupAdvertisementOSDWithdraApprovalAmountCard: getCommonContainer(
+//     {
+//       advertisementOSDWithdraApprovalAmountContainer: getCommonContainer({
+//         documentDetails,
+//         advertisementOSDWithdraApprovalAmountField: getTextField({
+
+//           label: {
+//             labelName: "Enter Amount",
+//             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
+//           },
+//           placeholder: {
+//             labelName: "Enter Amount",
+//             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
+//           },
+//           gridDefination: {
+//             xs: 12,
+//             sm: 12
+//           },
+//           props: {
+//             style: {
+//               width: "100%"
+//             }
+//           },
+//           jsonPath: "advertisement[0].WithdraApproval.Amount",
+//           required: true,
+//           pattern: getPattern("Amountopms"),
+
+//         }),
+
+//       })
+//     },
+//     {
+//       style: {
+//         marginTop: "24px"
+//       }
+//     }
+//   ),
+//   adhocPopupAdvertisementCommissionerWithdrawApproveRemarkCard: getCommonContainer(
+//     {
+//       advertisementCommissionerWithdrawApproveRemarkContainer: getCommonContainer({
+
+//         advertisementCommissionerWithdrawApproveRemarkField: getTextField({
+//           label: {
+//             labelName: "Enter Remarks",
+//             labelKey: "NOC_ADVERTISEMENT_COMMISSIONER_APPROVE_REMARK_LABEL"
+//           },
+//           placeholder: {
+//             labelName: "Enter Remarks",
+//             labelKey: "NOC_ADVERTISEMENT_COMMISSIONER_APPROVE_REMARK_LABEL"
+//           },
+//           gridDefination: {
+//             xs: 12,
+//             sm: 12
+//           },
+//           props: {
+//             style: {
+//               width: "100%"
+//             }
+//           },
+//           props: {
+
+//             className: "textfield-enterable-selection",
+//             multiline: true,
+//             rows: "4"
+//           },
+//           jsonPath: "advertisement[0].WithdraApproval.Remark",
+
+//           required: true,
+//           pattern: getOPMSPattern("Remarks"),
+
+//         }),
+//         downloadcard: {
+//           uiFramework: "custom-molecules-local",
+//           moduleName: "egov-opms",
+//           componentPath: "SampleDownload"
+//         },
+//       })
+//     },
+//     {
+//       style: {
+//         marginTop: "24px"
+//       }
+//     }
+//   ),
+//   div: {
+//     uiFramework: "custom-atoms",
+//     componentPath: "Div",
+//     props: {
+//       style: {
+//         width: "100%",
+//         // textAlign: "right"
+//       }
+//     },
+//     children: {
+//       cancelButton: {
+//         componentPath: "Button",
+//         props: {
+//           variant: "outlined",
+//           color: "primary",
+//           style: {
+//             width: "180px",
+//             height: "48px",
+//             marginRight: "16px"
+//           }
+//         },
+//         children: {
+//           previousButtonLabel: getLabel({
+//             labelName: "CANCEL",
+//             labelKey: "NOC_CANCEL_ADVERTISEMENT"
+//           })
+//         },
+//         onClickDefination: {
+//           action: "condition",
+//           callBack: (state, dispatch) => {
+//             showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
+//             window.location.reload();
+//           }
+//         }
+//       },
+//       addButton: {
+//         componentPath: "Button",
+//         props: {
+//           variant: "contained",
+//           color: "primary",
+//           style: {
+//             width: "180px",
+//             height: "48px"
+//           }
+//         },
+//         children: {
+//           previousButtonLabel: getLabel({
+//             labelName: "Submit",
+//             labelKey: "NOC_SUBMIT_ADVERTISEMENT"
+//           })
+//         },
+//         onClickDefination: {
+//           action: "condition",
+//           callBack: updateAdhocAdvWithdrawApp
+//         }
+//       }
+//     }
+//   }
+// });
+
+//osd withdraw popup
 export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
   header: {
     uiFramework: "custom-atoms",
@@ -3023,9 +3632,9 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3049,13 +3658,38 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
       }
     }
   },
-
   adhocPopupAdvertisementOSDWithdraApprovalAmountCard: getCommonContainer(
     {
+      documentDetails,
       advertisementOSDWithdraApprovalAmountContainer: getCommonContainer({
-        documentDetails,
-        advertisementOSDWithdraApprovalAmountField: getTextField({
 
+        employeeList: getSelectField({
+          label: {
+            labelName: "Select Role",
+            labelKey: "PM_SELECT_ADV_ROLE"
+          },
+          placeholder: {
+            labelName: "Select Role",
+            labelKey: "PM_SELECT_ADV_ROLE"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12
+          },
+          props: {
+            style: {
+              width: "100%"
+            }
+          },
+          optionLabel: "name",
+          optionValue: "withdrawStatus",
+          sourceJsonPath: "applyScreenMdmsData.egpm.AdvertisementEmployeeList",
+          jsonPath:
+            "OPMS.AdvertisementNOC.typeOfCommissioner",
+          visible: false,
+          required: false
+        }),
+        advertisementOSDWithdraApprovalAmountField: getTextField({
           label: {
             labelName: "Enter Amount",
             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
@@ -3076,9 +3710,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           jsonPath: "advertisement[0].WithdraApproval.Amount",
           required: true,
           pattern: getPattern("Amountopms"),
-
         }),
-       
       })
     },
     {
@@ -3109,12 +3741,11 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].WithdraApproval.Remark",
 
           required: true,
@@ -3194,6 +3825,8 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
   }
 });
 
+
+
 //sellmeat
 export const SellMeatForward = getCommonContainer({
   header: {
@@ -3253,9 +3886,9 @@ export const SellMeatForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3307,12 +3940,12 @@ export const SellMeatForward = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "SellMeat[0].SellMeatDetails.Forward.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3450,9 +4083,9 @@ export const SellMeatReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3505,12 +4138,12 @@ export const SellMeatReassign = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "SellMeat[0].SellMeatDetails.Reassign.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3648,9 +4281,9 @@ export const SellMeatApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3699,12 +4332,12 @@ export const SellMeatApprove = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "SellMeat[0].SellMeatDetails.Approve.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -3712,9 +4345,9 @@ export const SellMeatApprove = getCommonContainer({
         }),
         // break: getBreak(),
         // break: getBreak(),
-       
-       // break: getBreak(),
-      
+
+        // break: getBreak(),
+
 
       })
     },
@@ -3843,9 +4476,9 @@ export const SellMeatReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -3898,12 +4531,12 @@ export const SellMeatReject = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "SellMeat[0].SellMeatDetails.Reject.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4043,8 +4676,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -4177,12 +4810,12 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4322,8 +4955,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -4378,12 +5011,12 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4523,9 +5156,9 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4576,12 +5209,12 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4716,9 +5349,9 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4770,12 +5403,12 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -4913,9 +5546,9 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                 marginRight: "-15px", 
-                 paddingRight: "0px", 
-                 color: "rgba(0, 0, 0, 0.60)"
+                marginRight: "-15px",
+                paddingRight: "0px",
+                color: "rgba(0, 0, 0, 0.60)"
               }
             },
             children: {
@@ -4967,12 +5600,12 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks",
           required: true,
           pattern: getOPMSPattern("Remarks"),
@@ -5113,8 +5746,8 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
             props: {
               style: {
                 float: "right",
-                marginRight: "-15px", 
-                paddingRight: "0px", 
+                marginRight: "-15px",
+                paddingRight: "0px",
                 color: "rgba(0, 0, 0, 0.60)"
               }
             },
@@ -5162,12 +5795,12 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
               width: "100%"
             }
           },
-          props:{
-            
-                        className:"textfield-enterable-selection",
-                        multiline: true,
-                        rows: "4"
-                      },
+          props: {
+
+            className: "textfield-enterable-selection",
+            multiline: true,
+            rows: "4"
+          },
           jsonPath: "advertisement[0].withdraw.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
