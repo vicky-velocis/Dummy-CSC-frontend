@@ -18,7 +18,7 @@ export const getWFConfig = (module,businessService) => {
         INITIATED: "/egov-opms/advertisementnoc-search-preview",
         DEFAULT: "/egov-opms/advertisementnoc-search-preview",
       };
-    } else if (businessService == "ADVERTISEMENTNOC") {
+    } else if (businessService == "PETNOC") {
       return {
         INITIATED: "/egov-opms/search-preview",
         DEFAULT: "/egov-opms/search-preview",

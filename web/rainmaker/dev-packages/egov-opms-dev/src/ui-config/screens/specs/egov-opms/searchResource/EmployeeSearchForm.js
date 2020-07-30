@@ -1,82 +1,38 @@
 import { getCommonCard, getCommonContainer, getDateField, getLabel, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
-//import { searchApiCallForEmployeeFilter } from "./functions";
-//import { resetFieldsForEmployeeFilter } from "./citizenSearchFunctions";
+import { searchApiCallForEmployeeFilter } from "./searchFunctions";
+import { resetFieldsForEmployeeFilter } from "./citizenSearchFunctions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 
 
 
 export const SearchFormForEmployee = getCommonCard({
-
-
-  serviceRequestidContactNoAndRequestTypeContainer: getCommonContainer({
-
+  StatusLocalityAndFromToDateContainer: getCommonContainer({
     ServiceRequestId: {
       ...getTextField({
         label: {
-          labelName: "Service Request No.",
-          labelKey: "HC_SERVICE_REQUEST_ID"
+          labelName: "Application  No.",
+          labelKey: "PM_APPLICATION_ID"
         },
         placeholder: {
-          labelName: "Enter Service Request No.",
-          labelKey: "HC_SERVICE_REQUEST_ID_PLACEHOLDER"
+          labelName: "Enter Application No.",
+          labelKey: "PM_APPLICATION_ID_PLACEHOLDER"
         },
         gridDefination: {
           xs: 12,
           sm: 6,
           md: 4
         },
-
         pattern: getPattern("BuildingStreet"),
-        errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
-        jsonPath: "serviceRequests.servicerequestid"
+        errorMessage: "PM_ERR_INVALID_APPLICATION_ID_FIELD_MSG",
+        jsonPath: "OPMS.searchFilter.applicationId"
       })
     },
-    ServiceRequestType: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-hrms",
-      componentPath: "AutosuggestContainer",
-      jsonPath: "serviceRequests.servicetype",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 6,
-        md: 4
-      },
-      props: {
-        style: {
-          width: "100%",
-          cursor: "pointer"
-        },
-
-        className: "citizen-city-picker",
-        label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE" },
-        placeholder: {
-          labelName: "Select Service Request Type",
-          labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
-        },
-        sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-        jsonPath: "serviceRequests.servicetype",
-
-        labelsFromLocalisation: false,
-        suggestions: [],
-        fullwidth: true,
-        required: false,
-        inputLabelProps: {
-          shrink: true
-        },
-        isMulti: false,
-        labelName: "name",
-        valueName: "name"
-      },
-    },
-  }),
-  StatusLocalityAndFromToDateContainer: getCommonContainer({
-
     fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "HC_FROM_DATE_LABEL" },
+      label: { labelName: "From Date", labelKey: "PM_FROM_DATE_LABEL" },
       placeholder: {
         labelName: "FromDate",
-        labelKey: "HC_FROM_DATE_PLACEHOLDER"
+        labelKey: "PM_FROM_DATE_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
@@ -84,14 +40,12 @@ export const SearchFormForEmployee = getCommonCard({
         md: 4
       },
       pattern: getPattern("Date"),
-
-
-      jsonPath: "serviceRequests.fromDate",
+      jsonPath: "OPMS.searchFilter.fromDate",
       afterFieldChange: (action, state, dispatch) => {
         dispatch(
           handleField(
-            "employeeServiceRequestsFilter",
-            "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.toDate",
+            getPageName(),
+            "components.div.children.SearchFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.toDate",
             "props.inputProps.min",
             action.value
           )
@@ -101,10 +55,10 @@ export const SearchFormForEmployee = getCommonCard({
 
     }),
     toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "HC_TO_DATE_LABEL" },
+      label: { labelName: "To Date", labelKey: "PM_TO_DATE_LABEL" },
       placeholder: {
         labelName: "To Date",
-        labelKey: "HC_TO_DATE_PLACEHOLDER"
+        labelKey: "PM_TO_DATE_PLACEHOLDER"
       },
       props: {
         inputProps: {
@@ -117,13 +71,13 @@ export const SearchFormForEmployee = getCommonCard({
         md: 4
       },
       pattern: getPattern("Date"),
-      jsonPath: "serviceRequests.toDate",
+      jsonPath: "OPMS.searchFilter.toDate",
     }),
     ServiceRequestStatus: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-hrms",
+      moduleName: "egov-opms",
       componentPath: "AutosuggestContainer",
-      jsonPath: "serviceRequests.servicestatus",
+      jsonPath: "OPMS.searchFilter.applicationStatus",
       required: false,
       gridDefination: {
         xs: 12,
@@ -137,14 +91,14 @@ export const SearchFormForEmployee = getCommonCard({
         },
 
         className: "citizen-city-picker",
-        label: { labelName: "Service Request Status", labelKey: "HC_SERVICE_REQUEST_STATUS" },
+        label: { labelName: "Application Status", labelKey: "PM_APPLICATION_STATUS" },
 
         placeholder: {
-          labelName: "Service Request Status",
-          labelKey: "HC_SERVICE_REQUEST_STATUS_PLACEHOLDER"
+          labelName: "Application Status",
+          labelKey: "PM_APPLICATION_STATUS_PLACEHOLDER"
         },
-        sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceStatus",
-        jsonPath: "serviceRequests.servicestatus",
+        sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
+        jsonPath: "OPMS.searchFilter.applicationStatus",
 
         labelsFromLocalisation: false,
         suggestions: [],
@@ -155,7 +109,7 @@ export const SearchFormForEmployee = getCommonCard({
         },
         isMulti: false,
         labelName: "name",
-        valueName: "name"
+        valueName: "code"
       },
     }
   }),
@@ -182,13 +136,13 @@ export const SearchFormForEmployee = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "Search",
-            labelKey: "HC_HOME_SEARCH_RESULTS_BUTTON"
+            labelKey: "PM_HOME_SEARCH_RESULTS_BUTTON"
           })
         },
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            //searchApiCallForEmployeeFilter(state, dispatch)
+            searchApiCallForEmployeeFilter(state, dispatch)
           }
         }
       },
@@ -216,27 +170,30 @@ export const SearchFormForEmployee = getCommonCard({
         children: {
           buttonLabel: getLabel({
             labelName: "CLEAR ALL",
-            labelKey: "HC_CLEARFORM_BUTTON"
+            labelKey: "PM_CLEARFORM_BUTTON"
           })
         },
         onClickDefination: {
           action: "condition",
-          // callBack: resetFieldsForEmployeeFilter
+          callBack: (state, dispatch) => {
+            resetFieldsForEmployeeFilter(state, dispatch)
+          }
         }
-      },
-
-      // lastCont: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 4
-      //   }
-      // }
+      }
     })
   })
 
 });
+
+export const getPageName = () => {
+  switch (getapplicationType()) {
+    case "PETNOC": return "search";
+    case "SELLMEATNOC": return "sellmeat-search";
+    case "ROADCUTNOC": return "roadcut-search";
+    case "ADVERTISEMENTNOC": return "advertisement-search";
+  }
+
+}
 
 
 

@@ -17,6 +17,7 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 import './index.css'
 import { callPGService } from "./footer";
 import { getOPMSPattern, checkForRole } from '../../utils/index';
+
 //let role_name = JSON.parse(getUserInfo()).roles[0].code
 import { validateFields } from "../../utils";
 
@@ -110,17 +111,14 @@ const moveToReview = (state, dispatch, applnid) => {
   }
 };
 const updateAdhoc1 = (state, dispatch) => {
-  // screenConfiguration.screenConfig["search-preview"].components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children
-  let validatePopup = validateFields(
+
+  let isFormValid = validateFields(
     "components.adhocDialog.children.popup.children.adhocRebateCard.children.rebateAmountAndReasonContainer.children",
     state,
     dispatch,
     "search-preview"
   );
 
-  let validatestepformflag = validatePopup
-  let isFormValid = validatestepformflag
-  // let hasFieldToaster = validatestepformflag[1];
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -196,10 +194,12 @@ const updateAdhoc1 = (state, dispatch) => {
 
 const updateAdhocReaasign = (state, dispatch) => {
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
-
+  let isFormValid = validateFields(
+    "components.adhocDialog2.children.popup.children.adhocRebateCard.children.rebateReaassignContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -263,10 +263,13 @@ const updateAdhocReaasign = (state, dispatch) => {
   }
 };
 const updateAdhocReject = (state, dispatch) => {
-
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  //screenConfiguration.screenConfig["search-preview"].
+  let isFormValid = validateFields(
+    "components.adhocDialog3.children.popup.children.adhocRebateCard.children.rebateRejectContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -328,10 +331,13 @@ const updateAdhocReject = (state, dispatch) => {
 
 };
 const updateAdhocApprove = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
-
+  // screenConfiguration.screenConfig["search-preview"].
+  let isFormValid = validateFields(
+    "components.adhocDialog1.children.popup.children.adhocRebateCard.children.rebateApproveContainer.children",
+    state,
+    dispatch,
+    "search-preview"
+  );
   if (isFormValid) {
     dispatch(toggleSpinner());
     const remarks = get(
@@ -380,15 +386,14 @@ const updateAdhocApprove = (state, dispatch) => {
 
 //Advertisement
 const updateAdhocAdvForward = (state, dispatch) => {
-  // let validatestepformflag = popupvalidate()
-  // let isFormValid = validatestepformflag[0];
-  // let hasFieldToaster = validatestepformflag[1];
+
   let isFormValid = validateFields(
     "components.adhocDialogForward.children.popup.children.adhocPopupAdvertisementForwardRemarkCard.children.advertisementForwardRemarkContainer.children",
     state,
     dispatch,
     "advertisementnoc-search-preview"
   );
+
 
   let file = get(
     state.screenConfiguration.preparedFinalObject,
@@ -455,9 +460,12 @@ const updateAdhocAdvForward = (state, dispatch) => {
 };
 
 const updateAdhocAdvApprove = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialog1.children.popup.children.adhocPopupAdvertisementCommissionerApproveRemarkCard.children.advertisementCommissionerApproveRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
 
   if (isFormValid) {
     dispatch(toggleSpinner());
@@ -495,9 +503,13 @@ const updateAdhocAdvApprove = (state, dispatch) => {
   }
 };
 const updateAdhocAdvReject = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialog3.children.popup.children.adhocPopupAdvertisementCommissionerRejectRemarkCard.children.advertisementCommissionerRejectRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
+
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -557,9 +569,13 @@ const updateAdhocAdvReject = (state, dispatch) => {
 
 };
 const updateAdhocAdvReassign = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialog2.children.popup.children.adhocPopupAdvertisementJEXReassignRemarkCard.children.advertisementJEXReassignRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
+
   const remarks = get(
     state.screenConfiguration.preparedFinalObject,
     "advertisement[0].Reassign.Remark");
@@ -625,13 +641,6 @@ const updateAdhocAdvReassign = (state, dispatch) => {
 
 
 const updateAdhocAdvWithdrawApp = (state, dispatch) => {
-  // let validatestepformflag = popupvalidate()
-  // let isFormValid = validatestepformflag[0];
-  // let hasFieldToaster = validatestepformflag[1];
-  let file = get(
-    state.screenConfiguration.preparedFinalObject,
-    "documentsUploadRedux[0].documents[0].fileStoreId"
-  )
   let isValidAmout = validateFields(
     "components.adhocDialog.children.popup.children.adhocPopupAdvertisementOSDWithdraApprovalAmountCard.children.advertisementOSDWithdraApprovalAmountContainer.children",
     state,
@@ -646,6 +655,12 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
     "advertisementnoc-search-preview"
   );
   let isFormValid = isValidAmout & isValidRemarks
+
+  let file = get(
+    state.screenConfiguration.preparedFinalObject,
+    "documentsUploadRedux[0].documents[0].fileStoreId"
+  )
+
   if (isFormValid) {
     dispatch(toggleSpinner());
     const Amount = get(
@@ -737,10 +752,12 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
 
 const updateAdhocAdvWithdraw = (state, dispatch) => {
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
-
+  let isFormValid = validateFields(
+    "components.adhocDialog.children.popup.children.adhocPopupAdvertisementWithdrawRemarkCard.children.advertisementWithdrawRemarkContainer.children",
+    state,
+    dispatch,
+    "advertisementnoc-search-preview"
+  );
   if (isFormValid) {
     dispatch(toggleSpinner());
     const Remark = get(
@@ -776,9 +793,12 @@ const updateAdhocAdvWithdraw = (state, dispatch) => {
 
 //sellmeat
 const updateAdhocSellMeatForward = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialogForward.children.popup.children.SellMeatForwardCard.children.SellMeatForwardContainer.children",
+    state,
+    dispatch,
+    "sellmeatnoc-search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -840,10 +860,13 @@ const updateAdhocSellMeatForward = (state, dispatch) => {
   }
 };
 const updateAdhocSellMeatApprove = (state, dispatch) => {
+  let isFormValid = validateFields(
+    "components.adhocDialog1.children.popup.children.SellMeatApproveCard.children.SellMeatApproveContainer.children",
+    state,
+    dispatch,
+    "sellmeatnoc-search-preview"
+  );
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
 
   if (isFormValid) {
     dispatch(toggleSpinner());
@@ -881,10 +904,12 @@ const updateAdhocSellMeatApprove = (state, dispatch) => {
   }
 };
 const updateAdhocSellMeatReject = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
-
+  let isFormValid = validateFields(
+    "components.adhocDialog3.children.popup.children.SellMeatRejectCard.children.SellMeatRejectContainer.children",
+    state,
+    dispatch,
+    "sellmeatnoc-search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -946,10 +971,12 @@ const updateAdhocSellMeatReject = (state, dispatch) => {
   }
 };
 const updateAdhocSellMeatReassign = (state, dispatch) => {
-
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialog2.children.popup.children.SellMeatReassignCard.children.SellMeatReassignContainer.children",
+    state,
+    dispatch,
+    "sellmeatnoc-search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -1013,9 +1040,13 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
 
 //RoadCut
 const updateAdhocRoadCutForward = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  //  screenConfiguration.screenConfig["roadcutnoc-search-preview"].
+  let isFormValid = validateFields(
+    "components.adhocDialogForward.children.popup.children.adhocRebateCardRoadCutForward.children.ForwardContainerRoadCutForward.children",
+    state,
+    dispatch,
+    "roadcutnoc-search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -1120,7 +1151,6 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
       let errorMessage = {
         labelName:
           "Amount Should be Greater Than 0 ",
-        //labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
@@ -1136,10 +1166,12 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
 };
 const updateAdhocRoadCutApprove = (state, dispatch) => {
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
-
+  let isFormValid = validateFields(
+    "components.adhocDialog1.children.popup.children.adhocRebateCardCeRoadCutApprove.children.ContainerCeRoadCutApprove.children",
+    state,
+    dispatch,
+    "roadcutnoc-search-preview"
+  );
   if (isFormValid) {
     dispatch(toggleSpinner());
     const remarks = get(
@@ -1169,10 +1201,15 @@ const updateAdhocRoadCutApprove = (state, dispatch) => {
   }
 };
 const updateAdhocRoadCutReject = (state, dispatch) => {
+  let isFormValid = validateFields(
+    "components.adhocDialog3.children.popup.children.adhocRebateCardCeRoadCutReject.children",
+    state,
+    dispatch,
+    "roadcutnoc-search-preview"
+  );
 
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+
+
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -1225,9 +1262,12 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
   }
 };
 const updateAdhocRoadCutReassign = (state, dispatch) => {
-  let validatestepformflag = popupvalidate()
-  let isFormValid = validatestepformflag[0];
-  let hasFieldToaster = validatestepformflag[1];
+  let isFormValid = validateFields(
+    "components.adhocDialog2.children.popup.children.SellMeatReassignCard.children.SellMeatReassignContainer.children",
+    state,
+    dispatch,
+    "roadcutnoc-search-preview"
+  );
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -1393,11 +1433,11 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         penaltyReason: getSelectField({
           label: {
             labelName: "Select Gateway"
-            // labelKey: "NOC_SELECT_GATEWAY"
+
           },
           placeholder: {
             labelName: "Select Gateway"
-            //labelKey: "NOC_SELECT_GATEWAY"
+
           },
           gridDefination: {
             xs: 12,
@@ -1440,7 +1480,8 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           style: {
             width: "140px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -1468,7 +1509,8 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           color: "primary",
           style: {
             width: "140px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -1485,7 +1527,6 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
     }
   }
 });
-
 
 
 export const adhocPopup1 = getCommonContainer({
@@ -1581,7 +1622,6 @@ export const adhocPopup1 = getCommonContainer({
   adhocRebateCard: getCommonContainer(
     {
       documentDetails,
-
       rebateAmountAndReasonContainer: getCommonContainer({
 
         rebateReason: getTextField({
@@ -1665,7 +1705,8 @@ export const adhocPopup1 = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -1694,7 +1735,8 @@ export const adhocPopup1 = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -1711,6 +1753,7 @@ export const adhocPopup1 = getCommonContainer({
     }
   }
 });
+
 
 export const adhocPopup2 = getCommonContainer({
   header: {
@@ -1803,10 +1846,10 @@ export const adhocPopup2 = getCommonContainer({
 
   adhocRebateCard: getCommonContainer(
     {
-
+      documentDetails,
       rebateReaassignContainer: getCommonContainer({
 
-        documentDetails,
+
 
         rebateReaasignField: getTextField({
           label: {
@@ -1864,7 +1907,8 @@ export const adhocPopup2 = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -1892,7 +1936,8 @@ export const adhocPopup2 = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2080,7 +2125,8 @@ export const adhocPopup3 = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2105,7 +2151,8 @@ export const adhocPopup3 = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2218,11 +2265,11 @@ export const adhocPopup4 = getCommonContainer({
 
 
     {
-
+      documentDetails,
       rebateRejectContainer: getCommonContainer({
 
 
-        documentDetails,
+
         rebateRejectField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2281,7 +2328,8 @@ export const adhocPopup4 = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2310,7 +2358,8 @@ export const adhocPopup4 = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2530,7 +2579,7 @@ export const adhocPopup4 = getCommonContainer({
 //   }
 // });
 
-//advertisement forward for OSD
+
 export const adhocPopupAdvertisementForward = getCommonContainer({
   header: {
     uiFramework: "custom-atoms",
@@ -2623,6 +2672,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
   adhocPopupAdvertisementForwardRemarkCard: getCommonContainer(
     {
       documentDetails,
+
       advertisementForwardRemarkContainer: getCommonContainer({
         employeeList: getSelectField({
           label: {
@@ -2650,7 +2700,8 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           visible: false,
           required: false,
         }),
-        advertisementJEXForwardRemarkField: getTextField({
+
+        advertisementForwardRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
             labelKey: "NOC_ADVERTISEMENT_JEX_FORWARD_REMARK_LABEL"
@@ -2669,6 +2720,7 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
             }
           },
           props: {
+
             className: "textfield-enterable-selection",
             multiline: true,
             rows: "4"
@@ -2676,13 +2728,16 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           jsonPath: "advertisement[0].Forward.Remark",
           required: true,
           pattern: getOPMSPattern("Remarks"),
+
         }),
+
         downloadcard: {
           uiFramework: "custom-molecules-local",
           moduleName: "egov-opms",
           componentPath: "SampleDownload"
         },
       }),
+
     },
     {
       style: {
@@ -2708,7 +2763,8 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2736,7 +2792,8 @@ export const adhocPopupAdvertisementForward = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2845,8 +2902,9 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
 
   adhocPopupAdvertisementJEXReassignRemarkCard: getCommonContainer(
     {
+      documentDetails,
       advertisementJEXReassignRemarkContainer: getCommonContainer({
-        documentDetails,
+
         advertisementJEXReassignRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -2907,7 +2965,8 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -2935,7 +2994,8 @@ export const adhocPopupAdvertisementReassign = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3044,8 +3104,9 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
 
   adhocPopupAdvertisementCommissionerRejectRemarkCard: getCommonContainer(
     {
+      documentDetails,
       advertisementCommissionerRejectRemarkContainer: getCommonContainer({
-        documentDetails,
+
         advertisementCommissionerRejectRemarkField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3106,7 +3167,8 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3134,7 +3196,8 @@ export const adhocPopupAdvertisementReject = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3302,7 +3365,8 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3326,7 +3390,8 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3344,236 +3409,9 @@ export const adhocPopupAdvertisementApprove = getCommonContainer({
   }
 });
 
-// export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
-//   header: {
-//     uiFramework: "custom-atoms",
-//     componentPath: "Container",
-//     props: {
-//       style: {
-//         width: "100%",
-//         float: "right"
-//       }
-//     },
-//     children: {
-//       div1: {
-//         uiFramework: "custom-atoms",
-//         componentPath: "Div",
-//         gridDefination: {
-//           xs: 10,
-//           sm: 10
-//         },
-//         props: {
-//           style: {
-//             width: "100%",
-//             float: "right"
-//           }
-//         },
-//         children: {
-//           div: getCommonHeader(
-//             {
-//               labelName: "Remarks",
-//               labelKey: "NOC_REMARKS_ADVERTISEMENT"
-//             },
-//             {
-//               style: {
-//                 fontSize: "20px"
-//               }
-//             }
-//           )
-//         }
-//       },
-//       div2: {
-//         uiFramework: "custom-atoms",
-//         componentPath: "Div",
-//         gridDefination: {
-//           xs: 2,
-//           sm: 2
-//         },
-//         props: {
-//           style: {
-//             width: "100%",
-//             float: "right",
-//             cursor: "pointer"
-//           }
-//         },
-//         children: {
-//           closeButton: {
-//             componentPath: "Button",
-//             props: {
-//               style: {
-//                 float: "right",
-//                 marginRight: "-15px",
-//                 paddingRight: "0px",
-//                 color: "rgba(0, 0, 0, 0.60)"
-//               }
-//             },
-//             children: {
-//               previousButtonIcon: {
-//                 uiFramework: "custom-atoms",
-//                 componentPath: "Icon",
-//                 props: {
-//                   iconName: "close"
-//                 }
-//               }
-//             },
-//             onClickDefination: {
-//               action: "condition",
-//               callBack: (state, dispatch) => {
-//                 showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
-//                 window.location.reload();
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   },
-
-//   adhocPopupAdvertisementOSDWithdraApprovalAmountCard: getCommonContainer(
-//     {
-//       advertisementOSDWithdraApprovalAmountContainer: getCommonContainer({
-//         documentDetails,
-//         advertisementOSDWithdraApprovalAmountField: getTextField({
-
-//           label: {
-//             labelName: "Enter Amount",
-//             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
-//           },
-//           placeholder: {
-//             labelName: "Enter Amount",
-//             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
-//           },
-//           gridDefination: {
-//             xs: 12,
-//             sm: 12
-//           },
-//           props: {
-//             style: {
-//               width: "100%"
-//             }
-//           },
-//           jsonPath: "advertisement[0].WithdraApproval.Amount",
-//           required: true,
-//           pattern: getPattern("Amountopms"),
-
-//         }),
-
-//       })
-//     },
-//     {
-//       style: {
-//         marginTop: "24px"
-//       }
-//     }
-//   ),
-//   adhocPopupAdvertisementCommissionerWithdrawApproveRemarkCard: getCommonContainer(
-//     {
-//       advertisementCommissionerWithdrawApproveRemarkContainer: getCommonContainer({
-
-//         advertisementCommissionerWithdrawApproveRemarkField: getTextField({
-//           label: {
-//             labelName: "Enter Remarks",
-//             labelKey: "NOC_ADVERTISEMENT_COMMISSIONER_APPROVE_REMARK_LABEL"
-//           },
-//           placeholder: {
-//             labelName: "Enter Remarks",
-//             labelKey: "NOC_ADVERTISEMENT_COMMISSIONER_APPROVE_REMARK_LABEL"
-//           },
-//           gridDefination: {
-//             xs: 12,
-//             sm: 12
-//           },
-//           props: {
-//             style: {
-//               width: "100%"
-//             }
-//           },
-//           props: {
-
-//             className: "textfield-enterable-selection",
-//             multiline: true,
-//             rows: "4"
-//           },
-//           jsonPath: "advertisement[0].WithdraApproval.Remark",
-
-//           required: true,
-//           pattern: getOPMSPattern("Remarks"),
-
-//         }),
-//         downloadcard: {
-//           uiFramework: "custom-molecules-local",
-//           moduleName: "egov-opms",
-//           componentPath: "SampleDownload"
-//         },
-//       })
-//     },
-//     {
-//       style: {
-//         marginTop: "24px"
-//       }
-//     }
-//   ),
-//   div: {
-//     uiFramework: "custom-atoms",
-//     componentPath: "Div",
-//     props: {
-//       style: {
-//         width: "100%",
-//         // textAlign: "right"
-//       }
-//     },
-//     children: {
-//       cancelButton: {
-//         componentPath: "Button",
-//         props: {
-//           variant: "outlined",
-//           color: "primary",
-//           style: {
-//             width: "180px",
-//             height: "48px",
-//             marginRight: "16px"
-//           }
-//         },
-//         children: {
-//           previousButtonLabel: getLabel({
-//             labelName: "CANCEL",
-//             labelKey: "NOC_CANCEL_ADVERTISEMENT"
-//           })
-//         },
-//         onClickDefination: {
-//           action: "condition",
-//           callBack: (state, dispatch) => {
-//             showHideAdhocPopup(state, dispatch, "advertisementnoc-search-preview")
-//             window.location.reload();
-//           }
-//         }
-//       },
-//       addButton: {
-//         componentPath: "Button",
-//         props: {
-//           variant: "contained",
-//           color: "primary",
-//           style: {
-//             width: "180px",
-//             height: "48px"
-//           }
-//         },
-//         children: {
-//           previousButtonLabel: getLabel({
-//             labelName: "Submit",
-//             labelKey: "NOC_SUBMIT_ADVERTISEMENT"
-//           })
-//         },
-//         onClickDefination: {
-//           action: "condition",
-//           callBack: updateAdhocAdvWithdrawApp
-//         }
-//       }
-//     }
-//   }
-// });
 
 //osd withdraw popup
+
 export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
   header: {
     uiFramework: "custom-atoms",
@@ -3658,11 +3496,11 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
       }
     }
   },
+
   adhocPopupAdvertisementOSDWithdraApprovalAmountCard: getCommonContainer(
     {
       documentDetails,
       advertisementOSDWithdraApprovalAmountContainer: getCommonContainer({
-
         employeeList: getSelectField({
           label: {
             labelName: "Select Role",
@@ -3690,6 +3528,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           required: false
         }),
         advertisementOSDWithdraApprovalAmountField: getTextField({
+
           label: {
             labelName: "Enter Amount",
             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
@@ -3710,7 +3549,9 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           jsonPath: "advertisement[0].WithdraApproval.Amount",
           required: true,
           pattern: getPattern("Amountopms"),
+
         }),
+
       })
     },
     {
@@ -3742,6 +3583,7 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
             }
           },
           props: {
+
             className: "textfield-enterable-selection",
             multiline: true,
             rows: "4"
@@ -3783,7 +3625,8 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3807,7 +3650,8 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -3824,7 +3668,6 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
     }
   }
 });
-
 
 
 //sellmeat
@@ -3919,9 +3762,9 @@ export const SellMeatForward = getCommonContainer({
 
   SellMeatForwardCard: getCommonContainer(
     {
-
+      documentDetails,
       SellMeatForwardContainer: getCommonContainer({
-        documentDetails,
+
         SellMeatForwardField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -3978,7 +3821,8 @@ export const SellMeatForward = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4006,7 +3850,8 @@ export const SellMeatForward = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4116,10 +3961,11 @@ export const SellMeatReassign = getCommonContainer({
 
   SellMeatReassignCard: getCommonContainer(
     {
+      documentDetails,
 
       SellMeatReassignContainer: getCommonContainer({
 
-        documentDetails,
+
         SellMeatReassignField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -4176,7 +4022,8 @@ export const SellMeatReassign = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4204,7 +4051,8 @@ export const SellMeatReassign = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4375,7 +4223,8 @@ export const SellMeatApprove = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4399,7 +4248,8 @@ export const SellMeatApprove = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4509,10 +4359,10 @@ export const SellMeatReject = getCommonContainer({
 
   SellMeatRejectCard: getCommonContainer(
     {
+      documentDetails,
 
       SellMeatRejectContainer: getCommonContainer({
 
-        documentDetails,
         SellMeatRejectField: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -4571,7 +4421,8 @@ export const SellMeatReject = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4599,7 +4450,8 @@ export const SellMeatReject = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4709,9 +4561,9 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
 
   adhocRebateCardRoadCutForward: getCommonContainer(
     {
-
+      documentDetails,
       ForwardContainerRoadCutForward: getCommonContainer({
-        documentDetails,
+
         RoadCutForwardAmount: getTextField({
           label: {
             labelName: "Enter Amount",
@@ -4848,7 +4700,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4876,7 +4729,8 @@ export const adhocPopupForJeRoadCutForward = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -4988,10 +4842,10 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
 
   adhocRebateCardRoadCutReassign: getCommonContainer(
     {
-
+      documentDetails,
       ContainerRoadCutReassign: getCommonContainer({
 
-        documentDetails,
+
 
         FieldRoadCutReassignRemarks: getTextField({
           label: {
@@ -5049,7 +4903,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5078,7 +4933,8 @@ export const adhocPopupForJeRoadCutReassign = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5246,7 +5102,8 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5270,7 +5127,8 @@ export const adhocPopupForCeRoadCutApprove = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5382,9 +5240,9 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
 
   adhocRebateCardCeRoadCutReject: getCommonContainer(
     {
-
+      documentDetails,
       ContainerCeRoadCutReject: getCommonContainer({
-        documentDetails,
+
         FieldCeRoadCutRejectRemarks: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -5441,7 +5299,8 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5469,7 +5328,8 @@ export const adhocPopupForCeRoadCutReject = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5579,9 +5439,9 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
 
   adhocRebateCardSeRoadCutForward: getCommonContainer(
     {
-
+      documentDetails,
       ContainerSeRoadCutForward: getCommonContainer({
-        documentDetails,
+
         FieldSeRoadCutForwardRemarks: getTextField({
           label: {
             labelName: "Enter Remarks",
@@ -5638,7 +5498,8 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5666,7 +5527,8 @@ export const adhocPopupForSeRoadCutForward = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5831,7 +5693,8 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
           style: {
             width: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -5855,7 +5718,8 @@ export const adhocPopupAdvertisementWithdraw = getCommonContainer({
           color: "primary",
           style: {
             width: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
