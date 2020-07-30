@@ -126,10 +126,7 @@ const callBackForNext = async(state, dispatch) => {
 
 const callBackForNextTransitImages = async(state, dispatch) => {
 
-      let validatestepformflag = false ; 
         let uploadFlag = false;
-  
-
         let activeStep = 1;
         let isFormValid = true;
   
@@ -149,14 +146,11 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         dispatch,
         "transit-site-images"
       )
-      if(1) {
+      if(!!isOwnerDetailsValid && !!isImageDetailsValid) {
         const propertyId = get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications[0].property.id");
         let res = true;
         if(!propertyId) {
-          // console.log(`HERE ${res}`);
           res = await getDetailsFromPropertyTransit(state, dispatch)
-          // res = true;
-          
         }
         if(!!res) {
           console.log(`HERE SEEE ${res}`);
@@ -164,21 +158,15 @@ const callBackForNextTransitImages = async(state, dispatch) => {
           console.log(`HERE  ${applytrans}`);
           if(!applytrans){
             return
-            
           }
         } 
         else {
-          
-          
-          return
-          
+          return 
         }
       }
      else{
        isFormValid = false;
      } 
-    
-    
     } 
 
     isFormValid = await submittransitsiteimages(state, dispatch);
@@ -187,7 +175,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "PropertyImagesApplications[0]"
       );
-      moveToSuccessTransit(transitData, dispatch);
+      moveToSuccess(transitData, dispatch);
       }
 
     if (!isFormValid && !uploadFlag) {
@@ -199,8 +187,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
       };
       
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    } 
-  
+    }   
 }
 
 const callBackForNextDuplicate = async(state, dispatch) => {
