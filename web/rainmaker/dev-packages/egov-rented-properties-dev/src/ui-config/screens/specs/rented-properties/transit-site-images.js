@@ -13,7 +13,6 @@ const header = getCommonHeader({
 });
 
 
-
 const uploadTransitImages = {
     uiFramework: "material-ui",
     name: "transit-site-images",
@@ -44,10 +43,8 @@ const uploadTransitImages = {
                           }
                     }
                 },
-                // stepper,
+    
                 formwizardFirstStep: formwizardTransitSiteImagesFirstStep,
-                // formwizardSecondStep: formwizardOwnershipSecondStep,
-                // formwizardThirdStep: formwizardOwnershipThirdStep,
                 footer: transitsiteimagefooter
                
             }
