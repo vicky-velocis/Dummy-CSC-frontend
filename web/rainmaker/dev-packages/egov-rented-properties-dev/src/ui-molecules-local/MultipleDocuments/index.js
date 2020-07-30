@@ -1,3 +1,35 @@
+// import React, { Component } from "react";
+// import Label from "egov-ui-framework/ui-containers/LabelContainer";
+// import Card from "@material-ui/core/Card";
+// import Typography from "@material-ui/core/Typography"
+// import CardContent from "@material-ui/core/CardContent";
+// import Grid from "@material-ui/core/Grid";
+// import { withStyles } from "@material-ui/core/styles";
+// import { checkValueForNA } from "egov-ui-framework/ui-config/screens/specs/utils";
+// import get from "lodash/get";
+
+// const styles = {
+//     card: {
+//       paddingTop: 8,
+//       borderRadius: "inherit"
+//     }
+//   };
+
+// class MultipleDocuments extends Component {
+
+//   render() {
+//       const {data = [], contents, classes} = this.props
+//       console.log("documentsdata",data)
+//       return (
+//           <div>
+//             {data[0].applicationDocuments[0].id}
+//           </div>
+//       )
+//   }
+// }
+
+// export default withStyles(styles)(MultipleDocuments)
+
 import React, { Component } from "react";
 import Label from "egov-ui-framework/ui-containers/LabelContainer";
 import Card from "@material-ui/core/Card";
@@ -50,7 +82,7 @@ const styles = {
                     <Card className={classes.card}>
                     <CardContent>
                     <Grid container>
-                        {contents.map((content) => (
+                        {datum.applicationDocuments.map((content) => (
                             <Grid xs={6} sm={3} 
                             style={{
                                 marginBottom: "8px",
@@ -60,18 +92,18 @@ const styles = {
                             <Grid xs={12} sm={12}>
                             <Typography variant="caption">
                             <Label
-                              labelKey={content.label}
+                              labelKey={content.fileStoreId}
                             //   fontSize={14}
                             />
                             </Typography>
                             </Grid>
                             <Grid xs={12} sm={12}>
                             <Typography variant="body2">
-                            <Label
+                            {/* <Label
                               labelKey={this.generateLabelKey(content, datum)}
                             //   fontSize={14}
                               checkValueForNA={checkValueForNA}
-                            />
+                            /> */}
                             </Typography>
                             </Grid>
                             </Grid>)

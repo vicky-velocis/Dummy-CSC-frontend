@@ -119,7 +119,7 @@ import {
 //     })
 // }
 
-export const getReviewDocuments = (isEditable = true, screenKey, sourceJsonPath = "PropertiesTemp[0].reviewDocData") => {
+export const getReviewDocuments = (isEditable = true, screenKey, sourceJsonPath = "Images") => {
     return getCommonGrayCard({
       headerDiv: {
         uiFramework: "custom-atoms",
@@ -130,48 +130,14 @@ export const getReviewDocuments = (isEditable = true, screenKey, sourceJsonPath 
               xs: 12,
               sm: 10
             },
-            ...getCommonSubHeader({
-              labelName: "Documents",
-              labelKey: "TL_COMMON_DOCS"
-            })
-          },
-          searchButton: {
-            componentPath: "Button",
-            gridDefination: {
-              xs: 12,
-              sm: 12,
-              align: "right"
-            },
-            props: {
-              variant: "contained",
-              style: {
-                color: "white",
-                backgroundColor: "#fe7a51",
-                borderColor:"#fe7a51",
-                borderRadius: "2px",
-                width: "20%",
-                height: "48px",
-              }
-            },
-            children: {
-              buttonLabel: getLabel({
-                labelName: "Notice For Violation",
-                labelKey: "RP_VIOLATION_NOTICE_BUTTON"
-              })
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) => {
-                dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`));
-              }
-            }
           },
           documents: {
             uiFramework: "custom-containers-local",
             moduleName: "egov-rented-properties",
-            componentPath: "DownloadFileContainer",
+            componentPath: "MultipleDocumentsContainer",
             props: {
               sourceJsonPath,
+              businessService:"RP",
               className: "review-documents"
             }
           }

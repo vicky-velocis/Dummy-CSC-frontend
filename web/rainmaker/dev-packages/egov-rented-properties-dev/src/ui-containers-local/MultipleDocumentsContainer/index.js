@@ -1,25 +1,33 @@
 import React, { Component } from "react";
-import MultipleOwners from "../../ui-molecules-local/MultipleOwners";
+import MultipleDocuments from "../../ui-molecules-local/MultipleDocuments";
 import { connect } from "react-redux";
 import get from "lodash/get";
-
+import {
+    getQueryArg,
+    getFileUrl,
+    getFileUrlFromAPI
+  } from "egov-ui-framework/ui-utils/commons";
+import { func } from "prop-types";
+  
 class MultipleDocumentsContainer extends Component {
     render() {
         const {data, ...rest} = this.props
+        console.log("container",data)
         return(
             <MultipleDocuments data={data} {...rest}/>
+            // <h1>testing</h1>
         )
     }
 }
 
 const mapStateToProps = (state, props) => {
     const { screenConfiguration } = state;
-    const data = get(
+    let data = get(
         screenConfiguration.preparedFinalObject,
-        props.jsonPath,
+        props.sourceJsonPath,
         []
-      ); 
-    return {data}
+    ); 
+  return {data}
 }
 
 
