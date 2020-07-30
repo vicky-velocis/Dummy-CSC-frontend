@@ -942,6 +942,10 @@ const fullAddressField = {
   },
   minLength: 1,
   maxLength: 100,
+  props:{
+        multiline: true,
+        rows: "2"
+      },
   required: true,
   visible: false,
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
@@ -1134,6 +1138,10 @@ const particularsOfAreaField = {
   visible: false,
   minLength: 1,
   maxLength: 100,
+  props:{
+    multiline: true,
+    rows: "2"
+  },
   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.particularsOfArea"
 }
 
@@ -1165,6 +1173,10 @@ const completeResidentialAddressField = {
     minLength: 1,
     maxLength: 100,
     required: true,
+    props:{
+        multiline: true,
+        rows: "2"
+    },
     jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1"
 }
 
@@ -1181,6 +1193,10 @@ const permanentAddressField = {
     minLength: 1,
     maxLength: 100,
     required: true,
+    props:{
+        multiline: true,
+        rows: "2"
+    },
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
 }
 
