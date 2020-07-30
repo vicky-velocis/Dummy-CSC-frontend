@@ -1,5 +1,6 @@
 import pdfMakeCustom from "pdfmake/build/pdfmake";
 import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import _ from "lodash";
 import {getMessageFromLocalization} from "./receiptTransformer";
 import pdfFonts from "./vfs_fonts";
@@ -13,7 +14,7 @@ import { downloadCertificateForm } from "./index";
 import { download } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 
-
+const userInfo = JSON.parse(getUserInfo());
 // pdfMakeCustom.fonts = {
 //   Camby:{
 //           normal: 'Cambay-Regular.ttf',
@@ -1051,7 +1052,7 @@ const generateReceipt = async (state, dispatch, type) => {
       // certificate_data && pdfMakeCustom.createPdf(certificate_data).print();
       break;
     case "receipt_download":
-      download(receiptQueryString, Licenses, transformedData);
+      download(receiptQueryString, Licenses, transformedData, userInfo.name);
 
     //   let receipt_data = getReceiptData(transformedData, ulbLogo);
     //   receipt_data &&
@@ -1059,7 +1060,7 @@ const generateReceipt = async (state, dispatch, type) => {
     //     pdfMakeCustom.createPdf(receipt_data).open();
       break;
     case "receipt_print":
-      download(receiptQueryString, Licenses, transformedData, "print");
+      download(receiptQueryString, Licenses, transformedData, userInfo.name, "print");
 
       // receipt_data = getReceiptData(transformedData, ulbLogo);
       // receipt_data && pdfMakeCustom.createPdf(receipt_data).print();

@@ -57,6 +57,11 @@ const WorkFlowContainer = Loadable({
   loading: () => <Loading />
 })
 
+const TaskStatusContainer = Loadable({
+  loader: () => import("./TaskStatusContainer"),
+  loading: () => <Loading />
+})
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -69,5 +74,6 @@ export {
   ViewBreakupContainer,
   DialogContainer,
   ResubmitActionContainer,
-  WorkFlowContainer
+  WorkFlowContainer,
+  TaskStatusContainer
 };

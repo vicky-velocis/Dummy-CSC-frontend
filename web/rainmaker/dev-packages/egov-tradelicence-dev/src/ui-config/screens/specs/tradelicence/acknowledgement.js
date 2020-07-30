@@ -49,7 +49,7 @@ const abc=(  state,
                 const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
                 const documents = LicensesTemp[0].reviewDocData;
                 set(Licenses[0],"additionalDetails.documents", documents)
-                downloadAcknowledgementForm(Licenses);
+                downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
               }
             },
           },
@@ -65,7 +65,7 @@ const abc=(  state,
             const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
             const documents = LicensesTemp[0].reviewDocData;
             set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses);
+            downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
           }
         },
       },
@@ -91,7 +91,7 @@ const abc=(  state,
               const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
               const documents = LicensesTemp[0].reviewDocData;
               set(Licenses[0],"additionalDetails.documents", documents)
-              downloadAcknowledgementForm(Licenses,'print');
+              downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData, 'print');
             }
           },
 
@@ -108,7 +108,7 @@ const abc=(  state,
             const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
             const documents = LicensesTemp[0].reviewDocData;
             set(Licenses[0],"additionalDetails.documents", documents)
-            downloadAcknowledgementForm(Licenses,'print');
+            downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
           }
         },
       }
@@ -365,8 +365,13 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName:
-                "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
+                "Payment is collected successfully.",
               labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
+            },
+            subheader: {
+              labelName:
+                "Now you can dowload and issue Trade License Certificate to citizen.",
+              labelKey: "TL_CONFIRMATION_MESSAGE_SUB_HEADER"
             },
             body: {
               labelName:
@@ -390,6 +395,38 @@ const getAcknowledgementCard = (
     };
   } else if (purpose === "approve" && status === "success") {
     return {
+      header: getCommonHeader({
+        labelName: `Application for Trade License ${financialYearText}`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is Approved Successfully",
+              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+            },
+            body: {
+              labelName:
+                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+    /* return {
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
@@ -430,9 +467,36 @@ const getAcknowledgementCard = (
         }
       },
       approvalSuccessFooter
-    };
+    }; */
   } else if (purpose === "sendback" && status === "success") {
     return {
+      header: getCommonHeader({
+        labelName: `Application for Trade License ${financialYearText}`,
+        labelKey: "TL_APPLICATION_TRADE_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back Successfully",
+              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+    /* return {
       header: getCommonContainer({
         header: getCommonHeader({
           labelName: `Trade License Application ${financialYearText}`,
@@ -473,7 +537,7 @@ const getAcknowledgementCard = (
         }
       },
       approvalSuccessFooter
-    };
+    }; */
   }else if (purpose === "sendbacktocitizen" && status === "success") {
     return {
       header: getCommonContainer({

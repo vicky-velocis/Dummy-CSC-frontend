@@ -119,7 +119,7 @@ class ActionDialog extends React.Component {
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={false}
+        maxWidth="sm"
         style={{zIndex:2000}}
       >
         <DialogContent
@@ -168,7 +168,7 @@ class ActionDialog extends React.Component {
                     >
                       <TextFieldContainer
                         select={true}
-                        style={{ marginRight: "15px" }}
+                        style={{ marginRight: "15px", width: "90%" }}
                         label={fieldConfig.approverName.label}
                         placeholder={fieldConfig.approverName.placeholder}
                         data={dropDownData}
@@ -187,7 +187,7 @@ class ActionDialog extends React.Component {
                     </Grid>
                   )}
                   <Grid item sm="12">
-                    <TextFieldContainer
+                    {/* <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
                       label={fieldConfig.comments.label}
                       onChange={e =>
@@ -195,7 +195,9 @@ class ActionDialog extends React.Component {
                       }
                       jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
-                    />
+                    /> */}
+                    <label className="commentsLabel">{fieldConfig.comments.label.labelName}</label>
+                    <textarea className="form-control comments" rows="5" placeholder={fieldConfig.comments.placeholder.labelName} onChange={e => handleFieldChange(`${dataPath}.comment`, e.target.value)}/>
                   </Grid>
                   <Grid item sm="12">
                     <Typography

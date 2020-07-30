@@ -119,10 +119,11 @@ export const paymentSuccessFooter = (
               componentPath: "MenuButton",
               props: {
                 data: {
-                  label: "Download",
+                  label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+                  // label: "Download",
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
+                  props: { variant: "outlined", style: { height: "48px", color : "#FE7A51", marginRight: "10px" }, className: "tl-download-button" },
                   menu: downloadMenu
                 }
               }
@@ -133,10 +134,11 @@ export const paymentSuccessFooter = (
               componentPath: "MenuButton",
               props: {
                 data: {
-                  label: "Print",
+                  label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+                  // label: "Print",
                   leftIcon: "print",
                   rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
+                  props: { variant: "outlined", style: { height: "48px", color : "#FE7A51" }, className: "tl-print-button" },
                   menu: printMenu
                 }
               }

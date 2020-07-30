@@ -111,6 +111,11 @@ const tradeLicenseSearchAndResult = {
           moduleName: "egov-tradelicence",
           componentPath: "HowItWorks"
         }
+      },
+      props: {
+        style: {
+          padding: "0px 8px"
+        }
       }
     },
     // div: {
