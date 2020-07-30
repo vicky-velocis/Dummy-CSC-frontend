@@ -9,10 +9,10 @@ import {
 import { Dialog, DialogContent } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { withStyles } from "@material-ui/core/styles";
-import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { get } from "lodash";
+import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 
 const styles = theme => ({
   root: {
@@ -20,6 +20,11 @@ const styles = theme => ({
     width: "100%"
   }
 });
+
+const getEpochForDate = (date) => {
+  const dateSplit = date.split("-");
+  return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
+};
 
 const fieldConfig = {
   approverName: {
@@ -143,6 +148,36 @@ class ActionDialog extends React.Component {
   //   }
   // };
 
+ onButtonClick = (buttonLabel, isDocRequired) => {
+    let {state, dataPath, toggleSnackbar} = this.props
+    dataPath = `${dataPath}[0]`
+    const data = get(state.screenConfiguration.preparedFinalObject, dataPath) || []
+    const applicationState = data.applicationState
+    const duplicateCopyApplicationState = data.state    
+  if(this.props.moduleName === "OwnershipTransferRP" && (applicationState === "OT_PENDINGSAVERIFICATION" || applicationState === "OT_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") ) {
+    const value = applicationState === "OT_PENDINGSAVERIFICATION" ? data.ownerDetails.dueAmount : data.ownerDetails.aproCharge
+    if(!value) {
+      toggleSnackbar(
+              true,
+              { labelName: "Please enter all required fields", labelKey: "Please enter all required fields"},
+              "error"
+            );
+      return
+    }
+  } else if(this.props.moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "DC_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT")) {
+    const value = duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? data.applicant[0].feeAmount : data.applicant[0].aproCharge
+    if(!value) {
+      toggleSnackbar(
+              true,
+              { labelName: "Please enter all required fields", labelKey: "Please enter all required fields"},
+              "error"
+            );
+      return
+    }
+  }
+    this.props.onButtonClick(buttonLabel, isDocRequired)
+ }
+
   getButtonLabelName = label => {
     switch (label) {
       case "FORWARD":
@@ -174,8 +209,6 @@ class ActionDialog extends React.Component {
       dataPath,
       state
     } = this.props;
-    console.log(dataPath)
-    console.log(this.props)
     const {
       buttonLabel,
       showEmployeeList,
@@ -285,6 +318,7 @@ class ActionDialog extends React.Component {
                   {moduleName === "OwnershipTransferRP" && (applicationState === "OT_PENDINGSAVERIFICATION" || applicationState === "OT_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
+                      required={true}
                       InputLabelProps={{ shrink: true }}
                       label={applicationState === "OT_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
@@ -299,6 +333,7 @@ class ActionDialog extends React.Component {
                   {moduleName === "DuplicateCopyOfAllotmentLetterRP" && (duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" || duplicateCopyApplicationState === "DC_PENDINGAPRO") && (buttonLabel === "FORWARD" || buttonLabel === "SUBMIT") && (
                     <Grid item sm="12">
                     <TextFieldContainer
+                      required={true}
                       InputLabelProps={{ shrink: true }}
                       label={duplicateCopyApplicationState === "DC_PENDINGSAVERIFICATION" ? fieldConfig.applicationCharges.label : fieldConfig.publicationCharges.label}
                       onChange={e =>
@@ -349,7 +384,7 @@ class ActionDialog extends React.Component {
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.sanctioningDate.label}
                        onChange={e =>
-                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate` , getEpochForDate(e.target.value))
                       }
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].sanctionDate`}
                        />
@@ -360,13 +395,59 @@ class ActionDialog extends React.Component {
                        InputLabelProps={{ shrink: true }}
                        label= {fieldConfig.mortageEndDate.label}
                        onChange={e =>
-                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , e.target.value)
+                        handleFieldChange( `${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate` , getEpochForDate(e.target.value))
                       }
                       jsonPath={`${dataPath}.mortgageApprovedGrantDetails[0].mortgageEndDate`}
                        />   
                      </Grid>
                   )}
-                  
+                  {((moduleName === "OwnershipTransferRP" && applicationState === "OT_PENDINGCLAPPROVAL") || (moduleName === "DuplicateCopyOfAllotmentLetterRP" && duplicateCopyApplicationState === "DC_PENDINGCLAPPROVAL")) && buttonLabel === "REJECT" && (<Grid item sm="12">
+                  <Typography
+                      component="h3"
+                      variant="subheading"
+                      style={{
+                        color: "rgba(0, 0, 0, 0.8700000047683716)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px",
+                        marginBottom: "8px"
+                      }}
+                    >
+                      <div className="rainmaker-displayInline">
+                        <LabelContainer
+                          labelName="Supporting Documents"
+                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
+                        />
+                        {isDocRequired && (
+                          <span style={{ marginLeft: 5, color: "red" }}>*</span>
+                        )}
+                      </div>
+                    </Typography>
+                    <div
+                      style={{
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px"
+                      }}
+                    >
+                      <LabelContainer
+                        labelName="Only .jpg and .pdf files. 5MB max file size."
+                        labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
+                      />
+                    </div>
+                    <UploadMultipleFiles
+                      maxFiles={4}
+                      inputProps={{
+                        accept: "image/*, .pdf, .png, .jpeg"
+                      }}
+                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
+                      jsonPath={`${dataPath}.wfDocuments`}
+                      maxFileSize={5000}
+                    />
+                    </Grid>)}
                     <Grid sm={12} style={{ textAlign: "right" }} className="bottom-button-container">
                       <Button
                         variant={"contained"}
@@ -377,7 +458,7 @@ class ActionDialog extends React.Component {
                         }}
                         className="bottom-button"
                         onClick={() =>
-                          onButtonClick(buttonLabel, isDocRequired)
+                          this.onButtonClick(buttonLabel, isDocRequired)
                         }
                       >
                         <LabelContainer

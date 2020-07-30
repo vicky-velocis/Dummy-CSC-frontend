@@ -282,6 +282,14 @@ export const getMdmsData = async (action, state, dispatch) => {
           ]
         },
         { moduleName: "Pension_RRP", masterDetails: [{ name: "Documents" }] },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
         { 
           moduleName: "pension", 
           masterDetails: 
@@ -576,36 +584,51 @@ export const prepareEditFlow = async (
     );  
      
    }
+   //get set department and degignation
+  let department =
+  get(response, "ProcessInstances[0].employee.assignments[0].department",'') 
+  let degignation =
+  get(response, "ProcessInstances[0].employee.assignments[0].designation",'') 
+
+  if(department)
+  {
+    let deptMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.Department",
+      []
+    );
+    let codeNames = deptMdmsData.filter(x=>x.code ===department)
+    
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames =department;
+
+    set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employee.assignments[0].department", codeNames);
+  }
+  if(degignation)
+  {
+    let desigMdmsData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "applyScreenMdmsData.common-masters.Designation",
+      []
+    );
+    let codeNames = desigMdmsData.filter(x=>x.code ===degignation)
+    if(codeNames && codeNames[0])
+    codeNames = codeNames[0].name;
+    else
+    codeNames =degignation;
+  
+    set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employee.assignments[0].designation", codeNames);
+    
+  }
 //set default value for due function
 
 // set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isDuesPresent", false);
 // set(state,"screenConfiguration.preparedFinalObject.ProcessInstances[0].employeeOtherDetails.isDuesAmountDecided", false);
-let cardIndex=0;
- // Set default for dependent
- let dependents =
- get(response, "ProcessInstances[0].dependents",[]) 
-//  let isDuesPresent =
-//  get(response, "ProcessInstances[0].employeeOtherDetails.isDuesPresent") 
- console.log(dependents)
- console.log("dependents")
-if(dependents) 
-{
-//set gratuity text box and lable based on api responce
-for (let index = 0; index < dependents.length; index++) {
 
-//  alert(dependents[index].isEligibleForPension);
-//    set(action.screenConfig,
-//     "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.PensionEligible.visible"
-//     ,dependents[index].isEligibleForPension);
-//     set(action.screenConfig,
-//           "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityEligible.visible"
-//      ,dependents[index].isEligibleForGratuity);
-//      set(action.screenConfig,
-//        "components.div.children.formwizardFirstStep.children.empDetails.children.cardContent.children.dependentUnitcard.props.items[" + index + "].item" + index + ".children.cardContent.children.dependentUnitcardContainer.children.gratuityPercentage.visible"
-//        ,dependents[index].isEligibleForGratuity);
-   
- }
-} 
+ 
+
 
 
 

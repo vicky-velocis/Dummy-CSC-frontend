@@ -16,7 +16,7 @@ const styles = {
 
 
 function ServiceRequestIdContainer(props) {
-	return <div style={styles}>Service Request Id. {getapplicationNumber()}</div>;
+	return <div style={styles}>Service Request Id. : {getapplicationNumber()}</div>;
 }
 
 export default ServiceRequestIdContainer;

@@ -36,8 +36,24 @@ export const stepper = getStepperObject(
   { props: { activeStep: 2 } },
   stepsData
 );
+import {
+  
+  getCommonApplyFooter,
+ 
+} from "../utils";
 
 
+const undertakingsellmeatButton = getCommonContainer({
+  
+          downloadcard: {
+          uiFramework: "custom-molecules-local",
+              moduleName: "egov-opms",
+              componentPath: "SampleDownloadForSellMeat",
+      
+      visible: true,
+    },
+   
+  });
 
 let roles = JSON.parse(getUserInfo()).roles
 
@@ -117,13 +133,14 @@ export const callBackForCancel = async (state, dispatch) => {
 };
 
 
-var titlebarfooter = getCommonContainer({
+var titlebarfooter = getCommonApplyFooter({
   previousButton: {
     componentPath: "Button",
     props: {
       variant: "outlined",
       color: "primary",
       style: {
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px",
 
@@ -148,41 +165,13 @@ var titlebarfooter = getCommonContainer({
     },
     visible: true
   },
-  resendButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      nextButtonLabel: getLabel({
-        labelName: "RESEND",
-        labelKey: "NOC_RESEND_BUTTON"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition"
-    },
-    visible: false
-  },
   submitButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -335,6 +324,7 @@ const screenConfig = {
         body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary,
+          undertakingsellmeatButton:undertakingsellmeatButton
           //taskStatusSummary:taskStatusSummary
 
         }) : getCommonCard({
@@ -344,8 +334,8 @@ const screenConfig = {
         ,
         break: getBreak(),
         titlebarfooter,
-        citizenFooter:
-          process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
+        // citizenFooter:
+        //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : citizenFooter
       }
     }
   }

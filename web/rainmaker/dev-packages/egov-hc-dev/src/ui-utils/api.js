@@ -8,7 +8,8 @@ const instance = axios.create({
   //baseURL: window.location.origin,
   baseURL: window.location.origin,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "X-Content-Type-Options":"nosniff"
   }
 });
 
@@ -61,7 +62,10 @@ export const httpRequest = async (
   action,
   queryObject = [],
   requestBody = {},
-  headers = [],
+  headers = {
+    "Content-Type": "application/json",
+    "X-Content-Type-Options":"nosniff"
+  },
   customRequestInfo = {}
 ) => {
   store.dispatch(toggleSpinner());
@@ -75,6 +79,7 @@ export const httpRequest = async (
   endPoint = addQueryArg(endPoint, queryObject);
   var response;
   try {
+    // response["X-Powered-By"] = "Express"
     switch (method) {
       case "post":
         response = await instance.post(
@@ -91,6 +96,8 @@ export const httpRequest = async (
     if (responseStatus === 200 || responseStatus === 201) {
       return response.data;
     }
+    // response.set('X-Powered-By',false);
+    // response.set({"X-Frame-Options": "SAMEORIGIN"});
   } catch (error) {
     const { data, status } = error.response;
     if (status === 400 && data === "") {

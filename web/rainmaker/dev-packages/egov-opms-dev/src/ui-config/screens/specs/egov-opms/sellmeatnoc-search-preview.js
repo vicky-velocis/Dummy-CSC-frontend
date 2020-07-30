@@ -8,9 +8,9 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
-  prepareFinalObject,toggleSnackbar
+  prepareFinalObject, toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { localStorageGet, localStorageSet, setapplicationNumber,getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, localStorageSet, setapplicationNumber, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { gotoApplyWithStep } from "../utils/index";
 import {
   getFileUrlFromAPI,
@@ -23,7 +23,6 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchBill } from "../utils/index";
-//import  generatePdf from "../utils/receiptPdf";
 
 import { footer } from "./applyResource/employeeSellMeatFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
@@ -36,7 +35,7 @@ import {
 } from "./summaryResource/sellmeatapplicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { taskStatusSummary } from "./summaryResource/taskStatusSummary";
-import { showHideAdhocPopup ,checkForRole} from "../utils";
+import { showHideAdhocPopup, checkForRole } from "../utils";
 import { SellMeatReassign, SellMeatReject, SellMeatForward, SellMeatApprove } from "./payResource/adhocPopup";
 import {
   getAccessToken,
@@ -50,9 +49,20 @@ import { httpRequest } from "../../../../ui-utils";
 
 
 let roles = JSON.parse(getUserInfo()).roles
- let nocStatus = '';
+let nocStatus = '';
 
 
+const undertakingsellmeatButton = getCommonContainer({
+  
+          downloadcard: {
+          uiFramework: "custom-molecules-local",
+              moduleName: "egov-opms",
+              componentPath: "SampleDownloadForSellMeat",
+      
+      visible:  false,
+    },
+   
+  });
 const undertakingButton1 = getCommonContainer({
   resendButton: {
     componentPath: "Button",
@@ -63,8 +73,8 @@ const undertakingButton1 = getCommonContainer({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius: "inherit",
-        align: "right"
+        // borderRadius: "inherit",
+        // align: "right"
       }
     },
     children: {
@@ -98,7 +108,7 @@ const undertakingButton = getCommonContainer({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
         marginRight: "40px"
       }
@@ -169,7 +179,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-opms",
     componentPath: "ApplicationNoContainer",
     props: {
-      number:getapplicationNumber(), //localStorage.getItem('applicationsellmeatNumber')
+      number: getapplicationNumber(), //localStorage.getItem('applicationsellmeatNumber')
     }
   },
   downloadMenu: {
@@ -180,7 +190,7 @@ const titlebar = getCommonContainer({
         label: "Download",
         leftIcon: "cloud_download",
         rightIcon: "arrow_drop_down",
-        props: { variant: "outlined", style: { marginLeft: 10 } },
+        props: { variant: "outlined", style: { marginLeft: 10, marginTop: 5 } },
         menu: []
       }
     }
@@ -226,7 +236,7 @@ const prepareDocumentsView = async (state, dispatch) => {
       return doc;
     });
     dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-    
+
   }
 };
 
@@ -240,7 +250,6 @@ const setDownloadMenu = (state, dispatch) => {
     label: { labelName: "NOC Certificate PET", labelKey: "NOC_CERTIFICATE_PET" },
     link: () => {
       window.location.href = httpLinkPET;
-      //// generatePdf(state, dispatch, "certificate_download");
     },
     leftIcon: "book"
   };
@@ -261,52 +270,62 @@ const setDownloadMenu = (state, dispatch) => {
 };
 
 const HideshowEdit = (action, nocStatus) => {
-// Hide edit buttons
-let showEdit = false;
-if (nocStatus === "REASSIGN" || nocStatus === "DRAFT")  {
-  showEdit = true;
-}
-set(
-  action,
-  "screenConfig.components.div.children.body.children.cardContent.children.sellmeatapplicantSummary.children.cardContent.children.header.children.editSection.visible",
-  checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
-);
-set(
-  action,
-  "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-  checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
-);
+  // Hide edit buttons
+  let showEdit = false;
+  if (nocStatus === "REASSIGN" || nocStatus === "DRAFT") {
+    showEdit = true;
+  }
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.sellmeatapplicantSummary.children.cardContent.children.header.children.editSection.visible",
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
+  );
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+    checkForRole(roles, 'CITIZEN') ? showEdit === true ? true : false : false
+  );
 
-set(
-  action,
-  "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
-  false
-);
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.taskStatusSummary.children.cardContent.children.header.children.editSection.visible",
+    false
+  );
 
-set(
-  action,
-  "screenConfig.components.div.children.footer.children.previousButton.visible",
-  checkForRole(roles, 'CITIZEN') ?
-          nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
-       true
-    :false
-  :false
+  set(
+    action,
+    "screenConfig.components.div.children.footer.children.previousButton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+        true
+        : false
+      : false
   );
 
   set(
     action,
     "screenConfig.components.div.children.footer.children.submitButton.visible",
     checkForRole(roles, 'CITIZEN') ?
-            nocStatus === "DRAFT" || nocStatus === "REASSIGN"?
-         true
-      :false
-    :false
-    );
-set(
-  action,
-  "screenConfig.components.adhocDialog.children.popup",
-  getRequiredDocuments()
-);
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
+        true
+        : false
+      : false
+  );
+  
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.undertakingsellmeatButton.children.downloadcard.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT"  ?
+        true
+        : false
+      : true
+  );
+  set(
+    action,
+    "screenConfig.components.adhocDialog.children.popup",
+    getRequiredDocuments()
+  );
 }
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
@@ -319,17 +338,18 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
 
   nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   localStorageSet("app_noc_status", nocStatus);
+
   HideshowEdit(action, nocStatus);
 
   prepareDocumentsView(state, dispatch);
 
   if (checkForRole(roles, 'CITIZEN'))
-    setSearchResponseForNocCretificate(state,  dispatch, applicationNumber, tenantId);
+    setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
   //setDownloadMenu(state, dispatch);
 };
 
 let httpLinkPET;
-let httpLinkSELLMEAT="";
+let httpLinkSELLMEAT = "";
 
 const setSearchResponseForNocCretificate = async (
   state,
@@ -340,18 +360,18 @@ const setSearchResponseForNocCretificate = async (
   let downloadMenu = [];
   //nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
   let nocRemarks = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", {});
-   let nocStatus = "";
+  let nocStatus = "";
 
   var resApproved = nocRemarks.filter(function (item) {
     return item.applicationstatus == "APPROVED";
-   });
+  });
 
-   if (resApproved.length != 0)
-     nocStatus = "APPROVED";
-  
+  if (resApproved.length != 0)
+    nocStatus = "APPROVED";
+
   if (nocStatus == "APPROVED") {
     let getCertificateDataForSELLMEAT = { "applicationType": "SELLMEATNOC", "tenantId": tenantId, "applicationId": applicationNumber, "dataPayload": { "requestDocumentType": "certificateData" } };
-    
+
     //SELLMEAT
     const response0SELLMEAT = await getSearchResultsForNocCretificate([
       { key: "tenantId", value: tenantId },
@@ -360,30 +380,30 @@ const setSearchResponseForNocCretificate = async (
       { key: "requestUrl", value: "/pm-services/noc/_getCertificateData" }
     ]);
 
-    if(get(response0SELLMEAT, "ResposneInfo.status", "")==""){
+    if (get(response0SELLMEAT, "ResposneInfo.status", "") == "") {
       let errorMessage = {
         labelName: "No Certificate Information Found",
         labelKey: "" //UPLOAD_FILE_TOAST
       };
       dispatch(toggleSnackbar(true, errorMessage, "error"));
-    }else{
-    let getFileStoreIdForSELLMEAT = { "nocApplicationDetail": [get(response0SELLMEAT, "nocApplicationDetail[0]", "")] }
+    } else {
+      let getFileStoreIdForSELLMEAT = { "nocApplicationDetail": [get(response0SELLMEAT, "nocApplicationDetail[0]", "")] }
 
-    const response1SELLMEAT = await getSearchResultsForNocCretificate([
-      { key: "tenantId", value: tenantId },
-      { key: "applicationNumber", value: applicationNumber },
-      { key: "getCertificateDataFileStoreId", value: getFileStoreIdForSELLMEAT },
-      { key: "requestUrl", value: "/pdf-service/v1/_create?key=sellmeat-noc&tenantId="+tenantId }
-    ]);
+      const response1SELLMEAT = await getSearchResultsForNocCretificate([
+        { key: "tenantId", value: tenantId },
+        { key: "applicationNumber", value: applicationNumber },
+        { key: "getCertificateDataFileStoreId", value: getFileStoreIdForSELLMEAT },
+        { key: "requestUrl", value: "/pdf-service/v1/_create?key=sellmeat-noc&tenantId=" + tenantId }
+      ]);
 
-    const response2SELLMEAT = await getSearchResultsForNocCretificateDownload([
-      { key: "tenantId", value: tenantId },
-      { key: "applicationNumber", value: applicationNumber },
-      { key: "filestoreIds", value: get(response1SELLMEAT, "filestoreIds[0]", "") },
-      { key: "requestUrl", value: "/filestore/v1/files/url?tenantId="+tenantId+"&fileStoreIds=" }
-    ]);
-    httpLinkSELLMEAT = get(response2SELLMEAT, get(response1SELLMEAT, "filestoreIds[0]", ""), "")
-  }
+      const response2SELLMEAT = await getSearchResultsForNocCretificateDownload([
+        { key: "tenantId", value: tenantId },
+        { key: "applicationNumber", value: applicationNumber },
+        { key: "filestoreIds", value: get(response1SELLMEAT, "filestoreIds[0]", "") },
+        { key: "requestUrl", value: "/filestore/v1/files/url?tenantId=" + tenantId + "&fileStoreIds=" }
+      ]);
+      httpLinkSELLMEAT = get(response2SELLMEAT, get(response1SELLMEAT, "filestoreIds[0]", ""), "")
+    }
     //Object creation for NOC's
     let certificateDownloadObjectSELLMEAT = {
       label: { labelName: "NOC Certificate SELLMEAT", labelKey: "NOC_CERTIFICATE_SELLMEAT" },
@@ -419,10 +439,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     setapplicationNumber(applicationNumber); //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
-	 //localStorageSet('applicationsellmeatNumber',applicationNumber);
+    //localStorageSet('applicationsellmeatNumber',applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-   // searchBill(dispatch, applicationNumber, tenantId);
+    // searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId);
 
     const queryObject = [
@@ -431,7 +451,7 @@ const screenConfig = {
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
-    
+
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'popup_sellmeat');
       // prepareDocumentsUploadData(state, dispatch, 'apply_sellmeat');      
@@ -474,19 +494,20 @@ const screenConfig = {
         },
 
         body: checkForRole(roles, 'CITIZEN') ? getCommonCard({
-         
+
           sellmeatapplicantSummary: sellmeatapplicantSummary,
           documentsSummary: documentsSummary,
-		  taskStatusSummary: taskStatusSummary,
-          undertakingButton1
-        }) : 
-        getCommonCard({
-          sellmeatapplicantSummary: sellmeatapplicantSummary,
-          documentsSummary: documentsSummary
-        }),
+          taskStatusSummary: taskStatusSummary,
+          undertakingButton1,
+          undertakingsellmeatButton
+        }) :
+          getCommonCard({
+            sellmeatapplicantSummary: sellmeatapplicantSummary,
+            documentsSummary: documentsSummary
+          }),
         break: getBreak(),
-		
-		
+
+
         // undertakingButton,
         // citizenFooter:
         //   process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

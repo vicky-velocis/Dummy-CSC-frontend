@@ -28,7 +28,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-       // minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
@@ -79,7 +79,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: `${getRedirectionURL()}`
       },
-     
+
     },
     downloadFormButton: {
       componentPath: "Button",
@@ -87,7 +87,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-        //  minWidth: "290px",
+          //  minWidth: "290px",
           height: "48px",
           marginRight: "16px"
         }
@@ -101,7 +101,6 @@ export const applicationSuccessFooter = (
       onClickDefination: {
         action: "condition",
         callBack: () => {
-          // generatePdf(state, dispatch, "application_download");
         }
       },
       visible: false
@@ -112,7 +111,7 @@ export const applicationSuccessFooter = (
         variant: "outlined",
         color: "primary",
         style: {
-       //   minWidth: "170px",
+          //   minWidth: "170px",
           height: "48px",
           marginRight: "45px"
         }
@@ -126,7 +125,6 @@ export const applicationSuccessFooter = (
       onClickDefination: {
         action: "condition",
         callBack: () => {
-          // generatePdf(state, dispatch, "application_print");
         }
       },
       visible: false
@@ -137,9 +135,9 @@ export const applicationSuccessFooter = (
         variant: "contained",
         color: "primary",
         style: {
-        //  minWidth: "170px",
+          //  minWidth: "170px",
           height: "48px",
-         marginRight: "45px"
+          marginRight: "45px"
         }
       },
       children: {
@@ -157,13 +155,13 @@ export const applicationSuccessFooter = (
     makePayment: {
       componentPath: "Button",
       props: {
-       className: "apply-wizard-footer1",
+        className: "apply-wizard-footer1",
         variant: "contained",
         color: "primary",
         style: {
           minWidth: "180px",
           height: "48px",
-        
+
         }
       },
       children: {
@@ -174,7 +172,7 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=NOC`,
+        path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=NOC`,
       },
       roleDefination: {
         rolePath: "user-info.roles",
@@ -195,7 +193,7 @@ export const approvalSuccessFooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-       // minWidth: "200px",
+        // minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }
@@ -233,7 +231,6 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        // generatePdf(state, dispatch, "certificate_download");
       }
     }
   },
@@ -257,7 +254,6 @@ export const approvalSuccessFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        // generatePdf(state, dispatch, "certificate_print");
       }
     }
   }
@@ -273,7 +269,7 @@ export const paymentFailureFooter = (applicationNumber, tenant) => {
         variant: "contained",
         color: "primary",
         style: {
-        //  minWidth: "200px",
+          //  minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -302,7 +298,7 @@ export const paymentSuccessFooter = () => {
         variant: "outlined",
         color: "primary",
         style: {
-       //   minWidth: "200px",
+          //   minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -316,7 +312,6 @@ export const paymentSuccessFooter = () => {
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-          // generatePdf(state, dispatch, "receipt_download");
         }
       }
     },
@@ -326,7 +321,7 @@ export const paymentSuccessFooter = () => {
         variant: "contained",
         color: "primary",
         style: {
-       //   minWidth: "200px",
+          //   minWidth: "200px",
           height: "48px",
           marginRight: "40px"
         }
@@ -340,7 +335,6 @@ export const paymentSuccessFooter = () => {
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-          // generatePdf(state, dispatch, "receipt_print");
         }
       }
     },
@@ -350,7 +344,7 @@ export const paymentSuccessFooter = () => {
         variant: "contained",
         color: "primary",
         style: {
-      //    minWidth: "200px",
+          //    minWidth: "200px",
           height: "48px",
           marginRight: "16px"
         }
@@ -368,7 +362,7 @@ export const paymentSuccessFooter = () => {
             ? `/egov-ui-framework/egov-opms/search`
             : `/`
       },
-       visible: false
+      visible: false
     }
   });
 };

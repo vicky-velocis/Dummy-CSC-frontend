@@ -46,7 +46,7 @@ const PRSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("PublicRelation[0].filterEvent", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterInviteEvent", {}));
-  //  dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
+   dispatch(prepareFinalObject("PublicRelation[0].filterpress", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filtertender", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterpressMaster", {}));
     dispatch(prepareFinalObject("PublicRelation[0].filterLibraryEvent", {}));

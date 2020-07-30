@@ -38,7 +38,7 @@ import {
   furnishResponsePressNote,
 
   getSearchResultsViewPressnotedata,
-    getsampleemailtemplate,
+    getsampleemailtemplate,templateType
 } from "../../../../ui-utils/commons";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -80,10 +80,18 @@ export const formwizardFirstStep = {
    pressNotedocumentDetails,
    break: getBreak(),
 
-   publicationheader: getCommonHeader({
+  //  publicationheader: getCommonHeader({
+    publicationheader: getCommonTitle({
+    
 				labelName: "select publication list",
 				labelKey: "PR_SELECT_PUBLICATION"
-      }),
+      },
+      {
+        style: {
+          marginBottom: 18,
+        }
+      }
+      ),
       break: getBreak(),
       break: getBreak(),
 
@@ -323,6 +331,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "generatepressNote",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("pressnote", {}));
+    dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

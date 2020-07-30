@@ -14,26 +14,44 @@ export const documentDetails = getCommonCard({
   ),
   subText: getCommonParagraph({
     labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
+      "Only image and .pdf files can be uploaded.Max file size 2MB each and 4 files can be uploaded.",
     labelKey: "ROADCUT_DOCUMENT_DETAILS_SUBTEXT_NOC"
+  
   }),
+  
   break: getBreak(),
-  documentList: {
-    uiFramework: "custom-containers-local",
-    moduleName: "egov-opms",
-    componentPath: "DocumentListContainer",
+  
+  upload: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
     props: {
-      buttonLabel: {
-        labelName: "UPLOAD FILE",
-        labelKey: "ROADCUT_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE_NOC"
+      style: {
+        marginLeft: 8
       },
-      description: "Only .jpg and .pdf files. 1MB max file size.",
-      inputProps: {
-        accept: "image/*, .pdf, .png, .jpeg"
-      },
-      maxFileSize: 1000
+    
     },
-    type: "array"
+    required: true,
+    children: {
+      uploadButton: {
+        uiFramework: "custom-molecules",
+        componentPath: "UploadMultipleFiles",
+        props: {
+          maxFiles: 4,
+          jsonPath: "RoadCutDocuments",
+          inputProps: {
+            //accept: ".pdf,.png,.jpeg,.zip,.WAV,.AIFF,.AU,.PCM,.BWF,.mp3,.mpeg,.mp4"
+            accept: ".pdf,.png,.jpeg"
+          },
+          buttonLabel: {
+            labelName: "UPLOAD FILE",
+            labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+          },
+          maxFileSize: 2000,
+          moduleName: "egov-opms",
+          hasLocalization: false
+        }
+      }
+    }
   },
   subText1: getCommonParagraph({
     labelName:

@@ -14,60 +14,153 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
 
   const callBackForNext = async (state, dispatch) => {
    
-    let servicerequestmedia = get(state, "form.newapplication.files.media", []);
+  let servicerequestmedia = get(state, "form.newapplication.files.media", []);
   
-  
-  let media = []
-  let addressDetail = []
-  let services = []
+  let activeStep = 1;
+  let isFormValid = false;
   let hasFieldToaster = false;
-    
-  
-  servicerequestmedia.map((item, index) => {
-    media.push(item.fileStoreId)
-  });
-  
+  let services = [];
+
   
   let serviceRequest = get(state,
     "screenConfiguration.preparedFinalObject.SERVICEREQUEST"
   );
-  
 
   
-  let validatestepformflag = false ; 
-    let uploadFlag = false;
-    // alert(media.length);
-    if(media.length >= 0)
+  let media =[]
+  let uploadImage = get(state, "form.newapplication.files.media", []);
+  uploadImage.map((item, index) => {
+    media.push(item.fileStoreId)
+  });
+
+  
+
+  let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
+
+  let validatestepformflag;
+  let validationPaused;
+
+
+  if (typeOfService== ""){
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+  } 
+   
+
+  
+  if(!typeOfService){
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "ERROR", labelKey: "HC_SERVICE_TYPE_ERROR" },
+        "warning"
+      )
+    );
+  }
+  else if(typeOfService)
+  {
+    validatestepformflag = validatestepform(state, dispatch, serviceRequest);
+    isFormValid = validatestepformflag[0];
+    hasFieldToaster = validatestepformflag[1];
+    validationPaused = validatestepformflag[2];
+    services.push(serviceRequest)
+
+  }
+
+  // Field validation 
+  if(isFormValid === true && validationPaused==false)
+  {
+    let treeCount = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount");
+    let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description");
+    let houseNoAndStreetName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.houseNoAndStreetName");
+    let landmark = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.landmark");
+    let ownerName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.ownerName");
+    let contactNumber = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber");
+    let email = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.email");
+    let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla.label");
+   
+    let validationErrorMsg = ""
+    let flagValidField = true;
+
+   
+
+    if(! /^[0-9][0-9]{0,1}$/.test(treeCount))
     {
-      validatestepformflag = validatestepform(serviceRequest);
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_TREE_COUNT_ERROR" };
+      flagValidField = false;
     }
-    else{
+    else if(! /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/.test(description))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_DESCRIPTION_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(houseNoAndStreetName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(landmark))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z\s\\/\-]{1,256}$/.test(ownerName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_OWNER_NAME_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[0-9]{10}$/.test(contactNumber))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_CONTACT_NUMBER_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(email))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_EMAIL_ERROR" };
+      flagValidField = false;
+    }
+  
+    if(flagValidField === false)
+    {
       dispatch(
         toggleSnackbar(
           true,
-          { labelName: "Upload At least One Image..!", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
+          validationErrorMsg,
           "warning"
         )
-      );
+       );
+      
     }
-  
-    let activeStep = 1;
-    let isFormValid = true;
 
-    isFormValid = validatestepformflag[0];
-    hasFieldToaster = validatestepformflag[1];
-    services.push(serviceRequest)
   
-      if (isFormValid) {
+  
+      if (isFormValid && flagValidField) {
         // let responseStatus = "success";
-        if (activeStep === 1) {
-          
+        if(locality && typeOfService)
+        {
+          let locality = get(state, "screenConfiguration.screenConfig.apply.components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label");
+          let typeOfService = get(state, "screenConfiguration.screenConfig.apply.components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label");
+        }
+
+        if (typeOfService != undefined && locality != undefined )
+    {if (activeStep === 1) { 
           let status = 'INITIATED'
-          serviceRequest['city']= getTenantId(),
-          // serviceRequest['tenantId']= getTenantId(),
+          serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
           serviceRequest['media'] = media,
-          serviceRequest['isEditState'] = 1,
-          serviceRequest['address'] = 'hardcoded value'
+          serviceRequest['isEditState'] = 1
+          try
+          { serviceRequest['mohalla'] = serviceRequest.mohalla["label"]
+         }
+         catch (e){
+           serviceRequest['mohalla'] = serviceRequest.mohalla
+         }
+         try
+           {
+             serviceRequest['serviceType'] = serviceRequest.serviceType["label"]
+            }
+   
+           catch(e){
+             serviceRequest['serviceType'] = serviceRequest.serviceType
+         }
           dispatch(
             handleField(
               "apply",
@@ -75,7 +168,16 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
               "nextButton.visible",
               false
             )
-          );  
+          );
+          
+
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Please Wait While Your request is being Edited", labelKey: "HC_SERVICE_REQUEST_BEING_EDITED" },
+            "warning"
+          )
+        );  
           let response = await EditServiceRequest(state, dispatch, status);
           // debugger;
           
@@ -83,11 +185,17 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
           // let serviceRequestId = get(response, "service_request_id", "");
           let serviceRequestId = getapplicationNumber();
           if (responseStatus == "successful" || responseStatus == "SUCCESSFUL") {
- 
-            if (isFormValid) {
+
+          dispatch(
+            toggleSnackbar(
+              false,
+              { labelName: "Please wait while your request being is generated", labelKey: "HC_SERVICE_REQUEST_BEING_GENERATED" },
+              "warning"
+            )
+          );
               
                 dispatch(setRoute(`/egov-hc/acknowledgementServiceRequestUpdate?serviceRequestId=${serviceRequestId}&isEditState=${1}`));
-            }
+            
           } else {
             dispatch(
               handleField(
@@ -98,11 +206,28 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
               )
             );
             let errorMessage = {
-              labelName: "Submission Falied, Try Again later!",
-              labelKey: "ERR_DEFAULT_INPUT_FIELD_MSG" //UPLOAD_FILE_TOAST
+              labelName: "Submission Failed, Try Again later!",
+              labelKey: "ERR_SERVICE_REQUEST_FAILED_MSG" 
             };
             dispatch(toggleSnackbar(true, errorMessage, "error"));
           }
+        }}else{
+          if(typeOfService ==undefined)
+          {dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "ERROR", labelKey: "HC_SERVICE_TYPE_ERROR" },
+              "warning"
+            )
+          );}
+          if(locality ==undefined)
+          {dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "ERROR", labelKey: "HC_LOCALITY_ERROR" },
+              "warning"
+            )
+          );}
         }
         // responseStatus === "success" && changeStep(state, dispatch);
       } else if (hasFieldToaster) {
@@ -129,6 +254,7 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
         }
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
+    }
     };
  
 
@@ -142,7 +268,7 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
         variant: "contained",
         color: "primary",
         style: {
-          // minWidth: "200px",
+          minWidth: "200px",
           height: "48px",
           marginRight: "45px"
         }
@@ -171,109 +297,166 @@ import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-fra
   });
   
   
-  
-  export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
-    let allAreFilled = true;
-  
+  export const validatestepform = (state, dispatch, isFormValid, hasFieldToaster) => {
 
-  
+    if(window.NodeList && !NodeList.prototype.forEach) {
+      NodeList.prototype.forEach = Array.prototype.forEach;
+      }
+    let allAreFilled = true;
     let error= false;
-    //Types of Service Request
-      //servicerequest form
-  // debugger;
-      
+    let flagValidFields= false;
+    let validationPause =false;
   
-     document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
-      // alert("inside validate form")
-      if (!i.value) {
-        if(error==false)
-        {
-          error=true;
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      }
-      if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
+    let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
+    if (typeOfService== ""){
+      typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+    } 
+    let noOfTrees = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount", "");  
+    let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description", "");
+    let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla", "");
+    if (locality== ""){
+      locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
     }
-    })
-  
+    let address = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.address", "");
     
   
-    document.getElementById("apply_form2").querySelectorAll("input[type='hidden']").forEach(function (i) {
-      
-      // alert("inside validate form part 2")
-      if (i.value == i.placeholder) {
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-    })
- 
-  
-      if(!error)
+    if(typeOfService && noOfTrees && description)
+    {
+      validationPause = true;
+      if(!address)
       {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "ERROR", labelKey: "HC_ADDRESS_ERROR" },
+            "warning"
+          )
+        );
+      }else if(!locality)
+      {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "ERROR", labelKey: "HC_LOCALITY_ERROR" },
+            "warning"
+          )
+        );
+      }else{validationPause = false;}
   
-    let error_owner = false;
-    //owner form 
-    document.getElementById("apply_form3").querySelectorAll("[required]").forEach(function (i) {
-      // alert("inside validate form")
-      if (!i.value) {
-        if(error_owner==false)
-        {
-          error_owner=true;
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      }
-      if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
     }
-    })
   
-    
-  
-    document.getElementById("apply_form3").querySelectorAll("input[type='hidden']").forEach(function (i) {
+    if(validationPause === false)
+    {
+      var cnt = 0;
+     
+      document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
+      cnt = cnt + 1;
+        if (!i.value && i.value != undefined) {
+          if(error==false)
+          {
+          error=true;
+          var errorMsg1 = { labelName: "ERROR", labelKey: "HC_ERROR_1"+cnt.toString() };
+          // alert(i + " " + errorMsg1 )
+          dispatch(
+            toggleSnackbar(
+              true,
+              errorMsg1,
+              "warning"
+            )
+           );
+          i.focus();
+          allAreFilled = false;
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          }
+          if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+            i.parentNode.classList.add("MuiInput-error-853");
+            i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+            allAreFilled = false;
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
+      }
+      })
       
-      // alert("inside validate form part 2")
-      if (i.value == i.placeholder) {
-        i.focus();
-        allAreFilled = false;
-        i.parentNode.classList.add("MuiInput-error-853");
-        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-        allAreFilled = false;
-        isFormValid = false;
-        hasFieldToaster = true;
-      }
-    })
-      }
-  
+      document.getElementById("apply_form2").querySelectorAll("input[type='hidden']").forEach(function (i) {
+        
+        if (i.value == i.placeholder) {
+          i.focus();
+          allAreFilled = false;
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          allAreFilled = false;
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      })
     
+        if(!error)
+        {
+    
+      let error_owner = false;
+      var cnt2 = 0;
+      document.getElementById("apply_form3").querySelectorAll("[required]").forEach(function (i) {
+        cnt2 = cnt2 + 1 ;
+        if (!i.value) {
+          if(error_owner==false)
+          {
+          error_owner=true;
+          
+          var errorMsg2 = { labelName: "ERROR", labelKey: "HC_ERROR_2"+cnt2.toString() };
+          // alert(i + " " + errorMsg2 )
+          dispatch(
+            toggleSnackbar(
+              true,
+              errorMsg2,
+              "warning"
+            )
+           );
+          i.focus();
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          allAreFilled = false;
+          isFormValid = false;
+          hasFieldToaster = true;
+          }
+          if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+            i.parentNode.classList.add("MuiInput-error-853");
+            i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+            allAreFilled = false;
+            isFormValid = false;
+            hasFieldToaster = true;
+          }
+        }
+      })
+    
+      
+    
+      document.getElementById("apply_form3").querySelectorAll("input[type='hidden']").forEach(function (i) {
+        
+        if (i.value == i.placeholder) {
+          i.focus();
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          allAreFilled = false;
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      })
+        }
+    }
     
     if (allAreFilled == false) {
-      //alert('Fill all fields')
       isFormValid = false;
       hasFieldToaster = true;
+      flagValidFields = false;
     }
     else {
       isFormValid = true;
       hasFieldToaster = false;
+      flagValidFields = true;
     }
-    return [isFormValid, hasFieldToaster]
+  
+  
+    return [isFormValid, hasFieldToaster, validationPause]
   };

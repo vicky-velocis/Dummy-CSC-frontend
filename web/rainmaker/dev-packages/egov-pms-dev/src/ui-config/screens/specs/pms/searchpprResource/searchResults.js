@@ -119,7 +119,8 @@ export const searchResults = {
       getTextToLocalMapping("Name"),
       getTextToLocalMapping("Date Of Birth"),
       getTextToLocalMapping("Retirement Date"),
-      getTextToLocalMapping("Designation"),
+      getTextToLocalMapping("Designation"),     
+      getTextToLocalMapping("Department"),
       {
         name: "tenantId",
         options: {

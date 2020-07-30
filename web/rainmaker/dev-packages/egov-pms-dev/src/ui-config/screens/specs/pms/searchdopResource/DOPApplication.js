@@ -16,6 +16,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "searchdop",
+      "components.div.children.DOPApplication.children.cardContent.children.appDOPSearchContainer.children.department",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "searchdop",
       "components.div.children.searchResults",
       "visible",
       false
@@ -92,6 +100,29 @@ export const DOPApplication = getCommonCard({
       pattern: /^[^\$\"'<>?\\\\~`!@#$%^()+={}\[\]*,.:;“”‘’]{1,50}$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.name"
+    }),
+    department: getSelectField({
+      label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
+      placeholder: {
+        labelName: "Select Department",
+        labelKey: "HR_DEPT_PLACEHOLDER"
+      },
+      required: false,
+      jsonPath: "searchScreen.departments",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      props: {
+        optionLabel: "name",
+        optionValue: "code"
+        // hasLocalization: false
+      },
+      // localePrefix: {
+      //   moduleName: "common-masters",
+      //   masterName: "Department"
+      // }
     }),
     dob: getDateField({
       label: { labelName: "Date Of Birth", labelKey: "PENSION_DOB" },

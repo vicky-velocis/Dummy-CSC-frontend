@@ -251,8 +251,13 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName:
-                "Payment is collected successfully, Now you can dowload and issue Trade License Certificate to citizen",
+                "Payment is collected successfully.",
               labelKey: "TL_CONFIRMATION_MESSAGE_MAIN"
+            },
+            subheader: {
+              labelName:
+                "Now you can dowload and issue Trade License Certificate to citizen.",
+              labelKey: "TL_CONFIRMATION_MESSAGE_SUB_HEADER"
             },
             body: {
               labelName:

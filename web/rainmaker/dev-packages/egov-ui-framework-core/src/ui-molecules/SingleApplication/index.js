@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import get from "lodash/get";
 import { withStyles } from "@material-ui/core/styles";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import {toggleSnackbar} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -26,11 +26,11 @@ const styles = {
 
 
 class SingleApplication extends React.Component {
-  
+
   setBusinessServiceDataToLocalStorage = async (queryObject) => {
-    const {toggleSnackbar} = this.props;
+    const { toggleSnackbar } = this.props;
     try {
-      const payload = await httpRequest("post","egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
+      const payload = await httpRequest("post", "egov-workflow-v2/egov-wf/businessservice/_search", "_search", queryObject);
       localStorageSet("businessServiceData", JSON.stringify(get(payload, "BusinessServices")));
       return get(payload, "BusinessServices");
     } catch (e) {
@@ -59,6 +59,8 @@ class SingleApplication extends React.Component {
       await this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
+        case "MODIFIED":
+        case "PENDINGCLARIFICATION":
           setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           break
         default:
@@ -86,13 +88,13 @@ class SingleApplication extends React.Component {
             break;
           default:
             setRoute(`/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
-        }        
+        }
       }
     } else if (moduleName === "PT-MUTATION") {
-      if(item.acknowldgementNumber){
+      if (item.acknowldgementNumber) {
         const businessService = await getApplicationType(item.acknowldgementNumber, item.tenantId)
         console.log("businessService-----", businessService);
-        if(businessService){
+        if (businessService) {
           // navigateToApplication(businessService, this.props.history, item.acknowldgementNumber, item.tenantId, item.propertyId);
           if (businessService == 'PT.MUTATION') {
             setRoute("/pt-mutation/search-preview?applicationNumber=" + item.acknowldgementNumber + "&propertyId=" + item.propertyId + "&tenantId=" + item.tenantId);
@@ -101,7 +103,7 @@ class SingleApplication extends React.Component {
           } else {
             console.log('Navigation Error');
           }
-        }else{
+        } else {
           toggleSnackbar(
             true,
             {
@@ -126,14 +128,14 @@ class SingleApplication extends React.Component {
         default:
           setRoute(`/egov-opms/sellmeatnoc-search-preview?applicationNumber=${item.applicationId}&tenantId=${item.tenantId}`);
       }
-    } else if (moduleName === "HC") { 
-      switch (item.status){
-      case "INITIATED":
-          setRoute (`/egov-hc/search-preview?applicationNumber=${item.serviceRequestId}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
-       default:
-          setRoute (`/egov-hc/search-preview?applicationNumber=${item.service_request_id}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
-     }
-    }else if (moduleName === "ADVERTISEMENT-NOC") {
+    } else if (moduleName === "HC") {
+      switch (item.status) {
+        case "INITIATED":
+          setRoute(`/egov-hc/search-preview?applicationNumber=${item.serviceRequestId}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+        default:
+          setRoute(`/egov-hc/search-preview?applicationNumber=${item.service_request_id}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+      }
+    } else if (moduleName === "ADVERTISEMENT-NOC") {
       switch (item.status) {
         case "INITIATED":
           setRoute(`/egov-opms/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
@@ -171,6 +173,13 @@ class SingleApplication extends React.Component {
         break;
         default:
           setRoute(`/rented-properties/mortgage-search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`)
+    }
+   } else if (moduleName === "EGOV-ECHALLAN") {
+      switch (item.status) {
+        case "INITIATED":
+          setRoute(`/egov-echallan/apply?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
+        default:
+          setRoute(`/egov-echallan/search-preview?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
       }
     }
   };
@@ -180,37 +189,37 @@ class SingleApplication extends React.Component {
     setRoute(homeURL);
   };
   generatevalidity = (item) => {
-    const validFrom=item.validFrom?convertEpochToDate( get(item, "validFrom")):"NA";
-    const validTo=item.validTo?convertEpochToDate( get(item, "validTo")):"NA";
-    const validity = validFrom+" - "+validTo;
+    const validFrom = item.validFrom ? convertEpochToDate(get(item, "validFrom")) : "NA";
+    const validTo = item.validTo ? convertEpochToDate(get(item, "validTo")) : "NA";
+    const validity = validFrom + " - " + validTo;
     return validity;
   }
   generateLabelKey = (content, item) => {
     let LabelKey = "";
     if (content.prefix && content.suffix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
+      LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}${content.suffix}`;
     } else if (content.prefix) {
-      LabelKey = `${content.prefix}${get(item, content.jsonPath,"").replace(
+      LabelKey = `${content.prefix}${get(item, content.jsonPath, "").replace(
         /[._:-\s\/]/g,
         "_"
       )}`;
     } else if (content.suffix) {
-      LabelKey = `${get(item, content.jsonPath,"").replace(/[._:-\s\/]/g, "_")}${
+      LabelKey = `${get(item, content.jsonPath, "").replace(/[._:-\s\/]/g, "_")}${
         content.suffix
-      }`;
-    } else if(content.callBack) {
-      LabelKey = content.callBack(get(item, content.jsonPath,""))
+        }`;
+    } else if (content.callBack) {
+      LabelKey = content.callBack(get(item, content.jsonPath, ""))
     } else {
-      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath,""))}` : `${get(item, content.jsonPath,"")}`;
+      LabelKey = content.label === "PT_MUTATION_CREATION_DATE" ? `${epochToDate(get(item, content.jsonPath, ""))}` : `${get(item, content.jsonPath, "")}`;
     }
     return LabelKey;
   };
 
   render() {
-    const { searchResults, classes, contents, moduleName,setRoute } = this.props;
+    const { searchResults, classes, contents, moduleName, setRoute } = this.props;
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -246,9 +255,9 @@ class SingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
-                   {moduleName === "TL"&&
-                     <div> 
-                             <Grid container style={{ marginBottom: 12 }}>
+                    {moduleName === "TL" &&
+                      <div>
+                        <Grid container style={{ marginBottom: 12 }}>
                           <Grid item xs={6}>
                             <Label
                               labelKey="TL_COMMON_TABLE_VALIDITY"
@@ -271,24 +280,24 @@ class SingleApplication extends React.Component {
                             />
                           </Grid>
                         </Grid>
-                     </div>
-                   }
+                      </div>
+                    }
 
                     {/* <Link to={this.onCardClick(item)}> */}
-                      <div style={{cursor:"pointer"}} onClick = {()=>{
-                        const url = this.onCardClick(item);
-                        // setRoute(url);
-                        }}>
-                        <Label
-                          labelKey={"TL_VIEW_DETAILS"}
-                          textTransform={"uppercase"}
-                          style={{
-                            color: "#fe7a51",
-                            fontSize: 14,
-                            textTransform: "uppercase"
-                          }}
-                        />
-                      </div>
+                    <div style={{ cursor: "pointer" }} onClick={() => {
+                      const url = this.onCardClick(item);
+                      // setRoute(url);
+                    }}>
+                      <Label
+                        labelKey={moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
+                        textTransform={"uppercase"}
+                        style={{
+                          color: "#fe7a51",
+                          fontSize: 14,
+                          textTransform: "uppercase"
+                        }}
+                      />
+                    </div>
                     {/* </Link> */}
                   </div>
                 </CardContent>
@@ -296,26 +305,26 @@ class SingleApplication extends React.Component {
             );
           })
         ) : (
-          <div className="no-assessment-message-cont">
-            <Label
-              labelKey={"No results Found!"}
-              style={{ marginBottom: 10 }}
-            />
-            <Button
-              style={{
-                height: 36,
-                lineHeight: "auto",
-                minWidth: "inherit"
-              }}
-              className="assessment-button"
-              variant="contained"
-              color="primary"
-              onClick={this.onButtonCLick}
-            >
-              <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-            </Button>
-          </div>
-        )}
+            <div className="no-assessment-message-cont">
+              <Label
+                labelKey={"No results Found!"}
+                style={{ marginBottom: 10 }}
+              />
+              <Button
+                style={{
+                  height: 36,
+                  lineHeight: "auto",
+                  minWidth: "inherit"
+                }}
+                className="assessment-button"
+                variant="contained"
+                color="primary"
+                onClick={this.onButtonCLick}
+              >
+                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+              </Button>
+            </div>
+          )}
       </div>
     );
   }
@@ -330,8 +339,8 @@ const mapStateToProps = state => {
   let searchResults = orderBy(
     searchResultsRaw,
     ["auditDetails.lastModifiedTime"],
-    ["desc"]);  
-    searchResults=searchResults?searchResults:searchResultsRaw ;
+    ["desc"]);
+  searchResults = searchResults ? searchResults : searchResultsRaw;
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, searchResults };
 };
@@ -339,7 +348,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setRoute: path => dispatch(setRoute(path)),
-    toggleSnackbar : (open,message,type) => dispatch(toggleSnackbar(open,message,type))
+    toggleSnackbar: (open, message, type) => dispatch(toggleSnackbar(open, message, type))
   };
 };
 

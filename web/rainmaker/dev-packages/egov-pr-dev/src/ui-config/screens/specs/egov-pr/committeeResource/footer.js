@@ -25,6 +25,8 @@ export const cancelCommittee  = (
 ) => {
   dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
   dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
+  dispatch(prepareFinalObject("CreateInvite", {}));
+  
   const appendUrl =
   process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
 const reviewUrl = `${appendUrl}/egov-pr/committeeMaster`;
@@ -161,7 +163,10 @@ let checkboxcheck=localStorageGet("committeelist")
 			  dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
     else{
-    if(localStorageGet("committeelist")!==null || localStorageGet("committeelistAll") !== null)
+     
+      if(localStorageGet("committeelist")!=="[]")
+      {
+    if(localStorageGet("committeelist")!==null || localStorageGet("committeelistAll") !== null )
     {
 			
 			
@@ -192,6 +197,15 @@ let checkboxcheck=localStorageGet("committeelist")
     	
 	changeStep(state, dispatch);
   }
+}
+else{
+  let errorMessage = {
+    labelName:"Please fill all mandatory fields and select atleast one employee!",
+    labelKey: "PR_ERR_FILL_ALL_COMMITTEE_MANDATORY_FIELDS_TOAST"
+    };
+   
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}
 }
  
   }
