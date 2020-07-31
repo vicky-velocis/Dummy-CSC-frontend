@@ -130,19 +130,6 @@ const rentedPropertiesDetailPreview = {
               },
              ...headerrow
             },
-            helpSection: {
-              uiFramework: "custom-atoms",
-              componentPath: "Container",
-              props: {
-                color: "primary",
-                style: { justifyContent: "flex-end" }
-              },
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-                align: "right"
-              }
-            },
             searchButton: {
               componentPath: "Button",
               visible: !!findItem,

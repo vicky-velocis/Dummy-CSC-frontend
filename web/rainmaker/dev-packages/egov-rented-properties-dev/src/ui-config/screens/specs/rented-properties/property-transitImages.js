@@ -6,29 +6,12 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {onTabChange, headerrow, tabs} from './search-preview'
-  import { getSearchResults , setDocuments1 } from "../../../../ui-utils/commons";
-  import { getReviewDocuments } from "./applyResource/review-transit-images";
-import { convertDateTimeToEpoch } from "../utils";
+  import { getSearchResults } from "../../../../ui-utils/commons";
 import {
   getQueryArg,
-  getFileUrl,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
   let transitNumber = getQueryArg(window.location.href, "transitNumber");
-  const reviewDocumentDetails = getReviewDocuments(false, "property-transitImages")
-  
-  export const transitSiteImages = getCommonCard({
-    reviewDocumentDetails
-  });
-  
-
-  const epochToDate = et => {
-    if (!et) return null;
-    var date = new Date(Math.round(Number(et)));
-    var formattedDate =
-      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-    return formattedDate;
-  };
 
   const fetchImage = async (imgId) => {
     const res = await getFileUrlFromAPI(imgId.fileStoreId)           
@@ -79,7 +62,6 @@ import {
       await searchResults(action, state, dispatch, transitNumber)
     }
   }
-  
   
   const propertyTransitImages = {
       uiFramework: "material-ui",

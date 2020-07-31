@@ -50,15 +50,19 @@ class MultipleDocuments extends Component {
       return (
           <div>
               {!!data.length && data.map((datum, index) => (
-                  <Card className="MultipleOwners-card-212">
-                  <Button  mt={1}  color="primary"  variant="contained"  onClick={() =>
-                  {dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`))
-                  dispatch(prepareFinalObject("SingleImage[0]", datum));
-                }
-                } >
-                 Violation Notice</Button>            
+                  <Card className="MultipleOwners-card-212">            
                   <CardContent>
                   <Grid container>
+                  <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
+                  <Grid xs={12} sm={4} style={{textAlign: "right"}}>
+                  <Button  mt={1}  color="primary"  variant="contained"  
+                  onClick={() => { 
+                    dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
+                    dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
+                    Violation Notice
+                    </Button>
+                    </Grid>
+                 </Grid>
                       {datum.applicationDocuments.map((content) => (
                           <Grid xs={6} sm={3} 
                           style={{
