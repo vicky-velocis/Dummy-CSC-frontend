@@ -35,7 +35,7 @@ import {
 import { getSearchResults,getMortgageSearchResults } from "./commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { setDocsForEditFlow } from "./commons";
-
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 let userInfo = JSON.parse(getUserInfo());
 
   export const applyRentedProperties = async (state, dispatch, activeIndex) => {
@@ -673,7 +673,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           const {Properties} = payload;
           const {owners = []} = Properties[0]
           const findOwner = owners.find(item => !!item.activeState) || {}
-         
+        
           dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].property.pincode",
@@ -689,7 +689,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
            dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].property.colony",
-              Properties[0].propertyDetails.address.colony
+              getLocaleLabels("colony",Properties[0].propertyDetails.address.colony)
             )
           )
           dispatch(
