@@ -16,13 +16,8 @@ const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "CTL_CLERK");
 
-  
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
-const userInfo = JSON.parse(getUserInfo());
-const {roles = []} = userInfo
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
-const findItem = roles.find(item => item.code === "CTL_CLERK");
+
 export const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",

@@ -45,6 +45,28 @@ const fatherOrHusbandsNameField = {
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
+
+const getEditorField = {
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    label: {
+        labelName: "Editor",
+        labelKey: "RP_EDITOR_LABEL"
+    },
+    placeholder: { 
+        labelName: "Editor",
+        labelKey: "RP_EDITOR_LABEL"
+    },
+    props:{
+        multiline: true,
+        rows: "4"
+    },
+    visible: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
+  }
+
 const ownerNameField = {
     label: {
         labelName: "Owner Name",
@@ -63,6 +85,7 @@ const ownerNameField = {
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.name"
   }
+
 const originalAllotteField = {
     label: {
         labelName: "Original Allottee",
@@ -80,6 +103,7 @@ const originalAllotteField = {
     maxLength: 40,
     jsonPath: "Properties[0].owners[0].ownerDetails.orignalAllottee"
 }
+
 const getDocumentField = {
     label: {
         labelName: "Documents Given",
@@ -97,6 +121,7 @@ const getDocumentField = {
     maxLength: 40,
     jsonPath: "Properties[0].owners[0].ownerDetails.documentsGiven" 
 }
+
 const getViolationField = {
     label: {
         labelName: "Violations",
@@ -110,27 +135,13 @@ const getViolationField = {
         xs: 12,
         sm: 6
     },
-    minLength: 4,
-    maxLength: 40,
+    props:{
+        multiline: true,
+        rows: "4"
+    },
     jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
 }
-const getEditorField = {
-    label: {
-        labelName: "Editor",
-        labelKey: "RP_EDITOR_LABEL"
-    },
-    placeholder: {
-        labelName: "Editor",
-        labelKey: "RP_EDITOR_LABEL"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 4,
-    maxLength: 40,
-    jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
-}
+
 export const transitNumberConfig = {
     label: {
         labelName: "Transit Site/Plot number",
@@ -148,6 +159,7 @@ export const transitNumberConfig = {
     maxLength: 25,
     required: true,
 }
+
 const transitNumberField = {
     ...transitNumberConfig,
     jsonPath: "Properties[0].transitNumber"
@@ -170,6 +182,7 @@ const transitNumberField = {
     required: true,
     jsonPath: "Properties[0].owners[0].allotmenNumber"
   }  
+
   const memoDateField = {
         label: {
             labelName: "Memo Date",
@@ -187,8 +200,6 @@ const transitNumberField = {
             }
         }
       }
-
-      
 
 const demandNoticeFromDate = {
     label: {
@@ -267,13 +278,12 @@ const getOwnerDetailsForNotice = () => {
         detailsContainer: getCommonContainer({
         fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
         originalAllotte :getTextField(originalAllotteField),
-        // documentsGiven:getTextField(getDocumentField),
         violations:getTextField(getViolationField),
         editor : getTextField(getEditorField),
         })
     }
 }
-export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
+
 const getPropertyDetailsForNotice = () => {
     return {
         header: propertyHeader,
@@ -286,9 +296,7 @@ const getPropertyDetailsForNotice = () => {
 }
 const getPaymentDetailsNotice = () => {
     return {
-
-        detailsContainer: getCommonContainer({
-            
+            detailsContainer: getCommonContainer({    
             demandNoticeFromDate: getDateField(demandNoticeFromDate),
             demandNoticeLastDate: getDateField(demandNoticeLastDate),
             recoveryType: getSelectField(recoveryType),
@@ -297,6 +305,7 @@ const getPaymentDetailsNotice = () => {
     }
 }
 
+export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
 export const noticePropertyDetails = getCommonCard(getPropertyDetailsForNotice())
 
 export const paymentDetailsNotice=getCommonCard(getPaymentDetailsNotice())
