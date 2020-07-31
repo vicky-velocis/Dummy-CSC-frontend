@@ -341,3 +341,64 @@ export const getReviewPaymentDetails = (isEditable = true) => {
         })
     })
 }
+
+
+export const getReviewGrantDetails = () => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Grant Details",
+                        labelKey: "RP_GRANT_DETAILS_HEADER"
+                    })
+                },
+                
+            }
+        },
+        viewFour: getCommonContainer({
+         
+                nameOfTheBank: getLabelWithValue(
+                    {
+                        labelName: "Name of the bank (Text field)",
+                        labelKey: "WF_BANK_NAME"
+                    },
+                    { jsonPath: "Properties[0].mortgageApprovedGrantDetails[0].bankName" }
+                ),
+                mortageAmount: getLabelWithValue(
+                    {
+                        labelName: "Enter mortgage amount",
+                        labelKey: "WF_MORTAGE_AMOUNT"
+                    },
+                    { jsonPath: "Properties[0].mortgageApprovedGrantDetails[0].mortgageAmount" }
+                ),
+                sanctionLetterNo: getLabelWithValue(
+                    {
+                        labelName: "Sanction letter number",
+                        labelKey: "WF_SANCTION_LETTER_LABEL"
+                    },
+                    { jsonPath: "Properties[0].mortgageApprovedGrantDetails[0].sanctionLetterNumber" }
+                ),
+                mortageEndDate: getLabelWithValue(
+                    {
+                        labelName: "Mortgage end date ",
+                        labelKey: "WF_MORTAGAGEEND_DATE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].mortgageApprovedGrantDetails[0].mortgageEndDate" , callBack: convertEpochToDate}
+                ),
+                sanctioningDate: getLabelWithValue(
+                    {
+                        labelName: "Date of sanctioning",
+                        labelKey: "WF_SANCTIONING_DATE_LABEL"
+                    },
+                    { jsonPath: "Properties[0].mortgageApprovedGrantDetails[0].sanctionDate" , callBack: convertEpochToDate}
+                ),
+              
+        })
+    })
+}
