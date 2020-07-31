@@ -129,6 +129,11 @@ const ownershipTransitNumberField = {
       }
 }
 
+const noticeTransitNumberField = {
+    ...transitNumberConfig,
+    jsonPath: "DuplicateCopyApplications[0].property.transitNumber",
+}
+
 const transitNumberField = {
     ...transitNumberConfig,
     jsonPath: "Properties[0].transitNumber"
