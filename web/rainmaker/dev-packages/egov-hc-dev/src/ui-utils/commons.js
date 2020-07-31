@@ -6,6 +6,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 // import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 
@@ -122,12 +123,13 @@ export const getSearchResultsForFilters = async (filterdata) => {
 
 export const getSearchResultsView = async queryObject => {
   try {
-    
+    //debugger
     const response = await httpRequest(
       "post", "hc-services/serviceRequest/_getDetail", "",
       [],
       {
-        "service_request_id": queryObject[1].value
+        "service_request_id": queryObject[1].value,
+        "tenantId":queryObject[0].value
         }
       
     );
@@ -147,34 +149,34 @@ export const furnishServiceRequestDetailResponse = response => {
   let serviceRequestDetail = response.ResponseBody[0].length > 0 ? JSON.parse(response.ResponseBody[0]) : '';
 
   let serviceType
-  if (response.ResponseBody[0].service_type == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS"){
-    serviceType = "Pruning of Trees Girth less than or equal to 90 cms"
-  }
- else if(response.ResponseBody[0].service_type == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS"){
-  serviceType = "Pruning of Trees Girth greater than 90 cms"
-  }
-  else if(response.ResponseBody[0].service_type == "REMOVAL OF OVERGROWN/GREEN TREES"){
-    serviceType = "Removal of Overgrown/Green Trees"
-  }
-  else if(response.ResponseBody[0].service_type == "REMOVAL OF DEAD/DANGEROUS/DRY TREES"){
-    serviceType = "Removal of Dead/Dangerous/Dry Trees"
-  }
-  else{
-    serviceType = ""
-  }
+//   if (response.ResponseBody[0].service_type == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS"){
+//     serviceType = "Pruning of Trees Girth less than or equal to 90 cms"
+//   }
+//  else if(response.ResponseBody[0].service_type == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS"){
+//   serviceType = "Pruning of Trees Girth greater than 90 cms"
+//   }
+//   else if(response.ResponseBody[0].service_type == "REMOVAL OF OVERGROWN/GREEN TREES"){
+//     serviceType = "Removal of Overgrown/Green Trees"
+//   }
+//   else if(response.ResponseBody[0].service_type == "REMOVAL OF DEAD/DANGEROUS/DRY TREES"){
+//     serviceType = "Removal of Dead/Dangerous/Dry Trees"
+//   }
+//   else{
+//     serviceType = ""
+//   }
   set(refurnishresponse, "contactNumber", response.ResponseBody[0].contact_number);
-  set(refurnishresponse, "mohalla", response.ResponseBody[0].street_name);
+  // set(refurnishresponse, "mohalla", response.ResponseBody[0].street_name);
   set(refurnishresponse, "description", response.ResponseBody[0].description);
   set(refurnishresponse, "ownerName", response.ResponseBody[0].owner_name);
   set(refurnishresponse, "tenantId", response.ResponseBody[0].tenant_id);
   set(refurnishresponse, "email", response.ResponseBody[0].email_id);
-  set(refurnishresponse, "mohalla", response.ResponseBody[0].locality);
+  set(refurnishresponse, "mohalla", {value:"", label:response.ResponseBody[0].locality});
   set(refurnishresponse, "houseNoAndStreetName", response.ResponseBody[0].street_name);
   set(refurnishresponse, "landmark", response.ResponseBody[0].landmark);
   set(refurnishresponse, "latitude", response.ResponseBody[0].latitude);
   set(refurnishresponse, "longitude", response.ResponseBody[0].longitude);
   set(refurnishresponse, "address", response.ResponseBody[0].location);
-  set(refurnishresponse, "serviceType", serviceType);
+  set(refurnishresponse, "serviceType", {value:"", label: response.ResponseBody[0].service_type});
   set(refurnishresponse, "treeCount", response.ResponseBody[0].tree_count);
   set(refurnishresponse, "service_request_id", response.ResponseBody[0].service_request_id);
   set(refurnishresponse, "media", JSON.parse(response.ResponseBody[0].service_request_document));
@@ -263,7 +265,8 @@ export const EditServiceRequest = async (state, dispatch, status) => {
       arraypayload.push(payload);
   
       if (method === "CREATE") {
-  
+        
+        dispatch(toggleSpinner());
         response = await httpRequest("post", "hc-services/serviceRequest/_create", "", [], {services: arraypayload });
  
         if (response.ResponseInfo.status === 'successful') {
@@ -271,13 +274,16 @@ export const EditServiceRequest = async (state, dispatch, status) => {
           setapplicationNumber(service_request_id_for_edit);
 
           setApplicationNumberBox(state, dispatch);
+          dispatch(toggleSpinner());
           return { status: "successful", message: response };
         } else {
+          dispatch(toggleSpinner());
           return { status: "fail", message: response };
         }
       } 
   
     } catch (error) {
+      dispatch(toggleSpinner());
       dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
     }
@@ -298,6 +304,8 @@ export const createServiceRequest = async (state, dispatch, status) => {
     arraypayload.push(payload);
 
     if (method === "CREATE") {
+      
+      dispatch(toggleSpinner());
 
       response = await httpRequest("post", "hc-services/serviceRequest/_create", "", [], {services: arraypayload });
       
@@ -310,13 +318,16 @@ export const createServiceRequest = async (state, dispatch, status) => {
       
         
         setApplicationNumberBox(state, dispatch);
+        dispatch(toggleSpinner());
         return { status: "success", message: response };
       } else {
+        dispatch(toggleSpinner());
         return { status: "fail", message: response };
       }
     } 
 
   } catch (error) {
+    dispatch(toggleSpinner());
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
     

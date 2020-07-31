@@ -1,27 +1,29 @@
 import {
     getCommonHeader,
     getCommonContainer,
+    getLabel,
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
-import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
-import { getReviewDocuments } from "./applyResource/review-documents";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
+import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails,getReviewGrantDetails } from "./applyResource/review-property";
+import { getReviewDocuments } from "./applyResource/review-documents";
+import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
-  getLabel,
- 
-} from "egov-ui-framework/ui-config/screens/specs/utils";
+const userInfo = JSON.parse(getUserInfo());
+const {roles = []} = userInfo
+const findItem = roles.find(item => item.code === "CTL_CLERK");
+
+  
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 const findItem = roles.find(item => item.code === "CTL_CLERK");
-const headerrow = getCommonContainer({
+export const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES"
@@ -33,6 +35,7 @@ const reviewAddressDetails = getReviewAddress(false);
 const reviewRentDetails = getReviewRentDetails(false);
 const reviewPaymentDetails = getReviewPaymentDetails(false);
 const reviewDocumentDetails = getReviewDocuments(false, "apply")
+const reviewGrantDetails = getReviewGrantDetails(false)
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
@@ -40,7 +43,8 @@ export const propertyReviewDetails = getCommonCard({
   reviewOwnerDetails,
   reviewRentDetails,
   reviewPaymentDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+  reviewGrantDetails
 });
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {
@@ -77,6 +81,32 @@ const beforeInitFn = async (action, state, dispatch, transitNumber) => {
     await searchResults(action, state, dispatch, transitNumber)
   }
 }
+
+export const onTabChange = async(tabIndex, dispatch, state) => {
+  transitNumber = getQueryArg(window.location.href, "transitNumber");
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  let path = ""
+  if(tabIndex === 0) {
+    path = `/rented-properties/search-preview?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  } else if(tabIndex === 1) {
+    path = `/rented-properties/property-transitImages?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  } else if(tabIndex === 2) {
+    path = `/rented-properties/notices?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  }
+  dispatch(setRoute(path))
+}
+
+export const tabs = [
+  {
+    tabButton: { labelName: "Property Details", labelKey: "RP_PROPERTY_DETAILS" },
+  },
+  {
+    tabButton: { labelName: "Transit Site Image", labelKey: "RP_TRANSIT_SITE_IMAGES" },
+  },
+  {
+    tabButton: { labelName: "Notices", labelKey: "RP_NOTICES" },
+  }
+]
 
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
@@ -152,6 +182,17 @@ const rentedPropertiesDetailPreview = {
             },
             }
           },
+          tabSection: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-rented-properties",
+            componentPath: "CustomTabContainer",
+            props: {
+              tabs,
+              activeIndex: 0,
+              onTabChange
+            },
+            type: "array",
+          },
           taskStatus: {
             uiFramework: "custom-containers-local",
             moduleName: "egov-rented-properties",
@@ -167,5 +208,5 @@ const rentedPropertiesDetailPreview = {
     }
   }
 };
-export default rentedPropertiesDetailPreview;
 
+export default rentedPropertiesDetailPreview;

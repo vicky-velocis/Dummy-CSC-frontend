@@ -10,6 +10,7 @@ import {
   getLocalization,
   getTenantId
 } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
@@ -34,7 +35,8 @@ export const pressGrid = {
         name: getTextToLocalMapping("Press Id"),
         options: {
           display: false,
-         
+          filter: false,
+          display: "excluded",
         }
       },
       getTextToLocalMapping("Publication name"),
@@ -53,6 +55,7 @@ export const pressGrid = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
+      
       onRowClick: (row, index) => {
         onRowClick(row);
       }

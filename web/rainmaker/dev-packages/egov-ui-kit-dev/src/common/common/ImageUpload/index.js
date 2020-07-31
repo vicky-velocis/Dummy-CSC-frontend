@@ -46,7 +46,7 @@ class ImageUpload extends Component {
     if(getapplicationType() === "HORTICULTURE")
     {
       for (let i = 0; i < 5 - images.length; i++) {
-        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? true : false} />);
+        placeholders.push(<Placeholder key={i} inputProps={inputProps} onFilePicked={onFilePicked} hide={i === 1 ? false : false} />);
       }
     }
     else{
@@ -63,7 +63,7 @@ class ImageUpload extends Component {
   };
 
   onFilePicked = (file, imageUri) => {
-    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText, MAX_IMAGE_SIZE = 5000, imageLength,labelKey = "ERR_FILE_MORE_THAN_FIVEMB" } = this.props;
+    const { images, formKey, fieldKey, module, fileUpload, toggleSnackbarAndSetText, MAX_IMAGE_SIZE = 5000, imageLength = 3,labelKey = "ERR_FILE_MORE_THAN_FIVEMB" } = this.props;
     const fileSize = getFileSize(file);
     const isImage = isFileImage(file);
     if (!isImage) {
@@ -71,8 +71,14 @@ class ImageUpload extends Component {
     } else if (fileSize > MAX_IMAGE_SIZE) {
       toggleSnackbarAndSetText(true, { labelName: "The file is more than 5mb", labelKey: labelKey },"error");
     } else {
-      if (images.length < imageLength) {
-        fileUpload(formKey, fieldKey, { module, file, imageUri });
+      if(getapplicationType() === "HORTICULTURE"){
+        if (images.length < 5) {
+          fileUpload(formKey, fieldKey, { module, file, imageUri });
+        }
+      }else{
+        if (images.length < imageLength) {
+          fileUpload(formKey, fieldKey, { module, file, imageUri });
+        }
       }
     }
   };

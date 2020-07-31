@@ -20,7 +20,7 @@ import { footer } from "./summaryResource/footer";
 import { propertySummary } from "./summaryResource/propertySummary";
 import { getCommonApplyFooter, validateFields, getTextToLocalMapping } from "../utils";
 import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
-import {getSearchResultsView, resendinvitation} from "../egov-pr/searchResource/citizenSearchFunctions"
+import {getSearchResultsView, resendinvitation,resendinvitationevent} from "../egov-pr/searchResource/citizenSearchFunctions"
 import { localStorageGet,localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { ResendInvitedEmployeesResults } from "./inviteResources/searchResults";
 import "./publishtender.css";
@@ -32,8 +32,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Manage Event",
-    labelKey: "PR_MANAGE_EVENT_HEADER"
+    labelName: "Invite Guests",
+    labelKey: "PR_INVITE_GUESTS_HEADER"
   }),
   eventId: {
     uiFramework: "custom-atoms-local",
@@ -300,7 +300,7 @@ const screenConfig = {
 				},
 				onClickDefination: {
 				  action: "condition",
-				  callBack: resendinvitation
+				  callBack: resendinvitationevent
 				},
 				
 		},

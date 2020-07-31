@@ -19,8 +19,8 @@ export const tenderDocumentDetails = getCommonCard({
   ),
   subText: getCommonParagraph({
     labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT"
+      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload and 1MB max file size.",
+    labelKey: "PR_EMAILDOCUMENT_DETAILS_SUBTEXT"
   }),
   break: getBreak(),
   documentList: {
@@ -37,7 +37,7 @@ export const tenderDocumentDetails = getCommonCard({
       inputProps: {
         accept: ".pdf,.png,.jpeg,.zip,WAV, AIFF, AU, PCM or BWF, mp3"
       },
-      maxFileSize: 1000
+      maxFileSize: 2000
     },
     type: "array"
   }

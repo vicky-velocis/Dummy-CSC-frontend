@@ -46,6 +46,10 @@ const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
   loading: () => <Loading />
 });
+const DialogContainer=Loadable({
+  loader: () => import("./DialogContainer"),
+  loading: () => <Loading />
+});
 
 export {
   TextFieldContainer,
@@ -56,5 +60,6 @@ export {
   CustomTabContainer,
   DownloadFileContainer,
   AutosuggestContainer,
-  CheckboxContainer
+  CheckboxContainer,
+  DialogContainer
 };

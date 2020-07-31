@@ -1,6 +1,7 @@
 import { getBreak, getCommonCard, getCommonContainer, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import "./index.css";
 
 const getMapLocatorEdit = textSchema => {
   return {
@@ -42,36 +43,75 @@ export const servicerequestdetailsEdit = getCommonCard({
 
   break: getBreak(),
   servicerequestdetailsContainer: getCommonContainer({
+    // typeofrequest: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Type of Service Request",
+    //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
+    //     },
+    //     optionLabel: "name",
+    //     optionValue: "name",
+    //     placeholder: {
+    //       labelName: "Type of Service Request",
+    //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_PLACEHOLDER"
+    //     },
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 12,
+    //       md: 12,
+    //       lg: 12
+    //     },
+    //     sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
+    //     jsonPath: "SERVICEREQUEST.serviceType",
+    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     required: true,
+
+
+
+
+
+
+    //   })
+    // },
     typeofrequest: {
-      ...getSelectField({
-        label: {
-          labelName: "Type of Service Request",
-          labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
-        },
-        optionLabel: "name",
-        optionValue: "name",
-        placeholder: {
-          labelName: "Type of Service Request",
-          labelKey: "HC_TYPE_OF_SERVICE_REQUEST_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 12,
-          lg: 12
-        },
-        sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-        jsonPath: "SERVICEREQUEST.serviceType",
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: true,
-
-
-
-
-
-
-      })
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hc",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "SERVICEREQUEST.serviceType",
+            required: true,
+            gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 12,
+                    lg:12
+                  },
+    props: {
+    style: {
+    width: "100%",
+    cursor: "pointer"
     },
+   
+    className: "citizen-city-picker",
+    label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE" },
+    placeholder: {
+      labelName: "Select Service Request Type",
+      labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    },
+    sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
+    jsonPath: "SERVICEREQUEST.serviceType",
+   
+    labelsFromLocalisation: false,
+    suggestions: [],
+    fullwidth: true,
+    required: true,
+    inputLabelProps: {
+      shrink: true
+    },
+    isMulti: false,
+    labelName: "name",
+    valueName: "name"
+    },
+  },
     nooftrees: {
       ...getTextField({
         label: {
@@ -90,30 +130,35 @@ export const servicerequestdetailsEdit = getCommonCard({
         },
         required: true,
         pattern: getPattern("NoOfTree"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_NUMBER_OF_TREES_FIELD_MSG ",
         jsonPath: "SERVICEREQUEST.treeCount"
       })
     },
-    details: {
+    details:{
       ...getTextField({
-        label: {
-          labelName: "Service Request Additional Details",
-          labelKey: "HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL"
-        },
-        placeholder: {
-          labelName: "Service Request Additional Details",
-          labelKey: "HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL_PLACEHOLDER"
-        },
-        gridDefination: {
+         label:{
+            labelName:"Service Request Additional Details",
+            labelKey:"HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL"
+         },
+         placeholder:{
+            labelName:"Enter Service Request Additional Details",
+            labelKey:"HC_SERVICE_REQUEST_ADDITIONAL_DETAILS_LABEL_PLACEHOLDER"
+         },
+         gridDefination: {
           xs: 12,
           sm: 12,
           md: 12,
-          lg: 12
+          lg:12
         },
-        required: true,
-        pattern: getPattern("serviceRequestDescription"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "SERVICEREQUEST.description"
+        props:{
+          className: "textfield-enterable-selection",
+          multiline: true,
+          rows: "4"
+        },
+         required:true,
+         pattern:getPattern("serviceRequestDescription"),
+         errorMessage:"ERR_INVALID_SERVICE_REQUEST_DESCRIPTION_FIELD_MSG",
+         jsonPath:"SERVICEREQUEST.description"
       })
     },
     SILocationDetailsConatiner: getCommonContainer({
@@ -130,14 +175,16 @@ export const servicerequestdetailsEdit = getCommonCard({
           jsonPath:
             "SERVICEREQUEST.address"
         },
-        jsonPath: "SERVICEREQUEST.latitude",
+        jsonPath: "SERVICEREQUEST.address",
         onClickDefination: {
           action: "condition",
           callBack: showHideMapPopupEdit
         },
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 12,
+          md: 12,
+          lg:12
         },
         children: {
           gisTextField: {
@@ -148,10 +195,10 @@ export const servicerequestdetailsEdit = getCommonCard({
               },
               placeholder: {
                 labelName: "Select your property location on map",
-                labelKey: "EC_VIOLATION_DETAILS_GIS_CORD_PLACEHOLDER"
+                labelKey: "HC_VIOLATION_DETAILS_GIS_CORD_PLACEHOLDER"
               },
               jsonPath:
-                "SERVICEREQUEST.latitude",
+                "SERVICEREQUEST.address",
               iconObj: {
                 iconName: "gps_fixed",
                 position: "end"
@@ -167,7 +214,7 @@ export const servicerequestdetailsEdit = getCommonCard({
                 disabled: true,
                 cursor: "pointer",
                 jsonPath:
-                  "SERVICEREQUEST.latitude"
+                  "SERVICEREQUEST.address"
               }
             })
           }
@@ -189,37 +236,79 @@ export const servicerequestdetailsEdit = getCommonCard({
       }
 
     },
+    // locality: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Locality/Mohalla",
+    //       labelKey: "HC_LOCALITY_MOHALLA_LABEL"
+    //     },
+    //     optionLabel: "name",
+    //     optionValue: "name",
+    //     placeholder: {
+    //       labelName: "Locality/Mohalla",
+    //       labelKey: "HC_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"
+    //     },
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 12,
+    //       md: 12,
+    //       lg: 12
+    //     },
+    //     required: true,
+    //     sourceJsonPath: "applyScreenMdmsData.RAINMAKER-PGR.Sector",
+    //     jsonPath: "SERVICEREQUEST.mohalla",
+    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //     required: true,
+
+
+
+
+
+
+    //   })
+    // },
     locality: {
-      ...getSelectField({
-        label: {
-          labelName: "Locality/Mohalla",
-          labelKey: "HC_LOCALITY_MOHALLA_LABEL"
-        },
-        optionLabel: "name",
-        optionValue: "name",
-        placeholder: {
-          labelName: "Locality/Mohalla",
-          labelKey: "HC_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"
-        },
-        gridDefination: {
-          xs: 12,
-          sm: 12,
-          md: 12,
-          lg: 12
-        },
-        required: true,
-        sourceJsonPath: "applyScreenMdmsData.RAINMAKER-PGR.Sector",
-        jsonPath: "SERVICEREQUEST.mohalla",
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        required: true,
-
-
-
-
-
-
-      })
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hc",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "SERVICEREQUEST.mohalla",
+            required: true,
+            gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 12,
+                    lg:12
+                  },
+    props: {
+    style: {
+    width: "100%",
+    cursor: "pointer"
     },
+   
+    className: "citizen-city-picker",
+    label: {
+      labelName: "Locality/Mohalla",
+      labelKey: "HC_LOCALITY_MOHALLA_LABEL"
+    }, 
+    placeholder: {
+      labelName: "Select Locality/Mohalla",
+      labelKey: "HC_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"
+    },
+    sourceJsonPath: "applyScreenMdmsData.RAINMAKER-PGR.Sector",
+    jsonPath: "SERVICEREQUEST.mohalla",
+   
+    labelsFromLocalisation: false,
+    suggestions: [],
+    fullwidth: true,
+    required: true,
+    inputLabelProps: {
+      shrink: true
+    },
+    isMulti: false,
+    labelName: "name",
+    valueName: "name"
+    },
+  },
     houseno: {
       ...getTextField({
         label: {
@@ -238,7 +327,7 @@ export const servicerequestdetailsEdit = getCommonCard({
         },
         required: true,
         pattern: getPattern("location"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_HOUSE_NO._STREET_NAME_FIELD_MSG",
         jsonPath: "SERVICEREQUEST.houseNoAndStreetName"
       })
     },
@@ -259,7 +348,7 @@ export const servicerequestdetailsEdit = getCommonCard({
           lg: 12
         },
         pattern: getPattern("location"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_LANDMARK_FIELD_MSG",
         jsonPath: "SERVICEREQUEST.landmark"
       }),
 

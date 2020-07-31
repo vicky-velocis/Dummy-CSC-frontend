@@ -34,7 +34,8 @@ import {
   import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults,getMortgageSearchResults } from "./commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
+import { setDocsForEditFlow } from "./commons";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 let userInfo = JSON.parse(getUserInfo());
 
   export const applyRentedProperties = async (state, dispatch, activeIndex) => {
@@ -178,6 +179,59 @@ let userInfo = JSON.parse(getUserInfo());
     }
   }
 
+
+  export const submittransitsiteimages = async (state, dispatch) => {
+    try {
+      let queryObject = JSON.parse(
+          JSON.stringify(
+            get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications",[])
+          )
+        );
+      const filedata = get(state.form.newapplication, "files.media",[]);
+      const tenantId = getTenantId()
+      let response;
+      set(queryObject[0], "tenantId", tenantId);
+      set(queryObject[0], "description", queryObject[0].description);
+      let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(",");
+      const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); 
+      const output = filedata.map((fileitem,index) => 
+      
+        ({
+          "fileName" : (fileUrlPayload &&
+            fileUrlPayload[fileitem.fileStoreId] &&
+            decodeURIComponent(
+              getFileUrl(fileUrlPayload[fileitem.fileStoreId])
+                .split("?")[0]
+                .split("/")
+                .pop()
+                .slice(13)
+            )) ||
+          `Document - ${index + 1}`,
+          "fileStoreId" : fileitem.fileStoreId,
+          "fileUrl" : Object.values(fileUrlPayload)[index],
+          "documentType" : fileitem.file.documentType,
+          "tenantId" : tenantId,
+          "active": true
+        })
+      );
+      set(queryObject[0], "applicationDocuments", output)
+      dispatch(
+        prepareFinalObject("PropertyImagesApplications[0].applicationDocuments", output)
+      );
+      response = await httpRequest(
+        "post",
+        "/csp/property-images/_create",
+        "",
+        [],
+        { PropertyImagesApplications: queryObject }
+      );
+      return true;
+  } catch (error) {
+      dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+      console.log(error);
+      return false;
+  }
+  }
   
   export const applyMortgage = async (state, dispatch, activeIndex) => {
     try {
@@ -493,6 +547,85 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
 }
 
 
+export const getDetailsFromPropertyTransit = async (state, dispatch) => {
+  try {
+    
+    const transitNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PropertyImagesApplications[0].property.transitNumber",
+      ""
+    );
+    if(!!transitNumber) {
+      let queryObject = [
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "PM_APPROVED" }
+      ];
+      
+      const payload = await getSearchResults(queryObject)
+      
+      if (
+        payload &&
+        payload.Properties
+      ) {
+        if (!payload.Properties.length) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Transit Number",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "owners[0].property.transitNumber",
+              ""
+            )
+          )
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          
+          const {Properties} = payload;
+          const {owners = []} = Properties[0]
+          
+          dispatch(
+            prepareFinalObject(
+              "PropertyImagesApplications[0].property.pincode",
+              Properties[0].propertyDetails.address.pincode
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "PropertyImagesApplications[0].property.id",
+              Properties[0].propertyDetails.propertyId
+            )
+          )
+           dispatch(
+            prepareFinalObject(
+              "PropertyImagesApplications[0].property.area",
+              Properties[0].propertyDetails.address.area
+            )
+          )
+          
+          return true
+        }
+    }
+  }
+ } catch (error) {
+  console.log(e);
+  }
+}
+
+
 export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
   try {
     
@@ -540,7 +673,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           const {Properties} = payload;
           const {owners = []} = Properties[0]
           const findOwner = owners.find(item => !!item.activeState) || {}
-         
+        
           dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].property.pincode",
@@ -556,7 +689,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
            dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].property.colony",
-              Properties[0].propertyDetails.address.colony
+              getLocaleLabels("colony",Properties[0].propertyDetails.address.colony)
             )
           )
           dispatch(

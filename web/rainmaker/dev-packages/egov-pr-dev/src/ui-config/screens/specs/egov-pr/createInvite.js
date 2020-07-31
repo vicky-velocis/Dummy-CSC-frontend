@@ -2,7 +2,8 @@ import {
   getCommonContainer,
   getCommonHeader,
   getStepperObject,
-  getBreak
+  getBreak,
+  getCommonParagraph 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer, takeactionfooter } from "./inviteResources/footer";
@@ -488,11 +489,22 @@ const screenConfig = {
       children: {
         popup: applicantDetails,
 		 break: getBreak(),
-		    break: getBreak(),
-		 searchheader: getCommonHeader({
-				labelName: "Employee Search",
+		break: getBreak(),
+		//  searchheader: getCommonHeader({
+		// 		labelName: "Employee Search",
+		// 		labelKey: "PR_EMPLOYEE_SEARCH"
+    //   }),	
+      subText: getCommonParagraph({
+        labelName: "Employee Search",
 				labelKey: "PR_EMPLOYEE_SEARCH"
-			}),	
+      },
+      {
+        style:{
+          marginLeft:"25px",
+        }
+      }),
+
+
 		grid : searchDepartmentEmployeesResults
       }
     },

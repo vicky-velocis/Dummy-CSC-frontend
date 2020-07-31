@@ -11,6 +11,7 @@ import { httpRequest } from "./api";
 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+//import store from "ui-redux/store";
 
 
 
@@ -471,7 +472,7 @@ export const prepareDocumentsUploadData = (state, dispatch, type) => {
       []
     );
   }
-  debugger
+  
   documents = documents.filter(item => {
     return item.active;
   });
@@ -614,6 +615,7 @@ export const prepareDocumentsUploadData = (state, dispatch, type) => {
 
 
 export const createUpdateEvent = async (state, dispatch, status) => {
+  dispatch(toggleSpinner());
   let response = '';
   let response_updatestatus = '';
   let uuId = getQueryArg(window.location.href, "eventuuId") === 'null' ? '' : getQueryArg(window.location.href, "eventuuId") // get(state, "screenConfiguration.preparedFinalObject.PRSCP.applicationId");
@@ -639,12 +641,32 @@ export const createUpdateEvent = async (state, dispatch, status) => {
    startdate1=startdate1.split('-')
    endDate1=endDate1.split('-')
   
+   let area=get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.area")
+   let sector=get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.sector")
+   let typeofevent=get(state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.eventType")
+   let organizerDepartmentName=get(
+    state.screenConfiguration.preparedFinalObject,
+    "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
+    
+  );
+  let organizerUsernName=get(
+    state.screenConfiguration.preparedFinalObject,
+    "PublicRelation[0].CreateEventDetails.organizerUsernName",
+    
+  );
    let moduleCode=localStorageGet("modulecode")
     set(payload, "eventStatus", "PUBLISHED");
     set(payload, "startDate",startdate1[2]+'/'+startdate1[1]+'/'+startdate1[0]);
     set(payload, "endDate", endDate1[2]+'/'+endDate1[1]+'/'+endDate1[0]);
     set(payload, "tenantId", getTenantId());
     set(payload, "moduleCode",moduleCode);
+    set(payload, "area", area.label);
+    payload.hasOwnProperty("sector")===false?'':set(payload, "sector", sector.label);
+    
+    
+    set(payload, "eventType",typeofevent.label);
+    set(payload, "organizerDepartmentName", organizerDepartmentName.value);
+    set(payload, "organizerUsernName",organizerUsernName===undefined?"":organizerUsernName.label==="Select Organizer Employee"?"":organizerUsernName.label);
  
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
@@ -687,25 +709,37 @@ export const createUpdateEvent = async (state, dispatch, status) => {
       if (response.ResponseBody.eventDetailUuid!=='null' || response.ResponseBody.eventDetailUuid!=='') {
         dispatch(prepareFinalObject("EVENT", response));
         dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
-        
-       setApplicationNumberBox(state, dispatch);
+        dispatch(prepareFinalObject("EventDocuments",[]));
 
-        return { status: "success", message: response };
+       setApplicationNumberBox(state, dispatch);
+       if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
+        dispatch(toggleSpinner());
+        return { status: "success", message: "Event created successfully" };}
       } else {
+         dispatch(toggleSpinner());
         return { status: "fail", message: response };
       }
     } else
     {
+      
     set(payload, "eventDetailUuid",uuId);
       response = await httpRequest("post", "/prscp-services/v1/event/_update", "", [], { requestBody: payload });
       dispatch(prepareFinalObject("EVENT", response));
       dispatch(prepareFinalObject("EventDocuments",[]));
       dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
-      
-      return { status: "success", message: response };
+      if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
+        dispatch(toggleSpinner());
+        return { status: "success", message: "Event updated successfully" };}
+        else {
+          dispatch(toggleSpinner());
+         return { status: "fail", message: response };
+       }
+   //   }
+    //  return { status: "success", message: response };
     }
 
   } catch (error) {
+    dispatch(toggleSpinner());
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
 
     // Revert the changed pfo in case of request failure
@@ -844,19 +878,23 @@ export const furnishResponse = response => {
    let starttime=response.ResponseBody[0].startTime
  
    let endtime=response.ResponseBody[0].endTime
-
+  
+   
+   
+   
   set(refurnishresponse, "eventTitle", response.ResponseBody[0].eventTitle);
   set(refurnishresponse,"eventLocation", response.ResponseBody[0].eventLocation);
 
-  set(refurnishresponse, "sector", response.ResponseBody[0].sector);
-  set(refurnishresponse, "organizerDepartmentName", response.ResponseBody[0].organizerDepartmentName);
-  set(refurnishresponse, "organizerUsernName", response.ResponseBody[0].organizerUsernName);
-  set(refurnishresponse, "eventType", response.ResponseBody[0].eventType);
+  set(refurnishresponse, "sector",  {value: "", label: response.ResponseBody[0].sector});
+  set(refurnishresponse, "organizerDepartmentName",{value:response.ResponseBody[0].organizerDepartmentName, label: response.ResponseBody[0].EmpName});
+  
+  set(refurnishresponse, "organizerUsernName",{value: "", label: response.ResponseBody[0].organizerUsernName});
+  set(refurnishresponse, "eventType", {value: "", label: response.ResponseBody[0].eventType});
   set(refurnishresponse,"eventBudget", response.ResponseBody[0].eventBudget);
 
   set(refurnishresponse,"committeeUuid", response.ResponseBody[0].committeeUuid);
   set(refurnishresponse,"eventDescription", response.ResponseBody[0].eventDescription);
-  set(refurnishresponse,"area", response.ResponseBody[0].area);
+  set(refurnishresponse,"area", {value: "", label: response.ResponseBody[0].area});
 
 set(refurnishresponse, "startDate1",startdate[0]);
   
@@ -868,6 +906,10 @@ set(refurnishresponse, "startDate1",startdate[0]);
   set(refurnishresponse,"twitterUrl", response.ResponseBody[0].twitterUrl);
 
   set(refurnishresponse,"instagramUrl", response.ResponseBody[0].instagramUrl);
+
+  set(refurnishresponse,"eventId", response.ResponseBody[0].eventId);
+
+  set(refurnishresponse,"status", response.ResponseBody[0].status);
   
   return refurnishresponse;
   }
@@ -2218,7 +2260,7 @@ export const getInviteGuestGridData = async () => {
 
   
   export const UpdateMasterTender = async (dispatch,data) => {
-    debugger
+    
       try {
         const response = await httpRequest(
           "post",
@@ -2246,7 +2288,7 @@ export const getInviteGuestGridData = async () => {
     };
 //craeteMaterDtat
   export const createMasterTender = async (dispatch,data) => {
-    debugger
+    dispatch(toggleSpinner());
       try {
         const response = await httpRequest(
           "post",
@@ -2262,6 +2304,7 @@ export const getInviteGuestGridData = async () => {
         return response;
     
       } catch (error) {
+        dispatch(toggleSpinner());
         store.dispatch(
           toggleSnackbar(
             true,
@@ -2274,7 +2317,7 @@ export const getInviteGuestGridData = async () => {
     };
     
     export const forwardMasterTender = async data => {
-      debugger
+      
         try {
           const response = await httpRequest(
             "post",
@@ -2399,7 +2442,7 @@ export const getInviteGuestGridData = async () => {
 	  
        export const getSearchResultsForTenderSummary = async data => {
         try {
-          debugger
+          
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/tender/_get",
@@ -2461,7 +2504,7 @@ export const getEventeelistGridData = async () => {
 // Get Sample Email Template
 
 // Get InviteeeList of a event  grid data
-export const getsampleemailtemplate = async () => {
+export const getsampleemailtemplate = async (action, state, dispatch) => {
   
   let queryObject = [];
   var data = {
@@ -2492,6 +2535,8 @@ export const getsampleemailtemplate = async () => {
   localStorageSet("smsTemplate", payload.ResponseBody.smsContent)
   localStorageSet("email", resultdata[0].emailBody)
   localStorageSet("sms", payload.ResponseBody.smsContent)
+  localStorageSet("EmaildAttachment", payload.ResponseBody.setdoc)
+
    return payload;
   } catch (error) {
   }
@@ -2551,6 +2596,8 @@ export const invitationtoguests = async (state, dispatch) => {
 	
 	if(payload.ResponseInfo.status === "Success")
 	{
+    dispatch(prepareFinalObject("documentsUploadRedux", {}));
+
 		 dispatch(toggleSnackbar(
                 true,
                 { labelName: 'Invitation sent successfully', labelCode: 'INVITATION_SUCCESS' },
@@ -2603,7 +2650,7 @@ export const invitationtoguests = async (state, dispatch) => {
             store.dispatch(
               toggleSnackbar(
                 true,
-                { labelName: 'Success', labelCode: 'Success' },
+                { labelName: 'Press created successfully.', labelCode: 'PR_CREATE_PRESS_MSG' },
                 "success"
               ));
           
@@ -2635,8 +2682,9 @@ export const invitationtoguests = async (state, dispatch) => {
       };
 
    export const createPressNote = async   (dispatch,data) => {
+    dispatch(toggleSpinner());
         try {
-          debugger
+          
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/pressnote/_create",
@@ -2646,10 +2694,11 @@ export const invitationtoguests = async (state, dispatch) => {
           );
         
           if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
+            dispatch(toggleSpinner());
             store.dispatch(
               toggleSnackbar(
                 true,
-                { labelName: 'Success', labelCode: 'Success' },
+                { labelName: 'Press note created successfully.', labelCode: 'PR_GEN_PRESS_MSG' },
                 "success"
               ));
              
@@ -2660,11 +2709,13 @@ export const invitationtoguests = async (state, dispatch) => {
             return response
           }
           else {
+            dispatch(toggleSpinner());
             dispatch(toggleSnackbar(true, response.ResponseInfo.msgId, "warning"));
            
           }
 
         } catch (error) {
+          dispatch(toggleSpinner());
           store.dispatch(
             toggleSnackbar(
               true,
@@ -2677,7 +2728,7 @@ export const invitationtoguests = async (state, dispatch) => {
       };
       export const publishTenderNotice = async   (dispatch,data) => {
         try {
-          debugger
+          
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/tender/_publish",
@@ -2690,7 +2741,7 @@ export const invitationtoguests = async (state, dispatch) => {
             store.dispatch(
               toggleSnackbar(
                 true,
-                { labelName: 'Success', labelCode: 'Success' },
+                { labelName: 'Tender published successfully.', labelCode: 'PR_PUBLISH_TENDER_MSG' },
                 "success"
               ));
            
@@ -2717,7 +2768,7 @@ export const invitationtoguests = async (state, dispatch) => {
 
 export const updatePressNote = async   (dispatch,data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/pressnote/_update",
@@ -2730,7 +2781,7 @@ export const updatePressNote = async   (dispatch,data) => {
       store.dispatch(
         toggleSnackbar(
           true,
-          { labelName: 'Success', labelCode: 'Success' },
+          { labelName: 'Press note updated successfully.', labelCode: 'PR_UPDATE_GEN_PRESS_MSG' },
           "success"
         ));
        dispatch(prepareFinalObject("pressnote", {}));
@@ -2762,7 +2813,7 @@ export const updatePressNote = async   (dispatch,data) => {
 
       export const updatePressmaster = async   (dispatch,data) => {
         try {
-          debugger
+          
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/press/_update",
@@ -2775,7 +2826,7 @@ export const updatePressNote = async   (dispatch,data) => {
             store.dispatch(
               toggleSnackbar(
                 true,
-                { labelName: 'Success', labelCode: 'Success' },
+                { labelName: 'Press updated successfully.', labelCode: 'PR_UPDATE_PRESS_MSG' },
                 "success"
               ));
               dispatch(prepareFinalObject("PRESSDETAILS", {}));
@@ -2802,7 +2853,7 @@ export const updatePressNote = async   (dispatch,data) => {
 
       export const deletePressmaster = async(dispatch,data) => {
         try {
-        //  debugger
+        //  
           const response = await httpRequest(
             "post",
             "/prscp-services/v1/press/_delete",
@@ -2815,7 +2866,7 @@ export const updatePressNote = async   (dispatch,data) => {
             store.dispatch(
               toggleSnackbar(
                 true,
-                { labelName: 'Success', labelCode: 'Success' },
+                { labelName: 'Press deleted successfully.', labelCode: 'PR_DELETE_PRESS_MSG' },
                 "success"
               ));
             dispatch(setRoute(`pressGrid`))
@@ -2911,7 +2962,8 @@ export const updatePressNote = async   (dispatch,data) => {
   {
    
   set(refurnishresponse, "name", response.ResponseBody[0].personnelName);
-  set(refurnishresponse,"typeOfThePress", response.ResponseBody[0].pressType);
+  //set(refurnishresponse,"typeOfThePress", response.ResponseBody[0].pressType);
+  set(refurnishresponse,"typeOfThePress",  {value: "", label: response.ResponseBody[0].pressType});
   set(refurnishresponse,"publicationName", response.ResponseBody[0].publicationName);
   
   set(refurnishresponse, "emailId", response.ResponseBody[0].email);
@@ -2932,7 +2984,7 @@ export const getSearchResultsTender = async queryObject => {
 }
   };
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/tender/_get",
@@ -2982,7 +3034,7 @@ localStorageSet('tendernote',response.ResponseBody[0].noteContent)
 
 export const createCommitteemaster = async   (dispatch,data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/committee/_create",
@@ -2995,13 +3047,14 @@ export const createCommitteemaster = async   (dispatch,data) => {
       store.dispatch(
         toggleSnackbar(
           true,
-          { labelName: 'Success', labelCode: 'Success' },
+          { labelName: 'Committee created successfully.', labelCode: 'PR_CREATE_COMMITTEE_MSG' },
           "success"
         ));
       
 
       dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
       dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
+      dispatch(prepareFinalObject("CreateInvite", {}));
       
       dispatch(setRoute(`committeeMaster`))
       return response
@@ -3043,7 +3096,7 @@ export const createCommitteemaster = async   (dispatch,data) => {
 
 export const deleteCommiteemaster = async(dispatch,data) => {
   try {
-  //  debugger
+  //  
     const response = await httpRequest(
       "post",
       "/pr-services/committee/_delete",
@@ -3082,7 +3135,7 @@ export const deleteCommiteemaster = async(dispatch,data) => {
 
 export const updateCommitteemaster = async   (dispatch,data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/committee/_update",
@@ -3095,13 +3148,15 @@ export const updateCommitteemaster = async   (dispatch,data) => {
       store.dispatch(
         toggleSnackbar(
           true,
-          { labelName: 'Success', labelCode: 'Success' },
+          { labelName: 'Committee updated successfully.', labelCode: 'PR_UPDATE_COMMITTEE_MSG' },
           "success"
         ));
        // getPressMasterGridData1
 
       dispatch(prepareFinalObject("PublicRelation[0].CreateCommitteeDetails", {}));
       dispatch(prepareFinalObject("PublicRelation[0].CreateMasterCommitee", {}));
+      dispatch(prepareFinalObject("CreateInvite", {}));
+      
       dispatch(setRoute(`committeeMaster`))
       return response
     }
@@ -3125,7 +3180,7 @@ export const updateCommitteemaster = async   (dispatch,data) => {
 
 export const getEmployeeByUUidHRMS = async data => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/egov-hrms/employees/_search",
@@ -3151,7 +3206,7 @@ export const getEmployeeByUUidHRMS = async data => {
 
 export const getEmployeeByUUid = async data => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/user/_search",
@@ -3191,7 +3246,7 @@ export const furnishResponse_Committee = response => {
 
 export const cancelEventApplication = async (state,dispatch,data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/event/_updateStatus",
@@ -3203,7 +3258,7 @@ export const cancelEventApplication = async (state,dispatch,data) => {
       store.dispatch(
         toggleSnackbar(
           true,
-          { labelName: 'Success', labelCode: 'Success' },
+          { labelName: 'Event cancelled successfully.', labelCode: 'EVENT_CANCEL_MSG' },
           "success"
         ));
       dispatch(setRoute(`search`))
@@ -3233,7 +3288,7 @@ export const cancelEventApplication = async (state,dispatch,data) => {
 
 export const getEventFilterResults = async (data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/event/_get",
@@ -3264,7 +3319,7 @@ export const getEventFilterResults = async (data) => {
 
 export const getPressFilterResults = async (data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/pressnote/_get"
@@ -3298,7 +3353,7 @@ export const getPressFilterResults = async (data) => {
 
 export const getTenderFilterResults = async (data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/tender/_get"
@@ -3332,7 +3387,7 @@ export const getTenderFilterResults = async (data) => {
 
 export const getPressMasterFilterResults = async (data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/press/_get"
@@ -3364,7 +3419,7 @@ export const getPressMasterFilterResults = async (data) => {
 
 export const getLocaliyReportData = async (data) => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/report/prscp-services/_get"
@@ -3399,7 +3454,7 @@ export const getLocaliyReportData = async (data) => {
 
 export const getSearchResultsForTenderSummary1 = async (dispatch,data)  => {
   try {
-    debugger
+    
     const response = await httpRequest(
       "post",
       "/prscp-services/v1/tender/_get",

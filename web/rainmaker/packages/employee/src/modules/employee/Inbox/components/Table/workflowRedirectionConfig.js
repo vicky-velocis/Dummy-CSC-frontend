@@ -28,7 +28,7 @@ export const getWFConfig = (module,businessService) => {
           DEFAULT: "/tradelicence/search-preview",
         };
       }
-    case "RENTEDPROPERTIES": {
+    case "RENTEDPROPERTIES": 
       if(businessService === "MasterRP") {
       return {
         INITIATED: "/rented-properties/apply",
@@ -50,7 +50,16 @@ export const getWFConfig = (module,businessService) => {
         DEFAULT: "/rented-properties/mortgage-search-preview",
       };
     }
-    }
+    case "WS-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
+    case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
     case "FIRENOC":
       return {
         INITIATED: "/fire-noc/apply",

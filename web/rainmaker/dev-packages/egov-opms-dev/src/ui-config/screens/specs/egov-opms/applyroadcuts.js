@@ -3,7 +3,7 @@ import { footer } from "./applyResourceRoadCut/footer";
 import { nocDetails } from "./applyResourceRoadCut/nocDetails";
 import { documentDetails } from "./applyResourceRoadCut/documentDetails";
 import { getFileUrlFromAPI, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import {  prepareFinalObject, handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getOPMSTenantId, setapplicationType, getUserInfo, setapplicationNumber, lSRemoveItem, lSRemoveItemlocal } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import set from "lodash/set";
@@ -11,8 +11,10 @@ import get from "lodash/get";
 import jp from "jsonpath";
 import { getCurrentFinancialYear, clearlocalstorageAppDetails } from "../utils";
 
-import {  prepareDocumentsUploadData, getSearchResultsView, furnishRoadcutNocResponse,
-  setApplicationNumberBox} from "../../../../ui-utils/commons";
+import {
+  prepareDocumentsUploadData, getSearchResultsView, furnishRoadcutNocResponse,
+  setApplicationNumberBox
+} from "../../../../ui-utils/commons";
 
 export const stepsData = [
   { labelName: "Road Cut NOC Details", labelKey: "ROADCUT_APPLICANT_DETAILS_NOC" },
@@ -137,7 +139,12 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "RoadCutTypeOfApplicant"
-            }
+            },
+
+            {
+              name: "roadCutDivision"
+            },
+            
           ]
         },
         {
@@ -179,7 +186,7 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       { key: "tenantId", value: tenantId },
       { key: "applicationNumber", value: applicationNumber }
     ]);
-    
+
     let Refurbishresponse = furnishRoadcutNocResponse(response);
     dispatch(prepareFinalObject("ROADCUTNOC", Refurbishresponse));
     if (applicationNumber) {
@@ -189,52 +196,101 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
     let documentsPreview = [];
     // Get all documents from response
     let roadcutnocdetail = get(state, "screenConfiguration.preparedFinalObject.ROADCUTNOC", {});
-    let uploadRoadCutCertificate = roadcutnocdetail.hasOwnProperty('uploadDocuments') ?
-      roadcutnocdetail.uploadDocuments[0]['fileStoreId'] : '';
 
-    if (uploadRoadCutCertificate !== '') {
-      documentsPreview.push({
-        title: "ROADCUT_CERTIFIACTE",
-        fileStoreId: uploadRoadCutCertificate,
-        linkText: "View"
-      });
-      let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-      let fileUrls =
-        fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-      documentsPreview = documentsPreview.map(function (doc, index) {
+    //    let documentsPreview = [];
 
-        doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-        //doc["name"] = doc.fileStoreId;
-        doc["name"] =
-          (fileUrls[doc.fileStoreId] &&
-            decodeURIComponent(
-              fileUrls[doc.fileStoreId]
-                .split(",")[0]
-                .split("?")[0]
-                .split("/")
-                .pop()
-                .slice(13)
-            )) ||
-          `Document - ${index + 1}`;
+    let doc = roadcutnocdetail.uploadDocuments
 
-          doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-          doc["fileName"] =
-            (fileUrls[doc.fileStoreId] &&
-              decodeURIComponent(
-                fileUrls[doc.fileStoreId]
-                  .split(",")[0]
-                  .split("?")[0]
-                  .split("/")
-                  .pop()
-                  .slice(13)
-              )) ||
-            `Document - ${index + 1}`;
-        return doc;
-      });
-      dispatch(prepareFinalObject("documentsPreview", documentsPreview));
-      dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
-      
+    let doctitle = [];
+    if (doc.length > 0) {
+
+
+      if (doc.length > 0) {
+
+        for (let i = 0; i < doc.length; i++) {
+          let eventDoc = doc[i]['fileStoreId']
+          doctitle.push(doc[i]['fileName:']);
+
+          if (eventDoc !== '' || eventDoc !== undefined) {
+            documentsPreview.push({
+              title: doc[i]['fileName:'],
+              fileStoreId: eventDoc,
+              linkText: "View",
+              fileName: doc[i]['fileName:']
+            })
+            let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+            let fileUrls =
+              fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+
+            documentsPreview = documentsPreview.map(function (doc, index) {
+
+
+              doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+              doc["fileName"] =
+                (fileUrls[doc.fileStoreId] &&
+                  decodeURIComponent(
+                    fileUrls[doc.fileStoreId]
+                      .split(",")[0]
+                      .split("?")[0]
+                      .split("/")
+                      .pop()
+                      .slice(13)
+                  )) ||
+                `Document - ${index + 1}`;
+              return doc;
+            });
+          }
+        }
+
+      }
     }
+    dispatch(prepareFinalObject("RoadCutDocuments", documentsPreview));
+    // let uploadRoadCutCertificate = roadcutnocdetail.hasOwnProperty('uploadDocuments') ?
+    //   roadcutnocdetail.uploadDocuments[0]['fileStoreId'] : '';
+
+    // if (uploadRoadCutCertificate !== '') {
+    //   documentsPreview.push({
+    //     title: "ROADCUT_CERTIFIACTE",
+    //     fileStoreId: uploadRoadCutCertificate,
+    //     linkText: "View"
+    //   });
+    //   let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+    //   let fileUrls =
+    //     fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+    //   documentsPreview = documentsPreview.map(function (doc, index) {
+
+    //     doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+    //     //doc["name"] = doc.fileStoreId;
+    //     doc["name"] =
+    //       (fileUrls[doc.fileStoreId] &&
+    //         decodeURIComponent(
+    //           fileUrls[doc.fileStoreId]
+    //             .split(",")[0]
+    //             .split("?")[0]
+    //             .split("/")
+    //             .pop()
+    //             .slice(13)
+    //         )) ||
+    //       `Document - ${index + 1}`;
+
+    //       doc["fileUrl"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+    //       doc["fileName"] =
+    //         (fileUrls[doc.fileStoreId] &&
+    //           decodeURIComponent(
+    //             fileUrls[doc.fileStoreId]
+    //               .split(",")[0]
+    //               .split("?")[0]
+    //               .split("/")
+    //               .pop()
+    //               .slice(13)
+    //           )) ||
+    //         `Document - ${index + 1}`;
+    //     return doc;
+    //   });
+    //   dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+    //   dispatch(prepareFinalObject("documentsUploadRedux[0].documents", documentsPreview));
+
+    //    }
 
   }
 };

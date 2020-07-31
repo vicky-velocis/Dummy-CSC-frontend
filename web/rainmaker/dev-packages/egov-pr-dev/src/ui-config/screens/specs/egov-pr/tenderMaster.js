@@ -143,7 +143,9 @@ const tenderMaster = {
   uiFramework: "material-ui",
   name: "tenderMaster",
   beforeInitScreen: (action, state, dispatch) => {
-
+    localStorageSet('tenderFilStore',"") 
+    dispatch(prepareFinalObject("tenderNotice", {}));
+    dispatch(prepareFinalObject("documentsUploadRedux[0]",{}));
     const tenantId = getTenantId()
     localStorageSet("tendernote", "");
 

@@ -8,6 +8,7 @@ import {
     convertEpochToDate
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { gotoApplyWithStepPressMaster,gotoApplyWithStepCommitteeMaster } from "../../utils/index";
+  import "./customStyle.css";
   import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
   import { searchDepartmentEmployeesResults_committeeSummary,searchDepartmentEmployeesResults,searchDepartmentEmployeesResults_committee,searchDepartmentEmployeesResults1, searchInvitedEmployeesResults } from "../committeeResource/searchResults";
   

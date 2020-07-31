@@ -104,9 +104,11 @@ const prepareDocumentsView = async (state, dispatch) => {
 
 };
 
-const setSearchResponse = async (state, dispatch, action, serviceRequestId, tenantId) => {
+const setSearchResponse = async (state, dispatch, action, serviceRequestId) => {
+  //debugger
+  let tenantIdForBoth = JSON.parse(getUserInfo()).permanentCity;
   const response = await getSearchResultsView([
-    { key: "tenantId", value: tenantId },
+    { key: "tenantId", value: tenantIdForBoth },
     { key: "service_request_id", value: serviceRequestId }
   ]);
   
@@ -196,7 +198,7 @@ const screenConfig = {
 
     const tenantId = getTenantId();
 
-    setSearchResponse(state, dispatch, action, serviceRequestId, tenantId);
+    setSearchResponse(state, dispatch, action, serviceRequestId);
 
     const queryObject = [
       { key: "tenantId", value: tenantId },

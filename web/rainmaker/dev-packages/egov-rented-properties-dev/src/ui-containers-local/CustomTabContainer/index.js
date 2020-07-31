@@ -10,155 +10,16 @@ import get from "lodash/get";
 
 class MultiItem extends React.Component {
   state = {
-    tabIndex: 0
-  };
-
-  fieldsToReset = [
-    "ReceiptTemp[0].Bill[0].payer",
-    "ReceiptTemp[0].Bill[0].paidBy",
-    "ReceiptTemp[0].Bill[0].payerMobileNumber",
-    "ReceiptTemp[0].instrument.transactionNumber",
-    "ReceiptTemp[0].instrument.transactionDateInput",
-    "ReceiptTemp[0].instrument.ifscCode",
-    "ReceiptTemp[0].instrument.instrumentNumber",
-    "ReceiptTemp[0].instrument.transactionNumberConfirm",
-    "ReceiptTemp[0].instrument.bank.name",
-    "ReceiptTemp[0].instrument.branchName"
-  ];
-
-  resetAllFields = (children, dispatch, state) => {
-    for (var child in children) {
-      if (children[child].children) {
-        for (var innerChild in children[child].children) {
-          if (
-            get(
-              state.screenConfiguration.screenConfig["pay"],
-              `${
-                children[child].children[innerChild].componentJsonpath
-              }.props.value`
-            )
-          ) {
-            dispatch(
-              handleField(
-                "pay",
-                children[child].children[innerChild].componentJsonpath,
-                "props.value",
-                ""
-              )
-            );
-            dispatch(
-              handleField(
-                "pay",
-                children[child].children[innerChild].componentJsonpath,
-                "props.error",
-                false
-              )
-            );
-            dispatch(
-              handleField(
-                "pay",
-                children[child].children[innerChild].componentJsonpath,
-                "isFieldValid",
-                true
-              )
-            );
-            dispatch(
-              handleField(
-                "pay",
-                children[child].children[innerChild].componentJsonpath,
-                "props.helperText",
-                ""
-              )
-            );
-          }
-        }
-      }
-    }
-  };
-
-  resetFields = (dispatch, state) => {
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", ""));
-    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", ""));
-    // dispatch(
-    //   prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", "")
-    // );
-    // dispatch(prepareFinalObject("ReceiptTemp[0].instrument", {}));
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.bank.name"
-      ) &&
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "ReceiptTemp[0].instrument.branchName"
-      )
-    ) {
-      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.bank.name", ""));
-      dispatch(prepareFinalObject("ReceiptTemp[0].instrument.branchName", ""));
-    } // Has to manually clear bank name and branch
-    const keyToIndexMapping = [
-      {
-        index: 0,
-        key: "cash"
-      },
-      {
-        index: 1,
-        key: "cheque"
-      },
-      {
-        index: 2,
-        key: "demandDraft"
-      },
-      {
-        index: 3,
-        key: "card"
-      }
-    ];
-
-    keyToIndexMapping.forEach(item => {
-      const objectJsonPath = `components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[${
-        item.index
-      }].tabContent[${item.key}].children`;
-      const children = get(
-        state.screenConfiguration.screenConfig["pay"],
-        objectJsonPath,
-        {}
-      );
-      this.resetAllFields(children, dispatch, state);
-    });
-  };
-
-  setInstrumentType = (value, dispatch) => {
-    dispatch(
-      prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", value)
-    );
-  };
-
-  onTabChange = (tabIndex, dispatch, state) => {
-    this.resetFields(dispatch, state);
-    switch (tabIndex) {
-      case 0:
-        this.setInstrumentType("Cash", dispatch);
-        break;
-      case 1:
-        this.setInstrumentType("Cheque", dispatch);
-        break;
-      case 2:
-        this.setInstrumentType("DD", dispatch);
-        break;
-      case 3:
-        this.setInstrumentType("Card", dispatch);
-        break;
-      default:
-        this.setInstrumentType("Cash", dispatch);
-        break;
-    }
+    tabIndex: this.props.activeIndex || 0
   };
 
   onTabClick = tabIndex => {
     const { state, dispatch } = this.props;
-    this.onTabChange(tabIndex, dispatch, state);
-    this.setState({ tabIndex });
+    // this.onTabChange(tabIndex, dispatch, state);
+    if(this.state.tabIndex !== tabIndex) {
+      this.props.onTabChange(tabIndex, dispatch, state)
+      this.setState({ tabIndex });
+    }
   };
 
   render() {

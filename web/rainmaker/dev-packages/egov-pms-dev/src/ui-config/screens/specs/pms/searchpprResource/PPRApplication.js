@@ -16,6 +16,14 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "searchppr",
+      "components.div.children.PPRApplication.children.cardContent.children.appNOCAndMobNumContainer.children.department",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "searchppr",
       "components.div.children.PPRApplication.children.cardContent.children.appNOCAndMobNumContainer.children.code",
       "props.value",
       ""
@@ -123,6 +131,29 @@ export const PPRApplication = getCommonCard({
       pattern: getPattern("Date"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       required: false
+    }),
+    department: getSelectField({
+      label: { labelName: "Department", labelKey: "HR_DEPT_LABEL" },
+      placeholder: {
+        labelName: "Select Department",
+        labelKey: "HR_DEPT_PLACEHOLDER"
+      },
+      required: false,
+      jsonPath: "searchScreen.departments",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      sourceJsonPath: "searchScreenMdmsData.common-masters.Department",
+      props: {
+        optionLabel: "name",
+        optionValue: "code"
+        // hasLocalization: false
+      },
+      // localePrefix: {
+      //   moduleName: "common-masters",
+      //   masterName: "Department"
+      // }
     }),
   }),
   

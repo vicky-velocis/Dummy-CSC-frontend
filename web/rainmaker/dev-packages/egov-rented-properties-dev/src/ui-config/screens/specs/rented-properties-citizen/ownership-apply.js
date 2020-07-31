@@ -8,90 +8,12 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getOwnershipSearchResults, setDocsForEditFlow } from "../../../../ui-utils/commons";
+import { getOwnershipSearchResults, setDocsForEditFlow, setDocumentData } from "../../../../ui-utils/commons";
 
 const header = getCommonHeader({
     labelName: "Apply for Ownership Transfer",
     labelKey: "RP_APPLY_OWNERSHIP_TRANFER"
 });
-
-export const prepareOwnerShipDocuments = documents => {
-  let documentsArr =
-    documents.length > 0
-      ? documents.reduce((documentsArr, item, ind) => {
-        documentsArr.push({
-          name: item.code,
-          required: item.required,
-          jsonPath: `Owners[0].ownerDetails.ownershipTransferDocuments[${ind}]`,
-          statement: item.description
-        });
-        return documentsArr;
-      }, [])
-      : [];
-  return documentsArr;
-};
-
-const setDocumentData = async(action, state, dispatch) => {
-    const documentTypePayload = [{
-        moduleName: "PropertyServices",
-        masterDetails: [{name: "applications"}]
-      }
-    ]
-    const documentRes = await getMdmsData(dispatch, documentTypePayload);
-    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-    const {applications = []} = PropertyServices || {}
-    const findFreshLicenceItem = applications.find(item => item.code === "FRESHLICENSE")
-    const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
-    const freshLicenceDocuments = masterDocuments.map(item => ({
-    type: item.code,
-    description: {
-      labelName: "Only .jpg and .pdf files. 6MB max file size.",
-      labelKey: item.fileType
-    },
-    formatProps :{
-      accept : item.accept || "image/*, .pdf, .png, .jpeg",
-    }, 
-    maxFileSize: 6000,
-    downloadUrl: item.downloadUrl,
-    moduleName: "RentedProperties",
-    statement: {
-        labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
-        labelKey: item.description
-    }
-    }))
-    const documentTypes = prepareOwnerShipDocuments(masterDocuments);
-    let applicationDocs = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Owners[0].ownerDetails.ownershipTransferDocuments",
-      []
-    ) || [];
-    applicationDocs = applicationDocs.filter(item => !!item)
-    let applicationDocsReArranged =
-      applicationDocs &&
-      applicationDocs.length &&
-      documentTypes.map(item => {
-        const index = applicationDocs.findIndex(
-          i => i.documentType === item.name
-        );
-        return applicationDocs[index];
-      }).filter(item => !!item)
-    applicationDocsReArranged &&
-      dispatch(
-        prepareFinalObject(
-          "Owners[0].ownerDetails.ownershipTransferDocuments",
-          applicationDocsReArranged
-        )
-      );
-    dispatch(
-      handleField(
-          "ownership-apply",
-          "components.div.children.formwizardSecondStep.children.ownershipTransferDocumentsDetails.children.cardContent.children.documentList",
-          "props.inputProps",
-          freshLicenceDocuments
-      )
-  );
-    dispatch(prepareFinalObject("OwnersTemp[0].ownershipTransferDocuments", documentTypes))
-}
 
 const getData = async(action, state, dispatch) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -118,7 +40,7 @@ const getData = async(action, state, dispatch) => {
       )
     )
   }
-  setDocumentData(action, state, dispatch)
+  setDocumentData(action, state, dispatch, {documentCode: "FRESHLICENSE", jsonPath: "Owners[0].ownerDetails.ownershipTransferDocuments", screenKey: "ownership-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"OwnersTemp[0].ownershipTransferDocuments"})
 }
 
 

@@ -20,7 +20,9 @@ import {
    localStorageGet
  } from "egov-ui-kit/utils/localStorageUtils";
 const DeletePresmaterData = (state, dispatch) => {
-  
+  var confirmCancel= confirm("Are you sure you want to delete this press?");
+  if(confirmCancel===true)
+  {
     let payload={
       "RequestBody":{ 
         "tenantId":getTenantId(),
@@ -30,7 +32,7 @@ const DeletePresmaterData = (state, dispatch) => {
       }}
       
         deletePressmaster(dispatch,payload);
-    
+    }
   };
 
 const RedirectPresmaterData = (state, dispatch) => {

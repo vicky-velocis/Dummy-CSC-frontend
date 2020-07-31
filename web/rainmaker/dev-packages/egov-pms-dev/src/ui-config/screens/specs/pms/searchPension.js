@@ -50,7 +50,15 @@ export const getMdmsData = async (action, state, dispatch) => {
             name:"marritalStatus"
           },
           
-        ] }
+        ] },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
       ]
     }
   };

@@ -21,7 +21,7 @@ import {
     header: getCommonTitle(
       {
         labelName: "Create Committee",
-        labelKey: "PR_CREATE_COMMITTE_CARD"
+        labelKey: "PR_CREATE_COMMITTEE"
       },
       {
         style: {
@@ -45,7 +45,7 @@ import {
           },
         pattern:getPattern("TextValidation"),
           
-          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          errorMessage: "PR_COMMITTEE_NAME_INVALID",
           
         jsonPath: "PublicRelation[0].CreateCommitteeDetails.committeename",
 		 required: true,

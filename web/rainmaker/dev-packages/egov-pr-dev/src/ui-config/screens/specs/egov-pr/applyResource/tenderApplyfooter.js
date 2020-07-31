@@ -20,7 +20,19 @@ import {  localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
 import store from "../../../../../ui-redux/store";
 const state = store.getState();
 
-
+const truncTime=(str, length, ending)=> {
+  if (length == null) {
+    length = 20;
+  }
+  if (ending == null) {
+    ending = '...';
+  }
+  if (str.length > length) {
+    return str.substring(0, length - ending.length) + ending;
+  } else {
+    return str;
+  }
+};
 
 const setReviewPageRoute = (state, dispatch) => {
 	             let id=getQueryArg(window.location.href, "eventuuId")            
@@ -148,11 +160,11 @@ const callBackForSubmit = async (state, dispatch) => {
   
         
         [getTextToLocalMapping("Publication Name")]:
-        item['Publication Name'] || "-",
+        truncTime(item['Publication Name']) || "-",
         [ getTextToLocalMapping("Type of the Press")]:
         item['Type of the Press'] || "-",
         [ getTextToLocalMapping("Personnel Name")]:
-        item['Personnel Name'] || "-",
+        truncTime(item['Personnel Name'])|| "-",
         [ getTextToLocalMapping("Email Id")]:
         item['Email Id'] || "-",
         [getTextToLocalMapping("Mobile Number")]:
@@ -177,12 +189,13 @@ const callBackForSubmit = async (state, dispatch) => {
     else
     {
       dispatch(
-                toggleSnackbar(
-                  true,
-                  { labelName: "Please select Employees!", labelKey: "" },
-                  "warning"
-                )
-              );
+        toggleSnackbar(
+          true,
+          {   labelName: "Please fill all mandatory fields and select atleast one Press!",
+  labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST" },
+          "warning"
+        )
+      );
     }
    }
   
@@ -221,7 +234,7 @@ const callBackForSubmit = async (state, dispatch) => {
               labelName:
                 "Please check the Missing/Invalid field, then proceed!",
                
-              labelKey: "PR_ERR_FILL_ALL_MANDATORY_FIELDS_TOAST"
+              labelKey: "PR_ERR_FILL_ALL_MANDATORY_FIELDS_TOAST1"
             };
             break;
           case 2:
@@ -235,11 +248,12 @@ const callBackForSubmit = async (state, dispatch) => {
             errorMessage = {
               labelName:
                  "Please check the Missing/Invalid field, then proceed!",
-              labelKey: "PR_ERR_FILL_ALL_MANDATORY_FIELDS_AND_EMPLOYEE_TOAST"
+              labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST"
             };
             break;
         }
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
+       
       }
     }
   };

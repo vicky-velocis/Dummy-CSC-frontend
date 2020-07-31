@@ -9,14 +9,276 @@ import {
   getSelectField,
   getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall,searchEventApiCall,searchInviteApiCall ,searchLibraryApiCall,searchPressMasterApiCall,searchPressApiCall,searchTenderApiCall} from "./functions";
 // import "./searchfilter.css"
 import {
   getTodaysDateInYMD,
   getStartDateValue
   }  from "../../utils";
+ 
+  export const ResetEventField = async (state, dispatch) => {
+    //Event
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.eventId",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.eventStatus",
+        "props.value",
+        ""
+      )
+    );
+    
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.eventTitle",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.fromDate",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.scheduleStatus",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "search",
+        "components.div.children.EventFilter.children.cardContent.children.eventFilterContainer.children.toDate",
+        "props.value",
+        ""
+      )
+    );
+    //Invite
+    
+  }
+  export const ResetInviteField = async (state, dispatch) =>{
 
+
+
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.eventId",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.eventStatus",
+        "props.value",
+        ""
+      )
+    );
+    
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.eventTitle",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.fromDate",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.scheduleStatus",
+        "props.value",
+        ""
+      )
+    );
+    dispatch(
+      handleField(
+        "eventList",
+        "components.div.children.InviteGuestFilter.children.cardContent.children.eventFilterContainer.children.toDate",
+        "props.value",
+        ""
+      )
+    );
+  }
+  
+  export const ResetLibraryField = async (state, dispatch) =>{
+    
+        dispatch(
+          handleField(
+            "library-search",
+            "components.div.children.LibraryFilter.children.cardContent.children.eventFilterContainer.children.eventId",
+            "props.value",
+            ""
+          )
+        );
+   
+        
+        dispatch(
+          handleField(
+            "library-search",
+            "components.div.children.LibraryFilter.children.cardContent.children.eventFilterContainer.children.eventTitle",
+            "props.value",
+            ""
+          )
+        );
+        dispatch(
+          handleField(
+            "library-search",
+            "components.div.children.LibraryFilter.children.cardContent.children.eventFilterContainer.children.fromDate",
+            "props.value",
+            ""
+          )
+        );
+
+        dispatch(
+          handleField(
+            "library-search",
+            "components.div.children.LibraryFilter.children.cardContent.children.eventFilterContainer.children.toDate",
+            "props.value",
+            ""
+          )
+        );
+      }
+      export const ResetGENPRESSField = async (state, dispatch) =>{
+        
+       
+            
+            dispatch(
+              handleField(
+                "pressNoteList",
+                "components.div.children.PressNoteFilter.children.cardContent.children.pressNoteFilterContainer.children.Subject",
+                "props.value",
+                ""
+              )
+            );
+            dispatch(
+              handleField(
+                "pressNoteList",
+                "components.div.children.PressNoteFilter.children.cardContent.children.pressNoteFilterContainer.children.fileNumber",
+                "props.value",
+                ""
+              )
+            );
+    
+            dispatch(
+              handleField(
+                "pressNoteList",
+                "components.div.children.PressNoteFilter.children.cardContent.children.pressNoteFilterContainer.children.fromDate",
+                "props.value",
+                ""
+              )
+            );
+
+            dispatch(
+              handleField(
+                "pressNoteList",
+                "components.div.children.PressNoteFilter.children.cardContent.children.pressNoteFilterContainer.children.toDate",
+                "props.value",
+                ""
+              )
+            );
+
+            
+          }
+
+          export const ResetPressField = async (state, dispatch) =>{
+            
+           
+                
+                dispatch(
+                  handleField(
+                    "pressGrid",
+                    "components.div.children.pressMasterFilter.children.cardContent.children.pressMasterFilterContainer.children.PersonnelName",
+                    "props.value",
+                    ""
+                  )
+                );
+                dispatch(
+                  handleField(
+                    "pressGrid",
+                    "components.div.children.pressMasterFilter.children.cardContent.children.pressMasterFilterContainer.children.publicationName",
+                    "props.value",
+                    ""
+                  )
+                );
+        
+                dispatch(
+                  handleField(
+                    "pressGrid",
+                    "components.div.children.pressMasterFilter.children.cardContent.children.pressMasterFilterContainer.children.typeOfPress",
+                    "props.value",
+                    ""
+                  )
+                );
+    
+              
+                
+              }
+              export const ResetTenderField = async (state, dispatch) =>{
+                
+                    
+                    dispatch(
+                      handleField(
+                        "TenderSearch",
+                        "components.div.children.TenderFilter.children.cardContent.children.tenderFilterContainer.children.Subject",
+                        "props.value",
+                        ""
+                      )
+                    );
+                    dispatch(
+                      handleField(
+                        "TenderSearch",
+                        "components.div.children.TenderFilter.children.cardContent.children.tenderFilterContainer.children.fileNumber",
+                        "props.value",
+                        ""
+                      )
+                    );
+            
+                    dispatch(
+                      handleField(
+                        "TenderSearch",
+                        "components.div.children.TenderFilter.children.cardContent.children.tenderFilterContainer.children.fromDate",
+                        "props.value",
+                        ""
+                      )
+                    );
+        
+                    dispatch(
+                      handleField(
+                        "TenderSearch",
+                        "components.div.children.TenderFilter.children.cardContent.children.tenderFilterContainer.children.toDate",
+                        "props.value",
+                        ""
+                      )
+                    );
+        
+                    
+                  }
 export const EventFilter = getCommonCard({
   
   eventFilterContainer: getCommonContainer({
@@ -35,7 +297,7 @@ export const EventFilter = getCommonCard({
         sm: 4
       },
       required: false,
-     // pattern: /^[a-zA-Z ]*$/i,
+    
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "PublicRelation[0].filterEvent.eventId"
     }),
@@ -54,8 +316,9 @@ export const EventFilter = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      
+      pattern:getPattern("EventTitle"),
+      errorMessage: "PR_EVENT_TITLE_INVALID",
       jsonPath: "PublicRelation[0].filterEvent.eventTitle",
      
     }),
@@ -73,7 +336,7 @@ export const EventFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_START_DATE_INVALID",
       required: false,
       afterFieldChange: (action, state, dispatch) => {
         // 
@@ -108,7 +371,7 @@ export const EventFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_END_DATE_INVALID",
       required: false,
     }),
     scheduleStatus: getSelectField({
@@ -165,7 +428,8 @@ export const EventFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 12,
+          sm: 4,
+          md:4
           // align: "center",
           // id: "search-btn"
         },
@@ -174,10 +438,10 @@ export const EventFilter = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px",
           }
         },
@@ -190,6 +454,39 @@ export const EventFilter = getCommonCard({
         onClickDefination: {
           action: "condition",
         callBack: searchEventApiCall
+        }
+      },
+      ResetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+          md: 4
+          // align: "center",
+          // id: "search-btn"
+        },
+
+        props: {
+          variant: "contained",
+          style: {
+           //// marginLeft: "8px",
+            backgroundColor: "unset",
+            color: "rgb(254, 122, 81)",
+            border: "1px solid rgb(254, 122, 81)",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "RESET",
+            labelKey: "PR_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+        callBack: ResetEventField
         }
       }
     })
@@ -234,8 +531,9 @@ export const InviteGuestFilter = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      pattern:getPattern("EventTitle"),
+      
+      errorMessage: "PR_EVENT_TITLE_INVALID",
       jsonPath: "PublicRelation[0].filterInviteEvent.eventTitle"
     }),
     fromDate: getDateField({
@@ -251,7 +549,7 @@ export const InviteGuestFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_START_DATE_INVALID",
       required: false,
       
   afterFieldChange: (action, state, dispatch) => {
@@ -289,7 +587,7 @@ export const InviteGuestFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_END_DATE_INVALID",
       required: false,
     }),
     scheduleStatus: getSelectField({
@@ -346,17 +644,18 @@ export const InviteGuestFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4,
+          md: 4
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -370,8 +669,42 @@ export const InviteGuestFilter = getCommonCard({
           action: "condition",
         callBack: searchInviteApiCall
         }
+      },
+      ResetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+          md: 4
+          // align: "center",
+          // id: "search-btn"
+        },
+  
+        props: {
+          variant: "contained",
+          style: {
+           // marginLeft: "8px",
+            backgroundColor: "unset",
+            color: "rgb(254, 122, 81)",
+            border: "1px solid rgb(254, 122, 81)",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "RESET",
+            labelKey: "PR_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+        callBack: ResetInviteField
+        }
       }
-    })
+    }),
+    
   })
 });
 
@@ -412,7 +745,8 @@ export const LibraryFilter = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z ]*$/i,
+      pattern:getPattern("EventTitle"),
+      
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "PublicRelation[0].filterLibraryEvent.eventTitle"
     }),
@@ -429,7 +763,7 @@ export const LibraryFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_START_DATE_INVALID",
       required: false,
           
   afterFieldChange: (action, state, dispatch) => {
@@ -463,53 +797,10 @@ export const LibraryFilter = getCommonCard({
         sm: 4
       },
       pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_END_DATE_INVALID",
       required: false,
     }),
-//     scheduleStatus: getSelectField({
-//       label: {
-//         labelName: "Schedule Status",
-//         labelKey: "PR_SCHEDULE_STATUS_LABEL"
-//       },
-//       placeholder: {
-//         labelName: "Select Schedule Status",
-//         labelKey: "PR_SCHEDULE_STATUS_PLACEHOLDER"
-//       },
 
-//      optionValue:"name",
-//      optionLabel:"name"
-// ,     
-//       jsonPath: "PublicRelation[0].filterEvent.Scedulestatus",
-//       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventScheduledStatus",
-//       required: false,
-//       gridDefination: {
-//         xs: 12,
-//         sm: 4
-//       }
-    
-//     }),
-//     eventStatus: getSelectField({
-//       label: {
-//         labelName: "Event status",
-//         labelKey: "PR_EVENT_STATUS_LABEL"
-//       },
-//       placeholder: {
-//         labelName: "Select Event status",
-//         labelKey: "PR_EVENT_STATUS_PLACEHOLDER"
-//       },
-
-//       optionValue:"name",
-//       optionLabel:"name"
-//  ,   
-//       jsonPath: "PublicRelation[0].filterEvent.Eventstatus",
-//       sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventStatus",
-//       required: false,
-//       gridDefination: {
-//         xs: 12,
-//         sm: 4
-//       }
-    
-//     }),
   }),
   
 
@@ -520,17 +811,18 @@ export const LibraryFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4,
+          md: 4
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -544,8 +836,44 @@ export const LibraryFilter = getCommonCard({
           action: "condition",
         callBack: searchLibraryApiCall
         }
+      },
+
+      ResetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+          md: 4
+          // align: "center",
+          // id: "search-btn"
+        },
+  
+        props: {
+          variant: "contained",
+          style: {
+           // marginLeft: "8px",
+            backgroundColor: "unset",
+            color: "rgb(254, 122, 81)",
+            border: "1px solid rgb(254, 122, 81)",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "RESET",
+            labelKey: "PR_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+       callBack: ResetLibraryField
+        }
       }
-    })
+
+    }),
+    
   })
 });
 
@@ -569,8 +897,8 @@ export const PressNoteFilter = getCommonCard({
         sm: 4
       },
       required: false,
-     // pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      pattern:  getPattern("fileNumber"),
+      errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
       jsonPath: "PublicRelation[0].filterpress.fileNumber"
     }),
     Subject: getTextField({
@@ -588,7 +916,7 @@ export const PressNoteFilter = getCommonCard({
       },
       required: false,
       //pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
       jsonPath: "PublicRelation[0].filterpress.subject"
     }),
     fromDate: getDateField({
@@ -634,17 +962,18 @@ export const PressNoteFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4,
+          md: 4
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -658,8 +987,42 @@ export const PressNoteFilter = getCommonCard({
           action: "condition",
         callBack: searchPressApiCall
         }
+      },
+    
+    ResetButton: {
+      componentPath: "Button",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+        // align: "center",
+        // id: "search-btn"
+      },
+
+      props: {
+        variant: "contained",
+        style: {
+         // marginLeft: "8px",
+          backgroundColor: "unset",
+          color: "rgb(254, 122, 81)",
+          border: "1px solid rgb(254, 122, 81)",
+          borderRadius: "2px",
+          width: "80%",
+          height: "48px"
+        }
+      },
+      children: {
+        buttonLabel: getLabel({
+          labelName: "RESET",
+          labelKey: "PR_BUTTON_RESET"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+     callBack: ResetGENPRESSField
       }
-    })
+    }
+  }),
   })
 });
 
@@ -703,8 +1066,8 @@ export const TenderFilter = getCommonCard({
         sm: 4
       },
       required: false,
-      pattern: /^[a-zA-Z0-9]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      pattern: getPattern("fileNumber"),
+      errorMessage: "PR_TENDER_FILE_NUMBER_INVALID",
       jsonPath: "PublicRelation[0].filtertender.fileNumber"
     }),
     Subject: getTextField({
@@ -722,7 +1085,7 @@ export const TenderFilter = getCommonCard({
       },
       required: false,
      // pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_PRESS_NOTE_EMAIL_SUBJECT_INVALID",
       jsonPath: "PublicRelation[0].filtertender.subject"
     }),
     fromDate: getDateField({
@@ -768,17 +1131,18 @@ export const TenderFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4,
+          md: 4
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -792,8 +1156,42 @@ export const TenderFilter = getCommonCard({
           action: "condition",
         callBack: searchTenderApiCall
         }
+      },
+   
+    ResetButton: {
+      componentPath: "Button",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+        // align: "center",
+        // id: "search-btn"
+      },
+
+      props: {
+        variant: "contained",
+        style: {
+          ////// marginLeft: "8px",
+          backgroundColor: "unset",
+          color: "rgb(254, 122, 81)",
+          border: "1px solid rgb(254, 122, 81)",
+          borderRadius: "2px",
+          width: "80%",
+          height: "48px"
+        }
+      },
+      children: {
+        buttonLabel: getLabel({
+          labelName: "RESET",
+          labelKey: "PR_BUTTON_RESET"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+    callBack: ResetTenderField
       }
-    })
+    }
+  }),
   })
 });
 
@@ -822,7 +1220,7 @@ export const pressMasterFilter = getCommonCard({
       },
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_PUBLICATION_NAME_INVALID",
       jsonPath: "PublicRelation[0].filterpressMaster.publicationname"
     }),
     typeOfPress: getSelectField({
@@ -832,7 +1230,7 @@ export const pressMasterFilter = getCommonCard({
       },
       placeholder: {
         labelName: "Select Type Of Press",
-        labelKey: "PR_TYPEOFTHEPRESS"
+        labelKey: "PR_TYPEOFTHEPRESS_PLACEHOLDER"
       },
       optionValue:"name",
       optionLabel:"name"
@@ -862,7 +1260,7 @@ export const pressMasterFilter = getCommonCard({
       },
       required: false,
       pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_PERSONNEL_NAME_INVALID",
       jsonPath: "PublicRelation[0].filterpressMaster.personnelname"
     }),
    
@@ -878,17 +1276,18 @@ export const pressMasterFilter = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 6
+          sm: 4,
+          md: 4
           // align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
+            marginRight: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -902,7 +1301,41 @@ export const pressMasterFilter = getCommonCard({
           action: "condition",
         callBack: searchPressMasterApiCall
         }
+      },
+   
+    ResetButton: {
+      componentPath: "Button",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+        md: 4
+        // align: "center",
+        // id: "search-btn"
+      },
+
+      props: {
+        variant: "contained",
+        style: {
+           //// marginLeft: "8px",
+            backgroundColor: "unset",
+            color: "rgb(254, 122, 81)",
+            border: "1px solid rgb(254, 122, 81)",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px"
+        }
+      },
+      children: {
+        buttonLabel: getLabel({
+          labelName: "RESET",
+          labelKey: "PR_BUTTON_RESET"
+        })
+      },
+      onClickDefination: {
+        action: "condition",
+     callBack: ResetPressField
       }
-    })
+    }
+  }),
   })
 });

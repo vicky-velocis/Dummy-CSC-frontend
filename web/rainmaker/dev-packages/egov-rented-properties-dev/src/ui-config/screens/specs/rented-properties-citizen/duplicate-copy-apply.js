@@ -5,7 +5,7 @@ import {
 import {stepper, formwizardDuplicateCopyFirstStep,formwizardDuplicateCopySecondStep,formwizardDuplicateCopyThirdStep } from '../rented-properties/applyResource/applyConfig';
 import {duplicatefooter} from './footer';
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getOwnershipSearchResults, setDocsForEditFlow ,getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
+import { getOwnershipSearchResults, setDocsForEditFlow ,getDuplicateCopySearchResults, setDocumentData} from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
@@ -14,86 +14,6 @@ const header = getCommonHeader({
     labelName: "Apply Duplicate Copy Of Allotment",
     labelKey: "RP_COMMON_DUPLICATE_COPY_APPLY"
 });
-
-
-export const prepareOwnerShipDocuments = documents => {
-  let documentsArr =
-    documents.length > 0
-      ? documents.reduce((documentsArr, item, ind) => {
-        documentsArr.push({
-          name: item.code,
-          required: item.required,
-          jsonPath: `DuplicateCopyApplications[0].applicationDocuments[${ind}]`,
-          statement: item.description
-        });
-        return documentsArr;
-      }, [])
-      : [];
-  return documentsArr;
-};
-
-const setDocumentData = async(action, state, dispatch) => {
-    const documentTypePayload = [{
-        moduleName: "PropertyServices",
-        masterDetails: [{name: "applications"}]
-      }
-    ]
-    const documentRes = await getMdmsData(dispatch, documentTypePayload);
-    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-    const {applications = []} = PropertyServices || {}
-    const findFreshLicenceItem = applications.find(item => item.code === "DuplicateCopyOfAllotmentLetterRP")
-    const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
-    const freshLicenceDocuments = masterDocuments.map(item => ({
-    type: item.code,
-    description: {
-      labelName: "Only .jpg and .pdf files. 6MB max file size.",
-      labelKey: item.fileType
-    },
-    formatProps :{
-      accept : item.accept || "image/*, .pdf, .png, .jpeg",
-    }, 
-    maxFileSize: 6000,
-    downloadUrl: item.downloadUrl,
-    moduleName: "RentedProperties",
-    statement: {
-        labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
-        labelKey: item.description
-    }
-    }))
-    const documentTypes = prepareOwnerShipDocuments(masterDocuments);
-    let applicationDocs = get(
-      state.screenConfiguration.preparedFinalObject,
-      "DuplicateCopyApplications[0].applicationDocuments",
-      []
-    ) || [];
-    applicationDocs = applicationDocs.filter(item => !!item)
-    let applicationDocsReArranged =
-      applicationDocs &&
-      applicationDocs.length &&
-      documentTypes.map(item => {
-        const index = applicationDocs.findIndex(
-          i => i.documentType === item.name
-        );
-        return applicationDocs[index];
-      }).filter(item => !!item)
-    applicationDocsReArranged &&
-      dispatch(
-        prepareFinalObject(
-          "DuplicateCopyApplications[0].applicationDocuments",
-          applicationDocsReArranged
-        )
-      );
-    dispatch(
-      handleField(
-          "duplicate-copy-apply",
-          "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList",
-          "props.inputProps",
-          freshLicenceDocuments
-      )
-  );
-    dispatch(prepareFinalObject("DuplicateTemp[0].ownershipTransferDocuments", documentTypes))
-}
-
 
 const getData = async(action, state, dispatch) => {
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -120,7 +40,7 @@ const getData = async(action, state, dispatch) => {
       )
     )
   }
-  setDocumentData(action, state, dispatch)
+  setDocumentData(action, state, dispatch, {documentCode: "DuplicateCopyOfAllotmentLetterRP", jsonPath: "DuplicateCopyApplications[0].applicationDocuments", screenKey: "duplicate-copy-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"DuplicateTemp[0].ownershipTransferDocuments"})
 }
 
 

@@ -56,8 +56,8 @@ export const requestDetails = getCommonGrayCard({
     body: getCommonContainer({
     typeOfServiceRequest: getLabelWithValue(
       {
-        labelName: "Type Of Service Request",
-        labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
+        labelName: "Service Request Type",
+        labelKey: "HC_SERVICE_REQUEST_TYPE"
       },
       {
 

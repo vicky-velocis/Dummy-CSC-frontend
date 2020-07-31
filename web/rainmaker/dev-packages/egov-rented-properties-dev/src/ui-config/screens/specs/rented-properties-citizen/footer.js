@@ -1,7 +1,7 @@
 import { getCommonApplyFooter, validateFields } from "../utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyOwnershipTransfer, getDetailsFromProperty ,applyDuplicateCopy, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
+import { applyOwnershipTransfer, submittransitsiteimages ,getDetailsFromPropertyTransit ,getDetailsFromProperty ,applyDuplicateCopy, getDuplicateDetailsFromProperty} from "../../../../ui-utils/apply";
 import { previousButton, submitButton, nextButton, changeStep, moveToSuccess, DETAILS_STEP, DOCUMENT_UPLOAD_STEP, SUMMARY_STEP, submitButtontransit } from "../rented-properties/applyResource/footer";
 import { some } from "lodash";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -126,66 +126,13 @@ const callBackForNext = async(state, dispatch) => {
 
 const callBackForNextTransitImages = async(state, dispatch) => {
 
-
-
-
-  let servicerequestmedia = get(state, "form.newapplication.files.media", []);
-  
-  //let contact_flag = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber", []);
-
-      let media = []
-      //let addressDetail = []
-      //let services = []
-      let hasFieldToaster = true;
-        
-
-      servicerequestmedia.map((item, index) => {
-        media.push(item.fileStoreId)
-      });
-
-
-      let serviceRequest = get(state,
-        "screenConfiguration.preparedFinalObject.SERVICEREQUEST"
-      );
-
-
-
-      let validatestepformflag = false ; 
         let uploadFlag = false;
-        
-        if(media.length >= 1)
-        {
-          uploadFlag = true;
-          validatestepformflag = validatestepform(state,serviceRequest);
-        }
-        else if(media.length > 6){
-          uploadFlag = false;
-          dispatch(
-            toggleSnackbar(
-              true,
-              { labelName: "Upload maximum 6 images allowed!", labelKey: "TRANSIT_CAPTURE_UPLOAD_IMAGE_ERROR" },
-              "warning"
-            )
-          );
-        }
-        // else{
-        //   dispatch(
-        //     toggleSnackbar(
-        //       true,
-        //       { labelName: "Upload At least One Image..!", labelKey: "TRANSIT_CAPTURE_UPLOAD_IMAGE_ERROR1" },
-        //       "warning"
-        //     )
-        //   );
-        // }
-
-
-
         let activeStep = 1;
         let isFormValid = true;
   
-
+      if(activeStep === 1){
       const isOwnerDetailsValid = validateFields(
-        "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children",   
+        "components.div.children.formwizardFirstStep.children.ownershipAddressDetails.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",   
                  
         state,
         dispatch,
@@ -200,20 +147,36 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         "transit-site-images"
       )
       if(!!isOwnerDetailsValid && !!isImageDetailsValid) {
-        const propertyId = get(state.screenConfiguration.preparedFinalObject, "Owners[0].property.id");
+        const propertyId = get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications[0].property.id");
         let res = true;
         if(!propertyId) {
-          res = await getDetailsFromProperty(state, dispatch)
+          res = await getDetailsFromPropertyTransit(state, dispatch)
         }
         if(!!res) {
-         
-          isFormValid = true;
+          const applytrans = submittransitsiteimages(state, dispatch)
+          if(!applytrans){
+            return
+          }
         } 
         else {
-          return
+          return 
         }
-      } 
-    if (!isFormValid && hasFieldToaster && !uploadFlag) {
+      }
+     else{
+       isFormValid = false;
+     } 
+    } 
+
+    isFormValid = await submittransitsiteimages(state, dispatch);
+      if (isFormValid) {
+        const transitData = get(
+          state.screenConfiguration.preparedFinalObject,
+          "PropertyImagesApplications[0]"
+      );
+      moveToSuccess(transitData, dispatch);
+      }
+
+    if (!isFormValid && !uploadFlag) {
         
         let errorMessage = {
           labelName:
@@ -222,8 +185,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
       };
       
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    } 
-  
+    }   
 }
 
 const callBackForNextDuplicate = async(state, dispatch) => {

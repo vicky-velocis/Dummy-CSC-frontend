@@ -568,7 +568,10 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            style: {
+              wordBreak: "break-word"
+            }
           }
         },
         actionDialog: {

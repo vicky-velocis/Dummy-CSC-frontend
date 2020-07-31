@@ -79,6 +79,25 @@ export const nocSummary = getCommonGrayCard({
         }
       }
     ),
+    roadCutType: getLabelWithValue(
+      {
+        labelName: "Road Cut Type",
+        labelKey: "ROADCUT_ROAD_CUT_TYPE_LABEL_NOC"
+      },
+      {
+     
+      jsonPath: "nocApplicationDetail[0].applicationdetail",
+        callBack: value => {
+          if(value!=undefined){
+          let purposeOfRoadCutting = JSON.parse(value).hasOwnProperty('roadCutType')?JSON.parse(value)['roadCutType']:'';
+          return purposeOfRoadCutting;
+          }
+          else{
+            return '';
+          }
+        }
+      }
+    ),
     Age: getLabelWithValue(
       {
         labelName: "Division",
