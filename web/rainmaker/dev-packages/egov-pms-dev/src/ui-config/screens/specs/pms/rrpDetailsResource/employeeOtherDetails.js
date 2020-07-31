@@ -469,7 +469,7 @@ return getCommonCard({
         labelName: "LPD",
         labelKey: "PENSION_EMPLOYEE_PENSION_LPD"
       },
-      required: false,
+      required: true,
        minValue:0,
       maxLength:18,
       props: {
@@ -809,7 +809,7 @@ return getCommonCard({
           labelKey: "PENSION_EMPLOYEE_PENSION_LTC"
         },
         required: false,
-        visible: true,
+        visible: false,
          minValue:0,
         maxLength:18,
         props: {

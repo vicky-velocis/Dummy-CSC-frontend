@@ -32,7 +32,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import axios from 'axios';
 import { RC_PEDAL_RICKSHAW_LOADING_REHRI, DL_PEDAL_RICKSHAW_LOADING_REHRI, LICENSE_DHOBI_GHAT, RENEWAL_RENT_DEED_SHOP } from "../../../../ui-constants";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getSearchResults, getOwnershipSearchResults, getDuplicateCopySearchResults } from "../../../../ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1288,7 +1288,7 @@ export const createEstimateData = async (
   _businessService
 ) => {
   const workflowCode = get(data , "workflowCode") ? get(data , "workflowCode") : _businessService
-  const applicationNo = getQueryArg(href, "applicationNumber");
+  const applicationNo = getQueryArg(href, "applicationNumber") || getQueryArg(href, "consumerCode");
   const tenantId =
     get(data, "tenantId") || getQueryArg(href, "tenantId");
   const businessService = get(data, "businessService", "") || _businessService
@@ -1527,13 +1527,13 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
       value: getQueryArg(window.location.href, "consumerCode")
     }
   ];
-  const response = await getSearchResults(queryObject);
+  // const response = await getSearchResults(queryObject);
   //get bill and populate estimate card
-
   let payload;
   
   switch(businessService) {
     case "OwnershipTransferRP": {
+      const response = await getOwnershipSearchResults(queryObject)
       payload =  response &&
       response.Owners &&
         (await createEstimateData(
@@ -1550,6 +1550,7 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
       break
     }
     case "DuplicateCopyOfAllotmentLetterRP": {
+      const response = await getDuplicateCopySearchResults(queryObject)
       payload = response && response.DuplicateCopyApplications && (
         await createEstimateData(
           response.DuplicateCopyApplications[0],

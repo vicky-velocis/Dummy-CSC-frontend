@@ -5,6 +5,8 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {  validateFields } from "../../utils";
+
 import {
 
 
@@ -29,14 +31,22 @@ import {
 
 const AddPresmaterData = (state, dispatch) => {
 
-  let isFormValid = true;
-  let hasFieldToaster = false;
-  let validatestepformflag = validatestepform(1)
   
-    isFormValid = validatestepformflag[0];
-    hasFieldToaster = validatestepformflag[1];
-    if(isFormValid)
+
+    let Ispresvalis = validateFields(
+      "components.div.children.pressDetailsApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+      state,
+      dispatch,
+      'pressDetailsMasterCreate'
+    );
+  
+    if(Ispresvalis)
     {
+     let pressType=get(
+        state.screenConfiguration.preparedFinalObject,
+        "PRESSDETAILS.typeOfThePress"
+      )
+      
 let pressid=getQueryArg(window.location.href, "presstId");
 if(pressid){
 
@@ -51,10 +61,7 @@ if(pressid){
         "PRESSDETAILS.name"
       )
 ,
-      "pressType":get(
-        state.screenConfiguration.preparedFinalObject,
-        "PRESSDETAILS.typeOfThePress"
-      ),
+      "pressType":pressType.label,
       "publicationName": get(
         state.screenConfiguration.preparedFinalObject,
         "PRESSDETAILS.publicationName"
@@ -88,10 +95,7 @@ else{
         "PRESSDETAILS.name"
       )
 ,
-      "pressType":get(
-        state.screenConfiguration.preparedFinalObject,
-        "PRESSDETAILS.typeOfThePress"
-      ),
+      "pressType":pressType.label,
       "publicationName": get(
         state.screenConfiguration.preparedFinalObject,
         "PRESSDETAILS.publicationName"
@@ -113,10 +117,10 @@ else{
       
   }
 }
-else if (hasFieldToaster) {
+else  {
   let errorMessage = {
-    labelName: "Please fill all mandatory fields and upload the documents!",
-    labelKey: "ERR_UPLOAD_MANDATORY_DOCUMENTS_TOAST"
+    labelName: "Please fill all mandatory fields",
+    labelKey: "PR_ERR_REQURIED_PRESS_TOAST"
   };
   dispatch(toggleSnackbar(true, errorMessage, "warning"));
 }

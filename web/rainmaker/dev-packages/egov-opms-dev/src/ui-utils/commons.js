@@ -880,7 +880,7 @@ export const furnishRoadcutNocResponse = response => {
 
   set(refurnishresponse, "applicantName", response.nocApplicationDetail[0].applicantname);
   set(refurnishresponse, "sector", response.nocApplicationDetail[0].sector);
-
+  set(refurnishresponse, "roadCutType", applicationdetail.roadCutType);
   set(refurnishresponse, "typeOfApplicant", applicationdetail.typeOfApplicant);
   set(refurnishresponse, "length", applicationdetail.length);
   set(refurnishresponse, "ward", applicationdetail.ward);
@@ -1253,11 +1253,13 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
   let method = nocId ? "UPDATE" : "CREATE";
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "ROADCUTNOC", []);
-    let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    /// let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux", {});
+    let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.RoadCutDocuments", {});
 
     // Set owners & other documents
     let ownerDocuments = [];
     let otherDocuments = [];
+    let roadcutdocuments = [];
     let Remarks = "";
 
     jp.query(reduxDocuments, "$.*").forEach(doc => {
@@ -1269,9 +1271,16 @@ export const createUpdateRoadCutNocApplication = async (state, dispatch, status)
           }
         ];
       }
+      else {
+        let temp = { "fileStoreId": doc.fileStoreId }
+        roadcutdocuments.push(temp)
+      }
     });
+    
+    payload.hasOwnProperty("roadCutType") === false ? set(payload, "roadCutType", "") : ''
+    payload.hasOwnProperty("requestedLocation") === false ? set(payload, "requestedLocation", "") : ''
 
-    set(payload, "uploadDocuments", ownerDocuments);
+    set(payload, "uploadDocuments", roadcutdocuments);
     set(payload, "remarks", Remarks);
 
     console.log('Road CUt payload : ', payload)

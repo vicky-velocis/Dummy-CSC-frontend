@@ -91,6 +91,9 @@ const getAcknowledgementCard = (
       : purpose === "apply" ? {
         labelName: "Rented Property Master Entry Submitted Successfully",
         labelKey: "RP_MASTER_ENTRY_SUCCESS_MESSAGE_MAIN"
+      }: purpose === "TransitSiteapply" ? {
+        labelName: "Transit Site Image Capture Submitted Successfully",
+        labelKey: "RP_TRANSIT_SITE_IMAGE_MESSAGE_MAIN"
       } : purpose === "forward" ? {
         labelName: "Rented Property Master Entry Forwarded Successfully",
         labelKey: "RP_FORWARD_SUCCESS_MESSAGE_MAIN"

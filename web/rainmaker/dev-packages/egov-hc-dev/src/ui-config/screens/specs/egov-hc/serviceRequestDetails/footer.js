@@ -6,179 +6,244 @@ import get from "lodash/get";
 import { createServiceRequest } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
-
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { string } from "prop-types";
 
 let role_name = JSON.parse(getUserInfo()).roles[0].code
 
 
 const callBackForNext = async (state, dispatch) => {
- 
-  let servicerequestmedia = get(state, "form.newapplication.files.media", []);
+
+  let activeStep = 1;
+  let isFormValid = false;
+  let hasFieldToaster = false;
+  let services = [];
+
+  let serviceRequest = get(state,
+    "screenConfiguration.preparedFinalObject.SERVICEREQUEST"
+  );
+  let media =[]
+  let uploadImage = get(state, "form.newapplication.files.media", []);
+  uploadImage.map((item, index) => {
+    media.push(item.fileStoreId)
+  });
+
   
-  let contact_flag = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber", []);
 
-let media = []
-let addressDetail = []
-let services = []
-let hasFieldToaster = false;
-  
+  let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
 
-servicerequestmedia.map((item, index) => {
-  media.push(item.fileStoreId)
-});
+  let validatestepformflag;
+  let validationPaused;
 
+  // debugger;
+  if (typeOfService== ""){
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+  } 
+   
 
-let serviceRequest = get(state,
-  "screenConfiguration.preparedFinalObject.SERVICEREQUEST"
-);
-
-
-
-let validatestepformflag = false ; 
-  let uploadFlag = false;
-  
-  if(media.length >= 1)
+  if(media.length === 0)
   {
-    uploadFlag = true;
-    validatestepformflag = validatestepform(state,serviceRequest);
-  }
-  else{
     dispatch(
       toggleSnackbar(
         true,
-        { labelName: "Upload At least One Image..!", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
+        { labelName: "ERROR", labelKey: "HC_UPLOAD_IMAGE_ERROR" },
+        "warning"
+      )
+    );
+  }else if(!typeOfService){
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "ERROR", labelKey: "HC_SERVICE_TYPE_ERROR" },
         "warning"
       )
     );
   }
+  else if(uploadImage && typeOfService)
+  {
+    validatestepformflag = validatestepform(state, dispatch, serviceRequest);
+    isFormValid = validatestepformflag[0];
+    hasFieldToaster = validatestepformflag[1];
+    validationPaused = validatestepformflag[2];
+    services.push(serviceRequest)
 
-  let activeStep = 1;
-  let isFormValid = true;
-  
-  
-  let contactNo = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber", []);
-  let treeCount = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount", []);
-  let conno_flag = false;
-  let treeCount_flag = false;
-  
-  if(contactNo.length === 10)
-    {
-      conno_flag = true;
-    }
-    else{
-      isFormValid = false;
-      if(contact_flag>0)
-      {
-        document.getElementById('custom-containers-typeofrequest').focus();
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Invalid Contact Number..!", labelKey: "HC_CONTACT_NUMBER_ERROR" },
-            "warning"
-          )
-        );
-      }
-    }
+  }
 
-    if(uploadFlag === true && (parseInt(treeCount) === 0 || parseInt(treeCount) >99))
-    {
-      isFormValid = false;
-      
-      document.getElementById('custom-containers-nooftrees').focus();
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Invalid Contact Number..!", labelKey: "HC_TREE_COUNT_ERROR" },
-            "warning"
-          )
-        ); 
-    }
-    else{
-      treeCount_flag = true;
-    }
+  // Field validation 
+  if(isFormValid === true && validationPaused==false)
+  {
+    let treeCount = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount");
+    let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description");
+    let houseNoAndStreetName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.houseNoAndStreetName");
+    let landmark = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.landmark");
+    let ownerName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.ownerName");
+    let contactNumber = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber");
+    let email = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.email");
+    let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla.label");
+   
+    let validationErrorMsg = ""
+    let flagValidField = true;
 
-    if(treeCount_flag == true && conno_flag == true)
+   
+
+    if(! /^[0-9][0-9]{0,1}$/.test(treeCount))
     {
-      isFormValid = validatestepformflag[0];
-      hasFieldToaster = validatestepformflag[1];
-      services.push(serviceRequest)
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_TREE_COUNT_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/.test(description))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_DESCRIPTION_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(houseNoAndStreetName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(landmark))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[a-zA-Z\s\\/\-]{1,256}$/.test(ownerName))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_OWNER_NAME_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^[0-9]{10}$/.test(contactNumber))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_CONTACT_NUMBER_ERROR" };
+      flagValidField = false;
+    }
+    else if(! /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(email))
+    {
+      validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_EMAIL_ERROR" };
+      flagValidField = false;
     }
     
-    if (isFormValid) {
+    
+    if(flagValidField === false)
+    {
+      dispatch(
+        toggleSnackbar(
+          true,
+          validationErrorMsg,
+          "warning"
+        )
+       );
       
-      if (activeStep === 1) {
-        // "custom-containers-nextButtonLabel"
-        
-        let status = 'INITIATED'
-        serviceRequest['city']= getTenantId(),
-        serviceRequest['tenantId']= getTenantId(),
-        serviceRequest['media'] = media,
-        serviceRequest['address'] = 'hardcoded value',
-        serviceRequest['isEditState'] = 0
+    }
+    
+  
+    
+    
+  // API 
+  if (isFormValid && flagValidField) {
+    let locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
+    let typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label");
+
+      if (typeOfService != undefined && locality != undefined )
+    {if (activeStep === 1) { 
+      // "custom-containers-nextButtonLabel"
+      // debugger
+      let status = 'INITIATED'
+      serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
+      serviceRequest['tenantId']= getTenantId(),
+      serviceRequest['media'] = media,
+      // serviceRequest['address'] = 'hardcoded value',
+      serviceRequest['isEditState'] = 0
+      serviceRequest['mohalla'] =locality
+
+    serviceRequest['serviceType'] =typeOfService
+   
+   
+      dispatch(
+        handleField(
+          "servicerequest",
+          "components.div.children.footer.children",
+          "nextButton.visible",
+          false
+        )
+      );
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "Please wait while your request being is generated", labelKey: "HC_SERVICE_REQUEST_BEING_GENERATED" },
+          "warning"
+        )
+      );        
+      let response = await createServiceRequest(state, dispatch, status);
+      let responseStatus = get(response, "status", "");
+      
+      
+      let serviceRequestId = getapplicationNumber();
+      if (responseStatus == "SUCCESS" || responseStatus == "success") {
+        if (isFormValid) {
+        get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST")
+        dispatch(setRoute(`/egov-hc/acknowledgementServiceRequest?serviceRequestId=${serviceRequestId}`));
+        }
+      } else {
         dispatch(
           handleField(
             "servicerequest",
             "components.div.children.footer.children",
             "nextButton.visible",
-            false
+            true
           )
-        );        
-        let response = await createServiceRequest(state, dispatch, status);
-        let responseStatus = get(response, "status", "");
-        
-        
-        let serviceRequestId = getapplicationNumber();
-        if (responseStatus == "SUCCESS" || responseStatus == "success") {
-          
-        
-
-          if (isFormValid) {
-          get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST")
-          dispatch(setRoute(`/egov-hc/acknowledgementServiceRequest?serviceRequestId=${serviceRequestId}`));
-          }
-        } else {
-          dispatch(
-            handleField(
-              "servicerequest",
-              "components.div.children.footer.children",
-              "nextButton.visible",
-              true
-            )
-          );           
-          let errorMessage = {
-            labelName: "Submission Falied, Try Again later!",
-            labelKey: "ERR_DEFAULT_INPUT_FIELD_MSG" 
-          };
-          dispatch(toggleSnackbar(true, errorMessage, "error"));
-        }
+        );           
+        let errorMessage = {
+          labelName: "Submission Failed, Try Again later!",
+          labelKey: "ERR_SERVICE_REQUEST_FAILED_MSG" 
+        };
+        dispatch(toggleSnackbar(true, errorMessage, "error"));
       }
-      
-    } else if (hasFieldToaster) {
-      let errorMessage = {
-        labelName: "Please fill all mandatory fields !",
-        labelKey: "ERR_DEFAULT_INPUT_FIELD_MSG"
-      };
-      switch (activeStep) {
-        case 1:
-          errorMessage = {
-            labelName:
-              "Please check the Missing/Invalid field for Property Details, then proceed!",
-            
-            labelKey:"ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
-          };
-          break;
-        case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
-          };
-          break;
-      }
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }}else{
+      if(typeOfService ==undefined)
+      {dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "ERROR", labelKey: "HC_SERVICE_TYPE_ERROR" },
+          "warning"
+        )
+      );}
+      if(locality ==undefined)
+      {dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "ERROR", labelKey: "HC_LOCALITY_ERROR" },
+          "warning"
+        )
+      );}
     }
-  };
+    
+  } else if (hasFieldToaster) {
+    let errorMessage = {
+      labelName: "Please fill all mandatory fields !",
+      labelKey: "ERR_DEFAULT_INPUT_FIELD_MSG"
+    };
+    switch (activeStep) {
+      case 1:
+        errorMessage = {
+          labelName:
+            "Please check the Missing/Invalid field for Property Details, then proceed!",
+          
+          labelKey:"ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        };
+        break;
+      case 2:
+        errorMessage = {
+          labelName:
+            "Please fill all mandatory fields for Applicant Details, then proceed!",
+          labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
+        };
+        break;
+    }
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  }
+  }
+
+};
 
 
 
@@ -190,7 +255,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        
+        minWidth: "200px",
         height: "48px",
         marginRight: "45px"
       }
@@ -214,104 +279,166 @@ export const footer = getCommonApplyFooter({
 
 
 
-export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
+export const validatestepform = (state, dispatch, isFormValid, hasFieldToaster) => {
+
+  if(window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+    }
   let allAreFilled = true;
-
-  
-
   let error= false;
- 
+  let flagValidFields= false;
+  let validationPause =false;
 
-   document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
-   
-    if (!i.value) {
-      if(error==false)
-      {
-        error=true;
-      i.focus();
-      allAreFilled = false;
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-    }
-    if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
+  let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
+  if (typeOfService== ""){
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+  } 
+  let noOfTrees = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount", "");  
+  let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description", "");
+  let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla", "");
+  if (locality== ""){
+    locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
   }
-  })
-
+  let address = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.address", "");
   
 
-  document.getElementById("apply_form2").querySelectorAll("input[type='hidden']").forEach(function (i) {
-    
-    if (i.value == i.placeholder) {
-      i.focus();
-      allAreFilled = false;
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  })
-    
-
-    if(!error)
+  if(typeOfService && noOfTrees && description)
+  {
+    validationPause = true;
+    if(!address)
     {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "ERROR", labelKey: "HC_ADDRESS_ERROR" },
+          "warning"
+        )
+      );
+    }else if(!locality)
+    {
+      dispatch(
+        toggleSnackbar(
+          true,
+          { labelName: "ERROR", labelKey: "HC_LOCALITY_ERROR" },
+          "warning"
+        )
+      );
+    }else{validationPause = false;}
 
-  let error_owner = false;
-
-  document.getElementById("apply_form3").querySelectorAll("[required]").forEach(function (i) {
-    
-    if (!i.value) {
-      if(error_owner==false)
-      {
-        error_owner=true;
-      i.focus();
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-    if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
   }
-  })
 
-  
-
-  document.getElementById("apply_form3").querySelectorAll("input[type='hidden']").forEach(function (i) {
+  if(validationPause === false)
+  {
+    var cnt = 0;
+   
+    document.getElementById("apply_form2").querySelectorAll("[required]").forEach(function (i) {
+    cnt = cnt + 1;
+      if (!i.value && i.value != undefined) {
+        if(error==false)
+        {
+        error=true;
+        var errorMsg1 = { labelName: "ERROR", labelKey: "HC_ERROR_1"+cnt.toString() };
+        // alert(i + " " + errorMsg1 )
+        dispatch(
+          toggleSnackbar(
+            true,
+            errorMsg1,
+            "warning"
+          )
+         );
+        i.focus();
+        allAreFilled = false;
+        i.parentNode.classList.add("MuiInput-error-853");
+        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+        }
+        if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          allAreFilled = false;
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+    }
+    })
     
-    if (i.value == i.placeholder) {
-      i.focus();
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  })
-    }
-
+    document.getElementById("apply_form2").querySelectorAll("input[type='hidden']").forEach(function (i) {
+      
+      if (i.value == i.placeholder) {
+        i.focus();
+        allAreFilled = false;
+        i.parentNode.classList.add("MuiInput-error-853");
+        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+        allAreFilled = false;
+        isFormValid = false;
+        hasFieldToaster = true;
+      }
+    })
   
+      if(!error)
+      {
+  
+    let error_owner = false;
+    var cnt2 = 0;
+    document.getElementById("apply_form3").querySelectorAll("[required]").forEach(function (i) {
+      cnt2 = cnt2 + 1 ;
+      if (!i.value) {
+        if(error_owner==false)
+        {
+        error_owner=true;
+        
+        var errorMsg2 = { labelName: "ERROR", labelKey: "HC_ERROR_2"+cnt2.toString() };
+        // alert(i + " " + errorMsg2 )
+        dispatch(
+          toggleSnackbar(
+            true,
+            errorMsg2,
+            "warning"
+          )
+         );
+        i.focus();
+        i.parentNode.classList.add("MuiInput-error-853");
+        i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+        allAreFilled = false;
+        isFormValid = false;
+        hasFieldToaster = true;
+        }
+        if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
+          i.parentNode.classList.add("MuiInput-error-853");
+          i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+          allAreFilled = false;
+          isFormValid = false;
+          hasFieldToaster = true;
+        }
+      }
+    })
+  
+    
+  
+    document.getElementById("apply_form3").querySelectorAll("input[type='hidden']").forEach(function (i) {
+      
+      if (i.value == i.placeholder) {
+        i.focus();
+        i.parentNode.classList.add("MuiInput-error-853");
+        i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
+        allAreFilled = false;
+        isFormValid = false;
+        hasFieldToaster = true;
+      }
+    })
+      }
+  }
   
   if (allAreFilled == false) {
-    
     isFormValid = false;
     hasFieldToaster = true;
+    flagValidFields = false;
   }
   else {
     isFormValid = true;
     hasFieldToaster = false;
+    flagValidFields = true;
   }
-  return [isFormValid, hasFieldToaster]
+
+
+  return [isFormValid, hasFieldToaster, validationPause]
 };

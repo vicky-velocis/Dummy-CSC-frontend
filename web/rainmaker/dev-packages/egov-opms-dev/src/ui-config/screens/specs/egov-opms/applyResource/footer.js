@@ -45,6 +45,7 @@ const moveToReview = (state, dispatch, applnid) => {
     );
 
     let validateDocumentField = false;
+
     for (let i = 0; i < 2; i++) {
       let isDocumentRequired = get(documentsFormat[i], "isDocumentRequired");
       let isDocumentTypeRequired = get(
@@ -377,7 +378,7 @@ export const footer = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "16px"
       }
@@ -407,7 +408,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        // minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "45px"
       }
@@ -436,7 +437,7 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        //minWidth: "200px",
+        minWidth: "180px",
         height: "48px",
         marginRight: "45px"
       }

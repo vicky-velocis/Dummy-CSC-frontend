@@ -28,7 +28,19 @@ const convertTime =(time)=> {
   }
   return time.join(''); // return adjusted time or original string
   }
-
+  const truncTime=(str, length, ending)=> {
+    if (length == null) {
+      length = 20;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  };
 ///eventFilter
 
 export const searchEventApiCall = async (state, dispatch) => {
@@ -163,9 +175,9 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
           [getTextToLocalMapping("Event Id")]:
           item.eventId || "-",
           [getTextToLocalMapping("Event Title")]:
-          item.eventTitle || "-",
+          truncTime(item.eventTitle) || "-",
           [getTextToLocalMapping("Organizer Department")]:
-          [item.EmpName, item.organizerUsernName]|| "-",
+          item.EmpName|| "-",
           [getTextToLocalMapping("Organizer Employee")]:
           item.organizerUsernName || "-",
         [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -319,9 +331,9 @@ export const searchLibraryApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Event Id")]:
         item.eventId || "-",
         [getTextToLocalMapping("Event Title")]:
-        item.eventTitle || "-",
+        truncTime(item.eventTitle) || "-",
         [getTextToLocalMapping("Organizer Department")]:
-        [item.EmpName, item.organizerUsernName]|| "-",
+        item.EmpName|| "-",
         [getTextToLocalMapping("Organizer Employee")]:
         item.organizerUsernName || "-",
      [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -489,9 +501,9 @@ response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department
     [getTextToLocalMapping("Event Id")]:
    item.eventId || "-",
    [getTextToLocalMapping("Event Title")]:
-   item.eventTitle || "-",
+   truncTime(item.eventTitle) || "-",
    [getTextToLocalMapping("Organizer Department")]:
-   [item.EmpName, item.organizerUsernName]|| "-",
+   item.EmpName|| "-",
    [getTextToLocalMapping("Organizer Employee")]:
    item.organizerUsernName || "-",
  [getTextToLocalMapping("Date & Time")]:item.startDate.split(" ")[0] +" "+convertTime(item.startTime)+" "+"To"+" "+item.endDate.split(" ")[0] +" "+convertTime(item.endTime) || "-",
@@ -565,7 +577,7 @@ let data1 = response.ResponseBody.map(item => ({
     [getTextToLocalMapping("File Number")]:
     item.fileNumber || "-",
     [getTextToLocalMapping("Subject")]:
-    item.pressNoteSubject || "-",
+    truncTime(item.pressNoteSubject) || "-",
     [getTextToLocalMapping("Press Note List UUID")]:
     item.pressNoteUuid || "-",
   
@@ -602,7 +614,7 @@ let data1 = response.ResponseBody.map(item => ({
     [getTextToLocalMapping("File Number")]:
     item.fileNumber || "-",
     [getTextToLocalMapping("Subject")]:
-    item.pressNoteSubject || "-",
+    truncTime(item.pressNoteSubject) || "-",
     [getTextToLocalMapping("Press Note List UUID")]:
     item.pressNoteUuid || "-",
   
@@ -693,7 +705,7 @@ export const searchTenderApiCall = async (state, dispatch) => {
     [getTextToLocalMapping("Tender Notice ID")]:item.tenderNoticeId || "-",
     [getTextToLocalMapping("Date")]:item.tenderDate.split(" ")[0] || "-",
     [getTextToLocalMapping("File Number")]:item.fileNumber || "-",
-    [getTextToLocalMapping("Subject")]:item.tenderSubject || "-",
+    [getTextToLocalMapping("Subject")]:truncTime(item.tenderSubject)|| "-",
     [getTextToLocalMapping("Department User")]:item.createdByName || "-",
     [getTextToLocalMapping("tenderNoticeUuid")]:item.tenderNoticeUuid || "-",
     [getTextToLocalMapping("tenderNoticeStatus")]:item.tenderNoticeStatus || "-"
@@ -750,11 +762,11 @@ let data1 = response.ResponseBody.map(item => ({
   [getTextToLocalMapping("Press Id")]:
   item.pressMasterUuid || "-",
   [getTextToLocalMapping("Publication name")]:
-  item.publicationName || "-",
+  truncTime(item.publicationName) || "-",
   [getTextToLocalMapping("Type of the press")]:
   item.pressType || "-",
   [getTextToLocalMapping("Personnel Name")]:
-  item.personnelName || "-",
+  truncTime(item.personnelName) || "-",
   
 
   [getTextToLocalMapping("Email Id")]:

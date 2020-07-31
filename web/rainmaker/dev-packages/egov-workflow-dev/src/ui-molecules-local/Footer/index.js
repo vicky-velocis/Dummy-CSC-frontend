@@ -66,7 +66,7 @@ class Footer extends React.Component {
     }
     if(dataPath==="services"){
       var { state  } = this.props;
-      var{action} = this.props
+      
       const applicationNumberHC = get(
         state.screenConfiguration.preparedFinalObject.workflow,
         `ProcessInstances[0].businessId`);
@@ -172,6 +172,8 @@ class Footer extends React.Component {
   };
 
   onClose = () => {
+    var {state} = this.props;
+    set(state, "form.workflow.files.wfDocuments", []),
     this.setState({
       open: false
     });

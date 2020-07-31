@@ -77,7 +77,7 @@ export const getTodaysDateInYMD = () => {
 };
 
 export const getStartDateValue = (state) => {
-  debugger
+  
 //  const state = store.getState();
   console.log(state)
  let startDate= get(state,"screenConfiguration.preparedFinalObject.eventDetails[0].startDate",{});
@@ -1512,13 +1512,13 @@ return getLocaleLabels(
 case "Organizer Department":
 return getLocaleLabels(
   "Organizer_Department",
-  "Organizer",
+  "PR_ORGANIZER",
   localisationLabels
 );
 case "Organizer Employee":
 return getLocaleLabels(
   "Organizer_Employee",
-  "organizerUsernName",
+  "PR_ORGANIZER_EMPLOYEE",
   localisationLabels
 );
 

@@ -2,14 +2,21 @@ import { getCommonCard, getCommonContainer, getCommonHeader, getDateField, getLa
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
+import "./index.css";
 import { fetchData, fetchDataForFilterFields, resetFields } from "./searchResource/citizenSearchFunctions";
 
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 
 const header = getCommonHeader(
   {
     labelName: "My Service Request",
     labelKey: "HC_MY_SERVICE_REQUEST_HEADER"
+  },
+  {
+    style : {
+      padding: 0
+    }
   },
   {
     classes: {
@@ -31,7 +38,7 @@ export const FieldsForFilterForm = getCommonCard({
           labelKey: "HC_SERVICE_REQUEST_ID"
         },
         placeholder: {
-          labelName: "Service Request ID",
+          labelName: "Enter Service Request ID",
           labelKey: "HC_SERVICE_REQUEST_ID_PLACEHOLDER"
         },
         gridDefination: {
@@ -42,14 +49,14 @@ export const FieldsForFilterForm = getCommonCard({
 
         //  required:true,
         pattern: getPattern("BuildingStreet"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
         jsonPath: "myServiceRequests[0].servicerequestid"
       })
     },
     FromDate: getDateField({
       label: { labelName: "From Date", labelKey: "HC_FROM_DATE_LABEL" },
       placeholder: {
-        labelName: "FromDate",
+        labelName: "Select From Date",
         labelKey: "HC_FROM_DATE_PLACEHOLDER"
       },
       gridDefination: {
@@ -62,6 +69,16 @@ export const FieldsForFilterForm = getCommonCard({
 
       jsonPath: "myServiceRequests[0].FromDate",
       sourceJsonPath: "myServiceRequests[0].FromDate",
+      afterFieldChange: (action, state, dispatch) => {
+        dispatch(
+          handleField(
+            "myServiceRequests",
+            "components.div.children.form.children.cardContent.children.masterContainer.children.ToDate",
+            "props.inputProps.min",
+            action.value
+          )
+        );
+                }
 
 
     }),
@@ -69,7 +86,7 @@ export const FieldsForFilterForm = getCommonCard({
     ToDate: getDateField({
       label: { labelName: "To Date", labelKey: "HC_TO_DATE_LABEL" },
       placeholder: {
-        labelName: "To Date",
+        labelName: "Select To Date",
         labelKey: "HC_TO_DATE_PLACEHOLDER"
       },
       gridDefination: {
@@ -78,7 +95,11 @@ export const FieldsForFilterForm = getCommonCard({
         md: 4
       },
       pattern: getPattern("Date"),
-
+      props: {
+        inputProps: {
+          min: ''
+        }
+      },
 
       jsonPath: "myServiceRequests[0].ToDate",
       sourceJsonPath: "myServiceRequests[0].ToDate",
@@ -86,25 +107,65 @@ export const FieldsForFilterForm = getCommonCard({
 
 
     }),
-    ServiceRequestType: getSelectField({
-      label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
-      optionLabel: "name",
-      optionValue: "name",
-      placeholder: {
-        labelName: "Service Request Type",
-        labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
-      },
-      //    jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-        md: 4
-      },
+    // ServiceRequestType: getSelectField({
+    //   label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
+    //   optionLabel: "name",
+    //   optionValue: "name",
+    //   placeholder: {
+    //     labelName: "Select Service Request Type",
+    //     labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    //   },
+    //   //    jsonPath: "searchScreen.toDate",
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4,
+    //     md: 4
+    //   },
 
+    //   jsonPath: "myServiceRequests[0].servicetype",
+    //   sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
+    //   required: false
+    // }),
+    ServiceRequestType:{
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-hc",
+      componentPath: "AutosuggestContainer",
       jsonPath: "myServiceRequests[0].servicetype",
+      required: false,
+            gridDefination: {
+              xs: 12,
+              sm: 4,
+              md: 4
+            },
+    props: {
+    style: {
+    width: "100%",
+    cursor: "pointer"
+    },
+   
+    className: "citizen-city-picker",
+    
+    label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
+
+    placeholder: {
+      labelName: "Select Service Request Type",
+      labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
+    },
+    jsonPath: "myServiceRequests[0].servicetype",
       sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-      required: false
-    }),
+   
+    labelsFromLocalisation: false,
+    suggestions: [],
+    fullwidth: true,
+    required: false,
+    inputLabelProps: {
+      shrink: true
+    },
+    isMulti: false,
+    labelName: "name",
+    valueName: "name"
+    },
+  },
   }),
 
 
@@ -113,16 +174,17 @@ export const FieldsForFilterForm = getCommonCard({
       firstCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 4
+        // }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 4,
+          md: 4,
           // align: "center"
         },
         props: {
@@ -132,7 +194,8 @@ export const FieldsForFilterForm = getCommonCard({
             // margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            minWidth: "220px",
+            // minWidth: "220px",
+            width: "80%",
             height: "48px"
           }
         },
@@ -156,7 +219,8 @@ export const FieldsForFilterForm = getCommonCard({
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 3
+          sm: 4,
+          md:4 
           // align: "center"
         },
         props: {
@@ -167,7 +231,8 @@ export const FieldsForFilterForm = getCommonCard({
             border: "#FE7A51 solid 1px",
             borderRadius: "2px",
             // width: window.innerWidth > 480 ? "80%" : "100%",
-            minWidth: "220px",
+           // minWidth: "220px",
+           width: "80%",
             height: "48px"
           }
         },
@@ -182,14 +247,14 @@ export const FieldsForFilterForm = getCommonCard({
           callBack: resetFields
         }
       },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      }
+      // lastCont: {
+      //   uiFramework: "custom-atoms",
+      //   componentPath: "Div",
+      //   gridDefination: {
+      //     xs: 12,
+      //     sm: 4
+      //   }
+      // }
     })
   })
 });
@@ -250,6 +315,8 @@ const screenConfig = {
   name: "myServiceRequests",
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch)
+    // resetFieldsForEmployeeFilter(state, dispatch);
+
     getMdmsData(dispatch).then(response => {
     })
     fetchData(action, state, dispatch);
@@ -260,8 +327,27 @@ const screenConfig = {
     div: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
+      props: {
+        className: "common-div-css",
+        id: "myServiceRequests"
+      },
       children: {
-        header: header,
+        // header: header,
+        headerDiv: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+
+          children: {
+            header: {
+              // gridDefination: {
+              //   xs: 12,
+              //   sm: 6
+              // },
+              ...header
+            },
+            
+          }
+        },
         form: FieldsForFilterForm,
         applicationsCard: {
           uiFramework: "custom-molecules",

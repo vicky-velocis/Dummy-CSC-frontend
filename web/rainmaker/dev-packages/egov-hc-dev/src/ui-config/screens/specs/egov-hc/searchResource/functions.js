@@ -35,6 +35,7 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
   );
   
   const isSearchBoxFirstRowValid = validateFields(
+    // components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestStatus
     "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.serviceRequestidContactNoAndRequestTypeContainer.children",
     state,
     dispatch,
@@ -136,18 +137,19 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
     let fromDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.fromDate")
     let toDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.toDate")
     let servicerequestid = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicerequestid")
-    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype")
-    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus")
-    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla")
+    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype.label")
+    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus.label")
+    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla.label")
     let contactNumber = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.contactNumber")
     var dateFromObject = new Date(fromDate);
     var dateToObject = new Date(toDate);
     let fromDateNumeric = dateFromObject.getTime() 
     let toDateNumeric = dateToObject.getTime()
     var oneDayDifference = 60 * 60 * 24 * 1000
-    if (fromDateNumeric === toDateNumeric){
-      toDateNumeric = toDateNumeric + oneDayDifference
-    }
+    toDateNumeric = toDateNumeric+oneDayDifference
+    // if (fromDateNumeric === toDateNumeric){
+    //   toDateNumeric = toDateNumeric + oneDayDifference
+    // }
       var data = 
         {"fromDate":fromDateNumeric,
         "toDate": toDateNumeric,
@@ -168,10 +170,7 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
         [getTextToLocalMapping("Service Request Date")]: item.createdtime || "-",
         [getTextToLocalMapping("Type Of Service Request")]: item.service_type || "-",
         [getTextToLocalMapping("Name Of Owner")]:item.owner_name || "-",
-        [getTextToLocalMapping("Service Request Status")]: item.service_request_status || "-",
-        ["current_assignee"]: item.current_assignee|| "-",
-        ["status1"]: item.service_request_status || "-"
-        
+        [getTextToLocalMapping("Service Request Status")]: item.service_request_status || "-",       
       }));
     
     // console.log("data",data)

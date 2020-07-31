@@ -10,6 +10,22 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
+
+// SampleDownload: getCommonContainer({
+          
+        //   downloadcard: {
+        //     uiFramework: "custom-molecules-local",
+        //     moduleName: "egov-opms",
+        //     componentPath: "SampleDownload"
+        //   },
+          
+          
+
+         
+         
+        // })
+
+
 export const sellmeatapplicantSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
@@ -20,7 +36,8 @@ export const sellmeatapplicantSummary = getCommonGrayCard({
     children: {
       header: {
         gridDefination: {
-          xs: 8
+          xs: 9,
+          md: 8
         },
         ...getCommonSubHeader({
           labelName: "Applicant Details",
@@ -37,7 +54,8 @@ export const sellmeatapplicantSummary = getCommonGrayCard({
           }
         },
         gridDefination: {
-          xs: 4,
+          xs: 3,
+          md: 4,
           align: "right"
         },
         children: {
@@ -202,7 +220,20 @@ export const sellmeatapplicantSummary = getCommonGrayCard({
               }
             }
           )
-        })
+        }),
+        // SampleDownload: getCommonContainer({
+          
+        //   downloadcard: {
+        //     uiFramework: "custom-molecules-local",
+        //     moduleName: "egov-opms",
+        //     componentPath: "SampleDownload"
+        //   },
+          
+          
+
+         
+         
+        // })
       }),
       items: [],
       hasAddItem: false,

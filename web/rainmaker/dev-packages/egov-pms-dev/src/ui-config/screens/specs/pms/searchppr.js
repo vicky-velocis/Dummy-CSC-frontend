@@ -23,6 +23,8 @@ import {
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 
 import { httpRequest } from "../../../../ui-utils";
+
+
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : false;
@@ -63,7 +65,15 @@ export const getMdmsData = async (action, state, dispatch) => {
             name:"marritalStatus"
           },
           
-        ] }
+        ] },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "Department", filter: "[?(@.active == true)]" },
+            { name: "Designation", filter: "[?(@.active == true)]" }
+           
+          ]
+        },
       ]
     }
   };
@@ -86,7 +96,7 @@ export const getMdmsData = async (action, state, dispatch) => {
   }
 };
 export const getData = async (action, state, dispatch) => {
-  //await getMdmsData(action, state, dispatch);
+  await getMdmsData(action, state, dispatch);
 }
 const NOCSearchAndResult = {
   uiFramework: "material-ui",
@@ -94,9 +104,9 @@ const NOCSearchAndResult = {
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();
-    // getData(action, state, dispatch).then(responseAction => {
+    getData(action, state, dispatch).then(responseAction => {
     
-    // });
+    });
  //set search param blank
 dispatch(prepareFinalObject("searchScreen",{}));
    

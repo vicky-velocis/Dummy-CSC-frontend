@@ -1,2 +1,4 @@
-export const defaultLocation = { lat: 18.597659, lng: 73.759235 };
-export const MAP_API_KEY = "AIzaSyCH9PmCbk_mcpgijAAlTeltC4deOxC5wEM"; //CHANGE THIS
+export const defaultLocation = { lat: 30.7333, lng: 76.7794 }
+export const MAP_API_KEY = "AIzaSyAHALA8pcgvA9LrIpgTaZMGUCdtvyUba3o"; //CHANGE THIS
+export const MAP_API_KEY_FOR_ADDRESS = "AIzaSyAHALA8pcgvA9LrIpgTaZMGUCdtvyUba3o";
+export const MAX_LENGTH_OF_ADDRESS = 254

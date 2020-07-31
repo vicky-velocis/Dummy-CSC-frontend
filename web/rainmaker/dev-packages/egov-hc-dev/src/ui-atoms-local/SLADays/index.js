@@ -15,7 +15,7 @@ const styles = {
 };
 // const { number } = props;/ssss
 function SLADays(props) {
-	return <div style={styles}>Resolution Time(Days) {getSLADays()}</div>;
+	return <div style={styles}>Resolution Time(Days) : {getSLADays()}</div>;
 }
 
 export default SLADays;

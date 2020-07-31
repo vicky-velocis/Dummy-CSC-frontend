@@ -8,7 +8,7 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails } from "./applyResource/review-property";
+import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails,getReviewGrantDetails } from "./applyResource/review-property";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
@@ -30,6 +30,7 @@ const reviewAddressDetails = getReviewAddress(false);
 const reviewRentDetails = getReviewRentDetails(false);
 const reviewPaymentDetails = getReviewPaymentDetails(false);
 const reviewDocumentDetails = getReviewDocuments(false, "apply")
+const reviewGrantDetails = getReviewGrantDetails(false)
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
@@ -37,7 +38,8 @@ export const propertyReviewDetails = getCommonCard({
   reviewOwnerDetails,
   reviewRentDetails,
   reviewPaymentDetails,
-  reviewDocumentDetails
+  reviewDocumentDetails,
+  reviewGrantDetails
 });
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {

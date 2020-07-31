@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import isEmpty from "lodash/isEmpty";
 import "./index.css";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 class Footer extends React.Component {
   state = {
@@ -237,6 +238,7 @@ class Footer extends React.Component {
           dataPath={dataPath}
           moduleName={moduleName}
           state={state}
+          toggleSnackbar={this.props.toggleSnackbar}
         />
       </div>
     );
@@ -249,7 +251,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRoute: url => dispatch(setRoute(url))
+    setRoute: url => dispatch(setRoute(url)),
+    toggleSnackbar: (show, message, type) => dispatch(toggleSnackbar(show, message, type))
   };
 };
 

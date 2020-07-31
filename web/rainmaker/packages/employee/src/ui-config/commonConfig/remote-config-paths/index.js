@@ -10,6 +10,7 @@ const remoteConfigPath = (path, screenKey) => {
       config = require(`egov-rented-properties/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "pt-mutation":
+      case "pt-common-screens":
       config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "hrms":
@@ -43,15 +44,33 @@ const remoteConfigPath = (path, screenKey) => {
 	case "egov-opms":
       config = require(`egov-opms/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-      case "egov-hc":
-        config = require(`egov-hc/ui-config/screens/specs/${path}/${screenKey}`).default;
-        break;
-      	case "egov-pr":
+    case "egov-hc":
+      config = require(`egov-hc/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "egov-pr":
       config = require(`egov-pr/ui-config/screens/specs/${path}/${screenKey}`).default;
-    break; 
+      break; 
     case "pms":
       config = require(`egov-pms/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;   
+      break;  
+      case "egov-store-asset":
+        config = require(`egov-store-asset/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break; 
+    case "egov-echallan":
+      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+	case "auction":
+      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+	 break;
+    case "item-master":
+      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "fine-master":
+      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "vendor-master":
+      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

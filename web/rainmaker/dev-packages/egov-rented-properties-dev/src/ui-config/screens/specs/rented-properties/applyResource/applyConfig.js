@@ -1,10 +1,10 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {propertyDetails, transitSiteDetails } from './propertyDetails';
 import {noticePropertyDetails,ownerDetailsForNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
-import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite} from './addressDetails';
+import {propertyDetails, transitSiteDetails} from './propertyDetails';
+import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite,transitSitePropertyDetails,transitSiteComments} from './addressDetails';
 import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
@@ -196,9 +196,10 @@ export const formwizardTransitSiteImagesFirstStep = {
     id: "apply_form1"
   },
   children: {
-    ownershipAddressDetails,
+    transitSitePropertyDetails,
     // applicantDetailsMortgage
-    imageUploadDetailsProperties
+    imageUploadDetailsProperties,
+    transitSiteComments
     
   }
 }

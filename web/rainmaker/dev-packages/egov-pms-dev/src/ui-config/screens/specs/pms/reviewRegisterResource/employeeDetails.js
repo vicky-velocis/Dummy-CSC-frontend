@@ -112,6 +112,27 @@ export const empDetails = () => {
           }),
           visible: true
         },
+        doj: {
+          ...getDateField({
+            label: {
+              labelName: "Date of Joining",
+              labelKey: "PENSION_DOJ_EMPLOYEE"
+            },
+            placeholder: {
+              labelName: "Date of Joining",
+              labelName: "PENSION_DOJ_EMPLOYEE"
+            },
+            required: false,
+           
+            pattern: getPattern("Date"),
+            jsonPath: "ProcessInstances[0].dateOfJoining",
+            props: {
+              className:"applicant-details-error",
+              disabled:true
+            }
+          }),
+          visible: true
+        },
         // employeeStatus: getTextField({
         //   label: {
         //     labelName: "employeeStatus",

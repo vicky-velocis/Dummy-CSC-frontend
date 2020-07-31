@@ -259,4 +259,3 @@ const getTransitSiteDetails = () => {
 
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
-

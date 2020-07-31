@@ -28,6 +28,17 @@ export const getCurrentStatus = status => {
 
 const TaskStatusComponents = ({ currentObj, index }) => {
   if (currentObj.moduleName === 'HORTICULTURE'){
+    var role_name = ""
+
+    var current_assigner_roles = get(currentObj, "assigner")
+    for (var i = 0; i < current_assigner_roles.roles.length; i++) {
+      
+      {if (i!=  current_assigner_roles.roles.length-1)
+      {role_name += current_assigner_roles.roles[i].name + " | ";}
+      else{
+        role_name += current_assigner_roles.roles[i].name 
+      }}}
+      
     return (
     <Grid
       container={true}
@@ -40,7 +51,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer labelName="Date" labelKey="HC_DATE_LABEL" />
@@ -59,7 +70,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -77,7 +88,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={3}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -110,7 +121,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         sm={6}
         md={4}
         lg={2}
-        style={{ marginTop: 15, paddingRight: 20 }}
+        style={{ marginTop: 15, paddingRight: 20, wordBreak: "break-all" }}
       >
         <Typography variant="caption">
           <LabelContainer
@@ -126,15 +137,14 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         >
           <LabelContainer
             labelName={
-              get(currentObj, "assigner.roles[0].name")
-                ? get(currentObj, "assigner.roles[0].name")
-                : "NA"
+              role_name
+               
             }
           />
         </Typography>
       </Grid>
       
-      <Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: 15 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3} style={{ marginTop: 15, wordBreak: "break-all" }}>
         <Typography variant="caption">
           <LabelContainer
             labelName="Comments"
@@ -143,14 +153,17 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         </Typography>
         <Typography
           variant="body2"
-          classes={{
-            body2: "body2-word-wrap"
-          }}
+          // classes={{
+          //   body2: "body2-word-wrap"
+          // }}
+          className="bodydata-word-wrap"
+         
         >
           <LabelContainer labelName={get(currentObj, "comment")} />
         </Typography>
       </Grid>
-      {get(currentObj, "documents") && (
+      {get(currentObj, "documents") && (     
+
         <DownloadFileContainer
           data={get(currentObj, "documents")}
           className="review-documents"
@@ -164,7 +177,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
     <Grid
       container={true}
       spacing={12}
-      style={{ paddingLeft: 10, paddingBottom: 20 }}
+      style={{ paddingLeft: 10, paddingBottom: 20 ,wordBreak: "break-word"}}
     >
       <Grid
         item

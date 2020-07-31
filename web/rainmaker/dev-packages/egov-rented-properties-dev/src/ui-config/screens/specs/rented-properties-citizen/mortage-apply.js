@@ -5,95 +5,16 @@ import {
 import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
 import {mortgagefooter} from './footer-mortgage';
 import { getMdmsData } from "../rented-properties/apply";
-import { getOwnershipSearchResults, setDocsForEditFlow ,getMortgageSearchResults} from "../../../../ui-utils/commons";
+import { getOwnershipSearchResults, setDocsForEditFlow ,getMortgageSearchResults, setDocumentData} from "../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-
-const header = getCommonHeader({
-    labelName: "Apply Mortage License",
-    labelKey: "RP_COMMON_MORTAGE_LICENSE_APPLY"
-});
-
-export const prepareOwnerShipDocuments = documents => {
-    let documentsArr =
-      documents.length > 0
-        ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item.code,
-            required: item.required,
-            jsonPath: `MortgageApplications[0].applicationDocuments[${ind}]`,
-            statement: item.description
-          });
-          return documentsArr;
-        }, [])
-        : [];
-    return documentsArr;
-  };
-  
-  const setDocumentData = async(action, state, dispatch) => {
-      const documentTypePayload = [{
-          moduleName: "PropertyServices",
-          masterDetails: [{name: "applications"}]
-        }
-      ]
-      const documentRes = await getMdmsData(dispatch, documentTypePayload);
-      const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-      const {applications = []} = PropertyServices || {}
-      const findFreshLicenceItem = applications.find(item => item.code === "MortgageRP")
-      const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
-      const freshLicenceDocuments = masterDocuments.map(item => ({
-      type: item.code,
-      description: {
-        labelName: "Only .jpg and .pdf files. 6MB max file size.",
-        labelKey: item.fileType
-      },
-      formatProps :{
-        accept : item.accept || "image/*, .pdf, .png, .jpeg",
-      }, 
-      maxFileSize: 6000,
-      downloadUrl: item.downloadUrl,
-      moduleName: "RentedProperties",
-      statement: {
-          labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
-          labelKey: item.description
-      }
-      }))
-      const documentTypes = prepareOwnerShipDocuments(masterDocuments);
-      let applicationDocs = get(
-        state.screenConfiguration.preparedFinalObject,
-        "MortgageApplications[0].applicationDocuments",
-        []
-      ) || [];
-      applicationDocs = applicationDocs.filter(item => !!item)
-      let applicationDocsReArranged =
-        applicationDocs &&
-        applicationDocs.length &&
-        documentTypes.map(item => {
-          const index = applicationDocs.findIndex(
-            i => i.documentType === item.name
-          );
-          return applicationDocs[index];
-        }).filter(item => !!item)
-      applicationDocsReArranged &&
-        dispatch(
-          prepareFinalObject(
-            "MortgageApplications[0].applicationDocuments",
-            applicationDocsReArranged
-          )
-        );
-      dispatch(
-        handleField(
-            "mortage-apply",
-            "components.div.children.formwizardSecondStep.children.mortgageDocumentsDetails.children.cardContent.children.documentList",
-            "props.inputProps",
-            freshLicenceDocuments
-        )
-    );
-      dispatch(prepareFinalObject("MortgageApplicationsTemp[0].applicationDocuments", documentTypes))
-  }
+  const header = getCommonHeader({
+      labelName: "Apply Mortage License",
+      labelKey: "RP_COMMON_MORTAGE_LICENSE_APPLY"
+  });
   
   const getData = async(action, state, dispatch) => {
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -121,7 +42,7 @@ export const prepareOwnerShipDocuments = documents => {
         )
       )
     }
-    setDocumentData(action, state, dispatch)
+    setDocumentData(action, state, dispatch, {documentCode: "MortgageRP", jsonPath: "MortgageApplications[0].applicationDocuments", screenKey: "mortage-apply", screenPath: "components.div.children.formwizardSecondStep.children.mortgageDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"MortgageApplicationsTemp[0].applicationDocuments"})
   }
 
 const applyLicense = {

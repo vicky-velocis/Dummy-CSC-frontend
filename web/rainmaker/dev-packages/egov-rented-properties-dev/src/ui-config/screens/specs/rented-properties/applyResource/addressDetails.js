@@ -1,12 +1,24 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { transitNumberConfig, propertyHeader } from '../applyResource/propertyDetails'
-import { getDetailsFromProperty,getDetailsFromPropertyMortgage } from "../../../../../ui-utils/apply";
+import { getDetailsFromProperty,getDetailsFromPropertyMortgage,getDetailsFromPropertyTransit } from "../../../../../ui-utils/apply";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const addressHeader = getCommonTitle(
     {
         labelName: "Address Details",
         labelKey: "RP_ADDRESS_DETAILS_HEADER"
+    },
+    {
+        style: {
+                marginBottom: 18,
+                marginTop: 18
+        }
+    }
+  )
+  const commentsHeader = getCommonTitle(
+    {
+        labelName: "Transit Site Comments",
+        labelKey: "RP_TRANSITSIT_COMMENTS_HEADER"
     },
     {
         style: {
@@ -49,6 +61,23 @@ export const pincodeField = {
     },
     minLength: 6,
     maxLength: 6,
+    required: true,
+  }
+  export const commentsField = {
+    label: {
+        labelName: "Comments",
+        labelKey: "RP_TRANSIT_COMMENTS_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Comments for Transit Site",
+        labelKey: "RP_TRANSIT_COMMENTS_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 1000,
     required: true,
   }
 
@@ -154,6 +183,48 @@ const mortgageTransitNumberField = {
     }
 }
 
+const TransitsiteTransitNumberField = {
+  ...transitNumberConfig,
+  jsonPath: "PropertyImagesApplications[0].property.transitNumber",
+  iconObj: {
+      iconName: "search",
+      position: "end",
+      color: "#FE7A51",
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+          getDetailsFromPropertyTransit(state, dispatch);
+        }
+      }
+    },
+    title: {
+      value:
+        "If you have already assessed your property, then please search your property by your transit Number",
+      key: "If you have already assessed your property, then please search your property by your transit Number"
+    },
+    infoIcon: "info_circle",
+    beforeFieldChange: (action, state, dispatch) => {
+      dispatch(
+          prepareFinalObject(
+            "PropertyImagesApplications[0].property.id",
+            ""
+          )
+        )
+      dispatch(
+          prepareFinalObject(
+            "PropertyImagesApplications[0].property.area",
+            ""
+          )
+        )
+        dispatch(
+          prepareFinalObject(
+            "PropertyImagesApplications[0].property.pincode",
+            ""
+          )
+        )
+    }
+}
+
 const getOwnershipAddressDetails = () => {
     return {
         header: propertyHeader,
@@ -175,7 +246,29 @@ const getOwnershipAddressDetailsMortgage = () => {
       })
   }
 }
+const getTransitSitePropertyDetails = () => {
+  return {
+      header: propertyHeader,
+      detailsContainer: getCommonContainer({
+          transitNumber: getTextField(TransitsiteTransitNumberField),
+          areaName: getTextField({...areaNameField,jsonPath: "PropertyImagesApplications[0].property.area", required: false, props: {...areaNameField.props, disabled: true}}),
+          pincode: getTextField({...pincodeField, jsonPath: "PropertyImagesApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+      })
+  }
+}
+const getTransitSiteComments = () => {
+  return {
+      header: commentsHeader,
+      detailsContainer: getCommonContainer({
+          comments: getTextField({...commentsField,jsonPath: "PropertyImagesApplications[0].description", required: false, props: {...areaNameField.props, disabled: false}})
+      })
+  }
+}
+
+
 
 export const addressDetails = getCommonCard(getAddressDetails())
 export const ownershipAddressDetails = getCommonCard(getOwnershipAddressDetails())
 export const ownershipAddressDetailsMortgage = getCommonCard(getOwnershipAddressDetailsMortgage())
+export const transitSitePropertyDetails = getCommonCard(getTransitSitePropertyDetails())
+export const transitSiteComments = getCommonCard(getTransitSiteComments());

@@ -10,7 +10,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getCommonGrayCard, getLabelOnlyValue,showHideAdhocPopups } from "../../utils";
+import { getCommonGrayCard, getLabelOnlyValue, showHideAdhocPopups } from "../../utils";
 import store from "../../../../../ui-redux/store";
 import {
   localStorageGet, localStorageSet, setapplicationNumber, getOPMSTenantId, setapplicationType,
@@ -31,7 +31,7 @@ const styles = {
     lineHeight: "28px",
     padding: "10px 0px"
     //paddingLeft: "5px"
-    
+
   },
   subHeader: {
     color: "gba(0, 0, 0, 0.87)",
@@ -39,8 +39,8 @@ const styles = {
     fontSize: "16px",
     fontWeight: 400,
     lineHeight: "19px",
-	display: "block",
-	width : "95%",
+    display: "block",
+    width: "95%",
   },
   docs: {
     color: "rgba(0, 0, 0, 0.6)",
@@ -48,9 +48,9 @@ const styles = {
     fontSize: "14px",
     fontWeight: 400,
     lineHeight: "17px",
-	display: "block",
-	width : "95%",
-   // paddingBottom: "24px"
+    display: "block",
+    width: "95%",
+    // paddingBottom: "24px"
   },
   description: {
     fontFamily: "Roboto",
@@ -59,8 +59,8 @@ const styles = {
     fontWeight: 400,
     letterSpacing: "0.6px",
     lineHeight: "14px",
-	display: "block",
-	width : "95%",	
+    display: "block",
+    width: "95%",
     padding: "10px",
     marginBottom: "0px !important"
   },
@@ -120,13 +120,13 @@ const generateDocument = item => {
   // Add description to individual grey cards
   let subParagraph = item.description
     ? getCommonParagraph(
-        {
-          labelKey: getTransformedLocale(`NOC_${item.description}_NOTE`)
-        },
-        {
-          style: styles.description
-        }
-      )
+      {
+        labelKey: getTransformedLocale(`NOC_${item.description}_NOTE`)
+      },
+      {
+        style: styles.description
+      }
+    )
     : {};
 
   return getCommonGrayCard({
@@ -138,45 +138,45 @@ const generateDocument = item => {
 };
 
 
-const setvalueCancel = async (state,dispatch) => {
-  
-  
+const setvalueCancel = async (state, dispatch) => {
+
+
   dispatch(
-        handleField(
-          "search-preview",
-          "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
-          "props.checked",
-          false
-        )
-      );
-      localStorageSet("undertaking", "") 
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
+      "props.checked",
+      false
+    )
+  );
+  localStorageSet("undertaking", "")
   showHideAdhocPopups(state, dispatch, "search-preview")
-  
-  
-  
-  }
-  
-
-const setvalue = async (state,dispatch) => {
 
 
-dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
-        "props.checked",
-        true
-      )
-    );
-    localStorageSet("undertaking", "accept") 
-showHideAdhocPopups(state, dispatch, "search-preview")
+
+}
+
+
+const setvalue = async (state, dispatch) => {
+
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.body.children.cardContent.children.undertakingButton1.children.addPenaltyRebateButton1",
+      "props.checked",
+      true
+    )
+  );
+  localStorageSet("undertaking", "accept")
+  showHideAdhocPopups(state, dispatch, "search-preview")
 
 
 
 }
 
 export const getRequiredDocuments = () => {
-   return getCommonContainer(
+  return getCommonContainer(
     {
       div2: {
         uiFramework: "custom-atoms",
@@ -193,101 +193,103 @@ export const getRequiredDocuments = () => {
           }
         },
         children: {
-          closeButton: {
-            componentPath: "Button",
-            props: {
-              style: {
-                float: "right",
-                color: "rgba(225, 61, 61, 0.87)"
-              }
-            },
-            children: {
-              previousButtonIcon: {
-                uiFramework: "custom-atoms",
-                componentPath: "Icon",
-                props: {
-                  iconName: "close"
-                }
-              }
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
-            }
-          },
-       
-      header: {
-        uiFramework: "custom-atoms",
-        componentPath: "Container",
-        children: {
-          header
-        },
-        break: getBreak(),
-      },
-      subText1: getCommonParagraph({
-        labelName: "UNDERTAKING1",
-        labelKey: "UNDERTAKING_POINT1"
-      }),
-      subText2: getCommonParagraph({
-        labelName: "UNDERTAKING2",
-        labelKey: "UNDERTAKING_POINT2"
-      }),
-      subText3: getCommonParagraph({
-        labelName: "UNDERTAKING3",
-        labelKey: "UNDERTAKING_POINT3"
-      }),
-      subText4: getCommonParagraph({
-        labelName: "UNDERTAKING4",
-        labelKey: "UNDERTAKING_POINT4"
-      }),
-      subText5: getCommonParagraph({
-        labelName: "UNDERTAKING5",
-        labelKey: "UNDERTAKING_POINT5"
-      }),
-      subText6: getCommonParagraph({
-        labelName: "UNDERTAKING6",
-        labelKey: "UNDERTAKING_POINT6"
-      }),
-      subText7: getCommonParagraph({
-        labelName: "UNDERTAKING7",
-        labelKey: "UNDERTAKING_POINT7"
-      }),
-      subText8: getCommonParagraph({
-        labelName: "UNDERTAKING8",
-        labelKey: "UNDERTAKING_POINT8"
-      }),
-      subText9: getCommonParagraph({
-        labelName: "UNDERTAKING9",
-        labelKey: "UNDERTAKING_POINT9"
-      }),
-      subText10: getCommonParagraph({
-        labelName: "UNDERTAKING10",
-        labelKey: "UNDERTAKING_POINT10"
-      }),
-      subText13: getCommonParagraph({
-        labelName: "UNDERTAKING13",
-        labelKey: "UNDERTAKING_POINT13"
-      }),
+          // closeButton: {
+          //   componentPath: "Button",
+          //   props: {
+          //     style: {
+          //       float: "right",
+          //       marginRight: "-15px",
+          //       paddingRight: "0px",
+          //       color: "rgba(0, 0, 0, 0.60)"
+          //     }
+          //   },
+          //   children: {
+          //     previousButtonIcon: {
+          //       uiFramework: "custom-atoms",
+          //       componentPath: "Icon",
+          //       props: {
+          //         iconName: "close"
+          //       }
+          //     }
+          //   },
+          //   onClickDefination: {
+          //     action: "condition",
+          //     callBack: (state, dispatch) => showHideAdhocPopups(state, dispatch, "search-preview")
+          //   }
+          // },
 
-      subText11: getCommonParagraph({
-        labelName: "UNDERTAKING11",
-        labelKey: "UNDERTAKING_POINT11"
-      }),
-		subText12: getCommonParagraph({
-		labelName: "UNDERTAKING12",
-		labelKey: "UNDERTAKING_POINT12"
-    }),
-    
-      }
-      
-      }  ,
+          header: {
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            children: {
+              header
+            },
+            break: getBreak(),
+          },
+          subText1: getCommonParagraph({
+            labelName: "UNDERTAKING1",
+            labelKey: "UNDERTAKING_POINT1"
+          }),
+          subText2: getCommonParagraph({
+            labelName: "UNDERTAKING2",
+            labelKey: "UNDERTAKING_POINT2"
+          }),
+          subText3: getCommonParagraph({
+            labelName: "UNDERTAKING3",
+            labelKey: "UNDERTAKING_POINT3"
+          }),
+          subText4: getCommonParagraph({
+            labelName: "UNDERTAKING4",
+            labelKey: "UNDERTAKING_POINT4"
+          }),
+          subText5: getCommonParagraph({
+            labelName: "UNDERTAKING5",
+            labelKey: "UNDERTAKING_POINT5"
+          }),
+          subText6: getCommonParagraph({
+            labelName: "UNDERTAKING6",
+            labelKey: "UNDERTAKING_POINT6"
+          }),
+          subText7: getCommonParagraph({
+            labelName: "UNDERTAKING7",
+            labelKey: "UNDERTAKING_POINT7"
+          }),
+          subText8: getCommonParagraph({
+            labelName: "UNDERTAKING8",
+            labelKey: "UNDERTAKING_POINT8"
+          }),
+          subText9: getCommonParagraph({
+            labelName: "UNDERTAKING9",
+            labelKey: "UNDERTAKING_POINT9"
+          }),
+          subText10: getCommonParagraph({
+            labelName: "UNDERTAKING10",
+            labelKey: "UNDERTAKING_POINT10"
+          }),
+          subText13: getCommonParagraph({
+            labelName: "UNDERTAKING13",
+            labelKey: "UNDERTAKING_POINT13"
+          }),
+
+          subText11: getCommonParagraph({
+            labelName: "UNDERTAKING11",
+            labelKey: "UNDERTAKING_POINT11"
+          }),
+          subText12: getCommonParagraph({
+            labelName: "UNDERTAKING12",
+            labelKey: "UNDERTAKING_POINT12"
+          }),
+
+        }
+
+      },
       nextButton: {
         componentPath: "Button",
         props: {
           variant: "contained",
           color: "primary",
           style: {
-            // minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "45px"
           }
@@ -308,19 +310,18 @@ export const getRequiredDocuments = () => {
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            //// generatePdf(state, dispatch, "receipt_download");
-            setvalue( state, dispatch);
-            
+            setvalue(state, dispatch);
+
           }
         }
       },
       cancelButton: {
         componentPath: "Button",
         props: {
-          variant: "contained",
+          variant: "outlined",
           color: "primary",
           style: {
-            // minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
             marginRight: "45px"
           }
@@ -341,98 +342,12 @@ export const getRequiredDocuments = () => {
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            //// generatePdf(state, dispatch, "receipt_download");
-            setvalueCancel( state, dispatch);
-            
+            setvalueCancel(state, dispatch);
+
           }
         }
-      },
-      // okButton:  {
-      //   componentPath: "Button",
-      //   props: {
-      //     variant: "contained",
-      //     color: "primary",
-      //     style: {
-      //       minWidth: "200px",
-      //       height: "48px",
-      //       marginRight: "16px"
-      //     }
-      //   },
-      //   children: {
-      //     okButtonIcon: {
-      //       uiFramework: "custom-atoms",
-      //       componentPath: "Icon",
-      //       props: {
-      //         iconName: "keyboard_arrow_right"
-      //       },
-      //       children: {
-      //         printButtonLabel: getLabel({
-      //           labelName: "OK I Agree",
-      //           labelKey: "PM_COMMON_OK_I_AGREE_BUTTON"
-      //         })
-      //       },
-      //       // okButtonLabel: getLabel({
-      //       // labelName: "OK I Agree",
-      //       //   labelKey: "PM_COMMON_OK_I_AGREE_BUTTON"
-      //       // })
-      //     }
-      //   },
-      //   onClickDefination: {
-      //     action: "condition",
-      //     //callBack: (state, action) =>setvalue(state, action)
-  
-      //     callBack: (state, dispatch) => {
-      //       //// generatePdf(state, dispatch, "receipt_download");
-      //       setvalue( state, dispatch);
-            
-      //     }
-          
-      //   }
-      // },
-      // CancelButton:  {
-      //   componentPath: "Button",
-      //   props: {
-      //     variant: "contained",
-      //     color: "primary",
-      //     style: {
-      //       minWidth: "200px",
-      //       height: "48px",
-      //       marginRight: "16px"
-      //     }
-      //   },
-      //   children: {
-      //     CancelButtonIcon: {
-      //       uiFramework: "custom-atoms",
-      //       componentPath: "Icon",
-      //       props: {
-      //         iconName: "keyboard_arrow_right"
-      //       },
-      //       children: {
-      //         printButtonLabel: getLabel({
-      //           labelName: "Cancel",
-      //           labelKey: "PM_COMMON_CANCEL"
-      //         })
-      //       },
-      //       // okButtonLabel: getLabel({
-      //       // labelName: "Cancel",
-      //       //   labelKey: "PM_COMMON_CANCEL"
-      //       // })
-      //     }
-      //   },
-      //   onClickDefination: {
-      //     action: "condition",
-      //     //callBack: (state, action) =>setvalue(state, action)
-  
-      //     callBack: (state, dispatch) => {
-      //       //// generatePdf(state, dispatch, "receipt_download");
-      //       setvalueCancel( state, dispatch);
-            
-      //     }
-          
-      //   }
-      // }
-    
-  },
+      }
+    },
     {
       style: {
         padding: "0px 10px"

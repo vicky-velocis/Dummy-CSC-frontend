@@ -15,7 +15,7 @@ const styles = {
 };
 
 function Status(props) {
-	return <div style={styles}>Status {getServiceRequestStatus()}</div>;
+	return <div style={styles}>Status : {getServiceRequestStatus()}</div>;
 }
 
 export default Status;
