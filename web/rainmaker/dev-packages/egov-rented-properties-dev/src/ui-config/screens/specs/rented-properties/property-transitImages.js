@@ -1,7 +1,8 @@
 import {
       getCommonHeader,
       getCommonContainer,
-      getCommonCard
+      getCommonCard,
+      getLabel
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {onTabChange, headerrow, tabs} from './search-preview'
@@ -133,7 +134,7 @@ import {
                 },
                 type: "array",
               },
-              documents: {
+              viewFour: {
                 uiFramework: "custom-containers-local",
                 moduleName: "egov-rented-properties",
                 componentPath: "MultipleDocumentsContainer",
@@ -142,7 +143,39 @@ import {
                   businessService:"RP",
                   className: "review-documents"
                 }
-              }
+              },
+              // searchButton: {
+              //   componentPath: "Button",
+              //   gridDefination: {
+              //     xs: 12,
+              //     sm: 4,
+              //     align: "right"
+              //   },
+              //   props: {
+              //     variant: "contained",
+              //     style: {
+              //       color: "white",
+              //       backgroundColor: "#fe7a51",
+              //       borderColor:"#fe7a51",
+              //       borderRadius: "2px",
+              //       width: "50%",
+              //       height: "48px",
+              //     }
+              //   },
+              //   children: {
+              //     buttonLabel: getLabel({
+              //       labelName: "Notice Violation",
+              //       labelKey: "RP_NOTICE_VIOLATION_BUTTON"
+              //     })
+              //   },
+              //   onClickDefination: {
+              //     action: "condition",
+              //     callBack: (state, dispatch) => {
+              //       dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`));
+              //     }
+              //   }
+              // },
+
           }
         }
       }
