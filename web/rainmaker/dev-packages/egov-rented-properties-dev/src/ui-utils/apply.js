@@ -191,7 +191,7 @@ let userInfo = JSON.parse(getUserInfo());
       const tenantId = getTenantId()
       let response;
       set(queryObject[0], "tenantId", tenantId);
-      set(queryObject[0], "description", "");
+      set(queryObject[0], "description", queryObject[0].description);
       let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(",");
       const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); 
       const output = filedata.map((fileitem,index) => 
