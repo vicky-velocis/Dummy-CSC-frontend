@@ -129,6 +129,11 @@ const ownershipTransitNumberField = {
       }
 }
 
+const noticeTransitNumberField = {
+    ...transitNumberConfig,
+    jsonPath: "DuplicateCopyApplications[0].property.transitNumber",
+}
+
 const transitNumberField = {
     ...transitNumberConfig,
     jsonPath: "Properties[0].transitNumber"
@@ -254,3 +259,4 @@ const getTransitSiteDetails = () => {
 
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
+
