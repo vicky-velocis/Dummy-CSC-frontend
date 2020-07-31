@@ -46,6 +46,29 @@ const fatherOrHusbandsNameField = {
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
 
+const getEditorField = {
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    label: {
+        labelName: "Editor",
+        labelKey: "RP_EDITOR_LABEL"
+    },
+    placeholder: { 
+        labelName: "Editor",
+        labelKey: "RP_EDITOR_LABEL"
+    },
+    minLength: 1,
+    maxLength: 100,
+    props:{
+        multiline: true,
+        rows: "4"
+    },
+    visible: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
+  }
+
 const ownerNameField = {
     label: {
         labelName: "Owner Name",
@@ -114,27 +137,13 @@ const getViolationField = {
         xs: 12,
         sm: 6
     },
-    minLength: 4,
-    maxLength: 40,
-    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
-}
-
-const getEditorField = {
-    label: {
-        labelName: "Editor",
-        labelKey: "RP_EDITOR_LABEL"
+    props:{
+        multiline: true,
+        rows: "4"
     },
-    placeholder: {
-        labelName: "Editor",
-        labelKey: "RP_EDITOR_LABEL"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 4,
-    maxLength: 40,
-    jsonPath: "Properties[0].owners[0].ownerDetails.editor" 
+    visible: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.violations" ,
+       
 }
 
 export const transitNumberConfig = {
@@ -205,16 +214,11 @@ const getOwnerDetailsForNotice = () => {
         detailsContainer: getCommonContainer({
         fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
         originalAllotte :getTextField(originalAllotteField),
-        // documentsGiven:getTextField(getDocumentField),
         violations:getTextField(getViolationField),
         editor : getTextField(getEditorField),
-
-    
         })
     }
 }
-
-export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
 
 const getPropertyDetailsForNotice = () => {
     return {
@@ -228,5 +232,5 @@ const getPropertyDetailsForNotice = () => {
     }
 }
 
-
+export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
 export const noticePropertyDetails = getCommonCard(getPropertyDetailsForNotice())
