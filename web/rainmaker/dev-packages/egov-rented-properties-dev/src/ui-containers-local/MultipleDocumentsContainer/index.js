@@ -11,11 +11,10 @@ import { func } from "prop-types";
   
 class MultipleDocumentsContainer extends Component {
     render() {
-        const {data, ...rest} = this.props
+        const {data,...rest} = this.props
         console.log("container",data)
         return(
             <MultipleDocuments data={data} {...rest}/>
-            // <h1>testing</h1>
         )
     }
 }
@@ -27,7 +26,7 @@ const mapStateToProps = (state, props) => {
         props.sourceJsonPath,
         []
     ); 
-  return {data}
+  return {data }
 }
 
 

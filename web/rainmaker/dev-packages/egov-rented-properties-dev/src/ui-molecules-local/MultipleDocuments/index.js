@@ -3,13 +3,14 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography"
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import classNames from "classnames";
 import Button from "@material-ui/core/Button";
 import {LabelContainer}  from "egov-ui-framework/ui-containers"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+
 const styles = {
     card: {
       paddingTop: 8,
@@ -51,17 +52,13 @@ class MultipleDocuments extends Component {
               {!!data.length && data.map((datum, index) => (
                   <Card className="MultipleOwners-card-212">
                   <Button  mt={1}  color="primary"  variant="contained"  onClick={() =>
-                  dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`))
-                  } >
+                  {dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`))
+                  dispatch(prepareFinalObject("SingleImage[0]", datum));
+                }
+                } >
                  Violation Notice</Button>            
                   <CardContent>
                   <Grid container>
-                  {/* <Button color="primary"  onClick={() =>
-                  dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`))
-                          // onButtonClick(buttonLabel, isDocRequired)
-                        } >
-                                Violation Notice
-                              </Button> */}
                       {datum.applicationDocuments.map((content) => (
                           <Grid xs={6} sm={3} 
                           style={{

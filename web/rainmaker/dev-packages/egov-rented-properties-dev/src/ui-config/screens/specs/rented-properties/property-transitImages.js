@@ -53,7 +53,6 @@ import {
     let payload = await getSearchResults(queryObject);
     if(payload) {
       let properties = payload.Properties;
-      dispatch(prepareFinalObject("Properties[0]", properties[0]));
       if(properties[0].propertyImages){
         let data = properties[0].propertyImages;
         data = data.filter(function(image) {
@@ -67,8 +66,8 @@ import {
           applicationDocuments = applicationDocuments.map((image, index) => ({ ...image, url: urls[index] }));
           return { ...item, applicationDocuments };
         });
-        dispatch(prepareFinalObject("Images", images));     
-
+        dispatch(prepareFinalObject("Images", images));
+        dispatch(prepareFinalObject("Properties[0]", properties[0]));     
       }
     }
     
@@ -144,38 +143,6 @@ import {
                   className: "review-documents"
                 }
               },
-              // searchButton: {
-              //   componentPath: "Button",
-              //   gridDefination: {
-              //     xs: 12,
-              //     sm: 4,
-              //     align: "right"
-              //   },
-              //   props: {
-              //     variant: "contained",
-              //     style: {
-              //       color: "white",
-              //       backgroundColor: "#fe7a51",
-              //       borderColor:"#fe7a51",
-              //       borderRadius: "2px",
-              //       width: "50%",
-              //       height: "48px",
-              //     }
-              //   },
-              //   children: {
-              //     buttonLabel: getLabel({
-              //       labelName: "Notice Violation",
-              //       labelKey: "RP_NOTICE_VIOLATION_BUTTON"
-              //     })
-              //   },
-              //   onClickDefination: {
-              //     action: "condition",
-              //     callBack: (state, dispatch) => {
-              //       dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`));
-              //     }
-              //   }
-              // },
-
           }
         }
       }
