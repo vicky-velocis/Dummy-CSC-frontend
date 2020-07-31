@@ -142,7 +142,39 @@ const rentedPropertiesDetailPreview = {
                 sm: 4,
                 align: "right"
               }
-            }
+            },
+            searchButton: {
+              componentPath: "Button",
+              visible: !!findItem,
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              },
+              props: {
+                variant: "contained",
+                style: {
+                  color: "white",
+                  backgroundColor: "#fe7a51",
+                  borderColor:"#fe7a51",
+                  borderRadius: "2px",
+                  width: "50%",
+                  height: "48px",
+                }
+              },
+              children: {
+                buttonLabel: getLabel({
+                  labelName: "NOTICE RECOVERY",
+                  labelKey: "RP_NOTICE_RECOVERY"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  dispatch(setRoute(`/rented-properties/notice-recovry?tenantId=${getTenantId()}`));
+                }
+              }
+            },
             }
           },
           tabSection: {

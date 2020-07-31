@@ -59,8 +59,6 @@ const getEditorField = {
         labelName: "Editor",
         labelKey: "RP_EDITOR_LABEL"
     },
-    minLength: 1,
-    maxLength: 100,
     props:{
         multiline: true,
         rows: "4"
@@ -141,9 +139,7 @@ const getViolationField = {
         multiline: true,
         rows: "4"
     },
-    visible: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.violations" ,
-       
+    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
 }
 
 export const transitNumberConfig = {
@@ -168,7 +164,6 @@ const transitNumberField = {
     ...transitNumberConfig,
     jsonPath: "Properties[0].transitNumber"
   }
-
   const allotmentNumberField = {
     label: {
         labelName: "Allotment Number",
@@ -206,8 +201,77 @@ const transitNumberField = {
         }
       }
 
+const demandNoticeFromDate = {
+    label: {
+        labelName: "Demand Notice First Date",
+        labelKey: "RP_DEMAND_NOTICE_FIRST_DATE"
+    },
+    placeholder: {
+        labelName: "Demand Notice First Date",
+        labelKey: "RP_DEMAND_DATE_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("Date"),
+    jsonPath: "Properties[0].owners[0].ownerDetails.demandStartdate",
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
+
+  const demandNoticeLastDate = {
+    label: {
+        labelName: "Demand Notice Last Date",
+        labelKey: "RP_DEMAND_NOTICE_LAST_DATE"
+    },
+    placeholder: {
+        labelName: "Demand Notice Last Date",
+        labelKey: "RP_DEMAND_DATE_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("Date"),
+    jsonPath: "Properties[0].owners[0].ownerDetails.demandlastdate",
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
+  const recoveryType = {
+    label: {
+        labelName: "Recovery Type",
+        labelKey: "RP_RECOVERY_TYPE"
+    },
+    placeholder: {
+        labelName: "Enter Recovery Type",
+        labelKey: "RP_RECOVERY_TYPE_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "Properties[0].colony",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
+    jsonPath: "Properties[0].owners[0].ownerDetails.recoveryType" 
+}
 
 
+
+const paymentAmountFieldNotice = {
+    label: {
+        labelName: "Payment Amount",
+        labelKey: "RP_PAYMENT_AMOUNT_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Payment Amount",
+        labelKey: "RP_PAYMENT_AMOUNT"
+    },
+    minLength: 4,
+    maxLength: 25,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid"
+
+}
 const getOwnerDetailsForNotice = () => {
     return {
         header: rentHolderHeader,
@@ -227,10 +291,30 @@ const getPropertyDetailsForNotice = () => {
             transitNumber: getTextField(transitNumberField),
             allotmentNumber: getTextField(allotmentNumberField),
             memoDate: getDateField(memoDateField),
-
+        })
+    }
+}
+const getPaymentDetailsNotice = () => {
+    return {
+            detailsContainer: getCommonContainer({    
+            demandNoticeFromDate: getDateField(demandNoticeFromDate),
+            demandNoticeLastDate: getDateField(demandNoticeLastDate),
+            recoveryType: getSelectField(recoveryType),
+            paymentAmount: getTextField(paymentAmountFieldNotice),
         })
     }
 }
 
 export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
 export const noticePropertyDetails = getCommonCard(getPropertyDetailsForNotice())
+
+export const paymentDetailsNotice=getCommonCard(getPaymentDetailsNotice())
+
+
+
+
+
+
+
+
+
