@@ -343,7 +343,7 @@ export const getReviewPaymentDetails = (isEditable = true) => {
 }
 
 
-export const getReviewGrantDetails = (isEditable = true) => {
+export const getReviewGrantDetails = () => {
     return getCommonGrayCard({
         headerDiv: {
             ...headerDiv,
@@ -358,7 +358,7 @@ export const getReviewGrantDetails = (isEditable = true) => {
                         labelKey: "RP_GRANT_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                
             }
         },
         viewFour: getCommonContainer({
