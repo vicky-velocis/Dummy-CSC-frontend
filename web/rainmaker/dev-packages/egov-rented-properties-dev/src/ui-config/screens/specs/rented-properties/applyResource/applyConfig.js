@@ -1,7 +1,7 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {noticePropertyDetails,ownerDetailsForNotice} from './noticeDetails'
+import {noticePropertyDetails,ownerDetailsForNotice,paymentDetailsNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
 import {propertyDetails, transitSiteDetails} from './propertyDetails';
 import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite,transitSitePropertyDetails,transitSiteComments} from './addressDetails';
@@ -266,6 +266,19 @@ export const formwizardDuplicateCopyThirdStep = {
   },
   visible: false
 };
+export const recoveryNoticeFirstStep ={
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    noticePropertyDetails,
+    ownerDetailsForNotice,
+    paymentDetailsNotice
+    //ownershipAddressDetails
+  }
+}
 
 export const noticeViolationForm = {
   uiFramework: "custom-atoms",

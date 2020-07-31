@@ -16,8 +16,13 @@ const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "CTL_CLERK");
 
-let transitNumber = getQueryArg(window.location.href, "transitNumber");
+  
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+const userInfo = JSON.parse(getUserInfo());
+const {roles = []} = userInfo
+let transitNumber = getQueryArg(window.location.href, "transitNumber");
+const findItem = roles.find(item => item.code === "CTL_CLERK");
 export const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
@@ -142,7 +147,39 @@ const rentedPropertiesDetailPreview = {
                 sm: 4,
                 align: "right"
               }
-            }
+            },
+            searchButton: {
+              componentPath: "Button",
+              visible: !!findItem,
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                align: "right"
+              },
+              props: {
+                variant: "contained",
+                style: {
+                  color: "white",
+                  backgroundColor: "#fe7a51",
+                  borderColor:"#fe7a51",
+                  borderRadius: "2px",
+                  width: "50%",
+                  height: "48px",
+                }
+              },
+              children: {
+                buttonLabel: getLabel({
+                  labelName: "NOTICE RECOVERY",
+                  labelKey: "RP_NOTICE_RECOVERY"
+                })
+              },
+              onClickDefination: {
+                action: "condition",
+                callBack: (state, dispatch) => {
+                  dispatch(setRoute(`/rented-properties/notice-recovry?tenantId=${getTenantId()}`));
+                }
+              }
+            },
             }
           },
           tabSection: {
