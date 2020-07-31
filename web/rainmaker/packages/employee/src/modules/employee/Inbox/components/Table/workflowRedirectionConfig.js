@@ -32,6 +32,16 @@ export const getWFConfig = (module,businessService) => {
           INITIATED: "/tradelicence/apply",
           DEFAULT: "/tradelicence/search-preview",
         };
+     case "WS-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
+    case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
       case "FIRENOC":
         return {
           INITIATED: "/fire-noc/apply",
@@ -63,6 +73,22 @@ export const getWFConfig = (module,businessService) => {
             DEFAULT: "/pt-mutation/search-preview",
           };
         }
+  // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE":
+      case "RRP_SERVICE":
+        return {
+          INITIATED: "/pms/pmsmap",
+          DEFAULT: "/pms/pmsmap",
+        };
+        case "DOE_SERVICE":
+          return {
+            INITIATED: "/pms/pmsmap",
+            DEFAULT: "/pms/pmsmap",
+          };
+          case "DOP_SERVICE":
+          return {
+            INITIATED: "/pms/pmsmap",
+            DEFAULT: "/pms/pmsmap",
+          };
 
     }
   }
