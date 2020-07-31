@@ -105,31 +105,6 @@ export const getReviewProperty = (isEditable = true) => {
                 },
                 { jsonPath: "Properties[0].propertyDetails.area" }
             ),
-            // allotementDate: getLabelWithValue(
-            //     {
-            //         labelName: "Date of Allotment",
-            //         labelKey: "RP_ALLOTMENT_DATE_LABEL"
-            //     },
-            //     { jsonPath: "Properties[0].owners[0].ownerDetails.allotmentStartdate", 
-            //     callBack: convertEpochToDate
-            // }
-            // ),
-            // allotementNumber: getLabelWithValue(
-            //     {
-            //         labelName: "Allotment Number",
-            //         labelKey: "RP_ALLOTMENT_NUMBER_LABEL"
-            //     },
-            //     { jsonPath: "Properties[0].owners[0].allotmenNumber" }
-            // ),
-            // possessionDate: getLabelWithValue(
-            //     {
-            //         labelName: "Date of Possession",
-            //         labelKey: "RP_POSSESSION_DATE_LABEL"
-            //     },
-            //     { jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
-            //     callBack: convertEpochToDate
-            // }
-            // ),
         })
     })
 }
@@ -152,28 +127,6 @@ export const getReviewOwner = (isEditable = true) => {
                 editSection: masterEntryEditSection(isEditable)
             }
         },
-        // viewFour: {
-        //     uiFramework: "custom-containers-local",
-        //     componentPath: "MultipleOwnerContainer",
-        //     moduleName: "egov-rented-properties",
-        //     props: {
-        //         contents: [
-        //             {label: "RP_OWNER_NAME_LABEL",
-        //             jsonPath: "ownerDetails.name"},
-        //             {label: "RP_MOBILE_NO_LABEL",
-        //             jsonPath: "ownerDetails.phone"},
-        //             {label: "TL_FATHER_OR_HUSBANDS_NAME_LABEL",
-        //             jsonPath: "ownerDetails.fatherOrHusband"},
-        //             {label: "TL_COMMON_RELATIONSHIP_LABEL",
-        //             jsonPath: "ownerDetails.relation"},
-        //             {label: "RP_OWNER_DETAILS_EMAIL_LABEL",
-        //             jsonPath: "ownerDetails.email"},
-        //             {label: "RP_AADHAR_LABEL",
-        //             jsonPath: "ownerDetails.aadhaarNumber"}
-        //         ],
-        //         jsonPath: "Properties[0].owners"
-        //     }
-        // }
         viewFour: getCommonContainer({
                 ownerName: getLabelWithValue(
                     {
