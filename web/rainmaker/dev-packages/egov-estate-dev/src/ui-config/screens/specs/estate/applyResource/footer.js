@@ -76,9 +76,9 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === COURT_CASE_DETAILS_STEP) {
@@ -88,9 +88,9 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (!isCourtCaseDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isCourtCaseDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === PAYMENT_DETAILS_STEP) {
@@ -100,14 +100,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (isPaymentDetailsValid) {
+    /* if (isPaymentDetailsValid) {
       // const res = await applyEstates(state, dispatch, activeStep);
       // if (!res) {
       //   return
       // }
     } else {
       isFormValid = false;
-    }
+    } */
   }
 
   if (activeStep === DOCUMENT_UPLOAD_STEP) {

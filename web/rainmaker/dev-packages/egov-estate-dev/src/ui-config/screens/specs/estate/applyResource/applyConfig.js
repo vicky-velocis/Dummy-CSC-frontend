@@ -17,7 +17,9 @@ import {
   courtCaseDetails
 } from './courtCaseDetails';
 import {
-  paymentDetails
+  groundRentDetails,
+  serviceTaxDetails,
+  paymentMadeBy
 } from './paymentDetails';
 import {
   reviewDetails
@@ -66,7 +68,7 @@ export const stepsData = [{
   },
   {
     labelName: "Court Case",
-    labelKey: "EST_COMMON_COURT_CASE"
+    labelKey: "EST_COMMON_COURT_CASE_DETAILS"
   },
   {
     labelName: "Payment Details",
@@ -135,7 +137,9 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    paymentDetails
+    groundRentDetails, 
+    serviceTaxDetails,
+    // paymentMadeBy
   },
   visible: false
 };
