@@ -253,6 +253,13 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
       []
     );
   }
+  else  if (type == "materialReceipt") {
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.DocumentType_MaterialReceipt",
+      []
+    );
+  }
 
   else {
     documents = get(
@@ -674,4 +681,58 @@ export const GetMdmsNameBycode = (state, dispatch,jsonpath, code) => {
   if(Obj &&Obj[0])
   Name = Obj[0].name
   return Name;
+};
+
+export const ValidateCard = (state,dispatch,cardJsonPath,pagename,jasonpath,value) => {
+  let  DuplicatItem =[];
+  let CardItem = get(
+    state.screenConfiguration.screenConfig[`${pagename}`],
+    cardJsonPath,
+    []
+  );
+ let matcode =[];
+  for (let index = 0; index < CardItem.length; index++) {
+    if(CardItem[index].isDeleted === undefined ||
+    CardItem[index].isDeleted !== false)
+    {
+    let code = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${value}`,'')        
+    matcode.push(code)
+    }
+  } 
+  var uniq = matcode
+  .map((name) => {
+    return {
+      count: 1,
+      name: name
+    }
+  })
+  .reduce((a, b) => {
+    a[b.name] = (a[b.name] || 0) + b.count
+    return a
+  }, {})  
+  var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+  if(duplicates.length>0)
+  {
+  duplicates= duplicates.map(itm => {
+      return `${itm}`;
+    })
+    .join() || "-"
+   // IsDuplicatItem = true;  
+    DuplicatItem.push(
+      {
+        duplicates: duplicates,
+        IsDuplicatItem:true
+      }      
+    )  
+  } 
+  else{
+    DuplicatItem.push(
+      {
+        duplicates: duplicates,
+        IsDuplicatItem:false
+      });
+
+  }
+
+  return DuplicatItem;
 };

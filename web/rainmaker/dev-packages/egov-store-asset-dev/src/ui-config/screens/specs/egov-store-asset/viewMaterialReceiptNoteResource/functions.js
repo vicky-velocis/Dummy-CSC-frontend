@@ -317,7 +317,8 @@ export const getMaterialIndentData = async (
 
  let response = await getreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("materialReceipt", get(response, "MaterialReceipt")));
+response = response.MaterialReceipt.filter(x=>x.id===id)
+  dispatch(prepareFinalObject("materialReceipt", response));
  
   furnishindentData(state, dispatch);
 };

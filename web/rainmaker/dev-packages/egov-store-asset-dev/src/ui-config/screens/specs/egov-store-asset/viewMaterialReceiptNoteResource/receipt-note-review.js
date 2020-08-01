@@ -3,6 +3,7 @@ import { getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getReceiptNoteListDetailsView } from "./view-receipt-note-details"
  import { getReceiptNoteDetailsView } from "./view-material-receipt-note-details"
 // import { getOtherDetailsView } from "./view-other-details";
+import { documentsSummary } from "./documentsSummary";
 import { masterCommonFooter } from "./footer";
 
 export const MaterialReceiptReviewDetails = isReview => {
@@ -14,6 +15,7 @@ export const MaterialReceiptReviewDetails = isReview => {
     viewReceiptNoteListDetails, 
     viewReceiptNoteDetails,   
     // viewOtherDetails,
+    documentsSummary: documentsSummary,
     footer
   });
 };

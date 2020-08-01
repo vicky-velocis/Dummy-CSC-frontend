@@ -139,7 +139,7 @@ export const callBackForNext = async (state, dispatch) => {
          // storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
         }
         else{
-          alert('Create')
+         
           storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
 
         }
@@ -276,7 +276,7 @@ export const callBackForNext = async (state, dispatch) => {
          // storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
         }
         else{
-          alert('Create')
+         
           storeMappingTemp = storeMappingTemp.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
 
         }

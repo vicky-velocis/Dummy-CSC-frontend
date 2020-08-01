@@ -69,44 +69,44 @@ export const getMTIHeaderView = (isReview = true) => {
           labelName: "Indenting Store",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
         },
-        { jsonPath: "purchaseOrders[0].purchaseType" }
+        { jsonPath: "indents[0].indentStore.name" }
       ),
       indentDate: getLabelWithValue(
         {
           labelName: "Indent Date",
           labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE"
         },
-        { jsonPath: "purchaseOrders[0].store.name" }
+        { jsonPath: "indents[0].indentDate" }
       ),
       indentPurpose: getLabelWithValue(
         { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
-        { jsonPath: "purchaseOrders[0].purchaseOrderDate" }
+        { jsonPath: "indents[0].indentPurpose" }
       ),
       issuingStoreName: getLabelWithValue(
         {
           labelName: "Issuing Store Name",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME"
         },
-        { jsonPath: "purchaseOrders[0].rateType" }
+        { jsonPath: "indents[0].issueStore.name" }
       ),
       remarks: getLabelWithValue(
         { labelName: "Remarks", labelKey: "STORE_PURCHASE_ORDER_REMARK" },
         {
-          jsonPath: "purchaseOrders[0].supplier.name",
+          jsonPath: "indents[0].narration",
         }
       ),
-      createdBy: getLabelWithValue(
-        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
-        {
-          jsonPath: "purchaseOrders[0].advancePercentage"
-        }
-      ),
-      designation: getLabelWithValue(
-        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
-        {
-          jsonPath: "purchaseOrders[0].designation",
-        }
-      ),
+      // createdBy: getLabelWithValue(
+      //   { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+      //   {
+      //     jsonPath: "purchaseOrders[0].advancePercentage"
+      //   }
+      // ),
+      // designation: getLabelWithValue(
+      //   { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+      //   {
+      //     jsonPath: "purchaseOrders[0].designation",
+      //   }
+      // ),
     }),
   });
 };

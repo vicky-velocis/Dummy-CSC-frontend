@@ -71,8 +71,44 @@ import {
     visible: false
   };
   
-  
+  const getEmployeeData = async (action, state, dispatch) => {
+    const queryParams = [{ key: "tenantId", value:  getTenantId() }];//{ key: "roles", value: "EMPLOYEE" },
+    const payload = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "_search",
+      queryParams,
+    );
+    if(payload){
+      if (payload.Employees) {
+        // const username =  get(state,"auth.userInfo.name",'')
+        // let  empDetails =
+        // payload.Employees.filter(x=>x.code === username);//"2010010062D");
+        // if(empDetails && empDetails[0] ){  
+        //   alert(empDetails[0].assignments[0].department)      
+        // empDetails = payload.Employees.filter(item=>  item.assignments[0].department === empDetails[0].assignments[0].department)
+        // }
+        dispatch(prepareFinalObject("Employee",payload.Employees));  
+      }
+    }
 
+  }
+const getTransferIndentData = async (action, state, dispatch) => {
+  const tenantId = getTenantId();
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }];
+    try {
+      let response = await getSearchResults(queryObject, dispatch,"indents");
+      response = response.indents.filter(x=>x.indentNumber ==="IND/248430/QWERTY/2020-21/00003")
+      dispatch(prepareFinalObject("TransferIndent", response));
+      
+    } catch (e) {
+      console.log(e);
+    }
+}
   
   const getMdmsData = async (action, state, dispatch) => {
     let mdmsBody = {
@@ -89,6 +125,8 @@ import {
             moduleName: "common-masters",
             masterDetails: [
               { name: "UOM", filter: "[?(@.active == true)]" },
+              { name: "Department", filter: "[?(@.active == true)]" },
+              { name: "Designation", filter: "[?(@.active == true)]" }
             ]
           }
         ]
@@ -107,16 +145,38 @@ import {
       console.log(e);
     }
   };
-  
+  const getstoreData = async (action, state, dispatch) => {
+    const tenantId = getTenantId();
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }];
+    try {
+      let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+      dispatch(prepareFinalObject("store", response));
+      
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const getData = async (action, state, dispatch) => {
     await getMdmsData(action, state, dispatch);
+    await getstoreData(action, state, dispatch);
+    await getTransferIndentData(action, state, dispatch);
+    await getEmployeeData(action, state, dispatch);
   }
   const screenConfig = {
     uiFramework: "material-ui",
     name: "create-material-transfer-outward",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
-      
+      // SEt Default data Start
+     dispatch(prepareFinalObject("materialIssues[0].materialIssueStatus", "CREATED"));
+     dispatch(prepareFinalObject("materialIssues[0].issueType", "MATERIALOUTWARD",));
+     dispatch(prepareFinalObject("materialIssues[0].materialHandOverTo", "",));
+     dispatch(prepareFinalObject("materialIssues[0].inventoryType", "",));
+     dispatch(prepareFinalObject("materialIssues[0].expectedDeliveryDate", 1609353000000,));//31 DEC 2020
       return action;
     },
   

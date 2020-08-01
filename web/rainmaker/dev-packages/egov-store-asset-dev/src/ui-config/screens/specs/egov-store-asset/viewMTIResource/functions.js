@@ -82,7 +82,16 @@ const returnEmptyArrayIfNull = value => {
     return value;
   }
 };
-
+export const furnishindentData = (state, dispatch) => {
+  let indents = get(
+    state.screenConfiguration.preparedFinalObject,
+    "indents",
+    []
+  );
+   setDateInYmdFormat(indents[0], ["indentDate",]);
+  
+  dispatch(prepareFinalObject("indents", indents));
+};
 export const setRolesList = (state, dispatch) => {
   let rolesList = get(
     state.screenConfiguration.preparedFinalObject,
@@ -124,9 +133,19 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 export const handleCreateUpdatePO = (state, dispatch) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
-    "purchaseOrders[0].id",
+    "indents[0].id",
     null
   );
+  let indents = get(
+    state.screenConfiguration.preparedFinalObject,
+    "indents",
+    []
+  );
+  let indentDate =
+  get(state, "screenConfiguration.preparedFinalObject.indents[0].indentDate",0) 
+  indentDate = convertDateToEpoch(indentDate);
+  set(indents[0],"indentDate", indentDate);
+  //furnishindentData(state, dispatch);
   if (uuid) {
     createUpdatePO(state, dispatch, "UPDATE");
   } else {
@@ -136,9 +155,9 @@ export const handleCreateUpdatePO = (state, dispatch) => {
 
 export const createUpdatePO = async (state, dispatch, action) => {
 
-  let purchaseOrders = get(
+  let indents = get(
     state.screenConfiguration.preparedFinalObject,
-    "purchaseOrders",
+    "indents",
     []
   );
   let priceList = get(
@@ -147,69 +166,31 @@ export const createUpdatePO = async (state, dispatch, action) => {
     []
   );
   const tenantId =  getTenantId();
-  purchaseOrders[0].tenantId = tenantId;
+  indents[0].tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
 
-  purchaseOrders = handleCardDelete(purchaseOrders, "purchaseOrderDetails", false);
+  indents = handleCardDelete(indents, "indentDetails", false);
 
 
-  //SET TENANT IDS IN ALL NEWLY ADDED JURISDICTIONS, DOESNT CHANGE ALREADY PRESENT
-  let poDetailArray = returnEmptyArrayIfNull(
-    get(purchaseOrders[0], "purchaseOrderDetails", [])
-  );
-  for (let i = 0; i < poDetailArray.length; i++) {
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].tenantId`, tenantId);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].priceList`, priceList[0]);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].purchaseIndentDetails`, []);
-  }
+ 
 
-  set(
-    purchaseOrders[0],
-    "purchaseOrderDate",
-    convertDateToEpoch(get(purchaseOrders[0], "purchaseOrderDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "expectedDeliveryDate",
-    convertDateToEpoch(get(purchaseOrders[0], "expectedDeliveryDate"), "dayStart")
-  );
+  
 
-  set(
-    purchaseOrders[0],
-    "rateContractDate",
-    convertDateToEpoch(get(purchaseOrders[0], "rateContractDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementStartDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementStartDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementEndDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementEndDate"), "dayStart")
-  );
-
-  const requestBody = {purchaseOrders};
+  const requestBody = {indents};
   console.log("requestbody", requestBody);
 
   if (action === "CREATE") {
     try {
       const response = await httpRequest(
         "post",
-        "/store-asset-services/purchaseorders/_create",
+        "/store-asset-services/indents/_create",
         "",
         queryObject,
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${response.indents[0].indentNumber}`));
        }
   
     } catch (error) {
@@ -219,13 +200,13 @@ export const createUpdatePO = async (state, dispatch, action) => {
     try {
       const response = await httpRequest(
         "post",
-        "/store-asset-services/purchaseorders/_update",
+        "/store-asset-services/indents/_update",
         "",
         queryObject,
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${response.indents[0].indentNumber}`));
        }
   
     } catch (error) {

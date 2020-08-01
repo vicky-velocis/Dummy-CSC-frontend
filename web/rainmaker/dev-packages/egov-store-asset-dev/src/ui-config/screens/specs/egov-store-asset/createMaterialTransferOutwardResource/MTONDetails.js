@@ -29,7 +29,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_NAME_SELECT"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].material.code",
+              jsonPath: "materialIssues[0].materialIssueDetails[0].material.code",
               sourceJsonPath: "searchMaster.materialNames",
               props: {
                 className: "hr-generic-selectfield",
@@ -50,7 +50,7 @@ const MTONDetailsCard = {
               },
               required:true,
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].indentQuantity"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].indentQuantity"
             })
           },
           balanceQuantity: {
@@ -90,7 +90,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_UOM"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].uom.code",
+              jsonPath: "materialIssues[0].materialIssueDetails[0].uom.code",
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
               props: {
                 className: "hr-generic-selectfield",
@@ -110,7 +110,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].userQuantity"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].userQuantity"
             })
           },
           totalValue: {
@@ -124,7 +124,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].orderQuantity"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].orderQuantity"
             })
           },  
           balAfterIssue: {
@@ -138,7 +138,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_QTY_BALANCE_QTY_AFTER_ISSUE"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].orderQuantity"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].orderQuantity"
             })
           },  
           remark: {
@@ -152,7 +152,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].usedQuantity"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].usedQuantity"
             })
           },
       

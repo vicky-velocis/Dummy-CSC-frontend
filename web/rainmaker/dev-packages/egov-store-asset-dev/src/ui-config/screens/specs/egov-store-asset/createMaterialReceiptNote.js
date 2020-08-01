@@ -9,6 +9,7 @@ import {
   import { materialReceiptDetail } from "./creatematerialReceiptNoteResource/Material-receipt-details"; 
   import { MaterialReceiptNote } from "./creatematerialReceiptNoteResource/Material-receipt-note"; 
   import { otherDetails } from "./creatematerialReceiptNoteResource/other-details";
+  import { documentDetails } from "./creatematerialReceiptNoteResource/documentDetails";
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -22,6 +23,10 @@ import {
   import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
+  import {
+    prepareDocumentsUploadData,
+    
+  } from "../../../../ui-utils/storecommonsapi";
   let MrnNumber="";
   MrnNumber = getQueryArg(window.location.href, "MrnNumber");
   export const stepsData = [
@@ -64,6 +69,7 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
+      documentDetails,
       materialReceiptDetail
     },
     visible: false
@@ -135,9 +141,23 @@ export const header = getCommonContainer({
         [],
         mdmsBody
       );
+      // document type 
+
+     let  DocumentType_PriceList= [
+      {
+          code: "STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE",
+          isMandatory: true, 
+          required:true,
+          documentType:"STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE"  ,         
+          active: true
+      },]
       dispatch(
         prepareFinalObject("createScreenMdmsData", get(response, "MdmsRes"))
       );
+      dispatch(
+        prepareFinalObject("DocumentType_MaterialReceipt", DocumentType_PriceList)
+      );
+      prepareDocumentsUploadData(state, dispatch, 'materialReceipt');
       setRolesList(state, dispatch);
       setHierarchyList(state, dispatch);
       return true;

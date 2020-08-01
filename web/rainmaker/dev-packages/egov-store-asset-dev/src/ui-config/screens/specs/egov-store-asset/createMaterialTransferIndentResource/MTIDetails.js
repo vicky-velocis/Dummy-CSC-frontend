@@ -14,6 +14,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
 const MTIDetailsCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -29,14 +30,30 @@ const MTIDetailsCard = {
                 labelKey: "STORE_MATERIAL_NAME_SELECT"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].material.code",
-              sourceJsonPath: "searchMaster.materialNames",
+              jsonPath: "indents[0].indentDetails[0].material.code",
+              sourceJsonPath: "createScreenMdmsData.store-asset.Material",
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
                 optionLabel: "name"
               }
             }),
+            beforeFieldChange: (action, state, dispatch) => {
+              let name = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",action.value) 
+              let cardindex  = action.componentJsonpath.split("items[")[1].split("]")[0];
+              
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].material.name`, name));
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].unitRate`, 1));
+              let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
+              let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
+              if(MaterialType && MaterialType[0]) 
+              {             
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].uom.code`, MaterialType[0].baseUom.code));
+             let baseUomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code) 
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].uom.name`, baseUomname));
+              }
+              
+              }
           }, 
           uomName: {
             ...getSelectField({
@@ -46,14 +63,20 @@ const MTIDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_UOM"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].uom.code",
+              jsonPath: "indents[0].indentDetails[0].uom.code",
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
               props: {
+                disabled:true,
                 className: "hr-generic-selectfield",
                 optionValue: "code",
                 optionLabel: "name"
               }
             }),
+            beforeFieldChange: (action, state, dispatch) => {
+              let name = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",action.value) 
+              let cardindex  = action.componentJsonpath.split("items[")[1].split("]")[0];
+              dispatch(prepareFinalObject("indents[0].indentDetails[0].uom.name", name));
+              }
           },
         
           quantityRequired: {
@@ -68,8 +91,16 @@ const MTIDetailsCard = {
               },
               required:true,
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].indentQuantity"
-            })
+              jsonPath: "indents[0].indentDetails[0].indentQuantity"
+            }),
+            beforeFieldChange: (action, state, dispatch) => {
+              let cardindex  = action.componentJsonpath.split("items[")[1].split("]")[0];
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].userQuantity`,Number(action.value)));
+              dispatch(prepareFinalObject(`indents[0].indentDetails[${cardindex}].asset.code`,""));
+            //   let unitRate = get(state.screenConfiguration.preparedFinalObject,`indents[0].indentDetails[0].unitRate`,0)
+            //   let totalValue = unitRate * Number(action.value)
+            //  dispatch(prepareFinalObject("indents[0].indentDetails[0].totalValue",totalValue));
+            }
           },
           unitRate: {
             ...getTextField({
@@ -81,8 +112,12 @@ const MTIDetailsCard = {
                 labelName: "Enter Unit Rate",
                 labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
               },
+              props:{
+                disabled:true,
+              },
+              visible:false,
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].userQuantity"
+              jsonPath: "indents[0].indentDetails[0].unitRate"
             })
           },
           totalValue: {
@@ -95,9 +130,16 @@ const MTIDetailsCard = {
                 labelName: "Total Value",
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"
               },
+              props:{
+                disabled:true,
+              },
+              visible:false,
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].orderQuantity"
-            })
+              jsonPath: "indents[0].indentDetails[0].totalValue"
+            }),
+            beforeFieldChange: (action, state, dispatch) => {
+             
+            }
           },  
       
           remark: {
@@ -110,8 +152,9 @@ const MTIDetailsCard = {
                 labelName: "Enter Remark",
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
               },
+              visible:false,
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].usedQuantity"
+              jsonPath: "indents[0].indentDetails[0].usedQuantity"
             })
           },
       
@@ -134,7 +177,7 @@ const MTIDetailsCard = {
     headerName: "Material Transfer Indent Details",
     headerJsonPath:
       "children.cardContent.children.header.children.head.children.Accessories.props.label",
-    sourceJsonPath: "purchaseOrders[0].MTIDetails",
+    sourceJsonPath: "indents[0].indentDetails",
     prefixSourceJsonPath:
       "children.cardContent.children.mtiDetailsCardContainer.children",
    // disableDeleteIfKeyExists: "id"

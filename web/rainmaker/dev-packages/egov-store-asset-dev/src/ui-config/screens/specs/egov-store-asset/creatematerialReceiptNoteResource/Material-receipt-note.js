@@ -108,9 +108,28 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           ); 
           store =  store.filter(x=> x.code === action.value)  
           if(store && store[0]) 
-          dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name",store[0].name));
+          dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name",store[0].name));       
+          dispatch(prepareFinalObject("materialReceipt[0].receivingStore.department.name",store[0].department.name));
            //getpurchaseOrder(action,state, dispatch);
         }
+      },
+      departmentname: {
+        ...getTextField({
+          label: {
+            labelName: "Department Name",
+            labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+          },
+          placeholder: {
+            labelName: "Department Name",
+            labelKey: "STORE_DETAILS_DEPARTMENT_NAME"
+          },
+          props: {
+            disabled: true,       
+          },
+          required: false,
+          pattern: getPattern("Name") || null,
+          jsonPath: "materialReceipt[0].receivingStore.department.name"
+        })
       },
       receiptDate : {
         ...getDateField({
@@ -124,7 +143,12 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           },
           required: true,
           pattern: getPattern("Date") || null,
-          jsonPath: "materialReceipt[0].receiptDate"
+          jsonPath: "materialReceipt[0].receiptDate",
+          props: {
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
         })
       },
       receiptType: {
@@ -227,6 +251,11 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             labelKey: "STORE_MATERIAL_RECEIPT_SUPPLIER_BILL_DATE_PLACEHOLDER"
           },
           required: true,
+          props: {
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          },
           pattern: getPattern("Date") || null,
           jsonPath: "materialReceipt[0].supplierBillDate"
         })
@@ -260,6 +289,11 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             labelKey: "STORE_MATERIAL_RECEIPT_CHALLAN_DATE_PLACEHOLDER"
           },
           required: true,
+          props: {
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          },
           pattern: getPattern("Date") || null,
           jsonPath: "materialReceipt[0].challanDate"
         })
@@ -314,7 +348,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           jsonPath: "materialReceipt[0].inspectionDate",
           
           props: {
-            disabled: false,       
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
           },
         })
       },

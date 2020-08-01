@@ -38,10 +38,10 @@ export const getTextToLocalMapping = (label) => {
             localisationLabels
           );
    
-    case "Search Results for Material Indent":
+    case "Search Results for Material Receipt":
       return getLocaleLabels(
-        "Search Results for Material Indent",
-        "STORE_MATERIAL_INDENT_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for Material Receipt",
+        "STORE_MATERIAL_RECEIPT_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
   }

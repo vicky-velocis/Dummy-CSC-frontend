@@ -14,7 +14,7 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import { getSearchResults } from "../../../../ui-utils/commons";
   import { commonTransform, objectArrayToDropdown } from "../utils";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { prepareFinalObject,  handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
@@ -258,8 +258,23 @@ export const header = getCommonContainer({
         null,
       )
     );
+    //Set supplier visibility based on  issuePurpose
+ let issuePurpose =
+ get(state, "ProcessInstances[0].employeeOtherDetails.issuePurpose") 
+ issuePurpose = "RETURNTOSUPPLIER";
    
-
+ if(issuePurpose ==='RETURNTOSUPPLIER')
+ {
+  dispatch(
+    handleField(
+      "createMaterialNonIndentNote",
+      "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
+      "props.style",
+      { display: "none" }
+      
+    )
+  );
+ }
    
       return action;
     },

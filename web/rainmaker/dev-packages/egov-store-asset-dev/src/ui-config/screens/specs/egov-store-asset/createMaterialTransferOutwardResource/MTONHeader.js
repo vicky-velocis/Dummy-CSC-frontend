@@ -11,7 +11,8 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+import get from "lodash/get";
 export const MTONHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -32,12 +33,12 @@ export const MTONHeader = getCommonCard({
           labelName: "Select Issuing Store Name",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME_SELECT"
         },
-        jsonPath: "purchaseOrders[0].store.code",
-        sourceJsonPath: "searchMaster.storeNames",
+        jsonPath: "materialIssues[0].toStore.code",
+        sourceJsonPath: "store.stores",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
-          optionLabel: "name"
+          optionLabel: "name",
         }
       }),
     },
@@ -53,7 +54,7 @@ export const MTONHeader = getCommonCard({
         },
         required: true,
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].purchaseOrderDate",
+        jsonPath: "materialIssues[0].issueDate",
         props: {
           inputProps: {
             max: new Date().toISOString().slice(0, 10),
@@ -68,14 +69,60 @@ export const MTONHeader = getCommonCard({
           labelName: "Select Transfer Indent No.",
           labelKey: "STORE_MTON_INDENT_NUMBER_SELECT"
         },
-        jsonPath: "purchaseOrders[0].purchaseType",
-       // sourceJsonPath: "searchMaster.storeNames",
+        jsonPath: "materialIssues[0].indent.id",
+       sourceJsonPath: "TransferIndent.indents",
         props: {
           className: "hr-generic-selectfield",
-          optionValue: "value",
-          optionLabel: "label",
+          optionValue: "id",
+          optionLabel: "indentNumber",
         }
       }),
+      beforeFieldChange: (action, state, dispatch) => {
+        let indents = get(state, "screenConfiguration.preparedFinalObject.TransferIndent.indents",[]) 
+        if(indents &indents[0])
+        {
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentNumber", indents[0].indentNumber));
+          dispatch(prepareFinalObject("materialIssues[0].indent.tenantId", indents[0].indentNumber));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentDate", indents[0].indentDate));
+          dispatch(prepareFinalObject("materialIssues[0].indent.issueStore.code", indents[0].issueStore.code));
+          dispatch(prepareFinalObject("materialIssues[0].indent.issueStore.name", indents[0].issueStore.name));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentStore.code", indents[0].indentStore.code));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentStore.name", indents[0].indentStore.name));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentType", indents[0].indentType));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentPurpose", indents[0].indentPurpose));
+          dispatch(prepareFinalObject("materialIssues[0].indent.indentCreatedBy", indents[0].indentCreatedBy));
+          dispatch(prepareFinalObject("materialIssues[0].indent.designation", naindents[0].inddesignationentNumberme));
+          
+          let indentDetails = get(
+            indents[0],
+            "indentDetails",
+            []
+          );
+          for (let index = 0; index < indentDetails.length; index++) {
+            const element = indentDetails[index];
+
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].id`, element.id));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].uom.code`, element.uom.code));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].userQuantity`, element.userQuantity));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].material.code`, element.material.code));
+            //create material list for card item
+            let material=[];
+            material.push(
+              {
+                materialcode:element.material.code,
+                materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
+                uomcode:element.uom.code,
+                uomname:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",element.uom.code),
+                id:element.id,
+                indentQuantity:element.indentQuantity,
+                totalProcessedQuantity:element.totalProcessedQuantity,
+                indentIssuedQuantity:element.indentIssuedQuantity,
+                interstoreRequestQuantity:interstoreRequestQuantity,
+                //unitRate://to be deside
+              });
+          }
+        }
+      }
     },
     indentDate: {
       ...getDateField({
@@ -88,7 +135,7 @@ export const MTONHeader = getCommonCard({
           labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
         },
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].purchaseOrderDate",
+        jsonPath: "materialIssues[0].indent.indentDate",
         props: {
           inputProps: {
             max: new Date().toISOString().slice(0, 10),
@@ -103,9 +150,10 @@ export const MTONHeader = getCommonCard({
           labelName: "Select Store Name",
           labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
         },
-        jsonPath: "purchaseOrders[0].purchaseType",
+        jsonPath: "materialIssues[0].indent.indentStore.name",
        // sourceJsonPath: "searchMaster.storeNames",
         props: {
+          disabled:true,
           className: "hr-generic-selectfield",
           optionValue: "value",
           optionLabel: "label",
@@ -122,27 +170,26 @@ export const MTONHeader = getCommonCard({
           labelName: "Enter Indenting Dept. Name",
           labelKey: "STORE_MTON_INDENT_DEPT_NAME_PLCEHLDER"
         },
+        visible:false,
         props: {
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "materialIssues[0].createdBy"
       })
     },
     indentPurpose: {
-      ...getSelectField({
+      ...getTextField({
         label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
         placeholder: {
-          labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
+          labelName: "Indent Purpose",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE"
         },
-        required: true,
-        jsonPath: "purchaseOrders[0].rateType",
-        sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+        required: false,
+        jsonPath: "materialIssues[0].indent.indentPurpose",
+        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
         props: {
-          className: "hr-generic-selectfield",
-          optionValue: "code",
-          optionLabel: "name"
+          disabled:true
         }
       }),
     },
@@ -156,11 +203,12 @@ export const MTONHeader = getCommonCard({
           labelName: "Enter Indent Raised By",
           labelKey: "STORE_PURCHASE_ORDER_INDENT_RAISED_HLDER"
         },
+        visible:false,
         props: {
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "materialIssues[0].createdBy"
       })
     },
     issuedToEmployee: {
@@ -170,14 +218,27 @@ export const MTONHeader = getCommonCard({
           labelName: "Select Issued to Employee",
           labelKey: "STORE_MTON_ISSUED_TO_EMP_SELECT"
         },
-        jsonPath: "purchaseOrders[0].store.code",
-        sourceJsonPath: "searchMaster.storeNames",
+        jsonPath: "materialIssues[0].issuedToEmployee",
+        sourceJsonPath: "Employee",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
-          optionLabel: "name"
+          optionLabel: "code"
         }
       }),
+      beforeFieldChange: (action, state, dispatch) => {
+        let emp = get(state, "screenConfiguration.preparedFinalObject.Employee",[]) 
+        emp = emp.filler(x=x.code === action.value);
+        if(emp &emp[0])
+        {
+          console.log(emp[0])
+          console.log("emp[0]")
+          //let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"store.stores",emp[0].designation[0].)   
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", emp[0].indentNumber));
+
+        }
+
+      }
     },
     designation: {
       ...getTextField({
@@ -193,7 +254,7 @@ export const MTONHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].designation"
+        jsonPath: "materialIssues[0].issuedToDesignation"
       })
     },
     remarks: getTextField({
@@ -212,7 +273,7 @@ export const MTONHeader = getCommonCard({
       },
       pattern: getPattern("alpha-numeric-with-space-and-newline"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "purchaseOrders[0].remarks",
+      jsonPath: "materialIssues[0].description",
     }),
     issuedBy: {
       ...getTextField({
@@ -224,11 +285,12 @@ export const MTONHeader = getCommonCard({
           labelName: "Enter Issued By",
           labelKey: "STORE_PURCHASE_ORDER_ISSUEDBY_PLCEHLDER"
         },
+        visible:false,
         props: {
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "materialIssues[0].createdBy"
       })
     },
     designationIssuedEmp: {
@@ -241,11 +303,12 @@ export const MTONHeader = getCommonCard({
           labelName: "Enter Designation",
           labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
         },
+        visible:false,
         props: {
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].designation"
+        jsonPath: "materialIssues[0].designation"
       })
     },
   })

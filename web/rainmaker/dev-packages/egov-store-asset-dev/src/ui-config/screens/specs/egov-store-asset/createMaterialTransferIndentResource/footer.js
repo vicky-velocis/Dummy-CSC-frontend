@@ -11,7 +11,8 @@ import {
   validateFields
 } from "../../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {ValidateCard} from '../../../../../ui-utils/storecommonsapi'
 const moveToReview = dispatch => { 
   const reviewUrl = "/egov-store-asset/review-material-transfer-indent";
   dispatch(setRoute(reviewUrl));
@@ -27,7 +28,7 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   if (activeStep === 0) {
     const isMTHeaderValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.MTIHeader.children.cardContent.children.MTIHeaderContainer",
+      "components.div.children.formwizardFirstStep.children.MTIHeader.children.cardContent.children.MTIHeaderContainer.children",
       state,
       dispatch,
       "create-material-transfer-indent"
@@ -37,12 +38,12 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     }
   }
-  if (activeStep === 1) {
+  if (activeStep === 2) {
 
   }
-  if (activeStep === 2) {
+  if (activeStep === 1) {
     let poDetailsPath =
-      "components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items";
+      "components.div.children.formwizardSecondStep.children.MTIDetails.children.cardContent.children.MTIDetailsCard.props.items";
 
     let poDetailsItems = get(
       state.screenConfiguration.screenConfig['create-material-transfer-indent'],
@@ -55,7 +56,7 @@ export const callBackForNext = async (state, dispatch) => {
         (poDetailsItems[j].isDeleted === undefined ||
           poDetailsItems[j].isDeleted !== false) &&
         !validateFields(
-          `${poDetailsPath}[${j}].item${j}.children.cardContent.children.poDetailsCardContainer.children`,
+          `${poDetailsPath}[${j}].item${j}.children.cardContent.children.mtiDetailsCardContainer.children`,
           state,
           dispatch,
           "create-material-transfer-indent"
@@ -72,10 +73,113 @@ export const callBackForNext = async (state, dispatch) => {
 
     if (isFormValid) {
       if(activeStep === 2){
+
         moveToReview(dispatch);
       }
       else{
-        changeStep(state, dispatch);
+        // store validation
+        let issueStore = get(state.screenConfiguration.preparedFinalObject,`indents[0].issueStore.code`,'')
+        let indentStore = get(state.screenConfiguration.preparedFinalObject,`indents[0].indentStore.code`,'')
+        if(indentStore !== issueStore)
+        {
+          
+          
+          let cardJsonPath =
+          "components.div.children.formwizardSecondStep.children.MTIDetails.children.cardContent.children.MTIDetailsCard.props.items";
+          let pagename = "create-material-transfer-indent";
+          let jasonpath =  "indents[0].indentDetails";
+          let value = "material.code";
+          let DuplicatItem = ValidateCard(state,dispatch,cardJsonPath,pagename,jasonpath,value)
+          //  start check duplicat Item 
+      //          let CardItem = get(
+      //     state.screenConfiguration.screenConfig[`create-material-transfer-indent`],
+      //     cardJsonPath,
+      //     []
+      //   );
+      //  let matcode =[];
+      //   for (let index = 0; index < CardItem.length; index++) {
+          
+      //     if(CardItem[index].isDeleted === undefined ||
+      //      CardItem[index].isDeleted !== false)
+      //      {
+      //        let code = get(state.screenConfiguration.preparedFinalObject,`indents[0].indentDetails[${index}].material.code`,'')        
+      //        matcode.push(code)
+      //      }
+      //     //  else{
+      //     //    let code_ = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'')        
+      //     //  }      
+      //   } 
+      //      var uniq = matcode
+      //    .map((name) => {
+      //      return {
+      //        count: 1,
+      //        name: name
+      //      }
+      //    })
+      //    .reduce((a, b) => {
+      //      a[b.name] = (a[b.name] || 0) + b.count
+      //      return a
+      //    }, {})    
+   
+      //    var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+      //    var unoque = Object.keys(uniq).filter((a) => uniq[a] === 1)
+         
+      //    if(duplicates.length>0)
+      //    {
+      //    duplicates= duplicates.map(itm => {
+      //        return `${itm}`;
+      //      })
+      //      .join() || "-"
+      //      IsDuplicatItem = true;
+           
+      //    } 
+          // end
+         console.log(DuplicatItem)
+         console.log("DuplicatItem")
+          if(DuplicatItem && DuplicatItem[0])
+          {
+            if(!DuplicatItem[0].IsDuplicatItem)
+            {
+
+              // refresh card item
+              var storeMappingTemp = [];
+          let  storeMapping =  get(
+            state.screenConfiguration.preparedFinalObject,
+            `indents[0].indentDetails`,
+            []
+          );
+          for(var i = 0; i < storeMapping.length; i++){
+              if(storeMappingTemp.indexOf(storeMapping[i]) == -1){
+                storeMappingTemp.push(storeMapping[i]);
+              }
+          }
+          storeMappingTemp = storeMappingTemp.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+          if(storeMappingTemp.length>0)
+          {
+            dispatch(prepareFinalObject("indents[0].indentDetails",storeMappingTemp)
+          );
+            }
+              changeStep(state, dispatch);
+            }
+            else{
+              const errorMessage = {
+                labelName: "Duplicate Material Added",
+                labelKey:   `STORE_MATERIAL_DUPLICATE_VALIDATION ${DuplicatItem[0].duplicates}`
+              };
+              dispatch(toggleSnackbar(true, errorMessage, "warning"));
+
+            }
+          }
+          
+        }
+        
+        else{
+          const errorMessage = {
+            labelName: "Intenting Store and Issuing Store can not be same ",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_STORE_SELECTION_VALIDATION"
+          }; 
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        }
       }
      
     } else {

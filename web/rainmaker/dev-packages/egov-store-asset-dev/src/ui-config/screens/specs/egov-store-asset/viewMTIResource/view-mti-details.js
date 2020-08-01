@@ -25,12 +25,12 @@ const assignmentCard = {
             labelName: "Material Name",
             labelKey: "STORE_MATERIAL_NAME"
           },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.name" }
+          { jsonPath: "indents[0].indentDetails[0].material.name" }
         ),
         uomName: getLabelWithValue(
           { labelName: "UOM Name", labelKey: "STORE_PURCHASE_ORDER_UOM" },
           {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].uom.name",    
+            jsonPath: "indents[0].indentDetails[0].uom.name",    
           }
         ),
         quantityRequired: getLabelWithValue(
@@ -38,34 +38,34 @@ const assignmentCard = {
             labelName: "Quantity Required",
             labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED"
           },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentNumber" }
+          { jsonPath: "indents[0].indentDetails[0].userQuantity" }
         ),
-        unitRate: getLabelWithValue(
-          {
-            labelName: "Unit Rate",
-            labelKey: "STORE_MATERIAL_RECEIPT_UNIT_RATE"
-          },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.description" }
-        ),
-        totalValue: getLabelWithValue(
-          { labelName: "Total Value", labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentQuantity",
-          }
-        ),
-        Remark: getLabelWithValue(
-          { labelName: "Remark", labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
-          }
-        ),
+        // unitRate: getLabelWithValue(
+        //   {
+        //     labelName: "Unit Rate",
+        //     labelKey: "STORE_MATERIAL_RECEIPT_UNIT_RATE"
+        //   },
+        //   { jsonPath: "indents[0].indentDetails[0].material.description" }
+        // ),
+        // totalValue: getLabelWithValue(
+        //   { labelName: "Total Value", labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE" },
+        //   {
+        //     jsonPath: "indents[0].indentDetails[0].indentQuantity",
+        //   }
+        // ),
+        // Remark: getLabelWithValue(
+        //   { labelName: "Remark", labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK" },
+        //   {
+        //     jsonPath: "indents[0].indentDetails[0].userQuantity",
+        //   }
+        // ),
       })
     }),
 
     items: [],
     hasAddItem: false,
     isReviewPage: true,
-    sourceJsonPath: "purchaseOrders[0].purchaseOrderDetails",
+    sourceJsonPath: "indents[0].indentDetails",
     prefixSourceJsonPath:
       "children.cardContent.children.mtiDetailsCardContainer.children",
     afterPrefixJsonPath: "children.value.children.key"

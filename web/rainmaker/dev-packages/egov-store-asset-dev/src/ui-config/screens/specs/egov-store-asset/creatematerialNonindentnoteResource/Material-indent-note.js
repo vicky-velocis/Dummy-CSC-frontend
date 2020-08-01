@@ -16,8 +16,10 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
  import { getSearchResults } from "../../../../../ui-utils/commons";
+ let ReturntoSupplier = false;
  const getmrnNumber = async (  action, state,dispatch,)=>{
   const tenantId = getTenantId();
+ 
   let storecode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].fromStore.code",'')
   let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialIssues[0].supplier.code",'')
   let queryObject = [
@@ -139,79 +141,15 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           },
           required: true,
           pattern: getPattern("Date") ,
-          jsonPath: "materialIssues[0].issueDate"
+          jsonPath: "materialIssues[0].issueDate",
+          props: {
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
         })
       },
-      PurposeofIssue: {
-        ...getSelectField({
-          label: { labelName: "Purpose of Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE" },
-          placeholder: {
-            labelName: "Select Purpose of Issue",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE_SELECT"
-          },
-          required: true,
-          jsonPath: "materialIssues[0].issuePurpose",
-          //sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
-        props: {
-          data: [
-            {
-              code: "WRITEOFFORSCRAP",
-              name: "write-off of material in stock to be scrapped"
-            },
-            {
-              code: "RETURNTOSUPPLIER",
-              name: "return to supplier"
-            },
-           
-          ],
-          optionValue: "code",
-          optionLabel: "name",
-        },
-        })
-      },
-      supplier: {
-        ...getSelectField({
-          label: {
-            labelName: "Supplier Name",
-            labelKey: "STORE_COMMON_TABLE_COL_SUPPLIER_MASTER_NAME"
-          },
-          placeholder: {
-            labelName: "Select  Supplier Name",
-            labelKey: "STORE_COMMON_TABLE_COL_SUPPLIER_MASTER_NAME"
-          },
-          required: true,
-         
-          jsonPath: "materialIssues[0].supplier.code",
-          sourceJsonPath: "supplier.suppliers",
-            props: {
-              optionValue: "code",
-              optionLabel: "name",
-            },
-        }),
-        beforeFieldChange: (action, state, dispatch) => {
-          let supplier = get(
-            state.screenConfiguration.preparedFinalObject,
-            `supplier.suppliers`,
-            []
-          ); 
-          supplier =  supplier.filter(x=> x.code === action.value)   
-          if(supplier && supplier[0])
-          {
 
-        
-          dispatch(prepareFinalObject("materialIssues[0].supplier.name",supplier[0].name));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.tenantId",getTenantId()));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.type",supplier[0].type));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.ifsc",supplier[0].ifsc));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.contactNo",supplier[0].contactNo));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.bankCode",supplier[0].bankCode));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.address",supplier[0].address));
-          dispatch(prepareFinalObject("materialIssues[0].supplier.acctNo",supplier[0].acctNo));
-          //getmrnNumber(action,state, dispatch)
-        }
-         
-        }
-      },
       Remark: {
         ...getTextField({
           label: {
@@ -283,6 +221,121 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           pattern: getPattern("Name") || null,
           jsonPath: "materialIssues[0].materialIssueStatus"
         })
+      },
+      PurposeofIssue: {
+        ...getSelectField({
+          label: { labelName: "Purpose of Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE" },
+          placeholder: {
+            labelName: "Select Purpose of Issue",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE_SELECT"
+          },
+          required: true,
+          jsonPath: "materialIssues[0].issuePurpose",
+          //sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
+        props: {
+          data: [
+            {
+              code: "WRITEOFFORSCRAP",
+              name: "write-off of material in stock to be scrapped"
+            },
+            {
+              code: "RETURNTOSUPPLIER",
+              name: "return to supplier"
+            },
+           
+          ],
+          optionValue: "code",
+          optionLabel: "name",
+        },
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          //ReturntoSupplier In case user has selected ‘return to supplier’
+          if(action.value === "RETURNTOSUPPLIER")
+          {
+          dispatch(
+            handleField(
+              "createMaterialNonIndentNote",
+              "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
+              "props.style",
+              { display: "inline-block" }
+              
+            )
+          );
+          dispatch(
+            handleField(
+              "createMaterialNonIndentNote",
+              "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
+              "required",
+              true
+              
+            )
+          );
+            }
+          else
+          {
+          dispatch(
+            handleField(
+              "createMaterialNonIndentNote",
+              "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
+              "props.style",
+              {display:"none"}
+            )
+          );
+          dispatch(
+            handleField(
+              "createMaterialNonIndentNote",
+              "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
+              "required",
+              false
+              
+            )
+          );
+            }
+        }
+        
+      },
+      supplier: {
+        ...getSelectField({
+          label: {
+            labelName: "Supplier Name",
+            labelKey: "STORE_COMMON_TABLE_COL_SUPPLIER_MASTER_NAME"
+          },
+          placeholder: {
+            labelName: "Select  Supplier Name",
+            labelKey: "STORE_COMMON_TABLE_COL_SUPPLIER_MASTER_NAME"
+          },
+          required:true,
+         visible: true,
+          jsonPath: "materialIssues[0].supplier.code",
+          sourceJsonPath: "supplier.suppliers",
+            props: {
+              optionValue: "code",
+              optionLabel: "name",
+            },
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          let supplier = get(
+            state.screenConfiguration.preparedFinalObject,
+            `supplier.suppliers`,
+            []
+          ); 
+          supplier =  supplier.filter(x=> x.code === action.value)   
+          if(supplier && supplier[0])
+          {
+
+        
+          dispatch(prepareFinalObject("materialIssues[0].supplier.name",supplier[0].name));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.tenantId",getTenantId()));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.type",supplier[0].type));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.ifsc",supplier[0].ifsc));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.contactNo",supplier[0].contactNo));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.bankCode",supplier[0].bankCode));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.address",supplier[0].address));
+          dispatch(prepareFinalObject("materialIssues[0].supplier.acctNo",supplier[0].acctNo));
+          //getmrnNumber(action,state, dispatch)
+        }
+         
+        }
       },
     })
   });

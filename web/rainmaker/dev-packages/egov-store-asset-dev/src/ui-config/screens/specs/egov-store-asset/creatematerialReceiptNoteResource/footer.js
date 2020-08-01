@@ -113,13 +113,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(isFormValid)
     {
-    
-    if(true)
-    moveToReview(dispatch);
-    else{
-    
-
-    }
+      moveToReview(dispatch);
     
   }
     else{
@@ -187,7 +181,47 @@ export const callBackForNext = async (state, dispatch) => {
         {
           getpurchaseOrder(state, dispatch);
         }
+        if(activeStep ===1)
+        {
+        // check validation for file uplaod
+        if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
+        let fileUrl =
+        get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileUrl",'') 
+        let fileName =
+        get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileName",'') 
+        if(fileUrl) 
+        {
+        fileUrl = getFileUrl(fileUrl)
+        }
+        let  documentsPreview= [
+        {
+        title: "STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE",
+        linkText: "VIEW", 
+        link:fileUrl,//"https://chstage.blob.core.windows.net/fileshare/ch/undefined/July/15/1594826295177document.pdf?sig=R3nzPxT9MRMfROREe6LHEwuGfeVxB%2FKneAeWrDJZvOs%3D&st=2020-07-15T15%3A21%3A01Z&se=2020-07-16T15%3A21%3A01Z&sv=2016-05-31&sp=r&sr=b",
+        name: fileName, 
+        },]
+
+        dispatch(
+        prepareFinalObject("documentsPreview", documentsPreview)
+        );
         changeStep(state, dispatch);
+        }
+
+        else{
+        dispatch(
+        toggleSnackbar(
+        true,
+        { labelName: "Please uplaod mandatory documents!", labelKey: "" },
+        "warning"
+        ))
+
+        }
+        }
+        else{
+          changeStep(state, dispatch);
+        }
+
+       
 
       }
       else{
@@ -209,7 +243,16 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 };
-
+export const getFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
 export const changeStep = (
   state,
   dispatch,

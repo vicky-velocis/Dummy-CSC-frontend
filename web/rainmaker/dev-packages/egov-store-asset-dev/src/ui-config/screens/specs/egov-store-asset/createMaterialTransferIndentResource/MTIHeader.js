@@ -11,7 +11,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
 export const MTIHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -25,7 +25,7 @@ export const MTIHeader = getCommonCard({
     }
   ),
   MTIHeaderContainer: getCommonContainer({
-    storeName: {
+    indentingstoreName: {
       ...getSelectField({
         label: { labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE" },
         placeholder: {
@@ -34,14 +34,19 @@ export const MTIHeader = getCommonCard({
         },
        
         required: true,
-        jsonPath: "purchaseOrders[0].purchaseType",
-       // sourceJsonPath: "searchMaster.storeNames",
+        jsonPath: "indents[0].indentStore.code",
+        sourceJsonPath: "store.stores",
         props: {
           className: "hr-generic-selectfield",
-          optionValue: "value",
-          optionLabel: "label",
+          optionValue: "code",
+          optionLabel: "name",
         }
       }),
+      beforeFieldChange: (action, state, dispatch) => {
+      let name = GetMdmsNameBycode(state, dispatch,"store.stores",action.value) 
+     
+      dispatch(prepareFinalObject("indents[0].indentStore.name", name));
+      }
     },
     indentDate: {
       ...getDateField({
@@ -55,7 +60,7 @@ export const MTIHeader = getCommonCard({
         },
         required: true,
         pattern: getPattern("Date"),
-        jsonPath: "purchaseOrders[0].purchaseOrderDate",
+        jsonPath: "indents[0].indentDate",
         props: {
           inputProps: {
             max: new Date().toISOString().slice(0, 10),
@@ -71,13 +76,19 @@ export const MTIHeader = getCommonCard({
           labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
         },
         required: true,
-        jsonPath: "purchaseOrders[0].rateType",
-        sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
-        props: {
-          className: "hr-generic-selectfield",
-          optionValue: "code",
-          optionLabel: "name"
-        }
+        jsonPath: "indents[0].indentPurpose",
+       // sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+       props: {
+        data: [
+          {
+            code: "Consumption",
+            name: "Capital/Repair/Consumption"
+          },
+         
+        ],
+        optionValue: "code",
+        optionLabel: "name",
+      },
       }),
     },
     issuingStoreName: {
@@ -87,17 +98,18 @@ export const MTIHeader = getCommonCard({
           labelName: "Select Issuing Store Name",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME_SELECT"
         },
-        jsonPath: "purchaseOrders[0].store.code",
-        sourceJsonPath: "searchMaster.storeNames",
+        jsonPath: "indents[0].issueStore.code",
+        sourceJsonPath: "store.stores",
         props: {
           className: "hr-generic-selectfield",
           optionValue: "code",
-          optionLabel: "name"
+            optionLabel: "name",
         }
       }),
-      beforeFieldChange: async (action, state, dispatch) => {
-    
-      }
+      beforeFieldChange: (action, state, dispatch) => {
+        let name = GetMdmsNameBycode(state, dispatch,"store.stores",action.value)       
+        dispatch(prepareFinalObject("indents[0].issueStore.name", name));
+        }
     },
    
     remarks: getTextField({
@@ -116,7 +128,7 @@ export const MTIHeader = getCommonCard({
       },
       pattern: getPattern("alpha-numeric-with-space-and-newline"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "purchaseOrders[0].remarks",
+      jsonPath: "indents[0].narration",
     }),
     createdBy: {
       ...getTextField({
@@ -132,7 +144,7 @@ export const MTIHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "indents[0].createdBy"
       })
     },
     designation: {
@@ -149,7 +161,7 @@ export const MTIHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].designation"
+        jsonPath: "indents[0].designation"
       })
     },
   })

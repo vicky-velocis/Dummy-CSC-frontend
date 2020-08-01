@@ -145,7 +145,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search-material-receipt",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Indent")} (${
+          `${getTextToLocalMapping("Search Results for Material Receipt")} (${
             response.MaterialReceipt.length
           })`
         )

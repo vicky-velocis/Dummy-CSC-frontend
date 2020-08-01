@@ -54,7 +54,7 @@ import {
     },
     children: {
       MTIDetails,
-      totalIndentValue
+      //totalIndentValue
     },
     visible: false
   };
@@ -82,7 +82,9 @@ import {
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "RateType", filter: "[?(@.active == true)]" },
+              { name: "Material" }, //filter: "[?(@.active == true)]" },
+              { name: "InventoryType", filter: "[?(@.active == true)]" },
+              { name: "IndentPurpose"},// filter: "[?(@.active == true)]" },
             ]
           },
           {
@@ -107,15 +109,35 @@ import {
       console.log(e);
     }
   };
-  
+  const getstoreData = async (action, state, dispatch) => {
+    const tenantId = getTenantId();
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      }];
+    try {
+      let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+      dispatch(prepareFinalObject("store", response));       
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const getData = async (action, state, dispatch) => {
     await getMdmsData(action, state, dispatch);
+    await getstoreData(action, state, dispatch);
   }
   const screenConfig = {
     uiFramework: "material-ui",
     name: "create-material-transfer-indent",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
+           // SEt Default data Start
+     dispatch(prepareFinalObject("indents[0].indentType", "Transfer Indent"));
+     dispatch(prepareFinalObject("indents[0].designation", "MD",));
+     dispatch(prepareFinalObject("indents[0].materialHandOverTo", "",));
+     dispatch(prepareFinalObject("indents[0].inventoryType", "",));
+     dispatch(prepareFinalObject("indents[0].expectedDeliveryDate", 1609353000000,));//31 DEC 2020
       
       return action;
     },
