@@ -112,13 +112,13 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
-      "Estates[0].propertyDetails.applicationDocuments",
+      "Properties[0].propertyDetails.applicationDocuments",
       []
     );
 
     const uploadedTempDocData = get(
       state.screenConfiguration.preparedFinalObject,
-      "EstatesTemp[0].applicationDocuments",
+      "PropertiesTemp[0].applicationDocuments",
       []
     );
 
@@ -144,7 +144,7 @@ const callBackForNext = async (state, dispatch) => {
           };
         });
       dispatch(
-        prepareFinalObject("EstatesTemp[0].reviewDocData", reviewDocData)
+        prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
       );
     }
   }
@@ -154,7 +154,7 @@ const callBackForNext = async (state, dispatch) => {
     if (isFormValid) {
       const estatesData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Estates[0]"
+        "Properties[0]"
       );
       moveToSuccess(estatesData, dispatch);
     }
