@@ -65,13 +65,13 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === OWNER_PURCHASER_DETAILS_STEP) {
     const isOwnerDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )
 
     const isPurchaserDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardSecondStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )
@@ -83,7 +83,7 @@ const callBackForNext = async (state, dispatch) => {
 
   if (activeStep === COURT_CASE_DETAILS_STEP) {
     const isCourtCaseDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardThirdStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )

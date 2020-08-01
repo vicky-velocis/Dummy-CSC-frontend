@@ -25,7 +25,141 @@ export const courtCaseHeader = getCommonTitle({
   }
 })
 
+const estateOfficerCourtField = {
+  label: {
+      labelName: "Estate Officer Court",
+      labelKey: "EST_ESTATE_OFFICER_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Estate Officer Court",
+      labelKey: "EST_ESTATE_OFFICER_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.estateOfficerCourt"
+}
+
+const commissionersCourtField = {
+  label: {
+      labelName: "Commissioners Court",
+      labelKey: "EST_COMMISSIONERS_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Commissioners Court",
+      labelKey: "EST_COMMISSIONERS_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.commissionersCourt"
+}
+
+const chiefAdministratorsCourtField = {
+  label: {
+      labelName: "Chief Administrators Court",
+      labelKey: "EST_CHIEF_ADMINISTRATORS_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Chief Administrators Court",
+      labelKey: "EST_CHIEF_ADMINISTRATORS_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.chiefAdministratorsCourt"
+}
+
+const advisorToAdminCourtField = {
+  label: {
+      labelName: "Advisor to Admin Court",
+      labelKey: "EST_ADVISOR_TO_ADMIN_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Advisor to Admin Court",
+      labelKey: "EST_ADVISOR_TO_ADMIN_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.advisorToAdminCourt"
+}
+
+const honbleDistrictCourtField = {
+  label: {
+      labelName: "Hon'ble District Court",
+      labelKey: "EST_HONBLE_DISTRICT_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Hon'ble District Court",
+      labelKey: "EST_HONBLE_DISTRICT_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.honbleDistrictCourt"
+}
+
+const honbleHighCourtField = {
+  label: {
+      labelName: "Hon'ble High Court",
+      labelKey: "EST_HONBLE_HIGH_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Hon'ble High Court",
+      labelKey: "EST_HONBLE_HIGH_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.honbleHighCourt"
+}
+
+const honbleSupremeCourtField = {
+  label: {
+      labelName: "Hon'ble Supreme Court",
+      labelKey: "EST_HONBLE_SUPREME_COURT_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Hon'ble Supreme Court",
+      labelKey: "EST_HONBLE_SUPREME_COURT_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  minLength: 1,
+  maxLength: 250,
+  jsonPath: "Properties[0].courtCaseDetails.honbleSupremeCourt"
+}
+
 export const courtCaseDetails = getCommonCard({
   header: courtCaseHeader,
-  detailsContainer: getCommonContainer({})
+  detailsContainer: getCommonContainer({
+    estateOfficerCourt: getTextField(estateOfficerCourtField),
+    commissionersCourt: getTextField(commissionersCourtField),
+    chiefAdministratorsCourt: getTextField(chiefAdministratorsCourtField),
+    advisorToAdminCourt: getTextField(advisorToAdminCourtField),
+    honbleDistrictCourt: getTextField(honbleDistrictCourtField),
+    honbleHighCourt: getTextField(honbleHighCourtField),
+    honbleSupremeCourt: getTextField(honbleSupremeCourtField)
+  })
 })
