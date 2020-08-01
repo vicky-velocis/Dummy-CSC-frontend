@@ -59,7 +59,7 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
   try {
     let queryObject = JSON.parse(
       JSON.stringify(
-        get(state.screenConfiguration.preparedFinalObject, "Estates", [])
+        get(state.screenConfiguration.preparedFinalObject, "Properties", [])
       )
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -86,7 +86,7 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         "/csp/property/_create",
         "",
         [], {
-          Estates: queryObject
+          Properties: queryObject
         }
       );
     } else {
@@ -100,7 +100,7 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         ...item,
         active: true
       }))
-      const removedDocs = get(state.screenConfiguration.preparedFinalObject, "EstatesTemp[0].removedDocs") || [];
+      const removedDocs = get(state.screenConfiguration.preparedFinalObject, "PropertiesTemp[0].removedDocs") || [];
       applicationDocuments = [...applicationDocuments, ...removedDocs]
       set(queryObject[0], "propertyDetails.applicationDocuments", applicationDocuments)
       response = await httpRequest(
@@ -108,28 +108,28 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         "/csp/property/_update",
         "",
         [], {
-          Estates: queryObject
+          Properties: queryObject
         }
       );
     }
     let {
-      Estates
+      Properties
     } = response
 
-    let applicationDocuments = Estates[0].propertyDetails.applicationDocuments || [];
+    let applicationDocuments = Properties[0].propertyDetails.applicationDocuments || [];
     const removedDocs = applicationDocuments.filter(item => !item.active)
     applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    Estates = [{
-      ...Estates[0],
+    Properties = [{
+      ...Properties[0],
       propertyDetails: {
         ...Properties[0].propertyDetails,
         applicationDocuments
       }
     }]
-    dispatch(prepareFinalObject("Estates", Estates));
+    dispatch(prepareFinalObject("Properties", Properties));
     dispatch(
       prepareFinalObject(
-        "Estates[0].removedDocs",
+        "Properties[0].removedDocs",
         removedDocs
       )
     );

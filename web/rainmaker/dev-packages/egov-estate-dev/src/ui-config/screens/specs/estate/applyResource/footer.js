@@ -20,6 +20,7 @@ import {
 import {
   some
 } from "lodash";
+import "./index.css";
 
 export const DEFAULT_STEP = -1;
 export const PROPERTY_DETAILS_STEP = 0;
@@ -57,9 +58,9 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (!isPropertyDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isPropertyDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === OWNER_PURCHASER_DETAILS_STEP) {
