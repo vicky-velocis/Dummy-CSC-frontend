@@ -64,9 +64,10 @@ export const callPGService = async (state, dispatch) => {
     //let callbackUrl=`${window.origin}/egov-opms/paymentRedirectPage`;
     let callbackUrl = `${
       process.env.NODE_ENV === "production"
-        ? `${window.origin}/citizen`
-        : window.origin
+        ? `${window.location.origin}/citizen`
+        :window.location.origin
       }/egov-opms/paymentRedirectPage`;
+   
     try {
       const queryObj = [
         { key: "tenantId", value: tenantId },

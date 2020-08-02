@@ -49,13 +49,15 @@ export const searchResults = {
       {
         name: "tenantId",
         options: {
-          display: false
+          display: false,
+          viewColumns: false
         }
       },
       {
         name:"status1",
         options: {
-          display: false
+          display: false,
+          viewColumns: false
         }
       },
 

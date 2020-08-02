@@ -119,7 +119,7 @@ if (checkForRole(roles, 'SI') || checkForRole(roles, 'MOH')) {
   finalCardList = finalCardList.concat(cardlist)
   cardItems = cardlist;
 }
-if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE')) {
+if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles, 'SDO') || checkForRole(roles, 'EE') || checkForRole(roles, 'SE') || checkForRole(roles, 'DOEE') || checkForRole(roles, 'DOSE') || checkForRole(roles, 'DOCE') || checkForRole(roles, 'WD')) {
   const cardlist = [
     {
       label: {
@@ -138,7 +138,7 @@ if (checkForRole(roles, 'CE') || checkForRole(roles, 'JE') || checkForRole(roles
   finalCardList = finalCardList.concat(cardlist)
   cardItems = cardlist;
 }
-if (checkForRole(roles, 'OSD') || checkForRole(roles, 'COMMISSIONER') || checkForRole(roles, 'AD') || checkForRole(roles, 'JEX')) {
+if (checkForRole(roles, 'OSD') || checkForRole(roles, 'CA') || checkForRole(roles, 'SC') || checkForRole(roles, 'JEX') || checkForRole(roles, 'JC') || checkForRole(roles, 'SEC') || checkForRole(roles, 'ADDITIONAL_COMMISSIONER')) {
   const cardlist = [
     {
       label: {
@@ -214,7 +214,7 @@ const PermissionManagementSearchAndResult = {
           props: {
             items: finalCardList,
             history: {},
-            module:"PRSCP"
+            module: "PRSCP"
           }
         }
       }
@@ -227,8 +227,8 @@ const PermissionManagementSearchAndResult = {
         open: false,
         maxWidth: false,
         screenKey: "home",
-       
-       
+
+
       },
       children: {
         popup: {}

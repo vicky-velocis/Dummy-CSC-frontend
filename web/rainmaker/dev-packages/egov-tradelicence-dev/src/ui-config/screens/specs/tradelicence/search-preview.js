@@ -349,7 +349,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         moduleName: "egov-tradelicence",
         componentPath: "ApplicationNoContainer",
         props: {
-          number: applicationNumber
+          number: applicationNumber,
+          style: {
+           "margin-left": "0px",
+           "margin-top": "5px"
+          } 
         }
       },
       licenceNumber: {
@@ -563,7 +567,10 @@ const screenConfig = {
           props: {
             dataPath: "Licenses",
             moduleName: "NewTL",
-            updateUrl: "/tl-services/v1/_update"
+            updateUrl: "/tl-services/v1/_update",
+            style: {
+              wordBreak: "break-word"
+            }
           }
         },
         actionDialog: {

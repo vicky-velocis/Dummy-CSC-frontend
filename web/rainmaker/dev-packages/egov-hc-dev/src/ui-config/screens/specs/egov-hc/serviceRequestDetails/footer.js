@@ -280,6 +280,10 @@ export const footer = getCommonApplyFooter({
 
 
 export const validatestepform = (state, dispatch, isFormValid, hasFieldToaster) => {
+
+  if(window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+    }
   let allAreFilled = true;
   let error= false;
   let flagValidFields= false;

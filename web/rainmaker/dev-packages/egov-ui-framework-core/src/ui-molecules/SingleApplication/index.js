@@ -59,6 +59,8 @@ class SingleApplication extends React.Component {
       await this.setBusinessServiceDataToLocalStorage(businessServiceQueryObject);
       switch (item.status) {
         case "INITIATED":
+        case "MODIFIED":
+        case "PENDINGCLARIFICATION":
           setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           break
         default:
@@ -262,8 +264,7 @@ class SingleApplication extends React.Component {
                       // setRoute(url);
                     }}>
                       <Label
-                        labelKey={(item.status === "APPROVED" || item.status === "EXPIRED") && moduleName === "TL" ? "TL_VIEW_DETAILS_RENEWAL" :
-                          moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
+                        labelKey={moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",
