@@ -94,13 +94,27 @@ export const callBackForNext = async (state, dispatch) => {
     if(isFormValid)
     {
 
-    // get max and min Qty and validate     
+    // get max and min Qty and validate  
+    if(get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity") &&  get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
+    {  
     let MaxQty =0
     let MinQty = 0
     MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
     MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
-    if(MaxQty> MinQty)
+    if(MaxQty && MinQty &&  MinQty <=MaxQty)
     {
+    }
+ 
+    else{
+     // pop earnning Message
+     const errorMessage = {
+      labelName: "Maximun Qty is greater then Minimum Qty",
+      labelKey: "STORE_MATERIAL_MASTER_MAX_MIN_QTY_VALIDATION_MESSAGE"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+    }
+  }
       let IsDuplicatItem = false
       if(!IsDuplicatItem)
       {
@@ -139,7 +153,7 @@ export const callBackForNext = async (state, dispatch) => {
          // storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
         }
         else{
-         
+       
           storeMapping = storeMapping.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
 
         }
@@ -155,17 +169,7 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
 
       }
-    }
- 
-    else{
-     // pop earnning Message
-     const errorMessage = {
-      labelName: "Maximun Qty is greater then Minimum Qty",
-      labelKey: "STORE_MATERIAL_MASTER_MAX_MIN_QTY_VALIDATION_MESSAGE"
-    };
-    dispatch(toggleSnackbar(true, errorMessage, "warning"));
-
-    }
+   
     
   }
     else{

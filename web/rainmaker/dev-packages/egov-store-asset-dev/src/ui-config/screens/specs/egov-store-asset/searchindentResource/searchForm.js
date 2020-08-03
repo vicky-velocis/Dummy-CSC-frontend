@@ -141,7 +141,7 @@ export const searchForm = getCommonCard({
           labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
         },
         required: false,
-        jsonPath: "searchScreen.code", 
+        jsonPath: "searchScreen.issueStore", 
         gridDefination: {
           xs: 12,
           sm: 4,

@@ -213,8 +213,13 @@ export const header = getCommonContainer({
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
       const code = getQueryArg(window.location.href, "code");
-      if(code===null)
-      dispatch(prepareFinalObject("materials[0]",null));
+      const step = getQueryArg(window.location.href, "step");
+
+      if(!step && !code){
+        dispatch(prepareFinalObject("materials[0]",null));
+      }
+      // if(code===null)
+      // 
     // set active true when crete
     dispatch(prepareFinalObject("materials[0].storeMapping[0].active",true));
       return action;

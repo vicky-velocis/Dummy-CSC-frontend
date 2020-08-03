@@ -83,6 +83,14 @@ export const getPurchaseOrderHeaderView = (isReview = true) => {
         },
         { jsonPath: "purchaseOrders[0].store.name" }
       ),
+      divisionName: getLabelWithValue(
+        { labelName: "Division Name", labelKey: "STORE_DETAILS_DIVISION_NAME" },
+        { jsonPath: "purchaseOrders[0].store.divisionName" }
+      ),
+      departmentName: getLabelWithValue(
+        { labelName: "Department Name", labelKey: "STORE_DETAILS_DEPARTMENT_NAME" },
+        { jsonPath: "purchaseOrders[0].store.department.name" }
+      ),
       poDate: getLabelWithValue(
         { labelName: "PO Date", labelKey: "STORE_PURCHASE_ORDER_DATE" },
         { jsonPath: "purchaseOrders[0].purchaseOrderDate" }

@@ -78,25 +78,25 @@ export const getOtherDetailsView = (isReview = true) => {
         }
       }
     },
-    PurchasingInformationHeader: getHeader({
-      labelName: "Purchasing Information",
-      labelKey: "STORE_MATERIAL_PURCHASING_INFORMATION"
-    }),
-    break1: getBreak(),
-    viewOne: getCommonContainer({
-      reviewPurchaseUOMName: getLabelWithValue(
-        {
-          labelName: "PurchaseUOMName",
-          labelKey: "STORE_MATERIAL_PURCHASE_UOM_NAME"
-        },
-        { jsonPath: "materials[0].purchaseUom.code" }
-      ),
-      reviewExpenseAccountCode: getLabelWithValue(
-        { labelName: "Expense Account Code", labelKey: "STORE_MATERIAL_EXPENSE_ACCOUNT_CODE" },
-        { jsonPath: "materials[0].expenseAccount" }
-      ), 
+    // PurchasingInformationHeader: getHeader({
+    //   labelName: "Purchasing Information",
+    //   labelKey: "STORE_MATERIAL_PURCHASING_INFORMATION"
+    // }),
+    // break1: getBreak(),
+    // viewOne: getCommonContainer({
+    //   reviewPurchaseUOMName: getLabelWithValue(
+    //     {
+    //       labelName: "PurchaseUOMName",
+    //       labelKey: "STORE_MATERIAL_PURCHASE_UOM_NAME"
+    //     },
+    //     { jsonPath: "materials[0].purchaseUom.code" }
+    //   ),
+    //   reviewExpenseAccountCode: getLabelWithValue(
+    //     { labelName: "Expense Account Code", labelKey: "STORE_MATERIAL_EXPENSE_ACCOUNT_CODE" },
+    //     { jsonPath: "materials[0].expenseAccount" }
+    //   ), 
       
-    }),
+    // }),
     StockingInformationDetailsHeader: getHeader({
       labelName: "Stocking Information",
       labelKey: "STORE_MATERIAL_STOCKING_INFORMATION"

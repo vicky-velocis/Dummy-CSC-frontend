@@ -145,7 +145,9 @@ import {
         const storeNames = response.stores.map(item => {
           let code = item.code;
           let name = item.name;
-          return{code,name}
+          let department = item.department.name;
+          let divisionName = item.divisionName;
+          return{code,name,department,divisionName}
         } )
         dispatch(prepareFinalObject("searchMaster.storeNames", storeNames));
       }

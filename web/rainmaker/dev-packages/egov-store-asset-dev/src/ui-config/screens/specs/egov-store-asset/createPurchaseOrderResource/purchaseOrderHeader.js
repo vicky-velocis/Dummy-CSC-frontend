@@ -9,6 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
@@ -76,15 +77,38 @@ export const purchaseOrderHeader = getCommonCard({
         if(action.value){
         const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "store", value: action.value}];
         getSearchResults(queryObject, dispatch,"materials")
-        .then(response =>{
+        .then(async response =>{
           if(response){
-            const  materialNames = response.materials.map(material => {
+            let indentingMaterial =[];
+            let  materialNames = response.materials.map(material => {
                 const name = material.name;
                 const code = material.code;
                 const description = material.description;
                 return{ name, code,description }
             })
-                dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
+              if(indentNumber){
+                const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
+                let res = await getMaterialIndentSearchResults(queryObj, dispatch);
+                if(res && res.indents &&  res.indents.length > 0){
+                    res.indents.forEach(item => {
+                      if(item.indentDetails.length > 0){
+                        item.indentDetails.forEach(ele =>{
+                          const name = ele.material.name;
+                          const code = ele.material.code;
+                          const description = ele.material.description;
+                          if(!indentingMaterial.find(mat => mat.code === code))
+                               indentingMaterial.push({name,code,description})
+                        })
+                      }
+                    })
+                }
+
+                // finding common material
+                   materialNames = materialNames.filter(function(ele) {
+                        return indentingMaterial.findIndex(mat => mat.code === ele.code) !== -1;
+                    })
+              }
+            dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
          }
           
         });   
@@ -92,12 +116,44 @@ export const purchaseOrderHeader = getCommonCard({
             const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
             const storebj =  storeNames.filter(ele => ele.code === action.value);
             if(storebj){
-              dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name));         
+              dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name)); 
+              dispatch(prepareFinalObject("purchaseOrders[0].store.department.name", storebj[0].department));      
+              dispatch(prepareFinalObject("purchaseOrders[0].store.divisionName", storebj[0].divisionName));              
             }
           }
         }
       }
     },
+    divisionName: getTextField({
+      label: {
+        labelName: "Division Name",
+        labelKey: "STORE_DETAILS_DIVISION_NAME",
+      },
+      props: {
+        className: "applicant-details-error",
+        disabled: true
+      },
+      placeholder: {
+        labelName: "Enter Division Name",
+        labelKey: "STORE_DETAILS_DIVISION_NAME_PLACEHOLDER",
+      },
+      pattern: getPattern("non-empty-alpha-numeric"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "purchaseOrders[0].store.divisionName",
+    }),
+    departmentName: getTextField({
+      label: {
+        labelName: "Department Name",
+        labelKey: "STORE_DETAILS_DEPARTMENT_NAME",
+      },
+      props: {
+        className: "applicant-details-error",
+        disabled: true
+      },
+      //pattern: getPattern("non-empty-alpha-numeric"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "purchaseOrders[0].store.department.name",
+    }),
     purchaseOrderDate: {
       ...getDateField({
         label: {

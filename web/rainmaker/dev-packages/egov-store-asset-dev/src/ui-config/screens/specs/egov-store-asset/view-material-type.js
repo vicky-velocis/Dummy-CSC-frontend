@@ -106,7 +106,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
         required: false,
   
         props: {
-          content: "MATERIAL_TYPE_ACTIVE",
+          content: "STORE_DETAILS_ACTIVE",
           jsonPath: "materialTypes[0].active",
           disabled: true,
           screenName: "view-material-type",

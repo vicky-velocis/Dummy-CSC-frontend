@@ -157,6 +157,7 @@ const callBackForReset = async (state, dispatch) => {
   const checkBoxButton = ["isCentralStore", "active"];
   const textFields = [
     "code",
+    "divisionName",
     "name",
     "department",
     "description",
@@ -381,13 +382,30 @@ export const formwizardFirstStep = {
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
           jsonPath: "stores[0].description",
         }),
+        divisionName: getTextField({
+          label: {
+            labelName: "Division Name",
+            labelKey: "STORE_DETAILS_DIVISION_NAME",
+          },
+          props: {
+            className: "applicant-details-error",
+          },
+          placeholder: {
+            labelName: "Enter Division Name",
+            labelKey: "STORE_DETAILS_DIVISION_NAME_PLACEHOLDER",
+          },
+          required: true,
+          pattern: getPattern("non-empty-alpha-numeric"),
+          errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          jsonPath: "stores[0].divisionName",
+        }),
         isCentralStore: {
           uiFramework: "custom-containers-local",
           moduleName: "egov-store-asset",
           componentPath: "CheckboxContainer",
           jsonPath: "stores[0].isCentralStore",
           gridDefination: {
-            xs: 12,
+            xs: 6,
           },
           isFieldValid: true,
           required: false,

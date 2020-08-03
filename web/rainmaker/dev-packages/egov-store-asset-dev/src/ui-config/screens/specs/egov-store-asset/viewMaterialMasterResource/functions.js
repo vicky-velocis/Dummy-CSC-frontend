@@ -200,6 +200,24 @@ export const createUpdateMaterialMaster = async (state, dispatch, action) => {
   set(materialsObject[0], "tenantId", tenantId);
   set(materialsObject[0], "status", "CREATED");
 
+ const stckInfo = ["materialClass","stockingUom","minQuantity","maxQuantity","reorderLevel","reorderQuantity"];
+
+    stckInfo.forEach(ele => {
+     const present = materialsObject[0].hasOwnProperty(ele);
+      if(!present){
+        if(ele ==="stockingUom"){
+          materialsObject[0][ele] = null;
+        }
+        else if(ele ==="minQuantity" ||ele ==="maxQuantity"){
+          materialsObject[0][ele] = "0";
+        }
+          else{
+            materialsObject[0][ele] = null;
+          }
+        
+      }
+    })
+
   //set default glcode
   //materials[0].storeMapping[0].chartofAccount.glCode
   let storeMapping = get(state, "screenConfiguration.preparedFinalObject.materials[0].storeMapping",[]) 

@@ -8,8 +8,8 @@ import {
   
   export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: "Material Mater - Summary",
-      labelKey: "STORE_MATERIAL_MASTER_SUMMARY_HEADER"
+      labelName: "Price List - Summary",
+      labelKey: "STORE_PRICE_LIST_SUMMARY_HEADER"
     })
   });
   

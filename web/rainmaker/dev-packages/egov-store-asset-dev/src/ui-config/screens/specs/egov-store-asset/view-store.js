@@ -100,13 +100,17 @@ export const renderService = () => {
       { labelKey: "STORE_DETAILS_STORE_DESCRIPTION" },
       { jsonPath: "stores[0].description" }
     ),
+    divisionName: getLabelWithValue(
+      { labelKey: "STORE_DETAILS_DIVISION_NAME" },
+      { jsonPath: "stores[0].divisionName" }
+    ),
     isCentralStore: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-store-asset",
       componentPath: "CheckboxContainer",
       jsonPath: "stores[0].isCentralStore",
       gridDefination: {
-        xs: 12,
+        xs: 6,
       },
       isFieldValid: true,
       required: false,

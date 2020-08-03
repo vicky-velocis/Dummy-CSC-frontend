@@ -92,6 +92,14 @@ export const getIndentListDetailsView = (isReview = true) => {
         },
         {  jsonPath: "indents[0].issueStore.name", }
       ),
+      divisionName: getLabelWithValue(
+        { labelName: "Division Name", labelKey: "STORE_DETAILS_DIVISION_NAME" },
+        { jsonPath: "indents[0].indentStore.divisionName" }
+      ),
+      departmentName: getLabelWithValue(
+        { labelName: "Department Name", labelKey: "STORE_DETAILS_DEPARTMENT_NAME" },
+        { jsonPath: "indents[0].indentStore.department.name" }
+      ),
       IndentDate: getLabelWithValue(
         { labelName: "Indent Date",
         labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE" },

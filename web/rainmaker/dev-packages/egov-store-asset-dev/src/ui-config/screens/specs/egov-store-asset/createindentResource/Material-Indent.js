@@ -50,9 +50,41 @@ import {
           ); 
           store =  store.filter(x=> x.code === action.value)   
           dispatch(prepareFinalObject("indents[0].indentStore.name",store[0].name));
+          dispatch(prepareFinalObject("indents[0].indentStore.department.name",store[0].department.name));
+          dispatch(prepareFinalObject("indents[0].indentStore.divisionName",store[0].divisionName));
           
         }
       },
+      divisionName: getTextField({
+        label: {
+          labelName: "Division Name",
+          labelKey: "STORE_DETAILS_DIVISION_NAME",
+        },
+        props: {
+          className: "applicant-details-error",
+          disabled: true
+        },
+        placeholder: {
+          labelName: "Enter Division Name",
+          labelKey: "STORE_DETAILS_DIVISION_NAME_PLACEHOLDER",
+        },
+        pattern: getPattern("non-empty-alpha-numeric"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "indents[0].indentStore.divisionName",
+      }),
+      departmentName: getTextField({
+        label: {
+          labelName: "Department Name",
+          labelKey: "STORE_DETAILS_DEPARTMENT_NAME",
+        },
+        props: {
+          className: "applicant-details-error",
+          disabled: true
+        },
+        //pattern: getPattern("non-empty-alpha-numeric"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "indents[0].indentStore.department.name",
+      }),
       IndentDate: {
         ...getDateField({
           label: {
