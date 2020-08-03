@@ -95,14 +95,14 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
       } else {
         set(queryObject[0], "masterDataAction", "SUBMIT")
       }
-      let applicationDocuments = get(queryObject[0], "propertyDetails.applicationDocuments") || [];
+      let applicationDocuments = get(queryObject[0], "ownerDetails.applicationDocuments") || [];
       applicationDocuments = applicationDocuments.map(item => ({
         ...item,
         active: true
       }))
       const removedDocs = get(state.screenConfiguration.preparedFinalObject, "PropertiesTemp[0].removedDocs") || [];
       applicationDocuments = [...applicationDocuments, ...removedDocs]
-      set(queryObject[0], "propertyDetails.applicationDocuments", applicationDocuments)
+      set(queryObject[0], "ownerDetails.applicationDocuments", applicationDocuments)
       response = await httpRequest(
         "post",
         "/csp/property/_update",

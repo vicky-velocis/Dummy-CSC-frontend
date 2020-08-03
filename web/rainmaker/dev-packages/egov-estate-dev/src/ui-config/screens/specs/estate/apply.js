@@ -93,7 +93,7 @@ const setDocumentData = async (action, state, dispatch) => {
   const documentTypes = prepareDocumentTypeObj(masterDocuments);
   let applicationDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "Properties[0].propertyDetails.applicationDocuments",
+    "Properties[0].ownerDetails.applicationDocuments",
     []
   ) || [];
   applicationDocs = applicationDocs.filter(item => !!item)
@@ -109,7 +109,7 @@ const setDocumentData = async (action, state, dispatch) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        "Properties[0].propertyDetails.applicationDocuments",
+        "Properties[0].ownerDetails.applicationDocuments",
         applicationDocsReArranged
       )
     );

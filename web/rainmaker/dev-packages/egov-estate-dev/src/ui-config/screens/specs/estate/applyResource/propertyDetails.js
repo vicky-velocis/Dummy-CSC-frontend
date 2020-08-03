@@ -27,11 +27,11 @@ export const propertyHeader = getCommonTitle({
 
 const allocationTypeField = {
   label: {
-      labelName: "Allocation Type",
+      labelName: "Type of Allocation",
       labelKey: "EST_ALLOCATION_TYPE_LABEL"
   },
   placeholder: {
-      labelName: "Select Allocation Type",
+      labelName: "Select Type of Allocation",
       labelKey: "EST_ALLOCATION_TYPE_PLACEHOLDER"
   },
   required: true,
