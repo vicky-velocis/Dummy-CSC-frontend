@@ -20,6 +20,7 @@ import {
 import {
   some
 } from "lodash";
+import "./index.css";
 
 export const DEFAULT_STEP = -1;
 export const PROPERTY_DETAILS_STEP = 0;
@@ -57,39 +58,39 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (!isPropertyDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isPropertyDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === OWNER_PURCHASER_DETAILS_STEP) {
     const isOwnerDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.ownerDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )
 
     const isPurchaserDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardSecondStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )
 
-    if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === COURT_CASE_DETAILS_STEP) {
     const isCourtCaseDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children",
+      "components.div.children.formwizardThirdStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch
     )
 
-    if (!isCourtCaseDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isCourtCaseDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === PAYMENT_DETAILS_STEP) {
@@ -99,26 +100,26 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (isPaymentDetailsValid) {
+    /* if (isPaymentDetailsValid) {
       // const res = await applyEstates(state, dispatch, activeStep);
       // if (!res) {
       //   return
       // }
     } else {
       isFormValid = false;
-    }
+    } */
   }
 
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
-      "Estates[0].propertyDetails.applicationDocuments",
+      "Properties[0].propertyDetails.applicationDocuments",
       []
     );
 
     const uploadedTempDocData = get(
       state.screenConfiguration.preparedFinalObject,
-      "EstatesTemp[0].applicationDocuments",
+      "PropertiesTemp[0].applicationDocuments",
       []
     );
 
@@ -144,7 +145,7 @@ const callBackForNext = async (state, dispatch) => {
           };
         });
       dispatch(
-        prepareFinalObject("EstatesTemp[0].reviewDocData", reviewDocData)
+        prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
       );
     }
   }
@@ -154,7 +155,7 @@ const callBackForNext = async (state, dispatch) => {
     if (isFormValid) {
       const estatesData = get(
         state.screenConfiguration.preparedFinalObject,
-        "Estates[0]"
+        "Properties[0]"
       );
       moveToSuccess(estatesData, dispatch);
     }
