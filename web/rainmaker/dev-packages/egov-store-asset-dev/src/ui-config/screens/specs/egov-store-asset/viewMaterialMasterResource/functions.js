@@ -8,8 +8,10 @@ import set from "lodash/set";
 import {
   createMaterial,
   getMaterialMasterSearchResults,
-  updateMaterial
+  updateMaterial,
+  GetMdmsNameBycode
 } from "../../../../../ui-utils/storecommonsapi";
+
 import {
   convertDateToEpoch,
   epochToYmdDate,
@@ -303,6 +305,12 @@ export const getMaterialmasterData = async (
 
  let response = await getMaterialMasterSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
+let uomcode = get(response, "materials[0].baseUom.code")
+if(uomcode)
+{
+uomcode = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",uomcode) 
+set(response.materials[0], "baseUom.name", uomcode);
+}
   dispatch(prepareFinalObject("materials", get(response, "materials")));
   dispatch(
     handleField(

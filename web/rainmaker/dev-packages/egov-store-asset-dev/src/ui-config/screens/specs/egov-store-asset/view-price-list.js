@@ -33,7 +33,20 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "UOM", filter: "[?(@.active == true)]" },
+           
+          ]
+        },
+        {
+          moduleName: "store-asset",
+          masterDetails: [
+            { name: "Material", },            
+          ],
+        },
       ]
     }
   };
@@ -95,9 +108,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    getPriceLstData(state, dispatch, id, tenantId);
+   
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
+    getPriceLstData(state, dispatch, id, tenantId);
    getFileUrl(action,dispatch,tenantId);
     return action;
   },

@@ -267,7 +267,6 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
               "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.supplier",
               "required",
               true
-              
             )
           );
             }

@@ -116,7 +116,7 @@ export const getMasterDetailsView = (isReview = true) => {
       reviewBaseUOMName: getLabelWithValue(
         { labelName: "Base UOM Name", labelKey: "STORE_BASE_UOM_NAME" },
         {
-          jsonPath: "materials[0].baseUom.code"
+          jsonPath: "materials[0].baseUom.name"
         }
       ),
       reviewInventryType: getLabelWithValue(

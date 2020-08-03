@@ -10,6 +10,7 @@ import {
   import get from "lodash/get";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { filter } from "lodash";
+import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
  // import { getTodaysDateInYMD } from "../../utils";
   
   export const MaterialMasterDetails = getCommonCard({
@@ -59,6 +60,10 @@ import { filter } from "lodash";
           dispatch(prepareFinalObject("materials[0].materialType.code",MaterialType[0].materialType.code));
           dispatch(prepareFinalObject("materials[0].baseUom.code",MaterialType[0].baseUom.code));
           dispatch(prepareFinalObject("materials[0].purchaseUom.code",MaterialType[0].baseUom.code));
+
+          dispatch(prepareFinalObject("materials[0].baseUom.name",GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code)));
+
+          dispatch(prepareFinalObject("materials[0].purchaseUom.name",GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code)));
         }
         }
       },

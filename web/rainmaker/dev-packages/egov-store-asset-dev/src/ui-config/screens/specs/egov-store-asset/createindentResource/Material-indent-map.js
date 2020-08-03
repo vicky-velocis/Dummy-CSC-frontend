@@ -10,6 +10,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { getTodaysDateInYMD } from "../../utils";
   import get from "lodash/get";
+  import set from "lodash/set";
   import { handleScreenConfigurationFieldChange as handleField , prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
   const arrayCrawler = (arr, n) => {
@@ -85,7 +86,7 @@ import {
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"
                 },
                 placeholder: {
-                  labelName: "Select UOM Name",
+                  labelName: "Indent Purpose",
                   labelKey: "STORE_MATERIAL_INDENT_UOM_NAME_SELECT"
                 },
                
@@ -97,6 +98,27 @@ import {
                   disabled:true,
                   optionLabel: "name",
                   optionValue: "code"
+                },
+              })
+            },
+            indentPurpose: {
+              ...getTextField({
+                label: {
+                  labelName: "Indent Purpose",
+                  labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE"
+                },
+                placeholder: {
+                  labelName: "Select UOM Name",
+                  labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE"
+                },
+               
+                required: false,
+                pattern: getPattern("Name") || null,
+                jsonPath: "indents[0].indentDetails[0].indentPurpose",
+                //sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
+                props: {
+                  disabled:true,
+                  
                 },
               })
             },
@@ -205,6 +227,60 @@ import {
           }
         )
       }),
+      onMultiItemAdd: (state, muliItemContent) => {
+        let indentPurpose = get(
+          state.screenConfiguration.preparedFinalObject,
+          "indents[0].indentPurpose",
+          null
+        );
+        if(indentPurpose){
+          
+          let preparedFinalObject = get(
+            state,
+            "screenConfiguration.preparedFinalObject",
+            {}
+          );
+          let cardIndex = get(muliItemContent, "MaterialName.index");
+        if(preparedFinalObject){
+          set(preparedFinalObject.indents[0],`indentDetails[${cardIndex}].indentPurpose` , indentPurpose);
+        }      
+  
+          Object.keys(muliItemContent).forEach(key => {
+            if(indentPurpose ==='Revenue')
+            {
+              if ( key === "AssestCode") {
+                //set(muliItemContent[key], "props.visible", true);
+                muliItemContent[key].props.style = {display:"inline-block"};
+                //set(muliItemContent[key], "props.value", indentNumber);
+              }
+              if ( key === "ProjectCode") {
+                //set(muliItemContent[key], "props.visible", false);
+                muliItemContent[key].props.style = {display:"none"};
+                
+              }
+            }
+
+            else if(indentPurpose ==='Capital')
+            {
+              if ( key === "AssestCode") {
+                //set(muliItemContent[key], "props.visible", false);
+                muliItemContent[key].props.style = {display:"none"};
+                //set(muliItemContent[key], "props.value", indentNumber);
+              }
+              if ( key === "ProjectCode") {
+                //set(muliItemContent[key], "props.visible", true);
+                muliItemContent[key].props.style = {display:"inline-block"};
+                
+              }
+
+            }
+             
+          });  
+  
+        }
+          //console.log("click on add");
+        return muliItemContent;
+      },
       items: [],
       addItemLabel: {
         labelName: "ADD",

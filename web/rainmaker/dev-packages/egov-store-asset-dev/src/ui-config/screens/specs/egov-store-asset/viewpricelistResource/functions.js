@@ -9,7 +9,8 @@ import {
   createPriceList,
   getMaterialMasterSearchResults,
   getPriceListSearchResults,
-  UpdatePriceList
+  UpdatePriceList,
+  GetMdmsNameBycode
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -355,8 +356,27 @@ export const getPriceLstData = async (
   ];
 
  let response = await getPriceListSearchResults(queryObject, dispatch);
-// let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+ response = response.priceLists.filter(x=>x.id === id)
+  //dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+  if(response && response[0])
+  {
+  for (let index = 0; index < response[0].priceListDetails.length; index++) {
+    const element = response[0].priceListDetails[index];
+   let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
+   let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
+      // dispatch(
+      //   prepareFinalObject(
+      //     `priceLists[0].priceListDetails[${index}].uom.name`,
+      //     uonname,
+      //   )
+      // );
+
+      set(response[0], `priceListDetails[${index}].uom.name`, Uomname);
+      set(response[0], `priceListDetails[${index}].material.name`, matname);    
+    
+  }
+}
+  dispatch(prepareFinalObject("priceLists", response));
   // dispatch(
   //   handleField(
   //     "create",

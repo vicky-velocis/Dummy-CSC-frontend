@@ -25,9 +25,9 @@ import {
           materialcode: getLabelWithValue(
             {
               labelName: "Material Code",
-                labelKey: "STORE_MATERIAL_CODE"
+                labelKey: "STORE_MATERIAL_NAME"
             },
-            { jsonPath: "priceLists[0].priceListDetails[0].material.code",          
+            { jsonPath: "priceLists[0].priceListDetails[0].material.name",          
           }
           ),
           quantity: getLabelWithValue(
@@ -48,9 +48,9 @@ import {
             }
           ),
           uomcode: getLabelWithValue(
-            {  labelName: "Store Name", labelKey: "STORE_DETAILS_STORE_NAME" },
+            {  labelName: "UOM Name", labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME" },
             {
-              jsonPath: "priceLists[0].priceListDetails[0].uom.code",
+              jsonPath: "priceLists[0].priceListDetails[0].uom.name",
              
             }
           )

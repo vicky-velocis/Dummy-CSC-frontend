@@ -179,7 +179,7 @@ fileUrl = getFileUrl(fileUrl)
     const  agreementEndDate_ = new Date(agreementEndDate)
     let IsValidDate = true
     let IsValidStartDate = true    
-    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate|| agreementEndDate_> CurrentDate)
+    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate)
     {
       IsValidDate = false
     }

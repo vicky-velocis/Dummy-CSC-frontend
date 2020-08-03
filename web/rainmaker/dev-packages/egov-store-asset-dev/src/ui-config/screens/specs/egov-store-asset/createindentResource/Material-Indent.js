@@ -48,10 +48,13 @@ import {
             `store.stores`,
             []
           ); 
-          store =  store.filter(x=> x.code === action.value)   
+          store =  store.filter(x=> x.code === action.value) 
+          if(store&& store[0])  
+          {
           dispatch(prepareFinalObject("indents[0].indentStore.name",store[0].name));
           dispatch(prepareFinalObject("indents[0].indentStore.department.name",store[0].department.name));
           dispatch(prepareFinalObject("indents[0].indentStore.divisionName",store[0].divisionName));
+          }
           
         }
       },
@@ -100,7 +103,7 @@ import {
           jsonPath: "indents[0].indentDate",
           props: {
             inputProps: {
-              max: getTodaysDateInYMD()
+              max: new Date().toISOString().slice(0, 10),
             }
           }
         })
@@ -114,19 +117,22 @@ import {
           },
           required: true,
           jsonPath: "indents[0].indentPurpose",
-          //sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
+          sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
         props: {
-          data: [
-            {
-              code: "Consumption",
-              name: "Capital/Repair/Consumption"
-            },
+          // data: [
+          //   {
+          //     code: "Consumption",
+          //     name: "Capital/Repair/Consumption"
+          //   },
            
-          ],
+          // ],
           optionValue: "code",
           optionLabel: "name",
         },
-        })
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          dispatch(prepareFinalObject("indents[0].indentDetails[0].indentPurpose",action.value));   
+        }
       },
       InventryType: {
         ...getSelectField({
@@ -160,7 +166,7 @@ import {
           jsonPath: "indents[0].expectedDeliveryDate",
           props: {
             inputProps: {
-              max: getTodaysDateInYMD()
+              min: new Date().toISOString().slice(0, 10),
             }
           }
         })

@@ -47,9 +47,12 @@ import {
               },
             }),
             beforeFieldChange: (action, state, dispatch) => {
+              let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
               let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
               let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
-              dispatch(prepareFinalObject("priceLists[0].priceListDetails[0].uom.code",MaterialType[0].baseUom.code));
+              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].material.name`,MaterialType[0].baseUom.code));
+              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].uom.code`,MaterialType[0].baseUom.code));
+              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].uom.name`,MaterialType[0].baseUom.name));
             }
           },
             fromDate: {
@@ -126,10 +129,10 @@ import {
             },          
 
             uomcode: getSelectField({
-              label: { labelName: "UOM ", labelKey: "STORE_PRICE_UOM" },
+              label: { labelName: "UOM ", labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME" },
               placeholder: {
                 labelName: "Select UOM",
-                labelKey: "STORE_PRICE_UOM_SELECT",
+                labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME",
               },
               required: true,
               jsonPath: "priceLists[0].priceListDetails[0].uom.code",
