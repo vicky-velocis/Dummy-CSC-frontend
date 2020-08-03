@@ -72,7 +72,8 @@ import {
   };
   
   const getEmployeeData = async (action, state, dispatch) => {
-    const queryParams = [{ key: "tenantId", value:  getTenantId() }];//{ key: "roles", value: "EMPLOYEE" },
+    //fecthing employee details 
+    const queryParams = [{ key: "roles", value: "EMPLOYEE" },{ key: "tenantId", value:  getTenantId() }];
     const payload = await httpRequest(
       "post",
       "/egov-hrms/employees/_search",
@@ -81,14 +82,24 @@ import {
     );
     if(payload){
       if (payload.Employees) {
-        // const username =  get(state,"auth.userInfo.name",'')
-        // let  empDetails =
-        // payload.Employees.filter(x=>x.code === username);//"2010010062D");
-        // if(empDetails && empDetails[0] ){  
-        //   alert(empDetails[0].assignments[0].department)      
-        // empDetails = payload.Employees.filter(item=>  item.assignments[0].department === empDetails[0].assignments[0].department)
-        // }
-        dispatch(prepareFinalObject("Employee",payload.Employees));  
+        const empDetails =
+        payload.Employees.map((item, index) => {
+            const deptCode = item.assignments[0] && item.assignments[0].department;
+            const designation =   item.assignments[0] && item.assignments[0].designation;
+            const empCode = item.code;
+            const empName = `${item.user.name}`;
+          return {
+                  code : empCode,
+                  name : empName,
+                  dept : deptCode,
+                  designation:designation,
+          };
+        });
+      
+        if(empDetails){
+          dispatch(prepareFinalObject("createScreenMdmsData.employee",empDetails));  
+        }
+        
       }
     }
 

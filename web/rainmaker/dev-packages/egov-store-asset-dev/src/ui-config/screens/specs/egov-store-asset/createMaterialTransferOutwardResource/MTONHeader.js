@@ -219,24 +219,47 @@ export const MTONHeader = getCommonCard({
           labelKey: "STORE_MTON_ISSUED_TO_EMP_SELECT"
         },
         jsonPath: "materialIssues[0].issuedToEmployee",
-        sourceJsonPath: "Employee",
+        sourceJsonPath: "createScreenMdmsData.employee",
         props: {
-          className: "hr-generic-selectfield",
-          optionValue: "code",
-          optionLabel: "code"
-        }
+          className: "applicant-details-error",
+          optionLabel: "name",
+          optionValue: "designation",
+        },
       }),
       beforeFieldChange: (action, state, dispatch) => {
-        let emp = get(state, "screenConfiguration.preparedFinalObject.Employee",[]) 
-        emp = emp.filler(x=x.code === action.value);
-        if(emp &emp[0])
-        {
-          console.log(emp[0])
-          console.log("emp[0]")
-          //let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"store.stores",emp[0].designation[0].)   
-          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", emp[0].indentNumber));
+        let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
+        let designation=action.value ;
+        //alert(designation)
+        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
+        alert(issuedToDesignation);
+        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+      //   let designation='' ;
+      //   const empDetails =
+      //   emp.map((item, index) => {
+      //     const deptCode = item.dept;
+      //     const designation =   item.designation;
+      //     const empCode = item.code;
+      //     const empName = item.name;
+      //     if(empCode ===action.value)
+      //     {
+      //       designation = item.designation;
+      //   return {
+      //           code : empCode,
+      //           name : empName,
+      //           dept : deptCode,
+      //           designation:designation,
+      //   };
+      // }
+      // });
+      //   if(designation)
+      //   {
+      //     console.log(designation)
+      //     console.log("emp[0]")
+      //     let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
+      //     alert(issuedToDesignation);
+      //     dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
 
-        }
+      //   }
 
       }
     },
