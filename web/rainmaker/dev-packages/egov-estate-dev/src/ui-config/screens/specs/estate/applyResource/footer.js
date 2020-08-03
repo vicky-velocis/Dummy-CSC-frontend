@@ -130,7 +130,7 @@ const callBackForNext = async (state, dispatch) => {
           documentType: uploadedTempDocData[y].name
         })
       ) {
-        isFormValid = false;
+        // isFormValid = false;
       }
     }
     if (isFormValid) {
@@ -170,7 +170,10 @@ const callBackForNext = async (state, dispatch) => {
         labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
       };
       switch (activeStep) {
-        case DETAILS_STEP:
+        case PROPERTY_DETAILS_STEP:
+        case OWNER_PURCHASER_DETAILS_STEP:
+        case COURT_CASE_DETAILS_STEP:
+        case PAYMENT_DETAILS_STEP:
           errorMessage = {
             labelName: "Please fill all mandatory fields, then do next !",
             labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"

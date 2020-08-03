@@ -139,7 +139,7 @@ export const formwizardFourthStep = {
   children: {
     groundRentDetails, 
     serviceTaxDetails,
-    // paymentMadeBy
+    paymentMadeBy
   },
   visible: false
 };

@@ -589,15 +589,27 @@ export const serviceTaxDetails = getCommonCard({
   })
 })
 
+const paymentMadeByField = {
+  label: {
+    labelName: "Payment Made By",
+    labelKey: "EST_PAYMENT_MADE_BY_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Payment Made By",
+    labelKey: "EST_PAYMENT_MADE_BY_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+  },
+  required: true,
+  minLength: 1,
+  maxLength: 15,
+  jsonPath: "Properties[0].paymentDetails.paymentMadeBy"
+}
+
 export const paymentMadeBy = getCommonCard({
-  header: "",
   detailsContainer: getCommonContainer({
-    paymentMadeBy: getLabelWithValue({
-      labelName: "Payment Made By",
-      labelKey: "EST_PAYMENT_MADE_BY_LABEL"
-    }, 
-    {
-      jsonPath: "Properties[0].paymentDetails.paymentMadeBy"
-    })
+    paymentMadeBy: getTextField(paymentMadeByField)
   })
 })

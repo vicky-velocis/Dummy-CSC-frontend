@@ -80,6 +80,38 @@ const fatherHusbandNameField = {
   jsonPath: "Properties[0].ownerDetails.fatherHusbandName"
 }
 
+const getRelationshipRadioButton = {
+  uiFramework: "custom-containers",
+  componentPath: "RadioGroupContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 6,
+  },
+  jsonPath: "Properties[0].ownerDetails.relationship",
+  props: {
+    label: {
+      name: "Relationship",
+      key: "EST_RELATIONSHIP_LABEL"
+    },
+    buttons: [
+      {
+        labelName: "Father",
+        labelKey: "COMMON_RELATION_FATHER",
+        value: "FATHER"
+      },
+      {
+        label: "Husband",
+        labelKey: "COMMON_RELATION_HUSBAND",
+        value: "HUSBAND"
+      }
+    ],
+    jsonPath:"Properties[0].ownerDetails.relationship",
+    required: true
+  },
+  required: true,
+  type: "array"
+};
+
 const addressField = {
   label: {
       labelName: "Address",
@@ -163,6 +195,7 @@ export const ownerDetails = getCommonCard({
     serialNumber: getTextField(serialNumberField),
     ownerName: getTextField(ownerNameField),
     fatherHusbandName: getTextField(fatherHusbandNameField),
+    relationship: getRelationshipRadioButton,
     address: getTextField(addressField),
     mobileNumber: getTextField(mobileNumberField),
     share: getTextField(shareField),
