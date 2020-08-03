@@ -30,6 +30,9 @@ import get from "lodash/get";
 import {
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
+import { estateApplication } from './searchResource/estateApplication'
+import {} from './searchResource/functions'
+import {} from './searchResource/searchResults'
 
 const userInfo = JSON.parse(getUserInfo());
 const {
@@ -76,7 +79,7 @@ const estateSearchAndResult = {
     ]
     dispatch(prepareFinalObject("searchScreen", {}))
     //   searchApiCall(state, dispatch, true)
-    //   getStatusList(action, state, dispatch, queryObject, "search", "components.div.children.rentedPropertyApplication.children.cardContent.children.colonyContainer.children.status", "MasterRP")
+      // getStatusList(action, state, dispatch, queryObject, "search", "components.div.children.estateApplication.children.cardContent.children.colonyContainer.children.status", "MasterRP")
     return action
   },
   components: {
@@ -133,7 +136,7 @@ const estateSearchAndResult = {
             }
           }
         },
-        //   rentedPropertyApplication,
+          // estateApplication,
         breakAfterSearch: getBreak(),
         //   searchResults
       }
