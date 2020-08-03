@@ -471,3 +471,51 @@ export const sampleGetBill = () => {
     }
   };
 };
+export const IndentConfiguration =()=>{
+
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+    
+  }
+}
+
+export const NonIndentConfiguration =()=>{
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+  issuePurpose :"RETURNTOSUPPLIER"
+    
+  }
+}
+
+export const WorkFllowStatus = () => {
+  return {
+    
+    WorkFllowStatus: [
+      {
+        code:"CREATED",
+        value:"CREATED",
+      },
+      // {
+      //   code:"REJECTED",
+      //   value:"REJECTED",
+      // },
+      // {
+      //   code:"APPROVED",
+      //   value:"APPROVED",
+      // }
+
+    ]
+  }
+}

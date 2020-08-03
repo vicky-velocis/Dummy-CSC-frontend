@@ -8,7 +8,7 @@ import {
 } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -76,6 +76,25 @@ export const callBackForNext = async (state, dispatch) => {
 
       // check validation for file uplaod
       if (get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux") !== undefined) {
+        let fileUrl =
+  get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileUrl",'') 
+  let fileName =
+  get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileName",'') 
+  if(fileUrl) 
+  {
+fileUrl = getFileUrl(fileUrl)
+  }
+  let  documentsPreview= [
+    {
+      title: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
+      linkText: "VIEW", 
+      link:fileUrl,//"https://chstage.blob.core.windows.net/fileshare/ch/undefined/July/15/1594826295177document.pdf?sig=R3nzPxT9MRMfROREe6LHEwuGfeVxB%2FKneAeWrDJZvOs%3D&st=2020-07-15T15%3A21%3A01Z&se=2020-07-16T15%3A21%3A01Z&sv=2016-05-31&sp=r&sr=b",
+      name: fileName, 
+    },]
+   
+  dispatch(
+    prepareFinalObject("documentsPreview", documentsPreview)
+  );
       moveToReview(dispatch);
       }
       else{
@@ -160,7 +179,7 @@ export const callBackForNext = async (state, dispatch) => {
     const  agreementEndDate_ = new Date(agreementEndDate)
     let IsValidDate = true
     let IsValidStartDate = true    
-    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate|| agreementEndDate_> CurrentDate)
+    if(rateContractDate_>CurrentDate || AgreementDate_> CurrentDate|| agreementStartDate_> CurrentDate)
     {
       IsValidDate = false
     }
@@ -204,7 +223,16 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 };
-
+export const getFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}
 export const changeStep = (
   state,
   dispatch,

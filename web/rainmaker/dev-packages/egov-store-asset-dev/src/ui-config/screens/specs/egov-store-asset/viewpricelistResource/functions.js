@@ -9,7 +9,8 @@ import {
   createPriceList,
   getMaterialMasterSearchResults,
   getPriceListSearchResults,
-  UpdatePriceList
+  UpdatePriceList,
+  GetMdmsNameBycode
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -147,33 +148,33 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
   set(jsonObject, jsonPath, modifiedArray);
 };
 
-export const furnishmaterialsData = (state, dispatch) => {
+export const furnishPriceListData = (state, dispatch) => {
   let priceLists = get(
     state.screenConfiguration.preparedFinalObject,
-    "Employee",
+    "priceLists",
     []
   );
-  setDateInYmdFormat(priceLists[0], ["dateOfAppointment", "user.dob"]);
-  setAllDatesInYmdFormat(priceLists[0], [
-    { object: "assignments", values: ["fromDate", "toDate"] },
-    { object: "priceListDetails", values: ["serviceFrom", "serviceTo"] }
-  ]);
-  setAllYears(priceLists[0], [
-    { object: "education", values: ["yearOfPassing"] },
-    { object: "tests", values: ["yearOfPassing"] }
-  ]);
-  setRolesData(priceLists[0]);
-  setRolesList(state, dispatch);
-  dispatch(prepareFinalObject("Employee", priceLists));
+  setDateInYmdFormat(priceLists[0], ["agreementDate", "agreementEndDate","agreementStartDate","rateContractDate"]);
+  // setAllDatesInYmdFormat(priceLists[0], [
+  //   { object: "assignments", values: ["fromDate", "toDate"] },
+   
+  // ]);
+  // setAllYears(priceLists[0], [
+  //   { object: "education", values: ["yearOfPassing"] },
+  //   { object: "tests", values: ["yearOfPassing"] }
+  // ]);
+  // setRolesData(priceLists[0]);
+  // setRolesList(state, dispatch);
+  dispatch(prepareFinalObject("priceLists", priceLists));
 };
 
 export const handleCreateUpdatePriceList = (state, dispatch) => {
-  let uuid = get(
+  let id = get(
     state.screenConfiguration.preparedFinalObject,
-    "Employee[0].uuid",
+    "priceLists[0].id",
     null
   );
-  if (uuid) {
+  if (id) {
     createUpdatePriceList(state, dispatch, "UPDATE");
   } else {
     createUpdatePriceList(state, dispatch, "CREATE");
@@ -275,10 +276,10 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       //     : `/hrms/acknowledgement?purpose=create&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=create&code=123456`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=PRICELIST&mode=create&code=`));
        }
     } catch (error) {
-      furnishmaterialsData(state, dispatch);
+      furnishPriceListData(state, dispatch);
     }
   } else if (action === "UPDATE") {
     try {
@@ -294,10 +295,10 @@ export const createUpdatePriceList = async (state, dispatch, action) => {
       //     : `/hrms/acknowledgement?purpose=update&status=success&applicationNumber=${employeeId}`;
       // dispatch(setRoute(acknowledgementUrl));
       if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=123456`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=priceList&mode=update&code=`));
        }
     } catch (error) {
-      furnishmaterialsData(state, dispatch);
+      furnishPriceListData(state, dispatch);
     }
   }
 
@@ -334,7 +335,7 @@ export const getMaterialmasterData = async (
       }
     )
   );
- // furnishmaterialsData(state, dispatch);
+ // furnishPriceListData(state, dispatch);
 };
 
 export const getPriceLstData = async (
@@ -355,8 +356,27 @@ export const getPriceLstData = async (
   ];
 
  let response = await getPriceListSearchResults(queryObject, dispatch);
-// let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+ response = response.priceLists.filter(x=>x.id === id)
+  //dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+  if(response && response[0])
+  {
+  for (let index = 0; index < response[0].priceListDetails.length; index++) {
+    const element = response[0].priceListDetails[index];
+   let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
+   let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
+      // dispatch(
+      //   prepareFinalObject(
+      //     `priceLists[0].priceListDetails[${index}].uom.name`,
+      //     uonname,
+      //   )
+      // );
+
+      set(response[0], `priceListDetails[${index}].uom.name`, Uomname);
+      set(response[0], `priceListDetails[${index}].material.name`, matname);    
+    
+  }
+}
+  dispatch(prepareFinalObject("priceLists", response));
   // dispatch(
   //   handleField(
   //     "create",
@@ -368,5 +388,5 @@ export const getPriceLstData = async (
   //     }
   //   )
   // );
- // furnishmaterialsData(state, dispatch);
+  furnishPriceListData(state, dispatch);
 };

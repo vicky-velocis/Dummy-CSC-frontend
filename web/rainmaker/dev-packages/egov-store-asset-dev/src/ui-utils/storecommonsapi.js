@@ -253,6 +253,13 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
       []
     );
   }
+  else  if (type == "materialReceipt") {
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.DocumentType_MaterialReceipt",
+      []
+    );
+  }
 
   else {
     documents = get(
@@ -362,6 +369,7 @@ export const updateMaterialIndent = async (queryObject, payload, dispatch) => {
     );
     return response;
   } catch (error) {
+    console.log(error)
     dispatch(
       toggleSnackbar(
         true,
@@ -397,6 +405,30 @@ export const getmaterialissuesSearchResults = async queryObject => {
   }
 
 };
+export const getMaterialBalanceRateResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/receiptnotes/_balance",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
 export const creatematerialissues = async (queryObject, payload, dispatch) => {
   try {
     const response = await httpRequest(
@@ -404,7 +436,7 @@ export const creatematerialissues = async (queryObject, payload, dispatch) => {
       "/store-asset-services/materialissues/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialIssues: payload }
     );
     return response;
   } catch (error) {
@@ -425,6 +457,51 @@ export const updatematerialissues = async (queryObject, payload, dispatch) => {
       "/store-asset-services/materialissues/_update",
       "",
       queryObject,
+      { materialIssues: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const getreceiptnotesSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/receiptnotes/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatreceiptnotes = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/receiptnotes/_create",
+      "",
+      queryObject,
       { materialReceipt: payload }
     );
     return response;
@@ -438,4 +515,224 @@ export const updatematerialissues = async (queryObject, payload, dispatch) => {
     );
     throw error;
   }
+};
+export const updatereceiptnotes = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/receiptnotes/_update",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const getmiscellaneousreceiptnotesSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/miscellaneousreceiptnotes/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatmiscellaneousreceiptnotes = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/miscellaneousreceiptnotes/_create",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updatemiscellaneousreceiptnotes = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/miscellaneousreceiptnotes/_update",
+      "",
+      queryObject,
+      { materialReceipt: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+//Non-Indent Material Issue Note
+export const getNonIndentMaterialIssueSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_create",
+      "",
+      queryObject,
+      { materialIssues: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updateNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/materialissues-ni/_update",
+      "",
+      queryObject,
+      { materialIssues: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+
+export const GetMdmsNameBycode = (state, dispatch,jsonpath, code) => {
+  //Material
+  let Obj  = get(state, `screenConfiguration.preparedFinalObject.${jsonpath}`,[]) 
+  let Name = code
+  Obj = Obj.filter(x=>x.code === code)
+  if(Obj &&Obj[0])
+  Name = Obj[0].name
+  return Name;
+};
+
+export const ValidateCard = (state,dispatch,cardJsonPath,pagename,jasonpath,value) => {
+  let  DuplicatItem =[];
+  let CardItem = get(
+    state.screenConfiguration.screenConfig[`${pagename}`],
+    cardJsonPath,
+    []
+  );
+ let matcode =[];
+  for (let index = 0; index < CardItem.length; index++) {
+    if(CardItem[index].isDeleted === undefined ||
+    CardItem[index].isDeleted !== false)
+    {
+    let code = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${value}`,'')        
+    matcode.push(code)
+    }
+  } 
+  var uniq = matcode
+  .map((name) => {
+    return {
+      count: 1,
+      name: name
+    }
+  })
+  .reduce((a, b) => {
+    a[b.name] = (a[b.name] || 0) + b.count
+    return a
+  }, {})  
+  var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+  if(duplicates.length>0)
+  {
+  duplicates= duplicates.map(itm => {
+      return `${itm}`;
+    })
+    .join() || "-"
+   // IsDuplicatItem = true;  
+    DuplicatItem.push(
+      {
+        duplicates: duplicates,
+        IsDuplicatItem:true
+      }      
+    )  
+  } 
+  else{
+    DuplicatItem.push(
+      {
+        duplicates: duplicates,
+        IsDuplicatItem:false
+      });
+
+  }
+
+  return DuplicatItem;
 };

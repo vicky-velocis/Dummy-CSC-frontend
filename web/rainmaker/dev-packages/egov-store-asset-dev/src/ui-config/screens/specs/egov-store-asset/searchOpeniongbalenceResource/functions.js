@@ -110,11 +110,11 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Material Name")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Material Type Name")]: get(item, "materialType.name", "-") || "-", 
-          [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
-          [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
-          code: item.code,       
+          [getTextToLocalMapping("MRN Number")]: get(item, "mrnNumber", "-") || "-",
+          [getTextToLocalMapping("Store Name")]: get(item, "receivingStore.code", "-") || "-", 
+          [getTextToLocalMapping("Financial Year")]: get(item, "financialYear", "-") || "-", 
+         // [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
+          id: item.id,       
          
         };
       });
@@ -132,7 +132,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search-opening-balence",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Material Master")} (${
+          `${getTextToLocalMapping("Search Results for Opening Balence")} (${
             response.materialReceipt.length
           })`
         )
