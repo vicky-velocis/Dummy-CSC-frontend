@@ -16,6 +16,10 @@ import {
   validateFields,
   epochToYmd
 } from "../../utils";
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels,
+} from "egov-ui-framework/ui-utils/commons";
 // import "./index.css";
 
   const moveToReview = dispatch => {
@@ -34,6 +38,7 @@ export const callBackForNext = async (state, dispatch) => {
   const {NULMSEPRequest} = state.screenConfiguration.preparedFinalObject;
   let isFormValid = true;
   let documentsPreview =[];
+  let applicationDocument =[];
   if (activeStep === 0) {
     const isSepDetailsValid = validateFields(
       "components.div.children.formwizardFirstStep.children.SepDetails.children.cardContent.children.SepDetailsContainer.children",
@@ -71,6 +76,7 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
     }
   }
   if (activeStep === 1) {
+    const localisationLabels = getTransformedLocalStorgaeLabels();
     const documents = get(state.screenConfiguration.preparedFinalObject, "documentsContract");
     const uploadedDocs = get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux");
     const isDocRequired =  documents.map(doc => {
@@ -85,9 +91,14 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
           let obj = {
             title: documents[ele[0]].title,
             linkText: "VIEW", 
-            link:    ele[1].documents[0].fileUrl,       
+            link:  ele[1].documents[0].fileUrl,  
+            name:   ele[1].documents[0].fileName,    
           }
-  
+          let reqObj = {
+            documentType :  getLocaleLabels(documents[ele[0]].code,documents[ele[0]].code,localisationLabels),  
+            filestoreId:   ele[1].documents[0].fileStoreId,
+          }
+          applicationDocument.push(reqObj);
           documentsPreview.push(obj)
         }
     
@@ -123,6 +134,9 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
   }
 else if(activeStep == 1 && isFormValid){
 
+  dispatch(
+    prepareFinalObject("NULMSEPRequest.applicationDocument", applicationDocument)
+  );
   dispatch(
     prepareFinalObject("documentsPreview", documentsPreview)
   );

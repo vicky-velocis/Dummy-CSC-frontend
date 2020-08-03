@@ -16,7 +16,7 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  handleCardDelete } from "../../../../../ui-utils/commons";
 import{httpRequest} from '../../../../../ui-utils/api'
@@ -141,8 +141,8 @@ export const createUpdatePO = async (state, dispatch, action) => {
     "NULMSEPRequest",
     []
   );
-
-  const tenantId =  getTenantId();
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+  
   NULMSEPRequest.tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
@@ -173,7 +173,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
     try {
       const response = await httpRequest(
         "post",
-        "/v1/sep/_create",
+        "/nulm-services/v1/sep/_create",
         "",
         queryObject,
         requestBody
@@ -189,7 +189,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
     try {
       const response = await httpRequest(
         "post",
-        "/v1/sep/_update",
+        "/nulm-services/v1/sep/_update",
         "",
         queryObject,
         requestBody
