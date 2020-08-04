@@ -3,16 +3,68 @@ import {
     getCommonContainer,
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {onTabChange, headerrow, tabs} from './search-preview'
+import { getSearchResults } from "../../../../ui-utils/commons";
+
+let transitNumber = getQueryArg(window.location.href, "transitNumber");
+
+const fetchImage = async (imgId) => {
+  const res = await getFileUrlFromAPI(imgId.fileStoreId)           
+    return res.fileStoreIds[0].url;
+}
+
+const getImages = (imageObs) => {
+  return Promise.all(
+    imageObs.map(imageOb =>
+      Promise.all(imageOb.applicationDocuments.map(id => fetchImage(id))).then(urls => ({
+        ...imageOb,
+        urls
+      }))
+    )
+  );
+}
+
+export const searchResults = async (action, state, dispatch, transitNumber) => {
+  let queryObject = [
+    { key: "transitNumber", value: transitNumber }
+  ];
+  let payload = await getSearchResults(queryObject);
+  if(payload) {
+    let properties = payload.Properties;
+    if(properties[0].propertyImages){
+      let data = properties[0].propertyImages;
+      data = data.filter(function(image) {
+      if(image.applicationDocuments != null){
+        return image;
+      }
+    })
+      let images = await getImages(data);
+      images = images.map(item => {
+        let { applicationDocuments, urls } = item;
+        applicationDocuments = applicationDocuments.map((image, index) => ({ ...image, url: urls[index] }));
+        return { ...item, applicationDocuments };
+      });
+      dispatch(prepareFinalObject("Images", images));
+      dispatch(prepareFinalObject("Properties[0]", properties[0]));     
+    }
+  }
+  
+ }
+ const beforeInitFn = async (action, state, dispatch, transitNumber) => {
+  dispatch(prepareFinalObject("workflow.ProcessInstances", []))
+  if(transitNumber){
+    await searchResults(action, state, dispatch, transitNumber)
+  }
+}
 
 const notices = {
     uiFramework: "material-ui",
     name: "notices",
     beforeInitScreen: (action, state, dispatch) => {
     //   transitNumber = getQueryArg(window.location.href, "transitNumber");
-    //   beforeInitFn(action, state, dispatch, transitNumber);
+      beforeInitFn(action, state, dispatch, transitNumber);
       return action;
     },
     components: {
@@ -61,6 +113,17 @@ const notices = {
               type: "array",
             },
             // write code for transit images
+            viewFour: {
+              uiFramework: "custom-containers-local",
+              moduleName: "egov-rented-properties",
+              componentPath: "MultipleDocumentsContainer",
+              props: {
+                sourceJsonPath:"Properties[0].notices",
+                btnhide: true,
+                businessService:"RP",
+                className: "review-documents"
+              }
+            },
         }
       }
     }
