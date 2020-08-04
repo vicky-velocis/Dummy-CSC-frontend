@@ -231,7 +231,7 @@ export const MTONHeader = getCommonCard({
         let designation=action.value ;
         //alert(designation)
         let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
-        alert(issuedToDesignation);
+       // alert(issuedToDesignation);
         dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
       //   let designation='' ;
       //   const empDetails =

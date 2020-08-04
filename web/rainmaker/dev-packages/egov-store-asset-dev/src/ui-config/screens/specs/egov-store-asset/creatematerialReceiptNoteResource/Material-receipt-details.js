@@ -506,7 +506,7 @@ import {
               ...getDateField({
                 label: {
                   labelName: "Manufacturer Date",
-                  labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE "
+                  labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE"
                 },
                 placeholder: {
                   labelName: "Enter Manufacturer Date",
@@ -521,7 +521,7 @@ import {
               ...getDateField({
                 label: {
                   labelName: "Expiry Date",
-                  labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE "
+                  labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE"
                 },
                 placeholder: {
                   labelName: "Enter Expiry Date",

@@ -167,7 +167,7 @@ import {
         beforeFieldChange: (action, state, dispatch) => {
 
           let date = action.value;
-alert(date)
+
           dispatch(
             handleField(
               "createpricelist",

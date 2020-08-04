@@ -121,7 +121,7 @@ const getApplicationDisplayCode =() => {
     break;
     case "OPENINGBALANCE": labelValue = {
       labelName: "mrnNumber",
-      labelKey: `STORE_MATERIAL_NUMBER`,
+      labelKey: `STORE_MATERIAL_COMMON_MRN_NUMBER`,
     }
     break;
     case "MATERIALINDENT": labelValue = {
@@ -136,7 +136,7 @@ const getApplicationDisplayCode =() => {
     break;
     case "MATERIALRECEIPT": labelValue = {
       labelName: "mrnNumber",
-      labelKey: `STORE_MATERIAL_NUMBER`,
+      labelKey: `STORE_MATERIAL_COMMON_MRN_NUMBER`,
     }
     break;
        case "PURCHASEORDER": labelValue = {

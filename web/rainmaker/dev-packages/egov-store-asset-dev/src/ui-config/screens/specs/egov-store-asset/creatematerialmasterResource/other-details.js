@@ -8,7 +8,7 @@ import {
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
  
   
   export const otherDetails = getCommonCard({
@@ -128,7 +128,11 @@ import {
               optionLabel: "name",
             optionValue: "code"
             },
-          })
+          }),
+          beforeFieldChange: (action, state, dispatch) => {
+            let name =  GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",action.value) 
+            dispatch(prepareFinalObject("materials[0].stockingUom.name",name));
+          }
         },
         MininumQty: {
           ...getTextField({

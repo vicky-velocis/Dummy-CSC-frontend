@@ -85,7 +85,10 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     // Add selected search fields to queryobject
     for (var key in searchScreenObject) {
-      if (
+      if(searchScreenObject.hasOwnProperty(key) && typeof searchScreenObject[key] === "boolean"){
+        queryObject.push({ key: key, value: searchScreenObject[key] });
+      }
+      else if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {

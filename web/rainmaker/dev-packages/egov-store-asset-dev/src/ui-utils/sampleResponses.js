@@ -519,3 +519,19 @@ export const WorkFllowStatus = () => {
     ]
   }
 }
+
+export const ReceiptType = () => {
+  return {
+    
+    StoreReceiptType: 
+      {
+        PURCHASE_RECEIPT_TYPE:"PURCHASE RECEIPT",
+        MISCELLANEOUS_RECEIPT_TYPE:"MISCELLANEOUS RECEIPT",
+        INWARDRECEIPT_RECEIPT_TYPE:"INWARD RECEIPT",
+        OPENINGBALANCE_RECEIPT_TYPE:"OPENING BALANCE",
+      },
+      
+
+    
+  }
+}

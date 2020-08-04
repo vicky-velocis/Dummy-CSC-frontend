@@ -108,12 +108,12 @@ export const getOtherDetailsView = (isReview = true) => {
           labelName: "Usage Class",
           labelKey: "STORE_MATERIAL_USAGE_CLASS"
         },
-        { jsonPath: "materials[0].code" }
+        { jsonPath: "materials[0].materialClass" }
       ),
       reviewStockingUOMName: getLabelWithValue(
         { labelName: "Stocking UOM Name", labelKey: "STORE_MATERIAL_STOCKING_UOM_NAME" },
         {
-          jsonPath: "materials[0].stockingUom"
+          jsonPath: "materials[0].stockingUom.name"
         }
       ),
       reviewMaximunQty: getLabelWithValue(

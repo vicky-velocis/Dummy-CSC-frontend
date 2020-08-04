@@ -278,6 +278,7 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
     let card = {};
     card["code"] = doc.documentType;
     card["title"] = doc.documentType;
+    card["url"] = doc.url;
     card["cards"] = [];
     tempDoc[doc.documentType] = card;
   });
@@ -288,6 +289,7 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
       let card = {};
       card["name"] = doc.code;
       card["code"] = doc.code;
+      card["url"] = doc.url;
       card["required"] = doc.required ? true : false;
       if (doc.hasDropdown && doc.dropdownData) {
         let dropdown = {};
@@ -736,3 +738,15 @@ export const ValidateCard = (state,dispatch,cardJsonPath,pagename,jasonpath,valu
 
   return DuplicatItem;
 };
+
+
+export const getCommonFileUrl = (linkText="") => {
+  const linkList = linkText.split(",");
+  let fileURL = '';
+  linkList&&linkList.map(link => {
+    if (!link.includes('large') && !link.includes('medium') && !link.includes('small')) {
+      fileURL = link;
+    }
+  })
+  return fileURL;
+}

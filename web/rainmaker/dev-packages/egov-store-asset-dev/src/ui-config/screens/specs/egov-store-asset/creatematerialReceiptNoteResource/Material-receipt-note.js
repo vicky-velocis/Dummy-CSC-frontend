@@ -244,7 +244,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
         ...getDateField({
           label: {
             labelName: "Supplier Bill Date",
-            labelKey: "STORE_MATERIAL_RECEIPT_SUPPLIER_BILL_DATE "
+            labelKey: "STORE_MATERIAL_RECEIPT_SUPPLIER_BILL_DATE"
           },
           placeholder: {
             labelName: "Enter Supplier Bill Date",

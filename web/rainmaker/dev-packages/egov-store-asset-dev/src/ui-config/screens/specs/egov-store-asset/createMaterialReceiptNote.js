@@ -142,12 +142,14 @@ export const header = getCommonContainer({
         mdmsBody
       );
       // document type 
-
+      let fileUrl =
+      get(state, "screenConfiguration.preparedFinalObject.documentsPreview[0].link",'') 
      let  DocumentType_PriceList= [
       {
           code: "STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE",
           isMandatory: true, 
           required:true,
+          url: fileUrl,  
           documentType:"STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE"  ,         
           active: true
       },]

@@ -90,52 +90,8 @@ export const callBackForNext = async (state, dispatch) => {
           let jasonpath =  "indents[0].indentDetails";
           let value = "material.code";
           let DuplicatItem = ValidateCard(state,dispatch,cardJsonPath,pagename,jasonpath,value)
-          //  start check duplicat Item 
-      //          let CardItem = get(
-      //     state.screenConfiguration.screenConfig[`create-material-transfer-indent`],
-      //     cardJsonPath,
-      //     []
-      //   );
-      //  let matcode =[];
-      //   for (let index = 0; index < CardItem.length; index++) {
-          
-      //     if(CardItem[index].isDeleted === undefined ||
-      //      CardItem[index].isDeleted !== false)
-      //      {
-      //        let code = get(state.screenConfiguration.preparedFinalObject,`indents[0].indentDetails[${index}].material.code`,'')        
-      //        matcode.push(code)
-      //      }
-      //     //  else{
-      //     //    let code_ = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'')        
-      //     //  }      
-      //   } 
-      //      var uniq = matcode
-      //    .map((name) => {
-      //      return {
-      //        count: 1,
-      //        name: name
-      //      }
-      //    })
-      //    .reduce((a, b) => {
-      //      a[b.name] = (a[b.name] || 0) + b.count
-      //      return a
-      //    }, {})    
-   
-      //    var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-      //    var unoque = Object.keys(uniq).filter((a) => uniq[a] === 1)
          
-      //    if(duplicates.length>0)
-      //    {
-      //    duplicates= duplicates.map(itm => {
-      //        return `${itm}`;
-      //      })
-      //      .join() || "-"
-      //      IsDuplicatItem = true;
-           
-      //    } 
-          // end
-         console.log(DuplicatItem)
-         console.log("DuplicatItem")
+       
           if(DuplicatItem && DuplicatItem[0])
           {
             if(!DuplicatItem[0].IsDuplicatItem)

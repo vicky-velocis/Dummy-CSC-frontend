@@ -10,7 +10,8 @@ import {
   getMaterialMasterSearchResults,
   getPriceListSearchResults,
   UpdatePriceList,
-  GetMdmsNameBycode
+  GetMdmsNameBycode,
+  getCommonFileUrl
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -18,6 +19,7 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";  
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  
@@ -337,7 +339,36 @@ export const getMaterialmasterData = async (
   );
  // furnishPriceListData(state, dispatch);
 };
+const getFileUrl = async (dispatch,tenantId,fileStoreId)=>{
 
+  //fileStoreId = "242e3bc6-7f42-444e-b562-6f23468f6e72"
+  if(tenantId.includes("."))
+  {
+ 
+    var vStr = tenantId.split('.');
+
+    tenantId = vStr[0];
+  }
+  //tenantId = 
+  let FileURL = "";
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    console.log(fileRes)
+    console.log("fileRes")
+    FileURL = fileRes.fileStoreIds[0].url
+    FileURL = getCommonFileUrl(FileURL)
+    let  documentsPreview= [
+      {
+        title: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
+        linkText: "VIEW", 
+        link:FileURL,//"https://chstage.blob.core.windows.net/fileshare/ch/undefined/July/15/1594826295177document.pdf?sig=R3nzPxT9MRMfROREe6LHEwuGfeVxB%2FKneAeWrDJZvOs%3D&st=2020-07-15T15%3A21%3A01Z&se=2020-07-16T15%3A21%3A01Z&sv=2016-05-31&sp=r&sr=b",
+          
+      },]     
+    dispatch(
+      prepareFinalObject("documentsPreview", documentsPreview)
+    );
+  });  
+ 
+}
 export const getPriceLstData = async (
   state,
   dispatch,
@@ -376,6 +407,8 @@ export const getPriceLstData = async (
     
   }
 }
+
+getFileUrl(dispatch,tenantId,response[0].fileStoreId);
   dispatch(prepareFinalObject("priceLists", response));
   // dispatch(
   //   handleField(

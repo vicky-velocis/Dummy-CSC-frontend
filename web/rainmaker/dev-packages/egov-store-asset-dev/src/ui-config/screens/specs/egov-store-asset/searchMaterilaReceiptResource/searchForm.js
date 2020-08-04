@@ -23,7 +23,7 @@ const resetFields = (state, dispatch) => {
     ) {
       dispatch(
         handleField(
-          "search-indent",
+          "search-material-receipt",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -58,33 +58,33 @@ export const searchForm = getCommonCard({
       },
      
     }),
-    receiptType: {
-      ...getSelectField({
-        label: { labelName: "Receipt Type", labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE" },
-        placeholder: {
-          labelName: "Select Receipt Type",
-          labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE_SELECT"
-        },
-        required: false,
-        jsonPath: "searchScreen.receiptType",
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
-      props: {
-        data: [
-          {
-            code: "PurchaseReceipt",
-            name: "Purchase Receipt"
-          },
+    // receiptType: {
+    //   ...getSelectField({
+    //     label: { labelName: "Receipt Type", labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE" },
+    //     placeholder: {
+    //       labelName: "Select Receipt Type",
+    //       labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_TYPE_SELECT"
+    //     },
+    //     required: false,
+    //     jsonPath: "searchScreen.receiptType",
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 4,
+    //     },
+    //     //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+    //   props: {
+    //     data: [
+    //       {
+    //         code: "PurchaseReceipt",
+    //         name: "Purchase Receipt"
+    //       },
          
-        ],
-        optionValue: "code",
-        optionLabel: "name",
-      },
-      })
-    },
+    //     ],
+    //     optionValue: "code",
+    //     optionLabel: "name",
+    //   },
+    //   })
+    // },
     receivingStore: {
       ...getSelectField({
         label: {

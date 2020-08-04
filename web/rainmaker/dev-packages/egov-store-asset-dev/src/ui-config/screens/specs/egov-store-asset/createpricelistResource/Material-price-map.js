@@ -10,8 +10,9 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { getTodaysDateInYMD } from "../../utils";
   import get from "lodash/get";
+  import set from "lodash/set";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  
+  import{getmaterialissuesSearchResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
   const arrayCrawler = (arr, n) => {
     if (n == 1) {
       return arr.map(item => {
@@ -50,9 +51,11 @@ import {
               let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
               let Material = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.Material",[]) 
               let MaterialType = Material.filter(x=>x.code == action.value)//.materialType.code
-              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].material.name`,MaterialType[0].baseUom.code));
+              let matname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",action.value) 
+              let UomName = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code) 
+              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].material.name`,matname));
               dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].uom.code`,MaterialType[0].baseUom.code));
-              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].uom.name`,MaterialType[0].baseUom.name));
+              dispatch(prepareFinalObject(`priceLists[0].priceListDetails[${cardIndex}].uom.name`,UomName));
             }
           },
             fromDate: {
@@ -175,6 +178,20 @@ import {
           }
         )
       }),
+      // set active true
+      onMultiItemAdd: (state, muliItemContent) => {          
+          let preparedFinalObject = get(
+            state,
+            "screenConfiguration.preparedFinalObject",
+            {}
+          );
+          let cardIndex = get(muliItemContent, "materialcode.index");
+        if(preparedFinalObject){
+          set(preparedFinalObject.priceLists[0],`priceListDetails[${cardIndex}].active` , true);
+        } 
+          //console.log("click on add");
+        return muliItemContent;
+      },
       items: [],
       addItemLabel: {
         labelName: "ADD STORE",

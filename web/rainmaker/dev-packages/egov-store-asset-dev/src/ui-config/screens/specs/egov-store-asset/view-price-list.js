@@ -2,7 +2,7 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import get from "lodash/get";
 import { PriceListReviewDetails } from "./viewpricelistResource/pricelist-review";
 import { masterViewFooter } from "./viewpricelistResource/footer";
 import { getPriceLstData } from "./viewpricelistResource/functions";
@@ -26,6 +26,12 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
       tenantId: tenant,
       moduleDetails: [
         {
+          moduleName: "store-asset",
+          masterDetails: [
+            { name: "Material" },           
+          ],
+        },
+        {
           moduleName: "egov-hrms",
           masterDetails: [
             {
@@ -41,12 +47,7 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
            
           ]
         },
-        {
-          moduleName: "store-asset",
-          masterDetails: [
-            { name: "Material", },            
-          ],
-        },
+       
       ]
     }
   };
@@ -63,11 +64,12 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
     console.log(e);
   }
 };
-const getFileUrl = async (action,dispatch,tenantId)=>{
+const getFileUrl = async (action,dispatch,tenantId,fileStoreId)=>{
 
-  let fileStoreId = "242e3bc6-7f42-444e-b562-6f23468f6e72"
+  //fileStoreId = "242e3bc6-7f42-444e-b562-6f23468f6e72"
   getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
     console.log(fileRes)
+    console.log("fileRes")
   });
 
   // const queryObject = [
@@ -112,7 +114,8 @@ const screenConfig = {
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
     getPriceLstData(state, dispatch, id, tenantId);
-   getFileUrl(action,dispatch,tenantId);
+  //   let fileStoreId = get(state, "screenConfiguration.preparedFinalObject.priceLists[0].fileStoreId",0) 
+  //  getFileUrl(action,dispatch,tenantId,fileStoreId);
     return action;
   },
   components: {

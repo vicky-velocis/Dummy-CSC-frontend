@@ -8,7 +8,7 @@ import { getreceiptnotesSearchResults } from "../../../../../ui-utils/storecommo
 import { getTextToLocalMapping } from "./searchResults";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { validateFields } from "../../utils";
-
+import { ReceiptType } from "../../../../../ui-utils/sampleResponses";
 import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getDeptName = (state, codes) => {
@@ -46,6 +46,11 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: tenantId,
     },
+     // add default receiptType(remove from UI if exist) hard code in search query string
+     {
+      key: "receiptType",
+      value: ReceiptType().StoreReceiptType.MISCELLANEOUS_RECEIPT_TYPE
+    }
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,

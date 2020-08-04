@@ -48,7 +48,7 @@ export const searchForm = getCommonCard({
       label: { labelName: "Issue Note Number", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER" },
       placeholder: {
         labelName: "Enter Issue Note Number",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER_PLACEHOLDER",
+        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER",
       },
       required: false,
       jsonPath: "searchScreen.issueNoteNumber",

@@ -55,7 +55,7 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4,
       },
-      sourceJsonPath: "supplier.suppliers",
+      sourceJsonPath: "suppliers.suppliers",
       props: {
         optionValue: "code",
         optionLabel: "name",
