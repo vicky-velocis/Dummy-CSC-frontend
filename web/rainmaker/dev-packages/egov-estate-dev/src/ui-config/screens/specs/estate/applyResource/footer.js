@@ -23,6 +23,7 @@ import {
 } from "lodash";
 import "./index.css";
 import { ownerDocumentDetails } from './applyConfig';
+import { paymentDetails } from './paymentDetails';
 import { setDocumentData } from '../apply'
 
 export const DEFAULT_STEP = -1;
@@ -89,6 +90,12 @@ const callBackForNext = async (state, dispatch) => {
         state.screenConfiguration.screenConfig,
         `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}`,
         ownerDocumentDetails
+      )
+
+      set(
+        state.screenConfiguration.screenConfig,
+        `apply.components.div.children.formwizardFourthStep.children.paymentDetails_${i}`,
+        paymentDetails
       )
 
       setDocumentData("", state, dispatch, i);

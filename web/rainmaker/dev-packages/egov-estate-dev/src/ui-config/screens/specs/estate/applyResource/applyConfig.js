@@ -17,9 +17,7 @@ import {
   courtCaseDetails
 } from './courtCaseDetails';
 import {
-  groundRentDetails,
-  serviceTaxDetails,
-  paymentMadeBy
+  paymentDetails
 } from './paymentDetails';
 import {
   reviewDetails
@@ -137,9 +135,7 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    groundRentDetails, 
-    serviceTaxDetails,
-    paymentMadeBy
+    // paymentDetails
   },
   visible: false
 };
