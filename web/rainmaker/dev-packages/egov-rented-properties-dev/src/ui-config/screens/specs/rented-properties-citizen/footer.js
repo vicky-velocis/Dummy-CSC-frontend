@@ -167,7 +167,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
      } 
     } 
 
-    isFormValid = await submittransitsiteimages(state, dispatch);
+    // isFormValid = await submittransitsiteimages(state, dispatch);
       if (isFormValid) {
         const transitData = get(
           state.screenConfiguration.preparedFinalObject,

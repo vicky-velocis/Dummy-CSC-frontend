@@ -10,22 +10,6 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
-const fetchImage = async (imgId) => {
-  const res = await getFileUrlFromAPI(imgId.fileStoreId)           
-    return res.fileStoreIds[0].url;
-}
-
-const getImages = (imageObs) => {
-  return Promise.all(
-    imageObs.map(imageOb =>
-      Promise.all(imageOb.applicationDocuments.map(id => fetchImage(id))).then(urls => ({
-        ...imageOb,
-        urls
-      }))
-    )
-  );
-}
-
 export const searchResults = async (action, state, dispatch, transitNumber) => {
   let queryObject = [
     { key: "transitNumber", value: transitNumber }
@@ -33,24 +17,10 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-    if(properties[0].propertyImages){
-      let data = properties[0].propertyImages;
-      data = data.filter(function(image) {
-      if(image.applicationDocuments != null){
-        return image;
-      }
-    })
-      let images = await getImages(data);
-      images = images.map(item => {
-        let { applicationDocuments, urls } = item;
-        applicationDocuments = applicationDocuments.map((image, index) => ({ ...image, url: urls[index] }));
-        return { ...item, applicationDocuments };
-      });
-      dispatch(prepareFinalObject("Images", images));
+    if(properties){
       dispatch(prepareFinalObject("Properties[0]", properties[0]));     
     }
   }
-  
  }
  const beforeInitFn = async (action, state, dispatch, transitNumber) => {
   dispatch(prepareFinalObject("workflow.ProcessInstances", []))
@@ -63,7 +33,6 @@ const notices = {
     uiFramework: "material-ui",
     name: "notices",
     beforeInitScreen: (action, state, dispatch) => {
-    //   transitNumber = getQueryArg(window.location.href, "transitNumber");
       beforeInitFn(action, state, dispatch, transitNumber);
       return action;
     },
