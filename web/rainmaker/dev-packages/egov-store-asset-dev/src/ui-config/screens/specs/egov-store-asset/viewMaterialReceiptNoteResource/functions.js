@@ -219,7 +219,9 @@ export const createUpdateMR = async (state, dispatch, action) => {
   get(state, "screenConfiguration.preparedFinalObject.materialReceipt[0].inspectionDate",0) 
   inspectionDate = convertDateToEpoch(inspectionDate);
   set(materialReceipt[0],"inspectionDate", inspectionDate);
-
+  let fileStoreId =
+  get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",0)  
+  set(materialReceipt[0],"fileStoreId", fileStoreId);
 
   // set date to epoch in  price list material name
   let receiptDetails = returnEmptyArrayIfNull(

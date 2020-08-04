@@ -311,6 +311,13 @@ if(uomcode)
 uomcode = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",uomcode) 
 set(response.materials[0], "baseUom.name", uomcode);
 }
+
+let stockingUomuomcode = get(response, "materials[0].stockingUom.code")
+if(stockingUomuomcode)
+{
+  stockingUomuomcode = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",stockingUomuomcode) 
+set(response.materials[0], "stockingUom.name", stockingUomuomcode);
+}
   dispatch(prepareFinalObject("materials", get(response, "materials")));
   dispatch(
     handleField(

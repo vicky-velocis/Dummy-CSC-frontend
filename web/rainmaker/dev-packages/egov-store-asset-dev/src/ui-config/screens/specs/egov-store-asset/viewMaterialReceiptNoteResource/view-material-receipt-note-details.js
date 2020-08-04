@@ -174,7 +174,7 @@ import {
           ),
           ManufacturerDate: getLabelWithValue(
             {   labelName: "Manufacturer Date",
-            labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE "},
+            labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE"},
             {
               jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate",
              
@@ -182,7 +182,7 @@ import {
           ),
           expiryDate: getLabelWithValue(
             {   labelName: "Expiry Date",
-            labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE "},
+            labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE"},
             {
               jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",
              

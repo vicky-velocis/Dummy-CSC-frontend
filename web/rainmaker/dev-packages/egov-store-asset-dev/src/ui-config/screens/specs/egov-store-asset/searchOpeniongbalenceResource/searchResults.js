@@ -9,7 +9,7 @@ export const getTextToLocalMapping = (label) => {
     case "MRN Number":
       return getLocaleLabels(
         "MRN Number",
-        "STORE_MATERIAL_NUMBER",
+        "STORE_MATERIAL_COMMON_MRN_NUMBER",
         localisationLabels
       );
 
@@ -86,6 +86,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
+ // window.location.href = `view-opening-balence?id=${rowData[3]}&tenantId=${tenantId}`;
   window.location.href = `createopeningbalence?id=${rowData[3]}&tenantId=${tenantId}`;
 };
 

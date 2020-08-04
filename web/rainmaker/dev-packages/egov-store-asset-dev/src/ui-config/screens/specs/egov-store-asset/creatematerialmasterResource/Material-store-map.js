@@ -131,6 +131,20 @@ import {
           }
         )
       }),
+            // set active true
+            onMultiItemAdd: (state, muliItemContent) => {          
+              let preparedFinalObject = get(
+                state,
+                "screenConfiguration.preparedFinalObject",
+                {}
+              );
+              let cardIndex = get(muliItemContent, "store.index");
+            if(preparedFinalObject){
+              set(preparedFinalObject.materials[0],`storeMapping[${cardIndex}].active` , true);
+            } 
+              //console.log("click on add");
+            return muliItemContent;
+          },
       items: [],
       addItemLabel: {
         labelName: "ADD STORE",

@@ -95,7 +95,7 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
       ),
       ReceiptDate: getLabelWithValue(
         {labelName: "Receipt Date",
-        labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_DATE " },
+        labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_DATE" },
         { jsonPath: "materialReceipt[0].receiptDate", }
       ),
       ReceiptType: getLabelWithValue(
