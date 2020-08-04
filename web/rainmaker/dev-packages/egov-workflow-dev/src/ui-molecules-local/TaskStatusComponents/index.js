@@ -33,7 +33,6 @@ const TaskStatusComponents = ({ currentObj, index }) => {
   docs.map(item=>{
     item.linkText="Download"
   })
-// }
   }
 
   if (currentObj.moduleName === 'HORTICULTURE'){
