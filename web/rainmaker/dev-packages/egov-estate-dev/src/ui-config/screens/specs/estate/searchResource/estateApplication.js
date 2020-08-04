@@ -276,11 +276,11 @@ import {
       labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
     }),
     colonyContainer: getCommonContainer({
-      colony: getSelectField(FileNameField),
+        FileName: getTextField(FileNameField),
       status: getSelectField(statusField)
     }),
     transitNumberContainer: getCommonContainer({
-      transitNumber: getTextField(AllotmentNumberField),
+        allotmentNumber: getTextField(AllotmentNumberField),
       phone: getTextField(phoneNumberField)
     }),
     button: getCommonContainer({

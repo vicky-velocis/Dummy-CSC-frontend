@@ -87,7 +87,7 @@ export const transferSearchResults = {
   props: {...searchResults.props, 
     columns: [
       APPLICATION_NO,
-      getTextToLocalMapping("Transit No"),
+      // getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
       STATUS,
@@ -106,7 +106,7 @@ export const duplicateCopySearchResult = {
   props: {...searchResults.props, 
     columns: [
       APPLICATION_NO,
-      getTextToLocalMapping("Transit No"),
+      // getTextToLocalMapping("Transit No"),
       // PROPERTY_ID,
       OWNER_NAME,
       STATUS,

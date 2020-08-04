@@ -24,15 +24,13 @@ import {
 } from "../../../../ui-utils";
 import find from "lodash/find";
 import get from "lodash/get";
-//   import { rentedPropertyApplication } from "./searchResource/rentedPropertyApplication";
-//   import { searchApiCall } from "./searchResource/functions"
-//   import { searchResults } from "./searchResource/searchResults";
+import { estateApplication } from './searchResource/estateApplication';
+import {searchApiCall} from './searchResource/functions';
+import {searchResults} from './searchResource/searchResults';
+
 import {
   getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
-import { estateApplication } from './searchResource/estateApplication'
-import {} from './searchResource/functions'
-import {} from './searchResource/searchResults'
 
 const userInfo = JSON.parse(getUserInfo());
 const {
@@ -78,8 +76,8 @@ const estateSearchAndResult = {
       }
     ]
     dispatch(prepareFinalObject("searchScreen", {}))
-    //   searchApiCall(state, dispatch, true)
-      // getStatusList(action, state, dispatch, queryObject, "search", "components.div.children.estateApplication.children.cardContent.children.colonyContainer.children.status", "MasterRP")
+      searchApiCall(state, dispatch, true)
+      getStatusList(action, state, dispatch, queryObject, "search", "components.div.children.estateApplication.children.cardContent.children.colonyContainer.children.status", "MasterEsatate")
     return action
   },
   components: {
@@ -136,9 +134,9 @@ const estateSearchAndResult = {
             }
           }
         },
-          // estateApplication,
+          estateApplication,
         breakAfterSearch: getBreak(),
-        //   searchResults
+          searchResults
       }
     }
   }
