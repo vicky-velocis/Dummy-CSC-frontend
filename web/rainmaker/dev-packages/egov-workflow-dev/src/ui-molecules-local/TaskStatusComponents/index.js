@@ -27,10 +27,15 @@ export const getCurrentStatus = status => {
 };
 
 const TaskStatusComponents = ({ currentObj, index }) => {
-  var docs=currentObj.documents
+  
+   var docs=currentObj.documents
+  if( Array.isArray(docs)){
   docs.map(item=>{
     item.linkText="Download"
   })
+// }
+  }
+
   if (currentObj.moduleName === 'HORTICULTURE'){
     var role_name = ""
 
