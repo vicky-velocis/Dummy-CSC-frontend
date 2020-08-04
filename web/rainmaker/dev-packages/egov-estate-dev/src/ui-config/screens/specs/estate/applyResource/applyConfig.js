@@ -151,7 +151,7 @@ export const formwizardFifthStep = {
     id: "apply_form5"
   },
   children: {
-    ownerDocumentDetails
+    // ownerDocumentDetails
   },
   visible: false
 };

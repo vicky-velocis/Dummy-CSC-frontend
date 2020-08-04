@@ -18,9 +18,12 @@ import {
   setRoute
 } from "egov-ui-framework/ui-redux/app/actions";
 import {
-  some
+  some,
+  set
 } from "lodash";
 import "./index.css";
+import { ownerDocumentDetails } from './applyConfig';
+import { setDocumentData } from '../apply'
 
 export const DEFAULT_STEP = -1;
 export const PROPERTY_DETAILS_STEP = 0;
@@ -76,6 +79,21 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
+    const propertyOwners = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].ownerDetails"
+    );
+
+    for (var i = 0; i < propertyOwners.length; i++) {
+      set(
+        state.screenConfiguration.screenConfig,
+        `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}`,
+        ownerDocumentDetails
+      )
+
+      setDocumentData("", state, dispatch, i);
+    }
+
     // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
     //   return isFormValid = false;
     // }
@@ -113,7 +131,7 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].propertyDetails.applicationDocuments",
+      "Properties[0].ownerDetails.applicationDocuments",
       []
     );
 

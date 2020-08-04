@@ -22,7 +22,7 @@ import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import {
-  prepareDocumentTypeObj
+  prepareDocumentTypeObj, prepareDocumentTypeObjMaster
 } from "../utils";
 import {
   handleScreenConfigurationFieldChange as handleField
@@ -57,7 +57,7 @@ export const getMdmsData = async (dispatch, body) => {
   }
 };
 
-const setDocumentData = async (action, state, dispatch) => {
+export const setDocumentData = async (action, state, dispatch, owner) => {
   const documentTypePayload = [{
     moduleName: "PropertyServices",
     masterDetails: [{
@@ -90,12 +90,26 @@ const setDocumentData = async (action, state, dispatch) => {
       labelKey: item.description
     }
   }))
-  const documentTypes = prepareDocumentTypeObj(masterDocuments);
-  let applicationDocs = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Properties[0].ownerDetails.applicationDocuments",
-    []
-  ) || [];
+  var documentTypes;
+  var applicationDocs;
+  if (!owner) {
+    documentTypes = prepareDocumentTypeObj(masterDocuments);
+    applicationDocs = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].ownerDetails.applicationDocuments",
+      []
+    ) || [];
+  }
+  else {
+    documentTypes = prepareDocumentTypeObjMaster(masterDocuments, owner);
+    applicationDocs = get(
+      state.screenConfiguration.preparedFinalObject,
+      `Properties[0].ownerDetails[${owner}].applicationDocuments`,
+      []
+    ) || [];
+  }
+  
+  
   applicationDocs = applicationDocs.filter(item => !!item)
   let applicationDocsReArranged =
     applicationDocs &&
@@ -109,14 +123,14 @@ const setDocumentData = async (action, state, dispatch) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        "Properties[0].ownerDetails.applicationDocuments",
+        `Properties[0].ownerDetails[${owner}].applicationDocuments`,
         applicationDocsReArranged
       )
     );
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardFifthStep.children.ownerDocumentDetails.children.cardContent.children.documentList",
+      `components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${owner}.children.cardContent.children.documentList`,
       "props.inputProps",
       estateMasterDocuments
     )
@@ -168,7 +182,7 @@ const getData = async (action, state, dispatch) => {
       )
     )
   }
-  setDocumentData(action, state, dispatch)
+  // setDocumentData(action, state, dispatch)
 }
 
 const applyEstate = {
