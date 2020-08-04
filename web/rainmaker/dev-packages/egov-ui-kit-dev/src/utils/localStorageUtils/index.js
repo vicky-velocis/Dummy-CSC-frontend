@@ -22,7 +22,9 @@ export const getLocale = () => {
 export const getDefaultLocale = () => {
   return localStorage.getItem("defaultLocale");
 };
-
+export const getPGRSector = () => {
+  return localStorage.getItem("PGRSector");
+};
 
 export const getapplicationType = () => {
   return localStorage.getItem("applicationType");
@@ -63,6 +65,9 @@ export const setReturnUrl = (url) => {
 
 export const setDefaultLocale = (locale) => {
   localStorageSet("defaultLocale", locale);
+};
+export const setPGRSector = (locale) => {
+  localStorageSet("PGRSector", locale);
 };
 
 export const setapplicationType = (applicationTypeName) => {
