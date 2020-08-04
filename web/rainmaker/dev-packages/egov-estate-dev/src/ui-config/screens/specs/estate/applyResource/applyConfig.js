@@ -55,6 +55,22 @@ export const ownerDocumentDetails = getCommonCard({
   }
 });
 
+export const getOwnerDocumentDetails = (owner) => {
+  return getCommonCard({
+    ...documentCardConfig,
+    documentList: {
+      ...documentList,
+      props: {
+        ...documentList.props,
+        documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].applicationDocuments`,
+        uploadedDocumentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].uploadedDocsInRedux`,
+        tenantIdJsonPath: "Properties[0].tenantId",
+        removedJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].removedDocs`
+      }
+    }
+  });
+}
+
 
 export const stepsData = [{
     labelName: "Property Details",

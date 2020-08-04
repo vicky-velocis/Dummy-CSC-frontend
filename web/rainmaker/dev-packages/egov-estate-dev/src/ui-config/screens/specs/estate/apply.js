@@ -135,7 +135,7 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
       estateMasterDocuments
     )
   );
-  dispatch(prepareFinalObject("PropertiesTemp[0].applicationDocuments", documentTypes))
+  dispatch(prepareFinalObject(`PropertiesTemp[0].ownerDetails[${owner}].applicationDocuments`, documentTypes))
   dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 

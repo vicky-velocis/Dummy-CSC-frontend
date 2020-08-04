@@ -22,9 +22,23 @@ import {
   set
 } from "lodash";
 import "./index.css";
-import { ownerDocumentDetails } from './applyConfig';
-import { paymentDetails } from './paymentDetails';
-import { setDocumentData } from '../apply'
+import {
+  getOwnerDocumentDetails
+} from './applyConfig';
+import {
+  paymentDetails
+} from './paymentDetails';
+import {
+  setDocumentData
+} from '../apply'
+import {
+  getReviewOwner,
+  getReviewPurchaser,
+  getReviewPayment
+} from "./reviewProperty";
+import {
+  getReviewDocuments
+} from "./reviewDocuments";
 
 export const DEFAULT_STEP = -1;
 export const PROPERTY_DETAILS_STEP = 0;
@@ -84,8 +98,8 @@ const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Properties[0].ownerDetails"
     );
-
     for (var i = 0; i < propertyOwners.length; i++) {
+      const ownerDocumentDetails = getOwnerDocumentDetails(i)
       set(
         state.screenConfiguration.screenConfig,
         `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}`,
@@ -98,7 +112,49 @@ const callBackForNext = async (state, dispatch) => {
         paymentDetails
       )
 
+      const reviewOwnerDetails = getReviewOwner(true, i);
+      set(
+        reviewOwnerDetails,
+        "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
+        `Owner Details - ${propertyOwners[i].ownerName}`
+      )
+      set(
+        state.screenConfiguration.screenConfig,
+        `apply.components.div.children.formwizardSixthStep.children.reviewDetails.children.cardContent.children.reviewOwnerDetails_${i}`,
+        reviewOwnerDetails
+      )
+
+      const reviewPaymentDetails = getReviewPayment(true, i);
+      set(
+        reviewPaymentDetails,
+        "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
+        `Payment Details - ${propertyOwners[i].ownerName}`
+      )
+      set(
+        state.screenConfiguration.screenConfig,
+        `apply.components.div.children.formwizardSixthStep.children.reviewDetails.children.cardContent.children.reviewPaymentDetails_${i}`,
+        reviewPaymentDetails
+      )
+
       setDocumentData("", state, dispatch, i);
+    }
+
+    const propertyPurchasers = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].purchaserDetails"
+    )
+    for (var i = 0; i < propertyPurchasers.length; i++) {
+      const reviewPurchaserDetails = getReviewPurchaser(true, i);
+      set(
+        reviewPurchaserDetails,
+        "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
+        `Purchaser - ${propertyPurchasers[i].newOwnerName}`
+      )
+      set(
+        state.screenConfiguration.screenConfig,
+        `apply.components.div.children.formwizardSixthStep.children.reviewDetails.children.cardContent.children.reviewPurchaserDetails_${i}`,
+        reviewPurchaserDetails
+      )
     }
 
     // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
@@ -136,43 +192,63 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
-    const uploadedDocData = get(
+    const propertyOwners = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].ownerDetails.applicationDocuments",
-      []
+      "Properties[0].ownerDetails"
     );
 
-    const uploadedTempDocData = get(
-      state.screenConfiguration.preparedFinalObject,
-      "PropertiesTemp[0].applicationDocuments",
-      []
-    );
+    for (var i = 0; i < propertyOwners.length; i++) {
+      const uploadedDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        `Properties[0].ownerDetails[${i}].applicationDocuments`,
+        []
+      );
 
-    for (var y = 0; y < uploadedTempDocData.length; y++) {
-      if (
-        uploadedTempDocData[y].required &&
-        !some(uploadedDocData, {
-          documentType: uploadedTempDocData[y].name
-        })
-      ) {
-        // isFormValid = false;
+      const uploadedTempDocData = get(
+        state.screenConfiguration.preparedFinalObject,
+        `PropertiesTemp[0].ownerDetails[${i}].applicationDocuments`,
+        []
+      );
+
+      for (var y = 0; y < uploadedTempDocData.length; y++) {
+        if (
+          uploadedTempDocData[y].required &&
+          !some(uploadedDocData, {
+            documentType: uploadedTempDocData[y].name
+          })
+        ) {
+          isFormValid = false;
+        }
+      }
+      if (isFormValid) {
+        const reviewDocData =
+          uploadedDocData &&
+          uploadedDocData.map(item => {
+            return {
+              title: `EST_${item.documentType}`,
+              link: item.fileUrl && item.fileUrl.split(",")[0],
+              linkText: "View",
+              name: item.fileName
+            };
+          });
+        dispatch(
+          prepareFinalObject(`PropertiesTemp[0].ownerDetails[${i}].reviewDocData`, reviewDocData)
+        );
+
+        const reviewDocuments = getReviewDocuments(true, "apply", `PropertiesTemp[0].ownerDetails[${i}].reviewDocData`);
+        set(
+          reviewDocuments,
+          "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
+          `Documents - ${propertyOwners[i].ownerName}`
+        )
+        set(
+          state.screenConfiguration.screenConfig,
+          `apply.components.div.children.formwizardSixthStep.children.reviewDetails.children.cardContent.children.reviewDocuments_${i}`,
+          reviewDocuments
+        )
       }
     }
-    if (isFormValid) {
-      const reviewDocData =
-        uploadedDocData &&
-        uploadedDocData.map(item => {
-          return {
-            title: `EST_${item.documentType}`,
-            link: item.fileUrl && item.fileUrl.split(",")[0],
-            linkText: "View",
-            name: item.fileName
-          };
-        });
-      dispatch(
-        prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
-      );
-    }
+
   }
 
   if (activeStep === SUMMARY_STEP) {

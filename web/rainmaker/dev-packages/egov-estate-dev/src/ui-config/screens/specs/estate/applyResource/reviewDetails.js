@@ -6,8 +6,7 @@ import {
   getReviewProperty,
   getReviewOwner,
   getReviewPurchaser,
-  getReviewGroundRent,
-  getReviewServiceTax,
+  getReviewPayment,
   getReviewCourtCase
 } from "./reviewProperty";
 
@@ -19,9 +18,8 @@ import {
 const reviewPropertyDetails = getReviewProperty();
 const reviewOwnerDetails = getReviewOwner();
 const reviewPurchaserDetails = getReviewPurchaser();
-const reviewGroundRent = getReviewGroundRent();
-const reviewServiceTax = getReviewServiceTax();
-const reviewCourtCase = getReviewCourtCase();
+const reviewCourtCaseDetails = getReviewCourtCase();
+const reviewPaymentDetails = getReviewPayment();
 const reviewDocuments = getReviewDocuments();
 
 const header = getCommonTitle({
@@ -32,10 +30,9 @@ const header = getCommonTitle({
 export const reviewDetails = getCommonCard({
   header,
   reviewPropertyDetails,
-  reviewOwnerDetails,
-  reviewPurchaserDetails,
-  reviewGroundRent,
-  reviewServiceTax,
-  reviewCourtCase,
-  reviewDocuments
+  // reviewOwnerDetails,
+  // reviewPurchaserDetails,
+  // reviewPaymentDetails,
+  reviewCourtCaseDetails,
+  // reviewDocuments
 })
