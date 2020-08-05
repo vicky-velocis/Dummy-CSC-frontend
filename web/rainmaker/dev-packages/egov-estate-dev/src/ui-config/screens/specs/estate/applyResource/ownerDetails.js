@@ -57,7 +57,6 @@ const ownerNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].ownerDetails[0].ownerName"
 }
@@ -76,7 +75,6 @@ const fatherHusbandNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].ownerDetails[0].fatherHusbandName"
 }
@@ -130,7 +128,6 @@ const addressField = {
     multiline: true,
     rows: 2
   },
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].ownerDetails[0].address"
 }
@@ -166,7 +163,6 @@ const shareField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 5,
   jsonPath: "Properties[0].ownerDetails[0].share"
 }
@@ -184,7 +180,6 @@ const cpNumberField = {
     xs: 12,
     sm: 6
   },
-  minLength: 1,
   maxLength: 100,
   jsonPath: "Properties[0].ownerDetails[0].cpNumber"
 }

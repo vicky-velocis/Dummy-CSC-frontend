@@ -92,7 +92,7 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
   }))
   var documentTypes;
   var applicationDocs;
-  if (!owner) {
+  if (typeof owner == "undefined") {
     documentTypes = prepareDocumentTypeObj(masterDocuments);
     applicationDocs = get(
       state.screenConfiguration.preparedFinalObject,

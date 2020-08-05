@@ -40,7 +40,6 @@ const newOwnerNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].purchaserDetails[0].newOwnerName"
 }
@@ -59,7 +58,6 @@ const newOwnerFatherHusbandNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].purchaserDetails[0].newOwnerFatherHusbandName"
 }
@@ -82,7 +80,6 @@ const newOwnerAddressField = {
     multiline: true,
     rows: 2
   },
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].purchaserDetails[0].newOwnerAddress"
 }
@@ -118,7 +115,6 @@ const sellerNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].purchaserDetails[0].sellerName"
 }
@@ -137,7 +133,6 @@ const sellerFatherHusbandNameField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
   jsonPath: "Properties[0].purchaserDetails[0].sellerFatherHusbandName"
 }
@@ -156,7 +151,6 @@ const shareField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 5,
   jsonPath: "Properties[0].purchaserDetails[0].share"
 }
@@ -192,7 +186,6 @@ const registrationNumberField = {
     xs: 12,
     sm: 6
   },
-  minLength: 1,
   maxLength: 100,
   jsonPath: "Properties[0].purchaserDetails[0].registrationNumber"
 }

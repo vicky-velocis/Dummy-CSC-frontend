@@ -64,7 +64,7 @@ export const getOwnerDocumentDetails = (owner) => {
         ...documentList.props,
         documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].applicationDocuments`,
         uploadedDocumentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].uploadedDocsInRedux`,
-        tenantIdJsonPath: "Properties[0].tenantId",
+        tenantIdJsonPath: `Properties[0].tenantId`,
         removedJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].removedDocs`
       }
     }
