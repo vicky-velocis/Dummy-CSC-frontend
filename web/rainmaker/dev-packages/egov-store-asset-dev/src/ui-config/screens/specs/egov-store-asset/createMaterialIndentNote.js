@@ -4,7 +4,7 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
   import { footer } from "./creatematerialindentnoteResource/footer";
-  import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
+  import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
   import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
   import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialindentnoteResource/other-details";
@@ -15,9 +15,12 @@ import {
   import { commonTransform, objectArrayToDropdown } from "../utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
+  import {
+    IndentConfiguration
+  } from "../../../../ui-utils/sampleResponses";
   export const stepsData = [
     { labelName: "Indent Material Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE" },
     {
@@ -213,8 +216,63 @@ export const header = getCommonContainer({
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
-     
+     // SEt Default data
+
+     dispatch(
+      prepareFinalObject(
+        "materialIssues[0].materialIssueStatus",
+        IndentConfiguration().materialIssueStatus,
+      )
+    );
+    dispatch(
+      prepareFinalObject(
+        "materialIssues[0].issueType",
+        IndentConfiguration().IssueType.INDENTISSUE,
+      )
+    );
+    let indents = get(
+      state.screenConfiguration.preparedFinalObject,
+      `indents`,
+      []
+    );
+
+    let IndentId = getQueryArg(window.location.href, "IndentId");
     
+    indents = indents.filter(x=> x.id === IndentId)
+    //designation
+    dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
+    //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
+    if(indents && indents[0] )
+    { 
+      if(indents[0].issueStore.code !== undefined)
+      {    
+        dispatch(prepareFinalObject("materialIssues[0].toStore.code",indents[0].issueStore.code));
+        dispatch(prepareFinalObject("materialIssues[0].toStore.name",indents[0].issueStore.name));
+        dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
+        dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
+        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+        //get Material based on Indent
+        let material =[]
+        let indentDetails = get(
+          indents[0],
+          `indentDetails`,
+          []
+        );
+        for (let index = 0; index < indentDetails.length; index++) {
+          const element = indentDetails[index];
+          material.push( element.material)
+          
+        }
+        dispatch(prepareFinalObject("IndentMaterial",material));
+       
+      }
+    
+    else
+    dispatch(setRoute(`/egov-store-asset/search-indent`));
+    }
+    else{
+      dispatch(setRoute(`/egov-store-asset/search-indent`));
+    }
       return action;
     },
   

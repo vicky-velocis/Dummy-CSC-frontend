@@ -77,7 +77,7 @@ import {
           requestBody
         );
          if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=suppliermaster&mode=update&code=123456`));
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=suppliermaster&mode=update&code=${suppliers[0].name}`));
          }
     
       } catch (error) {
@@ -120,7 +120,7 @@ import {
           requestBody
         );
          if(response){
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=suppliermaster&mode=create&code=123456`));
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=suppliermaster&mode=create&code=${suppliers[0].name}`));
          }
     
       } catch (error) {
@@ -133,7 +133,7 @@ import {
   // Reset Button
   const callBackForReset = async (state, dispatch) => {
    
-    const textFields = ["type","code","name","address","contactNo","faxNo","website","email","description", "panNo", "tinNo", "cstNo","vatNo","contactPerson","contactPersonNo","gstNo"];
+    const textFields = ["type","code","name","address","contactNo","faxNo","website","email","description", "panNo", "tinNo","contactPerson","contactPersonNo","gstNo"];
 
     const bankInfoField =["bankCode","bankBranch","acctNo","ifsc","micr"];
 
@@ -291,23 +291,6 @@ import {
                 required:true,
                 jsonPath: "suppliers[0].type",
               }),
-          code: getTextField({
-            label: {
-              labelName: "Supplier Code",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CODE",
-            },
-            props: {
-              className: "applicant-details-error",
-            },
-            placeholder: {
-              labelName: "enter supplier code",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CODE_PLACEHOLDER",
-            },
-            required: true,
-            pattern: getPattern("non-empty-alpha-numeric"),
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "suppliers[0].code",
-          }),
           name: getTextField({
             label: {
               labelName: "Supplier Name",
@@ -325,6 +308,23 @@ import {
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
   
             jsonPath: "suppliers[0].name",
+          }),
+          code: getTextField({
+            label: {
+              labelName: "Supplier Code",
+              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CODE",
+            },
+            props: {
+              className: "applicant-details-error",
+            },
+            placeholder: {
+              labelName: "enter supplier code",
+              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CODE_PLACEHOLDER",
+            },
+            required: true,
+            pattern: getPattern("non-empty-alpha-numeric"),
+            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+            jsonPath: "suppliers[0].code",
           }),
           address: getTextField({
             label: {
@@ -460,38 +460,38 @@ import {
             errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
             jsonPath: "suppliers[0].tinNo",
           }),
-          cstNo: getTextField({
-            label: {
-              labelName: "C.S.T No.",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CST",
-            },
-            props: {
-              className: "applicant-details-error",
-            },
-            placeholder: {
-              labelName: "enter C.S.T No.",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CST_PLACEHOLDER",
-            },
-            pattern: getPattern("CSTNo"),
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "suppliers[0].cstNo",
-          }),
-          vatNo: getTextField({
-            label: {
-              labelName: "VAT No.",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_VAT",
-            },
-            props: {
-              className: "applicant-details-error",
-            },
-            placeholder: {
-              labelName: "enter VAT No.",
-              labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_VAT_PLACEHOLDER",
-            },
-            pattern: getPattern("VATNo"),
-            errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-            jsonPath: "suppliers[0].vatNo",
-          }),
+          // cstNo: getTextField({
+          //   label: {
+          //     labelName: "C.S.T No.",
+          //     labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CST",
+          //   },
+          //   props: {
+          //     className: "applicant-details-error",
+          //   },
+          //   placeholder: {
+          //     labelName: "enter C.S.T No.",
+          //     labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_CST_PLACEHOLDER",
+          //   },
+          //   pattern: getPattern("CSTNo"),
+          //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          //   jsonPath: "suppliers[0].cstNo",
+          // }),
+          // vatNo: getTextField({
+          //   label: {
+          //     labelName: "VAT No.",
+          //     labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_VAT",
+          //   },
+          //   props: {
+          //     className: "applicant-details-error",
+          //   },
+          //   placeholder: {
+          //     labelName: "enter VAT No.",
+          //     labelKey: "STORE_SUPPLIER_MASTER_SUPPLIER_VAT_PLACEHOLDER",
+          //   },
+          //   pattern: getPattern("VATNo"),
+          //   errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+          //   jsonPath: "suppliers[0].vatNo",
+          // }),
            gstNo: getTextField({
             label: {
               labelName: "GST No.",
@@ -599,7 +599,7 @@ import {
                optionValue: "code",
               optionLabel: "name",
             },
-            sourceJsonPath: "supplierMaster.banknames",
+            sourceJsonPath: "createScreenMdmsData.store-asset.BankCodes",
             placeholder: {
               labelName: "select Bank Name",
               labelKey: "STORE_SUPPLIER_MASTER_TYPE_SELECT",
@@ -694,7 +694,8 @@ import {
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "SupplierType", filter: "[?(@.active == true)]" }
+              { name: "SupplierType", filter: "[?(@.active == true)]" },
+              { name: "BankCodes", filter: "[?(@.active == true)]" }
             ],
   
           },
@@ -754,7 +755,7 @@ import {
 
   const getData = async (action, state, dispatch) => {
     await getMDMSData(action, state, dispatch);
-    await getBankName(action,state,dispatch);
+   // await getBankName(action,state,dispatch);
   };
 
 

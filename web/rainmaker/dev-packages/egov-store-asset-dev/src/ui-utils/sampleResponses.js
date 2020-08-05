@@ -471,3 +471,67 @@ export const sampleGetBill = () => {
     }
   };
 };
+export const IndentConfiguration =()=>{
+
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+    
+  }
+}
+
+export const NonIndentConfiguration =()=>{
+  return{
+    IssueType:{
+      
+      INDENTISSUE:"INDENTISSUE",
+      NONINDENTISSUE:"NONINDENTISSUE",
+      MATERIALOUTWARD:"MATERIALOUTWARD",
+  },
+  materialIssueStatus:"CREATED",
+  issuePurpose :"RETURNTOSUPPLIER"
+    
+  }
+}
+
+export const WorkFllowStatus = () => {
+  return {
+    
+    WorkFllowStatus: [
+      {
+        code:"CREATED",
+        value:"CREATED",
+      },
+      // {
+      //   code:"REJECTED",
+      //   value:"REJECTED",
+      // },
+      // {
+      //   code:"APPROVED",
+      //   value:"APPROVED",
+      // }
+
+    ]
+  }
+}
+
+export const ReceiptType = () => {
+  return {
+    
+    StoreReceiptType: 
+      {
+        PURCHASE_RECEIPT_TYPE:"PURCHASE RECEIPT",
+        MISCELLANEOUS_RECEIPT_TYPE:"MISCELLANEOUS RECEIPT",
+        INWARDRECEIPT_RECEIPT_TYPE:"INWARD RECEIPT",
+        OPENINGBALANCE_RECEIPT_TYPE:"OPENING BALANCE",
+      },
+      
+
+    
+  }
+}

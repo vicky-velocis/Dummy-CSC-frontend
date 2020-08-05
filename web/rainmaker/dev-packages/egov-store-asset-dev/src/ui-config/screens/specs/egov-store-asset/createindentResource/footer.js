@@ -21,8 +21,8 @@ import {
 const moveToReview = dispatch => {
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/reviewpricelist`
-      : `/egov-store-asset/reviewpricelist`;
+      ? `/egov-ui-framework/egov-store-asset/reviewindent`
+      : `/egov-store-asset/reviewindent`;
   dispatch(setRoute(reviewUrl));
 };
 
