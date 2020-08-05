@@ -150,7 +150,9 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant, se
 
 const setSearchResponseForNocCretificate = async (state, dispatch, applicationNumber, tenantId, secondNumber, ismailsend) => {
   let violatorDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail', []);
-  let numbertowords = numWords(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail.paymentDetails.paymentAmount', '0')) + ' ' + 'only.'
+  let numbertowords = numWords(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail.paymentDetails.paymentAmount', '0')) + ' ' + 'only'
+  let paydetails = get(state, 'screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].billAccountDetails',[]);
+   
   //const secondNumber = getQueryArg(window.location.href, "secondNumber");
   //NOC_Receipts
   let data = {
@@ -160,13 +162,19 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
     "amount": violatorDetails.paymentDetails.paymentAmount, //get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail.challanAmount', '0'),
     "amountInWord": numbertowords,
     "paymentMode": violatorDetails.paymentDetails.paymentMode === 'NA' ? 'Online' : violatorDetails.paymentDetails.paymentMode,
-    "memoNo": violatorDetails.challanId
+    "memoNo": violatorDetails.challanId,
+    "fineAmount": violatorDetails.challanAmount,
+    "storageAmount": violatorDetails.penaltyAmount,
+ 
   }
 
   let getFileStoreIdFor_RECEIPT = { "paymentEchallan": [data] }
   //http://192.168.12.116:8080/pdf-service/v1/_create?key=challanReceipt-ec&tenantId=pb
 
   let pdfCreateKey = "challanReceipt-ec";
+  if (violatorDetails.encroachmentType === "Seizure of Vehicles") {
+    pdfCreateKey = "challanReceiptVehicle-ec"
+  }
 
   const response1_RECEIPT = await getSearchResultsForNocCretificate([
     { key: "tenantId", value: tenantId },

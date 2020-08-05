@@ -26,7 +26,7 @@ const header = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "challanNumber")
+      number: getQueryArg(window.location.href, "applicationNumber")
     }
   }
 });

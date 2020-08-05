@@ -4,7 +4,7 @@ import {
 
 import {
   resetAllFields,
-   showHideAdhocPopup, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, callbackforsearchPreviewAction, generateReceiptNumber
+  showHideAdhocPopup, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, callbackforsearchPreviewAction, generateReceiptNumber, showHideDeleteConfirmation
 } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
@@ -22,12 +22,19 @@ import {
   localStorageGet, localStorageSet
 } from "egov-ui-kit/utils/localStorageUtils";
 import { callPGService } from "./footer";
+
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getDateInEpoch } from "egov-ui-framework/ui-utils/commons";
 import {
   toggleSpinner,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { onItemMasterRowClick } from "../../egov-echallan-item-master/searchResource/serachResultGrid";
+
+const ItemMasterDeleteRowClick = async(state,dispatch) => {
+ let rowdata =   get(state, 'screenConfiguration.preparedFinalObject.tableMetarowData', {});
+ onItemMasterRowClick(rowdata,true);
+};
 
 const callBackForwardAddToStore = async (state, dispatch) => {
 
@@ -35,7 +42,7 @@ const callBackForwardAddToStore = async (state, dispatch) => {
   let isdamageqtyavailable = true;
   let isIntactqtyavailable = true;
   let isremarkavailable = true;
-  
+
   if (isdamageqtyavailable && isIntactqtyavailable && isremarkavailable) {
     dispatch(toggleSpinner());
     let response = await addToStoreViolationData(state, dispatch, false);
@@ -295,8 +302,8 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         children: {
           div: getCommonHeader(
             {
-              labelName: "Select Gateway"
-              // labelKey: "NOC_SELECT_GATEWAY_BOX"
+              labelName: "Select Gateway",
+              labelKey: "EC_SELECT_GATEWAY_POPUP_HEADER"
             },
             {
               style: {
@@ -306,48 +313,6 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           )
         }
       },
-      // div2: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-      //   gridDefination: {
-      //     xs: 2,
-      //     sm: 2
-      //   },
-      //   props: {
-      //     style: {
-      //       width: "100%",
-      //       float: "right",
-      //       cursor: "pointer"
-      //     }
-      //   },
-      //   children: {
-      //     closeButton: {
-      //       componentPath: "Button",
-      //       props: {
-      //         style: {
-      //           float: "right",
-      //           color: "rgba(0, 0, 0, 0.60)"
-      //         }
-      //       },
-      //       children: {
-      //         previousButtonIcon: {
-      //           uiFramework: "custom-atoms",
-      //           componentPath: "Icon",
-      //           props: {
-      //             iconName: "close"
-      //           }
-      //         }
-      //       },
-      //       onClickDefination: {
-      //         action: "condition",
-      //         callBack: (state, dispatch) => {
-
-      //           showHideAdhocPopup(state, dispatch, "pay")
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
     }
   },
   adhocPenaltyCard: getCommonContainer(
@@ -355,12 +320,12 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
       CitizenPaymentGatewayContainer: getCommonContainer({
         CitizenPaymentGatewayCard: getSelectField({
           label: {
-            labelName: "Select Gateway"
-            // labelKey: "NOC_SELECT_GATEWAY"
+            labelName: "Select Gateway",
+            labelKey: "EC_SELECT_GATEWAY_POPUP_HEADER"
           },
           placeholder: {
-            labelName: "Select Gateway"
-            //labelKey: "NOC_SELECT_GATEWAY"
+            labelName: "Select Gateway",
+            labelKey: "EC_SELECT_GATEWAY_POPUP_HEADER"
           },
           gridDefination: {
             xs: 12,
@@ -432,8 +397,8 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
         },
         children: {
           previousButtonLabel: getLabel({
-            labelName: "Submit"
-            //labelKey: "NOC_SUBMIT"
+            labelName: "Submit",
+            labelKey: "EC_ECHALLAN_PAYMENT_GATEWAY_POPUP_BUTTON_SUBMIT"
           })
         },
         onClickDefination: {
@@ -483,7 +448,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
             }
           )
         }
-      },      
+      },
     }
   },
 
@@ -531,7 +496,7 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
-            set(state,'form',{});
+            set(state, 'form', {});
             set(state,
               "screenConfiguration.preparedFinalObject.violationDocuments",
               ""
@@ -786,7 +751,7 @@ export const adhocPopupReceivePayment = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             showHideAdhocPopupReceivePayment(state, dispatch, "search-preview");
-            set(state,'form',{});
+            set(state, 'form', {});
             resetField(state, dispatch);
             //  const objectJsonPath = `components.receivePayment.children.popup`;
 
@@ -817,6 +782,147 @@ export const adhocPopupReceivePayment = getCommonContainer({
         onClickDefination: {
           action: "condition",
           callBack: receivePaymentUpdateStatus
+        }
+      }
+    }
+  }
+});
+
+export const ItemMasterDeletionPopup = getCommonContainer({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        width: "100%",
+        float: "right"
+      }
+    },
+    children: {
+      div1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
+          }
+        },
+        children: {
+          div: getCommonHeader(
+            {
+              labelName: "Item Master",
+              labelKey: "EC_ITEM_MASTER_HEADER"
+            },
+            {
+              style: {
+                fontSize: "16px"
+              }
+            }
+          )
+        }
+      },      
+    }
+  },
+  subheader: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        width: "100%",
+        float: "right"
+      }
+    },
+    children: {
+      div2: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
+          }
+        },
+        children: {
+          div: getCommonSubHeader(
+            {
+              labelName: "Are you sure you want to delete Record?",
+              labelKey: "EC_DELETE_ITEM_MASTER_POPUP_CONFIRMATION_MESSAGE"
+            },
+            {
+              style: {
+                fontSize: "16px",
+                marginTop:"20px",
+                marginBottom:"20px",
+              }
+            }
+          )
+        }
+      },
+
+    }
+  },
+  div: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        width: "100%",
+        // textAlign: "right"
+      }
+    },
+    children: {
+      cancelButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          previousButtonLabel: getLabel({
+            labelName: "CANCEL",
+            labelKey: "EC_DELETE_ITEM_MASTER_POPUP_BUTTON_CANCEL"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            showHideDeleteConfirmation(state, dispatch, "search")
+          }
+        }
+      },
+      addButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px"
+          }
+        },
+        children: {
+          previousButtonLabel: getLabel({
+            labelName: "Yes",
+            labelKey: "EC_DELETE_ITEM_MASTER_POPUP_BUTTON_YES"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: ItemMasterDeleteRowClick
         }
       }
     }

@@ -10,6 +10,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "ui-redux/store";
 import "./index.css";
+import "./customfooter.css";
 import set from "lodash/set";
 
 let state = store.getState();
@@ -324,7 +325,7 @@ const receivePayment = async (state, dispatch) => {
         true,
         {
           labelName: "Payment cannot be made after 30 days of voilation date",
-          labelKey: ""
+          labelKey: "EC_VEHICLE_PAYMENT_30_DAYS"
         },
         "warning"
       ));
@@ -359,13 +360,22 @@ export const footer = getCommonApplyFooter({
   cancelButton: {
     componentPath: "Button",
     props: {
-      variant: "outlined",
+      variant: "contained",
       color: "primary",
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
-      }
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
+
+      },     
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       nextButtonIcon: {
@@ -379,7 +389,7 @@ export const footer = getCommonApplyFooter({
         labelName: "BACK",
         labelKey: "EC_ECHALLAN_COMMON_BUTTON_BACK"
       }),
-
+     
     },
     onClickDefination: {
       action: "condition",
@@ -394,8 +404,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       onGroundPaymentButtonLabel: getLabel({
@@ -428,8 +446,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       sendtoSoreButtonLabel: getLabel({
@@ -462,8 +488,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       ForwardButtonLabel: getLabel({
@@ -498,8 +532,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       returnandCloseButtonLabel: getLabel({
@@ -532,8 +574,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       addtoSoreButtonLabel: getLabel({
@@ -567,8 +617,16 @@ export const footer = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "40px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md:12,
     },
     children: {
       ForwardButtonLabel: getLabel({
@@ -595,4 +653,54 @@ export const footer = getCommonApplyFooter({
     }
   },
 
+});
+
+
+
+const toggleactionmenu = (state, dispatch) => {
+
+  var x = document.getElementById("custom-atoms-employeeFooter");
+  // if (x.style.display === "none") {
+  if (window.getComputedStyle(x).display === "none") {
+    x.style.display = "block";
+    x.classList.add("addpadding");
+  } else {
+    x.style.display = "none";
+    x.classList.remove("addpadding");
+  }
+}
+
+export const takeactionfooter = getCommonApplyFooter({
+  actionbutton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    children: {
+
+      pressguestbuttonLabel: getLabel({
+        labelName: "Take Action",
+        labelKey: "EC_TAKE_ACTION"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_up"
+        }
+      },
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        toggleactionmenu(state, dispatch)
+      }
+    },
+    visible: true
+  }
 });

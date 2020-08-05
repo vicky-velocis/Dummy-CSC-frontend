@@ -374,7 +374,7 @@ export const fetchItemListMasterData = async (action, state, dispatch) => {
       'code': item['itemName'] || "-",
       'name': item['itemName'] || "-"
     }));
-    data.push({'id': 'Other', 'code': 'Other', 'name': 'Other' })
+    data.push({ 'id': 'Other', 'code': 'Other', 'name': 'Other' })
 
     store.dispatch(prepareFinalObject("applyScreenMdmsData.egec.ItemList", data));
     //this is kept purposely if the data does not get at the load then it would be assigned.
@@ -452,6 +452,33 @@ export const fetchMasterChallanData = async (RequestBody) => {
     const response = await httpRequest(
       "post",
       "/ec-services/violation/_get",
+      "",
+      [],
+      data
+    );
+
+    return response;
+
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+
+};
+
+export const fetchSearchMasterChallanData = async (RequestBody) => {
+  let data = {
+    RequestBody
+  }
+  try {
+    const response = await httpRequest(
+      "post",
+      "/ec-services/violation/_search",
       "",
       [],
       data
@@ -569,17 +596,19 @@ export const fetchVendorDetails = async (state, dispatch) => {
 
     let vendordata = [];
     response.ResponseBody.forEach(vendor => {
-      let vendormodified = {
-        code: vendor.covNo,
-        name: vendor.name + "(" + vendor.covNo + ")",
-        fullname: vendor.name,
-        address: vendor.address,
-        fatherSpouseName: vendor.fatherSpouseName,
-        contactNumber: vendor.contactNumber,
-        numberOfViolation:vendor.numberOfViolation,
+      if (vendor.isActive) {
+        let vendormodified = {
+          code: vendor.covNo,
+          name: vendor.name + "(" + vendor.covNo + ")",
+          fullname: vendor.name,
+          address: vendor.address,
+          fatherSpouseName: vendor.fatherSpouseName,
+          contactNumber: vendor.contactNumber,
+          numberOfViolation: vendor.numberOfViolation,
+          active:vendor.isActive,
+        }
+        vendordata.push(vendormodified);
       }
-      vendordata.push(vendormodified);
-
     });
     return vendordata;
 
@@ -613,6 +642,8 @@ export const createVendorDetails = async (file) => {
   };
 
   try {
+    store.dispatch(toggleSpinner());
+
     if (file.insert.length > 0) {
       let response = await httpRequest(
         "post",
@@ -642,7 +673,7 @@ export const createVendorDetails = async (file) => {
         response = updateresponse;
       }
     }
-
+    store.dispatch(toggleSpinner());
     if (isUpdateSuccess || isCreateSuccess) {
       return { status: "success", message: response.responseInfo };
     } else {
@@ -667,7 +698,7 @@ export const createCitizenBasedonMobileNumber = async (state, dispatch) => {
       mobileNumber: payload.contactNumber,
       active: true,
       tenantId: tenantId,
-      permanentCity : tenantId,
+      permanentCity: getTenantId(),
       type: 'CITIZEN',
       permanentAddress: payload.address,
       correspondenceAddress: payload.address,
@@ -1118,7 +1149,8 @@ export const addToStoreViolationData = async (state, dispatch, status) => {
         isActive: true,
         itemUuid: "",
         itemName: element[0],
-        quantity: element[3],
+        damagedQuantity: element[4],
+        quantity: element[1],
         isVerified: status,
         isAuctioned: false,
         remark: element[5],
