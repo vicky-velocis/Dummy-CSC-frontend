@@ -22,7 +22,7 @@ const styles = theme => ({
 });
 
 const getEpochForDate = (date) => {
-  const dateSplit = date.split("-");
+  const dateSplit = date.split("/");
   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
 };
 
