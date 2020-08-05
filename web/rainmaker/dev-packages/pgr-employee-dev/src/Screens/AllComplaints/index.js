@@ -12,10 +12,10 @@ import orderby from "lodash/orderBy";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import isEmpty from "lodash/isEmpty";
 import isEqual from "lodash/isEqual";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getPGRSector,setPGRSector } from "egov-ui-kit/utils/localStorageUtils";
 import CountDetails from "./components/CountDetails";
 import "./index.css";
-import { Multiselect } from "multiselect-react-dropdown";
+import {Multiselect} from "multiselect-react-dropdown";
 
 class AllComplaints extends Component {
   constructor(props) {   
@@ -39,13 +39,14 @@ class AllComplaints extends Component {
 	}
 	};
     }
-   selectedSector = [];
+   selectedSector = window.localStorage.getItem('PGRSector')? JSON.parse(getPGRSector()).map(ele => ele.value).join() : [];
   state = {
     complaintNo: "",
     mobileNo: "",
     complaints: [],
     search: false,
     value: window.localStorage.getItem('tabValue')?parseInt(window.localStorage.getItem('tabValue')):0,
+    defaultSelectedSector: window.localStorage.getItem('PGRSector')? JSON.parse(getPGRSector()) : [],
     sortPopOpen: false,
     errorText: ""
   };
@@ -55,7 +56,11 @@ class AllComplaints extends Component {
       width: "30px"
     }
   };
+  functionToCheckQueryParams = (queryParams = []) =>{
 
+    return queryParams.filter(params => params.value)
+
+  }
   componentDidMount = async () => {
     let {
       role,
@@ -157,27 +162,35 @@ class AllComplaints extends Component {
         );
       } else if(role === "eo"){
         fetchComplaints(
-          [
+          this.functionToCheckQueryParams([
             {
               key: "status",
               value:"escalatedlevel1pending,escalatedlevel2pending"
+            },
+            {
+              key: "mohalla",
+              value:this.selectedSector
             }
-          ],
+          ]),
           true,
           true
         );
       }
       else {
         fetchComplaints(
-          [
+          this.functionToCheckQueryParams([
             {
               key: "status",
               value:
                 rawRole === "EMPLOYEE"
                   ? "assigned,reassignrequested"
                   : "assigned,open,reassignrequested"
+            },
+            {
+              key: "mohalla",
+              value:this.selectedSector
             }
-          ],
+          ]),
           true,
           true
         );
@@ -299,13 +312,18 @@ class AllComplaints extends Component {
       { key: "status", value: "assigned,open,reassignrequested,escalatedlevel1pending,escalatedlevel2pending" }
     ]);
     this.setState({ mobileNo: "", complaintNo: "", search: false,sector:[] });
+    setPGRSector("[]");
     this.selectedSector = [];    this.multiselectRef.current.resetSelectedValues();
   };
   onSelect(selectedList, selectedItem) {  
+      const sectorStr = JSON.stringify(selectedList);
+      setPGRSector(sectorStr);
       this.selectedSector = selectedList.map((sectorDetail) => sectorDetail.value );
     }
 
-    onRemove(selectedList, removedItem) {   
+    onRemove(selectedList, removedItem) {  
+    const sectorStr =JSON.stringify(selectedList);
+      setPGRSector(sectorStr); 
      this.selectedSector = selectedList.map( (sectorDetail) => sectorDetail.value );  
   }
   onChange = value => {
@@ -347,9 +365,10 @@ class AllComplaints extends Component {
     };
     return role === "ao" ? (
       <div>
+        <div>
         <div
-          className="sort-button rainmaker-displayInline"
-          style={{ padding: "20px 20px 0px 0px", justifyContent: "flex-end" }}
+          className="gro-search rainmaker-displayInline"
+          style={{ padding: "10px 20px 0px 0px", justifyContent: "flex-end" }}
         >
           <div
             className="rainmaker-displayInline"
@@ -391,6 +410,7 @@ class AllComplaints extends Component {
             sortPopOpen={sortPopOpen}
             closeSortDialog={closeSortDialog}
           />
+        </div>
         </div>
         <Tabs
           className="employee-complaints-tab"
@@ -743,7 +763,7 @@ class AllComplaints extends Component {
                     ref={this.multiselectRef}    
                     closeIcon={"circle"}     
                     placeholder={"Select Sector"} 
-                    selectedValues={this.state.sector}       
+                    selectedValues={this.state.defaultSelectedSector}       
                     avoidHighlightFirstOption             
                    />   
                   </div>     

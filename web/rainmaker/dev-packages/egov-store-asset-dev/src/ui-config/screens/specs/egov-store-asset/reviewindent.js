@@ -3,13 +3,13 @@ import {
     getCommonContainer,
     getCommonSubHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { PriceListReviewDetails } from "./viewpricelistResource/pricelist-review";
+  import { IndentListReviewDetails } from "./viewindentResource/indent-review";
   import { setRolesList } from "./viewMaterialMasterResource/functions";
   
   export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: "Material Mater - Summary",
-      labelKey: "STORE_MATERIAL_MASTER_SUMMARY_HEADER"
+      labelName: "Material  Indent Note",
+      labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE"
     })
   });
   
@@ -21,11 +21,11 @@ import {
     })
   });
   
-  const PriceListReview = PriceListReviewDetails(true);
+  const PriceListReview = IndentListReviewDetails(true);
   
   const screenConfig = {
     uiFramework: "material-ui",
-    name: "reviewmaterialmaster",
+    name: "reviewindent",
     beforeInitScreen: (action, state, dispatch) => {
       // COMMA SEPARATED ROLES IN REVIEW SCREEN
       setRolesList(state, dispatch);
@@ -50,13 +50,13 @@ import {
                 },
                 ...header
               },
-              subHeader: {
-                gridDefination: {
-                  xs: 12,
-                  sm: 10
-                },
-                ...subHeader
-              }
+              // subHeader: {
+              //   gridDefination: {
+              //     xs: 12,
+              //     sm: 10
+              //   },
+              //   ...subHeader
+              // }
             }
           },
           PriceListReview
