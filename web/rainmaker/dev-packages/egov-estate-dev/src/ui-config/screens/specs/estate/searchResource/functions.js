@@ -301,10 +301,10 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
 export const searchApiCall = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
   !!hideTable && showHideTable(false, dispatch, "search");
   let queryObject = [
-    {
-      key: "tenantId",
-      value: getTenantId()
-    },
+    // {
+    //   key: "tenantId",
+    //   value: getTenantId()
+    // },
     { key: "offset", value: offset },
     { key: "limit", value: limit }
   ];
@@ -366,10 +366,10 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit , hid
     const response = await getSearchResults(queryObject);
     try {
       let data = response.Properties.map(item => ({
-        [getTextToLocalMapping("Transit No")]: item.transitNumber || "-",
-        [getTextToLocalMapping("Colony")]: getLocaleLabels(item.colony, item.colony) || "-",
-        [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
-        [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
+        [getTextToLocalMapping("File Number")]: item.fileNumber || "-",
+        [getTextToLocalMapping("Sector Number")]: item.sectorNumber || "-",
+        [getTextToLocalMapping("Status")]: item.state || "-",
+        // [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
         [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
       dispatch(

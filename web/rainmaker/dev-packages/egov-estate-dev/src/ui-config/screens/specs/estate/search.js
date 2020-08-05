@@ -25,7 +25,7 @@ import {
 import find from "lodash/find";
 import get from "lodash/get";
 import { estateApplication } from './searchResource/estateApplication';
-import {searchApiCall} from './searchResource/functions';
+// import {searchApiCall} from './searchResource/functions';
 import {searchResults} from './searchResource/searchResults';
 
 import {
@@ -76,7 +76,7 @@ const estateSearchAndResult = {
       }
     ]
     dispatch(prepareFinalObject("searchScreen", {}))
-      searchApiCall(state, dispatch, true)
+      // searchApiCall(state, dispatch, true)
       getStatusList(action, state, dispatch, queryObject, "search", "components.div.children.estateApplication.children.cardContent.children.colonyContainer.children.status", "MasterEsatate")
     return action
   },

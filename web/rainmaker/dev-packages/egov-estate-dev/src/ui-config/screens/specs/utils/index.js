@@ -2526,6 +2526,18 @@ import {
           "TL_TYPE_NEW",
           localisationLabels
         );
+        case "File Number":
+          return getLocaleLabels(
+            "File Number",
+            "ESTATE_COMMON_TABLE_COL_FILE_NO",
+            localisationLabels
+          );
+      case "Sector Number": 
+            return getLocaleLabels(
+              "Sector Number",
+              "ESTATE_COMMON_TABLE_COL_SECTOR_NO",
+              localisationLabels
+            )
     }
   };
   

@@ -25,9 +25,8 @@ export const searchResults = {
   visible: true,
   props: {
     columns: [
-      getTextToLocalMapping("Transit No"),
-      getTextToLocalMapping("Colony"),
-      getTextToLocalMapping("Owner"),
+      getTextToLocalMapping("File Number"),
+      getTextToLocalMapping("Sector Number"),
       getTextToLocalMapping("Status"),
       LAST_MODIFIED_ON
     ],

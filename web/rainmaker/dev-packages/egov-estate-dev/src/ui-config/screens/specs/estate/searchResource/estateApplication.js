@@ -99,21 +99,21 @@ import {
     jsonPath: "searchScreen.transitNumber"
   }
 
-  const AllotmentNumberField = {
+  const sectorNumberField = {
     label: {
-        labelName: "Allotment Number",
-        labelKey: "ESTATE_ALLOTMENT_NUMBER_LABEL"
+        labelName: "Sector Number",
+        labelKey: "ESTATE_SECTOR_NUMBER_LABEL"
     },
     placeholder: {
-        labelName: "Enter Allotment Number",
-        labelKey: "ESTATE_ALLOTMENT_NUMBER_PLACEHOLDER"
+        labelName: "Enter Sector Number",
+        labelKey: "ESTATE_SECTOR_NUMBER_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
         sm: 6
     },
     required: false,
-    jsonPath: "searchScreen.AllotmentNumber"
+    jsonPath: "searchScreen.SECTORNumber"
   }
 
   const FileNameField = {
@@ -130,7 +130,7 @@ import {
         sm: 6
     },
     required: false,
-    jsonPath: "searchScreen.FileName"
+    jsonPath: "searchScreen.fileNumber"
   }
   
   const phoneNumberField = {
@@ -276,12 +276,12 @@ import {
       labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_PROPERTY_LABEL"
     }),
     colonyContainer: getCommonContainer({
-        FileName: getTextField(FileNameField),
+      fileNumber: getTextField(FileNameField),
       status: getSelectField(statusField)
     }),
     transitNumberContainer: getCommonContainer({
-        allotmentNumber: getTextField(AllotmentNumberField),
-      phone: getTextField(phoneNumberField)
+        sectorNumber: getTextField(sectorNumberField),
+      // phone: getTextField(phoneNumberField)
     }),
     button: getCommonContainer({
       buttonContainer: getCommonContainer(
