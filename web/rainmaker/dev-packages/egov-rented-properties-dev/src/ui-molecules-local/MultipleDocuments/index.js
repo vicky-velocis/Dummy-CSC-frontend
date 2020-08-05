@@ -67,13 +67,22 @@ class MultipleDocuments extends Component {
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
                   <Grid xs={12} sm={12} style={{textAlign: "left"}}>
                   <br></br>
-                    <LabelContainer   
+                
+                    {!btnhide && (<LabelContainer   
                       labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
                       style={documentTitle}
-                  />
+                  />)
+                    }
+                    {btnhide && 
+                      (<LabelContainer   
+                        labelName= {moment(datum.auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A')}
+                        style={documentTitle}
+                    />)
+                    }
+                    
 
                     </Grid> 
-                    {!btnhide && 
+                    {btnhide && 
                       (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
                   <Button  mt={1}  color="primary"  variant="contained"  
                   onClick={() => { 
