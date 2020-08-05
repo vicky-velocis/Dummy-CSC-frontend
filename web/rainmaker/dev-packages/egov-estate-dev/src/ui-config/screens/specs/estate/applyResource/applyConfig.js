@@ -5,7 +5,10 @@ import {
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  propertyDetails
+  propertyInfoDetails,
+  auctionDetails,
+  allotmentDetails,
+  additionalDetails
 } from './propertyDetails';
 import {
   ownerDetails
@@ -114,7 +117,10 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    propertyDetails
+    propertyInfoDetails,
+    auctionDetails,
+    allotmentDetails,
+    additionalDetails
   }
 };
 

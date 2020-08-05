@@ -70,14 +70,32 @@ const callBackForNext = async (state, dispatch) => {
   let hasFieldToaster = true;
 
   if (activeStep === PROPERTY_DETAILS_STEP) {
-    const isPropertyDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.propertyDetails.children.cardContent.children.detailsContainer.children",
+    const isPropertyInfoValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.propertyInfoDetails.children.cardContent.children.detailsContainer.children",
+      state,
+      dispatch,
+      "apply"
+    )
+    const isAuctionValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.auctionDetails.children.cardContent.children.detailsContainer.children",
+      state,
+      dispatch,
+      "apply"
+    )
+    const isAllotmentValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.allotmentDetails.children.cardContent.children.detailsContainer.children",
+      state,
+      dispatch,
+      "apply"
+    )
+    const isAdditionalValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.additionalDetails.children.cardContent.children.detailsContainer.children",
       state,
       dispatch,
       "apply"
     )
 
-    // if (!isPropertyDetailsValid) {
+    // if (!isPropertyInfoValid || !isAuctionValid || !isAllotmentValid || !isAdditionalValid) {
     //   return isFormValid = false;
     // }
   }
@@ -188,9 +206,9 @@ const callBackForNext = async (state, dispatch) => {
         )
       }
     }
-    if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
+    //   return isFormValid = false;
+    // }
   }
 
   if (activeStep === COURT_CASE_DETAILS_STEP) {

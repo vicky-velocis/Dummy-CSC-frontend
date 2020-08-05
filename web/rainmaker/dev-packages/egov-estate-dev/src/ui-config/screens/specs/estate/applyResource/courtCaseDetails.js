@@ -38,7 +38,6 @@ const estateOfficerCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.estateOfficerCourt"
 }
@@ -56,7 +55,6 @@ const commissionersCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.commissionersCourt"
 }
@@ -74,7 +72,6 @@ const chiefAdministratorsCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.chiefAdministratorsCourt"
 }
@@ -92,7 +89,6 @@ const advisorToAdminCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.advisorToAdminCourt"
 }
@@ -110,7 +106,6 @@ const honbleDistrictCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.honbleDistrictCourt"
 }
@@ -128,7 +123,6 @@ const honbleHighCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.honbleHighCourt"
 }
@@ -146,7 +140,6 @@ const honbleSupremeCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
   jsonPath: "Properties[0].courtCaseDetails.honbleSupremeCourt"
 }

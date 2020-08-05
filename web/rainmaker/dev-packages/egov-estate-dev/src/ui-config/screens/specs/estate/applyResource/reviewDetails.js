@@ -3,7 +3,10 @@ import {
   getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  getReviewProperty,
+  getReviewPropertyInfo,
+  getReviewAuction,
+  getReviewAllotment,
+  getReviewAdditional,
   getReviewOwner,
   getReviewPurchaser,
   getReviewPayment,
@@ -15,7 +18,10 @@ import {
 } from "./reviewDocuments";
 
 
-const reviewPropertyDetails = getReviewProperty();
+const reviewPropertyInfo = getReviewPropertyInfo();
+const reviewAuction = getReviewAuction();
+const reviewAllotment = getReviewAllotment();
+const reviewAdditional = getReviewAdditional();
 const reviewOwnerDetails = getReviewOwner();
 const reviewPurchaserDetails = getReviewPurchaser();
 const reviewCourtCaseDetails = getReviewCourtCase();
@@ -29,7 +35,10 @@ const header = getCommonTitle({
 
 export const reviewDetails = getCommonCard({
   header,
-  reviewPropertyDetails,
+  reviewPropertyInfo,
+  reviewAuction,
+  reviewAllotment,
+  reviewAdditional,
   // reviewOwnerDetails,
   // reviewPurchaserDetails,
   // reviewPaymentDetails,

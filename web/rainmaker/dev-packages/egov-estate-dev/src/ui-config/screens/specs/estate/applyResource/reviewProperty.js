@@ -129,7 +129,7 @@ export const headerDiv = {
   }
 }
 
-export const getReviewProperty = (isEditable = true) => {
+export const getReviewPropertyInfo = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
       ...headerDiv,
@@ -140,57 +140,22 @@ export const getReviewProperty = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Property Details",
-            labelKey: "EST_PROPERTY_DETAILS_HEADER"
+            labelName: "Property INFO",
+            labelKey: "EST_PROPERTY_INFO_HEADER"
           })
         },
         editSection: masterEntryEditSection(isEditable)
       }
     },
     viewFour: getCommonContainer({
-      allocationType: getLabelWithValue(
-        allocationTypeLabel, {
-          jsonPath: "Properties[0].propertyDetails.allocationType"
+      fileNumber: getLabelWithValue(
+        fileNumberLabel, {
+          jsonPath: "Properties[0].propertyDetails.fileNumber"
         }
       ),
-      modeOfAuction: getLabelWithValue(
-        modeOfAuctionLabel, {
-          jsonPath: "Properties[0].propertyDetails.modeOfAuction"
-        }
-      ),
-      schemeName: getLabelWithValue(
-        schemeNameLabel, {
-          jsonPath: "Properties[0].propertyDetails.schemeName"
-        }
-      ),
-      dateOfAuction: getLabelWithValue(
-        dateOfAuctionLabel, {
-          jsonPath: "Properties[0].propertyDetails.dateOfAuction"
-        }
-      ),
-      dateOfAllotment: getLabelWithValue(
-        dateOfAllotmentLabel, {
-          jsonPath: "Properties[0].propertyDetails.dateOfAllotment"
-        }
-      ),
-      allotmentNumber: getLabelWithValue(
-        allotmentNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.allotmentNumber"
-        }
-      ),
-      areaOfProperty: getLabelWithValue(
-        areaOfPropertyLabel, {
-          jsonPath: "Properties[0].propertyDetails.areaOfProperty"
-        }
-      ),
-      rate: getLabelWithValue(
-        rateLabel, {
-          jsonPath: "Properties[0].propertyDetails.rate"
-        }
-      ),
-      possessionDate: getLabelWithValue(
-        possessionDateLabel, {
-          jsonPath: "Properties[0].propertyDetails.possessionDate"
+      propertyType: getLabelWithValue(
+        propertyTypeLabel, {
+          jsonPath: "Properties[0].propertyDetails.propertyType"
         }
       ),
       category: getLabelWithValue(
@@ -213,19 +178,123 @@ export const getReviewProperty = (isEditable = true) => {
           jsonPath: "Properties[0].propertyDetails.sectorNumber"
         }
       ),
-      fileNumber: getLabelWithValue(
-        fileNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.fileNumber"
+      areaOfProperty: getLabelWithValue(
+        areaOfPropertyLabel, {
+          jsonPath: "Properties[0].propertyDetails.areaOfProperty"
         }
       ),
+      rate: getLabelWithValue(
+        rateLabel, {
+          jsonPath: "Properties[0].propertyDetails.rate"
+        }
+      ),
+      possessionDate: getLabelWithValue(
+        possessionDateLabel, {
+          jsonPath: "Properties[0].propertyDetails.possessionDate"
+        }
+      ),
+      allocationType: getLabelWithValue(
+        allocationTypeLabel, {
+          jsonPath: "Properties[0].propertyDetails.allocationType"
+        }
+      )
+    })
+  })
+}
+
+export const getReviewAuction = (isEditable = true) => {
+  return getCommonGrayCard({
+    headerDiv: {
+      ...headerDiv,
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelName: "Auction Details",
+            labelKey: "EST_AUCTION_DETAILS_HEADER"
+          })
+        },
+        editSection: masterEntryEditSection(isEditable)
+      }
+    },
+    viewFour: getCommonContainer({
+      modeOfAuction: getLabelWithValue(
+        modeOfAuctionLabel, {
+          jsonPath: "Properties[0].propertyDetails.modeOfAuction"
+        }
+      ),
+      schemeName: getLabelWithValue(
+        schemeNameLabel, {
+          jsonPath: "Properties[0].propertyDetails.schemeName"
+        }
+      ),
+      dateOfAuction: getLabelWithValue(
+        dateOfAuctionLabel, {
+          jsonPath: "Properties[0].propertyDetails.dateOfAuction"
+        }
+      )
+    })
+  })
+}
+
+export const getReviewAllotment = (isEditable = true) => {
+  return getCommonGrayCard({
+    headerDiv: {
+      ...headerDiv,
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelName: "Allotment Details",
+            labelKey: "EST_ALLOTMENT_DETAILS_HEADER"
+          })
+        },
+        editSection: masterEntryEditSection(isEditable)
+      }
+    },
+    viewFour: getCommonContainer({
+      dateOfAllotment: getLabelWithValue(
+        dateOfAllotmentLabel, {
+          jsonPath: "Properties[0].propertyDetails.dateOfAllotment"
+        }
+      ),
+      allotmentNumber: getLabelWithValue(
+        allotmentNumberLabel, {
+          jsonPath: "Properties[0].propertyDetails.allotmentNumber"
+        }
+      )
+    })
+  })
+}
+
+export const getReviewAdditional = (isEditable = true) => {
+  return getCommonGrayCard({
+    headerDiv: {
+      ...headerDiv,
+      children: {
+        header: {
+          gridDefination: {
+            xs: 12,
+            sm: 10
+          },
+          ...getCommonSubHeader({
+            labelName: "Additional Details",
+            labelKey: "EST_ADDITIONAL_DETAILS_HEADER"
+          })
+        },
+        editSection: masterEntryEditSection(isEditable)
+      }
+    },
+    viewFour: getCommonContainer({
       lastNocDate: getLabelWithValue(
         lastNocDateLabel, {
           jsonPath: "Properties[0].propertyDetails.lastNocDate"
-        }
-      ),
-      propertyType: getLabelWithValue(
-        propertyTypeLabel, {
-          jsonPath: "Properties[0].propertyDetails.propertyType"
         }
       ),
       serviceCategory: getLabelWithValue(
