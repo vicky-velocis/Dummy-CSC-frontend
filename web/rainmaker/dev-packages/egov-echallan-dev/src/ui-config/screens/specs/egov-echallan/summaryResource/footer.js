@@ -2,7 +2,7 @@ import { getLabel, getTodaysDateInYMD, convertEpochToDate } from "egov-ui-framew
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import { createUpdateNocApplication, UpdateChallanStatus, addToStoreViolationData, addToStoreReturnCloseData } from "../../../../../ui-utils/commons";
-import { getCommonApplyFooter, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, callbackforsearchPreviewAction, getDiffernceBetweenTodayDate, getTextToLocalSeizedItemDetailHeader } from "../../utils";
+import { getCommonApplyFooter, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, callbackforsearchPreviewAction, getDiffernceBetweenTodayDate, getTextToLocalSeizedItemDetailHeader, showHideChallanConfirmation } from "../../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
   toggleSnackbar, prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
@@ -35,29 +35,11 @@ const updateonGroundPayment = async (state, dispatch) => {
       )
     );
   } else {
-    let challanClose = window.confirm('Are you sure you want to Return & Close the Challan?')
-    if (challanClose) {
-      let response = await UpdateChallanStatus(state, dispatch, "CLOSED");
-      if (response.status === 'success') {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Challan has been closed", labelKey: "EC_TOASTER_ON_GROUND_PAYMENT_SUCCESS" },
-            "success"
-          )
-        );
-        callbackforsearchPreviewAction(state, dispatch);
-      }
-      else {
-        dispatch(
-          toggleSnackbar(
-            true,
-            { labelName: "Please try after sometime", labelKey: "EC_TOASTER_ON_GROUND_PAYMENT_ERROR" },
-            "error"
-          )
-        );
-      }
-    }
+    showHideChallanConfirmation(state, dispatch, "search-preview");
+    // let challanClose = window.confirm('Are you sure you want to Return & Close the Challan?')
+    // if (challanClose) {
+
+    // }
   }
 };
 
@@ -256,7 +238,7 @@ const callBackAddToStore = async (state, dispatch, isVerified) => {
       {
         labelName: intactDamageMessage,
         labelKey: ""
-      }, "warning"));    
+      }, "warning"));
   } else if (isdamageqtyavailable) {
     showHideAdhocPopupForwardUploadDocs(state, dispatch, "search-preview")
     set(state,
@@ -370,12 +352,12 @@ export const footer = getCommonApplyFooter({
         border: "1px solid #ddd",
         color: "#000"
 
-      },     
+      },
     },
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       nextButtonIcon: {
@@ -389,7 +371,7 @@ export const footer = getCommonApplyFooter({
         labelName: "BACK",
         labelKey: "EC_ECHALLAN_COMMON_BUTTON_BACK"
       }),
-     
+
     },
     onClickDefination: {
       action: "condition",
@@ -413,7 +395,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       onGroundPaymentButtonLabel: getLabel({
@@ -455,7 +437,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       sendtoSoreButtonLabel: getLabel({
@@ -497,7 +479,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       ForwardButtonLabel: getLabel({
@@ -541,7 +523,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       returnandCloseButtonLabel: getLabel({
@@ -583,7 +565,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       addtoSoreButtonLabel: getLabel({
@@ -626,7 +608,7 @@ export const footer = getCommonApplyFooter({
     gridDefination: {
       xs: 12,
       sm: 12,
-      md:12,
+      md: 12,
     },
     children: {
       ForwardButtonLabel: getLabel({

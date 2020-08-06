@@ -234,11 +234,11 @@ export const searchTextViewSeizureReport = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            // margin: "8px",
-            backgroundColor: "rgb(249, 122, 81)",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
             width: "80%",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -268,7 +268,8 @@ export const searchTextViewSeizureReport = getCommonCard({
             border: "1px solid rgb(254, 122, 81)",
             borderRadius: "2px",
             width: "80%",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {

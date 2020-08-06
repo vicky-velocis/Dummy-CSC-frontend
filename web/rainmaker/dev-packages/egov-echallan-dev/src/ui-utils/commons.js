@@ -423,6 +423,10 @@ export const createUpdateItemMaster = async (state, dispatch, status, isActive) 
   let method = ItemID ? "UPDATE" : "CREATE";
   try {
     let payload = get(state.screenConfiguration.preparedFinalObject, "ItemMaster", []);
+    let itemname = payload.itemName.replace(/(\r\n|\n|\r)/gm, "").trim();
+    let itemDesc = payload.description.replace(/(\r\n|\n|\r)/gm, "").trim();
+    set(payload, "itemName", itemname);
+    set(payload, "description", itemDesc);
     set(payload, "tenantId", getTenantId());
     set(payload, "approvalStatus", status);
     set(payload, "isActive", isActive);
@@ -605,7 +609,7 @@ export const fetchVendorDetails = async (state, dispatch) => {
           fatherSpouseName: vendor.fatherSpouseName,
           contactNumber: vendor.contactNumber,
           numberOfViolation: vendor.numberOfViolation,
-          active:vendor.isActive,
+          active: vendor.isActive,
         }
         vendordata.push(vendormodified);
       }

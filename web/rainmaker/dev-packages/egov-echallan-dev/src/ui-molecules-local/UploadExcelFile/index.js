@@ -9,7 +9,7 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, lSRemoveItem, lSRemoveItemlocal } from "egov-ui-kit/utils/localStorageUtils";
-
+import "./index.css";
 import { createVendorDetails } from "../../ui-utils/commons";
 import { searchVendorResultErrorResponse } from "../../ui-config/screens/specs/egov-echallan-vendor-master/searchResource/searchResultApiResponse";
 
@@ -320,10 +320,10 @@ class UploadExcelFile extends React.Component {
             />
           </div>
 
-          <div className="col-md-2 col-sm-2 col-xs-12">
+          <div className="col-md-2 col-sm-2 col-xs-12 ">
             <button
               type="submit"
-              className="MuiButtonBase-root-47 MuiButton-root-21 MuiButton-contained-32 MuiButton-containedPrimary-33 MuiButton-raised-35 MuiButton-raisedPrimary-36"
+              className="MuiButtonBase-root-47 MuiButton-root-21 MuiButton-contained-32 MuiButton-containedPrimary-33 MuiButton-raised-35 MuiButton-raisedPrimary-36 uploadExcelBtn"
               style={{
                 color: "white",
                 margin: "8px",

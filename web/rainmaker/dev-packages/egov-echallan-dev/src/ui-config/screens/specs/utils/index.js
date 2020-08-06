@@ -251,6 +251,16 @@ export const showHideDeleteConfirmation = (state, dispatch, screenKey) => {
 };
 
 
+export const showHideChallanConfirmation = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.deleteConfirmation.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.deleteConfirmation", "props.open", !toggle)
+  );
+};
 
 export const showHideAdhocPopupVendorError = (state, dispatch, screenKey) => {
   let toggle = get(

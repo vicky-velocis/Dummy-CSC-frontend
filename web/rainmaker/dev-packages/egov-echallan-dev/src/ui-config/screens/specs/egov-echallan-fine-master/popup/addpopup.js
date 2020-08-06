@@ -655,7 +655,8 @@ export const adhocPopup = getCommonContainer({
             borderRadius: "2px",
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
 
@@ -707,12 +708,9 @@ export const adhocPopup = getCommonContainer({
             borderRadius: "2px",
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
-            //   color: "white",
-            //   borderRadius: "2px",
-            //   width: "auto",
-            //   height: "48px",
-            //   marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
+
           }
         },
 
@@ -759,7 +757,8 @@ export const adhocPopup = getCommonContainer({
             borderRadius: "2px",
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
 
@@ -806,7 +805,8 @@ export const adhocPopup = getCommonContainer({
             borderRadius: "2px",
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
 

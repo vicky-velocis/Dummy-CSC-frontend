@@ -25,9 +25,15 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
   let encroachmentType = get(
     state.screenConfiguration.preparedFinalObject,
     "searchViewSeizureReport[0].EncroachmentType", ''
+  ) === '0' ? '' : get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchViewSeizureReport[0].EncroachmentType", ''
   ).trim();
 
   let sector = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchViewSeizureReport[0].sector", ''
+  ) === '0' ? '' : get(
     state.screenConfiguration.preparedFinalObject,
     "searchViewSeizureReport[0].sector", ''
   ).trim();
@@ -35,7 +41,10 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
   let siName = get(
     state.screenConfiguration.preparedFinalObject,
     "searchViewSeizureReport[0].SIName", ''
-  )
+  ) === '0' ? '' : get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchViewSeizureReport[0].SIName", ''
+  ).trim();
 
   let challanStatus = get(
     state.screenConfiguration.preparedFinalObject,
@@ -43,7 +52,7 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
   ) === '0' ? '' : get(
     state.screenConfiguration.preparedFinalObject,
     "searchViewSeizureReport[0].Status", ''
-  );
+  ).trim();
 
   if ((fromdate === undefined || fromdate === '')) {
     dispatch(

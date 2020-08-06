@@ -126,9 +126,14 @@ export const serachResultGrid = {
             return (
               <React.Fragment>
                 <Button onClick={() => {
-                 showHideAdhocPopupTrue(store.getState(),store.dispatch,"search")
+                  onRowClick: (row, index) => {
+                    onRowClick(row);
+                    // if (localStorage.getItem('fineDeletedCalled') === 'false') {
+                    //   onRowClick(row, false);
+                    // }
+                  }
                   //onRowClick(tableMeta.rowData, false)
-                }} style={{paddingTop: "0px", paddingBottom: "16px"}} >
+                }} style={{ paddingTop: "0px", paddingBottom: "16px" }} >
                   <span>
                     <i class="material-icons">edit</i>
                     {/* Edit */}
@@ -237,7 +242,6 @@ export const serachResultGrid = {
 };
 
 const onRowClick = rowData => {
-
   let userInfo = JSON.parse(getUserInfo());
   if (checkForRole(roles, 'challanHOD')) {
     isVisibility(true)
@@ -248,19 +252,26 @@ const onRowClick = rowData => {
   let isEditAllowed = false;
   if (rowData[7] === "PENDING" && checkForRole(roles, 'challanHOD')) {
     isEditAllowed = true;
+    showHideAdhocPopupTrue(store.getState(), store.dispatch, "search");
   } else if ((rowData[7] === "APPROVED" || rowData[7] === "REJECTED") && checkForRole(roles, 'challanEAO')) {
     isEditAllowed = true;
+    showHideAdhocPopupTrue(store.getState(), store.dispatch, "search")
+  } else if (rowData[7] === "PENDING" && checkForRole(roles, 'challanEAO')) {
+  store.dispatch(
+      handleField("search", "components.adhocDialog", "props.open", false)
+    );
   }
+
   // else if (rowData[5] === "REJECTED" && roles[0].code === 'challanEAO') {
   //   isEditAllowed = true;
   // }
+  const state = store.getState();
   if (isEditAllowed) {
-    const state = store.getState();
     let toggle = get(
       state.screenConfiguration.screenConfig["create"],
       "components.adhocDialog.props.open",
       false
-    );
+    )
 
     store.dispatch(prepareFinalObject("FineMaster", {}));
     store.dispatch(prepareFinalObject("FineMaster.fineUuid", rowData[0]));
@@ -288,6 +299,11 @@ const onRowClick = rowData => {
     );
   }
   else {
+    get(
+      state.screenConfiguration.screenConfig["create"],
+      "components.adhocDialog.props.open",
+      false
+    );
     store.dispatch(
       toggleSnackbar(
         true,
@@ -427,14 +443,14 @@ const isVisibility = (isVisible) => {
         "props.visible",
         true
       )
-    ),
-      store.dispatch(
-        handleField(
-          "search",
-          "components.adhocDialog.children.popup.children.header.children.div1.children.div1",
-          "visible",
-          isVisible
-        )
+    );
+    store.dispatch(
+      handleField(
+        "search",
+        "components.adhocDialog.children.popup.children.header.children.div1.children.div1",
+        "visible",
+        isVisible
       )
+    )
   }
 };

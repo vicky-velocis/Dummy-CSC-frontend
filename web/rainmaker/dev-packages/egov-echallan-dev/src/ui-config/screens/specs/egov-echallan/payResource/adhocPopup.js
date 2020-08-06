@@ -4,7 +4,9 @@ import {
 
 import {
   resetAllFields,
-  showHideAdhocPopup, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, callbackforsearchPreviewAction, generateReceiptNumber, showHideDeleteConfirmation
+  showHideAdhocPopup, showHideAdhocPopupReceivePayment, showHideAdhocPopupForwardUploadDocs, 
+  callbackforsearchPreviewAction, generateReceiptNumber, showHideDeleteConfirmation,
+  showHideChallanConfirmation
 } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
@@ -13,7 +15,7 @@ import { createEstimateData } from "../../utils";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import jp from "jsonpath";
 import set from "lodash/set";
-import { UpdateStatus, addToStoreViolationData } from "../../../../../ui-utils/commons";
+import { UpdateStatus, addToStoreViolationData, UpdateChallanStatus } from "../../../../../ui-utils/commons";
 import { documentDetails } from "./documentDetails";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import store from "redux/store";
@@ -211,6 +213,28 @@ const createOfflinePaymentObj = async (state, dispatch) => {
   return responses;
 }
 
+const challanCloseOnGround = async (state,dispatch)=> {
+  let response = await UpdateChallanStatus(state, dispatch, "CLOSED");
+  if (response.status === 'success') {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Challan has been closed", labelKey: "EC_TOASTER_ON_GROUND_PAYMENT_SUCCESS" },
+        "success"
+      )
+    );
+    callbackforsearchPreviewAction(state, dispatch);
+  }
+  else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "Please try after sometime", labelKey: "EC_TOASTER_ON_GROUND_PAYMENT_ERROR" },
+        "error"
+      )
+    );
+  }
+}
 
 const receivePaymentUpdateStatus = async (state, dispatch) => {
   let isFormValid = get(state, 'screenConfiguration.preparedFinalObject.eChallanReceivePayament[0].paymentMode', '') === '' ? false : true;
@@ -483,7 +507,8 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           style: {
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -511,7 +536,8 @@ export const adhocPopupStockViolationForwardHOD = getCommonContainer({
           color: "primary",
           style: {
             minWidth: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -738,7 +764,8 @@ export const adhocPopupReceivePayment = getCommonContainer({
           style: {
             minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -770,7 +797,8 @@ export const adhocPopupReceivePayment = getCommonContainer({
           color: "primary",
           style: {
             minWidth: "180px",
-            height: "48px"
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -929,3 +957,143 @@ export const ItemMasterDeletionPopup = getCommonContainer({
   }
 });
 
+export const challanDeletionPopup = getCommonContainer({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        width: "100%",
+        float: "right"
+      }
+    },
+    children: {
+      div1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
+          }
+        },
+        children: {
+          div: getCommonHeader(
+            {
+              labelName: "Manage Challan",
+              labelKey: "EC_MANAGE_CHALLAN"
+            },
+            {
+              style: {
+                fontSize: "16px"
+              }
+            }
+          )
+        }
+      },      
+    }
+  },
+  subheader: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        width: "100%",
+        float: "right"
+      }
+    },
+    children: {
+      div2: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
+          }
+        },
+        children: {
+          div: getCommonSubHeader(
+            {
+              labelName: "Are you sure you want to Return & Close the Challan?",
+              labelKey: "EC_CHALLAN_RETURN_CLOSE_POPUP_CONFIRMATION_MESSAGE"
+            },
+            {
+              style: {
+                fontSize: "16px",
+                marginTop:"20px",
+                marginBottom:"20px",
+              }
+            }
+          )
+        }
+      },
+
+    }
+  },
+  div: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
+      style: {
+        width: "100%",
+        // textAlign: "right"
+      }
+    },
+    children: {
+      cancelButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          previousButtonLabel: getLabel({
+            labelName: "CANCEL",
+            labelKey: "EC_CHALLAN_POPUP_BUTTON_CANCEL"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            showHideChallanConfirmation(state, dispatch, "search-preview")
+          }
+        }
+      },
+      addButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px"
+          }
+        },
+        children: {
+          previousButtonLabel: getLabel({
+            labelName: "Yes",
+            labelKey: "EC_CHALLAN_POPUP_BUTTON_YES"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: challanCloseOnGround
+        }
+      }
+    }
+  }
+});

@@ -188,7 +188,12 @@ const AddAuctiontoGrid = async (state, dispatch, apply) => {
       );
     } else {
       dispatch(
-        toggleSnackbar(true, "Auction Date should be greater then the Violation Date",
+
+        toggleSnackbar(true,
+          {
+            labelName: "Auction Date should be greater then the Violation Date",
+            labelKey: "EC_AUCTION_DATE_GREATER_VIOLATIOM_DATE"
+          },
           "warning")
       );
     }

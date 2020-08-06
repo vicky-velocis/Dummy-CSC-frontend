@@ -1,7 +1,7 @@
 //import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 //import { getGridData1,getCategory1,getYear1,getMonth1,getrepotforproccessingTime1,getSectordata1,getSubCategory1,getUpdatePriceBook1,getMasterGridData1,getGridDataSellMeat1,getGridDataRoadcut1,getGridDataAdvertisement1} from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch, fetchRoleCode, truncData } from "../../utils/index";
+import { convertEpochToDate, convertDateToEpoch, fetchRoleCode, truncData, getSiNameDetails } from "../../utils/index";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 import { validateFields, getMdmsEncroachmentSectorData } from "../../utils";
@@ -9,7 +9,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { fetchMasterChallanData, fetchViewSeizureData, fetchPaymentDetailsData, fetchStoreItemHODMasterChallanData, fetchSearchMasterChallanData } from "../../../../../ui-utils/commons";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-import { getTodaysDateInYMD } from "egov-ui-framework/ui-utils/commons";
+import { getTodaysDateInYMD } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 export const searchResultApiResponse = async (state, dispatch) => {
 
@@ -26,9 +26,15 @@ export const searchResultApiResponse = async (state, dispatch) => {
   let encroachmentType = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteriaManageChallan[0].EncroachmentType", ''
+  ) === '0' ? '' : get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchCriteriaManageChallan[0].EncroachmentType", ''
   ).trim();
 
   let sector = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchCriteriaManageChallan[0].sector", ''
+  ) === '0' ? '' : get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteriaManageChallan[0].sector", ''
   ).trim();
@@ -36,14 +42,18 @@ export const searchResultApiResponse = async (state, dispatch) => {
   let siName = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteriaManageChallan[0].SIName", ''
-  )
+  ) === '0' ? '' : get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchCriteriaManageChallan[0].SIName", ''
+  ).trim();
+
   let challanStatus = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteriaManageChallan[0].Status", ''
   ) === '0' ? '' : get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteriaManageChallan[0].Status", ''
-  );
+  ).trim();
 
   if ((fromdate === undefined || fromdate === '')) {
     dispatch(
@@ -91,8 +101,9 @@ export const searchResultApiResponse = async (state, dispatch) => {
     }
     try {
       let response;
-      await getMdmsEncroachmentSectorData("", state, dispatch);
-
+      await getMdmsEncroachmentSectorData("", state, dispatch).then(response => {
+        getSiNameDetails("", state, dispatch);
+      })
       response = await fetchSearchMasterChallanData(requestBody);
 
       if (response) {

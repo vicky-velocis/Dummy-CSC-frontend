@@ -23,7 +23,7 @@ import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResul
 import { setEncroachmentType, getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import "./index.css";
-import { adhocPopupReceivePayment, adhocPopupStockViolationForwardHOD } from "./payResource/adhocPopup";
+import { adhocPopupReceivePayment, adhocPopupStockViolationForwardHOD, challanDeletionPopup } from "./payResource/adhocPopup";
 
 let roles = JSON.parse(getUserInfo()).roles;
 
@@ -823,7 +823,7 @@ const setSearchResponseForNocCretificate = async (
         // let articleobj = "article" + [index + 1];
         let artilceName = "(" + integer_to_roman(index + 1) + ")  " + truncData(element.itemName, 25) + " - " + element.quantity + " - " + truncData(element.remark, 25);
         if (artilceName.length < 80) {
-          while (artilceName.length < 155) {
+          while (artilceName.length < 160) {
             artilceName = artilceName + " ";
           }
         }
@@ -1065,6 +1065,20 @@ const screenConfig = {
       children: {
         popup: adhocPopupStockViolationForwardHOD
       }
+    },
+    deleteConfirmation: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "DeleteConfirmationContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: challanDeletionPopup
+      },
+      visible: true
     },
   }
 };

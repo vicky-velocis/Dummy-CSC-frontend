@@ -17,6 +17,7 @@ const viewErrorButton = getCommonContainer({
                 color: "#3366BB",
                 boxShadow: "unset",
                 backgroundColor: "unset",
+                textDecoration: "underline"
             }
         },
         children: {
