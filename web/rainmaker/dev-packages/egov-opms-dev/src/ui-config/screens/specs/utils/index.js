@@ -117,35 +117,34 @@ export const validateFieldsAdv = (
 
   let isFormValid = true;
   for (var variable in fields) {
-    if(variable==="exemptedCategory")
-    {
-      
+    if (variable === "exemptedCategory") {
+
     }
-    else{
-    if (fields.hasOwnProperty(variable)) {
-      if (
-        fields[variable] &&
-        fields[variable].props &&
-        (fields[variable].props.disabled === undefined ||
-          !fields[variable].props.disabled) &&
-        !validate(
-          screen,
-          {
-            ...fields[variable],
-            value: get(
-              state.screenConfiguration.preparedFinalObject,
-              fields[variable].jsonPath
-            )
-          },
-          dispatch,
-          true
-        )
-      ) {
-        isFormValid = false;
+    else {
+      if (fields.hasOwnProperty(variable)) {
+        if (
+          fields[variable] &&
+          fields[variable].props &&
+          (fields[variable].props.disabled === undefined ||
+            !fields[variable].props.disabled) &&
+          !validate(
+            screen,
+            {
+              ...fields[variable],
+              value: get(
+                state.screenConfiguration.preparedFinalObject,
+                fields[variable].jsonPath
+              )
+            },
+            dispatch,
+            true
+          )
+        ) {
+          isFormValid = false;
+        }
       }
     }
   }
-}
   return isFormValid;
 };
 
@@ -575,7 +574,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
 };
 
 
-export const createDemandForRoadCutNOC = async (state, ispatch, applicationNumber, tenantId) => {
+export const createDemandForRoadCutNOC = async (state, ispatch, applicationNumber, tenantId, divisionCode) => {
   try {
     let amount =
       get(state.screenConfiguration.preparedFinalObject, "nocApplicationDetail.[0].amount");
@@ -609,7 +608,8 @@ export const createDemandForRoadCutNOC = async (state, ispatch, applicationNumbe
             "bankPerformanceRoadCut": performancebankguaranteecharges,
             "gstRoadCut": gstamount,
             "owners": [userInfo],
-            "tenantId": getOPMSTenantId()
+            "tenantId": getOPMSTenantId(),
+            "roadCutDivision": divisionCode
           },
           "applicationNumber": applicationNumber,
           "tenantId": getOPMSTenantId()
@@ -1132,16 +1132,16 @@ export const getOPMSPattern = type => {
     //   return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”]{1,128}$/i;
     case "BadgeNumber":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}&#,\[\]*.:;“”‘’]{1,50}$/i;
-      case "typeofroadcut":
+    case "typeofroadcut":
       return /^[a-zA-Z0-9-, ]{1,200}$/i;
-      case "petnocIdentificationMark":
+    case "petnocIdentificationMark":
       return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,100}$/i;
-      
-      case "Remarks":
+
+    case "Remarks":
       return /^[a-zA-Z0-9.',\n\r ]{1,128}$/i;
-      case "TexrearAddress":
+    case "TexrearAddress":
       return /^[a-zA-Z0-9-\/,()_'&.\"\n\r ]{1,128}$/i;
-      
+
   }
 };
 

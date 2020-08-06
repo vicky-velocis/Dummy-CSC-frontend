@@ -449,8 +449,19 @@ const screenConfig = {
     //localStorageSet('applicationsellmeatNumber',applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        ""
+      )
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Forward.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Approve.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Reject.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Reassign.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    // searchBill(dispatch, applicationNumber, tenantId);
+
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId);
 
     const queryObject = [

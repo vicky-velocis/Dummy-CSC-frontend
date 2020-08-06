@@ -137,7 +137,6 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) => {
       }
 
 
-      // debugger
       const response = await getGridDataForSearchFilter(data);
 
 

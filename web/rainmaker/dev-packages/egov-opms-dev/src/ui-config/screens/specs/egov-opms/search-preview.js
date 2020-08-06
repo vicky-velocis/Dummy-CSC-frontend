@@ -531,6 +531,17 @@ const screenConfig = {
     setapplicationNumber(applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        ""
+      )
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.additionalDetail.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Reaasign.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Reject.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Approve.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, action, applicationNumber, tenantId);

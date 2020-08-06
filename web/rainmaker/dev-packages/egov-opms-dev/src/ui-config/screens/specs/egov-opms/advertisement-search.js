@@ -7,7 +7,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResultsAdvertisement } from "./searchResource/searchResults";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import { SearchFormForEmployee } from "./searchResource/EmployeeSearchForm";
-import "./masteradv.css";
+import "./searchGrid.css";
 import {
   getOPMSTenantId,
   localStorageGet,
@@ -60,6 +60,11 @@ const NOCSearchAndResult = {
         }
       });
       let arr = status.slice(1)
+      arr = arr.filter(item => item.code != "WITHDRAWREJECTED")
+      arr = arr.filter(item => item.code != "WITHDRAWAPPROVAL")
+      arr.push({ code: "APPROVEFORWITHDRAW", name: getTextAdvertisement("APPROVEFORWITHDRAW", "0") })
+      arr.push({ code: "REJECTEFORWITHDRAW", name: getTextAdvertisement("REJECTEFORWITHDRAW", "0") })
+
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.searchScreen.status",
