@@ -629,6 +629,21 @@ const screenConfig = {
     setapplicationNumber(applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        ""
+      )
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Forward.Remark", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Approve.Remark", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Reject.Remark", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Reassign.Remark", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].WithdraApproval.Amount", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].WithdraApproval.Remark", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS.AdvertisementNOC.typeOfCommissioner", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)

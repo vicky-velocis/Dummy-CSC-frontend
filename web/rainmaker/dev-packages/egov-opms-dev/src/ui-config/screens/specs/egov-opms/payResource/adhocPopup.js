@@ -1040,13 +1040,23 @@ const updateAdhocSellMeatReassign = (state, dispatch) => {
 
 //RoadCut
 const updateAdhocRoadCutForward = (state, dispatch) => {
-  //  screenConfiguration.screenConfig["roadcutnoc-search-preview"].
-  let isFormValid = validateFields(
-    "components.adhocDialogForward.children.popup.children.adhocRebateCardRoadCutForward.children.ForwardContainerRoadCutForward.children",
-    state,
-    dispatch,
-    "roadcutnoc-search-preview"
-  );
+  let isFormValid = false;
+  if (localStorageGet("applicationStatus") == "INITIATED" || localStorageGet("applicationStatus") == "REASSIGNTOJE" || localStorageGet("applicationStatus") == "RESENT") {
+    isFormValid = validateFields(
+      "components.adhocDialog.children.popup.children.adhocRebateCardRoadCutForward.children.ForwardContainerRoadCutForward.children",
+      state,
+      dispatch,
+      "roadcutnoc-search-preview"
+    );
+  }
+  else {
+    isFormValid = validateFields(
+      "components.adhocDialogForward.children.popup.children.adhocRebateCardSeRoadCutForward.children.ContainerSeRoadCutForward.children",
+      state,
+      dispatch,
+      "roadcutnoc-search-preview"
+    );
+  }
   let file = get(
     state.screenConfiguration.preparedFinalObject,
     "documentsUploadRedux[0].documents[0].fileStoreId"
@@ -1073,7 +1083,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
     );
     let data = {}
     if (RoadCutForwardAmount > 0) {
-      if (checkForRole(roles, 'JE') && nocStatus == "INITIATED") {
+      if (nocStatus == "INITIATED" || nocStatus == "REASSIGNTOJE" || nocStatus == "RESENT") {
         if (file) {
           data = {
             "uploadDocuments": [{
@@ -1133,7 +1143,6 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
       //alert(wfstatus.status)
 
       UpdateStatus(state, dispatch, '/egov-opms/roadcut-search', [],
-
         {
 
           "applicationType": "ROADCUTNOC",
@@ -1145,6 +1154,7 @@ const updateAdhocRoadCutForward = (state, dispatch) => {
           "dataPayload": data
         }
       );
+
     } else {
       dispatch(toggleSpinner());
 
@@ -1263,7 +1273,7 @@ const updateAdhocRoadCutReject = (state, dispatch) => {
 };
 const updateAdhocRoadCutReassign = (state, dispatch) => {
   let isFormValid = validateFields(
-    "components.adhocDialog2.children.popup.children.SellMeatReassignCard.children.SellMeatReassignContainer.children",
+    "components.adhocDialog2.children.popup.children.adhocRebateCardRoadCutReassign.children.ContainerRoadCutReassign.children",
     state,
     dispatch,
     "roadcutnoc-search-preview"
