@@ -78,6 +78,7 @@ export const SearchFormForEmployee = getCommonCard({
       moduleName: "egov-opms",
       componentPath: "AutosuggestContainer",
       jsonPath: "OPMS.searchFilter.applicationStatus",
+
       required: false,
       gridDefination: {
         xs: 12,

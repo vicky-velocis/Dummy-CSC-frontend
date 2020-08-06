@@ -228,7 +228,7 @@ export const footerEmp = getCommonApplyFooter({
       action: "condition",
       callBack: (state, dispatch) => {
         set(state, 'screenConfiguration.preparedFinalObject.ROADCUTNOCWF.REASSIGNDO', false);
-        if (checkForRole(roles, 'JE') && localStorageGet("applicationStatus") == "INITIATED") {
+        if (localStorageGet("applicationStatus") == "INITIATED" || localStorageGet("applicationStatus") == "REASSIGNTOJE" || localStorageGet("applicationStatus") == "RESENT") {
           showHideAdhocPopup(state, dispatch, "roadcutnoc-search-preview")
         } else {
           showHideAdhocPopupopmsForward(state, dispatch, "roadcutnoc-search-preview", "nextButton")

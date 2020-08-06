@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
+import Select, { createFilter } from "react-select";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -246,6 +246,9 @@ class IntegrationReactSelect extends React.Component {
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("multi")}
+          filterOption={createFilter({
+            matchFrom: 'start'
+          })}
         />
       </div>
     );

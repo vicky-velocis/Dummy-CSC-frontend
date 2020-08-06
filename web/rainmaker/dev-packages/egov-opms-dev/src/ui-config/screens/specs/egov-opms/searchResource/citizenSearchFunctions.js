@@ -746,6 +746,10 @@ export const getTextAdvertisement = (label, isWithdrawn) => {
       return 'Withdraw Approval';
     case "WITHDRAWREJECTED":
       return 'Withdraw Rejected';
+    case "APPROVEFORWITHDRAW":
+      return 'Withdraw Approval';
+    case "REJECTEFORWITHDRAW":
+      return 'Withdraw Rejected';
     case "WITHDRAWAFTERAPRROVAL":
       return 'Withdraw Request';
     case "WITHDRAW":

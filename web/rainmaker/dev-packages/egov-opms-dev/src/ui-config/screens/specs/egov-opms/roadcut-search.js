@@ -21,7 +21,7 @@ import {
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { getGridDataRoadcut, getTextForRoadCuttNoc } from "./searchResource/citizenSearchFunctions";
 import { SearchFormForEmployee } from "./searchResource/EmployeeSearchForm";
-import "./masteradv.css";
+import "./searchGrid.css";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
