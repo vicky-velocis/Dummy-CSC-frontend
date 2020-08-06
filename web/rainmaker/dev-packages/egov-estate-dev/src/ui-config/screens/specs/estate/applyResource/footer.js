@@ -24,9 +24,6 @@ import {
 } from "lodash";
 import "./index.css";
 import {
-  getOwnerDocumentDetails
-} from './applyConfig';
-import {
   groundRentDetails,
   serviceTaxDetails,
   paymentMadeBy
@@ -98,19 +95,24 @@ const callBackForNext = async (state, dispatch) => {
       "apply"
     )
 
-    // if (!isPropertyInfoValid || !isAuctionValid || !isAllotmentValid || !isAdditionalValid) {
-    //   isFormValid = false;
-    // }
+    if (isPropertyInfoValid && isAuctionValid && isAllotmentValid && isAdditionalValid) {
+      const res = await applyEstates(state, dispatch, activeStep);
+      if (!res) {
+        return
+      }
+    } else {
+      // isFormValid = false;
+    }
   }
 
   if (activeStep === OWNER_PURCHASER_DETAILS_STEP) {
     const propertyOwners = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].ownerDetails"
+      "Properties[0].propertyDetails.owners"
     );
     const propertyPurchasers = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].purchaserDetails"
+      "Properties[0].propertyDetails.purchaseDetails"
     )
 
     let propertyOwnersItems = get(
@@ -131,50 +133,89 @@ const callBackForNext = async (state, dispatch) => {
           "apply"
         )
 
-        const ownerName = propertyOwners ? propertyOwners[i] ? propertyOwners[i].ownerName : "" : "";
-        var ownerDocumentDetails = getOwnerDocumentDetails(i);
+        var ownerName = propertyOwners ? propertyOwners[i] ? propertyOwners[i].ownerDetails.ownerName : "" : "";
+        
+        if (i > 0) {
+          var documentDetailsString = JSON.stringify(get(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_0`, {}
+          ))
+          var newDocumentDetailsString = documentDetailsString.replace(/_0/g, `_${i}`);
+          newDocumentDetailsString = newDocumentDetailsString.replace(/owners\[0\]/g, `owners[${i}]`)
+          var documentDetailsObj = JSON.parse(newDocumentDetailsString);
+          set(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}`,
+            documentDetailsObj
+          )
+
+          setDocumentData("", state, dispatch, i)
+
+          var groundRentString = JSON.stringify(get(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.groundRentDetails_0`, {}
+          ))
+          var newGroundRentString = groundRentString.replace(/_0/g, `_${i}`);
+          newGroundRentString = newGroundRentString.replace(/paymentDetails\[0\]/g, `paymentDetails[${i}]`)
+          var groundRentObj = JSON.parse(newGroundRentString);
+          set(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.groundRentDetails_${i}`,
+            groundRentObj
+          )
+
+          var serviceTaxString = JSON.stringify(get(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_0`, {}
+          ))
+          var newServiceTaxString = serviceTaxString.replace(/_0/g, `_${i}`)
+          var serviceTaxObj = JSON.parse(newServiceTaxString);
+          set(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}`,
+            serviceTaxObj
+          )
+
+          var serviceTaxString = JSON.stringify(get(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_0`, {}
+          ))
+          var newServiceTaxString = serviceTaxString.replace(/_0/g, `_${i}`)
+          var serviceTaxObj = JSON.parse(newServiceTaxString);
+          set(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}`,
+            serviceTaxObj
+          )
+
+          var paymentMadeByString = JSON.stringify(get(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.paymentMadeBy_0`, {}
+          ))
+          var newPaymentMadeByString = paymentMadeByString.replace(/_0/g, `_${i}`)
+          var paymentMadeByObj = JSON.parse(newPaymentMadeByString);
+          set(
+            state.screenConfiguration.screenConfig,
+            `apply.components.div.children.formwizardFourthStep.children.paymentMadeBy_${i}`,
+            paymentMadeByObj
+          )
+        }
+
         set(
-          ownerDocumentDetails,
-          "children.cardContent.children.header.children.key.props.labelKey",
+          state.screenConfiguration.screenConfig,
+          `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}.children.cardContent.children.header.children.key.props.labelKey`,
           `Douments - ${ownerName}`
         )
+
         set(
           state.screenConfiguration.screenConfig,
-          `apply.components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${i}`,
-          ownerDocumentDetails
-        )
-
-
-        // set(
-        //   paymentDetails,
-        //   "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
-        //   `Payment Details - ${ownerName}`
-        // )
-        // var groundRentDetails = getGroundRentDetails(i);
-        // var serviceTaxDetails = getServiceTaxDetails(i);
-        // var paymentMadeBy = getPaymentMadeBy(i)
-        // set(
-        //   state.screenConfiguration.screenConfig,
-        //   `apply.components.div.children.formwizardFourthStep.children.groundRentDetails_${i}`,
-        //   groundRentDetails
-        // )
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFourthStep.children",
-            `groundRentDetails_${i}`,
-            groundRentDetails
-          )
-        );
-        set(
-          state.screenConfiguration.screenConfig,
-          `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}`,
-          serviceTaxDetails
+          `apply.components.div.children.formwizardFourthStep.children.groundRentDetails_${i}.children.cardContent.children.header.children.key.props.labelKey`,
+          `Ground Rent Details - ${ownerName}`
         )
         set(
           state.screenConfiguration.screenConfig,
-          `apply.components.div.children.formwizardFourthStep.children.paymentMadeBy_${i}`,
-          paymentMadeBy
+          `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}.children.cardContent.children.header.children.key.props.labelKey`,
+          `Service Tax Details - ${ownerName}`
         )
 
         const reviewOwnerDetails = getReviewOwner(true, i);
@@ -200,8 +241,6 @@ const callBackForNext = async (state, dispatch) => {
           `apply.components.div.children.formwizardSixthStep.children.reviewDetails.children.cardContent.children.reviewPaymentDetails_${i}`,
           reviewPaymentDetails
         )
-
-        setDocumentData("", state, dispatch, i);
       }
     }
 
@@ -228,9 +267,15 @@ const callBackForNext = async (state, dispatch) => {
         )
       }
     }
-    // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
-    //   isFormValid = false;
-    // }
+
+    if (isOwnerDetailsValid && isPurchaserDetailsValid) {
+      const res = await applyEstates(state, dispatch, activeStep);
+      if (!res) {
+        return
+      }
+    } else {
+      // isFormValid = false;
+    }
   }
 
   if (activeStep === COURT_CASE_DETAILS_STEP) {
@@ -240,9 +285,14 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    // if (!isCourtCaseDetailsValid) {
-    //   isFormValid = false;
-    // }
+    if (isCourtCaseDetailsValid) {
+      const res = await applyEstates(state, dispatch, activeStep);
+      if (!res) {
+        return
+      }
+    } else {
+      isFormValid = false;
+    }
   }
 
   if (activeStep === PAYMENT_DETAILS_STEP) {
@@ -273,31 +323,31 @@ const callBackForNext = async (state, dispatch) => {
         return
       }
     } else {
-      // isFormValid = false;
+      isFormValid = false;
     }
   }
 
   if (activeStep === DOCUMENT_UPLOAD_STEP) {
     const propertyOwners = get(
       state.screenConfiguration.preparedFinalObject,
-      "Properties[0].ownerDetails"
+      "Properties[0].propertyDetails.owners"
     );
 
     const propertyOwnersTemp = get(
       state.screenConfiguration.preparedFinalObject,
-      "PropertiesTemp[0].ownerDetails"
+      "PropertiesTemp[0].propertyDetails.owners"
     );
 
     for (var i = 0; i < propertyOwnersTemp.length; i++) {
       const uploadedDocData = get(
         state.screenConfiguration.preparedFinalObject,
-        `Properties[0].ownerDetails[${i}].applicationDocuments`,
+        `Properties[0].propertyDetails.owners[${i}].ownerDetails.applicationDocuments`,
         []
       );
 
       const uploadedTempDocData = get(
         state.screenConfiguration.preparedFinalObject,
-        `PropertiesTemp[0].ownerDetails[${i}].applicationDocuments`,
+        `PropertiesTemp[0].propertyDetails.owners[${i}].ownerDetails.applicationDocuments`,
         []
       );
 
@@ -323,14 +373,14 @@ const callBackForNext = async (state, dispatch) => {
             };
           });
         dispatch(
-          prepareFinalObject(`PropertiesTemp[0].ownerDetails[${i}].reviewDocData`, reviewDocData)
+          prepareFinalObject(`PropertiesTemp[0].propertyDetails.owners[${i}].ownerDetails.reviewDocData`, reviewDocData)
         );
 
-        const reviewDocuments = getReviewDocuments(true, "apply", `PropertiesTemp[0].ownerDetails[${i}].reviewDocData`);
+        const reviewDocuments = getReviewDocuments(true, "apply", `PropertiesTemp[0].propertyDetails.owners[${i}].ownerDetails.reviewDocData`);
         set(
           reviewDocuments,
           "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
-          `Documents - ${propertyOwners ? propertyOwners[i] ? propertyOwners[i].ownerName : "" : ""}`
+          `Documents - ${propertyOwners ? propertyOwners[i] ? propertyOwners[i].ownerDetails.ownerName : "" : ""}`
         )
         set(
           state.screenConfiguration.screenConfig,
@@ -339,7 +389,6 @@ const callBackForNext = async (state, dispatch) => {
         )
       }
     }
-
   }
 
   if (activeStep === SUMMARY_STEP) {

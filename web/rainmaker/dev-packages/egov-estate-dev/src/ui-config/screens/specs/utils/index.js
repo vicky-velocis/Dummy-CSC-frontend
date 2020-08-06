@@ -1048,7 +1048,7 @@ import {
           documentsArr.push({
             name: item.code,
             required: item.required,
-            jsonPath: `Properties[0].ownerDetails.applicationDocuments[${ind}]`,
+            jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.applicationDocuments[${ind}]`,
             statement: item.description
           });
           return documentsArr;
@@ -1064,7 +1064,7 @@ import {
           documentsArr.push({
             name: item.code,
             required: item.required,
-            jsonPath: `Properties[0].ownerDetails[${owner}].applicationDocuments[${ind}]`,
+            jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments[${ind}]`,
             statement: item.description
           });
           return documentsArr;

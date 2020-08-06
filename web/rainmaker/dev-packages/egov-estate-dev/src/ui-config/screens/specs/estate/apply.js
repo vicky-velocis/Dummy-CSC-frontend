@@ -6,8 +6,8 @@ import {
   formwizardFirstStep,
   formwizardSecondStep,
   formwizardThirdStep,
-  formwizardFourthStep, 
-  formwizardFifthStep, 
+  formwizardFourthStep,
+  formwizardFifthStep,
   formwizardSixthStep
 } from './applyResource/applyConfig'
 import {
@@ -17,12 +17,15 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
-import { footer } from './applyResource/footer';
+import {
+  footer
+} from './applyResource/footer';
 import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import {
-  prepareDocumentTypeObj, prepareDocumentTypeObjMaster
+  prepareDocumentTypeObj,
+  prepareDocumentTypeObjMaster
 } from "../utils";
 import {
   handleScreenConfigurationFieldChange as handleField
@@ -57,7 +60,7 @@ export const getMdmsData = async (dispatch, body) => {
   }
 };
 
-export const setDocumentData = async (action, state, dispatch, owner) => {
+export const setDocumentData = async (action, state, dispatch, owner = 0) => {
   const documentTypePayload = [{
     moduleName: "PropertyServices",
     masterDetails: [{
@@ -84,7 +87,7 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
     },
     maxFileSize: 6000,
     downloadUrl: item.downloadUrl,
-    moduleName: "RentedProperties",
+    moduleName: "Estate",
     statement: {
       labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
       labelKey: item.description
@@ -92,24 +95,14 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
   }))
   var documentTypes;
   var applicationDocs;
-  if (typeof owner == "undefined") {
-    documentTypes = prepareDocumentTypeObj(masterDocuments);
-    applicationDocs = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Properties[0].ownerDetails.applicationDocuments",
-      []
-    ) || [];
-  }
-  else {
-    documentTypes = prepareDocumentTypeObjMaster(masterDocuments, owner);
-    applicationDocs = get(
-      state.screenConfiguration.preparedFinalObject,
-      `Properties[0].ownerDetails[${owner}].applicationDocuments`,
-      []
-    ) || [];
-  }
-  
-  
+  documentTypes = prepareDocumentTypeObjMaster(masterDocuments, owner);
+  applicationDocs = get(
+    state.screenConfiguration.preparedFinalObject,
+    `Properties[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`,
+    []
+  ) || [];
+
+
   applicationDocs = applicationDocs.filter(item => !!item)
   let applicationDocsReArranged =
     applicationDocs &&
@@ -123,7 +116,7 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        `Properties[0].ownerDetails[${owner}].applicationDocuments`,
+        `Properties[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`,
         applicationDocsReArranged
       )
     );
@@ -135,7 +128,7 @@ export const setDocumentData = async (action, state, dispatch, owner) => {
       estateMasterDocuments
     )
   );
-  dispatch(prepareFinalObject(`PropertiesTemp[0].ownerDetails[${owner}].applicationDocuments`, documentTypes))
+  dispatch(prepareFinalObject(`PropertiesTemp[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`, documentTypes))
   dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 
@@ -182,7 +175,7 @@ const getData = async (action, state, dispatch) => {
       )
     )
   }
-  // setDocumentData(action, state, dispatch)
+  setDocumentData(action, state, dispatch)
 }
 
 const applyEstate = {
