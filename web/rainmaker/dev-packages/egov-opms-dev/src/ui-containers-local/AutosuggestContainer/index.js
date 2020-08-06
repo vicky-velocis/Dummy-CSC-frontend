@@ -34,7 +34,7 @@ class AutoSuggestor extends Component {
     let translatedLabel = getLocaleLabels(
       label.labelName,
       label.labelKey,
-      localizationLabels    
+      localizationLabels
     );
     let translatedPlaceholder = getLocaleLabels(
       placeholder.labelName,
@@ -59,19 +59,19 @@ class AutoSuggestor extends Component {
 }
 
 const getLocalisedSuggestions = (suggestions, localePrefix, transfomedKeys) => {
-  return (	
-    suggestions &&	
-    suggestions.length > 0 &&	
-    suggestions.map((option, key) => {	
-      option.name = getLocaleLabels(	
-        option.code,	
-        localePrefix && !isEmpty(localePrefix)	
-          ? appendModulePrefix(option.code, localePrefix)	
-          : option.name,	
-        transfomedKeys	
-      );	
-      return option;	
-    })	
+  return (
+    suggestions &&
+    suggestions.length > 0 &&
+    suggestions.map((option, key) => {
+      option.name = getLocaleLabels(
+        option.code,
+        localePrefix && !isEmpty(localePrefix)
+          ? appendModulePrefix(option.code, localePrefix)
+          : option.name,
+        transfomedKeys
+      );
+      return option;
+    })
   );
 };
 
@@ -95,7 +95,7 @@ const mapStateToProps = (state, ownprops) => {
     ? value
     : get(state.screenConfiguration.preparedFinalObject, jsonPath);
   //To fetch corresponding labels from localisation for the suggestions, if needed.
-  
+
   if (labelsFromLocalisation) {
     suggestions = getLocalisedSuggestions(
       JSON.parse(JSON.stringify(suggestions)),
@@ -113,7 +113,7 @@ const mapStateToProps = (state, ownprops) => {
   if (selectedItem && selectedItem.name) {
     value = { label: selectedItem.name, value: selectedItem.code };
   }
-  return { value, jsonPath, suggestions,localizationLabels };
+  return { value, jsonPath, suggestions, localizationLabels };
 };
 
 const mapDispatchToProps = dispatch => {

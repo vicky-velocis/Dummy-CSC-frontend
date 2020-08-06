@@ -161,7 +161,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = false;
   let hasFieldToaster = false;
 
- 
+
   if (activeStep === 0) {
 
     isFormValid = validateFields(
@@ -215,27 +215,12 @@ const callBackForNext = async (state, dispatch) => {
 
 
 
-    } else  {
+    } else {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",
         labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
       };
-      switch (activeStep) {
-        case 1:
-          errorMessage = {
-            labelName:
-              "Please check the Missing/Invalid field for Property Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
-          };
-          break;
-        case 2:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Applicant Details, then proceed!",
-            labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_APPLICANT_TOAST"
-          };
-          break;
-      }
+
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     }
   }

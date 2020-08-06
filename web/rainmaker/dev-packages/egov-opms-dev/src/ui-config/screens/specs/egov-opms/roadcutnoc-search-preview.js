@@ -106,23 +106,48 @@ const getMdmsData = async (action, state, dispatch) => {
           moduleName: "egpm",
           masterDetails: [
             {
-              name: "color"
+              name: "roadCutDivision"
             },
             {
               name: "sector"
-            },
-            {
-              name: "breed"
-            },
-            {
-              name: "sex"
-            },
-            {
-              name: "age"
             }
           ]
         },
         { moduleName: "RoadCutNOC", masterDetails: [{ name: "RoadCutNOCRemarksDocuments" }] }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getMdmsDataForTaxCode = async (action, state, dispatch) => {
+
+  let tenantId = getOPMSTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "egpm",
+          masterDetails: [
+            {
+              name: "roadCutDivision"
+            }
+          ]
+        }
       ]
     }
   };
@@ -431,6 +456,7 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
   let amount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].amount", {});
   let performancebankguaranteecharges = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].performancebankguaranteecharges", {});
   let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
+
   await setCurrentApplicationProcessInstance(state);
   HideshowEdit(state, action, nocStatus, amount, applicationNumber);
   if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
@@ -441,14 +467,28 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
       dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", gstamount));
       dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", performancebankguaranteecharges));
       if (checkForRole(roles, 'CITIZEN')) {
-        let res = await createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
+        await getMdmsDataForTaxCode(action, state, dispatch)
+        let division = JSON.parse(response.nocApplicationDetail[0].applicationdetail).division;
+        let divisionMDMS = get(
+          state,
+          "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.roadCutDivision",
+          []
+        );
+        let divisionCode = divisionMDMS.find(item => {
+          return item.name == division;
+        });
+        let res = await createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId, divisionCode.taxCode);
         if (res != null) {
+          dispatch(prepareFinalObject("OPMS.RODCUTNOC.BusinessServiceCode", `OPMS.ROADCUTNOC_${divisionCode.taxCode}`));
           const response = await fetchBill([
             { key: "tenantId", value: tenantId },
             { key: "consumerCode", value: applicationNumber },
-            { key: "businessService", value: "OPMS.ROADCUTNOC" }
+            {
+              key: "businessService", value: `OPMS.ROADCUTNOC_${divisionCode.taxCode}`
+            }
           ], dispatch);
         }
+
       }
     } else {
       dispatch(prepareFinalObject("ReceiptTemp[0].Bill", {}));
@@ -597,6 +637,19 @@ const screenConfig = {
     setapplicationNumber(applicationNumber); //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        {}
+      )
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
     //setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
@@ -607,21 +660,6 @@ const screenConfig = {
       { key: "businessServices", value: "ROADCUTNOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
-    // if (checkForRole(roles, 'JE')) {
-    //   set(
-    //     action,
-    //     "screenConfig.components.adhocDialogForward.children.popup",
-    //     adhocPopupForJeRoadCutForward
-    //   );
-    // }
-    // else {
-    //   set(
-    //     action,
-    //     "screenConfig.components.adhocDialogForward.children.popup",
-    //     adhocPopupForSeRoadCutForward
-    //   );
-    // }
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'popup_rodcut');
     });
