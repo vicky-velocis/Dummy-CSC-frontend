@@ -48,7 +48,7 @@ const cardlist = [
     route: "echallan-landing",
     id: "eChallan",
     pendingCount: '', //localStorageGet("challanCount") === null ? "" : localStorageGet("challanCount"),
-    color: 'powderblue',
+    //color: 'powderblue',
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSI", "challanSM", "challanHOD", "challanEAO"],
@@ -66,10 +66,10 @@ const cardlist = [
       class="material-icons module-page-icon">
       gavel
       </i>,
-    route: "../auction/home",
+    route: "../egov-echallan-auction/home",
     id: "eAuction",
     pendingCount: '', //localStorageGet("auctionCount") === null ? "" : localStorageGet("auctionCount"),
-    color: 'lightgreen',
+    //color: 'lightgreen',
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSM", "challanHOD"],
@@ -90,35 +90,35 @@ const cardlist = [
       class="material-icons module-page-icon">
       grading
       </i>,
-    route: "../fine-master/search",
+    route: "../egov-echallan-fine-master/search",
     id: "fine-Master",
     pendingCount: '', //localStorageGet("fineCount") === null ? "" : localStorageGet("fineCount"),
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanHOD"],
     },
-    color: 'darkturquoise',
+    //color: 'darkturquoise',
   },
-  {
-    label: {
-      labelKey: "",
-      labelName: "Item Master"
-    },
-    icon: <i
-      viewBox="0 -8 35 42"
-      color="primary"
-      class="material-icons module-page-icon">
-      picture_in_picture
-      </i>,
-    route: "../item-master/search",
-    pendingCount: '', //localStorageGet("itemCount") === null ? "" : localStorageGet("itemCount"),
-    id: "Item-Master",
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: [""],
-    },
-    color: 'burlywood',
-  },
+  // {
+  //   label: {
+  //     labelKey: "",
+  //     labelName: "Item Master"
+  //   },
+  //   icon: <i
+  //     viewBox="0 -8 35 42"
+  //     color="primary"
+  //     class="material-icons module-page-icon">
+  //     picture_in_picture
+  //     </i>,
+  //   route: "../item-master/search",
+  //   pendingCount: '', //localStorageGet("itemCount") === null ? "" : localStorageGet("itemCount"),
+  //   id: "Item-Master",
+  //   roleDefination: {
+  //     rolePath: "user-info.roles",
+  //     roles: [""],
+  //   },
+  //   //color: 'burlywood',
+  // },
 ];
 
 cardItems = cardlist;
@@ -140,33 +140,33 @@ const eChallanPermissionManagement = {
   name: "home",
   beforeInitScreen: (action, state, dispatch) => {
     setapplicationType("egov-echallan");
-    geteChallanCount(action, state, dispatch).then(response => {
-      let countDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0]', {});
-      let userInfo = JSON.parse(getUserInfo());
-      const roles = get(userInfo, "roles")
-      if (checkForRole(roles, 'challanSI') || checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
-        dispatch(
-          handleField('home', 'components.div.children.applyCard.props.items[0]',
-            'pendingCount',
-            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].challanCount', ''))
-        );
-      }
+    // geteChallanCount(action, state, dispatch).then(response => {
+    //   let countDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0]', {});
+    //   let userInfo = JSON.parse(getUserInfo());
+    //   const roles = get(userInfo, "roles")
+    //   if (checkForRole(roles, 'challanSI') || checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
+    //     dispatch(
+    //       handleField('home', 'components.div.children.applyCard.props.items[0]',
+    //         'pendingCount',
+    //         get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].challanCount', ''))
+    //     );
+    //   }
 
-      if (checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
-        dispatch(
-          handleField('home', 'components.div.children.applyCard.props.items[1]',
-            'pendingCount',
-            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].auctionCount', ''))
-        );
-      }
-      if (checkForRole(roles, 'challanHOD')) {
-        dispatch(
-          handleField('home', 'components.div.children.applyCard.props.items[2]',
-            'pendingCount',
-            get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].fineCount', ''))
-        );
-      }
-    });
+    //   if (checkForRole(roles, 'challanHOD') || checkForRole(roles, 'challanSM')) {
+    //     dispatch(
+    //       handleField('home', 'components.div.children.applyCard.props.items[1]',
+    //         'pendingCount',
+    //         get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].auctionCount', ''))
+    //     );
+    //   }
+    //   if (checkForRole(roles, 'challanHOD')) {
+    //     dispatch(
+    //       handleField('home', 'components.div.children.applyCard.props.items[2]',
+    //         'pendingCount',
+    //         get(state, 'screenConfiguration.preparedFinalObject.eChallanDashboardCount[0].fineCount', ''))
+    //     );
+    //   }
+    // });
     return action;
   },
   components: {

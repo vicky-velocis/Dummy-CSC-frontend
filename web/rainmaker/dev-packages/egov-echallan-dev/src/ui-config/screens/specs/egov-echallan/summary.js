@@ -13,14 +13,14 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, getTextToLocalMapping, convertEpochToDate, sendReceiptBymail } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, getTextToLocalMapping, convertEpochToDate, sendReceiptBymail, truncData, integer_to_roman } from "../utils/index";
 import { httpRequest } from "../../../../ui-utils";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { searchResultsSummary, searchVehicleResultsSummary } from "./summaryResource/summaryGrid";
-import { footer } from "./summaryResource/footer";
+import { footer, takeactionfooter } from "./summaryResource/footer";
 import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchMdmsData } from "../../../../ui-utils/commons";
 import "./index.css";
 import { getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
@@ -70,7 +70,7 @@ const getMdmsData = async (action, state, dispatch) => {
       ]
     }
   };
-  await fetchMdmsData(state, dispatch, mdmsBody,false);
+  await fetchMdmsData(state, dispatch, mdmsBody, false);
 };
 
 const titlebar = getCommonContainer({
@@ -83,7 +83,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "challanNumber")
+      number: getQueryArg(window.location.href, "applicationNumber")
     }
   },
   applicationStatus: {
@@ -91,7 +91,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationStatusContainer",
     props: {
-      status: "Status : " + getQueryArg(window.location.href, "challanNumber")
+      status: "Status : " + getQueryArg(window.location.href, "applicationNumber")
     }
   },
   paymentStatus: {
@@ -126,7 +126,8 @@ const prepareDocumentsView = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.eChallanDetail[0].document",
     {}
   );
-  if (eChallanDocs.length > 0) {
+
+  if (eChallanDocs[0].documentUuid !== null) {
     eChallanDocs.forEach(element => {
       let docType = element.documentType.search('-') !== -1 ? element.documentType.split('-')[0].trim() : element.documentType
 
@@ -162,6 +163,7 @@ const prepareDocumentsView = async (state, dispatch) => {
             .split("/")
             .pop()
             .slice(13)
+
         )) ||
       `Document - ${index + 1}`;
     return doc;
@@ -346,13 +348,13 @@ const setSearchResponse = async (
     let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
       if (encroachRecord.code == sectorval.encroachmentType)
         return true;
-    });    
-  
+    });
+
     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
-  
+
     let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
-  
+
   }
 
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
@@ -407,6 +409,8 @@ const setSearchResponse = async (
     case "SENT TO STORE":
     case "ADDED TO STORE":
     case "PENDING FOR AUCTION":
+    case "RELEASED ON GROUND":
+    case "RELEASED FROM STORE":
       setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
       setOnGroundButtonVisibleTrueFalse(false, dispatch);
       break;
@@ -422,7 +426,7 @@ const setOnGroundButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.onGroundPaymentButton",
+      "components.div.children.employeeFooter.children.onGroundPaymentButton",
       "visible",
       isVisible
     )
@@ -433,7 +437,7 @@ const setReceiveButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.StoreManagerReceivePaymentProcess",
+      "components.div.children.employeeFooter.children.StoreManagerReceivePaymentProcess",
       "visible",
       isVisible
     )
@@ -445,7 +449,7 @@ const setReturnCloseButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.StoreManagerReturnandCloseProcess",
+      "components.div.children.employeeFooter.children.StoreManagerReturnandCloseProcess",
       "visible",
       isVisible
     )
@@ -456,7 +460,7 @@ const setAddToStoreButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.StoreManagerAddToStoreProcess",
+      "components.div.children.employeeFooter.children.StoreManagerAddToStoreProcess",
       "visible",
       isVisible
     )
@@ -467,7 +471,7 @@ const setHodApprovalButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.StoreManagerHODApprovalProcess",
+      "components.div.children.employeeFooter.children.StoreManagerHODApprovalProcess",
       "visible",
       false //isVisible //changed since the requirement is changed
     )
@@ -478,7 +482,7 @@ const setSendtoSoreButtonVisibleTrueFalse = (isVisible, dispatch) => {
   dispatch(
     handleField(
       "summary",
-      "components.div.children.footer.children.sendtoSoreButton",
+      "components.div.children.employeeFooter.children.sendtoSoreButton",
       "visible",
       isVisible
     )
@@ -507,6 +511,14 @@ const setSearchResponseForNocCretificate = async (
   let pdfCreateKey = '';
   let tenant = tenantId.length > 2 ? tenantId.split('.')[0] : tenantId;
 
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let violationEncroached = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", "NA")
+
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == violationEncroached)
+      return true;
+  });
+
   if (nocRemarks == "CHALLAN ISSUED") {
     let data = {};
 
@@ -526,11 +538,9 @@ const setSearchResponseForNocCretificate = async (
       //)
     );
 
-    data.encroachmentType = nullToNa(
-      get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", "NA")
-    );
+    data.encroachmentType = nullToNa(__FOUNDENCROACH.name);
 
-    switch (data.encroachmentType) {
+    switch (violationEncroached) {
       case "Unauthorized/Unregistered Vendor":
         encorachmentvalue = "unregisteredEchallan";
         pdfCreateKey = "unregistered-ec";
@@ -602,13 +612,26 @@ const setSearchResponseForNocCretificate = async (
       get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].siName", "NA")
     );
 
+    let article = []
     if (data.encroachmentType !== "Seizure of Vehicles") {
       let violationitemList = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", [])
       for (let index = 0; index < violationitemList.length; index++) {
         const element = violationitemList[index];
-        let articleobj = "article" + [index + 1];
-        data[articleobj] = element.itemName + " - " + element.quantity + " - " + element.remark;
+        // let articleobj = "article" + [index + 1];
+        let artilceName = "(" + integer_to_roman(index + 1) + ")  " + truncData(element.itemName, 25) + " - " + element.quantity + " - " + truncData(element.remark, 25);
+        if (artilceName.length < 80) {
+          while (artilceName.length < 160) {
+            artilceName = artilceName + " ";
+          }
+        }
+        article.push(artilceName);
       }
+      let art = "";
+      article.forEach(element => {
+        art += element;
+      });
+
+      data.article = art;
     }
 
     data.placeTime = nullToNa(
@@ -645,8 +668,8 @@ const setSearchResponseForNocCretificate = async (
       },
       leftIcon: "book"
     };
-    if(violatorDetails.emailId !== ""){
-      sendReceiptBymail(state, dispatch, httpLinkEchallan,violatorDetails,false);
+    if (violatorDetails.emailId !== "") {
+      sendReceiptBymail(state, dispatch, httpLinkEchallan, violatorDetails, false);
     }
   }
 
@@ -701,14 +724,14 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "challanNumber");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     set(state, 'form.apply_Violator_Image.files.echallanViolaterImage', []);
     set(state, 'form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage', []);
     set(state, 'form.apply_Violations_Image.files.echallanViolationImage', []);
 
-     let responsecreateDemand = '';
+    let responsecreateDemand = '';
     //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
     // //calculate search Bill called\
     //searchBill(dispatch, applicationNumber, tenantId);
@@ -761,7 +784,8 @@ const screenConfig = {
         }),
         break: getBreak(),
         //titlebarfooter,
-        footer,
+        employeeFooter: footer,
+        takeactionfooter,
       }
     }
   }
