@@ -8,7 +8,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   toggleSnackbar,
-  prepareFinalObject
+  prepareFinalObject,
+  handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import {
@@ -26,7 +27,9 @@ import {
   getOwnerDocumentDetails
 } from './applyConfig';
 import {
-  getPaymentDetails
+  groundRentDetails,
+  serviceTaxDetails,
+  paymentMadeBy
 } from './paymentDetails';
 import {
   setDocumentData
@@ -96,7 +99,7 @@ const callBackForNext = async (state, dispatch) => {
     )
 
     // if (!isPropertyInfoValid || !isAuctionValid || !isAllotmentValid || !isAdditionalValid) {
-    //   return isFormValid = false;
+    //   isFormValid = false;
     // }
   }
 
@@ -110,11 +113,11 @@ const callBackForNext = async (state, dispatch) => {
       "Properties[0].purchaserDetails"
     )
 
-    const propertyOwnersItems = get(
+    let propertyOwnersItems = get(
       state,
       "screenConfiguration.screenConfig.apply.components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
     );
-    const propertyPurchaserItems = get(
+    let propertyPurchaserItems = get(
       state,
       "screenConfiguration.screenConfig.apply.components.div.children.formwizardSecondStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
     );
@@ -125,7 +128,7 @@ const callBackForNext = async (state, dispatch) => {
           `components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[${i}].item${i}.children.cardContent.children.ownerCard.children`,
           state,
           dispatch,
-
+          "apply"
         )
 
         const ownerName = propertyOwners ? propertyOwners[i] ? propertyOwners[i].ownerName : "" : "";
@@ -141,18 +144,37 @@ const callBackForNext = async (state, dispatch) => {
           ownerDocumentDetails
         )
 
-        var paymentDetails = getPaymentDetails(i);
 
-        set(
-          paymentDetails,
-          "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
-          `Payment Details - ${ownerName}`
-        )
-        console.log("paymentDetails", paymentDetails);
+        // set(
+        //   paymentDetails,
+        //   "children.cardContent.children.headerDiv.children.header.children.key.props.labelKey",
+        //   `Payment Details - ${ownerName}`
+        // )
+        // var groundRentDetails = getGroundRentDetails(i);
+        // var serviceTaxDetails = getServiceTaxDetails(i);
+        // var paymentMadeBy = getPaymentMadeBy(i)
+        // set(
+        //   state.screenConfiguration.screenConfig,
+        //   `apply.components.div.children.formwizardFourthStep.children.groundRentDetails_${i}`,
+        //   groundRentDetails
+        // )
+        dispatch(
+          handleField(
+            "apply",
+            "components.div.children.formwizardFourthStep.children",
+            `groundRentDetails_${i}`,
+            groundRentDetails
+          )
+        );
         set(
           state.screenConfiguration.screenConfig,
-          `apply.components.div.children.formwizardFourthStep.children.paymentDetails_${i}`,
-          paymentDetails
+          `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}`,
+          serviceTaxDetails
+        )
+        set(
+          state.screenConfiguration.screenConfig,
+          `apply.components.div.children.formwizardFourthStep.children.paymentMadeBy_${i}`,
+          paymentMadeBy
         )
 
         const reviewOwnerDetails = getReviewOwner(true, i);
@@ -207,7 +229,7 @@ const callBackForNext = async (state, dispatch) => {
       }
     }
     // if (!isOwnerDetailsValid || !isPurchaserDetailsValid) {
-    //   return isFormValid = false;
+    //   isFormValid = false;
     // }
   }
 
@@ -218,26 +240,41 @@ const callBackForNext = async (state, dispatch) => {
       dispatch
     )
 
-    if (!isCourtCaseDetailsValid) {
-      return isFormValid = false;
-    }
+    // if (!isCourtCaseDetailsValid) {
+    //   isFormValid = false;
+    // }
   }
 
   if (activeStep === PAYMENT_DETAILS_STEP) {
-    const isPaymentDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.detailsContainer.children",
+    let propertyOwnersItems = get(
       state,
-      dispatch
-    )
+      "screenConfiguration.screenConfig.apply.components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
+    );
 
-    /* if (isPaymentDetailsValid) {
-      // const res = await applyEstates(state, dispatch, activeStep);
-      // if (!res) {
-      //   return
-      // }
+    for (var i = 0; i < propertyOwnersItems.length; i++) {
+      var isGroundRentDetailsValid = validateFields(
+        `components.div.children.formwizardFourthStep.children.groundRentDetails_${i}.children.cardContent.children.detailsContainer.children`,
+        state,
+        dispatch,
+        "apply"
+      )
+
+      var isServiceTaxDetailsValid = validateFields(
+        `components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}.children.cardContent.children.detailsContainer.children`,
+        state,
+        dispatch,
+        "apply"
+      )
+    }
+
+    if (isGroundRentDetailsValid && isServiceTaxDetailsValid) {
+      const res = await applyEstates(state, dispatch, activeStep);
+      if (!res) {
+        return
+      }
     } else {
-      isFormValid = false;
-    } */
+      // isFormValid = false;
+    }
   }
 
   if (activeStep === DOCUMENT_UPLOAD_STEP) {

@@ -41,7 +41,7 @@ const newOwnerNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].purchaserDetails[0].newOwnerName"
+  jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].newOwnerName"
 }
 
 const newOwnerFatherHusbandNameField = {
@@ -59,7 +59,7 @@ const newOwnerFatherHusbandNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].purchaserDetails[0].newOwnerFatherHusbandName"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].newOwnerFatherName"
 }
 
 const newOwnerAddressField = {
@@ -81,7 +81,7 @@ const newOwnerAddressField = {
     rows: 2
   },
   maxLength: 150,
-  jsonPath: "Properties[0].purchaserDetails[0].newOwnerAddress"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].newOwnerAddress"
 }
 
 const newOwnerMobileNumberField = {
@@ -98,7 +98,7 @@ const newOwnerMobileNumberField = {
   //   value: userInfo.userName,
   //   disabled: true
   // },
-  jsonPath: "Properties[0].purchaserDetails[0].newOwnerMobileNumber",
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].newOwnerMobileNumber",
 }
 
 const sellerNameField = {
@@ -116,7 +116,7 @@ const sellerNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].purchaserDetails[0].sellerName"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].sellerName"
 }
 
 const sellerFatherHusbandNameField = {
@@ -134,7 +134,7 @@ const sellerFatherHusbandNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].purchaserDetails[0].sellerFatherHusbandName"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].sellerFatherName"
 }
 
 const shareField = {
@@ -152,7 +152,7 @@ const shareField = {
   },
   required: true,
   maxLength: 5,
-  jsonPath: "Properties[0].purchaserDetails[0].share"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].percentageOfShare"
 }
 
 const modeOfTransferField = {
@@ -165,7 +165,7 @@ const modeOfTransferField = {
     labelKey: "EST_MODE_OF_TRANSFER_PLACEHOLDER"
   },
   required: true,
-  jsonPath: "Properties[0].purchaserDetails[0].modeOfTransfer",
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].modeOfTransfer",
   sourceJsonPath: "applyScreenMdmsData.Estate.ModeOfTransfer",
   gridDefination: {
     xs: 12,
@@ -187,7 +187,7 @@ const registrationNumberField = {
     sm: 6
   },
   maxLength: 100,
-  jsonPath: "Properties[0].purchaserDetails[0].registrationNumber"
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].registrationNumber"
 }
 
 const dateOfRegistrationField = {
@@ -200,7 +200,7 @@ const dateOfRegistrationField = {
     labelKey: "EST_DATE_OF_REGISTRATION_PLACEHOLDER"
   },
   pattern: getPattern("Date"),
-  jsonPath: "Properties[0].purchaserDetails[0].dateOfRegistration",
+  jsonPath: "Properties[0].propertyDetails.purchaserDetails[0].dateOfRegistration",
   props: {
     inputProps: {
       max: getTodaysDateInYMD()

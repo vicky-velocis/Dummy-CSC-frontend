@@ -20,7 +20,9 @@ import {
   courtCaseDetails
 } from './courtCaseDetails';
 import {
-  paymentDetails
+  groundRentDetails,
+  serviceTaxDetails,
+  paymentMadeBy
 } from './paymentDetails';
 import {
   reviewDetails
@@ -157,7 +159,9 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    // paymentDetails
+    // groundRentDetails,
+    // serviceTaxDetails,
+    // paymentMadeBy
   },
   visible: false
 };

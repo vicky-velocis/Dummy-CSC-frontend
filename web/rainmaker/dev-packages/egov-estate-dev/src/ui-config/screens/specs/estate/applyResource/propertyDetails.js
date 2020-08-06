@@ -15,7 +15,7 @@ import {
 } from "../../utils";
 import get from "lodash/get";
 
-const allocationTypeField = {
+const typeOfAllocationField = {
     label: {
         labelName: "Type of Allocation",
         labelKey: "EST_ALLOCATION_TYPE_LABEL"
@@ -25,7 +25,7 @@ const allocationTypeField = {
         labelKey: "EST_ALLOCATION_TYPE_PLACEHOLDER"
     },
     required: true,
-    jsonPath: "Properties[0].propertyDetails.allocationType",
+    jsonPath: "Properties[0].propertyDetails.typeOfAllocation",
     sourceJsonPath: "applyScreenMdmsData.Estate.AllocationType",
     gridDefination: {
         xs: 12,
@@ -139,7 +139,7 @@ const areaOfPropertyField = {
     required: true,
     minLength: 2,
     maxLength: 15,
-    jsonPath: "Properties[0].propertyDetails.areaOfProperty"
+    jsonPath: "Properties[0].propertyDetails.areaSqft"
 }
 
 const rateField = {
@@ -158,7 +158,7 @@ const rateField = {
     required: true,
     minLength: 2,
     maxLength: 5,
-    jsonPath: "Properties[0].propertyDetails.rate"
+    jsonPath: "Properties[0].propertyDetails.ratePerSqft"
 }
 
 const possessionDateField = {
@@ -190,7 +190,7 @@ const categoryField = {
         labelKey: "EST_CATEGORY_PLACEHOLDER"
     },
     required: true,
-    jsonPath: "Properties[0].propertyDetails.category",
+    jsonPath: "Properties[0].category",
     sourceJsonPath: "applyScreenMdmsData.Estate.Category",
     gridDefination: {
         xs: 12,
@@ -208,7 +208,7 @@ const subCategoryField = {
         labelKey: "EST_SUBCATEGORY_PLACEHOLDER"
     },
     required: true,
-    jsonPath: "Properties[0].propertyDetails.subCategory",
+    jsonPath: "Properties[0].subCategory",
     sourceJsonPath: "applyScreenMdmsData.Estate.SubCategory",
     gridDefination: {
         xs: 12,
@@ -232,7 +232,7 @@ const siteNumberField = {
     required: true,
     minLength: 1,
     maxLength: 50,
-    jsonPath: "Properties[0].propertyDetails.rate"
+    jsonPath: "Properties[0].siteNumber"
 }
 
 const sectorNumberField = {
@@ -245,7 +245,7 @@ const sectorNumberField = {
         labelKey: "EST_SECTOR_NUMBER_PLACEHOLDER"
     },
     required: true,
-    jsonPath: "Properties[0].propertyDetails.sectorNumber",
+    jsonPath: "Properties[0].sectorNumber",
     sourceJsonPath: "applyScreenMdmsData.Estate.SectorNumber",
     gridDefination: {
         xs: 12,
@@ -269,7 +269,7 @@ const fileNumberField = {
     required: true,
     minLength: 1,
     maxLength: 50,
-    jsonPath: "Properties[0].propertyDetails.rate"
+    jsonPath: "Properties[0].fileNumber"
 }
 
 const lastNocDateField = {
@@ -347,7 +347,7 @@ export const propertyInfoDetails = getCommonCard({
         areaOfProperty: getTextField(areaOfPropertyField),
         rate: getTextField(rateField),
         possessionDate: getDateField(possessionDateField),
-        allocationType: getSelectField(allocationTypeField)
+        typeOfAllocation: getSelectField(typeOfAllocationField)
     })
 })
 

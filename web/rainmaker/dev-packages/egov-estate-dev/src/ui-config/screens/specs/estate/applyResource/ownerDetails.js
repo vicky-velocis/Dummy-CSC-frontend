@@ -58,7 +58,7 @@ const ownerNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails[0].ownerName"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.ownerName"
 }
 
 const fatherHusbandNameField = {
@@ -76,7 +76,7 @@ const fatherHusbandNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails[0].fatherHusbandName"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianName"
 }
 
 const getRelationshipRadioButton = {
@@ -86,7 +86,7 @@ const getRelationshipRadioButton = {
     xs: 12,
     sm: 6,
   },
-  jsonPath: "Properties[0].ownerDetails[0].relationship",
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianRelation",
   props: {
     label: {
       name: "Relationship",
@@ -103,7 +103,7 @@ const getRelationshipRadioButton = {
         value: "HUSBAND"
       }
     ],
-    jsonPath: "Properties[0].ownerDetails[0].relationship",
+    jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianRelation",
     required: true
   },
   required: true,
@@ -129,7 +129,7 @@ const addressField = {
     rows: 2
   },
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails[0].address"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.address"
 }
 
 const mobileNumberField = {
@@ -146,7 +146,7 @@ const mobileNumberField = {
   //   value: userInfo.userName,
   //   disabled: true
   // },
-  jsonPath: "Properties[0].ownerDetails[0].mobileNumber",
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.mobileNumber",
 }
 
 const shareField = {
@@ -164,7 +164,7 @@ const shareField = {
   },
   required: true,
   maxLength: 5,
-  jsonPath: "Properties[0].ownerDetails[0].share"
+  jsonPath: "Properties[0].propertyDetails.owners[0].share"
 }
 
 const cpNumberField = {
@@ -181,7 +181,7 @@ const cpNumberField = {
     sm: 6
   },
   maxLength: 100,
-  jsonPath: "Properties[0].ownerDetails[0].cpNumber"
+  jsonPath: "Properties[0].propertyDetails.owners[0].cpNumber"
 }
 
 const commonOwnerInformation = () => {
@@ -230,7 +230,7 @@ export const ownerDetails = getCommonCard({
             },
             headerName: "Owner ",
             headerJsonPath: "children.cardContent.children.header.children.key.props.label",
-            sourceJsonPath: "Properties[0].ownerDetails",
+            sourceJsonPath: "Properties[0].propertyDetails.owners",
             prefixSourceJsonPath: "children.cardContent.children.ownerCard.children"
           },
           type: "array"

@@ -68,32 +68,23 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
     let response;
     set(queryObject[0], "tenantId", tenantId);
     // set(queryObject[0], "owners[0].ownerDetails.allotmentStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.allotmentStartdate))
-    // set(queryObject[0], "owners[0].ownerDetails.posessionStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.posessionStartdate))
-    // set(queryObject[0], "owners[0].ownerDetails.dateOfBirth", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.dateOfBirth)) !!queryObject[0].owners[0].ownerDetails.payment && set(queryObject[0], "owners[0].ownerDetails.payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.payment[0].paymentDate))
-    // set(queryObject[0], "owners[0].ownerDetails.allotmentEnddate", addYears(queryObject[0].owners[0].ownerDetails.allotmentStartdate, 5))
-    // set(queryObject[0], "owners[0].ownerDetails.posessionEnddate", addYears(queryObject[0].owners[0].ownerDetails.posessionStartdate, 5))
-    // set(queryObject[0], "propertyDetails.floors", "")
-    // set(queryObject[0], "propertyDetails.additionalDetails", "")
-    // set(queryObject[0], "owners[0].applicationStatus", "")
-    // set(queryObject[0], "owners[0].activeState", true)
-    // set(queryObject[0], "owners[0].isPrimaryOwner", true)
-    // set(queryObject[0], "owners[0].ownerDetails.payment[0].amountDue", "")
-    // set(queryObject[0], "owners[0].ownerDetails.payment[0].receiptNumber", "")
     if (!id) {
-      set(queryObject[0], "masterDataAction", "DRAFT");
+      console.log(queryObject[0]);
+      set(queryObject[0], "action", "DRAFT");
       response = await httpRequest(
         "post",
-        "/csp/property/_create",
+        "/property-service/property-master/_create",
         "",
-        [], {
+        [], 
+        {
           Properties: queryObject
         }
       );
     } else {
       if (activeIndex === 0) {
-        set(queryObject[0], "masterDataAction", "MODIFY")
+        set(queryObject[0], "action", "MODIFY")
       } else {
-        set(queryObject[0], "masterDataAction", "SUBMIT")
+        set(queryObject[0], "action", "SUBMIT")
       }
       let applicationDocuments = get(queryObject[0], "ownerDetails.applicationDocuments") || [];
       applicationDocuments = applicationDocuments.map(item => ({
