@@ -34,7 +34,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import {
   prepareDocumentsUploadData,
-  getSearchResults,
+  //getSearchResults,
   furnishResponsePressNote,
 
   getSearchResultsViewPressnotedata,
@@ -332,7 +332,8 @@ const screenConfig = {
   name: "generatepressNote",
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("pressnote", {}));
-    dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
+    dispatch(prepareFinalObject("PressNoteDocuments", []));
+
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

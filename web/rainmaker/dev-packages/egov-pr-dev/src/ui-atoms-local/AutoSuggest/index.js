@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Select from "react-select";
+import Select, { createFilter } from "react-select";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -148,9 +148,9 @@ function Menu(props) {
       square
       className={props.selectProps.classes.ac_paper}
       {...props.innerProps}
-      style={{}}
+      style={{overflowX: "scroll"}}
     >
-      <div style={{}}>{props.children}</div>
+      <div style={{width: 800}}>{props.children}</div>
     </Paper>
   );
 }
@@ -217,14 +217,21 @@ class IntegrationReactSelect extends React.Component {
             label: label,
             InputLabelProps: inputLabelProps,
             required: required,
-            fullWidth: fullwidth
+            fullWidth: fullwidth,
+           
           }}
+         
           options={getSuggestions(suggestions) || []}
           components={components}
           value={value ? value : this.state.single}
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("single")}
+         
+          filterOption={createFilter({
+            matchFrom: 'start'
+          })}
+          
         />
       </div>
     );

@@ -2,7 +2,10 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonHeader,
-  getLabelWithValue
+  getLabelWithValue,
+  getBreak,
+  getLabel,
+  getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
@@ -19,6 +22,12 @@ import { eventdetailsSummary } from "./summaryResource/eventdetailsSummary";
 import {getSearchResultsView} from "../egov-pr/searchResource/citizenSearchFunctions"
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import {
+  
+  handleScreenConfigurationFieldChange as handleField
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { cancelEventApplication } from "../../../../ui-utils/commons";
+import {  showHideAdhocPopupopmsReject } from "../utils";
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -54,7 +63,116 @@ const header = getCommonContainer({
   }
   
 });
+const cancelNocApplication = async (state, dispatch) => {
 
+let data={"RequestBody":{
+  
+      
+              "tenantId": getTenantId(),
+              "moduleCode": localStorageGet("modulecode"),
+              "eventDetailUuid": getQueryArg(window.location.href, "eventuuId"),
+              "eventStatus": "CANCELLED"
+          } }
+          cancelEventApplication(state, dispatch,data)
+
+ 
+       
+  //}
+};
+const closePopup = async (state, dispatch) => {
+
+
+  showHideAdhocPopupopmsReject(state, dispatch, "summary", "pressMaster")
+
+         
+    
+  };
+
+
+
+
+
+export const ConfirmMsg = getCommonContainer({
+   
+  msgContainer: getCommonContainer({
+    subText: getCommonParagraph({
+      labelName: "Are you sure you want to cancel this event?",
+      
+      labelKey: "PR_EVENT_CONFIRM_MSG"
+    }
+    ,
+      
+      {
+        style: {
+          wordBreak:"break-all"
+        }
+      }
+    ),
+  }),
+    break: getBreak(),
+    btnContainer: getCommonContainer({
+
+    cancel: {
+      componentPath: "Button",
+      props: {
+        variant: "outlined",
+      //  color: "primary",
+        style: {
+          color: "rgb(254, 122, 81)",
+          border: "1px solid rgb(254, 122, 81)",
+          borderRadius: "2px",
+          height: "38px",
+          marginRight: "16px",
+          marginTop: "40px",
+          minWidth:"80px",
+
+        }
+      },
+      children: {
+        nextButtonLabel: getLabel({
+          labelName: "Cancel",
+          labelKey: "PR_BUTTON_CANCEL"
+        }),
+      
+      },
+      onClickDefination: {
+
+
+        action: "condition",
+        callBack:closePopup
+      }
+    },
+    submit: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+       color: "primary",
+        style: {
+          borderRadius: "2px",
+          height: "38px",
+          marginRight: "16px",
+          marginTop: "40px",
+          minWidth:"80px",
+
+        }
+      },
+      children: {
+        nextButtonLabel: getLabel({
+          labelName: "Ok",
+          labelKey: "PR_OK_BUTTON"
+        }),
+       
+      },
+      onClickDefination: {
+
+
+        action: "condition",
+        callBack:cancelNocApplication
+      }
+    }
+
+  })
+});
 const prepareDocumentsView = async (state, dispatch) => {
   
   let documentsPreview = [];
@@ -80,24 +198,20 @@ const prepareDocumentsView = async (state, dispatch) => {
     doc["link"] = fileUrls[doc.fileStoreId];
     return doc;
   });
-
-
-
-
-        dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+ dispatch(prepareFinalObject("documentsPreview", documentsPreview));
     
 }
 const HideshowEdit = (action, Status, ) => {
-  set(
-    action,
-    "screenConfig.components.div.children.footer.children.testButton.visible",
-    Status === 'UPCOMING' ?  true  : false 
-  );
-  set(
-    action,
-    "screenConfig.components.div.children.footer.children.testButton.visible",
-    Status === 'ONGOING' ?  true  : false 
-  );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footer.children.testButton.visible",
+  //   Status === 'UPCOMING' ?  true  : false 
+  // );
+  // set(
+  //   action,
+  //   "screenConfig.components.div.children.footer.children.testButton.visible",
+  //   Status === 'ONGOING' ?  true  : false 
+  // );
         
       
 }
@@ -123,6 +237,18 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
+  
+
+    set(
+      action,
+      "screenConfig.components.div.children.footer.children.testButton.visible",
+      ((getQueryArg(window.location.href, "status") === 'UPCOMING' || getQueryArg(window.location.href, "status") === 'ONGOING')  && getQueryArg(window.location.href, "eventstatus")!=="CANCELLED") ?  true  : false 
+    );
+    // set(
+    //   action,
+    //   "screenConfig.components.div.children.footer.children.testButton.visible",
+    //   Status === 'ONGOING' ?  true  : false 
+    // );
 
 
   set(
@@ -183,7 +309,20 @@ const screenConfig = {
         }),
         footer: getQueryArg(window.location.href, "page")==="apply"?ApplySummaryfooter:footer
       }
-    }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-pr",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "xs",
+        screenKey: "summary"
+      },
+      children: {
+        popup: ConfirmMsg
+      }
+    },
   }
 };
 

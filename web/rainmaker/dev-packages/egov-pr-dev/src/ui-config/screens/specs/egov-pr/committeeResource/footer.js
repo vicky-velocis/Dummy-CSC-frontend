@@ -16,7 +16,7 @@ import {
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { invitationtoguests ,updateCommitteemaster,createCommitteemaster} from "../../../../../ui-utils/commons.js";
 import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
-import { localStorageGet, lSRemoveItemlocal, lSRemoveItem} from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet,localStorageSet, lSRemoveItemlocal, lSRemoveItem} from "egov-ui-kit/utils/localStorageUtils";
 import store from "../../../../../ui-redux/store";
 const state = store.getState();
 
@@ -146,12 +146,17 @@ const callBackForNext = async (state, dispatch) => {
 )
 let checkboxcheck=localStorageGet("committeelist")
    activeStepforbtn = activeStep;
-   let isFormValid = true;
-   let hasFieldToaster = false;
-   let validatestepformflag = validatestepform(activeStep,committedept,checkboxcheck)
-   
-     isFormValid = validatestepformflag[0];
-     hasFieldToaster = validatestepformflag[1];
+    let isFormValid = false;
+  //  let hasFieldToaster = false;
+  //  let validatestepformflag = validatestepform(activeStep,committedept,checkboxcheck)
+  // screenConfiguration.screenConfig.createCommitteeMaster.components.div.children.formwizardFirstStep.children.createCommittee.children.cardContent.children.propertyDetailsConatiner.children
+   isFormValid = validateFields(
+    "components.div.children.formwizardFirstStep.children.createCommittee.children.cardContent.children.propertyDetailsConatiner.children",
+    state,
+    dispatch,
+    "createCommitteeMaster")
+    //  isFormValid = validatestepformflag[0];
+    //  hasFieldToaster = validatestepformflag[1];
   
   if(activeStep === 0){
     if(isFormValid==false){
@@ -197,6 +202,16 @@ let checkboxcheck=localStorageGet("committeelist")
     	
 	changeStep(state, dispatch);
   }
+  
+    else{
+      let errorMessage = {
+        labelName:"Please fill all mandatory fields and select atleast one employee!",
+        labelKey: "PR_ERR_FILL_ALL_COMMITTEE_MANDATORY_FIELDS_TOAST"
+        };
+       
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }
+  
 }
 else{
   let errorMessage = {
@@ -235,7 +250,7 @@ export const changeStep = (
     activeStep = defaultActiveStep;
   }
 
-  //const isPreviousButtonVisible = activeStep > 0 ? true : false;
+ const isPreviousButtonVisible = activeStep === 1 ? true : false;
   const isNextButtonVisible = activeStep < 1 ? true : false;
   const isPayButtonVisible = activeStep ===1 ? true : false;
   const iscancel = activeStep ===1 ? true : false;
@@ -245,6 +260,11 @@ export const changeStep = (
       path: "components.div.children.stepper.props",
       property: "activeStep",
       value: activeStep
+    },
+    {
+      path: "components.div.children.footer.children.previousButton",
+      property: "visible",
+      value: isPreviousButtonVisible
     },
     {
       path: "components.div.children.footer.children.cancel",
@@ -346,23 +366,113 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
-	lSRemoveItemlocal("committeelist");
-	lSRemoveItemlocal("selectedDepartmentsInvite");
-	lSRemoveItem("committeelist")
-	lSRemoveItem("selectedDepartmentsInvite");
-	
-	dispatch(
+ // localStorageSet("selectedDepartmentsInvite",[{"key":"REVENUE","cat":"REV01","active":true}]);
+
+  if(localStorageGet("committeelist")!=="[]")
+  {
+if(localStorageGet("committeelist")!==null || localStorageGet("committeelistAll") !== null )
+{
+  
+
+  let selectedrows = localStorageGet("committeelist") === null ? JSON.parse(localStorageGet("committeelistAll")) : JSON.parse(localStorageGet("committeelist"));
+  
+  let data = selectedrows.map(item => ({
+  // alert(item)
+  [getTextToLocalMapping("Department")]:
+  item.Department || "-",
+  [getTextToLocalMapping("Employee Name")]: item['Employee Name'] || "-",
+  [getTextToLocalMapping("Mobile No")]: item['Mobile No'] || "-",
+  [getTextToLocalMapping("Email ID")]:  item['Email ID'] || "-",
+  [getTextToLocalMapping("Department Id")]: item['Department Id'] || "-",
+  [getTextToLocalMapping("Employee ID")]:  item['Employee ID'] || "-",
+  [getTextToLocalMapping("Designation")]:  item['Designation'] || "-"
+ 
+  }));
+  
+
+  dispatch(
   handleField(
-    "createCommitteeMaster",    "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
-    "props.data",
-    []
+  "createCommitteeMaster",
+  "components.div.children.formwizardSecondStep.children.searchDepartmentEmployeesResults_committee1",			 
+  "props.data",
+  data
   )
-);
-  changeStep(state, dispatch, "previous");
+  );
+  
+//changeStep(state, dispatch);
+changeStep(state, dispatch, "previous");
+
+}
+
+else{
+  let errorMessage = {
+    labelName:"Please fill all mandatory fields and select atleast one employee!",
+    labelKey: "PR_ERR_FILL_ALL_COMMITTEE_MANDATORY_FIELDS_TOAST"
+    };
+   
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}
+
+}
+else{
+let errorMessage = {
+labelName:"Please fill all mandatory fields and select atleast one employee!",
+labelKey: "PR_ERR_FILL_ALL_COMMITTEE_MANDATORY_FIELDS_TOAST"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}
+
+
+
+
+
+// 	lSRemoveItemlocal("committeelist");
+// 	lSRemoveItemlocal("selectedDepartmentsInvite");
+// 	lSRemoveItem("committeelist")
+// 	lSRemoveItem("selectedDepartmentsInvite");
+	
+// 	dispatch(
+//   handleField(
+//     "createCommitteeMaster",    "components.div.children.formwizardFirstStep.children.searchDepartmentEmployeesResults_committee.children.cardContent.children.committieegrid",
+//     "props.data",
+//     []
+//   )
+// );
 };
 
  
 export const footer = getCommonApplyFooter({
+  previousButton: {
+    componentPath: "Button",
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+       // minWidth: "200px",
+        height: "48px",
+        marginRight: "16px" 
+      }
+    },
+    children: {
+      previousButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_left"
+        }
+      },
+      previousButtonLabel: getLabel({
+        labelName: "Previous Step",
+        labelKey: "PR_COMMON_BUTTON_PREV_STEP"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForPrevious
+    },
+    visible: false
+  },
   cancel: {
     componentPath: "Button",
     props: {
