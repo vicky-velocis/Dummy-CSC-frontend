@@ -1048,7 +1048,7 @@ import {
           documentsArr.push({
             name: item.code,
             required: item.required,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+            jsonPath: `Properties[0].ownerDetails.applicationDocuments[${ind}]`,
             statement: item.description
           });
           return documentsArr;
@@ -1926,7 +1926,7 @@ import {
       //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
       let applicationDocs = get(
         state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "Properties[0].ownerDetails.applicationDocuments",
         []
       ) || [];
       applicationDocs = applicationDocs.filter(item => !!item)
@@ -1942,7 +1942,7 @@ import {
       applicationDocsReArranged &&
         dispatch(
           prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.applicationDocuments",
+            "Properties[0].ownerDetails.applicationDocuments",
             applicationDocsReArranged
           )
         );

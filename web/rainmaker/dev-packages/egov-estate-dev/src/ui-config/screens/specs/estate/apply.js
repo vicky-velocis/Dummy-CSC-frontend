@@ -67,13 +67,13 @@ const setDocumentData = async (action, state, dispatch) => {
   const documentRes = await getMdmsData(dispatch, documentTypePayload);
   const {
     PropertyServices
-  } = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
+  } = documentRes && documentRes.MdmsRes ? documentRes.MdmsRes : {}
   const {
     applications = []
   } = PropertyServices || {}
   const findMasterItem = applications.find(item => item.code === "MasterRP")
   const masterDocuments = !!findMasterItem ? findMasterItem.documentList : [];
-  const rentedMasterDocuments = masterDocuments.map(item => ({
+  const estateMasterDocuments = masterDocuments.map(item => ({
     type: item.code,
     description: {
       labelName: "Only .jpg and .pdf files. 6MB max file size.",
@@ -93,7 +93,7 @@ const setDocumentData = async (action, state, dispatch) => {
   const documentTypes = prepareDocumentTypeObj(masterDocuments);
   let applicationDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "Properties[0].propertyDetails.applicationDocuments",
+    "Properties[0].ownerDetails.applicationDocuments",
     []
   ) || [];
   applicationDocs = applicationDocs.filter(item => !!item)
@@ -109,20 +109,20 @@ const setDocumentData = async (action, state, dispatch) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        "Properties[0].propertyDetails.applicationDocuments",
+        "Properties[0].ownerDetails.applicationDocuments",
         applicationDocsReArranged
       )
     );
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardSecondStep.children.rentedDocumentsDetails.children.cardContent.children.documentList",
+      "components.div.children.formwizardFifthStep.children.ownerDocumentDetails.children.cardContent.children.documentList",
       "props.inputProps",
-      rentedMasterDocuments
+      estateMasterDocuments
     )
   );
   dispatch(prepareFinalObject("PropertiesTemp[0].applicationDocuments", documentTypes))
-  dispatch(prepareFinalObject("applyScreenMdmsData.rentedApplications", applications))
+  dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 
 export const getColonyTypes = async (action, state, dispatch) => {
@@ -174,10 +174,10 @@ const getData = async (action, state, dispatch) => {
 const applyEstate = {
   uiFramework: "material-ui",
   name: "apply",
-  // beforeInitScreen: (action, state, dispatch) => {
-  //   getData(action, state, dispatch)
-  //   return action;
-  // },
+  beforeInitScreen: (action, state, dispatch) => {
+    getData(action, state, dispatch)
+    return action;
+  },
   components: {
     div: {
       uiFramework: "custom-atoms",

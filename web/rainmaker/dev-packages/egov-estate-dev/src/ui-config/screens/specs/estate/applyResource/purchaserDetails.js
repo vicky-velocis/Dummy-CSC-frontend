@@ -160,12 +160,12 @@ const sellerFatherHusbandNameField = {
 
 const shareField = {
   label: {
-      labelName: "Share",
-      labelKey: "EST_SHARE_LABEL"
+      labelName: "% Share",
+      labelKey: "EST_PERCENT_SHARE_LABEL"
   },
   placeholder: {
-      labelName: "Enter Share",
-      labelKey: "EST_SHARE_PLACEHOLDER"
+      labelName: "Enter % Share",
+      labelKey: "EST_PERCENT_SHARE_PLACEHOLDER"
   },
   gridDefination: {
       xs: 12,

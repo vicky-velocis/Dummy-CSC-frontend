@@ -1,6 +1,6 @@
 export const documentList = {
   uiFramework: "custom-containers-local",
-  moduleName: "egov-estatte",
+  moduleName: "egov-estate",
   componentPath: "DocumentListContainer",
   props: {
     buttonLabel: {
