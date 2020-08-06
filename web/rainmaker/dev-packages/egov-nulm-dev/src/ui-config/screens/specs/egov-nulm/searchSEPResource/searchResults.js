@@ -30,6 +30,12 @@ export const getTextToLocalMapping = (label) => {
         "STORE_COMMON_TABLE_COL_ACTIVE",
         localisationLabels
       );
+      case "Creation Date":
+      return getLocaleLabels(
+        "Creation Date",
+        "NULM_SEP_CREATION_DATE",
+        localisationLabels
+      );
       case "Code":
         return getLocaleLabels(
           "Code",
@@ -54,7 +60,7 @@ export const searchResults = {
       getTextToLocalMapping("Application Id"),
       getTextToLocalMapping("Name of Applicant"),
       getTextToLocalMapping("Application Status"),
-      getTextToLocalMapping("Active"),
+      getTextToLocalMapping("Creation Date"),
       {
         name: "code",
         options: {
@@ -78,7 +84,7 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view-sep?tenantId=${getTenantId()}&code=${rowData[4]}`;
+  window.location.href = `view-sep?tenantId=${getTenantId()}&applicationNumber=${rowData[0]}&status=${rowData[2]}`;
 };
 
 

@@ -6,14 +6,14 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { getTextToLocalMapping } from "./searchResults";
-import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-
-
+import { validateFields,convertDateToEpoch } from "../../utils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import set from "lodash/set";
 export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
   showHideTable(false, dispatch);
-  const tenantId =  getTenantId();
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+
   let queryObject = [
     {
       key: "tenantId",
@@ -74,6 +74,15 @@ export const searchApiCall = async (state, dispatch) => {
    let NULMSEPRequest = {...searchScreenObject};
    NULMSEPRequest.tenantId = tenantId;
 
+  if(get(NULMSEPRequest, "toDate")){
+    let toDate = get(NULMSEPRequest, "toDate").split("-").reverse().join("-");
+    set( NULMSEPRequest,"toDate",toDate );
+  }
+  if(get(NULMSEPRequest, "fromDate")){
+    let fromDate = get(NULMSEPRequest, "fromDate").split("-").reverse().join("-");
+    set( NULMSEPRequest,"fromDate",fromDate );
+  }
+  
    const requestBody = {NULMSEPRequest}
     let response = await getSearchResults([],requestBody, dispatch,"sep");
     try {
@@ -83,7 +92,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Application Id")]: get(item, "applicationId", "-") || "-",
           [getTextToLocalMapping("Name of Applicant")]: get(item, "name", "-") || "-",
           [getTextToLocalMapping("Application Status")]: get(item, "applicationStatus", "-") || "-",
-          [getTextToLocalMapping("Active")]: get(item, "isActive",false) ? "Yes": "No",
+          [getTextToLocalMapping("Creation Date")]: get(item, "auditDetails.createdTime", "")? new Date(get(item, "auditDetails.createdTime", "-")).toISOString().substr(0,10) : "-",
           ["code"]: get(item, "applicationUuid", "-")
         };
       });

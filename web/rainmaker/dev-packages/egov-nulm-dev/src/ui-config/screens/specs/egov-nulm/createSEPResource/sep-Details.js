@@ -49,17 +49,17 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSEPRequest.gender",
         label: { name: "Gender", key: "NULM_SEP_GENDER" },
         buttons: [
           {
             labelName: "FEMALE",
-            labelKey: "NULM_SEP_GENDER_FEMALE",
+            labelKey: "COMMON_GENDER_MALE",
             value:"FEMALE",           
           },
           {
             label: "MALE",
-            labelKey: "NULM_SEP_GENDER_MALE",
+            labelKey: "COMMON_GENDER_FEMALE",
             value:"MALE",           
           },
           {
@@ -68,7 +68,7 @@ export const SepDetails = getCommonCard({
             value:"OTHERS",           
           }
         ],      
-        defaultValue: "MALE"
+       // defaultValue: "MALE"
       },
       type: "array",
      
@@ -121,7 +121,7 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_ADHAR_NUMBER_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("numeric-only") || null,
+        pattern: getPattern("aadhar") || null,
         jsonPath: "NULMSEPRequest.adharNo"
       })
     },
@@ -248,7 +248,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSEPRequest.category",
         label: { name: "Category", key: "NULM_SEP_CATEGORY" },
         buttons: [
           {
@@ -268,11 +268,11 @@ export const SepDetails = getCommonCard({
           },
           {
             label: "OTHERS",
-            labelKey: "NULM_SEP_CATEGORY_OTHERS",
+            labelKey: "NULM_SEP_GENDER_OTHERS",
             value:"OTHERS",           
           }
         ],
-        defaultValue: "OTHERS"
+     //   defaultValue: "OTHERS"
       },
       type: "array",     
     },
@@ -288,8 +288,8 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
-       
-        label: { name: "Urban Poor", key: "NULM_SEP_URBAN_POOR" },
+        jsonPath: "NULMSEPRequest.isUrbanPoor",
+        label: { name: "Urban Poor", key: "NULM_SEP_URBAN_ROOR" },
         buttons: [
           {
             labelName: "YES",
@@ -333,6 +333,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
+        jsonPath: "NULMSEPRequest.isMinority",
         label: { name: "Minority", key: "NULM_SEP_MINORITY" },
         buttons: [
           {
@@ -361,7 +362,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: false,
-       
+        jsonPath: "NULMSEPRequest.minority",
         label: { name: "Minority Religion", key: "NULM_SEP_MINORITY_RELIGION" },
         buttons: [
           {
@@ -396,7 +397,7 @@ export const SepDetails = getCommonCard({
           }
         ],
       
-        defaultValue: "MUSLIM"
+      //  defaultValue: "MUSLIM"
       },
       type: "array",     
     },
@@ -411,7 +412,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSEPRequest.isHandicapped",
         label: { name: "Urban Poor", key: "NULM_SEP_HANDICAPPED" },
         buttons: [
           {
@@ -482,12 +483,12 @@ export const SepDetails = getCommonCard({
       ...getTextField({
         label: {
           labelName: "Details of account of beneficiary-bank Name/Branch/A/C name (Only in Chandigarh)",
-          labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_(ONLY_IN_CHANDIGARH)"
+          labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_ONLY_IN_CHANDIGARH)"
         },
-        placeholder: {
-          labelName: "Enter Details of account of beneficiary-bank Name/Branch/A/C name (Only in Chandigarh)",
-          labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_(ONLY_IN_CHANDIGARH)_PLACEHOLDER"
-        },
+        // placeholder: {
+        //   labelName: "Enter Details of account of beneficiary-bank Name/Branch/A/C name (Only in Chandigarh)",
+        //   labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_ONLY_IN_CHANDIGARH)"
+        // },
         required: true,
         pattern: getPattern("alpha-numeric-with-space") || null,
         jsonPath: "NULMSEPRequest.bankDetails"
@@ -570,6 +571,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,  
+        jsonPath: "NULMSEPRequest.isLoanFromBankinginstitute",
         label: { name: "Whether taken loan from any banking/financial institute", 
         key: "NULM_SEP_WHETHER_TAKEN_LOAN_FROM_ANY_BANKING/FINANCIAL_INSTITUTE" },
         buttons: [
@@ -599,7 +601,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSEPRequest.isRepaymentMade",
         label: { name: "If Yes , whether all repayment made ?", 
         key: "NULM_SEP_IF_YES_WHEATHER_ALL_REPAYMENT_MADE?" },
         buttons: [
@@ -629,7 +631,7 @@ export const SepDetails = getCommonCard({
       type: "array",
       props: {
         required: false,
-       
+        jsonPath: "NULMSEPRequest.recommendedBy",
         label: { name: "Recommended by", 
         key: "NULM_SEP_RECOMMENDED_BY" },
         buttons: [
@@ -645,7 +647,7 @@ export const SepDetails = getCommonCard({
           },
           {
             label: "BANK",
-            labelKey: "NULM_SEP_BANK",
+            labelKey: "NULM_SEP_Bank",
             value:"BANK",           
           },
           {
@@ -656,7 +658,7 @@ export const SepDetails = getCommonCard({
         
         ],
       
-        defaultValue: "SHG"
+       // defaultValue: "SHG"
       },
       type: "array",
      

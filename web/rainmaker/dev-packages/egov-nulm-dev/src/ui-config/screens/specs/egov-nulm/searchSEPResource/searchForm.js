@@ -7,6 +7,7 @@ import {
   getPattern,
   getSelectField,
   getTextField,
+  getDateField,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -90,6 +91,52 @@ export const searchForm = getCommonCard({
           sm: 4,
         },
         jsonPath: "searchScreen.applicationId"
+      })
+    },
+    fromDate: {
+      ...getDateField({
+        label: {
+          labelName: "From date",
+          labelKey: "NULM_SEP_FROM_DATE"
+        },
+        placeholder: {
+          labelName: "From date",
+          labelKey: "NULM_SEP_FROM_DATE"
+        },
+        pattern: getPattern("Date") || null,
+        jsonPath: "searchScreen.fromDate",
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+        },
+        props: {
+          inputProps: {
+           // max: getTodaysDateInYMD()
+          }
+        }
+      })
+    },
+    toDate: {
+      ...getDateField({
+        label: {
+          labelName: "To date",
+          labelKey: "NULM_SEP_TO_DATE"
+        },
+        placeholder: {
+          labelName: "To date",
+          labelKey: "NULM_SEP_TO_DATE"
+        },
+        pattern: getPattern("Date") || null,
+        jsonPath: "searchScreen.toDate",
+         gridDefination: {
+          xs: 12,
+          sm: 4,
+        },
+        props: {
+          inputProps: {
+         //   max: getTodaysDateInYMD()
+          }
+        }
       })
     },
   

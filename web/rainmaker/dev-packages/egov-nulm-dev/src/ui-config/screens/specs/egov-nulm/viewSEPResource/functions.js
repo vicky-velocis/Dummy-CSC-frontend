@@ -121,20 +121,36 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 
 
 
-export const handleCreateUpdatePO = (state, dispatch) => {
+
+export const handleSubmitSEP = (state, dispatch) =>{
+  handleCreateUpdateSEP(state, dispatch,"CREATED")
+};
+export const handlesaveSEP = (state, dispatch) =>{
+  handleCreateUpdateSEP(state, dispatch,"DRAFTED")
+};
+export const handleRejectSEP = (state, dispatch) =>{
+  handleCreateUpdateSEP(state, dispatch,"APPROVED")
+};
+export const handleApproveSEP = (state, dispatch) =>{
+  handleCreateUpdateSEP(state, dispatch,"REJECTED")
+};
+
+
+
+export const handleCreateUpdateSEP = (state, dispatch,status) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
     "NULMSEPRequest.applicationUuid",
     null
   );
   if (uuid) {
-    createUpdatePO(state, dispatch, "UPDATE");
+    createUpdatePO(state, dispatch, "UPDATE",status);
   } else {
-    createUpdatePO(state, dispatch, "CREATE");
+    createUpdatePO(state, dispatch, "CREATE",status);
   }
 };
 
-export const createUpdatePO = async (state, dispatch, action) => {
+export const createUpdatePO = async (state, dispatch, action,status) => {
 
   let NULMSEPRequest = get(
     state.screenConfiguration.preparedFinalObject,
@@ -145,14 +161,15 @@ export const createUpdatePO = async (state, dispatch, action) => {
   
   NULMSEPRequest.tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
- 
-  if(action ==="CREATE")
-   NULMSEPRequest.applicationStatus = "CREATED";
+ //setting status
+   NULMSEPRequest.applicationStatus = status;
+let dob = get(NULMSEPRequest, "dob");
+   const formattedDOB = dob.split("-").reverse().join("-");
 
   set(
     NULMSEPRequest,
     "dob",
-    convertDateToEpoch(get(NULMSEPRequest, "dob"), "dayStart")
+    formattedDOB
   );
 
   const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
@@ -179,7 +196,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-      //  dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-nulm/acknowledgement?screen=sep&mode=create&code=${response.ResponseBody.applicationId}`));
        }
   
     } catch (error) {
@@ -195,7 +212,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-      //  dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-nulm/acknowledgement?screen=sep&mode=update&code=${response.ResponseBody.applicationId}`));
        }
   
     } catch (error) {

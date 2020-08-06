@@ -170,7 +170,7 @@ export const getSEPDetailsView = (isReview = true) => {
       isUrbanPoor: getLabelWithValue(
         {
           labelName: "Urban Poor",
-          labelKey: "NULM_SEP_URBAN_POOR"
+          labelKey: "NULM_SEP_URBAN_ROOR"
         },
         { jsonPath: "NULMSEPRequest.isUrbanPoor" }
       ),
@@ -205,7 +205,7 @@ export const getSEPDetailsView = (isReview = true) => {
       typeofbusiness: getLabelWithValue(
         {
           labelName: "Type of Business/Industry/Service/activity proposed to be started",
-          labelKey: "NULM_SEP_TYPE_OF_BUSINESS/INDUSTRY/SERVICE/ACTIVITY_PROPOSED_TO_BE_STARTED"
+          labelKey: "NULM_SEP_TYPE_OF_BUSINESS/INDUSTRY/SERVICE/ACTIVITY_PROPOSED_TO_BE_STARTED "
         },
         { jsonPath: "NULMSEPRequest.typeOfBusinessToBeStarted" }
       ),
@@ -227,7 +227,7 @@ export const getSEPDetailsView = (isReview = true) => {
       bankDetails: getLabelWithValue(
         {
           labelName: "Details of account of beneficiary-bank Name/Branch/A/C name (Only in Chandigarh)",
-          labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_(ONLY_IN_CHANDIGARH)"
+          labelKey: "NULM_SEP_OF_ACCOUNT_OF_BENEFICIARY_BANK_A_C_NAME_ONLY_IN_CHANDIGARH)"
         },
         { jsonPath: "NULMSEPRequest.bankDetails" }
       ),

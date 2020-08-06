@@ -1,7 +1,7 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleCreateUpdatePO } from "./functions";
+import { handleSubmitSEP,handleRejectSEP,handlesaveSEP,handleApproveSEP } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
   const createUrl = `/egov-nulm/create-sep`;
@@ -18,31 +18,109 @@ const getCommonCreateFooter = children => {
     children
   };
 };
+export const buttonController = () => {
+  if (process.env.REACT_APP_NAME === "Employee")
+    return {
+      rejectButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+             minWidth: "200px",
+            height: "48px",
+            marginRight: "16px",
+          },
+        },
+        children: {
+          resetButtonLabel: getLabel({
+            labelName: "Reject",
+            labelKey: "NULM_COMMON_REJECT_BUTTON",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: handleRejectSEP,
+        },
+        visible: true,
+      },
+      approvedButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            // minWidth: "200px",
+            height: "48px",
+            marginRight: "16px",
+          },
+        },
+        children: {
+          updateButtonLabel: getLabel({
+            labelName: "Approved",
+            labelKey: "NULM_COMMON_APPROVED_BUTTON",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: handleApproveSEP,
+        },
+        visible: true,
+      },
+    };
+  else
+    return {
+      saveButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+             minWidth: "200px",
+            height: "48px",
+            marginRight: "16px",
+          },
+        },
+        children: {
+          resetButtonLabel: getLabel({
+            labelName: "Save",
+            labelKey: "NULM_COMMON_SAVE_BUTTON",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: handlesaveSEP,
+        },
+        visible: true,
+      },
+      submitButton: {
+        componentPath: "Button",
+        props: {
+          variant: "contained",
+          color: "primary",
+          style: {
+            minWidth: "200px",
+            height: "48px",
+            marginRight: "45px"
+          }
+        },
+        children: {
+          submitButtonLabel: getLabel({
+            labelName: "SUBMIT",
+            labelKey: "HR_SUBMIT_LABEL"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: handleSubmitSEP
+        }
+      }
+    };
+};
 
 export const poCommonFooter = () => {
   return getCommonCreateFooter({
-    submitButton: {
-      componentPath: "Button",
-      props: {
-        variant: "contained",
-        color: "primary",
-        style: {
-          minWidth: "200px",
-          height: "48px",
-          marginRight: "45px"
-        }
-      },
-      children: {
-        submitButtonLabel: getLabel({
-          labelName: "SUBMIT",
-          labelKey: "HR_SUBMIT_LABEL"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: handleCreateUpdatePO
-      }
-    }
+    ...buttonController(),
   });
 };
 

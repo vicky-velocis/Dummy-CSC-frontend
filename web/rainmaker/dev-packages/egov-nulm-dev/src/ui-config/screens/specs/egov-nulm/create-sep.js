@@ -9,7 +9,7 @@ import { SepDetails } from "./createSEPResource/sep-Details";
 import { documentDetails } from "./createSEPResource/documentDetails";
 import get from "lodash/get";
 import { httpRequest } from "../../../../ui-utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { NULMConfiguration } from "../../../../ui-utils/sampleResponses";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -119,7 +119,21 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
 
     const mdmsDataStatus = getMdmsData(state, dispatch);
+    if(state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.NULMSEPRequest){
 
+      const {NULMSEPRequest} = state.screenConfiguration.preparedFinalObject ;
+      const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
+    
+      radioButtonValue.forEach(value => {
+        if(NULMSEPRequest[value] && NULMSEPRequest[value]=== true ){
+          dispatch(prepareFinalObject(`NULMSEPRequest[${value}]`, "YES" ));
+        }else{
+          dispatch(prepareFinalObject(`NULMSEPRequest[${value}]`, "NO" ));
+        }
+      })
+
+      dispatch(prepareFinalObject(`NULMSEPRequest.dob`, NULMSEPRequest.dob.split(" ")[0] ));
+    }
     return action;
   },
 

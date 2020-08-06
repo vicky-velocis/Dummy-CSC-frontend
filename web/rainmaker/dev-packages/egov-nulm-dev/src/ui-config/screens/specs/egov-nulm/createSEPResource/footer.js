@@ -69,10 +69,14 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
   }
 }
 
+if(NULMSEPRequest && ( !NULMSEPRequest.hasOwnProperty("gender") || !NULMSEPRequest.hasOwnProperty("category"))){
+  isFormValid = false;
+}
+
 
 
     if (!isSepDetailsValid) {
-   //   isFormValid = false;
+      isFormValid = false;
     }
   }
   if (activeStep === 1) {
