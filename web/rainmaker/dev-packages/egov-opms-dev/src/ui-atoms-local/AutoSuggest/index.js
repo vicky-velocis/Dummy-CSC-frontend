@@ -246,9 +246,6 @@ class IntegrationReactSelect extends React.Component {
           placeholder={placeholder}
           {...rest}
           onChange={this.handleChange("multi")}
-          // filterOption={createFilter({
-          //   matchFrom: 'start'
-          // })}
         />
       </div>
     );
