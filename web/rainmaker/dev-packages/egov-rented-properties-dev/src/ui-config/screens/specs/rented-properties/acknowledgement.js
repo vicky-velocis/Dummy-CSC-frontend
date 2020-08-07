@@ -139,11 +139,11 @@ const getAcknowledgementCard = (
               icon: purpose ==="reject" ? "close" : "done",
               backgroundColor: purpose ==="reject" ? "#E54D42" : "#39CB74",
               header,
-            //   body: {
-            //     labelName:
-            //       "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-            //     labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
-            //   },
+              body: {
+                labelName:
+                  "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+                labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+              },
               tailText: tailText,
               number: transitNumber || applicationNumber
             })
@@ -173,11 +173,11 @@ const getAcknowledgementCard = (
                 labelName: "Payment is Failed!",
                 labelKey: "RP_PAYMENT_FAILED_MESSAGE_HEAD"
               },
-            //   body: {
-            //     labelName:
-            //       "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-            //     labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
-            //   },
+              body: {
+                labelName:
+                  "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+                labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+              },
               tailText: {
                 labelName: "Application Number",
                 labelKey: "RP_APPLICATION_NUMBER_LABEL"
