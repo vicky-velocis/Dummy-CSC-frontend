@@ -275,8 +275,13 @@ const setSearchResponse = async (
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-  dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-  prepareDocumentsView(state, dispatch);
+  if (response === undefined) {
+    dispatch(setRoute(`/egov-opms/invalidIdErrorPage?applicationNumber=${applicationNumber}&tenantId=${tenantId}`))
+  }
+  else {
+    dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
+    prepareDocumentsView(state, dispatch);
+  }
 
 };
 
