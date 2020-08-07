@@ -67,45 +67,69 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
 
     let response;
     set(queryObject[0], "tenantId", tenantId);
-    // set(queryObject[0], "owners[0].ownerDetails.allotmentStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.allotmentStartdate))
-    // set(queryObject[0], "owners[0].ownerDetails.posessionStartdate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.posessionStartdate))
-    // set(queryObject[0], "owners[0].ownerDetails.dateOfBirth", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.dateOfBirth)) !!queryObject[0].owners[0].ownerDetails.payment && set(queryObject[0], "owners[0].ownerDetails.payment[0].paymentDate", convertDateToEpoch(queryObject[0].owners[0].ownerDetails.payment[0].paymentDate))
-    // set(queryObject[0], "owners[0].ownerDetails.allotmentEnddate", addYears(queryObject[0].owners[0].ownerDetails.allotmentStartdate, 5))
-    // set(queryObject[0], "owners[0].ownerDetails.posessionEnddate", addYears(queryObject[0].owners[0].ownerDetails.posessionStartdate, 5))
-    // set(queryObject[0], "propertyDetails.floors", "")
-    // set(queryObject[0], "propertyDetails.additionalDetails", "")
-    // set(queryObject[0], "owners[0].applicationStatus", "")
-    // set(queryObject[0], "owners[0].activeState", true)
-    // set(queryObject[0], "owners[0].isPrimaryOwner", true)
-    // set(queryObject[0], "owners[0].ownerDetails.payment[0].amountDue", "")
-    // set(queryObject[0], "owners[0].ownerDetails.payment[0].receiptNumber", "")
+    set(queryObject[0], "propertyDetails.dateOfAuction", convertDateToEpoch(queryObject[0].propertyDetails.dateOfAuction))
+    set(queryObject[0], "propertyDetails.lastNocDate", convertDateToEpoch(queryObject[0].propertyDetails.lastNocDate))
+    set(queryObject[0], "propertyDetails.dateOfAllotment", convertDateToEpoch(queryObject[0].propertyDetails.dateOfAllotment))
+    set(queryObject[0], "propertyDetails.possesionDate", convertDateToEpoch(queryObject[0].propertyDetails.possesionDate))
+
+    const purchaseDetails = get(
+      queryObject[0],
+      "propertyDetails.purchaseDetails",
+      []
+    )
+    purchaseDetails.map((item, index) => {
+      set(queryObject[0], `propertyDetails.purchaseDetails[${index}].dateOfRegistration`, convertDateToEpoch(queryObject[0].propertyDetails.purchaseDetails[index].dateOfRegistration));
+    })
+    
     if (!id) {
-      set(queryObject[0], "masterDataAction", "DRAFT");
+      console.log(queryObject[0]);
+      set(queryObject[0], "action", "DRAFT");
       response = await httpRequest(
         "post",
-        "/csp/property/_create",
+        "/property-service/property-master/_create",
         "",
-        [], {
+        [], 
+        {
           Properties: queryObject
         }
       );
     } else {
       if (activeIndex === 0) {
-        set(queryObject[0], "masterDataAction", "MODIFY")
+        set(queryObject[0], "action", "MODIFY")
       } else {
-        set(queryObject[0], "masterDataAction", "SUBMIT")
+        set(queryObject[0], "action", "SUBMIT")
       }
-      let applicationDocuments = get(queryObject[0], "ownerDetails.applicationDocuments") || [];
-      applicationDocuments = applicationDocuments.map(item => ({
+
+      let owners = get(
+        queryObject[0],
+        "propertyDetails.owners",
+        []
+      )
+      owners.map((item, index) => {
+        let ownerDocuments = get(queryObject[0, `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`]) || [];
+        ownerDocuments = ownerDocuments.map(item => ({
+          ...item,
+          isActive: true
+        }))
+
+        const removedDocs = get(state.screenConfiguration.preparedFinalObject, `propertyDetails.owners[${index}].ownerDetails.removedDocs`) || [];
+        ownerDocuments = [...ownerDocuments, ...removedDocs]
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`, ownerDocuments)
+      })
+
+      
+      /* let ownerDocuments = get(queryObject[0], "ownerDetails.ownerDocuments") || [];
+      ownerDocuments = ownerDocuments.map(item => ({
         ...item,
         active: true
       }))
       const removedDocs = get(state.screenConfiguration.preparedFinalObject, "PropertiesTemp[0].removedDocs") || [];
-      applicationDocuments = [...applicationDocuments, ...removedDocs]
-      set(queryObject[0], "ownerDetails.applicationDocuments", applicationDocuments)
+      ownerDocuments = [...ownerDocuments, ...removedDocs]
+      set(queryObject[0], "ownerDetails.ownerDocuments", ownerDocuments) */
+
       response = await httpRequest(
         "post",
-        "/csp/property/_update",
+        "/property-service/property-master/_update",
         "",
         [], {
           Properties: queryObject
@@ -116,23 +140,41 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
       Properties
     } = response
 
-    let applicationDocuments = Properties[0].propertyDetails.applicationDocuments || [];
-    const removedDocs = applicationDocuments.filter(item => !item.active)
-    applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    Properties = [{
-      ...Properties[0],
-      propertyDetails: {
-        ...Properties[0].propertyDetails,
-        applicationDocuments
-      }
-    }]
+    let owners = get(
+      Properties[0],
+      "propertyDetails.owners",
+      []
+    )
+
+    owners.map((item, index) => {
+      let ownerDocuments = Properties[0].propertyDetails.owners[index].ownerDocuments || [];
+      const removedDocs = ownerDocuments.filter(item => !item.active)
+      ownerDocuments = ownerDocuments.filter(item => item.active)
+      Properties[0].propertyDetails.owners[index].ownerDetails.ownerDocuments = ownerDocuments;
+      dispatch(
+        prepareFinalObject(
+          `Properties[0].propertyDetails.owners[${index}].removedDocs`,
+          removedDocs
+        )
+      );
+    })
+    // let ownerDocuments = Properties[0].propertyDetails.ownerDocuments || [];
+    // const removedDocs = ownerDocuments.filter(item => !item.active)
+    // ownerDocuments = ownerDocuments.filter(item => !!item.active)
+    // Properties = [{
+    //   ...Properties[0],
+    //   propertyDetails: {
+    //     ...Properties[0].propertyDetails,
+    //     ownerDocuments
+    //   }
+    // }]
     dispatch(prepareFinalObject("Properties", Properties));
-    dispatch(
-      prepareFinalObject(
-        "Properties[0].removedDocs",
-        removedDocs
-      )
-    );
+    // dispatch(
+    //   prepareFinalObject(
+    //     "Properties[0].removedDocs",
+    //     removedDocs
+    //   )
+    // );
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, {

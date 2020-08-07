@@ -6,8 +6,8 @@ import {
   formwizardFirstStep,
   formwizardSecondStep,
   formwizardThirdStep,
-  formwizardFourthStep, 
-  formwizardFifthStep, 
+  formwizardFourthStep,
+  formwizardFifthStep,
   formwizardSixthStep
 } from './applyResource/applyConfig'
 import {
@@ -17,12 +17,15 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
-import { footer } from './applyResource/footer';
+import {
+  footer
+} from './applyResource/footer';
 import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import {
-  prepareDocumentTypeObj
+  prepareDocumentTypeObj,
+  prepareDocumentTypeObjMaster
 } from "../utils";
 import {
   handleScreenConfigurationFieldChange as handleField
@@ -57,7 +60,7 @@ export const getMdmsData = async (dispatch, body) => {
   }
 };
 
-const setDocumentData = async (action, state, dispatch) => {
+export const setDocumentData = async (action, state, dispatch, owner = 0) => {
   const documentTypePayload = [{
     moduleName: "PropertyServices",
     masterDetails: [{
@@ -84,18 +87,22 @@ const setDocumentData = async (action, state, dispatch) => {
     },
     maxFileSize: 6000,
     downloadUrl: item.downloadUrl,
-    moduleName: "RentedProperties",
+    moduleName: "Estate",
     statement: {
       labelName: "Allowed documents are Aadhar Card / Voter ID Card / Driving License",
       labelKey: item.description
     }
   }))
-  const documentTypes = prepareDocumentTypeObj(masterDocuments);
-  let applicationDocs = get(
+  var documentTypes;
+  var applicationDocs;
+  documentTypes = prepareDocumentTypeObjMaster(masterDocuments, owner);
+  applicationDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    "Properties[0].ownerDetails.applicationDocuments",
+    `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`,
     []
   ) || [];
+
+
   applicationDocs = applicationDocs.filter(item => !!item)
   let applicationDocsReArranged =
     applicationDocs &&
@@ -109,19 +116,19 @@ const setDocumentData = async (action, state, dispatch) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        "Properties[0].ownerDetails.applicationDocuments",
+        `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`,
         applicationDocsReArranged
       )
     );
   dispatch(
     handleField(
       "apply",
-      "components.div.children.formwizardFifthStep.children.ownerDocumentDetails.children.cardContent.children.documentList",
+      `components.div.children.formwizardFifthStep.children.ownerDocumentDetails_${owner}.children.cardContent.children.documentList`,
       "props.inputProps",
       estateMasterDocuments
     )
   );
-  dispatch(prepareFinalObject("PropertiesTemp[0].applicationDocuments", documentTypes))
+  dispatch(prepareFinalObject(`PropertiesTemp[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`, documentTypes))
   dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 

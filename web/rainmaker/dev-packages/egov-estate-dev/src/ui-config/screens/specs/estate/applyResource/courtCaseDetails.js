@@ -38,9 +38,8 @@ const estateOfficerCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.estateOfficerCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].estateOfficerCourt"
 }
 
 const commissionersCourtField = {
@@ -56,9 +55,8 @@ const commissionersCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.commissionersCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].commissionersCourt"
 }
 
 const chiefAdministratorsCourtField = {
@@ -74,9 +72,8 @@ const chiefAdministratorsCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.chiefAdministratorsCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].chiefAdministratorsCourt"
 }
 
 const advisorToAdminCourtField = {
@@ -92,9 +89,8 @@ const advisorToAdminCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.advisorToAdminCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].advisorToAdminCourt"
 }
 
 const honbleDistrictCourtField = {
@@ -110,9 +106,8 @@ const honbleDistrictCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleDistrictCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableDistrictCourt"
 }
 
 const honbleHighCourtField = {
@@ -128,9 +123,8 @@ const honbleHighCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleHighCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableHighCourt"
 }
 
 const honbleSupremeCourtField = {
@@ -146,9 +140,8 @@ const honbleSupremeCourtField = {
       xs: 12,
       sm: 6
   },
-  minLength: 1,
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleSupremeCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableSupremeCourt"
 }
 
 export const courtCaseDetails = getCommonCard({
