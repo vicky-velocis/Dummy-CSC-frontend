@@ -13,9 +13,9 @@ import {
   getReviewCourtCase
 } from "./reviewProperty";
 
-// import {
-//   getReviewDocuments
-// } from "./reviewDocuments";
+import {
+  getReviewDocuments
+} from "./reviewDocuments";
 
 
 const reviewPropertyInfo = getReviewPropertyInfo();
