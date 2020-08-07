@@ -8,8 +8,8 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails,getReviewGrantDetails } from "./applyResource/review-property";
-import { getReviewDocuments } from "./applyResource/review-documents";
+import { getReviewOwner, getReviewProperty } from "./applyResource/reviewProperty";
+// import { getReviewDocuments } from "./applyResource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
@@ -20,26 +20,26 @@ let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
 export const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Rented Properties",
-    labelKey: "RP_COMMON_RENTED_PROPERTIES"
+    labelName: "Estate",
+    labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
 const reviewOwnerDetails = getReviewOwner(false);
 const reviewPropertyDetails = getReviewProperty(false);
-const reviewAddressDetails = getReviewAddress(false);
-const reviewRentDetails = getReviewRentDetails(false);
-const reviewPaymentDetails = getReviewPaymentDetails(false);
-const reviewDocumentDetails = getReviewDocuments(false, "apply")
-const reviewGrantDetails = getReviewGrantDetails(false)
+// const reviewAddressDetails = getReviewAddress(false);
+// const reviewRentDetails = getReviewRentDetails(false);
+// const reviewPaymentDetails = getReviewPaymentDetails(false);
+// const reviewDocumentDetails = getReviewDocuments(false, "apply")
+// const reviewGrantDetails = getReviewGrantDetails(false)
 
 export const propertyReviewDetails = getCommonCard({
   reviewPropertyDetails,
-  reviewAddressDetails,
+  // reviewAddressDetails,
   reviewOwnerDetails,
-  reviewRentDetails,
-  reviewPaymentDetails,
-  reviewDocumentDetails,
-  reviewGrantDetails
+  // reviewRentDetails,
+  // reviewPaymentDetails,
+  // reviewDocumentDetails,
+  // reviewGrantDetails
 });
 
 export const searchResults = async (action, state, dispatch, transitNumber) => {
