@@ -9,14 +9,13 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getReviewOwner, getReviewProperty } from "./applyResource/reviewProperty";
-// import { getReviewDocuments } from "./applyResource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "CTL_CLERK");
 
-let transitNumber = getQueryArg(window.location.href, "transitNumber");
+let fileNumber = getQueryArg(window.location.href, "fileNumber");
 
 export const headerrow = getCommonContainer({
   header: getCommonHeader({
@@ -24,27 +23,19 @@ export const headerrow = getCommonContainer({
     labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
-const reviewOwnerDetails = getReviewOwner(false);
-const reviewPropertyDetails = getReviewProperty(false);
-// const reviewAddressDetails = getReviewAddress(false);
-// const reviewRentDetails = getReviewRentDetails(false);
-// const reviewPaymentDetails = getReviewPaymentDetails(false);
-// const reviewDocumentDetails = getReviewDocuments(false, "apply")
-// const reviewGrantDetails = getReviewGrantDetails(false)
+// const reviewOwnerDetails = getReviewOwner(false);
+// const reviewPropertyDetails = getReviewProperty(false);
+
 
 export const propertyReviewDetails = getCommonCard({
-  reviewPropertyDetails,
-  // reviewAddressDetails,
-  reviewOwnerDetails,
-  // reviewRentDetails,
-  // reviewPaymentDetails,
-  // reviewDocumentDetails,
-  // reviewGrantDetails
+  // reviewPropertyDetails,
+  // reviewOwnerDetails,
+
 });
 
-export const searchResults = async (action, state, dispatch, transitNumber) => {
+export const searchResults = async (action, state, dispatch, fileNumber) => {
   let queryObject = [
-    { key: "transitNumber", value: transitNumber }
+    { key: "fileNumber", value: fileNumber }
   ];
   let payload = await getSearchResults(queryObject);
   if(payload) {
@@ -70,27 +61,25 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   }
 }
 
-const beforeInitFn = async (action, state, dispatch, transitNumber) => {
+const beforeInitFn = async (action, state, dispatch, fileNumber) => {
   dispatch(prepareFinalObject("workflow.ProcessInstances", []))
-  if(transitNumber){
-    await searchResults(action, state, dispatch, transitNumber)
+  if(fileNumber){
+    await searchResults(action, state, dispatch, fileNumber)
   }
 }
 
 export const onTabChange = async(tabIndex, dispatch, state) => {
-  transitNumber = getQueryArg(window.location.href, "transitNumber");
-  const tenantId = getQueryArg(window.location.href, "tenantId");
+  fileNumber = getQueryArg(window.location.href, "filenumber");
   let path = ""
+  // switch(tabIndex){
 
-  switch(tabIndex){
-
-  }
+  // }
   if(tabIndex === 0) {
-    path = `/rented-properties/search-preview?transitNumber=${transitNumber}&tenantId=${tenantId}`
+    path = `/estate/search-preview?filenumber=${fileNumber}`
   } else if(tabIndex === 1) {
-    path = `/rented-properties/property-transitImages?transitNumber=${transitNumber}&tenantId=${tenantId}`
+    path = `/estate/property-transitImages?filenumber=${fileNumber}`
   } else if(tabIndex === 2) {
-    path = `/rented-properties/notices?transitNumber=${transitNumber}&tenantId=${tenantId}`
+    path = `/estate/notices?filenumber=${fileNumber}`
   }
   dispatch(setRoute(path))
 }
@@ -109,10 +98,10 @@ export const tabs = [
     tabButton: { labelName: "Payment Details", labelKey: "ESTATE_PAYMENT_DETAILS" },
   },
   {
-    tabButton: { labelName: "Court Case", labelKey: "ESTATE_COURT_CASE" },
+    tabButton: { labelName: "Notices", labelKey: "ESTATE_NOTICES" },
   },
   {
-    tabButton: { labelName: "Notices", labelKey: "ESTATE_NOTICES" },
+    tabButton: { labelName: "Court Case", labelKey: "ESTATE_COURT_CASE" },
   }
 ]
 
@@ -120,8 +109,8 @@ const estateDetailPreview = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    transitNumber = getQueryArg(window.location.href, "transitNumber");
-    // beforeInitFn(action, state, dispatch, transitNumber);
+    fileNumber = getQueryArg(window.location.href, "filenumber");
+    beforeInitFn(action, state, dispatch, fileNumber);
     return action;
   },
   components: {
@@ -143,43 +132,11 @@ const estateDetailPreview = {
               },
              ...headerrow
             },
-            searchButton: {
-              componentPath: "Button",
-              visible: !!findItem,
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-                align: "right"
-              },
-              props: {
-                variant: "contained",
-                style: {
-                  color: "white",
-                  backgroundColor: "#fe7a51",
-                  borderColor:"#fe7a51",
-                  borderRadius: "2px",
-                  width: "50%",
-                  height: "48px",
-                }
-              },
-              children: {
-                buttonLabel: getLabel({
-                  labelName: "NOTICE RECOVERY",
-                  labelKey: "RP_NOTICE_RECOVERY"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  dispatch(setRoute(`/rented-properties/notice-recovry?tenantId=${getTenantId()}`));
-                }
-              }
-            },
             }
           },
           tabSection: {
             uiFramework: "custom-containers-local",
-            moduleName: "egov-rented-properties",
+            moduleName: "egov-estate",
             componentPath: "CustomTabContainer",
             props: {
               tabs,
@@ -190,7 +147,7 @@ const estateDetailPreview = {
           },
           taskStatus: {
             uiFramework: "custom-containers-local",
-            moduleName: "egov-rented-properties",
+            moduleName: "egov-estate",
             componentPath: "WorkFlowContainer",
             props: {
               dataPath: "Properties",
