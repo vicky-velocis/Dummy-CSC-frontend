@@ -20,6 +20,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   const duplicateCopyApplicatioNumber =  get(rentedData, "applicationNumber")
   const tenantId = get(rentedData, "tenantId");
   const purpose = "apply";
+  const purposeTransit = "TransitSiteapply";
   const status = "success";
  
   const path = type === "OWNERSHIPTRANSFERRP" ? 
@@ -28,7 +29,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}` :
   type === "PERMISSIONTOMORTGAGE" ? 
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`:
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${transitNumberTransitSite}&tenantId=${tenantId}`
+  `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumberTransitSite}&tenantId=${tenantId}`
   dispatch(
     setRoute(path)
   );
