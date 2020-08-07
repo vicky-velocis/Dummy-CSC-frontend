@@ -17,6 +17,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   const transitNumberTransitSite = get(rentedData, "property.transitNumber")
   const applicationNumberTransitSite = get(rentedData, "applicationNumber")
   const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
+  const purposenotice = "NoticeGenapply";
   const duplicateCopyApplicatioNumber =  get(rentedData, "applicationNumber")
   const tenantId = get(rentedData, "tenantId");
   const purpose = "apply";
@@ -34,21 +35,6 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
     setRoute(path)
   );
 };
-export const moveToSuccessNotice = (rentedData, dispatch, type) => {
-  const id = get(rentedData, "id");
-  const transitNumberNoticeGen = get(rentedData, "property.transitNumber")
-  const tenantId = get(rentedData, "tenantId");
-  const purposenotice = "NoticeGenapply";
-  const status = "success";
-  const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
-  const path = type === "OWNERSHIPTRANSFERRP" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
-  : `/rented-properties/acknowledgement?purpose=${purposenotice}&status=${status}&transitNumber=${transitNumberNoticeGen}&tenantId=${tenantId}`
-  dispatch(
-    setRoute(path)
-  );
-};
-
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
@@ -214,7 +200,7 @@ if (isFormValid) {
     state.screenConfiguration.preparedFinalObject,
     "NoticeApplications[0]"
 );
-moveToSuccessNotice(noticegendata, dispatch);
+moveToSuccess(noticegendata, dispatch);
 }
 
 if (!isFormValid) {
@@ -261,7 +247,7 @@ if (isFormValid) {
     state.screenConfiguration.preparedFinalObject,
     "NoticeApplications[0]"
 );
-moveToSuccessNotice(noticegendata, dispatch);
+moveToSuccess(noticegendata, dispatch);
 }
 
 if (!isFormValid) {
