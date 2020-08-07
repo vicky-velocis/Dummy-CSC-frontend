@@ -61,15 +61,7 @@ export const documentsEventSummary = getCommonGrayCard({
       }
     }
   },
-  // body: {
-    // uiFramework: "custom-containers-local",
-    // moduleName: "egov-noc",
-    // componentPath: "DownloadFileContainer",
-    // props: {
-      // sourceJsonPath: "documentsPreview",
-      // className: "pr-review-documents"
-    // }
-  // }
+  
   body: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-pr",
