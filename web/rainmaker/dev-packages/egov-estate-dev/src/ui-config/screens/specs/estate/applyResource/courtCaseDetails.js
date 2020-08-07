@@ -39,7 +39,7 @@ const estateOfficerCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.estateOfficerCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].estateOfficerCourt"
 }
 
 const commissionersCourtField = {
@@ -56,7 +56,7 @@ const commissionersCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.commissionersCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].commissionersCourt"
 }
 
 const chiefAdministratorsCourtField = {
@@ -73,7 +73,7 @@ const chiefAdministratorsCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.chiefAdministratorsCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].chiefAdministratorsCourt"
 }
 
 const advisorToAdminCourtField = {
@@ -90,7 +90,7 @@ const advisorToAdminCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.advisorToAdminCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].advisorToAdminCourt"
 }
 
 const honbleDistrictCourtField = {
@@ -107,7 +107,7 @@ const honbleDistrictCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleDistrictCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableDistrictCourt"
 }
 
 const honbleHighCourtField = {
@@ -124,7 +124,7 @@ const honbleHighCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleHighCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableHighCourt"
 }
 
 const honbleSupremeCourtField = {
@@ -141,7 +141,7 @@ const honbleSupremeCourtField = {
       sm: 6
   },
   maxLength: 250,
-  jsonPath: "Properties[0].courtCaseDetails.honbleSupremeCourt"
+  jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableSupremeCourt"
 }
 
 export const courtCaseDetails = getCommonCard({

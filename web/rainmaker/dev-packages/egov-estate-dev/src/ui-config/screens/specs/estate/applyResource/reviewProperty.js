@@ -103,18 +103,18 @@ export const editSection = {
     },
     buttonLabel: getLabel({
       labelName: "Edit",
-      labelKey: "TL_SUMMARY_EDIT"
+      labelKey: "EST_SUMMARY_EDIT"
     })
   }
 }
 
-const masterEntryEditSection = (isEditable) => ({
+const masterEntryEditSection = (isEditable, step = 0) => ({
   ...editSection,
   visible: isEditable,
   onClickDefination: {
     action: "condition",
     callBack: (state, dispatch) => {
-      changeStep(state, dispatch, "apply", "", 0);
+      changeStep(state, dispatch, "apply", "", step);
     }
   }
 })
@@ -144,13 +144,13 @@ export const getReviewPropertyInfo = (isEditable = true) => {
             labelKey: "EST_PROPERTY_INFO_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 0)
       }
     },
     viewFour: getCommonContainer({
       fileNumber: getLabelWithValue(
         fileNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.fileNumber"
+          jsonPath: "Properties[0].fileNumber"
         }
       ),
       propertyType: getLabelWithValue(
@@ -160,37 +160,32 @@ export const getReviewPropertyInfo = (isEditable = true) => {
       ),
       category: getLabelWithValue(
         categoryLabel, {
-          jsonPath: "Properties[0].propertyDetails.category"
+          jsonPath: "Properties[0].category"
         }
       ),
       subCategory: getLabelWithValue(
         subCategoryLabel, {
-          jsonPath: "Properties[0].propertyDetails.subCategory"
+          jsonPath: "Properties[0].subCategory"
         }
       ),
       siteNumber: getLabelWithValue(
         siteNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.siteNumber"
+          jsonPath: "Properties[0].siteNumber"
         }
       ),
       sectorNumber: getLabelWithValue(
         sectorNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.sectorNumber"
+          jsonPath: "Properties[0].sectorNumber"
         }
       ),
       areaOfProperty: getLabelWithValue(
         areaOfPropertyLabel, {
-          jsonPath: "Properties[0].propertyDetails.areaOfProperty"
+          jsonPath: "Properties[0].propertyDetails.areaSqft"
         }
       ),
       rate: getLabelWithValue(
         rateLabel, {
-          jsonPath: "Properties[0].propertyDetails.rate"
-        }
-      ),
-      possessionDate: getLabelWithValue(
-        possessionDateLabel, {
-          jsonPath: "Properties[0].propertyDetails.possessionDate"
+          jsonPath: "Properties[0].propertyDetails.ratePerSqft"
         }
       ),
       allocationType: getLabelWithValue(
@@ -217,7 +212,7 @@ export const getReviewAuction = (isEditable = true) => {
             labelKey: "EST_AUCTION_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 0)
       }
     },
     viewFour: getCommonContainer({
@@ -240,39 +235,6 @@ export const getReviewAuction = (isEditable = true) => {
   })
 }
 
-export const getReviewAllotment = (isEditable = true) => {
-  return getCommonGrayCard({
-    headerDiv: {
-      ...headerDiv,
-      children: {
-        header: {
-          gridDefination: {
-            xs: 12,
-            sm: 10
-          },
-          ...getCommonSubHeader({
-            labelName: "Allotment Details",
-            labelKey: "EST_ALLOTMENT_DETAILS_HEADER"
-          })
-        },
-        editSection: masterEntryEditSection(isEditable)
-      }
-    },
-    viewFour: getCommonContainer({
-      dateOfAllotment: getLabelWithValue(
-        dateOfAllotmentLabel, {
-          jsonPath: "Properties[0].propertyDetails.dateOfAllotment"
-        }
-      ),
-      allotmentNumber: getLabelWithValue(
-        allotmentNumberLabel, {
-          jsonPath: "Properties[0].propertyDetails.allotmentNumber"
-        }
-      )
-    })
-  })
-}
-
 export const getReviewAdditional = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -288,7 +250,7 @@ export const getReviewAdditional = (isEditable = true) => {
             labelKey: "EST_ADDITIONAL_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 0)
       }
     },
     viewFour: getCommonContainer({
@@ -336,7 +298,7 @@ const cpNumberLabel = {
   labelKey: "EST_CP_NUMBER_LABEL"
 }
 
-export const getReviewOwner = (isEditable = true, owner) => {
+export const getReviewOwner = (isEditable = true, owner = 0) => {
   return getCommonGrayCard({
     headerDiv: {
       ...headerDiv,
@@ -351,43 +313,58 @@ export const getReviewOwner = (isEditable = true, owner) => {
             labelKey: "EST_OWNER_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 1)
       }
     },
     viewFour: getCommonContainer({
       ownerName: getLabelWithValue(
         ownerNameLabel, {
-          jsonPath: `Properties[0].ownerDetails[${owner}].ownerName`
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerName`
         }
       ),
       fatherHusbandName: getLabelWithValue(
         fatherHusbandNameLabel, {
-          jsonPath: `Properties[0].ownerDetails[${owner}].fatherHusbandName`
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.guardianName`
         }
       ),
       relationship: getLabelWithValue(
         relationshipLabel, {
-          jsonPath: "Properties[0].ownerDetails.relationship"
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.guardianRelation`
         }
       ),
       address: getLabelWithValue(
         addressLabel, {
-          jsonPath: "Properties[0].ownerDetails.address"
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.address`
         }
       ),
       mobileNumber: getLabelWithValue(
         mobileNumberLabel, {
-          jsonPath: "Properties[0].ownerDetails.mobileNumber"
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.mobileNumber`
         }
       ),
       share: getLabelWithValue(
         shareLabel, {
-          jsonPath: "Properties[0].ownerDetails.share"
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].share`
         }
       ),
       cpNumber: getLabelWithValue(
         cpNumberLabel, {
-          jsonPath: "Properties[0].ownerDetails.cpNumber"
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].cpNumber`
+        }
+      ),
+      possessionDate: getLabelWithValue(
+        possessionDateLabel, {
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.possessionDate`
+        }
+      ),
+      dateOfAllotment: getLabelWithValue(
+        dateOfAllotmentLabel, {
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.dateOfAllotment`
+        }
+      ),
+      allotmentNumber: getLabelWithValue(
+        allotmentNumberLabel, {
+          jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.allotmentNumber`
         }
       )
     })
@@ -436,7 +413,7 @@ const dateOfRegistrationLabel = {
   labelKey: "EST_DATE_OF_REGISTRATION_LABEL"
 }
 
-export const getReviewPurchaser = (isEditable = true) => {
+export const getReviewPurchaser = (isEditable = true, purchaser = 0) => {
   return getCommonGrayCard({
     headerDiv: {
       ...headerDiv,
@@ -451,63 +428,63 @@ export const getReviewPurchaser = (isEditable = true) => {
             labelKey: "EST_PURCHASER_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 1)
       }
     },
     viewFour: getCommonContainer({
       newOwnerName: getLabelWithValue(
         newOwnerNameLabel, {
-          jsonPath: "Properties[0].purchaserDetails.newOwnerName"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].newOwnerName`
         }
       ),
       newOwnerFatherHusbandName: getLabelWithValue(
         newOwnerFatherHusbandNameLabel, {
-          jsonPath: "Properties[0].purchaserDetails.newOwnerFatherHusbandName"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].newOwnerFatherName`
         }
       ),
       relationship: getLabelWithValue(
         relationshipLabel, {
-          jsonPath: "Properties[0].purchaserDetails.relationship"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].relationship`
         }
       ),
       newOwnerAddress: getLabelWithValue(
         newOwnerAddressLabel, {
-          jsonPath: "Properties[0].purchaserDetails.newOwnerAddress"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].newOwnerAddress`
         }
       ),
       newOwnerMobileNumber: getLabelWithValue(
         newOwnerMobileNumberLabel, {
-          jsonPath: "Properties[0].purchaserDetails.newOwnerMobileNumber"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].newOwnerMobileNumber`
         }
       ),
       sellerName: getLabelWithValue(
         sellerNameLabel, {
-          jsonPath: "Properties[0].purchaserDetails.sellerName"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].sellerName`
         }
       ),
       sellerFatherHusbandName: getLabelWithValue(
         sellerFatherHusbandNameLabel, {
-          jsonPath: "Properties[0].purchaserDetails.sellerFatherHusbandName"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].sellerFatherName`
         }
       ),
       percentShare: getLabelWithValue(
         percentShareLabel, {
-          jsonPath: "Properties[0].purchaserDetails.share"
+          jsonPath: "Properties[0].propertyDetails.purchaseDetails[${purchaser}].percentageOfShare"
         }
       ),
       modeOfTransfer: getLabelWithValue(
         modeOfTransferLabel, {
-          jsonPath: "Properties[0].purchaserDetails.modeOfTransfer"
+          jsonPath: "Properties[0].propertyDetails.purchaseDetails[${purchaser}].modeOfTransfer"
         }
       ),
       registrationNumber: getLabelWithValue(
         registrationNumberLabel, {
-          jsonPath: "Properties[0].purchaserDetails.registrationNumberField"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].registrationNumberField`
         }
       ),
       dateOfRegistration: getLabelWithValue(
         dateOfRegistrationLabel, {
-          jsonPath: "Properties[0].purchaserDetails.dateOfRegistration"
+          jsonPath: `Properties[0].propertyDetails.purchaseDetails[${purchaser}].dateOfRegistration`
         }
       )
     })
@@ -620,94 +597,6 @@ const balanceInttLabelST = {
   labelKey: "EST_BALANCE_INTT_LABEL"
 }
 
-export const getReviewServiceTax = (isEditable = true) => {
-  return getCommonGrayCard({
-    headerDiv: {
-      ...headerDiv,
-      children: {
-        header: {
-          gridDefination: {
-            xs: 12,
-            sm: 10
-          },
-          ...getCommonSubHeader({
-            labelName: "Service Tax Details",
-            labelKey: "EST_SERVICE_TAX_DETAILS_HEADER"
-          })
-        },
-        editSection: masterEntryEditSection(isEditable)
-      }
-    },
-    viewFour: getCommonContainer({
-      rateOfStOrGst: getLabelWithValue(
-        rateOfStOrGstLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.rateOfStOrGst"
-        }
-      ),
-      amountOfGst: getLabelWithValue(
-        amountOfGstLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.amountOfGst"
-        }
-      ),
-      amountDue: getLabelWithValue(
-        amountDueLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.amountDue"
-        }
-      ),
-      dateOfDeposit: getLabelWithValue(
-        dateOfDepositLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.dateOfDeposit"
-        }
-      ),
-      delayInPayment: getLabelWithValue(
-        delayInPaymentLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.delayInPayment"
-        }
-      ),
-      interestForDelay: getLabelWithValue(
-        interestForDelayLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.interestForDelay"
-        }
-      ),
-      totalAmountDueWithInterest: getLabelWithValue(
-        totalAmountDueWithInterestLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.totalAmountDueWithInterest"
-        }
-      ),
-      amountDepositedSt: getLabelWithValue(
-        amountDepositedSTLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.amountDepositedSt"
-        }
-      ),
-      amountDepositedIntt: getLabelWithValue(
-        amountDepositedInttLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.amountDepositedIntt"
-        }
-      ),
-      balanceSt: getLabelWithValue(
-        balanceStLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.balanceSt"
-        }
-      ),
-      balanceIntt: getLabelWithValue(
-        balanceInttLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.balanceIntt"
-        }
-      ),
-      totalDue: getLabelWithValue(
-        totalDueLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.totalDue"
-        }
-      ),
-      receiptNumberAndDate: getLabelWithValue(
-        receiptNumberAndDateLabel, {
-          jsonPath: "Properties[0].paymentDetails.serviceTax.receiptNumberAndDate"
-        }
-      )
-    })
-  })
-}
-
 export const getReviewPayment = (isEditable = true, owner) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -723,7 +612,7 @@ export const getReviewPayment = (isEditable = true, owner) => {
             labelKey: "EST_PAYMENT_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 3)
       }
     },
     viewGroundRent: getCommonContainer({
@@ -916,43 +805,43 @@ export const getReviewCourtCase = (isEditable = true) => {
             labelKey: "EST_COURT_CASE_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable)
+        editSection: masterEntryEditSection(isEditable, 2)
       }
     },
     viewFour: getCommonContainer({
       estateOfficerCourt: getLabelWithValue(
         estateOfficerCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.estateOfficerCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].estateOfficerCourt"
         }
       ),
       commissionersCourt: getLabelWithValue(
         commissionersCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.commissionersCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].commissionersCourt"
         }
       ),
       chiefAdministratorsCourt: getLabelWithValue(
         chiefAdministratorsCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.chiefAdministratorsCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].chiefAdministratorsCourt"
         }
       ),
       advisorToAdminCourt: getLabelWithValue(
         advisorToAdminCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.advisorToAdminCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].advisorToAdminCourt"
         }
       ),
       honbleDistrictCourt: getLabelWithValue(
         honbleDistrictCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.honbleDistrictCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableDistrictCourt"
         }
       ),
       honbleHighCourt: getLabelWithValue(
         honbleHighCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.honbleHighCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableHighCourt"
         }
       ),
       honbleSupremeCourt: getLabelWithValue(
         honbleSupremeCourtLabel, {
-          jsonPath: "Properties[0].courtCaseDetails.honbleSupremeCourt"
+          jsonPath: "Properties[0].propertyDetails.courtCases[0].honorableSupremeCourt"
         }
       )
     })

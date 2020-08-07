@@ -87,42 +87,6 @@ const dateOfAuctionField = {
     }
 }
 
-const dateOfAllotmentField = {
-    label: {
-        labelName: "Date of Allotment",
-        labelKey: "EST_DATE_OF_ALLOTMENT_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Date of Allotment",
-        labelKey: "EST_DATE_OF_ALLOTMENT_PLACEHOLDER"
-    },
-    pattern: getPattern("Date"),
-    jsonPath: "Properties[0].propertyDetails.dateOfAllotment",
-    props: {
-        inputProps: {
-            max: getTodaysDateInYMD()
-        }
-    }
-}
-
-const allotmentNumberField = {
-    label: {
-        labelName: "Allotment Number",
-        labelKey: "EST_ALLOTMENT_NUMBER_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Allotment Number",
-        labelKey: "EST_ALLOTMENT_NUMBER_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 1,
-    maxLength: 50,
-    jsonPath: "Properties[0].propertyDetails.allotmentNumber"
-}
-
 const areaOfPropertyField = {
     label: {
         labelName: "Area of the Property in sqft",
@@ -159,25 +123,6 @@ const rateField = {
     minLength: 2,
     maxLength: 5,
     jsonPath: "Properties[0].propertyDetails.ratePerSqft"
-}
-
-const possessionDateField = {
-    label: {
-        labelName: "Possession Date",
-        labelKey: "EST_POSSESSION_DATE_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Possession Date",
-        labelKey: "EST_POSSESSION_DATE_PLACEHOLDER"
-    },
-    pattern: getPattern("Date"),
-    required: true,
-    jsonPath: "Properties[0].propertyDetails.possessionDate",
-    props: {
-        inputProps: {
-            max: getTodaysDateInYMD()
-        }
-    }
 }
 
 const categoryField = {
@@ -346,7 +291,6 @@ export const propertyInfoDetails = getCommonCard({
         sectorNumber: getSelectField(sectorNumberField),
         areaOfProperty: getTextField(areaOfPropertyField),
         rate: getTextField(rateField),
-        possessionDate: getDateField(possessionDateField),
         typeOfAllocation: getSelectField(typeOfAllocationField)
     })
 })
@@ -369,7 +313,7 @@ export const auctionDetails = getCommonCard({
     })
 })
 
-const allotmentDetailsHeader = getCommonTitle({
+/* const allotmentDetailsHeader = getCommonTitle({
     labelName: "Allotment Details",
     labelKey: "EST_ALLOTMENT_DETAILS_HEADER"
 }, {
@@ -384,7 +328,7 @@ export const allotmentDetails = getCommonCard({
         dateOfAllotment: getDateField(dateOfAllotmentField),
         allotmentNumber: getTextField(allotmentNumberField)
     })
-})
+}) */
 
 const additionalDetailsHeader = getCommonTitle({
     labelName: "Additional Details",

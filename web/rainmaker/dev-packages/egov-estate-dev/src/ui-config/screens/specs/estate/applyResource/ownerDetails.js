@@ -58,7 +58,7 @@ const ownerNameField = {
   },
   required: true,
   maxLength: 150,
-  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.ownerName"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.ownerName",
 }
 
 const fatherHusbandNameField = {
@@ -184,6 +184,61 @@ const cpNumberField = {
   jsonPath: "Properties[0].propertyDetails.owners[0].cpNumber"
 }
 
+const possessionDateField = {
+  label: {
+    labelName: "Possession Date",
+    labelKey: "EST_POSSESSION_DATE_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Possession Date",
+    labelKey: "EST_POSSESSION_DATE_PLACEHOLDER"
+  },
+  pattern: getPattern("Date"),
+  required: true,
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.possessionDate",
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
+}
+
+const dateOfAllotmentField = {
+  label: {
+    labelName: "Date of Allotment",
+    labelKey: "EST_DATE_OF_ALLOTMENT_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Date of Allotment",
+    labelKey: "EST_DATE_OF_ALLOTMENT_PLACEHOLDER"
+  },
+  pattern: getPattern("Date"),
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.dateOfAllotment",
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
+}
+
+const allotmentNumberField = {
+  label: {
+    labelName: "Allotment Number",
+    labelKey: "EST_ALLOTMENT_NUMBER_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Allotment Number",
+    labelKey: "EST_ALLOTMENT_NUMBER_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+  },
+  minLength: 1,
+  maxLength: 50,
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.allotmentNumber"
+}
+
 const commonOwnerInformation = () => {
   return getCommonGrayCard({
     header: getCommonTitle({
@@ -201,7 +256,10 @@ const commonOwnerInformation = () => {
       address: getTextField(addressField),
       mobileNumber: getTextField(mobileNumberField),
       share: getTextField(shareField),
-      cpNumber: getTextField(cpNumberField)
+      cpNumber: getTextField(cpNumberField),
+      possessionDate: getDateField(possessionDateField),
+      dateOfAllotment: getDateField(dateOfAllotmentField),
+      allotmentNumber: getTextField(allotmentNumberField)
     })
   });
 };

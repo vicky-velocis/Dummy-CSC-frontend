@@ -5,7 +5,7 @@ import {
 import {
   getReviewPropertyInfo,
   getReviewAuction,
-  getReviewAllotment,
+  // getReviewAllotment,
   getReviewAdditional,
   getReviewOwner,
   getReviewPurchaser,
@@ -20,7 +20,7 @@ import {
 
 const reviewPropertyInfo = getReviewPropertyInfo();
 const reviewAuction = getReviewAuction();
-const reviewAllotment = getReviewAllotment();
+// const reviewAllotment = getReviewAllotment();
 const reviewAdditional = getReviewAdditional();
 const reviewOwnerDetails = getReviewOwner();
 const reviewPurchaserDetails = getReviewPurchaser();
@@ -37,7 +37,7 @@ export const reviewDetails = getCommonCard({
   header,
   reviewPropertyInfo,
   reviewAuction,
-  reviewAllotment,
+  // reviewAllotment,
   reviewAdditional,
   // reviewOwnerDetails,
   // reviewPurchaserDetails,

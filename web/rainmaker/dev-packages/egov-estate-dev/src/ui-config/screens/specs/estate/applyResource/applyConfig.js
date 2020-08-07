@@ -7,7 +7,7 @@ import {
 import {
   propertyInfoDetails,
   auctionDetails,
-  allotmentDetails,
+  // allotmentDetails,
   additionalDetails
 } from './propertyDetails';
 import {
@@ -121,7 +121,7 @@ export const formwizardFirstStep = {
   children: {
     propertyInfoDetails,
     auctionDetails,
-    allotmentDetails,
+    // allotmentDetails,
     additionalDetails
   }
 };

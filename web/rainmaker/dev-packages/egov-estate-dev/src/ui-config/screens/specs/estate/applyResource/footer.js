@@ -82,12 +82,12 @@ const callBackForNext = async (state, dispatch) => {
       dispatch,
       "apply"
     )
-    const isAllotmentValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.allotmentDetails.children.cardContent.children.detailsContainer.children",
-      state,
-      dispatch,
-      "apply"
-    )
+    // const isAllotmentValid = validateFields(
+    //   "components.div.children.formwizardFirstStep.children.allotmentDetails.children.cardContent.children.detailsContainer.children",
+    //   state,
+    //   dispatch,
+    //   "apply"
+    // )
     const isAdditionalValid = validateFields(
       "components.div.children.formwizardFirstStep.children.additionalDetails.children.cardContent.children.detailsContainer.children",
       state,
@@ -95,7 +95,7 @@ const callBackForNext = async (state, dispatch) => {
       "apply"
     )
 
-    if (isPropertyInfoValid && isAuctionValid && isAllotmentValid && isAdditionalValid) {
+    if (isPropertyInfoValid && isAuctionValid && isAdditionalValid) {
       const res = await applyEstates(state, dispatch, activeStep);
       if (!res) {
         return
@@ -168,7 +168,8 @@ const callBackForNext = async (state, dispatch) => {
             state.screenConfiguration.screenConfig,
             `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_0`, {}
           ))
-          var newServiceTaxString = serviceTaxString.replace(/_0/g, `_${i}`)
+          var newServiceTaxString = serviceTaxString.replace(/_0/g, `_${i}`);
+          newServiceTaxString = newServiceTaxString.replace(/paymentDetails\[0\]/g, `paymentDetails[${i}]`)
           var serviceTaxObj = JSON.parse(newServiceTaxString);
           set(
             state.screenConfiguration.screenConfig,
@@ -188,6 +189,15 @@ const callBackForNext = async (state, dispatch) => {
             paymentMadeByObj
           )
         }
+
+        dispatch(
+          handleField(
+            "apply",
+            `components.div.children.formwizardFourthStep.children.paymentMadeBy_${i}.children.cardContent.children.detailsContainer.children.paymentMadeBy`,
+            "props.value",
+            ownerName
+          )
+        );
 
         set(
           state.screenConfiguration.screenConfig,
