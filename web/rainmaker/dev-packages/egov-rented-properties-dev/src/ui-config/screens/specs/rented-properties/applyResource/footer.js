@@ -176,11 +176,8 @@ const callBackForNext = async(state, dispatch) => {
 
 const callBackForNextrecoveryNoticegeneration = async(state, dispatch) => {
 
-  let uploadFlag = false;
-  let activeStep = 1;
   let isFormValid = true;
 
-if(activeStep === 1){
 const isOwnerDetailsValid = validateFields(
   "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
   state,
@@ -206,12 +203,10 @@ if(isOwnerDetailsValid && isRentHolderValid && isPaymentDetailsValid) {
   if(!res) {
    return
   } 
-}
 else{
- isFormValid = false;
-} 
-
-} 
+  isFormValid = false;
+  } 
+}
 
 
 if (isFormValid) {
@@ -236,11 +231,8 @@ dispatch(toggleSnackbar(true, errorMessage, "warning"));
 
 const callBackForNextViolationnoticegeneration = async(state, dispatch) => {
 
-  let uploadFlag = false;
-  let activeStep = 1;
   let isFormValid = true;
 
-if(activeStep === 1){
 const isOwnerDetailsValid = validateFields(
   "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
   state,
@@ -259,13 +251,10 @@ if(isOwnerDetailsValid && isRentHolderValid) {
   if(!res) {
    return
   } 
-}
 else{
- isFormValid = false;
-} 
-
-} 
-
+  isFormValid = false;
+  } 
+}
 
 if (isFormValid) {
   const noticegendata = get(
