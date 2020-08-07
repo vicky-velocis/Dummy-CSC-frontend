@@ -609,7 +609,7 @@ export const getPattern = type => {
     case "TINNo":
       return /^\d{2}[A-Za-z0-9-!@#$%&*.?=]{9}$/i;
     case "DecimalAmount":
-      return /^\d{0,6}(\.\d{1,2})?$/i
+      return /^\d{0,6}$/i
     case "ECViolatorAddress":
       return /^[a-zA-Z.0-9 @#%&-:]{1,512}$/i;
     case "SeizedQuantity":
