@@ -29,7 +29,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}` :
   type === "PERMISSIONTOMORTGAGE" ? 
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`
-  : `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumberTransitSite}&tenantId=${tenantId}`
+  : `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
   dispatch(
     setRoute(path)
   );
