@@ -5,6 +5,7 @@ import get from "lodash/get";
 import { applyRentedProperties,applynoticegeneration,applyrecoveryNotice } from "../../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
+import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
 
 export const DEFAULT_STEP = -1;
 export const DETAILS_STEP = 0;
@@ -12,24 +13,42 @@ export const DOCUMENT_UPLOAD_STEP = 1;
 export const SUMMARY_STEP = 2;
 
 export const moveToSuccess = (rentedData, dispatch, type) => {
-  const id = get(rentedData, "id");
-  const transitNumber = get(rentedData, "transitNumber")
-  const transitNumberTransitSite = get(rentedData, "property.transitNumber")
-  const applicationNumberTransitSite = get(rentedData, "applicationNumber")
-  const applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
-  const duplicateCopyApplicatioNumber =  get(rentedData, "applicationNumber")
-  const tenantId = get(rentedData, "tenantId");
-  const purpose = "apply";
-  const purposeTransit = "TransitSiteapply";
   const status = "success";
- 
-  const path = type === "OWNERSHIPTRANSFERRP" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
-  :type === "DUPLICATECOPYOFALLOTMENTLETTERRP" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}` :
-  type === "PERMISSIONTOMORTGAGE" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`:
-  `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumberTransitSite}&tenantId=${tenantId}`
+  let purpose = "apply";
+  let applicationNumber = ""
+  let path = ""
+  const tenantId = get(rentedData, "tenantId");
+
+  switch(type) {
+    case OWNERSHIPTRANSFERRP: {
+      applicationNumber = get(rentedData, "ownerDetails.applicationNumber")
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+      break
+    }
+    case DUPLICATECOPYOFALLOTMENTLETTERRP:
+    case PERMISSIONTOMORTGAGE:  
+    {
+      applicationNumber = get(rentedData, "applicationNumber")
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+      break
+    }
+    case RP_MASTER_ENTRY: {
+      applicationNumber = get(rentedData, "transitNumber")
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+      break
+    }
+    case TRANSITSITEIMAGES: {
+      applicationNumber = get(rentedData, "property.transitNumber")
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${applicationNumber}&tenantId=${tenantId}&type=${type}`
+      break
+    }
+    case VIOLATION_NOTICE:
+    case RECOVERY_NOTICE: {
+      applicationNumber = get(rentedData, "property.transitNumber")
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${applicationNumber}&tenantId=${tenantId}&type=${NOTICE_GENERATION}`
+      break
+    }
+  }
   dispatch(
     setRoute(path)
   );
@@ -125,7 +144,7 @@ const callBackForNext = async(state, dispatch) => {
           state.screenConfiguration.preparedFinalObject,
           "Properties[0]"
       );
-          moveToSuccess(rentedData, dispatch);
+          moveToSuccess(rentedData, dispatch, RP_MASTER_ENTRY);
       }
     }
 
@@ -199,7 +218,7 @@ if (isFormValid) {
     state.screenConfiguration.preparedFinalObject,
     "NoticeApplications[0]"
 );
-moveToSuccess(noticegendata, dispatch);
+moveToSuccess(noticegendata, dispatch, RECOVERY_NOTICE);
 }
 
 if (!isFormValid) {
@@ -246,7 +265,7 @@ if (isFormValid) {
     state.screenConfiguration.preparedFinalObject,
     "NoticeApplications[0]"
 );
-moveToSuccess(noticegendata, dispatch);
+moveToSuccess(noticegendata, dispatch, VIOLATION_NOTICE);
 }
 
 if (!isFormValid) {
