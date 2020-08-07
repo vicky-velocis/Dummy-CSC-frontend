@@ -1048,7 +1048,23 @@ import {
           documentsArr.push({
             name: item.code,
             required: item.required,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+            jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.ownerDocuments[${ind}]`,
+            statement: item.description
+          });
+          return documentsArr;
+        }, [])
+        : [];
+    return documentsArr;
+  };
+
+  export const prepareDocumentTypeObjMaster = (documents, owner) => {
+    let documentsArr =
+      documents.length > 0
+        ? documents.reduce((documentsArr, item, ind) => {
+          documentsArr.push({
+            name: item.code,
+            required: item.required,
+            jsonPath: `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments[${ind}]`,
             statement: item.description
           });
           return documentsArr;
@@ -1926,7 +1942,7 @@ import {
       //REARRANGE APPLICATION DOCS FROM TL SEARCH IN EDIT FLOW
       let applicationDocs = get(
         state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "Properties[0].ownerDetails.applicationDocuments",
         []
       ) || [];
       applicationDocs = applicationDocs.filter(item => !!item)
@@ -1942,7 +1958,7 @@ import {
       applicationDocsReArranged &&
         dispatch(
           prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.applicationDocuments",
+            "Properties[0].ownerDetails.applicationDocuments",
             applicationDocsReArranged
           )
         );
