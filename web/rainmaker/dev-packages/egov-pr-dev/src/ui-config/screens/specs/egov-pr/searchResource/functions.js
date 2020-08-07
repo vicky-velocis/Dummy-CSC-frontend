@@ -44,7 +44,8 @@ let Aggrigate=get(
 )
 if( year!==undefined && Aggrigate!==undefined)
 {
-  if(Aggrigate==="Department")
+  
+  if(Aggrigate.label==="Department")
   {
 let data={
 
@@ -57,14 +58,15 @@ let data={
     },
     {
       "name":"year",
-      "input":parseInt(get(
-        state.screenConfiguration.preparedFinalObject,
-        "TimeseriesReport.Year"
-      ))
+      "input":parseInt(
+ 
+      year.label
+      )
+
     },
     {
       "name":"month",
-      "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
+      "input":month===undefined?monthdata:month.label==="ALL"?monthdata:[parseInt(month.value)]
     }
   ]
  
@@ -191,14 +193,14 @@ response.reportData[j][0]=payload.MdmsRes["common-masters"].Department[i].name
           },
           {
             "name":"year",
-            "input":parseInt(get(
-              state.screenConfiguration.preparedFinalObject,
-              "TimeseriesReport.Year"
-            ))
+            "input":parseInt(
+           
+            year.label
+            )
           },
           {
             "name":"month",
-            "input":month===undefined?monthdata:month==="ALL"?monthdata:[parseInt(month)]
+            "input":month===undefined?monthdata:month.label==="ALL"?monthdata:[parseInt(month.value)]
           }
         ]
        
