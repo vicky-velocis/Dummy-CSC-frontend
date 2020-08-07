@@ -2542,17 +2542,18 @@ import {
           "TL_TYPE_NEW",
           localisationLabels
         );
-        case RC_PEDAL_RICKSHAW_LOADING_REHRI:
-          return getLocaleLabels("Initiated,", label, localisationLabels);
-    
-        case DL_PEDAL_RICKSHAW_LOADING_REHRI:
-          return getLocaleLabels("Initiated,", label, localisationLabels);
-    
-        case LICENSE_DHOBI_GHAT:
-          return getLocaleLabels("Initiated,", label, localisationLabels);
-        
-        case RENEWAL_RENT_DEED_SHOP:
-          return getLocaleLabels("Initiated,", label, localisationLabels);
+        case "File Number":
+          return getLocaleLabels(
+            "File Number",
+            "ESTATE_COMMON_TABLE_COL_FILE_NO",
+            localisationLabels
+          );
+      case "Sector Number": 
+            return getLocaleLabels(
+              "Sector Number",
+              "ESTATE_COMMON_TABLE_COL_SECTOR_NO",
+              localisationLabels
+            )
     }
   };
   
