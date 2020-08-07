@@ -2,7 +2,7 @@ import { getCommonApplyFooter, validateFields } from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { applyRentedProperties } from "../../../../../ui-utils/apply";
+import { applyRentedProperties,applynoticegeneration,applyrecoveryNotice } from "../../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 
@@ -28,13 +28,12 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
   :type === "DUPLICATECOPYOFALLOTMENTLETTERRP" ? 
   `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}` :
   type === "PERMISSIONTOMORTGAGE" ? 
-  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`
-  : `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumber}&tenantId=${tenantId}`
+  `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${duplicateCopyApplicatioNumber}&tenantId=${tenantId}&type=${type}`:
+  `/rented-properties/acknowledgement?purpose=${purposeTransit}&status=${status}&transitNumber=${transitNumberTransitSite}&tenantId=${tenantId}`
   dispatch(
     setRoute(path)
   );
 };
-
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
@@ -158,6 +157,108 @@ const callBackForNext = async(state, dispatch) => {
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
         }
     }
+}
+
+const callBackForNextrecoveryNoticegeneration = async(state, dispatch) => {
+
+  let isFormValid = true;
+
+const isOwnerDetailsValid = validateFields(
+  "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
+  state,
+  dispatch,
+  "notice-recovry"
+)
+
+const isRentHolderValid = validateFields(
+  "components.div.children.formwizardFirstStep.children.ownerDetailsForNotice.children.cardContent.children.detailsContainer.children",   
+  state,
+  dispatch,
+  "notice-recovry"
+)
+
+const isPaymentDetailsValid = validateFields(
+  "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children",   
+  state,
+  dispatch,
+  "notice-recovry"
+)
+if(isOwnerDetailsValid && isRentHolderValid && isPaymentDetailsValid) {
+  const res = await applynoticegeneration(state, dispatch, "Recovery")
+  if(!res) {
+   return
+  } 
+else{
+  isFormValid = false;
+  } 
+}
+
+
+if (isFormValid) {
+  const noticegendata = get(
+    state.screenConfiguration.preparedFinalObject,
+    "NoticeApplications[0]"
+);
+moveToSuccess(noticegendata, dispatch);
+}
+
+if (!isFormValid) {
+  
+  let errorMessage = {
+    labelName:
+        "Please fill all mandatory fields, then do next !",
+    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}   
+}
+
+const callBackForNextViolationnoticegeneration = async(state, dispatch) => {
+
+  let isFormValid = true;
+
+const isOwnerDetailsValid = validateFields(
+  "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
+  state,
+  dispatch,
+  "notice-violation"
+)
+
+const isRentHolderValid = validateFields(
+  "components.div.children.formwizardFirstStep.children.ownerDetailsForNotice.children.cardContent.children.detailsContainer.children",   
+  state,
+  dispatch,
+  "notice-violation"
+)
+if(isOwnerDetailsValid && isRentHolderValid) {
+  const res = await applynoticegeneration(state, dispatch, "Violation")
+  if(!res) {
+   return
+  } 
+else{
+  isFormValid = false;
+  } 
+}
+
+if (isFormValid) {
+  const noticegendata = get(
+    state.screenConfiguration.preparedFinalObject,
+    "NoticeApplications[0]"
+);
+moveToSuccess(noticegendata, dispatch);
+}
+
+if (!isFormValid) {
+  
+  let errorMessage = {
+    labelName:
+        "Please fill all mandatory fields, then do next !",
+    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}   
 }
 
 export const changeStep = (
@@ -416,6 +517,28 @@ export const footer = getCommonApplyFooter({
       onClickDefination: {
         action: "condition",
         callBack: callBackForNext
+      },
+    }
+  });
+
+  export const Violationnoticegenfooter = getCommonApplyFooter({
+    
+    submitButton: {
+      ...submitButtontransit,
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForNextViolationnoticegeneration
+      },
+    }
+  });
+
+  export const recoveryNoticefooter = getCommonApplyFooter({
+    
+    submitButton: {
+      ...submitButtontransit,
+      onClickDefination: {
+        action: "condition",
+        callBack: callBackForNextrecoveryNoticegeneration
       },
     }
   });
