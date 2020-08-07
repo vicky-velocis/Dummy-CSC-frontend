@@ -176,18 +176,6 @@ const callBackForNext = async (state, dispatch) => {
             serviceTaxObj
           )
 
-          var serviceTaxString = JSON.stringify(get(
-            state.screenConfiguration.screenConfig,
-            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_0`, {}
-          ))
-          var newServiceTaxString = serviceTaxString.replace(/_0/g, `_${i}`)
-          var serviceTaxObj = JSON.parse(newServiceTaxString);
-          set(
-            state.screenConfiguration.screenConfig,
-            `apply.components.div.children.formwizardFourthStep.children.serviceTaxDetails_${i}`,
-            serviceTaxObj
-          )
-
           var paymentMadeByString = JSON.stringify(get(
             state.screenConfiguration.screenConfig,
             `apply.components.div.children.formwizardFourthStep.children.paymentMadeBy_0`, {}
@@ -323,7 +311,7 @@ const callBackForNext = async (state, dispatch) => {
         return
       }
     } else {
-      isFormValid = false;
+      // isFormValid = false;
     }
   }
 
@@ -341,13 +329,13 @@ const callBackForNext = async (state, dispatch) => {
     for (var i = 0; i < propertyOwnersTemp.length; i++) {
       const uploadedDocData = get(
         state.screenConfiguration.preparedFinalObject,
-        `Properties[0].propertyDetails.owners[${i}].ownerDetails.applicationDocuments`,
+        `Properties[0].propertyDetails.owners[${i}].ownerDetails.ownerDocuments`,
         []
       );
 
       const uploadedTempDocData = get(
         state.screenConfiguration.preparedFinalObject,
-        `PropertiesTemp[0].propertyDetails.owners[${i}].ownerDetails.applicationDocuments`,
+        `PropertiesTemp[0].propertyDetails.owners[${i}].ownerDetails.ownerDocuments`,
         []
       );
 

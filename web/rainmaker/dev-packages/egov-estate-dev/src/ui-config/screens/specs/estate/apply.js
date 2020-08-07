@@ -98,7 +98,7 @@ export const setDocumentData = async (action, state, dispatch, owner = 0) => {
   documentTypes = prepareDocumentTypeObjMaster(masterDocuments, owner);
   applicationDocs = get(
     state.screenConfiguration.preparedFinalObject,
-    `Properties[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`,
+    `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`,
     []
   ) || [];
 
@@ -116,7 +116,7 @@ export const setDocumentData = async (action, state, dispatch, owner = 0) => {
   applicationDocsReArranged &&
     dispatch(
       prepareFinalObject(
-        `Properties[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`,
+        `Properties[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`,
         applicationDocsReArranged
       )
     );
@@ -128,7 +128,7 @@ export const setDocumentData = async (action, state, dispatch, owner = 0) => {
       estateMasterDocuments
     )
   );
-  dispatch(prepareFinalObject(`PropertiesTemp[0].propertyDetails.owners[${owner}].ownerDetails.applicationDocuments`, documentTypes))
+  dispatch(prepareFinalObject(`PropertiesTemp[0].propertyDetails.owners[${owner}].ownerDetails.ownerDocuments`, documentTypes))
   dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 

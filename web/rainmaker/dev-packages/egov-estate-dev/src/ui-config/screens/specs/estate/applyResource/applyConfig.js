@@ -52,7 +52,7 @@ export const ownerDocumentDetails_0 = getCommonCard({
     ...documentList,
     props: {
       ...documentList.props,
-      documentsJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.applicationDocuments",
+      documentsJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.ownerDocuments",
       uploadedDocumentsJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.uploadedDocsInRedux",
       tenantIdJsonPath: "Properties[0].tenantId",
       removedJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.removedDocs"
@@ -67,7 +67,7 @@ export const ownerDocumentDetails_0 = getCommonCard({
 //       ...documentList,
 //       props: {
 //         ...documentList.props,
-//         documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].applicationDocuments`,
+//         documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].ownerDocuments`,
 //         uploadedDocumentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].uploadedDocsInRedux`,
 //         tenantIdJsonPath: `Properties[0].tenantId`,
 //         removedJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].removedDocs`
