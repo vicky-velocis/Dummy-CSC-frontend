@@ -5,7 +5,10 @@ import {
   getCommonParagraph
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  propertyDetails
+  propertyInfoDetails,
+  auctionDetails,
+  // allotmentDetails,
+  additionalDetails
 } from './propertyDetails';
 import {
   ownerDetails
@@ -17,9 +20,9 @@ import {
   courtCaseDetails
 } from './courtCaseDetails';
 import {
-  groundRentDetails,
-  serviceTaxDetails,
-  paymentMadeBy
+  groundRentDetails_0,
+  serviceTaxDetails_0,
+  paymentMadeBy_0
 } from './paymentDetails';
 import {
   reviewDetails
@@ -43,19 +46,35 @@ const documentCardConfig = {
   }),
 }
 
-export const ownerDocumentDetails = getCommonCard({
+export const ownerDocumentDetails_0 = getCommonCard({
   ...documentCardConfig,
   documentList: {
     ...documentList,
     props: {
       ...documentList.props,
-      documentsJsonPath: "PropertiesTemp[0].applicationDocuments",
-      uploadedDocumentsJsonPath: "PropertiesTemp[0].uploadedDocsInRedux",
+      documentsJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.ownerDocuments",
+      uploadedDocumentsJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.uploadedDocsInRedux",
       tenantIdJsonPath: "Properties[0].tenantId",
-      removedJsonPath: "PropertiesTemp[0].removedDocs"
+      removedJsonPath: "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.removedDocs"
     }
   }
 });
+
+// export const getOwnerDocumentDetails = (owner) => {
+//   return getCommonCard({
+//     ...documentCardConfig,
+//     documentList: {
+//       ...documentList,
+//       props: {
+//         ...documentList.props,
+//         documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].ownerDocuments`,
+//         uploadedDocumentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].uploadedDocsInRedux`,
+//         tenantIdJsonPath: `Properties[0].tenantId`,
+//         removedJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].removedDocs`
+//       }
+//     }
+//   });
+// }
 
 
 export const stepsData = [{
@@ -100,7 +119,10 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    propertyDetails
+    propertyInfoDetails,
+    auctionDetails,
+    // allotmentDetails,
+    additionalDetails
   }
 };
 
@@ -137,9 +159,9 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    groundRentDetails, 
-    serviceTaxDetails,
-    paymentMadeBy
+    groundRentDetails_0,
+    serviceTaxDetails_0,
+    paymentMadeBy_0
   },
   visible: false
 };
@@ -151,7 +173,7 @@ export const formwizardFifthStep = {
     id: "apply_form5"
   },
   children: {
-    ownerDocumentDetails
+    ownerDocumentDetails_0
   },
   visible: false
 };

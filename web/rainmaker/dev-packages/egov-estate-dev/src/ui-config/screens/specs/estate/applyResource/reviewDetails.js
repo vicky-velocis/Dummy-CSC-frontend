@@ -3,11 +3,13 @@ import {
   getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  getReviewProperty,
+  getReviewPropertyInfo,
+  getReviewAuction,
+  // getReviewAllotment,
+  getReviewAdditional,
   getReviewOwner,
   getReviewPurchaser,
-  getReviewGroundRent,
-  getReviewServiceTax,
+  getReviewPayment,
   getReviewCourtCase
 } from "./reviewProperty";
 
@@ -16,13 +18,15 @@ import {
 // } from "./reviewDocuments";
 
 
-const reviewPropertyDetails = getReviewProperty();
+const reviewPropertyInfo = getReviewPropertyInfo();
+const reviewAuction = getReviewAuction();
+// const reviewAllotment = getReviewAllotment();
+const reviewAdditional = getReviewAdditional();
 const reviewOwnerDetails = getReviewOwner();
 const reviewPurchaserDetails = getReviewPurchaser();
-const reviewGroundRent = getReviewGroundRent();
-const reviewServiceTax = getReviewServiceTax();
-const reviewCourtCase = getReviewCourtCase();
-// const reviewDocuments = getReviewDocuments();
+const reviewCourtCaseDetails = getReviewCourtCase();
+const reviewPaymentDetails = getReviewPayment();
+const reviewDocuments = getReviewDocuments();
 
 const header = getCommonTitle({
   labelName: "Please review your Application and Submit",
@@ -31,11 +35,13 @@ const header = getCommonTitle({
 
 export const reviewDetails = getCommonCard({
   header,
-  reviewPropertyDetails,
-  reviewOwnerDetails,
-  reviewPurchaserDetails,
-  reviewGroundRent,
-  reviewServiceTax,
-  reviewCourtCase,
+  reviewPropertyInfo,
+  reviewAuction,
+  // reviewAllotment,
+  reviewAdditional,
+  // reviewOwnerDetails,
+  // reviewPurchaserDetails,
+  // reviewPaymentDetails,
+  reviewCourtCaseDetails,
   // reviewDocuments
 })

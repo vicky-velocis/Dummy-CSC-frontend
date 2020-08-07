@@ -5,7 +5,8 @@ import {
   getDateField,
   getCommonTitle,
   getPattern,
-  getCommonContainer
+  getCommonContainer,
+  getCommonGrayCard,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   prepareFinalObject
@@ -27,57 +28,55 @@ export const ownerHeader = getCommonTitle({
 
 const serialNumberField = {
   label: {
-      labelName: "Sr No",
-      labelKey: "EST_SERIAL_NUMBER_LABEL"
+    labelName: "Sr No",
+    labelKey: "EST_SERIAL_NUMBER_LABEL"
   },
   required: true,
-  jsonPath: "Properties[0].ownerDetails.serialNumber",
+  jsonPath: "Properties[0].ownerDetails[0].serialNumber",
   props: {
     value: 1,
     disabled: true
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
   }
 }
 
 const ownerNameField = {
   label: {
-      labelName: "Owner Name",
-      labelKey: "EST_OWNER_NAME_LABEL"
+    labelName: "Owner Name",
+    labelKey: "EST_OWNER_NAME_LABEL"
   },
   placeholder: {
-      labelName: "Enter Owner Name",
-      labelKey: "EST_OWNER_NAME_PLACEHOLDER"
+    labelName: "Enter Owner Name",
+    labelKey: "EST_OWNER_NAME_PLACEHOLDER"
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails.ownerName"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.ownerName",
 }
 
 const fatherHusbandNameField = {
   label: {
-      labelName: "Father/Husband Name",
-      labelKey: "EST_FATHER_HUSBAND_NAME_LABEL"
+    labelName: "Father/Husband Name",
+    labelKey: "EST_FATHER_HUSBAND_NAME_LABEL"
   },
   placeholder: {
-      labelName: "Enter Father/Husband Name",
-      labelKey: "EST_FATHER_HUSBAND_NAME_PLACEHOLDER"
+    labelName: "Enter Father/Husband Name",
+    labelKey: "EST_FATHER_HUSBAND_NAME_PLACEHOLDER"
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails.fatherHusbandName"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianName"
 }
 
 const getRelationshipRadioButton = {
@@ -87,14 +86,13 @@ const getRelationshipRadioButton = {
     xs: 12,
     sm: 6,
   },
-  jsonPath: "Properties[0].ownerDetails.relationship",
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianRelation",
   props: {
     label: {
       name: "Relationship",
       key: "EST_RELATIONSHIP_LABEL"
     },
-    buttons: [
-      {
+    buttons: [{
         labelName: "Father",
         labelKey: "COMMON_RELATION_FATHER",
         value: "FATHER"
@@ -105,7 +103,7 @@ const getRelationshipRadioButton = {
         value: "HUSBAND"
       }
     ],
-    jsonPath:"Properties[0].ownerDetails.relationship",
+    jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianRelation",
     required: true
   },
   required: true,
@@ -114,91 +112,188 @@ const getRelationshipRadioButton = {
 
 const addressField = {
   label: {
-      labelName: "Address",
-      labelKey: "EST_ADDRESS_LABEL"
+    labelName: "Address",
+    labelKey: "EST_ADDRESS_LABEL"
   },
   placeholder: {
-      labelName: "Enter Address",
-      labelKey: "EST_ADDRESS_PLACEHOLDER"
+    labelName: "Enter Address",
+    labelKey: "EST_ADDRESS_PLACEHOLDER"
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
   },
   required: true,
   props: {
     multiline: true,
     rows: 2
   },
-  minLength: 1,
   maxLength: 150,
-  jsonPath: "Properties[0].ownerDetails.address"
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.address"
 }
 
 const mobileNumberField = {
   label: {
-      labelName: "Mobile No.",
-      labelKey: "TL_MOBILE_NUMBER_LABEL"
+    labelName: "Mobile No.",
+    labelKey: "TL_MOBILE_NUMBER_LABEL"
   },
   placeholder: {
-      labelName: "Enter Mobile No.",
-      labelKey: "TL_MOBILE_NUMBER_PLACEHOLDER"
+    labelName: "Enter Mobile No.",
+    labelKey: "TL_MOBILE_NUMBER_PLACEHOLDER"
   },
   pattern: getPattern("MobileNo"),
   // props: {
   //   value: userInfo.userName,
   //   disabled: true
   // },
-  jsonPath: "Properties[0].ownerDetails.owners[0].mobileNumber",
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.mobileNumber",
 }
 
 const shareField = {
   label: {
-      labelName: "Share",
-      labelKey: "EST_SHARE_LABEL"
+    labelName: "Share",
+    labelKey: "EST_SHARE_LABEL"
   },
   placeholder: {
-      labelName: "Enter Share",
-      labelKey: "EST_SHARE_PLACEHOLDER"
+    labelName: "Enter Share",
+    labelKey: "EST_SHARE_PLACEHOLDER"
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 5,
-  jsonPath: "Properties[0].ownerDetails.share"
+  jsonPath: "Properties[0].propertyDetails.owners[0].share"
 }
 
 const cpNumberField = {
   label: {
-      labelName: "CP No.",
-      labelKey: "EST_CP_NUMBER_LABEL"
+    labelName: "CP No.",
+    labelKey: "EST_CP_NUMBER_LABEL"
   },
   placeholder: {
-      labelName: "Enter CP No.",
-      labelKey: "EST_CP_NUMBER_PLACEHOLDER"
+    labelName: "Enter CP No.",
+    labelKey: "EST_CP_NUMBER_PLACEHOLDER"
   },
   gridDefination: {
-      xs: 12,
-      sm: 6
+    xs: 12,
+    sm: 6
+  },
+  maxLength: 100,
+  jsonPath: "Properties[0].propertyDetails.owners[0].cpNumber"
+}
+
+const possessionDateField = {
+  label: {
+    labelName: "Possession Date",
+    labelKey: "EST_POSSESSION_DATE_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Possession Date",
+    labelKey: "EST_POSSESSION_DATE_PLACEHOLDER"
+  },
+  pattern: getPattern("Date"),
+  required: true,
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.possessionDate",
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
+}
+
+const dateOfAllotmentField = {
+  label: {
+    labelName: "Date of Allotment",
+    labelKey: "EST_DATE_OF_ALLOTMENT_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Date of Allotment",
+    labelKey: "EST_DATE_OF_ALLOTMENT_PLACEHOLDER"
+  },
+  pattern: getPattern("Date"),
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.dateOfAllotment",
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
+}
+
+const allotmentNumberField = {
+  label: {
+    labelName: "Allotment Number",
+    labelKey: "EST_ALLOTMENT_NUMBER_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Allotment Number",
+    labelKey: "EST_ALLOTMENT_NUMBER_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
   },
   minLength: 1,
-  maxLength: 100,
-  jsonPath: "Properties[0].ownerDetails.cpNumber"
+  maxLength: 50,
+  jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.allotmentNumber"
 }
+
+const commonOwnerInformation = () => {
+  return getCommonGrayCard({
+    header: getCommonTitle({
+      labelName: "Owner",
+      labelKey: "EST_COMMON_OWNER_INFORMATION"
+    }, {
+      style: {
+        marginBottom: 18
+      }
+    }),
+    ownerCard: getCommonContainer({
+      ownerName: getTextField(ownerNameField),
+      fatherHusbandName: getTextField(fatherHusbandNameField),
+      relationship: getRelationshipRadioButton,
+      address: getTextField(addressField),
+      mobileNumber: getTextField(mobileNumberField),
+      share: getTextField(shareField),
+      cpNumber: getTextField(cpNumberField),
+      possessionDate: getDateField(possessionDateField),
+      dateOfAllotment: getDateField(dateOfAllotmentField),
+      allotmentNumber: getTextField(allotmentNumberField)
+    })
+  });
+};
 
 export const ownerDetails = getCommonCard({
   header: ownerHeader,
   detailsContainer: getCommonContainer({
-    serialNumber: getTextField(serialNumberField),
-    ownerName: getTextField(ownerNameField),
-    fatherHusbandName: getTextField(fatherHusbandNameField),
-    relationship: getRelationshipRadioButton,
-    address: getTextField(addressField),
-    mobileNumber: getTextField(mobileNumberField),
-    share: getTextField(shareField),
-    cpNumber: getTextField(cpNumberField)
+    multipleApplicantContainer: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: {
+          width: "100%"
+        }
+      },
+      children: {
+        multipleApplicantInfo: {
+          uiFramework: "custom-containers",
+          componentPath: "MultiItem",
+          props: {
+            scheama: commonOwnerInformation(),
+            items: [],
+            addItemLabel: {
+              labelName: "Add Owner",
+              labelKey: "EST_COMMON_ADD_OWNER_LABEL"
+            },
+            headerName: "Owner ",
+            headerJsonPath: "children.cardContent.children.header.children.key.props.label",
+            sourceJsonPath: "Properties[0].propertyDetails.owners",
+            prefixSourceJsonPath: "children.cardContent.children.ownerCard.children"
+          },
+          type: "array"
+        }
+      }
+    }
   })
 })
