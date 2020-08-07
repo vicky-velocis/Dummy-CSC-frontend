@@ -11,9 +11,9 @@ import {
   getReviewCourtCase
 } from "./reviewProperty";
 
-import {
-  getReviewDocuments
-} from "./reviewDocuments";
+// import {
+//   getReviewDocuments
+// } from "./reviewDocuments";
 
 
 const reviewPropertyDetails = getReviewProperty();
@@ -22,7 +22,7 @@ const reviewPurchaserDetails = getReviewPurchaser();
 const reviewGroundRent = getReviewGroundRent();
 const reviewServiceTax = getReviewServiceTax();
 const reviewCourtCase = getReviewCourtCase();
-const reviewDocuments = getReviewDocuments();
+// const reviewDocuments = getReviewDocuments();
 
 const header = getCommonTitle({
   labelName: "Please review your Application and Submit",
@@ -37,5 +37,5 @@ export const reviewDetails = getCommonCard({
   reviewGroundRent,
   reviewServiceTax,
   reviewCourtCase,
-  reviewDocuments
+  // reviewDocuments
 })
