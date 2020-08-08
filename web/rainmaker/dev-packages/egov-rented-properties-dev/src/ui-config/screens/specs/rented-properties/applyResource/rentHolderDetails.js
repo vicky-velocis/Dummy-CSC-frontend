@@ -292,6 +292,61 @@ const colonyField = {
     },
     errorMessage:"RP_ERR_COLONY_FIELD",
 }
+const allotmentDateField = {
+    label: {
+        labelName: "Date of Allotment",
+        labelKey: "RP_ALLOTMENT_DATE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Date of Allotment",
+        labelKey: "RP_ALLOTMENT_DATE_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("Date"),
+    jsonPath: "Properties[0].owners[0].ownerDetails.allotmentStartdate",
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
+  const allotmentNumberField = {
+    label: {
+        labelName: "Allotment Number",
+        labelKey: "RP_ALLOTMENT_NUMBER_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Allotment Number",
+        labelKey: "RP_ALLOTMENT_NUMBER_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 3,
+    maxLength: 20,
+    required: true,
+    jsonPath: "Properties[0].owners[0].allotmenNumber"
+  }
+
+  const posessionDateField = {
+    label: {
+        labelName: "Date of Possession",
+        labelKey: "RP_POSSESSION_DATE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Date of Possession",
+        labelKey: "RP_POSSESSION_DATE_PLACEHOLDER"
+    },
+    required: true,
+    pattern: getPattern("Date"),
+    jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
+    props: {
+        inputProps: {
+            max: getTodaysDateInYMD()
+        }
+    }
+  }
 
 const getRentHolderDetails = () => {
     return {
@@ -302,7 +357,12 @@ const getRentHolderDetails = () => {
             fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
             relationShip: getRelationshipRadioButton,
             email: getTextField(emailField),
-            aadhar: getTextField(aadharField)
+            aadhar: getTextField(aadharField),
+            dateOfAllotment: getDateField(allotmentDateField),
+            allotmentNumber: getTextField(allotmentNumberField),
+            posessionDate: getDateField(posessionDateField)
+        
+
         })
     }
 }

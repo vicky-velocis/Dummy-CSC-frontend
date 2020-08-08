@@ -234,9 +234,9 @@ const getPropertyDetails = () => {
             colony: getSelectField(colonyField),
             transitNumber: getTextField(transitNumberField),
             areaOfProperty: getTextField(areaField),
-            dateOfAllotment: getDateField(allotmentDateField),
-            allotmentNumber: getTextField(allotmentNumberField),
-            posessionDate: getDateField(posessionDateField)
+            // dateOfAllotment: getDateField(allotmentDateField),
+            // allotmentNumber: getTextField(allotmentNumberField),
+            // posessionDate: getDateField(posessionDateField)
         })
     }
 }
