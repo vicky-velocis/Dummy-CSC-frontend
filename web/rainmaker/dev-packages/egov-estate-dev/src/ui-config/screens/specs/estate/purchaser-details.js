@@ -8,7 +8,7 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-// import { getReviewOwner, getReviewProperty } from "./applyResource/reviewProperty";
+import { getPurchaserDetails } from "./preview-resource/purchaser-details";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
@@ -23,14 +23,11 @@ export const headerrow = getCommonContainer({
     labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
-// const reviewOwnerDetails = getReviewOwner(false);
-// const reviewPropertyDetails = getReviewProperty(false);
+const purchaserDetails = getPurchaserDetails(false);
 
 
 export const propertyReviewDetails = getCommonCard({
-  // reviewPropertyDetails,
-  // reviewOwnerDetails,
-
+  purchaserDetails,
 });
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
@@ -72,32 +69,29 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
   fileNumber = getQueryArg(window.location.href, "filenumber");
   let path = ""
   switch(tabIndex){
-      case 0:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
-      case 1:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
-      case 2:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
-      case 3:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
-      case 4:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
-      case 5:
-        path = `/estate/search-preview?filenumber=${fileNumber}`
-        break
+    case 0:
+      path = `/estate/search-preview?filenumber=${fileNumber}`
+      break
+    case 1:
+      path = `/estate/owner-details?filenumber=${fileNumber}`
+      break
+    case 2:
+      path = `/estate/purchaser-details?filenumber=${fileNumber}`
+      break
+    case 3:
+      path = `/estate/payment-details?filenumber=${fileNumber}`
+      break
+    case 4:
+      path = `/estate/documents?filenumber=${fileNumber}`
+      break
+    case 5:
+      path = `/estate/notices?filenumber=${fileNumber}`
+      break
+    case 6:
+      path = `/estate/court-case?filenumber=${fileNumber}`
+      break
 
-  }
-  // if(tabIndex === 0) {
-  // } else if(tabIndex === 1) {
-  //   path = `/estate/property-transitImages?filenumber=${fileNumber}`
-  // } else if(tabIndex === 2) {
-  //   path = `/estate/notices?filenumber=${fileNumber}`
-  // }
+}
   dispatch(setRoute(path))
 }
 
@@ -113,6 +107,9 @@ export const tabs = [
   },
   {
     tabButton: { labelName: "Payment Details", labelKey: "ESTATE_PAYMENT_DETAILS" },
+  },
+  {
+    tabButton: { labelName: "Documents", labelKey: "ESTATE_DOCUMENTS" },
   },
   {
     tabButton: { labelName: "Notices", labelKey: "ESTATE_NOTICES" },

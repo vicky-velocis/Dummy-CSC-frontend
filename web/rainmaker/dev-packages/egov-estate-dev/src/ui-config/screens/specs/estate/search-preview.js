@@ -8,7 +8,7 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-// import { getReviewOwner, getReviewProperty } from "./applyResource/reviewProperty";
+import { getReviewAuction, getPropertyDetails,getAllotmentDetails,getAdditionalDetails } from "./preview-resource/preview-properties";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
@@ -23,14 +23,17 @@ export const headerrow = getCommonContainer({
     labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
-// const reviewOwnerDetails = getReviewOwner(false);
-// const reviewPropertyDetails = getReviewProperty(false);
+const reviewAuctionDetails = getReviewAuction(false);
+const reviewPropertyDetails = getPropertyDetails(false);
+const reviewAllotmentDetails = getAllotmentDetails(false);
+const additionalDetails = getAdditionalDetails(false)
 
 
 export const propertyReviewDetails = getCommonCard({
-  // reviewPropertyDetails,
-  // reviewOwnerDetails,
-
+  reviewPropertyDetails,
+  reviewAuctionDetails,
+  reviewAllotmentDetails,
+  additionalDetails
 });
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
@@ -91,17 +94,11 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/notices?filenumber=${fileNumber}`
         break
       case 6:
-          path = `/estate/court-case?filenumber=${fileNumber}`
-          break
+        path = `/estate/court-case?filenumber=${fileNumber}`
+        break
 
   }
-  // if(tabIndex === 0) {
-  // } else if(tabIndex === 1) {
-  //   path = `/estate/property-transitImages?filenumber=${fileNumber}`
-  // } else if(tabIndex === 2) {
-  //   path = `/estate/notices?filenumber=${fileNumber}`
-  // }
-  // dispatch(setRoute(path))
+  dispatch(setRoute(path))
 }
 
 export const tabs = [
