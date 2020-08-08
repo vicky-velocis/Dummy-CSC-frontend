@@ -132,31 +132,6 @@ export const setDocumentData = async (action, state, dispatch, owner = 0) => {
   dispatch(prepareFinalObject("applyScreenMdmsData.estateApplications", applications))
 }
 
-export const getColonyTypes = async (action, state, dispatch) => {
-  const colonyTypePayload = [{
-    moduleName: "PropertyServices",
-    masterDetails: [{
-      name: "colonies"
-    }, {
-      name: "applications"
-    }]
-  }]
-  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-  const {
-    PropertyServices
-  } = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-  const {
-    colonies = []
-  } = PropertyServices || {}
-  dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
-  const propertyTypes = colonies.map(item => ({
-    code: item.code,
-    label: item.code
-  }))
-  dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
-}
-
-
 const header = getCommonHeader({
   labelName: "Add Estate",
   labelKey: "EST_COMMON_ESTATES_ADD"
@@ -175,7 +150,16 @@ const getData = async (action, state, dispatch) => {
       )
     )
   }
-  setDocumentData(action, state, dispatch)
+  setDocumentData(action, state, dispatch);
+
+  const mdmsPayload = [{
+    moduleName: "PropertyServices",
+    masterDetails: [{
+      name: "category"
+    }]
+  }]
+  const response = await getMdmsData(dispatch, mdmsPayload);
+  dispatch(prepareFinalObject("applyScreenMdmsData", response.MdmsRes));
 }
 
 const applyEstate = {
