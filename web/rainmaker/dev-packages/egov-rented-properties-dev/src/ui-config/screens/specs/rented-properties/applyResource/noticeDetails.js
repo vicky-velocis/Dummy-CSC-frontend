@@ -171,6 +171,9 @@ export const transitNumberConfig = {
 
 const transitNumberField = {
     ...transitNumberConfig,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].transitNumber"
   }
   const allotmentNumberField = {
@@ -189,6 +192,9 @@ const transitNumberField = {
     minLength: 3,
     maxLength: 20,
     required: true,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].allotmenNumber"
   }  
 
