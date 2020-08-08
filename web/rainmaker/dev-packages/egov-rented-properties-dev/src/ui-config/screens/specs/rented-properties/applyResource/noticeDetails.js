@@ -43,6 +43,9 @@ const fatherOrHusbandsNameField = {
     minLength: 4,
     maxLength: 40,
     required: true,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
 
@@ -101,6 +104,9 @@ const originalAllotteField = {
     },
     minLength: 4,
     maxLength: 40,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].ownerDetails.name"
 }
 
@@ -139,6 +145,9 @@ const getViolationField = {
         multiline: true,
         rows: "4"
     },
+    props: {
+        disabled: true
+      },
     jsonPath: "SingleImage[0].description" 
 }
 
