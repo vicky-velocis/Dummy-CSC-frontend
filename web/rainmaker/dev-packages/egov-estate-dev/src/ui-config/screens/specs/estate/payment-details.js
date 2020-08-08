@@ -76,23 +76,20 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 1:
-        path = `/estate/owner-details?filenumber=${fileNumber}`
+        path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 2:
-        path = `/estate/purchaser-details?filenumber=${fileNumber}`
+        path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 3:
-        path = `/estate/payment-details?filenumber=${fileNumber}`
+        path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 4:
-        path = `/estate/documents?filenumber=${fileNumber}`
+        path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 5:
-        path = `/estate/notices?filenumber=${fileNumber}`
+        path = `/estate/search-preview?filenumber=${fileNumber}`
         break
-      case 6:
-          path = `/estate/court-case?filenumber=${fileNumber}`
-          break
 
   }
   // if(tabIndex === 0) {
@@ -101,7 +98,7 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
   // } else if(tabIndex === 2) {
   //   path = `/estate/notices?filenumber=${fileNumber}`
   // }
-  // dispatch(setRoute(path))
+  dispatch(setRoute(path))
 }
 
 export const tabs = [
@@ -118,9 +115,6 @@ export const tabs = [
     tabButton: { labelName: "Payment Details", labelKey: "ESTATE_PAYMENT_DETAILS" },
   },
   {
-    tabButton: { labelName: "Documents", labelKey: "ESTATE_DOCUMENTS" },
-  },
-  {
     tabButton: { labelName: "Notices", labelKey: "ESTATE_NOTICES" },
   },
   {
@@ -128,9 +122,9 @@ export const tabs = [
   }
 ]
 
-const estateDetailPreview = {
+const EstatePaymentDetails = {
   uiFramework: "material-ui",
-  name: "court-case",
+  name: "payment-details",
   beforeInitScreen: (action, state, dispatch) => {
     fileNumber = getQueryArg(window.location.href, "filenumber");
     beforeInitFn(action, state, dispatch, fileNumber);
@@ -163,7 +157,7 @@ const estateDetailPreview = {
             componentPath: "CustomTabContainer",
             props: {
               tabs,
-              activeIndex: 0,
+              activeIndex: 3,
               onTabChange
             },
             type: "array",
@@ -174,7 +168,7 @@ const estateDetailPreview = {
             componentPath: "WorkFlowContainer",
             props: {
               dataPath: "Properties",
-              moduleName: "MasterEsatate",
+              moduleName: "MasterRP",
               updateUrl: "/csp/property/_update"
             }
           },
@@ -184,4 +178,4 @@ const estateDetailPreview = {
   }
 };
 
-export default estateDetailPreview;
+export default EstatePaymentDetails;
