@@ -33,6 +33,7 @@ export const pincodeField = {
     minLength: 6,
     maxLength: 6,
     required: true,
+    errorMessage: "RP_ERR_PINCODE_FIELD",
   }
 const colonyFieldConfig = {
     label: {
@@ -52,6 +53,7 @@ const colonyFieldConfig = {
         xs: 12,
         sm: 6
     },
+    errorMessage: "RP_ERR_COLONY_FIELD",
 }
 
 const colonyField = {
@@ -85,6 +87,7 @@ export const transitNumberConfig = {
     minLength: 4,
     maxLength: 25,
     required: true,
+    errorMessage: "RP_ERR_TRANSIT_FIELD",
 }
 
 const ownershipTransitNumberField = {
@@ -155,7 +158,8 @@ const transitNumberField = {
         inputProps: {
             max: getTodaysDateInYMD()
         }
-    }
+    },
+    errorMessage: "RP_ERR_ALLOTMENT_DATE_FIELD",
   }
 
   const allotmentNumberField = {
@@ -174,7 +178,8 @@ const transitNumberField = {
     minLength: 3,
     maxLength: 20,
     required: true,
-    jsonPath: "Properties[0].owners[0].allotmenNumber"
+    jsonPath: "Properties[0].owners[0].allotmenNumber",
+    errorMessage: "RP_ERR_ALLOTMENT_NUMBER_FIELD",
   }
 
   const areaField = {
@@ -197,7 +202,8 @@ const transitNumberField = {
     gridDefination: {
         xs: 12,
         sm: 6
-    }
+    },
+    errorMessage: "RP_ERR_AREA_FIELD",
   }
 
   const posessionDateField = {
@@ -216,7 +222,8 @@ const transitNumberField = {
         inputProps: {
             max: getTodaysDateInYMD()
         }
-    }
+    },
+    errorMessage: "RP_ERR_POSESSION_DATE_FIELD",
   }
  
 
@@ -252,7 +259,7 @@ const getTransitSiteDetails = () => {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(ownershipTransitNumberField),
-            colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            colony: getTextField({...colonyFieldConfig,jsonPath: "Properties[0].colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }
