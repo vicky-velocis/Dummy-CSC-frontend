@@ -43,6 +43,9 @@ const fatherOrHusbandsNameField = {
     minLength: 4,
     maxLength: 40,
     required: true,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband"
 }
 
@@ -101,7 +104,10 @@ const originalAllotteField = {
     },
     minLength: 4,
     maxLength: 40,
-    jsonPath: "Properties[0].owners[0].ownerDetails.orignalAllottee"
+    props: {
+        disabled: true
+      },
+    jsonPath: "Properties[0].owners[0].ownerDetails.name"
 }
 
 const getDocumentField = {
@@ -139,7 +145,10 @@ const getViolationField = {
         multiline: true,
         rows: "4"
     },
-    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
+    props: {
+        disabled: true
+      },
+    jsonPath: "SingleImage[0].description" 
 }
 
 export const transitNumberConfig = {
@@ -162,6 +171,9 @@ export const transitNumberConfig = {
 
 const transitNumberField = {
     ...transitNumberConfig,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].transitNumber"
   }
   const allotmentNumberField = {
@@ -180,6 +192,9 @@ const transitNumberField = {
     minLength: 3,
     maxLength: 20,
     required: true,
+    props: {
+        disabled: true
+      },
     jsonPath: "Properties[0].owners[0].allotmenNumber"
   }  
 

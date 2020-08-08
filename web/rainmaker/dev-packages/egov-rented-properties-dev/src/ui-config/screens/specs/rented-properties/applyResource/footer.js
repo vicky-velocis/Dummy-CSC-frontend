@@ -44,7 +44,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
     }
     case VIOLATION_NOTICE:
     case RECOVERY_NOTICE: {
-      applicationNumber = get(rentedData, "property.transitNumber")
+      applicationNumber = get(rentedData, "notices[0].property.transitNumber")
       path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${applicationNumber}&tenantId=${tenantId}&type=${NOTICE_GENERATION}`
       break
     }
@@ -255,15 +255,15 @@ if(isOwnerDetailsValid && isRentHolderValid) {
   if(!res) {
    return
   } 
+}
 else{
   isFormValid = false;
   } 
-}
 
 if (isFormValid) {
   const noticegendata = get(
     state.screenConfiguration.preparedFinalObject,
-    "NoticeApplications[0]"
+    "Properties[0]"
 );
 moveToSuccess(noticegendata, dispatch, VIOLATION_NOTICE);
 }
