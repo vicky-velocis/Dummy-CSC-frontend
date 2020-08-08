@@ -101,7 +101,7 @@ const originalAllotteField = {
     },
     minLength: 4,
     maxLength: 40,
-    jsonPath: "Properties[0].owners[0].ownerDetails.orignalAllottee"
+    jsonPath: "Properties[0].owners[0].ownerDetails.name"
 }
 
 const getDocumentField = {
@@ -139,7 +139,7 @@ const getViolationField = {
         multiline: true,
         rows: "4"
     },
-    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
+    jsonPath: "SingleImage[0].description" 
 }
 
 export const transitNumberConfig = {
