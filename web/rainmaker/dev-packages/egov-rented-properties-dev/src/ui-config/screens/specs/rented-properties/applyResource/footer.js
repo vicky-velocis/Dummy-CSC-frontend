@@ -503,7 +503,7 @@ export const submitButtontransit = {
       children: {
         submitButtonLabel: getLabel({
           labelName: "Submit",
-          labelKey: "TL_COMMON_BUTTON_SUBMIT"
+          labelKey: "RP_TRANSITE_SITE_BUTTON_SUBMIT"
         }),
         submitButtonIcon: {
           uiFramework: "custom-atoms",
