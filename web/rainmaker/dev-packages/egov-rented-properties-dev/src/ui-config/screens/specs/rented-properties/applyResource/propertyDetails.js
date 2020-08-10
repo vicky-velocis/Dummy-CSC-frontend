@@ -292,7 +292,7 @@ const getPropertyDetailsForAccount = () => {
             transitNumber: getTextField(ownershipTransitNumberField),
             colony: getTextField({...colonyFieldConfig,jsonPath: "", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "", required: false, props: {...pincodeField.props, disabled: true}}),
-            ownername: getTextField(ownerNameField)
+            ownername: getTextField({...ownerNameField , props: {...ownerNameField.props, disabled: true}})
         })
     }
 }
