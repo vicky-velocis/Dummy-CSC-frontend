@@ -9,6 +9,8 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTodaysDateInYMD } from "../../utils";
+
 import { searchApiCall, searchTransferProperties,searchDuplicateCopy, searchMortgage} from "./functions";
 
 const colonyField = {
@@ -250,6 +252,40 @@ const ownernameField = {
   jsonPath: "searchScreen.ownername"
 }
 
+const fromDateField = {
+  label: {
+    labelName: "From",
+    labelKey: "RP_FROM_DATE_LABEL"
+},
+placeholder: {
+    labelName: "Enter Date",
+    labelKey: "RP_FROM_DATE_PLACEHOLDER"
+},
+  pattern: getPattern("Date"),
+  jsonPath: "searchScreen.fromDate",
+  props: {
+      inputProps: {
+          max: getTodaysDateInYMD()
+      }
+  }
+}
+const toDateField = {
+  label: {
+      labelName: "To",
+      labelKey: "RP_TO_DATE_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Date",
+      labelKey: "RP_TO_DATE_PLACEHOLDER"
+  },
+  pattern: getPattern("Date"),
+  jsonPath: "searchScreen.toDate",
+  props: {
+      inputProps: {
+          max: getTodaysDateInYMD()
+      }
+  }
+}
 
 
 const buttonItem = {
@@ -402,6 +438,10 @@ const accountStatementSearchForm = {
     ownername:getTextField(ownernameField)
     // mobileNo: getTextField(duplicateCopyApplicantMobileNumberField),
     // status: getSelectField(ownershipStatusField)
+  }),
+  dateContainer:getCommonContainer({
+      from:getDateField(fromDateField),
+      to:getDateField(toDateField)
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer(
