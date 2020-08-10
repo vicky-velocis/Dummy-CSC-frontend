@@ -44,7 +44,7 @@ const fatherOrHusbandsNameField = {
     maxLength: 40,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband",
-    errorMessage:"RP_ERR_FATHER_OR_HUSBAND_FIELD" ,
+    errorMessage:"RP_ERR_FATHER_OR_HUSBAND_FIELD",
     props: {
         disabled: true
       }
