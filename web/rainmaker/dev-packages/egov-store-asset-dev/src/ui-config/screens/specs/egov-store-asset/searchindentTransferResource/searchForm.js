@@ -16,14 +16,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["issueStore",  "issueNoteNumber","issueDate","issuePurpose"];
+  const textFields = ["indentNumber","indentDate","indentPurpose",  "inventoryType","issueStore"];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-indent-note.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-indent-transfer.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-indent-note",
+          "search-indent-transfer",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -44,38 +44,53 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    issueStore: {
-      ...getSelectField({
+    indentNumber: getTextField({
+      label: { labelName: "Indent No.", labelKey: "STORE_MATERIAL_INDENT_NUMBER" },
+      placeholder: {
+        labelName: "Indent No.",
+        labelKey: "STORE_MATERIAL_INDENT_NUMBER",
+      },
+      required: false,
+      jsonPath: "searchScreen.indentNumber",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+     
+    }),
+    indentDate: {
+      ...getDateField({
         label: {
-          labelName: "Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME"
+          labelName: "Indent Date",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE"
         },
         placeholder: {
-          labelName: "Select Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
+          labelName: "Enter Indent Date",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE_PLACEHOLDER"
         },
         required: false,
-        jsonPath: "searchScreen.fromStore", 
+        pattern: getPattern("Date") || null,
+        jsonPath: "searchScreen.indentDate",
         gridDefination: {
           xs: 12,
           sm: 4,
-        },        
-        sourceJsonPath: "store.stores",
-        props: {
-          optionValue: "code",
-          optionLabel: "name",
         },
+        props: {
+          // inputProps: {
+          //   max: getTodaysDateInYMD()
+          // }
+        }
       })
     },
-    issueNoteNumber: {
-      ...getTextField({
-        label: { labelName: "Issue Note Number", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER" },
+    indentPurpose: {
+      ...getSelectField({
+        label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
         placeholder: {
           labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER"
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
         },
         required: false,
-        jsonPath: "searchScreen.issueNoteNumber",
+        jsonPath: "searchScreen.indentPurpose",
         gridDefination: {
           xs: 12,
           sm: 4,
@@ -94,72 +109,50 @@ export const searchForm = getCommonCard({
       },
       })
     },
-    // RaisedBy: getSelectField({
-    //   label: { labelName: "Indent No.", labelKey: "STORE_MATERIAL_INDENT_NUMBER" },
-    //   placeholder: {
-    //     labelName: "Indent No.",
-    //     labelKey: "STORE_MATERIAL_INDENT_NUMBER",
-    //   },
-    //   required: false,
-    //   jsonPath: "searchScreen.indentNumber",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4,
-    //   },
-     
-    // }),
-    issueDate: {
-      ...getDateField({
-        label: {
-          labelName: "Issue Date",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE"
-        },
-        placeholder: {
-          labelName: "Enter Issue Date",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
-        },
-        required: false,
-        pattern: getPattern("Date") || null,
-        jsonPath: "searchScreen.issueDate",
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        props: {
-          // inputProps: {
-          //   max: getTodaysDateInYMD()
-          // }
-        }
-      })
-    },
-    issuePurpose: {
+    inventoryType: {
       ...getSelectField({
-        label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
+        label: { labelName: "Inventry Type", labelKey: "STORE_INVENTRY_TYPE" },
         placeholder: {
-          labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
+          labelName: "Select Inventry Type",
+          labelKey: "STORE_INVENTRY_TYPE"
         },
         required: false,
-        jsonPath: "searchScreen.issuePurpose",
+        jsonPath: "searchScreen.inventoryType",
         gridDefination: {
           xs: 12,
           sm: 4,
         },
-        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
-      props: {
-        data: [
-          {
-            code: "Consumption",
-            name: "Capital/Repair/Consumption"
-          },
+         sourceJsonPath: "searchScreenMdmsData.store-asset.InventoryType",
+        props: {
          
-        ],
-        optionValue: "code",
-        optionLabel: "name",
-      },
+          optionValue: "code",
+          optionLabel: "name"
+        },
+      })
+    },   
+    issueStore: {
+      ...getSelectField({
+        label: {
+          labelName: "Store Name",
+          labelKey: "STORE_DETAILS_STORE_NAME"
+        },
+        placeholder: {
+          labelName: "Select Store Name",
+          labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
+        },
+        required: false,
+        jsonPath: "searchScreen.issueStore", 
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+        },        
+        sourceJsonPath: "store.stores",
+        props: {
+          optionValue: "code",
+          optionLabel: "name",
+        },
       })
     },
-   
   }),
 
   button: getCommonContainer({

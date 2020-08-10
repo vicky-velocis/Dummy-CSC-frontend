@@ -2,11 +2,18 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  
+  import get from "lodash/get";
+  import set from "lodash/set";
   import { POReviewDetails } from "./viewPurchaseOrder/po-review";
   import { poViewFooter } from "./viewPurchaseOrder/footer";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import {
+    convertDateToEpoch,
+    epochToYmdDate,
+    showHideAdhocPopup,
+    validateFields
+  } from "../utils";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getSearchResults } from "../../../../ui-utils/commons";
@@ -50,7 +57,20 @@ import {
       console.log(e);
     }
   };
-  
+  const setDateInYmdFormat = (obj, values) => {
+    values.forEach(element => {
+      set(obj, element, epochToYmdDate(get(obj, element)));
+    });
+  };
+  const furnishindentData = (state, dispatch) => {
+    let purchaseOrders = get(
+      state.screenConfiguration.preparedFinalObject,
+      "purchaseOrders",
+      []
+    );
+     setDateInYmdFormat(purchaseOrders[0], ["expectedDeliveryDate", "purchaseOrderDate"]);    
+    dispatch(prepareFinalObject("purchaseOrders", purchaseOrders));
+  };
   const screenConfig = {
     uiFramework: "material-ui",
     name: "view-purchase-order",
@@ -62,7 +82,7 @@ import {
       .then(response =>{
         if(response){
           dispatch(prepareFinalObject("purchaseOrders", [...response.purchaseOrders]));       
-      
+          furnishindentData(state, dispatch);
       if(response.purchaseOrders && response.purchaseOrders[0].supplier.code){
         const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "suppliers", value: response.purchaseOrders[0].supplier.code}];
        

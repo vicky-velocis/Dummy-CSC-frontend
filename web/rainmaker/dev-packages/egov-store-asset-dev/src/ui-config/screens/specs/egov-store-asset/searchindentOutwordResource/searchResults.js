@@ -6,17 +6,17 @@ import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 export const getTextToLocalMapping = (label) => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
-    case "Issue No.":
+    case "Indent No.":
       return getLocaleLabels(
-        "Issue No.",
-        "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER",
+        "Indent No.",
+        "STORE_MATERIAL_INDENT_NUMBER",
         localisationLabels
       );
 
-      case "Issue Date":
+      case "Indent Date":
         return getLocaleLabels(
-          "Issue Date",
-          "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE",
+          "Indent Date",
+          "STORE_MATERIAL_INDENT_INDENT_DATE",
           localisationLabels
         );
     case "Indenting Store Name":
@@ -25,23 +25,23 @@ export const getTextToLocalMapping = (label) => {
         "STORE_MATERIAL_INDENT_STORE_NAME",
         localisationLabels
       );
-      case "Issue Purpose":
+      case "Indent Purpose":
         return getLocaleLabels(
-          "Issue Purpose",
-          "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE",
+          "Indent Purpose",
+          "STORE_MATERIAL_INDENT_INDENT_PURPOSE",
           localisationLabels
         );
-        case "Issue Status":
+        case "Indent Status":
           return getLocaleLabels(
-            "Issue Status",
-            "STORE_MATERIAL_INDENT_NOTE_STATUS",
+            "Indent Status",
+            "STORE_MATERIAL_INDENT_INDENT_STATUS",
             localisationLabels
           );
    
-    case "Search Results for Material Non Indent":
+    case "Search Results for Material Indent Outword":
       return getLocaleLabels(
-        "Search Results for Material Non Indent",
-        "STORE_MATERIAL_NON_INDENT_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for Material Indent Outword",
+        "STORE_MATERIAL_INDENT_OUTWORD_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
   }
@@ -53,11 +53,11 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Issue No."),
-      getTextToLocalMapping("Issue Date"),
-      //getTextToLocalMapping("Indenting Store Name"),     
-      getTextToLocalMapping("Issue Purpose"),
-      getTextToLocalMapping("Issue Status"),
+      getTextToLocalMapping("Indent No."),
+      getTextToLocalMapping("Indent Date"),
+      getTextToLocalMapping("Indenting Store Name"),     
+      getTextToLocalMapping("Indent Purpose"),
+      getTextToLocalMapping("Indent Status"),
       {
         name: "id",
         options: {
@@ -82,7 +82,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-non-indent-issue-note?issueNoteNumber=${rowData[0]}&tenantId=${tenantId}&Status=${rowData[3]}`;
+  window.location.href = `view-indent-outword?id=${rowData[5]}&tenantId=${tenantId}`;
 };
 
 

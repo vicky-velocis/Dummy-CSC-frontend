@@ -134,6 +134,16 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
     }
     break;
+    case "INDENTINWORD": labelValue = {
+      labelName: "Issue Number",
+      labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
+    }
+    break;
+    case "INDENTOUTWORD": labelValue = {
+      labelName: "Issue Number",
+      labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
+    }
+    break;
     case "MATERIALRECEIPT": labelValue = {
       labelName: "mrnNumber",
       labelKey: `STORE_MATERIAL_COMMON_MRN_NUMBER`,

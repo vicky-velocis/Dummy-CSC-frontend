@@ -128,7 +128,7 @@ export const searchApiCall = async (state, dispatch) => {
          // [getTextToLocalMapping("Indent Purpose")]: get(item, "issuePurpose", "-") || "-", 
          // [getTextToLocalMapping("Raised By")]: get(item, "issuedToEmployee", "-") || "-",  
           [getTextToLocalMapping("Status")]: get(item, "materialIssueStatus", "-") || "-",  
-          id: item.id,       
+          id: item.indent.id,       
          
         };
       });

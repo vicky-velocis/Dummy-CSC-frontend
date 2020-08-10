@@ -166,7 +166,12 @@ console.log(matcodes)
           },
           required: true,
           pattern: getPattern("Date") ,
-          jsonPath: "materialIssues[0].issueDate"
+          jsonPath: "materialIssues[0].issueDate",
+          props: {           
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
         })
       },
       IndentingStore: {

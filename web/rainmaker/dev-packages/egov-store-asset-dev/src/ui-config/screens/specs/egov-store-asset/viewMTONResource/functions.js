@@ -6,10 +6,9 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  createEmployee,
-  getSearchResults,
-  updateEmployee
-} from "../../../../../ui-utils/commons";
+  getmaterialOutwordSearchResults,
+  GetMdmsNameBycode
+} from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
   epochToYmdDate,
@@ -124,7 +123,7 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 export const handleCreateUpdatePO = (state, dispatch) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
-    "purchaseOrders[0].id",
+    "materialIssues[0].id",
     null
   );
   if (uuid) {
@@ -136,80 +135,37 @@ export const handleCreateUpdatePO = (state, dispatch) => {
 
 export const createUpdatePO = async (state, dispatch, action) => {
 
-  let purchaseOrders = get(
+  let materialIssues = get(
     state.screenConfiguration.preparedFinalObject,
-    "purchaseOrders",
+    "materialIssues",
     []
   );
-  let priceList = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchMaster.priceList",
-    []
+  set(
+    materialIssues[0],
+    "issueDate",
+    convertDateToEpoch(get(materialIssues[0], "issueDate"), "dayStart")
   );
   const tenantId =  getTenantId();
-  purchaseOrders[0].tenantId = tenantId;
+  materialIssues[0].tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
 
-  purchaseOrders = handleCardDelete(purchaseOrders, "purchaseOrderDetails", false);
 
 
-  //SET TENANT IDS IN ALL NEWLY ADDED JURISDICTIONS, DOESNT CHANGE ALREADY PRESENT
-  let poDetailArray = returnEmptyArrayIfNull(
-    get(purchaseOrders[0], "purchaseOrderDetails", [])
-  );
-  for (let i = 0; i < poDetailArray.length; i++) {
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].tenantId`, tenantId);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].priceList`, priceList[0]);
-    set(purchaseOrders[0], `purchaseOrderDetails[${i}].purchaseIndentDetails`, []);
-  }
-
-  set(
-    purchaseOrders[0],
-    "purchaseOrderDate",
-    convertDateToEpoch(get(purchaseOrders[0], "purchaseOrderDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "expectedDeliveryDate",
-    convertDateToEpoch(get(purchaseOrders[0], "expectedDeliveryDate"), "dayStart")
-  );
-
-  set(
-    purchaseOrders[0],
-    "rateContractDate",
-    convertDateToEpoch(get(purchaseOrders[0], "rateContractDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementStartDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementStartDate"), "dayStart")
-  );
-  set(
-    purchaseOrders[0],
-    "agreementEndDate",
-    convertDateToEpoch(get(purchaseOrders[0], "agreementEndDate"), "dayStart")
-  );
-
-  const requestBody = {purchaseOrders};
+  const requestBody = {materialIssues};
   console.log("requestbody", requestBody);
 
   if (action === "CREATE") {
     try {
       const response = await httpRequest(
         "post",
-        "/store-asset-services/purchaseorders/_create",
+        "/store-asset-services/materialissues-to/_create",
         "",
         queryObject,
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=create&code=${response.materialIssues[0].issueNumber}`));
        }
   
     } catch (error) {
@@ -219,13 +175,13 @@ export const createUpdatePO = async (state, dispatch, action) => {
     try {
       const response = await httpRequest(
         "post",
-        "/store-asset-services/purchaseorders/_update",
+        "/store-asset-services/materialissues-to/_update",
         "",
         queryObject,
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=update&code=${response.materialIssues[0].issueNumber}`));
        }
   
     } catch (error) {
@@ -234,4 +190,50 @@ export const createUpdatePO = async (state, dispatch, action) => {
   } 
 };
 
+export const getIndentOutwordData = async (
+  state,
+  dispatch,
+  id,
+  tenantId
+) => {
+  let queryObject = [
+    {
+      key: "ids",
+      value: id
+    },
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ];
 
+ let response = await getmaterialOutwordSearchResults(queryObject, dispatch);
+// let response = samplematerialsSearch();
+response = response.materialIssues.filter(x=>x.id === id)
+if(response && response[0])
+{
+for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
+  const element = response[0].materialIssueDetails[index];
+ let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
+ let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
+    
+    set(response[0], `priceListDetails[${index}].uom.name`, Uomname);
+    set(response[0], `priceListDetails[${index}].material.name`, matname);    
+  
+}
+}
+  dispatch(prepareFinalObject("materialIssues", response));
+
+ furnishPriceListData(state, dispatch);
+};
+
+export const furnishPriceListData = (state, dispatch) => {
+  let materialIssues = get(
+    state.screenConfiguration.preparedFinalObject,
+    "materialIssues",
+    []
+  );
+  setDateInYmdFormat(materialIssues[0], ["issueDate", "indent.indentDate",]);
+  
+  dispatch(prepareFinalObject("materialIssues", priceLists));
+};

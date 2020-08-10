@@ -16,14 +16,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["issueStore",  "issueNoteNumber","issueDate","issuePurpose"];
+  const textFields = ["issueNoteNumber","fromStore",  "toStore","issueDate"];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-indent-note.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-indent-outword.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-indent-note",
+          "search-indent-outword",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -44,15 +44,29 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    issueStore: {
+    issueNoteNumber: getTextField({
+      label: { labelName: "Material Issue Number", labelKey: "STORE_COMMON_MRN_ISSUE_NUMBER" },
+      placeholder: {
+        labelName: "Material Issue Number",
+        labelKey: "STORE_COMMON_MRN_ISSUE_NUMBER",
+      },
+      required: false,
+      jsonPath: "searchScreen.issueNoteNumber",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+     
+    }),
+    fromStore: {
       ...getSelectField({
         label: {
-          labelName: "Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME"
+          labelName: "From Store",
+          labelKey: "STORE_DETAILS_STORE_NAME_FROM"
         },
         placeholder: {
-          labelName: "Select Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
+          labelName: "Select From Store",
+          labelKey: "STORE_DETAILS_STORE_NAME_FROM_SELECT"
         },
         required: false,
         jsonPath: "searchScreen.fromStore", 
@@ -67,47 +81,29 @@ export const searchForm = getCommonCard({
         },
       })
     },
-    issueNoteNumber: {
-      ...getTextField({
-        label: { labelName: "Issue Note Number", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER" },
+    toStore: {
+      ...getSelectField({
+        label: {
+          labelName: "To Store",
+          labelKey: "STORE_DETAILS_STORE_NAME_TO"
+        },
         placeholder: {
-          labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER"
+          labelName: "Select To Store",
+          labelKey: "STORE_DETAILS_STORE_NAME_TO_SELECT"
         },
         required: false,
-        jsonPath: "searchScreen.issueNoteNumber",
+        jsonPath: "searchScreen.toStore", 
         gridDefination: {
           xs: 12,
           sm: 4,
+        },        
+        sourceJsonPath: "store.stores",
+        props: {
+          optionValue: "code",
+          optionLabel: "name",
         },
-        sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
-      props: {
-        // data: [
-        //   {
-        //     code: "Consumption",
-        //     name: "Capital/Repair/Consumption"
-        //   },
-         
-        // ],
-        optionValue: "code",
-        optionLabel: "name",
-      },
       })
     },
-    // RaisedBy: getSelectField({
-    //   label: { labelName: "Indent No.", labelKey: "STORE_MATERIAL_INDENT_NUMBER" },
-    //   placeholder: {
-    //     labelName: "Indent No.",
-    //     labelKey: "STORE_MATERIAL_INDENT_NUMBER",
-    //   },
-    //   required: false,
-    //   jsonPath: "searchScreen.indentNumber",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4,
-    //   },
-     
-    // }),
     issueDate: {
       ...getDateField({
         label: {
@@ -132,34 +128,8 @@ export const searchForm = getCommonCard({
         }
       })
     },
-    issuePurpose: {
-      ...getSelectField({
-        label: { labelName: "Indent Purpose", labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE" },
-        placeholder: {
-          labelName: "Select Indent Purpose",
-          labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
-        },
-        required: false,
-        jsonPath: "searchScreen.issuePurpose",
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
-      props: {
-        data: [
-          {
-            code: "Consumption",
-            name: "Capital/Repair/Consumption"
-          },
-         
-        ],
-        optionValue: "code",
-        optionLabel: "name",
-      },
-      })
-    },
-   
+  
+
   }),
 
   button: getCommonContainer({

@@ -11,8 +11,8 @@ import {
     const IndentId = getQueryArg(window.location.href, "IndentId");
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-store-asset/createMaterialTransferInword?step=0`
-    : `/egov-store-asset/createMaterialTransferInword?step=0`;
+    ? `/egov-ui-framework/egov-store-asset/createMaterialTransferInword?step=1`
+    : `/egov-store-asset/createMaterialTransferInword?step=1`;
     dispatch(setRoute(createUrl));
   };
   

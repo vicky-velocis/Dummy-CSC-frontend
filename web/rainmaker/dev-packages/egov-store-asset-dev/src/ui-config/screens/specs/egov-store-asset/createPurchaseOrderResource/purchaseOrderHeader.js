@@ -68,6 +68,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].store.code",
         sourceJsonPath: "searchMaster.storeNames",
         props: {
+          disabled : indentNumber ? true : false,
           className: "hr-generic-selectfield",
           optionValue: "code",
           optionLabel: "name"
@@ -84,7 +85,9 @@ export const purchaseOrderHeader = getCommonCard({
                 const name = material.name;
                 const code = material.code;
                 const description = material.description;
-                return{ name, code,description }
+                const uom = material.baseUom;
+                const indentQuantity = 0;
+                return{ name, code,description,uom ,indentQuantity}
             })
               if(indentNumber){
                 const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
@@ -96,16 +99,18 @@ export const purchaseOrderHeader = getCommonCard({
                           const name = ele.material.name;
                           const code = ele.material.code;
                           const description = ele.material.description;
+                          const uom = ele.material.baseUom;
+                          const indentQuantity = ele.indentQuantity;
                           if(!indentingMaterial.find(mat => mat.code === code))
-                               indentingMaterial.push({name,code,description})
+                               indentingMaterial.push({name,code,description,uom,indentQuantity})
                         })
                       }
                     })
                 }
 
                 // finding common material
-                   materialNames = materialNames.filter(function(ele) {
-                        return indentingMaterial.findIndex(mat => mat.code === ele.code) !== -1;
+                   materialNames = indentingMaterial.filter(function(ele) {
+                        return materialNames.findIndex(mat => mat.code === ele.code) !== -1;
                     })
               }
             dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          

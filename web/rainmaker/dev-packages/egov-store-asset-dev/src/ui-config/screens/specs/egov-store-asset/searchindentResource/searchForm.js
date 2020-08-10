@@ -95,15 +95,15 @@ export const searchForm = getCommonCard({
           xs: 12,
           sm: 4,
         },
-        //sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
+        sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
       props: {
-        data: [
-          {
-            code: "Consumption",
-            name: "Capital/Repair/Consumption"
-          },
+        // data: [
+        //   {
+        //     code: "Consumption",
+        //     name: "Capital/Repair/Consumption"
+        //   },
          
-        ],
+        // ],
         optionValue: "code",
         optionLabel: "name",
       },
@@ -114,7 +114,7 @@ export const searchForm = getCommonCard({
         label: { labelName: "Inventry Type", labelKey: "STORE_INVENTRY_TYPE" },
         placeholder: {
           labelName: "Select Inventry Type",
-          labelKey: "STORE_MATERIAL_TYPE_NAME_SELECT"
+          labelKey: "STORE_INVENTRY_TYPE"
         },
         required: false,
         jsonPath: "searchScreen.inventoryType",

@@ -102,7 +102,7 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
         {
           labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
         },
-        { jsonPath: "materialIssues[0].toStore.name" }
+        { jsonPath: "materialIssues[0].toStore.code" }
       ),
       IndentingDetpName: getLabelWithValue(
         { labelName: "Indenting Dept. Name",

@@ -22,8 +22,8 @@ if(ConfigStatus.length >0)
 IsEdit = true;
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Material  Receipt Note`,
-    labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_NOTE"
+    labelName: `View Material  Receipt Note`,
+    labelKey: "STORE_VIEW_MATERIAL_RECEIPT_NOTE"
   })
 });
 
@@ -55,6 +55,13 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
               name: "DeactivationReason",
               filter: "[?(@.active == true)]"
             }
+          ]
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "UOM", filter: "[?(@.active == true)]" },
+           
           ]
         }
       ]

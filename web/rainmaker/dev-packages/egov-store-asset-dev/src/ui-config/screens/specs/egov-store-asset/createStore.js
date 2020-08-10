@@ -322,7 +322,7 @@ export const formwizardFirstStep = {
             labelKey: "STORE_DETAILS_STORE_NAME_PLACEHOLDER",
           },
           required: true,
-          pattern: getPattern("alpha-only"),
+          pattern: getPattern("Name"),
           errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
 
           jsonPath: "stores[0].name",

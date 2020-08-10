@@ -4,11 +4,12 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getPriceListSearchResults } from "../../../../../ui-utils/storecommonsapi";
+import { getmaterialOutwordSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { getTextToLocalMapping } from "./searchResults";
+import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { validateFields } from "../../utils";
-import { convertEpochToDate,  } from "../../utils/index";
-import { getTenantId, } from "egov-ui-kit/utils/localStorageUtils";
+import { IndentConfigType } from "../../../../../ui-utils/sampleResponses";
+import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getDeptName = (state, codes) => {
   let deptMdmsData = get(
@@ -44,7 +45,7 @@ export const searchApiCall = async (state, dispatch) => {
     {
       key: "tenantId",
       value: tenantId,
-    },
+    },   
   ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -55,9 +56,9 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-price-list"
+    "search-indent-outword"
   );
-
+  let ValidAPICall = true;
   if (!isSearchFormValid) {
     dispatch(
       toggleSnackbar(
@@ -86,20 +87,48 @@ export const searchApiCall = async (state, dispatch) => {
   } else {
     // Add selected search fields to queryobject
     for (var key in searchScreenObject) {
-      if(searchScreenObject.hasOwnProperty(key) && typeof searchScreenObject[key] === "boolean"){
-        queryObject.push({ key: key, value: searchScreenObject[key] });
-      }
-      else if (
+      if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+
+        if (key === "issueDate") {
+          Dateselect = true;
+          queryObject.push({
+            key: key,
+            value: convertDateToEpoch(searchScreenObject[key], "dob")
+          });
+        } 
+        else
+                queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    let response = await getPriceListSearchResults(queryObject, dispatch);
+
+    let fromStore = get(
+      state,
+      "screenConfiguration.preparedFinalObject.searchScreen.fromStore"
+    );
+    let toStore = get(
+      state,
+      "screenConfiguration.preparedFinalObject.searchScreen.toStore"
+    );
+
+    if(fromStore === toStore)
+    {
+      ValidAPICall = false
+      const errorMessage = {
+        labelName: "From Store and To Store can not be same",
+        labelKey: "STORE_SEARCH_STORE_SELECTION_VALIDATION"
+      }; 
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }
+   
+    if(ValidAPICall)
+{
+    let response = await getmaterialOutwordSearchResults(queryObject, dispatch);
     try {
 
-      if(response.priceLists.length===0)
+      if(response.materialIssues.length===0)
       {
         dispatch(
               toggleSnackbar(
@@ -111,17 +140,15 @@ export const searchApiCall = async (state, dispatch) => {
            
       }
       else{
-      let data = response.priceLists.map((item) => {
+      let data = response.materialIssues.map((item) => {
        
 
         return {
-          [getTextToLocalMapping("Suplier Name")]: get(item, "supplier.name", "-") || "-",
-          [getTextToLocalMapping("Rate Type")]: get(item, "rateType", "-") || "-", 
-        // [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 
-         [getTextToLocalMapping("Agrement No")]: get(item, "agreementNumber", "-") || "-", 
-         [getTextToLocalMapping("Agrement Start Date")]: convertEpochToDate(item.agreementStartDate, "agreementStartDate", "-") || "-",  
-         [getTextToLocalMapping("Agrement End Date")]: convertEpochToDate(item.agreementEndDate, "agreementEndDate", "-") || "-",  
-          [getTextToLocalMapping("Active")]: get(item, "active",false) ? "Yes": "No", 
+          [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
+          [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
+         [getTextToLocalMapping("Indenting Store Name")]: get(item, "indentStore.name", "-") || "-", 
+          [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
+          [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
           id: item.id,       
          
         };
@@ -129,7 +156,7 @@ export const searchApiCall = async (state, dispatch) => {
 
       dispatch(
         handleField(
-          "search-price-list",
+          "search-indent-outword",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -137,17 +164,18 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-price-list",
+          "search-indent-outword",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for Price List")} (${
-            response.priceLists.length
+          `${getTextToLocalMapping("Search Results for Material Indent Outword")} (${
+            response.materialIssues.length
           })`
         )
       );
       showHideTable(true, dispatch);
         }
-    } catch (error) {
+    } 
+    catch (error) {
       dispatch(
         toggleSnackbar(
           true,
@@ -157,12 +185,13 @@ export const searchApiCall = async (state, dispatch) => {
       );
     }
   }
+  }
 };
 
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-price-list",
+      "search-indent-outword",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

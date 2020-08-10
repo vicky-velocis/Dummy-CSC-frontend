@@ -10,8 +10,8 @@ import {
   const gotoCreatePage = (state, dispatch) => {
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-store-asset/creatindent?step=0`
-    : `/egov-store-asset/creatindent?step=0`;
+    ? `/egov-ui-framework/egov-store-asset/creatindent?step=1`
+    : `/egov-store-asset/creatindent?step=1`;
     dispatch(setRoute(createUrl));
   };
   
@@ -30,20 +30,20 @@ import {
             { jsonPath: "indents[0].indentDetails[0].material.name",          
           }
           ),
-          MaterialDescription: getLabelWithValue(
-            {
-              labelName: "Material Description",
-                  labelKey: "STORE_MATERIAL_DESCRIPTION"
-            },
-            { jsonPath: "indents[0].storeMapping[0].MaterialDescription"
+          // MaterialDescription: getLabelWithValue(
+          //   {
+          //     labelName: "Material Description",
+          //         labelKey: "STORE_MATERIAL_DESCRIPTION"
+          //   },
+          //   { jsonPath: "indents[0].storeMapping[0].MaterialDescription"
             
-           }
-          ),
+          //  }
+          // ),
           UOMName: getLabelWithValue(
             { labelName: "UOM Name",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"},
             {
-              jsonPath: "indents[0].indentDetails[0].uom.code"
+              jsonPath: "indents[0].indentDetails[0].uom.name"
              
             }
           ),
@@ -85,7 +85,7 @@ import {
       items: [],
       hasAddItem: false,
       isReviewPage: true,
-      sourceJsonPath: "priceLists[0].priceListDetails",
+      sourceJsonPath: "indents[0].indentDetails",
       prefixSourceJsonPath:
         "children.cardContent.children.storeCardContainer.children",
       afterPrefixJsonPath: "children.value.children.key"

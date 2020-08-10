@@ -56,7 +56,21 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            { name: "UOM", filter: "[?(@.active == true)]" },
+           
+          ]
+        },
+        {
+          moduleName: "store-asset",
+          masterDetails: [
+            { name: "Material" }, //filter: "[?(@.active == true)]" },           
+                      
+          ],
+        },
       ]
     }
   };

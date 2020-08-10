@@ -8,8 +8,8 @@ import {
   import set from "lodash/set";
   import { httpRequest,getsto } from "../../../../ui-utils";
   import { getstoreTenantId,getStoresSearchResults } from "../../../../ui-utils/storecommonsapi";
-  import { searchForm } from "./searchindentnoteResource/searchForm";
-  import { searchResults } from "./searchindentnoteResource/searchResults";
+  import { searchForm } from "./searchindentTransferResource/searchForm";
+  import { searchResults } from "./searchindentTransferResource/searchResults";
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   
@@ -18,12 +18,12 @@ import {
   //enableButton = hasButton && hasButton === "false" ? false : true;
   
   const header = getCommonHeader({
-    labelName: "Materisl Indent List",
-    labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE",
+    labelName: "Material Transfer Indent",
+    labelKey: "STORE_MTI_CREATE_HEADER",
   });
   
   const createMaterialIndentHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-store-asset/creatindent`));
+    dispatch(setRoute(`/egov-store-asset/create-material-transfer-indent`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
@@ -83,7 +83,7 @@ import {
   
   const materialMasterSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search-indent-note",
+    name: "search-indent-transfer",
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
       const storedata = getstoreData(action,state, dispatch);
@@ -117,7 +117,7 @@ import {
                   sm: 6,
                   align: "right",
                 },
-                visible: false,
+                visible: enableButton,
                 props: {
                   variant: "contained",
                   color: "primary",
@@ -142,8 +142,8 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add Material Indent",
-                    labelKey: "STORE_MATERIAL_INDENT_NOTE_ADD_MATERIAL_INDENT",//
+                    labelName: "Add Material Indent Transfer",
+                    labelKey: "STORE_MATERIAL_INDENT_TRANSFER",//
                   }),
                 },
                 onClickDefination: {
