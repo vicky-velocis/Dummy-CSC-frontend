@@ -97,6 +97,24 @@ const transitNumberField = {
       xs: 12,
       sm: 6
   },
+  required:true,
+  iconObj: {
+    iconName: "search",
+    position: "end",
+    color: "#FE7A51",
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        // getDuplicateDetailsFromProperty(state, dispatch);
+      }
+    }
+  },
+  title: {
+    value:
+      "If you have already assessed your property, then please search your property by your transit Number",
+    key: "If you have already assessed your property, then please search your property by your transit Number"
+  },
+  infoIcon: "info_circle",
   required: false,
   jsonPath: "searchScreen.transitNumber"
 }
