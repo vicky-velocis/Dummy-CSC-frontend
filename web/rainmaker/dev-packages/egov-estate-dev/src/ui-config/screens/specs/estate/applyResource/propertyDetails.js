@@ -27,7 +27,7 @@ const typeOfAllocationField = {
     },
     required: true,
     jsonPath: "Properties[0].propertyDetails.typeOfAllocation",
-    sourceJsonPath: "applyScreenMdmsData.Estate.AllocationType",
+    sourceJsonPath: "applyScreenMdmsData.EstatePropertyService.allocationType",
     gridDefination: {
         xs: 12,
         sm: 6
@@ -137,13 +137,13 @@ const categoryField = {
     },
     required: true,
     jsonPath: "Properties[0].category",
-    sourceJsonPath: "applyScreenMdmsData.Estate.categories",
+    sourceJsonPath: "applyScreenMdmsData.EstatePropertyService.categories",
     gridDefination: {
         xs: 12,
         sm: 6
     },
     beforeFieldChange: (action, state, dispatch) => {
-        if (action.value == "Residential"  || action.value == "Commercial") {
+        if (action.value == "CAT.RESIDENTIAL"  || action.value == "CAT.COMMERCIAL") {
             dispatch(
                 handleField(
                     "apply",
@@ -158,13 +158,13 @@ const categoryField = {
                 "applyScreenMdmsData.EstatePropertyService.categories"
             )
 
-            const filteredCategory = categories.filter(item => item.name === action.value)
+            const filteredCategory = categories.filter(item => item.code === action.value)
             dispatch(
                 handleField(
                     "apply",
                     "components.div.children.formwizardFirstStep.children.propertyInfoDetails.children.cardContent.children.detailsContainer.children.subCategory",
                     "props.data",
-                    filteredCategory.subCategories
+                    filteredCategory[0].SubCategory
                 )
             )
         }
@@ -219,7 +219,7 @@ const sectorNumberField = {
     },
     required: true,
     jsonPath: "Properties[0].sectorNumber",
-    sourceJsonPath: "applyScreenMdmsData.Estate.SectorNumber",
+    sourceJsonPath: "applyScreenMdmsData.EstatePropertyService.SectorNumber",
     gridDefination: {
         xs: 12,
         sm: 6
@@ -274,7 +274,7 @@ const propertyTypeField = {
     },
     required: true,
     jsonPath: "Properties[0].propertyDetails.propertyType",
-    sourceJsonPath: "applyScreenMdmsData.Estate.PropertyType",
+    sourceJsonPath: "applyScreenMdmsData.EstatePropertyService.propertyType",
     gridDefination: {
         xs: 12,
         sm: 6

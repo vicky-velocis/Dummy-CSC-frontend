@@ -114,7 +114,7 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         []
       )
       owners.map((item, index) => {
-        let ownerDocuments = get(queryObject[0, `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`]) || [];
+        let ownerDocuments = get(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`) || [];
         ownerDocuments = ownerDocuments.map(item => ({
           ...item,
           isActive: true
@@ -156,8 +156,8 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
 
     owners.map((item, index) => {
       let ownerDocuments = Properties[0].propertyDetails.owners[index].ownerDocuments || [];
-      const removedDocs = ownerDocuments.filter(item => !item.active)
-      ownerDocuments = ownerDocuments.filter(item => item.active)
+      const removedDocs = ownerDocuments.filter(item => !item.isActive)
+      ownerDocuments = ownerDocuments.filter(item => item.isActive)
       Properties[0].propertyDetails.owners[index].ownerDetails.ownerDocuments = ownerDocuments;
       dispatch(
         prepareFinalObject(

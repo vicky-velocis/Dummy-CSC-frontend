@@ -21,7 +21,7 @@ const getAcknowledgementCard = (
   purpose,
   status,
   tenant,
-  applicationNumber,
+  fileNumber,
   type,
   businessService
 ) => {
@@ -32,8 +32,8 @@ const getAcknowledgementCard = (
     }
 
     const tailText = {
-      labelName: "Application Number",
-      labelKey: "EST_APPLICATION_NUMBER_LABEL"
+      labelName: "File Number",
+      labelKey: "EST_FILE_NUMBER_LABEL"
     }
 
     return {
@@ -50,7 +50,7 @@ const getAcknowledgementCard = (
             backgroundColor: purpose === "reject" ? "#E54D42" : "#39CB74",
             header,
             tailText: tailText,
-            number: applicationNumber
+            number: fileNumber
           })
         }
       },
@@ -63,14 +63,14 @@ const getAcknowledgementCard = (
   } 
 }
 
-const getData = async (action, state, dispatch, purpose, status, tenant, applicationNumber, type, businessService) => {
+const getData = async (action, state, dispatch, purpose, status, tenant, fileNumber, type, businessService) => {
   const data = await getAcknowledgementCard(
     state,
     dispatch,
     purpose,
     status,
     tenant,
-    applicationNumber,
+    fileNumber,
     type,
     businessService
   );
@@ -90,14 +90,14 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     const purpose = getQueryArg(window.location.href, "purpose");
     const status = getQueryArg(window.location.href, "status");
-    const applicationNumber = getQueryArg(
+    const fileNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "fileNumber"
     );
     const tenant = getQueryArg(window.location.href, "tenantId");
     const type = getQueryArg(window.location.href, "type")
     const businessService = getQueryArg(window.location.href, "businessService")
-    getData(action, state, dispatch, purpose, status, tenant, applicationNumber, type, businessService)
+    getData(action, state, dispatch, purpose, status, tenant, fileNumber, type, businessService)
     return action;
   },
   components: {
