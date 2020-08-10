@@ -323,6 +323,74 @@ const buttonItem = {
   }
 }
 
+const submitButtonItem = {
+  firstCont: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  },
+  submitButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+        backgroundColor: "#fe7a51",
+        borderRadius: "2px",
+        width: "80%",
+        height: "48px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "RP_HOME_SEARCH_RESULTS_BUTTON_SUBMIT"
+      })
+    }
+  }
+}
+
+const filterButtonItem = {
+  firstCont: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  },
+  filterButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+        backgroundColor: "#fe7a51",
+        borderRadius: "2px",
+        width: "80%",
+        height: "48px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "Filter",
+        labelKey: "RP_HOME_SEARCH_RESULTS_BUTTON_FILTER"
+      })
+    }
+  }
+}
+
 export const rentedPropertyApplication = getCommonCard({
   subParagraph: getCommonParagraph({
     labelName: "Please provide atleast one parameter to search Property",
@@ -439,13 +507,37 @@ const accountStatementSearchForm = {
     // mobileNo: getTextField(duplicateCopyApplicantMobileNumberField),
     // status: getSelectField(ownershipStatusField)
   }),
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer(
+      {...submitButtonItem, submitButton: {...submitButtonItem.submitButton, 
+        onClickDefination: {
+          action: "condition",
+          // callBack: searchTransferProperties
+        }
+      }, lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  })
+}
+
+const accountStatementFilterForm = {
+  // subParagraph: getCommonParagraph({
+  //   labelName: "Please provide atleast one parameter to search Application",
+  //   labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_APPLICATION_LABEL"
+  // }),
   dateContainer:getCommonContainer({
       from:getDateField(fromDateField),
       to:getDateField(toDateField)
   }),
   button: getCommonContainer({
     buttonContainer: getCommonContainer(
-      {...buttonItem, searchButton: {...buttonItem.searchButton, 
+      {...filterButtonItem, filterButton: {...filterButtonItem.filterButton, 
         onClickDefination: {
           action: "condition",
           // callBack: searchTransferProperties
@@ -471,7 +563,29 @@ export const accountStatementGenerationApplications = getCommonCard(
   {...accountStatementSearchForm,
     button: getCommonContainer({
       buttonContainer: getCommonContainer(
-        {...buttonItem, searchButton: {...buttonItem.searchButton, 
+        {...submitButtonItem, submitButton: {...submitButtonItem.submitButton, 
+          onClickDefination: {
+            action: "condition",
+            callBack: searchDuplicateCopy
+          }
+        }, lastCont: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }
+      })
+    })
+  }
+)
+
+export const accountStatementFilter = getCommonCard(
+  {...accountStatementFilterForm,
+    button: getCommonContainer({
+      buttonContainer: getCommonContainer(
+        {...filterButtonItem, filterButton: {...filterButtonItem.filterButton, 
           onClickDefination: {
             action: "condition",
             callBack: searchDuplicateCopy
