@@ -66,6 +66,12 @@ const LandingPage = Loadable({
   loading: () => <Loading />
 });
 
+const HorizontalCardItems = Loadable({
+  loader: () => import("./HorizontalCardItems"),
+  loading: () => <Loading />
+});
+
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -78,5 +84,6 @@ export {
   HowItWorks,
   ActionDialog,
   Footer,
-  LandingPage
+  LandingPage,
+  HorizontalCardItems
 };
