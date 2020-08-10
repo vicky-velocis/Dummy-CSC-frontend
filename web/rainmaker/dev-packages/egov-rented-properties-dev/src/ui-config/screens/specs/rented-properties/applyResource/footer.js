@@ -516,6 +516,34 @@ export const submitButtontransit = {
       
 }
 
+export const payment = {
+  componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "180px",
+          height: "48px",
+          marginRight: "45px",
+          borderRadius: "inherit"
+        }
+      },
+      children: {
+        submitButtonLabel: getLabel({
+          labelName: "Make Payment",
+          labelKey: "RP_COMMON_MAKE_PAYMENT_BUTTON_"
+        }),
+        submitButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "keyboard_arrow_right"
+          }
+        }
+      },
+      
+}
+
 export const footer = getCommonApplyFooter({
     previousButton: {
       ...previousButton, 
