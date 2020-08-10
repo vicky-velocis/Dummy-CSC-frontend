@@ -200,6 +200,57 @@ const ownershipStatusField = {
   jsonPath: "searchScreen.status"
 }
 
+const areaField = {
+  label: {
+    labelName: "Area",
+    labelKey: "RP_AREA",
+  },
+  placeholder: {
+    labelName: "Enter Area",
+    labelKey: "RP_AREA_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+},
+required: false,
+jsonPath: "searchScreen.area"
+}
+const pincodeField = {
+  label: {
+      labelName: "Pincode",
+      labelKey: "RP_PINCODE_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Pincode",
+      labelKey: "RP_PINCODE_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  required: false,
+  jsonPath: "searchScreen.pincode"
+}
+
+const ownernameField = {
+  label: {
+      labelName: "Owner Name",
+      labelKey: "RP_OWNER_NAME_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Owner Name.",
+      labelKey: "RP_OWNER_NAME_PLACEHOLDER"
+  },
+  gridDefination: {
+      xs: 12,
+      sm: 6
+  },
+  required: false,
+  jsonPath: "searchScreen.ownername"
+}
+
+
 
 const buttonItem = {
   firstCont: {
@@ -336,8 +387,66 @@ const duplicateCopySearchForm = {
   })
 }
 
+const accountStatementSearchForm = {
+  subParagraph: getCommonParagraph({
+    labelName: "Please provide atleast one parameter to search Application",
+    labelKey: "RP_PLEASE_PROVIDE_ONE_PARAMETER_TO_SEARCH_APPLICATION_LABEL"
+  }),
+  applicationNoContainer: getCommonContainer({
+    // applicationNo: getTextField(applicationNoField),
+    transitNumber: getTextField(transitNumberField),
+    area:getTextField(areaField)
+  }),
+  statusContainer: getCommonContainer({
+    pincode:getTextField(pincodeField),
+    ownername:getTextField(ownernameField)
+    // mobileNo: getTextField(duplicateCopyApplicantMobileNumberField),
+    // status: getSelectField(ownershipStatusField)
+  }),
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer(
+      {...buttonItem, searchButton: {...buttonItem.searchButton, 
+        onClickDefination: {
+          action: "condition",
+          // callBack: searchTransferProperties
+        }
+      }, lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  })
+}
+
 export const ownerShipTransferApplication = getCommonCard(
   commonSearchForm
+)
+
+
+export const accountStatementGenerationApplications = getCommonCard(
+  {...accountStatementSearchForm,
+    button: getCommonContainer({
+      buttonContainer: getCommonContainer(
+        {...buttonItem, searchButton: {...buttonItem.searchButton, 
+          onClickDefination: {
+            action: "condition",
+            callBack: searchDuplicateCopy
+          }
+        }, lastCont: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div",
+          gridDefination: {
+            xs: 12,
+            sm: 4
+          }
+        }
+      })
+    })
+  }
 )
 
 export const searchDuplicateCopyApplication = getCommonCard(

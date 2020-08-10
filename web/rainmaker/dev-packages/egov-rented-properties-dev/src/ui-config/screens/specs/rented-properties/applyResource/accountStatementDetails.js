@@ -270,7 +270,7 @@ const accountStatementHeader = getCommonTitle(
     },
     minLength: 4,
     maxLength: 40,
-    required: true,
+    required: false,
     jsonPath: "",
     errorMessage: "",
   } 
