@@ -78,6 +78,11 @@ let labelValue = "";
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
     break;
+    case "SCRAP": labelValue = {
+      labelName: "Material Master Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    break;
       default :  labelValue = {
       labelName: "Submitted Successfully",
       labelKey: "",
@@ -154,6 +159,12 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_PURCHASE_ORDER_NUMBER`,
     }
     break;
+    case "SCRAP": labelValue = {
+      labelName: "Scrap Number",
+      labelKey: `STORE_SCRAP_NUMBER`,
+    }
+    break;
+    
     
     default :  labelValue = {
       labelName: "Application No.",

@@ -9,11 +9,13 @@ import {
   getPattern,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 const ScrapMaterialDetailsCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -29,32 +31,69 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_MATERIAL_NAME_SELECT"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].material.code",
-              sourceJsonPath: "searchMaster.materialNames",
+              jsonPath: "scraps[0].scrapDetails[0].material.code",
+              sourceJsonPath: "materialNames",
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
-                optionLabel: "name"
+                optionLabel: "code"
               }
             }),
+            beforeFieldChange: async (action, state, dispatch) => {
+              if(action.value){
+              const {scraps , materialNames} = state.screenConfiguration.preparedFinalObject;
+              const {store} = scraps[0];
+              //material object 
+             const matObj = materialNames.filter(mat => mat.code === action.value);
+
+
+              const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "issueingStore", value: store.code},{ key: "material", value: action.value}];
+              getSearchResults(queryObject, dispatch,"materialBalanceAndName")
+              .then( response =>{
+                if(response){    
+                     response.MaterialBalanceRate.forEach(element => {      
+                       if(element.receiptId === matObj[0].receiptIdForScrap){
+                        const index= action.componentJsonpath.indexOf("items[");
+                        if(index !== -1){
+                          const itemIndex = action.componentJsonpath.charAt(index + 6);
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].material.name`, matObj[0].name)); 
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].balanceQuantity`, element.balance)); 
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].unitRate`, element.unitRate)); 
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].uom`, matObj[0].scrapUom)); 
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].issueDetail.id`, matObj[0].scrapissueDetail)); 
+                          let balanceValue = element.unitRate * element.balance;
+                          if(balanceValue) {
+                           dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].balanceValue`, balanceValue)); 
+                          }        
+                         }
+                       
+                       }
+                                                                
+                  });
+                           
+               }           
+              });   
+           
+              }
+            }
           }, 
-          lotNo: {
-            ...getSelectField({
-              label: { labelName: "LOT No.", labelKey: "STORE_SCRAP_LOT_NO" },
-              placeholder: {
-                labelName: "Select Lot No.",
-                labelKey: "STORE_SCRAP_LOT_NO_PLCHLDR"
-              },
-              required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].uom.code",
-              sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-              }
-            }),
-          },
+          // lotNo: {
+          //   ...getSelectField({
+          //     label: { labelName: "LOT No.", labelKey: "STORE_SCRAP_LOT_NO" },
+          //     placeholder: {
+          //       labelName: "Select Lot No.",
+          //       labelKey: "STORE_SCRAP_LOT_NO_PLCHLDR"
+          //     },
+          //     required: true,
+          //     jsonPath: "scraps[0].scrapDetails[0].lotNumber",
+          //     sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
+          //     props: {
+          //       className: "hr-generic-selectfield",
+          //       optionValue: "code",
+          //       optionLabel: "name"
+          //     }
+          //   }),
+          // },
           balanceQuantity: {
             ...getTextField({
               label: {
@@ -66,7 +105,10 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity"
+              jsonPath: "scraps[0].scrapDetails[0].balanceQuantity",
+              props: {
+                disabled: true
+              },
             })
           },
           balanceValue: {
@@ -80,7 +122,10 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_SCRAP_BAL_VALUE_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].indentQuantity"
+              jsonPath: "scraps[0].scrapDetails[0].balanceValue",
+              props: {
+                disabled: true
+              },
             })
           },
           unitRate: {
@@ -94,25 +139,26 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].userQuantity"
+              jsonPath: "scraps[0].scrapDetails[0].unitRate",
+              props: {
+                disabled: true
+              },
             })
           },
           scrapReason: {
-            ...getSelectField({
-              label: { labelName: "Scrap Reason", labelKey: "STORE_SCRAP_REASON" },
+            ...getTextField({
+              label: {
+                labelName: "Scrap Reason",
+                labelKey: "STORE_SCRAP_REASON"
+              },
               placeholder: {
-                labelName: "Select Scrap Reason",
+                labelName: "Enter Scrap Reason",
                 labelKey: "STORE_SCRAP_REASON_PLCHLDR"
               },
               required: true,
-              jsonPath: "purchaseOrders[0].MTIDetails[0].uom.code",
-              sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
-              props: {
-                className: "hr-generic-selectfield",
-                optionValue: "code",
-                optionLabel: "name"
-              }
-            }),
+              pattern: getPattern("alpha-numeric-with-space-and-newline"),
+              jsonPath: "scraps[0].scrapDetails[0].scrapReason",
+            })
           },
           scrapQty: {
             ...getTextField({
@@ -125,8 +171,25 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_SCRAP_QUANTITY_PLCHLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].orderQuantity"
-            })
+              jsonPath: "scraps[0].scrapDetails[0].scrapQuantity",
+              required :true,
+            }),
+            beforeFieldChange: async (action, state, dispatch) => {
+              if(action.value){
+                const index= action.componentJsonpath.indexOf("items[");
+                if(index !== -1){
+                  const itemIndex = action.componentJsonpath.charAt(index + 6);
+                  const {scrapDetails} = state.screenConfiguration.preparedFinalObject.scraps[0];
+                  let unitRate = scrapDetails[itemIndex].unitRate;
+                  let scrapQty = action.value;
+                  let scrapValue = unitRate *scrapQty;
+                  if(scrapValue) {
+                   dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].scrapValue`, scrapValue)); 
+                   dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].userQuantity`, scrapQty)); 
+                  }        
+                 }
+              }
+            }
           },  
       
           scrapValue: {
@@ -140,7 +203,10 @@ const ScrapMaterialDetailsCard = {
                 labelKey: "STORE_SCRAP_VALUE_PLACEHOLDER"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].MTIDetails[0].usedQuantity"
+              jsonPath: "scraps[0].scrapDetails[0].scrapValue",
+              props: {
+                disabled: true
+              },
             })
           },
       
@@ -163,7 +229,7 @@ const ScrapMaterialDetailsCard = {
     headerName: "Scrap Material Details",
     headerJsonPath:
       "children.cardContent.children.header.children.head.children.Accessories.props.label",
-    sourceJsonPath: "purchaseOrders[0].MTIDetails",
+    sourceJsonPath: "scraps[0].scrapDetails",
     prefixSourceJsonPath:
       "children.cardContent.children.ScrapMaterialDetailsCardContainer.children",
    // disableDeleteIfKeyExists: "id"

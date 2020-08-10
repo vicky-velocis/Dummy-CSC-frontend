@@ -32,14 +32,9 @@ const createMatrialIndentNoteHandle = async (state, dispatch) => {
   let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
   dispatch(setRoute(`/egov-store-asset/createMaterialNonIndentNote?issueNoteNumber=${issueNoteNumber}`));
 };
-const creatPOHandle = async (state, dispatch) => {
-  let indents = get(
-    state.screenConfiguration.preparedFinalObject,
-    `indents`,
-    []
-  );
-  let indentNumber = indents[0].indentNumber;
-  dispatch(setRoute(`/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}`));
+const creatScrapHandle = async (state, dispatch) => {
+  let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
+  dispatch(setRoute(`/egov-store-asset/create-scrap-material?issueNoteNumber=${issueNoteNumber}`));
 };
 const masterView = IndentNoteReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
@@ -114,16 +109,19 @@ const screenConfig = {
             header: {
               gridDefination: {
                 xs: 12,
-                sm: 6,
+                sm: 12,
               },
               ...header
             },
+           
             newApplicationButton: {
               componentPath: "Button",
               gridDefination: {
                 xs: 12,
-                sm: 6,
-                align: "right",
+                sm: 4,
+                md:3,
+                lg:3,
+                // align: "right",
               },
               visible: true,// enableButton,
               props: {
@@ -160,8 +158,15 @@ const screenConfig = {
               },
             },
             newPOButton: {
-              componentPath: "Button",            
-              visible: false,// enableButton,
+              componentPath: "Button",         
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                md:3,
+                lg:3,
+                // align: "right",
+              },   
+              visible: true,// enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -186,13 +191,13 @@ const screenConfig = {
                 },
 
                 buttonLabel: getLabel({
-                  labelName: "Add Purchase Order",
-                  labelKey: "STORE_ADD_NEW_PURCHASE_ORDR_BUTTON",
+                  labelName: "Add Scrap",
+                  labelKey: "STORE_ADD_NEW_SCRAP_BUTTON",
                 }),
               },
               onClickDefination: {
                 action: "condition",
-                callBack: creatPOHandle,
+                callBack: creatScrapHandle,
               },
             },
           }

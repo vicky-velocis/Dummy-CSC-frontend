@@ -9,7 +9,7 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  
+  import { getSearchResults } from "../../../../ui-utils/commons";
   export const header = getCommonContainer({
     header: getCommonHeader({
       labelName: `View Scrap Material`,
@@ -50,12 +50,42 @@ import {
       console.log(e);
     }
   };
+
+  const fetchEmployeeDetails = async(response,dispatch) => {
+    
+    const queryParams = [{ key: "ids", value: response.scraps[0].auditDetails.createdBy },{ key: "tenantId", value:  getTenantId() }];
+    try { 
+      const payload = await httpRequest(
+        "post",
+        "/egov-hrms/employees/_search",
+        "_search",
+        queryParams
+      );
+      if(payload){
+        dispatch(prepareFinalObject("scraps[0].createdBy",payload.Employees[0].user.name));  
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
   
   const screenConfig = {
     uiFramework: "material-ui",
     name: "view-scrap-material",
     beforeInitScreen: (action, state, dispatch) => {
-    
+      let scrapNumber = getQueryArg(window.location.href, "scrapNumber");
+      let tenantId = getQueryArg(window.location.href, "tenantId");
+      const queryObject = [{ key: "tenantId", value: tenantId},{ key: "scrapNumber", value: scrapNumber}];
+      getSearchResults(queryObject, dispatch,"scrap")
+      .then(response =>{
+        if(response){
+          dispatch(prepareFinalObject("scraps", [...response.scraps]));    
+          fetchEmployeeDetails(response,dispatch);
+        }
+      })
+
+
       return action;
     },
     components: {
