@@ -286,7 +286,7 @@ export const setDocuments = async (
             fileUrlPayload[item.fileStoreId] &&
             getFileUrl(fileUrlPayload[item.fileStoreId])) ||
           "",
-        linkText: "View",
+        linkText: "Download",
         name:
           (fileUrlPayload &&
             fileUrlPayload[item.fileStoreId] &&

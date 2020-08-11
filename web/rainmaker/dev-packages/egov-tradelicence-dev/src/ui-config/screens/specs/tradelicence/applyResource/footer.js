@@ -2,7 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { applyTradeLicense,getNextFinancialYearForRenewal, download, organizeLicenseData } from "../../../../../ui-utils/commons";
+import { applyTradeLicense,getNextFinancialYearForRenewal, download, organizeLicenseData, getSearchResults } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -190,11 +190,37 @@ export const callBackForNext = async (state, dispatch) => {
           if(age < 18) {
             isFormValid = false;
             ageFieldError = true
+          } 
+           else {
+            let isRenewable;
+            const applicationType = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationType");
+            if(applicationType === "Renew") {
+            const oldLicenseNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].oldLicenseNumber")
+            const appliationNumber = get(state.screenConfiguration.preparedFinalObject, "Licenses[0].applicationNumber")
+            const tenantId = getQueryArg(window.location.href, "tenantId");
+            const queryObj = [
+              {
+                key: "tenantId",
+                value: tenantId
+              },
+              {
+                key:"oldLicenseNumber",
+                value: oldLicenseNumber
+              }
+            ]
+
+          const applicationsData = await getSearchResults(queryObj);
+          isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => (item.status !== "REJECTED" && item.status !== "APPROVED") && (!!appliationNumber ? appliationNumber !==item.applicationNumber : true));
+          isRenewable = !isRenewable.length
           } else {
+            isRenewable = true
+          }
+          if(isRenewable) {
             await getDocList(state, dispatch, licenseType);
             getReviewDetails(state, dispatch, "apply", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewTradeDetails.children.cardContent.children.viewOne", "components.div.children.formwizardFourthStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.viewOne", true)
             const response = await applyTradeLicense(state, dispatch, activeStep);
             if(!!response) {
+              isFormValid = true;
               dispatch(
                 handleField(
                   "apply",
@@ -211,7 +237,20 @@ export const callBackForNext = async (state, dispatch) => {
                   true
                 )
               );
+            } else {
+              return
+              // isFormValid = false;
             }
+          } else {
+            dispatch(
+              toggleSnackbar(
+                true,
+                { labelName: "An Application with same old licence number is already in progress.", labelKey: "TL_APPLICATION_ALREADY_IN_PROGRESS" },
+                "error"
+              )
+            );
+            return;
+          }
           }
       }
       else {
@@ -270,7 +309,7 @@ export const callBackForNext = async (state, dispatch) => {
                   return {
                       title: `TL_${item.documentType}`,
                       link: item.fileUrl && item.fileUrl.split(",")[0],
-                      linkText: "View",
+                      linkText: "Download",
                       name: item.fileName
                   };
               });
@@ -568,18 +607,25 @@ export const renewTradelicence  = async (financialYear,state,dispatch) => {
     state.screenConfiguration.preparedFinalObject,
     `Licenses`
   );
-
   const tenantId= get(licences[0] , "tenantId");
 
+    const queryObj = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key:"oldLicenseNumber",
+        value: licences[0].licenseNumber
+      }
+    ]
+
+  const applicationsData = await getSearchResults(queryObj);
+  const isRenewable = !!applicationsData && !!applicationsData.Licenses && applicationsData.Licenses.filter(item => item.status !== "REJECTED" && item.status !== "APPROVED");
+
+ if(!isRenewable.length) {
   const nextFinancialYear = await getNextFinancialYearForRenewal(financialYear);
-
-  // let currentFinancialYr = getCurrentFinancialYear();
-  // let fY1 = currentFinancialYr.split("-")[1];
-  // fY1 = fY1.substring(2, 4);
-  // currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-
   let applicationDocuments = licences[0].tradeLicenseDetail.applicationDocuments
-
   const payload = {
     applicationType: "Renew",
     financialYear: nextFinancialYear,
@@ -711,29 +757,15 @@ dispatch(
     true
   )
 );
-
-
-  // const wfCode = "DIRECTRENEWAL";
-//   set(licences[0], "action", "INITIATE");
-//   set(licences[0], "workflowCode", wfCode);
-//   set(licences[0], "applicationType", "RENEWAL");
-//   set(licences[0],"financialYear" ,nextFinancialYear);
-
-// const response=  await httpRequest("post", "/tl-services/v1/_update", "", [], {
-//     Licenses: licences
-//   })
-//    const renewedapplicationNo = get(
-//     response,
-//     `Licenses[0].applicationNumber`
-//   );
-//   const licenseNumber = get(
-//     response,
-//     `Licenses[0].licenseNumber`
-//   );
-//   dispatch(
-//     setRoute(
-//       `/tradelicence/acknowledgement?purpose=EDITRENEWAL&status=success&applicationNumber=${renewedapplicationNo}&licenseNumber=${licenseNumber}&FY=${nextFinancialYear}&tenantId=${tenantId}&action=${wfCode}`
-//     ));
+  } else {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "An Application is already in progress.", labelKey: "TL_APPLICATION_ALREADY_IN_PROGRESS" },
+        "error"
+      )
+    );
+  }
 };
 
 export const footerReview = (
@@ -1017,7 +1049,7 @@ export const footerReviewTop = (
         { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
-      download(receiptQueryString, Licenses, data());
+      download(receiptQueryString, Licenses, data(), userInfo.name);
       // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
@@ -1030,7 +1062,7 @@ export const footerReviewTop = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString,Licenses, data(), "print");
+      download(receiptQueryString,Licenses, data(), userInfo.name, "print");
      // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
@@ -1041,7 +1073,7 @@ export const footerReviewTop = (
       const { Licenses ,LicensesTemp} = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1051,7 +1083,7 @@ export const footerReviewTop = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };
@@ -1069,6 +1101,8 @@ export const footerReviewTop = (
         applicationPrintObject
       ];
       break;
+    case "PENDINGCLARIFICATION":
+    case "MODIFIED":
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
     case "PENDINGPAYMENT":
@@ -1081,8 +1115,10 @@ export const footerReviewTop = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDINGAPPROVAL":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      // downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      // printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;
@@ -1204,7 +1240,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString, Licenses, data());
+      download(receiptQueryString, Licenses, data(), userInfo.name);
     },
     leftIcon: "receipt"
   };
@@ -1216,7 +1252,7 @@ export const downloadPrintContainer = (
         { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       const { Licenses } = state.screenConfiguration.preparedFinalObject;
-      download(receiptQueryString, Licenses, data(), "print");
+      download(receiptQueryString, Licenses, data(), userInfo.name, "print");
     },
     leftIcon: "receipt"
   };
@@ -1226,7 +1262,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses);
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData);
     },
     leftIcon: "assignment"
   };
@@ -1236,7 +1272,7 @@ export const downloadPrintContainer = (
       const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = LicensesTemp[0].reviewDocData;
       set(Licenses[0],"additionalDetails.documents",documents)
-      downloadAcknowledgementForm(Licenses,'print');
+      downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
     },
     leftIcon: "assignment"
   };
@@ -1265,8 +1301,10 @@ export const downloadPrintContainer = (
       printMenu = [applicationPrintObject];
       break;
     case "PENDINGAPPROVAL":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
+      // downloadMenu = [receiptDownloadObject, applicationDownloadObject];
+      // printMenu = [receiptPrintObject, applicationPrintObject];
+      downloadMenu = [applicationDownloadObject];
+      printMenu = [applicationPrintObject];
       break;
     default:
       break;

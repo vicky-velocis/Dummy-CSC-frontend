@@ -61,6 +61,16 @@ const Footer = Loadable({
   loading: () => <Loading />
 })
 
+const TaskDialog = Loadable({
+  loader: () => import("./TaskDialog"),
+  loading: () => <Loading />
+});
+
+const TlHowItWorks = Loadable({
+  loader: () => import("./TlHowItWorks"),
+  loading: () => <Loading />
+})
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -72,5 +82,7 @@ export {
   FeesEstimateCard,
   HowItWorks,
   ActionDialog,
-  Footer
+  Footer,
+  TaskDialog,
+  TlHowItWorks
 };
