@@ -197,7 +197,7 @@ const estateBranchHome = {
         applyCard: {
           moduleName: "egov-estate",
           uiFramework: "custom-molecules-local",
-          componentPath: "HorizontalCardItems",
+          componentPath: "VerticalCardItems",
           props: {
             items: cardItems,
             history: {},

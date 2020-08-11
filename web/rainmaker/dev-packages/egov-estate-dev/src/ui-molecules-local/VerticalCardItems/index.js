@@ -33,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-class HorizontalCardItems extends React.Component {
+class VerticalCardItems extends React.Component {
   goToAppy = route => {
     const {
       setRoute
@@ -111,5 +111,5 @@ export default withStyles(styles)(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(HorizontalCardItems)
+  )(VerticalCardItems)
 );
