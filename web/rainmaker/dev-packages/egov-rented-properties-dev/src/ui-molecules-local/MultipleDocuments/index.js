@@ -10,6 +10,7 @@ import {LabelContainer}  from "egov-ui-framework/ui-containers"
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import { getFileUrl,getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import moment from 'moment'
 
 const styles = {
@@ -67,7 +68,17 @@ class MultipleDocuments extends Component {
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
                   <Grid xs={12} sm={12} style={{textAlign: "left"}}>
                   <br></br>
-                
+                  {!btnhide && (<LabelContainer   
+                      labelName= "Notice ID : "
+                      style={documentTitle}
+                  />)
+                    }
+                  {!btnhide && (<LabelContainer   
+                      labelName= {datum.id ? datum.id : 'NA'}
+                      style={documentTitle}
+                  />)
+                    }
+
                     {!btnhide && (<LabelContainer   
                       labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
                       style={documentTitle}
@@ -120,12 +131,26 @@ class MultipleDocuments extends Component {
                           </Grid>
                           <Grid container>
                             <Grid xs={6} className={classes.subtext}>
-                              <Typography className={classes.body2}>{content.url.split("?")[0].split("/").pop().slice(13)}</Typography>
+                              {btnhide && (<Typography className={classes.body2}>{content.url.split("?")[0].split("/").pop().slice(13)}</Typography>)}
+                              {content.fileStoreId = decodeURIComponent(getFileUrl(content.fileStoreId))}
+                              {!btnhide && (<Typography className={classes.body2}>{content.fileStoreId && decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13)}</Typography>)}
                             </Grid>
                             <Grid xs={6} align="right">
-                              <Button href={content.url} color="primary">
-                                Download
-                              </Button>
+                              {
+                                btnhide && (
+                                  <Button href={content.url} color="primary">
+                                  Download
+                                </Button>
+                                )
+                              }
+                              {
+                                !btnhide && (
+                                  <Button href={getFileUrlFromAPI(content.fileStoreId)} color="primary">
+                                  Download
+                                </Button>
+                                )
+                              }
+                             
                             </Grid>
                           </Grid>
                           </Grid>
