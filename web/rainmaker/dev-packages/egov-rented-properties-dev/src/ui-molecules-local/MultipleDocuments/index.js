@@ -120,7 +120,7 @@ class MultipleDocuments extends Component {
                           </Grid>
                           <Grid container>
                             <Grid xs={6} className={classes.subtext}>
-                              <Typography className={classes.body2}>{content.documentType}</Typography>
+                              <Typography className={classes.body2}>{content.url.split("?")[0].split("/").pop().slice(13)}</Typography>
                             </Grid>
                             <Grid xs={6} align="right">
                               <Button href={content.url} color="primary">
