@@ -113,7 +113,7 @@ class MultipleDocuments extends Component {
                     
 
                     </Grid> 
-                    { 
+                    {btnhide &&
                       (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
                   <Button  mt={1} mr={0} color="primary"  variant="contained"  
                   onClick={() => { 
