@@ -78,7 +78,7 @@ const callBackForNext = async(state, dispatch) => {
                   return {
                       title: `RP_${item.documentType}`,
                       link: item.fileUrl && item.fileUrl.split(",")[0],
-                      linkText: "View",
+                      linkText: "Download",
                       name: item.fileName
                   };
               });
@@ -260,7 +260,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
                   return {
                       title: `RP_${item.documentType}`,
                       link: item.fileUrl && item.fileUrl.split(",")[0],
-                      linkText: "View",
+                      linkText: "Download",
                       name: item.fileName
                   };
               });
