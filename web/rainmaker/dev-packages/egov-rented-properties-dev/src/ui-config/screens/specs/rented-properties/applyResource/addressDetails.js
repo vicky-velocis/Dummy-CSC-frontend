@@ -268,7 +268,7 @@ const getTransitSiteComments = () => {
   return {
       header: commentsHeader,
       detailsContainer: getCommonContainer({
-          comments: getTextField({...commentsField,jsonPath: "PropertyImagesApplications[0].description", required: false, props: {...commentsField.props}})
+          comments: getTextField({...commentsField,jsonPath: "PropertyImagesApplications[0].description",  props: {...commentsField.props}})
       })
   }
 }
