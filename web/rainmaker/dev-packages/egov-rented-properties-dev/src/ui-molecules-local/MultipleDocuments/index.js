@@ -93,9 +93,8 @@ class MultipleDocuments extends Component {
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
                   <Grid xs={12} sm={12} style={{textAlign: "left"}}>
                   <br></br>
-                
                     {!btnhide && (<LabelContainer   
-                      labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
+                      labelName= {datum.id}
                       style={documentTitle}
                   />)
                     }
@@ -114,7 +113,7 @@ class MultipleDocuments extends Component {
                   onClick={() => { 
                     dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
                     dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
-                    Violation Notice
+                    Create Violation
                     </Button>
                     </Grid>)
                     } 
