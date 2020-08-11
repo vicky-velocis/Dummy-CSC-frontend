@@ -42,7 +42,7 @@ export const areaField = {
         sm: 6
     },
     minLength: 3,
-    maxLength: 20,
+    maxLength: 100,
     required: true,
     errorMessage: "RP_ERR_AREA_FIELD",
   }
