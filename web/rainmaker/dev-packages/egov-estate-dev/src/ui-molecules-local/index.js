@@ -66,8 +66,8 @@ const LandingPage = Loadable({
   loading: () => <Loading />
 });
 
-const HorizontalCardItems = Loadable({
-  loader: () => import("./HorizontalCardItems"),
+const VerticalCardItems = Loadable({
+  loader: () => import("./VerticalCardItems"),
   loading: () => <Loading />
 });
 
@@ -85,5 +85,5 @@ export {
   ActionDialog,
   Footer,
   LandingPage,
-  HorizontalCardItems
+  VerticalCardItems
 };

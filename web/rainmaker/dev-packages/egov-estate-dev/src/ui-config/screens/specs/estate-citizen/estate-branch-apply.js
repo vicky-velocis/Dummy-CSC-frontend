@@ -1,6 +1,7 @@
 import React from "react";
 import {
-  getCommonHeader
+  getCommonHeader,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
 import "../utils/index.css";
@@ -17,7 +18,11 @@ const cardItems = [{
       labelName: "Transfer of Ownership on the basis of Registered Sale/Gift/Exchange/Family Transfer Deed"
     },
     icon: < EstateIcon / > ,
-    route: `ownership-transfer/?type=registeredDeed`
+    route: `ownership-transfer?type=registeredDeed`,
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -25,7 +30,11 @@ const cardItems = [{
       labelName: "Transfer of Ownership on the basis of Registered Will"
     },
     icon: < EstateIcon / > ,
-    route: "ownership-transfer/?type=registeredWill"
+    route: "ownership-transfer?type=registeredWill",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -33,7 +42,11 @@ const cardItems = [{
       labelName: "Transfer of Ownership on the basis of Un-registered Will"
     },
     icon: < EstateIcon / > ,
-    route: "ownership-transfer/?type=unregisteredWill"
+    route: "ownership-transfer?type=unregisteredWill",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -41,23 +54,23 @@ const cardItems = [{
       labelName: "Transfer of Ownership on the basis of Intestate Death (without will)"
     },
     icon: < EstateIcon / > ,
-    route: "ownership-transfer/?type=intestateDeath"
+    route: "ownership-transfer?type=intestateDeath",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
-      labelKey: "EST_TRANSFER_OF_OWNERSHIP_INTESTATE_DEATH",
+      labelKey: "EST_TRANSFER_OF_OWNERSHIP_PARTNERSHIP_DEED",
       labelName: "Transfer of Ownership on the basis of Partnership deed/Dissolution deed/Change of Director in case of Private Limited Company"
     },
     icon: < EstateIcon / > ,
-    route: "ownership-transfer/?type=partnershipDeed"
-  },
-  {
-    label: {
-      labelKey: "EST_TRANSFER_OF_OWNERSHIP_INTESTATE_DEATH",
-      labelName: "Transfer of Property on the basis of Court Decree/Family Settlement"
-    },
-    icon: < EstateIcon / > ,
-    route: ""
+    route: "ownership-transfer?type=partnershipDeed",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -65,7 +78,11 @@ const cardItems = [{
       labelName: "Transfer of Property on the basis of Court Decree/Family Settlement"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -73,7 +90,11 @@ const cardItems = [{
       labelName: "No Objection Certificate for Transfer of Lease Rights by way of Sale/Gift/Family Transfer Deed/Exchange Deed"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -81,7 +102,11 @@ const cardItems = [{
       labelName: "Execution of Lease Deed/Deed of Conveyance"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -89,7 +114,11 @@ const cardItems = [{
       labelName: "No Dues Certificate"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -97,7 +126,11 @@ const cardItems = [{
       labelName: "Permission to Mortgage"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -105,7 +138,11 @@ const cardItems = [{
       labelName: "Conversion from Leasehold to Freehold Property"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -113,7 +150,11 @@ const cardItems = [{
       labelName: "Duplicate Allotment Letter/Possession Letter"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -121,7 +162,11 @@ const cardItems = [{
       labelName: "Conversion of Property from residential to Commercial (SCF to SCO)"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   },
   {
     label: {
@@ -129,7 +174,11 @@ const cardItems = [{
       labelName: "Change of Trade"
     },
     icon: < EstateIcon / > ,
-    route: ""
+    route: "",
+    buttonLabel: getLabel({
+      labelName: "Apply",
+      labelKey: "EST_APPLY"
+    })
   }
 ]
 

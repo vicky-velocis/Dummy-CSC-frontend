@@ -4,13 +4,13 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import LabelContainer from 'egov-ui-framework/ui-containers/LabelContainer'
 // import LabelContainer from "../../ui-containers/LabelContainer";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import Button from "@material-ui/core/Button";
 
 const styles = theme => ({
   root: {
@@ -21,7 +21,7 @@ const styles = theme => ({
     marginTop: 0,
     height: 110,
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
     display: "flex",
     cursor: "pointer"
   },
@@ -34,46 +34,31 @@ const styles = theme => ({
 });
 
 class HorizontalCardItems extends React.Component {
-  onCardCLick = route => {
+  goToAppy = route => {
     const {
-      screenConfig,
-      handleField,
-      setRoute,
-      moduleName,
-      jsonPath,
-      value
+      setRoute
     } = this.props;
-    if (typeof route === "string") {
-      setRoute(route);
-    } else {
-      let toggle = get(
-        screenConfig[route.screenKey],
-        `${route.jsonPath}.props.open`,
-        false
-      );
-      handleField(route.screenKey, route.jsonPath, "props.open", !toggle);
-    }
-  };
+    setRoute(route);
+  }
 
   render() {
-    const { classes, items, gridDefination = {}, buttonLabel, buttonKey } = this.props;
+    const { classes, items } = this.props;
     return (
-      <Grid container className="landing-page-main-grid">
+      <Grid container className="horizontal-card-main-grid">
         {items.map(obj => {
           return !obj.hide ? (
             <Grid
               className={classes.item}
               item
-              xs={ gridDefination.xs ? gridDefination.xs : 12}
-              sm={ gridDefination.sm ? gridDefination.sm : items.length > 4 ? 12 / 4 : 12 / items.length}
+              xs={12}
+              sm={12}
               align="center"
             >
               <Card
                 className={`${classes.paper} module-card-style`}
-                onClick={() => this.onCardCLick(obj.route)}
               >
                 <CardContent classes={{ root: "card-content-style" }}>
-                  <div>
+                  <div style={{float: "left", padding: "0px 10px", display: "inline-block"}}>
                     <LabelContainer
                       labelKey={obj.label.labelKey}
                       labelName={obj.label.labelName}
@@ -83,22 +68,16 @@ class HorizontalCardItems extends React.Component {
                       }}
                     />
                   </div>
-                  <div>
-                    <Button
-                          variant={"contained"}
-                          color={"primary"}
-                          style={{
-                            minWidth: "200px",
-                            height: "48px"
-                          }}
-                          className="bottom-button"
-                          onClick={() =>
-                            onButtonClick()
-                          }
+                  <div style={{float: "right",padding: "0px 10px",display: "inline-block"}}>
+                  <Button
+                      variant={"contained"}
+                      color={"primary"}
+                      className="bottom-button"
+                      onClick={ () => this.goToAppy(obj.route) }
                     >
                       <LabelContainer
-                            labelName={buttonLabel}
-                            labelKey={buttonKey}
+                        labelName={obj.buttonLabel.props.labelName}
+                        labelKey={obj.buttonLabel.props.labelKey}
                       />
                     </Button>
                   </div>
@@ -115,11 +94,7 @@ class HorizontalCardItems extends React.Component {
 const mapStateToProps = state => {
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   const moduleName = get(state.screenConfiguration, "moduleName");
-  const applicationCount = get(
-    state.screenConfiguration.preparedFinalObject,
-    "myApplicationsCount"
-  );
-  return { screenConfig, moduleName, applicationCount };
+  return { screenConfig, moduleName };
 };
 
 const mapDispatchToProps = dispatch => {
