@@ -108,13 +108,24 @@ class MultipleDocuments extends Component {
                     
 
                     </Grid> 
-                    {btnhide && 
+                    { 
                       (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
-                  <Button  mt={1}  color="primary"  variant="contained"  
+                  <Button  mt={1} mr={0} color="primary"  variant="contained"  
                   onClick={() => { 
                     dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
                     dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
                     Violation Notice
+                    </Button>
+                    </Grid>)
+                    } 
+
+                  {!btnhide && 
+                      (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
+                  <Button  mt={1}  color="primary"  variant="contained"  
+                  onClick={() => { 
+                    dispatch(setRoute(`/rented-properties/notice-recovry?tenantId=${getTenantId()}`)); 
+                    }}> 
+                    Recovery Notice 
                     </Button>
                     </Grid>)
                     } 
