@@ -252,7 +252,7 @@ class ActionDialog extends React.Component {
         fullScreen={fullscreen}
         open={open}
         onClose={onClose}
-        maxWidth={false}
+        maxWidth="sm"
         style={{zIndex:2000}}
       >
         <DialogContent

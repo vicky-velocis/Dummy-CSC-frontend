@@ -104,12 +104,6 @@ class MultipleDocuments extends Component {
                       style={documentTitle}
                   />)
                     }
-
-                    {!btnhide && (<LabelContainer   
-                      labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
-                      style={documentTitle}
-                  />)
-                    }
                     {btnhide && 
                       (<LabelContainer   
                         labelName= {moment(datum.auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A')}
@@ -125,7 +119,7 @@ class MultipleDocuments extends Component {
                   onClick={() => { 
                     dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
                     dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
-                    Violation Notice
+                    Create Violation
                     </Button>
                     </Grid>)
                     } 
