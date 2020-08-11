@@ -8,7 +8,6 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getReviewAuction, getPropertyDetails } from "./preview-resource/preview-properties";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
@@ -23,13 +22,9 @@ export const headerrow = getCommonContainer({
     labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
-const reviewAuctionDetails = getReviewAuction(false);
-const reviewPropertyDetails = getPropertyDetails(false);
 
 
-export const propertyReviewDetails = getCommonCard({
-  reviewPropertyDetails,
-  reviewAuctionDetails,
+export const noticesDetails = getCommonCard({
 
 });
 
@@ -85,7 +80,7 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
       path = `/estate/payment-details?filenumber=${fileNumber}`
       break
     case 4:
-      path = `/estate/documents?filenumber=${fileNumber}`
+      path = `/estate/document-details?filenumber=${fileNumber}`
       break
     case 5:
       path = `/estate/notices?filenumber=${fileNumber}`
@@ -171,7 +166,7 @@ const EstateNotices = {
               updateUrl: "/csp/property/_update"
             }
           },
-        propertyReviewDetails
+        noticesDetails
       }
     }
   }

@@ -8,8 +8,8 @@ import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { getReviewDocuments } from "./preview-resource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
-import {getReviewPayment} from './preview-resource/payment-details'
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
@@ -24,10 +24,11 @@ export const headerrow = getCommonContainer({
   })
 });
 
-const paymentReviewDetails = getReviewPayment(false)
+// const documentPreviewDetails =  getReviewDocuments(false,'Preview');
 
-export const PaymentDetails = getCommonCard({
-  paymentReviewDetails
+
+export const documentDetails = getCommonCard({
+  // documentPreviewDetails
 });
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
@@ -37,7 +38,6 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-
     let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
     const removedDocs = applicationDocuments.filter(item => !item.active)
     applicationDocuments = applicationDocuments.filter(item => !!item.active)
@@ -51,7 +51,7 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     );
     await setDocuments(
       payload,
-      "Properties[0].propertyDetails.applicationDocuments",
+      "Properties[3].propertyDetails.owners[0].ownerDetails.ownerDocuments",
       "PropertiesTemp[0].reviewDocData",
       dispatch,'RP'
     );
@@ -119,11 +119,16 @@ export const tabs = [
   }
 ]
 
-const EstatePaymentDetails = {
+const DocumentReviewDetails = {
   uiFramework: "material-ui",
-  name: "payment-details",
+  name: "document-details",
   beforeInitScreen: (action, state, dispatch) => {
     fileNumber = getQueryArg(window.location.href, "filenumber");
+    // set(
+    //   action.screenConfig,
+    //   "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
+    //   fileNumber
+    // );
     beforeInitFn(action, state, dispatch, fileNumber);
     return action;
   },
@@ -154,7 +159,7 @@ const EstatePaymentDetails = {
             componentPath: "CustomTabContainer",
             props: {
               tabs,
-              activeIndex: 3,
+              activeIndex: 4,
               onTabChange
             },
             type: "array",
@@ -169,10 +174,10 @@ const EstatePaymentDetails = {
               updateUrl: "/csp/property/_update"
             }
           },
-        PaymentDetails
+        documentDetails
       }
     }
   }
 };
 
-export default EstatePaymentDetails;
+export default DocumentReviewDetails;
