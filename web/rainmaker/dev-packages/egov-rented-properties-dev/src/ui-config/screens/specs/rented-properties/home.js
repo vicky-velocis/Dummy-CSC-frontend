@@ -108,12 +108,12 @@ const citizenCardItems = [{
       },
       {
         label: {
-          labelName: "Account Statement Generation",
-          labelKey: "ACCOUNT_STATEMENT_GENERATION_HEADER"
+          labelName: "Pay Rent",
+          labelKey: "RP_PAY_RENT_HEADER"
         },
         icon: <TradeLicenseIcon />,
-        route: `/rented-properties-citizen/account-statement`
-        }
+        route: `/rented-properties-citizen/account-statement-apply`
+      }
 ]
 
   const home = {
