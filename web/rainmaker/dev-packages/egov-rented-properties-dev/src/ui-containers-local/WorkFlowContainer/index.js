@@ -154,7 +154,7 @@ class WorkFlowContainer extends React.Component {
         let path = "";
         switch(this.props.moduleName) {
           case "MasterRP": {
-            path = `&transitNumber=${data[0].transitNumber}&tenantId=${tenant}`
+            path = `&transitNumber=${data[0].transitNumber}&tenantId=${tenant}&type=RP_MASTER_ENTRY`
             break
           }
           case "OwnershipTransferRP": {
