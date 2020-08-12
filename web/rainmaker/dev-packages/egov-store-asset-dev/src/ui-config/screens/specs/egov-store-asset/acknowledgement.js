@@ -73,6 +73,18 @@ let labelValue = "";
       labelName: "Material Indent Note Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
+    case "INDENTTFR": labelValue = {
+      labelName: "Material Indent Tranfer Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    case "INDENTINWORD": labelValue = {
+      labelName: "Material Indent Inword Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
+    case "INDENTOUTWORD": labelValue = {
+      labelName: "Material Indent Outword Submitted Successfully",
+      labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
+    }
     case "PURCHASEORDER": labelValue = {
       labelName: "Material Master Submitted Successfully",
       labelKey: `STORE_APPLICATION_SUCCESS_${screenName}_${mode}`,
@@ -144,7 +156,7 @@ const getApplicationDisplayCode =() => {
       labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
     }
     break;
-    case "INDENTINWORD": labelValue = {
+    case "INDENTTFR": labelValue = {
       labelName: "Issue Number",
       labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
     }
@@ -152,6 +164,11 @@ const getApplicationDisplayCode =() => {
     case "INDENTOUTWORD": labelValue = {
       labelName: "Issue Number",
       labelKey: `STORE_MATERIAL_INDENT_NOTE_ISSUE_NOTE_NUMBER`,
+    }
+    break;
+    case "INDENTINWORD": labelValue = {
+      labelName: "Material Receipt Number",
+      labelKey: `STORE_MATERIAL_COMMON_MRN_NUMBER`,
     }
     break;
     case "MATERIALRECEIPT": labelValue = {

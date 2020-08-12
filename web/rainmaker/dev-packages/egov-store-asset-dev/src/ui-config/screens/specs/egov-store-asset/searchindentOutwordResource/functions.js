@@ -106,22 +106,24 @@ export const searchApiCall = async (state, dispatch) => {
 
     let fromStore = get(
       state,
-      "screenConfiguration.preparedFinalObject.searchScreen.fromStore"
+      "screenConfiguration.preparedFinalObject.searchScreen.fromStore",''
     );
     let toStore = get(
       state,
-      "screenConfiguration.preparedFinalObject.searchScreen.toStore"
+      "screenConfiguration.preparedFinalObject.searchScreen.toStore",''
     );
-
-    if(fromStore === toStore)
+    if(fromStore !=='' && toStore !=='' )
     {
-      ValidAPICall = false
-      const errorMessage = {
-        labelName: "From Store and To Store can not be same",
-        labelKey: "STORE_SEARCH_STORE_SELECTION_VALIDATION"
-      }; 
-      dispatch(toggleSnackbar(true, errorMessage, "warning"));
-    }
+        if(fromStore === toStore)
+        {
+          ValidAPICall = false
+          const errorMessage = {
+            labelName: "From Store and To Store can not be same",
+            labelKey: "STORE_SEARCH_STORE_SELECTION_VALIDATION"
+          }; 
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        }
+      }
    
     if(ValidAPICall)
 {
@@ -144,11 +146,11 @@ export const searchApiCall = async (state, dispatch) => {
        
 
         return {
-          [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
-          [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "indentStore.name", "-") || "-", 
-          [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
-          [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
+          [getTextToLocalMapping("Issue No.")]: get(item, "issueNumber", "-") || "-",
+          [getTextToLocalMapping("Issue Date")]:  convertEpochToDate(Number(item.issueDate,"issueDate" ,"-")) || "-", 
+         [getTextToLocalMapping("From Store Name")]: get(item, "fromStore.name", "-") || "-", 
+          [getTextToLocalMapping("To Store Name")]: get(item, "toStore.name", "-") || "-",  
+          [getTextToLocalMapping("Status")]: get(item, "materialIssueStatus", "-") || "-",  
           id: item.id,       
          
         };

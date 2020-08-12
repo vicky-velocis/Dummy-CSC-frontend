@@ -987,3 +987,72 @@ export const getmaterialOutwordSearchResults = async queryObject => {
   }
 
 };
+
+
+//Material Indent Inword Apis
+export const getIndentInwordSearchResults = async queryObject => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/transferinwards/_search",     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
+export const creatIndentInword = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/transferinwards/_create",
+      "",
+      queryObject,
+      { transferInwards: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+export const updateIndentInword = async (queryObject, payload, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/store-asset-services/transferinwards/_update",
+      "",
+      queryObject,
+      { transferInwards: payload }
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};

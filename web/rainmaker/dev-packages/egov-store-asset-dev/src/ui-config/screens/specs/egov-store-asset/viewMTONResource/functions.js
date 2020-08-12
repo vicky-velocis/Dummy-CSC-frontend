@@ -7,7 +7,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   getmaterialOutwordSearchResults,
-  GetMdmsNameBycode
+  GetMdmsNameBycode,
+  getMaterialBalanceRateResults
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -126,7 +127,13 @@ export const handleCreateUpdatePO = (state, dispatch) => {
     "materialIssues[0].id",
     null
   );
+
   if (uuid) {
+      // get set date field into epoch
+  let indentDate =
+  get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].indent.indentDate",0) 
+  indentDate = convertDateToEpoch(indentDate);
+  set(state,"screenConfiguration.preparedFinalObject.materialIssues[0].indent.indentDate", indentDate);
     createUpdatePO(state, dispatch, "UPDATE");
   } else {
     createUpdatePO(state, dispatch, "CREATE");
@@ -217,8 +224,8 @@ for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
  let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
  let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
     
-    set(response[0], `priceListDetails[${index}].uom.name`, Uomname);
-    set(response[0], `priceListDetails[${index}].material.name`, matname);    
+    set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
+    set(response[0], `materialIssueDetails[${index}].material.name`, matname);    
   
 }
 }
@@ -235,5 +242,51 @@ export const furnishPriceListData = (state, dispatch) => {
   );
   setDateInYmdFormat(materialIssues[0], ["issueDate", "indent.indentDate",]);
   
-  dispatch(prepareFinalObject("materialIssues", priceLists));
+  dispatch(prepareFinalObject("materialIssues", materialIssues));
+  //set indentsOutmaterial based on indent number
+
+  let indentDetails = get(
+    materialIssues[0],
+    "indent.indentDetails",
+    []
+  );
+          let material=[];
+          let matcode =[];
+          let storecode = materialIssues[0].indent.issueStore.code;
+          for (let index = 0; index < indentDetails.length; index++) {
+            const element = indentDetails[index];
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].id`, element.id));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].uom.code`, element.uom.code));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].userQuantity`, element.userQuantity));
+            dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].material.code`, element.material.code));
+            //create material list for card item
+           
+            material.push(
+              {
+                materialcode:element.material.code,
+                materialName:GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code),
+                uomcode:element.uom.code,
+                uomname:GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code),
+                id:element.id,
+                indentQuantity:element.indentQuantity,
+                totalProcessedQuantity:element.totalProcessedQuantity,
+                indentIssuedQuantity:element.indentIssuedQuantity,
+                interstoreRequestQuantity:element.interstoreRequestQuantity,
+                //unitRate://to be deside
+              });
+              matcode.push( element.material.code)
+          }  
+          
+          let matcodes_= matcode.map(itm => {
+            return `${itm}`;
+          })
+          .join() || "-"
+          const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "issueingStore", value: storecode},{ key: "material", value: matcodes_}];
+          getMaterialBalanceRateResults(queryObject)
+          .then(async response =>{
+            if(response){
+              dispatch(prepareFinalObject("indentsOutmaterial", response.MaterialBalanceRate));
+              
+            }
+          }); 
 };

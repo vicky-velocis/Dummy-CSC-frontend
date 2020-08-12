@@ -8,6 +8,7 @@ import {
   import { poViewFooter } from "./viewPurchaseOrder/footer";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
   import {
     convertDateToEpoch,
     epochToYmdDate,
@@ -27,7 +28,7 @@ import {
   const tradeView = POReviewDetails(false);
   
   const getMdmsData = async (action, state, dispatch, tenantId) => {
-    const tenant = tenantId || getTenantId();
+    const tenant = getstoreTenantId();
     let mdmsBody = {
       MdmsCriteria: {
         tenantId: tenant,

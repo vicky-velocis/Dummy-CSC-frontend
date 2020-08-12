@@ -37,6 +37,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     `indents`,
     []
   );
+  indents = get(indents,'indents');
+  if(indents && indents[0])
+  {
   let indentDetails = get(
     indents[0],
     `indentDetails`,
@@ -93,6 +96,7 @@ console.log(matcodes)
   } catch (e) {
     console.log(e);
   }
+}
 };
   export const IndentMaterialIssueDetails = getCommonCard({
     header: getCommonTitle(

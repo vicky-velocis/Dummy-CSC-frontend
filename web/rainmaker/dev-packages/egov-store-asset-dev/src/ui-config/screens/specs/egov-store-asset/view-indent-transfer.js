@@ -13,6 +13,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `View  Indent Transfer`,
@@ -38,7 +39,7 @@ const createMatrialIndentOutwordHandle=async (state, dispatch) => {
 
 const masterView = MTIReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
-  const tenant = tenantId || getTenantId();
+  const tenant = getstoreTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenant,

@@ -95,7 +95,7 @@ export const searchForm = getCommonCard({
           xs: 12,
           sm: 4,
         },
-        sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
+        sourceJsonPath: "searchScreenMdmsData.store-asset.IndentPurpose",
       props: {
         // data: [
         //   {

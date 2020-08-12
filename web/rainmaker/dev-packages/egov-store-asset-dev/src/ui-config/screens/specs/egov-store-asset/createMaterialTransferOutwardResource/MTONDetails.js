@@ -222,7 +222,7 @@ const MTONDetailsCard = {
                 labelName: "Enter Remark",
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
               },
-              pattern: getPattern("numeric-only"),
+              pattern: getPattern("Name"),
               jsonPath: "materialIssues[0].materialIssueDetails[0].description"
             })
           },

@@ -4,7 +4,7 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
   import { footer } from "./creatematerialTransferInwordResource/footer";
-  import { getstoreTenantId,getStoresSearchResults, } from "../../../../ui-utils/storecommonsapi";
+  import { getstoreTenantId,getmaterialOutwordSearchResults, } from "../../../../ui-utils/storecommonsapi";
   import { getSearchResults } from "../../../../ui-utils/commons";
   import { MaterialTransferInwordDetail } from "./creatematerialTransferInwordResource/Material-transfer-inword-details"; 
   import { MaterialTransferInwordNote } from "./creatematerialTransferInwordResource/Material-transfer-inword-note"; 
@@ -23,10 +23,10 @@ import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
   export const stepsData = [
-    { labelName: "Miscellaneous Material Receipt", labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_MISC" },
+    { labelName: "Material Transfer Inward", labelKey: "STORE_MATERIAL_TRANSFER_INWARD" },
     {
-      labelName: "Miscellaneous Material Receipt Details",
-      labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_MISC_DETAILS"
+      labelName: "Material Transfer Inward Details",
+      labelKey: "STORE_MATERIAL_TRANSFER_INWARD_DETAILS"
     },
     { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
@@ -39,8 +39,8 @@ import {
   
 export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: `Miscellaneous Material Receipt Note `,
-      labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_MISC_HEADER"
+      labelName: `Material Transfer Inward Note`,
+      labelKey: "STORE_MATERIAL_TRANSFER_INWORD_NOTE_HEADER"
     })
   });
   
@@ -88,15 +88,25 @@ export const header = getCommonContainer({
           {
             moduleName: "store-asset",
             masterDetails: [
-             
+              { name: "Material", },             
               { name: "ReceiptType", },
               
             ],
-          },
-         
+          }, 
+           {
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "UOM",
+                filter: "[?(@.active == true)]"
+              },
+              
+            ]
+          },       
          
         ]
-      }
+      },
+
     };
     try {
       const response = await httpRequest(
@@ -116,16 +126,22 @@ export const header = getCommonContainer({
       console.log(e);
     }
   };
-  const getstoreData = async (action, state, dispatch) => {
+  const gettransferOutword = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     let queryObject = [
       {
         key: "tenantId",
         value: tenantId
-      }];
+      },
+      {
+        key: "materialIssueStatus",
+        value: "APPROVED"
+      }
+    
+    ];
     try {
-      let response = await getStoresSearchResults(queryObject, dispatch);
-      dispatch(prepareFinalObject("store", response));
+      let response = await getmaterialOutwordSearchResults(queryObject, dispatch);
+      dispatch(prepareFinalObject("materialOutword", response));
     } catch (e) {
       console.log(e);
     }
@@ -190,31 +206,31 @@ export const header = getCommonContainer({
      
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
-      const storedata = getstoreData(action,state, dispatch);
+      const storedata = gettransferOutword(action,state, dispatch);
      
      // SEt Default data
 
      dispatch(
       prepareFinalObject(
-        "materialReceipt[0].receiptType",
-        "PURCHASE RECEIPT",
+        "transferInwards[0].receiptType",
+        "INWARD RECEIPT",
       )
     );
     dispatch(
       prepareFinalObject(
-        "materialReceipt[0].designation",
+        "transferInwards[0].designation",
         "ASST-ENG",
       )
     );
     dispatch(
       prepareFinalObject(
-        "materialReceipt[0].receivedBy",
+        "transferInwards[0].receivedBy",
         "sanjeev",
       )
     );
     dispatch(
       prepareFinalObject(
-        "materialReceipt[0].inspectedBy",
+        "transferInwards[0].inspectedBy",
         "Ramesh",
       )
     );

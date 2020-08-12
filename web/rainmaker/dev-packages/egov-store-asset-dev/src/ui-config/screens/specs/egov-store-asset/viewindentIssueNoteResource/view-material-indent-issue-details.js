@@ -54,7 +54,7 @@ import {
               labelName: "Qty Issued",
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_QTY_ISSUED"
             },
-            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.quantityIssued"
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.userQuantity"
             
            }
           ),
@@ -90,22 +90,22 @@ import {
              
           //   }
           // ),
-          AssestCode: getLabelWithValue(
-            {   labelName: "Assest Code",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE" },
-            {
-              jsonPath: "materialIssues[0].materialIssueDetails[0].AssestCode",
+          // AssestCode: getLabelWithValue(
+          //   {   labelName: "Assest Code",
+          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE" },
+          //   {
+          //     jsonPath: "materialIssues[0].materialIssueDetails[0].AssestCode",
              
-            }
-          ),
-          ProjectCode: getLabelWithValue(
-            {   labelName: "Project Code",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE"},
-            {
-              jsonPath: "materialIssues[0].materialIssueDetails[0].ProjectCode",
+          //   }
+          // ),
+          // ProjectCode: getLabelWithValue(
+          //   {   labelName: "Project Code",
+          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE"},
+          //   {
+          //     jsonPath: "materialIssues[0].materialIssueDetails[0].ProjectCode",
              
-            }
-          ),
+          //   }
+          // ),
          
           Remark: getLabelWithValue(
             {   labelName: "Remark",

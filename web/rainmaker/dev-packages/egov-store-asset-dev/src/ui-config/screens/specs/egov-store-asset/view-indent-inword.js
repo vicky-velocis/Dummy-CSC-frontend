@@ -4,9 +4,9 @@ import {
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { MaterialReceiptReviewDetails } from "./viewMaterialReceiptNoteResource/receipt-note-review";
-import { masterViewFooter } from "./viewMaterialReceiptNoteResource/footer";
-import { getMaterialIndentData } from "./viewMaterialReceiptNoteResource/functions";
+import { MaterialTransferInwordReviewDetails } from "./viewMaterialTransferInwordResource/inword-note-review";
+import { masterViewFooter } from "./viewMaterialTransferInwordResource/footer";
+import { getIndentInwordData } from "./viewMaterialTransferInwordResource/functions";
 import { showHideAdhocPopup } from "../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
@@ -14,35 +14,21 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
-import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
-let IsEdit = false;
-let Status = getQueryArg(window.location.href, "Status");
-let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
-ConfigStatus = ConfigStatus.filter(x=>x.code === Status)
-if(ConfigStatus.length >0)
-IsEdit = true;
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `View Material  Receipt Note`,
-    labelKey: "STORE_VIEW_MATERIAL_RECEIPT_NOTE"
+    labelName: `View  Indent Transfer`,
+    labelKey: "STORE_INDENT_TRANSFER_VIEW"
   })
 });
 
-const createMatrialIndentNoteHandle = async (state, dispatch) => {
+const createMatrialIndentInwordHandle = async (state, dispatch) => {
 
   let id = getQueryArg(window.location.href, "id");
-  dispatch(setRoute(`/egov-store-asset/createMaterialReceiptNote?id=${id}`));
+  dispatch(setRoute(`/egov-store-asset/createMaterialTransferInword?id=${id}`));
 };
-const creatPOHandle = async (state, dispatch) => {
-  let indents = get(
-    state.screenConfiguration.preparedFinalObject,
-    `indents`,
-    []
-  );
-  let indentNumber = indents[0].indentNumber;
-  dispatch(setRoute(`/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}`));
-};
-const masterView = MaterialReceiptReviewDetails(false);
+
+
+const masterView = MaterialTransferInwordReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
   const tenant = getstoreTenantId();
   let mdmsBody = {
@@ -53,6 +39,14 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
           moduleName: "egov-hrms",
           masterDetails: [
             {
+              moduleName: "store-asset",
+              masterDetails: [
+                { name: "Material" }, //filter: "[?(@.active == true)]" },           
+               
+                
+              ],
+            },
+            {
               name: "DeactivationReason",
               filter: "[?(@.active == true)]"
             }
@@ -61,10 +55,13 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
         {
           moduleName: "common-masters",
           masterDetails: [
-            { name: "UOM", filter: "[?(@.active == true)]" },
-           
+            {
+              name: "UOM",
+              filter: "[?(@.active == true)]"
+            },
+            
           ]
-        }
+        },
       ]
     }
   };
@@ -84,14 +81,14 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "view-material-receipt-note",
+  name: "view-indent-inword",
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
    
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
-    getMaterialIndentData(state, dispatch, id, tenantId);
+    getIndentInwordData(state, dispatch, id, tenantId);
     return action;
   },
   components: {
@@ -145,20 +142,20 @@ const screenConfig = {
                 },
 
                 buttonLabel: getLabel({
-                  labelName: "Add Material Receipt",
-                  labelKey: "STORE_ADD_NEW_MATERIAL_RECEIPT_BUTTON",
+                  labelName: "Add Material Transfer Inward",
+                  labelKey: "STORE_ADD_NEW_MATERIAL_TFR_INWARD_BUTTON",
                 }),
               },
               onClickDefination: {
                 action: "condition",
-                callBack: createMatrialIndentNoteHandle,
+                callBack: createMatrialIndentInwordHandle,
               },
             },
-            
+
           }
         },
         masterView,
-        footer: IsEdit? masterViewFooter():{},
+        footer: masterViewFooter()
       }
     },
    

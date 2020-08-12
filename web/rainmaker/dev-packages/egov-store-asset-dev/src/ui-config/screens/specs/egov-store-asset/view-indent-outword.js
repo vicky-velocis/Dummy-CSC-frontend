@@ -13,10 +13,11 @@ import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `View  Indent Transfer`,
-    labelKey: "STORE_INDENT_TRANSFER_VIEW"
+    labelName: `View Material Transfer Outward Note`,
+    labelKey: "STORE_MTON_VIEW"
   })
 });
 
@@ -38,7 +39,7 @@ const createMatrialIndentOutwordHandle=async (state, dispatch) => {
 
 const masterView = MTONReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
-  const tenant = tenantId || getTenantId();
+  const tenant = getstoreTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenant,
@@ -46,6 +47,14 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
         {
           moduleName: "egov-hrms",
           masterDetails: [
+            {
+              moduleName: "store-asset",
+              masterDetails: [
+                { name: "Material" }, //filter: "[?(@.active == true)]" },           
+               
+                
+              ],
+            },
             {
               name: "DeactivationReason",
               filter: "[?(@.active == true)]"
@@ -81,7 +90,7 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
 
 const screenConfig = {
   uiFramework: "material-ui",
-  name: "view-indent-transfer",
+  name: "view-indent-outword",
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
@@ -183,8 +192,8 @@ const screenConfig = {
                 },
 
                 buttonLabel: getLabel({
-                  labelName: "Add Material Indent Note",
-                  labelKey: "STORE_MATERIAL_INDENT_TRANSFER",
+                  labelName: "Add Material Indent Outword",
+                  labelKey: "STORE_MATERIAL_INDENT_OUTWORD",
                 }),
               },
               onClickDefination: {

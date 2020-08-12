@@ -191,7 +191,7 @@ export const createUpdateIT = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=create&code=${response.indents[0].indentNumber}`));
        }
   
     } catch (error) {
@@ -207,7 +207,7 @@ export const createUpdateIT = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=update&code=${response.indents[0].indentNumber}`));
        }
   
     } catch (error) {

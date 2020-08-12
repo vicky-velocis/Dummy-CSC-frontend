@@ -90,7 +90,7 @@ import {
                 //sourceJsonPath: "materials",
                 sourceJsonPath: "indentsmaterial",
                 props: {
-                  optionValue: "materialCode",
+                  optionValue: "receiptId",
                   optionLabel: "materialName",
                   // optionValue: "id",
                   // optionLabel: "id",
@@ -99,17 +99,17 @@ import {
               beforeFieldChange: (action, state, dispatch) => {
                 let Material = get(
                   state.screenConfiguration.preparedFinalObject,
-                  `IndentMaterial`,
+                  `indentsmaterial`,
                   []
                 );               
-                Material =  Material.filter(x=> x.code === action.value)               
+                Material =  Material.filter(x=> x.receiptId === action.value)               
                 let indentDetails = get(
                   state.screenConfiguration.preparedFinalObject,
                   `materialIssues[0].indent.indentDetails`,
                   []
                 ); 
                
-                indentDetails = indentDetails.filter(x=> x.material.code === action.value)
+                indentDetails = indentDetails.filter(x=> x.material.code === Material[0].materialCode)
                 let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 if(Material && Material[0])
                 {
@@ -129,7 +129,8 @@ import {
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.maxQuantity",Material[0].maxQuantity));
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.reorderQuantity",Material[0].reorderQuantity));                
                 dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[0].materialIssueDetails[${cardIndex}].material`,Material[0]));
-                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.material.name`,Material[0].name));
+               // dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.material.name`,Material[0].materialCode));
+               // dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.material.code`,Material[0].code));
                 
                
                 dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[0].materialIssueDetails[${cardIndex}].uom`,indentDetails[0].uom));
@@ -143,7 +144,7 @@ import {
                   `indentsmaterial`,
                   []
                 ); 
-                indentsmaterial = indentsmaterial.filter(x=>x.materialCode === action.value)
+                indentsmaterial = indentsmaterial.filter(x=>x.receiptId === action.value)
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].tenantId`,getTenantId()));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].receiptDetailId`,indentsmaterial[0].receiptDetailId));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].receiptId`,indentsmaterial[0].receiptId));
@@ -153,6 +154,8 @@ import {
                 let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",indentDetails[0].uom.code) 
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].uom.name`,uomname));              
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.material.code`,indentsmaterial[0].materialCode));                
+                let matname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",indentsmaterial[0].materialCode) 
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material.name`,matname));                
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.uom.code`,indentsmaterial[0].uomCode));                
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.balanceQty`,indentsmaterial[0].balance));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.unitRate`,indentsmaterial[0].unitRate));
@@ -238,7 +241,7 @@ import {
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.BalanceQtyAfterIssue`,BalanceQtyAfterIssue));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.TotalValue`,TotalValue)); 
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].pendingIndentQuantity`,pendingIndentQuantity));
-                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.indentIssuedQuantity`,0));
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.indentIssuedQuantity`,Number(action.value)));
                 //indentIssuedQuantity
               }
             },
@@ -329,7 +332,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].AssestCode"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].assestCode"
               })
             },
             ProjectCode: {
@@ -347,7 +350,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].ProjectCode"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].projectCode"
               })
             },
             Remark: {
