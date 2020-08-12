@@ -625,7 +625,7 @@ export const getPattern = type => {
 
       //validation patterns for HC....don't use
     case "NoOfTree":
-      return /^[0-9][0-9]{0,1}$/i;
+      return /^(0?[1-9]|[1-9][0-9])$/i;
     case "serviceRequestDescription":
       return  /^[a-zA-Z0-9#$%&?@/!\\n~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/;
     case "location":
