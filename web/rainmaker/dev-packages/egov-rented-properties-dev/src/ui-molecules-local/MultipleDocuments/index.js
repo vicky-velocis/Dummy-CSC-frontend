@@ -104,6 +104,21 @@ class MultipleDocuments extends Component {
                       style={documentTitle}
                   />)
                     }
+                  {btnhide && datum.id &&  (<Grid xs={6} align="left">
+                  <Button color="primary"
+                  onClick={() => { 
+                    dispatch(setRoute(`/rented-properties/notices?tenantId=${getTenantId()}`)); 
+                    }}> 
+                     Notice ID : {datum.id}
+                    </Button>
+                    </Grid>)
+                    }
+                    <br></br>
+                    {!btnhide && (<LabelContainer   
+                      labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
+                      style={documentTitle}
+                  />)
+                    }
                     {btnhide && 
                       (<LabelContainer   
                         labelName= {moment(datum.auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A')}
@@ -163,7 +178,6 @@ class MultipleDocuments extends Component {
                           <Grid container>
                             <Grid xs={6} className={classes.subtext}>
                               {btnhide && (<Typography className={classes.body2}>{content.url.split("?")[0].split("/").pop().slice(13)}</Typography>)}
-                              {content.fileStoreId = decodeURIComponent(getFileUrl(content.fileStoreId))}
                               {!btnhide && (<Typography className={classes.body2}>{content.fileStoreId && decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13)}</Typography>)}
                             </Grid>
                             <Grid xs={6} align="right">
