@@ -12,7 +12,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { getFileUrl,getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 import moment from 'moment'
-
+import { checkValueForNA } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { get } from "lodash";
 const styles = {
     card: {
       paddingTop: 8,
@@ -65,8 +66,9 @@ const styles = {
 class MultipleDocuments extends Component {
 
   render() {
-      let {data = [], btnhide,contents, classes , dispatch} = this.props
-        if(data === null || data === undefined || data.length==0){
+      let {data = [], btnhide, contents, classes , dispatch} = this.props
+      data = data.filter(dat => !!dat.applicationDocuments)
+        if(data.length==0){
         return(
           <Card className="Multiple-card-212">  
           <CardContent>
@@ -92,8 +94,6 @@ class MultipleDocuments extends Component {
           </Card>
         )
       }
-      data = data.filter(dat => !!dat.applicationDocuments)
-
       return (
           <div>
               {!!data.length && data.map((datum, index) => (
@@ -101,15 +101,6 @@ class MultipleDocuments extends Component {
                   <CardContent>
                   <Grid container>
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
-
-                  <Grid xs={12} sm={12} style={{textAlign: "left"}}>
-                    {!btnhide && (<LabelContainer   
-                      labelName= {`Notice Type : ${datum.noticeType}`} 
-                      style={documentTitle}
-                  />)
-                    }
-                  <br></br>
-
                     {btnhide &&
                       (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
                   <Button  mt={1} mr={0} color="primary"  variant="contained"  
@@ -120,41 +111,38 @@ class MultipleDocuments extends Component {
                     </Button>
                     </Grid>)
                     } 
-                 </Grid>
-                 <Grid xs={12} sm={12} >
-
-                  {!btnhide && (<LabelContainer   
-                      labelName= "Notice ID : "
-                      style={documentTitle}
-                  />)
-                    }
-                  {!btnhide && (<LabelContainer   
-                      labelName= {datum.memoNumber ? datum.memoNumber : 'NA'}
-                      style={documentTitle}
-                  />)
-                    }
-                  {btnhide && !!datum.notices.length &&  (<Grid xs={6} align="left">
-                  <Button color="primary"
-                  onClick={() => { 
-                    dispatch(setRoute(`/rented-properties/notices?tenantId=${getTenantId()}`)); 
-                    }}> 
-                     Notice ID : {datum.notices.join(",")}
-                    </Button>
-                    </Grid>)
-                    }
-                    <br></br>
-                    {!btnhide && (<LabelContainer   
-                      labelName= {datum.applicationDocuments[0].auditDetails.createdTime ? moment(datum.applicationDocuments[0].auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
-                      style={documentTitle}
-                  />)
-                    }
-                    {btnhide && 
-                      (<LabelContainer   
-                        labelName= {moment(datum.auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A')}
-                        style={documentTitle}
-                    />)
-                    }
-                    </Grid> 
+                  </Grid>
+                 {contents.map(content => {
+                      return (
+                        <Grid container style={{ marginBottom: 12 }}>
+                          <Grid item xs={3}>
+                            <LabelContainer
+                              labelKey={content.label}
+                              fontSize={14}
+                              style={{
+                                fontSize: 14,
+                                color: "rgba(0, 0, 0, 0.60"
+                              }}
+                            />
+                          </Grid>
+                          <Grid item xs={9}>
+                            <LabelContainer
+                              onClick={content.callBack ? content.callBack : content.url ? () => dispatch(setRoute(content.url)) : () => {}}
+                              labelKey={
+                                content.type === "date" ? moment(get(datum, content.jsonPath, "")).format('dddd, MMMM Do, YYYY h:mm:ss A') : get(datum, content.jsonPath, "")
+                                }
+                              fontSize={14}
+                              checkValueForNA={checkValueForNA}
+                              style={{
+                                fontSize: 14,
+                                color: !!content.callBack || !!content.url ? "#FE7A51" : "rgba(0, 0, 0, 0.87",
+                                cursor: !!content.callBack || !!content.url ? "pointer" : "auto"
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                      );
+                    })}
                       {datum.applicationDocuments.map((content) => (
                           <Grid xs={6} sm={3} 
                           style={{
@@ -181,10 +169,10 @@ class MultipleDocuments extends Component {
                           </Grid>
                           <Grid container>
                             <Grid xs={6} className={classes.subtext}>
-                              {btnhide && (<Typography className={classes.body2}>{!!content.url ? content.url.split("?")[0].split("/").pop().slice(13) : content.fileStoreId ? decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13) : ""}</Typography>)}
+                              <Typography className={classes.body2}>{content.name}</Typography>
                             </Grid>
                             <Grid xs={6} align="right">
-                              <Button href={!!content.url ? content.url : getFileUrlFromAPI(content.fileStoreId)} color="primary">
+                              <Button href={content.url} color="primary">
                               Download
                               </Button>
                             </Grid>
@@ -193,16 +181,6 @@ class MultipleDocuments extends Component {
                           </Grid>)
                       )}
                   </Grid>
-                  <br></br>
-                      <LabelContainer
-                      labelName= "Comments : "
-                      style={commentHeader}
-                  />
-                  &nbsp;
-                   <LabelContainer
-                      labelName= {datum.description ? datum.description : 'NA'}
-                      style={documentTitle}
-                  />
                   </CardContent>
                   </Card>)
                   )}
@@ -210,7 +188,5 @@ class MultipleDocuments extends Component {
       )
   }
 }
-
-
 
 export default withStyles(styles)(MultipleDocuments)
