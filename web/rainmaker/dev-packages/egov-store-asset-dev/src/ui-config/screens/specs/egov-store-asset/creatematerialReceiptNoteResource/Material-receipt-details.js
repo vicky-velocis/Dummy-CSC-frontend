@@ -96,6 +96,7 @@ import {
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 let purchaseOrder = get(
                   state.screenConfiguration.preparedFinalObject,
                   `purchaseOrder.purchaseOrders`,
@@ -123,15 +124,19 @@ import {
                 }
                 // set
                // alert(purchaseOrderDetails[0].id);
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.id",purchaseOrderDetails[0].id));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].purchaseOrderDetail.id`,purchaseOrderDetails[0].id));
                 dispatch(prepareFinalObject("ReceiptMaterial",material));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",purchaseOrderDetails[0].uom.code));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",purchaseOrderDetails[0].uom.name));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.code`,purchaseOrderDetails[0].uom.code));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.name`,purchaseOrderDetails[0].uom.name));
                 //set AvailableQty from  po purchaseOrderDetails 0 index receivedQuantity,orderQuantity,unitPrice(unitRate)
                 //
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].AvailableQty",purchaseOrderDetails[0].receivedQuantity));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].orderQuantity",purchaseOrderDetails[0].orderQuantity));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].unitRate",purchaseOrderDetails[0].unitPrice));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].AvailableQty`,purchaseOrderDetails[0].receivedQuantity));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].orderQuantity`,purchaseOrderDetails[0].orderQuantity));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,purchaseOrderDetails[0].unitPrice));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receivedQty`,purchaseOrderDetails[0].orderQuantity));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].acceptedQty`,purchaseOrderDetails[0].orderQuantity));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].totalAcceptedvalue`,purchaseOrderDetails[0].orderQuantity * purchaseOrderDetails[0].unitPrice));
+
               }
 
             },
@@ -157,7 +162,7 @@ import {
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 let materials = get(
                   state.screenConfiguration.preparedFinalObject,
                   `ReceiptMaterial`,
@@ -166,8 +171,8 @@ import {
                 materials =  materials.filter(x=> x.code === action.value)   
                 if(materials && materials[0])
                 {
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].name));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].MaterialNameDesc",materials[0].description));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].material.name`,materials[0].name));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].MaterialNameDesc`,materials[0].description));
                 //dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].baseUom.code));
                // dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",materials[0].name));
                 }
@@ -328,15 +333,16 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].acceptedQty"
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                let receivedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].receivedQty`,0)
-                let unitRate =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                let receivedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].receivedQty`,0)
+                let unitRate =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,0)
                 let QtyRejected = Number(receivedQty) - Number(action.value)
                 let totalAcceptedvalue = unitRate * Number(action.value)
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].qtyRejected",QtyRejected));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].quantity",Number(action.value)));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].userReceivedQty",receivedQty));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",false));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].totalAcceptedvalue",totalAcceptedvalue));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].qtyRejected`,QtyRejected));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].quantity`,Number(action.value)));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].userReceivedQty`,receivedQty));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].isScrapItem`,false));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].totalAcceptedvalue`,totalAcceptedvalue));
                      }
             },
             unitRate: {
@@ -435,10 +441,11 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].ValueofQtyaccepted"
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                let acceptedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].acceptedQty`,0)
-                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                let acceptedQty =   get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].acceptedQty`,0)
+                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,0)
                 let ValueofQtyaccepted = Number(acceptedQty) * Number(unitRate)
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].ValueofQtyaccepted",Number(ValueofQtyaccepted)));
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].ValueofQtyaccepted`,Number(ValueofQtyaccepted)));
 
                      }
             },

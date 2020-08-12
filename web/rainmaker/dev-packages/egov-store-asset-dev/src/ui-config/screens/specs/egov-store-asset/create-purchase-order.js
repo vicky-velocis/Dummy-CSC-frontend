@@ -16,7 +16,8 @@ import {
   import map from "lodash/map";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getSearchResults } from "../../../../ui-utils/commons";
+  import { getSearchResults } from "../../../../ui-utils/commons";  
+import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommonsapi";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   export const stepsData = [
     { labelName: "Purchase Order", labelKey: "STORE_PO_HEADER" },
@@ -191,6 +192,75 @@ import {
       if(indentNumber){     
           dispatch(prepareFinalObject("purchaseOrders[0].purchaseType", "Indent"));   
           dispatch(prepareFinalObject("purchaseOrders[0].indentNumbers", [indentNumber]));
+          // get store from indent then set materilal and disable store selection
+          let storecode="";
+          let indents = get(
+            state.screenConfiguration.preparedFinalObject,
+            `indents`,
+            []
+          );
+          indents = indents.filter(x=> x.indentNumber === indentNumber)
+          if(indents && indents[0] )
+          {
+            storecode = indents[0].indentStore.code;
+            dispatch(prepareFinalObject("purchaseOrders[0].store.code", storecode)); 
+          }          
+          storecode = getQueryArg(window.location.href, "indentNumber");
+          if(storecode){
+            const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "store", value: storecode}];
+            getSearchResults(queryObject, dispatch,"materials")
+            .then(async response =>{
+              if(response){
+                let indentingMaterial =[];
+                let  materialNames = response.materials.map(material => {
+                    const name = material.name;
+                    const code = material.code;
+                    const description = material.description;
+                    const uom = material.baseUom;
+                    const indentQuantity = 0;
+                    return{ name, code,description,uom ,indentQuantity}
+                })
+                  if(indentNumber){
+                    const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
+                    let res = await getMaterialIndentSearchResults(queryObj, dispatch);
+                    if(res && res.indents &&  res.indents.length > 0){
+                        res.indents.forEach(item => {
+                          if(item.indentDetails.length > 0){
+                            item.indentDetails.forEach(ele =>{
+                              const name = ele.material.name;
+                              const code = ele.material.code;
+                              const description = ele.material.description;
+                              const uom = ele.material.baseUom;
+                              const indentQuantity = ele.indentQuantity;
+                              if(!indentingMaterial.find(mat => mat.code === code))
+                                   indentingMaterial.push({name,code,description,uom,indentQuantity})
+                            })
+                          }
+                        })
+                    }
+    
+                    // finding common material
+                       materialNames = indentingMaterial.filter(function(ele) {
+                            return materialNames.findIndex(mat => mat.code === ele.code) !== -1;
+                        })
+                  }
+                dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
+             }
+              
+            });   
+            if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.storeNames){
+                const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
+                const storebj =  storeNames.filter(ele => ele.code === storecode);
+                if(storebj && storebj[0]){
+                  dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name)); 
+                  dispatch(prepareFinalObject("purchaseOrders[0].store.department.name", storebj[0].department));      
+                  dispatch(prepareFinalObject("purchaseOrders[0].store.divisionName", storebj[0].divisionName));              
+                }
+              }
+            }
+      }
+      else{
+
       }
       return action;
     },

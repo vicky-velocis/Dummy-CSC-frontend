@@ -119,13 +119,7 @@ import {
           jsonPath: "indents[0].indentPurpose",
           sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
         props: {
-          // data: [
-          //   {
-          //     code: "Consumption",
-          //     name: "Capital/Repair/Consumption"
-          //   },
-           
-          // ],
+          
           optionValue: "code",
           optionLabel: "name",
         },

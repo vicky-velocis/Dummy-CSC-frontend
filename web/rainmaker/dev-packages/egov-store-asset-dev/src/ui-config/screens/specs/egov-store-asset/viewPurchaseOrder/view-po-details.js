@@ -51,12 +51,12 @@ const assignmentCard = {
             jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentQuantity",
           }
         ),
-        userQuantity: getLabelWithValue(
-          { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
-          }
-        ),
+        // userQuantity: getLabelWithValue(
+        //   { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
+        //   }
+        // ),
         orderQuantity: getLabelWithValue(
           { labelName: "Order Quantity", labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY" },
           {
@@ -81,18 +81,18 @@ const assignmentCard = {
             jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].receivedQuantity"
           }
         ),
-        tenderQuantity: getLabelWithValue(
-          { labelName: "Tender Quantity", labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity",    
-          }
-        ),
-        usedQuantity: getLabelWithValue(
-          { labelName: "Used Quantity", labelKey: "STORE_PURCHASE_ORDER_USED_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity",    
-          }
-        )
+        // tenderQuantity: getLabelWithValue(
+        //   { labelName: "Tender Quantity", labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity",    
+        //   }
+        // ),
+        // usedQuantity: getLabelWithValue(
+        //   { labelName: "Used Quantity", labelKey: "STORE_PURCHASE_ORDER_USED_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity",    
+        //   }
+        // )
       })
     }),
 

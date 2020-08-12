@@ -11,8 +11,8 @@ import {
     const IndentId = getQueryArg(window.location.href, "IndentId");
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-    ? `/egov-ui-framework/egov-store-asset/createMaterialReceiptNote?step=0`
-    : `/egov-store-asset/createMaterialReceiptNote?step=0`;
+    ? `/egov-ui-framework/egov-store-asset/createMaterialReceiptNote?step=1`
+    : `/egov-store-asset/createMaterialReceiptNote?step=1`;
     dispatch(setRoute(createUrl));
   };
   
@@ -45,7 +45,7 @@ import {
               labelName: "Material Description",
                   labelKey: "STORE_MATERIAL_DESCRIPTION"
             },
-            { jsonPath: "materialReceipt[0].receiptDetails[0].MaterialNameDesc"
+            { jsonPath: "materialReceipt[0].receiptDetails[0].material.description"
             
            }
           ),

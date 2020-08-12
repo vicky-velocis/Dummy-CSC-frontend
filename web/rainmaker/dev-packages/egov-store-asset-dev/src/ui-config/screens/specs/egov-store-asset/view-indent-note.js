@@ -14,6 +14,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
+import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 let IsEdit = false;
 let Status = getQueryArg(window.location.href, "Status");
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
@@ -23,32 +24,41 @@ IsEdit = true;
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Indent Material Issue Note`,
-    labelKey: "STORE_COMMON_CREATE_INDENT_MATERIAL_ISSUE_NOTE"
+    labelName: `View Indent Material Issue Note`,
+    labelKey: "STORE_VIEW_INDENT_MATERIAL_ISSUE_NOTE"
   })
 });
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
-
+  const IndentId = getQueryArg(window.location.href, "IndentId");
   let issueNumber = getQueryArg(window.location.href, "issueNumber");
-  dispatch(setRoute(`/egov-store-asset/createMaterialIndentNote?issueNumber=${issueNumber}`));
+  dispatch(setRoute(`/egov-store-asset/createMaterialIndentNote?issueNumber=${issueNumber}&&IndentId=${IndentId}`));
 };
 const creatPOHandle = async (state, dispatch) => {
   let indents = get(
     state.screenConfiguration.preparedFinalObject,
-    `indents`,
+    `materialIssues`,
     []
   );
-  let indentNumber = indents[0].indentNumber;
+  let indentNumber = indents[0].indent.indentNumber;
+  if(indentNumber)
   dispatch(setRoute(`/egov-store-asset/create-purchase-order?indentNumber=${indentNumber}`));
 };
 const masterView = IndentNoteReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
-  const tenant = tenantId || getTenantId();
+  const tenant = getstoreTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenant,
       moduleDetails: [
+        {
+          moduleName: "store-asset",
+          masterDetails: [
+            { name: "Material" }, //filter: "[?(@.active == true)]" },           
+            { name: "IndentPurpose"},// filter: "[?(@.active == true)]" },
+            
+          ],
+        },
         {
           moduleName: "egov-hrms",
           masterDetails: [
@@ -57,7 +67,18 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "UOM",
+              filter: "[?(@.active == true)]"
+            },
+            
+          ]
+        },
+        
       ]
     }
   };

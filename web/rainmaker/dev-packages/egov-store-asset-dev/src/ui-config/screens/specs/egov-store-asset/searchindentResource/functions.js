@@ -8,7 +8,7 @@ import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecom
 import { getTextToLocalMapping } from "./searchResults";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { validateFields } from "../../utils";
-
+import { IndentConfigType } from "../../../../../ui-utils/sampleResponses";
 import { getTenantId,getOPMSTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getDeptName = (state, codes) => {
@@ -45,6 +45,10 @@ export const searchApiCall = async (state, dispatch) => {
     {
       key: "tenantId",
       value: tenantId,
+    },
+    {
+      key: "indentType",
+      value: IndentConfigType().IndntType.INEDENT
     },
   ];
   let searchScreenObject = get(
@@ -124,7 +128,7 @@ export const searchApiCall = async (state, dispatch) => {
         return {
           [getTextToLocalMapping("Indent No.")]: get(item, "indentNumber", "-") || "-",
           [getTextToLocalMapping("Indent Date")]:  convertEpochToDate(Number(item.indentDate,"indentDate" ,"-")) || "-", 
-         [getTextToLocalMapping("Indenting Store Name")]: get(item, "issueStore.name", "-") || "-", 
+         [getTextToLocalMapping("Indenting Store Name")]: get(item, "indentStore.name", "-") || "-", 
           [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
           [getTextToLocalMapping("Indent Status")]: get(item, "indentStatus", "-") || "-",  
           id: item.id,       

@@ -37,6 +37,7 @@ import {
             masterDetails: [
               { name: "Material" },
               { name: "InventoryType"},
+              { name: "IndentPurpose"},// filter: "[?(@.active == true)]" },
             ],
           },
          

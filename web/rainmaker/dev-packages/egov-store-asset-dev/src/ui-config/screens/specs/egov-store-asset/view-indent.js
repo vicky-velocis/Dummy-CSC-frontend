@@ -13,10 +13,11 @@ import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Material  Indent Note`,
-    labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE"
+    labelName: `View Material  Indent Note`,
+    labelKey: "STORE_VIEW_INDENT"
   })
 });
 
@@ -36,7 +37,7 @@ const creatPOHandle = async (state, dispatch) => {
 };
 const masterView = IndentListReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
-  const tenant = tenantId || getTenantId();
+  const tenant =  getstoreTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenant,
@@ -49,7 +50,17 @@ const getMdmsData = async (action, state, dispatch, tenantId) => {
               filter: "[?(@.active == true)]"
             }
           ]
-        }
+        },
+        {
+          moduleName: "common-masters",
+          masterDetails: [
+            {
+              name: "UOM",
+              filter: "[?(@.active == true)]"
+            },
+            
+          ]
+        },
       ]
     }
   };
@@ -73,9 +84,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    getMaterialIndentData(state, dispatch, id, tenantId);
+   
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
+    getMaterialIndentData(state, dispatch, id, tenantId);
     return action;
   },
   components: {
