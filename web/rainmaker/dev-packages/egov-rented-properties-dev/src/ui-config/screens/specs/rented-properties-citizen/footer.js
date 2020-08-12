@@ -151,7 +151,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
       )
       if(!!isOwnerDetailsValid && !!isImageDetailsValid) {
         const propertyId = get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications[0].property.id");
-        let res;
+        let res = true;
         if(!propertyId) {
           res = await getDetailsFromPropertyTransit(state, dispatch)
         }

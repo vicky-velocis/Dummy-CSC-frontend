@@ -75,10 +75,18 @@ class MultipleDocuments extends Component {
           <Grid container>
           <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
           <Grid xs={12} sm={12} style={{textAlign: "center"}}>
-          <LabelContainer
+          {btnhide && (
+            <LabelContainer
               labelName= "No transit site images captured."
               style={labelHeader}
-          />
+          />)
+        }
+        {!btnhide && (
+            <LabelContainer
+              labelName= "No Notices generated."
+              style={labelHeader}
+          />)
+        }
           </Grid>
           </Grid>
           </Grid>
@@ -103,8 +111,7 @@ class MultipleDocuments extends Component {
                     </Button>
                     </Grid>)
                     } 
-                 </Grid>
-
+                  </Grid>
                  {contents.map(content => {
                       return (
                         <Grid container style={{ marginBottom: 12 }}>
