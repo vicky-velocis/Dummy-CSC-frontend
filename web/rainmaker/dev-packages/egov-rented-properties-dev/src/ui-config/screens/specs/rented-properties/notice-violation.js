@@ -12,9 +12,9 @@ import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
-import { getNoticeReviewDocuments } from "./applyResource/review-documents";
+import { getReviewDocuments } from "./applyResource/review-documents";
 
-const reviewDocumentDetails = getNoticeReviewDocuments(false, "apply")
+const reviewDocumentDetails = getReviewDocuments(false, "notice-violation")
 
 export const noticeDocumentDetails = getCommonCard({
   reviewDocumentDetails
