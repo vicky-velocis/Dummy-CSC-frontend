@@ -44,9 +44,8 @@ const ScrapMaterialDetailsCard = {
               const {scraps , materialNames} = state.screenConfiguration.preparedFinalObject;
               const {store} = scraps[0];
               //material object 
+             if(materialNames) {
              const matObj = materialNames.filter(mat => mat.code === action.value);
-
-
               const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "issueingStore", value: store.code},{ key: "material", value: action.value}];
               getSearchResults(queryObject, dispatch,"materialBalanceAndName")
               .then( response =>{
@@ -61,6 +60,7 @@ const ScrapMaterialDetailsCard = {
                           dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].unitRate`, element.unitRate)); 
                           dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].uom`, matObj[0].scrapUom)); 
                           dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].issueDetail.id`, matObj[0].scrapissueDetail)); 
+                          dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].lotNumber`, matObj[0].lotNumber)); 
                           let balanceValue = element.unitRate * element.balance;
                           if(balanceValue) {
                            dispatch(prepareFinalObject(`scraps[0].scrapDetails[${itemIndex}].balanceValue`, balanceValue)); 
@@ -73,7 +73,7 @@ const ScrapMaterialDetailsCard = {
                            
                }           
               });   
-           
+            }
               }
             }
           }, 
@@ -94,6 +94,24 @@ const ScrapMaterialDetailsCard = {
           //     }
           //   }),
           // },
+          lotNo: {
+            ...getTextField({
+              label: {
+                labelName: "LOT No.",
+                labelKey: "STORE_SCRAP_LOT_NO"
+              },
+              placeholder: {
+                labelName: "Select Lot No.",
+                labelKey: "STORE_SCRAP_LOT_NO_PLCHLDR"
+              },
+            //  pattern: getPattern("numeric-only"),
+              jsonPath: "scraps[0].scrapDetails[0].lotNumber",
+              props: {
+                disabled: true
+              },
+            })
+          },
+          
           balanceQuantity: {
             ...getTextField({
               label: {
@@ -146,19 +164,47 @@ const ScrapMaterialDetailsCard = {
             })
           },
           scrapReason: {
-            ...getTextField({
-              label: {
-                labelName: "Scrap Reason",
-                labelKey: "STORE_SCRAP_REASON"
-              },
+            ...getSelectField({
+              label: { labelName: "Scrap Reason", labelKey: "STORE_SCRAP_REASON" },
               placeholder: {
-                labelName: "Enter Scrap Reason",
-                labelKey: "STORE_SCRAP_REASON_PLCHLDR"
+                labelName: "Select Scrap Reason",
+                labelKey: "STORE_SCRAP_REMARK_SELECT"
               },
               required: true,
-              pattern: getPattern("alpha-numeric-with-space-and-newline"),
               jsonPath: "scraps[0].scrapDetails[0].scrapReason",
-            })
+             // sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
+              props: {
+                className: "hr-generic-selectfield",
+                optionValue: "code",
+                optionLabel: "name",
+                data: [
+                  {
+                    code: "Damaged",
+                    name: "Damaged"
+                  },
+                  {
+                    code: "NotInUse",
+                    name: "NotInUse"
+                  },
+                  {
+                    code: "NotFitforUse",
+                    name: "NotFitforUse"
+                  },
+                  {
+                    code: "Expired",
+                    name: "Expired"
+                  },
+                  {
+                    code: "StockCleared",
+                    name: "StockCleared"
+                  },
+                  {
+                    code: "DeadStock",
+                    name: "DeadStock"
+                  },
+                ],
+              }
+            }),
           },
           scrapQty: {
             ...getTextField({

@@ -165,11 +165,13 @@ const getData = async (action, state, dispatch) => {
               const scrapUom = element.uom;
               const scrapissueDetail = element.id;
              const receiptIdForScrap = element.materialIssuedFromReceipts && element.materialIssuedFromReceipts[0].materialReceiptId;
+             const lotNumber = element.materialIssuedFromReceipts && element.materialIssuedFromReceipts[0].materialReceiptDetail.receiptDetailsAddnInfo[0].lotNo;
               let obj = {
                 ...element.material,
                 receiptIdForScrap,
                 scrapUom,
-                scrapissueDetail
+                scrapissueDetail,
+                lotNumber
               }
               materialNames.push(obj);
             }

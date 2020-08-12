@@ -38,7 +38,7 @@ const assignmentCard = {
             labelName: "Balance Quantity",
             labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY"
           },
-          { jsonPath: "scraps[0].scrapDetails[0].userQuantity" }
+          { jsonPath: "scraps[0].scrapDetails[0].balanceQuantity" }
         ),
         balanceValue: getLabelWithValue(
           { labelName: "Balance Value", labelKey: "STORE_SCRAP_BAL_VALUE" },
