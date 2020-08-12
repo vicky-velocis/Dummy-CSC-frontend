@@ -194,8 +194,8 @@ let userInfo = JSON.parse(getUserInfo());
       set(queryObject[0], "description", queryObject[0].description);
       let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(",");
       const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); 
-      const test = decodeURIComponent(getFileUrl("59c95c89-ffbb-4614-b4dc-c758b3247311"))
-      const test2 = decodeURIComponent(getFileUrl("59c95c89-ffbb-4614-b4dc-c758b3247311").split("?")[0].split("/").pop().slice(13))
+      const test = Object.values(await getFileUrlFromAPI("59c95c89-ffbb-4614-b4dc-c758b3247311"))
+      const test2 = decodeURIComponent(getFileUrlFromAPI("59c95c89-ffbb-4614-b4dc-c758b3247311")).split("?")[0].split("/").pop().slice(13)
       const output = filedata.map((fileitem,index) => 
       
         ({
@@ -255,6 +255,7 @@ let userInfo = JSON.parse(getUserInfo());
       const recoveryType = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.recoveryType")
       const amount = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.payment[0].amountPaid")
       const noticeType = str
+      const properyImageId = filedata.id;
       const tenantId = getTenantId()
       let response;
  
@@ -293,6 +294,7 @@ let userInfo = JSON.parse(getUserInfo());
         "demandNoticeFrom": demandNoticeFrom,
         "demandNoticeTo" : demandNoticeTo,
         "amount" : amount,
+        "propertyImageId": properyImageId,
         "property": {
           "id": id,
           "transitNumber": transitNumber,
