@@ -124,7 +124,7 @@ const notices = {
               uiFramework: "custom-atoms",
               componentPath: "Div",
               props: {
-                style: { textAlign: "right", display: "flex" }
+                style: { textAlign: "right" , margin: "10px 0px 0px 0px"}
               },
               children: {
                 recoveryButton: {
@@ -140,7 +140,7 @@ const notices = {
                       backgroundColor: "#fe7a51",
                       borderColor:"#fe7a51",
                       borderRadius: "2px",
-                      width: "50%",
+                      width: "17%",
                       height: "48px",
                     }
                   },
@@ -170,8 +170,9 @@ const notices = {
                       backgroundColor: "#fe7a51",
                       borderColor:"#fe7a51",
                       borderRadius: "2px",
-                      width: "50%",
+                      width: "17%",
                       height: "48px",
+                      margin: "0px 0px 0px 10px",
                     }
                   },
                   children: {
