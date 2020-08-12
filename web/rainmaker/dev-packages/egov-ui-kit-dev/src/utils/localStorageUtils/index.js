@@ -60,6 +60,10 @@ export const getModule = () => {
   return localStorage.getItem("module");
 };
 
+export const getEChallanPaymentMailSent = () => {
+  return localStorage.getItem('EChallanPaymentMailSent');
+};
+
 
 //SET methods 
 export const setCurrentAssignee = (CurrentAssignee) => {
@@ -126,6 +130,11 @@ export const seteventuuid = (eventuuId) => {
 export const setEncroachmentType = (encroachmentType) => {
   localStorageSet('encroachmentType',encroachmentType);
 };
+
+export const setEChallanPaymentMailSent = (isChallanPayMailSent) => {
+  localStorageSet('EChallanPaymentMailSent',isChallanPayMailSent);
+};
+
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {

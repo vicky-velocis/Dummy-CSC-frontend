@@ -21,7 +21,8 @@ import get from "lodash/get";
 import store from "ui-redux/store";
 
 export const AuctionGridDetails = {
-  uiFramework: "custom-molecules",
+  uiFramework: "custom-molecules-local",
+  moduleName: "egov-echallan",
   componentPath: "Table",
   visible: true,
   // uiFramework: "custom-molecules-local",

@@ -323,6 +323,7 @@ const setSearchResponse = async (
   action
 ) => {
 
+
   let RequestBody = {
     searchtext: applicationNumber,
     tenantId: tenantId,
@@ -364,7 +365,17 @@ const setSearchResponse = async (
   let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
 
   // Set Institution/Applicant info card visibility
+  let appnumber = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId", '');
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      appnumber
+    )
+  );
 
+ 
   dispatch(
     handleField(
       "summary",
@@ -731,19 +742,7 @@ const screenConfig = {
     set(state, 'form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage', []);
     set(state, 'form.apply_Violations_Image.files.echallanViolationImage', []);
 
-    let responsecreateDemand = '';
-    //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
-    // //calculate search Bill called\
-    //searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "eChallan" }
-    ];
-    let status = localStorageGet("app_noc_status") == "REASSIGN" ? "RESENT" : "INITIATED";
-
-    //setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
     // Hide edit buttons
     setEditVisibleTrueFalse(action)
 

@@ -432,8 +432,15 @@ export const adhocPopup = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             dispatch(prepareFinalObject("ItemMaster", []));
-
             showHideAdhocPopup(state, dispatch, "search");
+            // const objectJsonPath = `components.adhocDialog.children.popup.children.addItemMasterCard.children`;
+            // const children = get(
+            //   state.screenConfiguration.screenConfig["search"],
+            //   objectJsonPath,
+            //   {}
+            // );
+            // resetAllFields(children, dispatch, state, 'search');
+
             setTimeout(() => window.location.reload(), 1000);
           }
         },

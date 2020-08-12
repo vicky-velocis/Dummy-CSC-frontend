@@ -19,7 +19,7 @@ import { estimateSummary } from "./summaryResource/estimateSummary";
 import { searchResultsSummary, serachResultGridSM, searchResultsSummaryHOD, searchVehicleResultsSummary } from "./summaryResource/summaryGrid";
 import { footer, takeactionfooter } from "./summaryResource/footer";
 import { titlebarfooter } from "./summaryResource/citizenFooter";
-import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchStoreItemHODMasterChallanData, fetchMdmsData } from "../../../../ui-utils/commons";
+import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchStoreItemHODMasterChallanData, fetchMdmsData, setCurrentApplicationProcessInstance } from "../../../../ui-utils/commons";
 import { setEncroachmentType, getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import "./index.css";
@@ -568,6 +568,10 @@ const setSearchResponse = async (
   const response = await getSearchResultsView(RequestBody);
   //
   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
+
+  await setCurrentApplicationProcessInstance(state);
+
+
   let sectorval = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
   let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
   let __FOUND = sectorValue.find(function (sectorRecord, index) {
@@ -575,8 +579,10 @@ const setSearchResponse = async (
       return true;
   });
 
-  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
 
+
+  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+ 
   let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
   let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
     if (encroachRecord.code == sectorval.encroachmentType)
@@ -596,6 +602,15 @@ const setSearchResponse = async (
 
   let appstatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
   let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      getQueryArg(window.location.href, "applicationNumber")
+    )
+  );
 
   dispatch(
     handleField(
@@ -923,8 +938,6 @@ const setSearchResponseForNocCretificate = async (
       },
       leftIcon: "book"
     };
-
-
   }
   let isassigned = false;
 

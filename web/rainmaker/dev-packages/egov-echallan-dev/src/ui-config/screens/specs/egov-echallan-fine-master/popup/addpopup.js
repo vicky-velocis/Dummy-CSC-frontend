@@ -259,46 +259,6 @@ export const adhocPopup = getCommonContainer({
           )
         }
       },
-      // closebtns: {
-      //   uiFramework: "custom-atoms",
-      //   componentPath: "Div",
-      //   gridDefination: {
-      //     xs: 2,
-      //     sm: 2
-      //   },
-      //   props: {
-      //     style: {
-      //       width: "100%",
-      //       float: "right",
-      //       cursor: "pointer"
-      //     }
-      //   },
-      //   children: {
-      //     closeButton: {
-      //       componentPath: "Button",
-      //       props: {
-      //         style: {
-      //           float: "right",
-      //           color: "rgba(0, 0, 0, 0.60)"
-      //         }
-      //       },
-      //       children: {
-      //         // previousButtonIcon: {
-      //         //   uiFramework: "custom-atoms",
-      //         //   componentPath: "Icon",
-      //         //   props: {
-      //         //     iconName: "close"
-      //         //   }
-      //         // }
-      //       },
-      //       onClickDefination: {
-      //         action: "condition",
-      //         callBack: (state, dispatch) =>
-      //           showHideAdhocPopup(state, dispatch, "create")
-      //       }
-      //     }
-      //   }
-      // }
     }
   },
   addFineMasterCard: getCommonContainer(
@@ -683,6 +643,13 @@ export const adhocPopup = getCommonContainer({
             dispatch(prepareFinalObject("FineMaster", []));
             showHideAdhocPopup(state, dispatch, "search");
             setTimeout(() => window.location.reload(), 1000);
+            // const objectJsonPath = `components.adhocDialog.children.popup.children.addFineMasterCard.children`;
+            // const children = get(
+            //   state.screenConfiguration.screenConfig["search"],
+            //   objectJsonPath,
+            //   {}
+            // );
+            // resetAllFields(children, dispatch, state, 'search');
 
           }
         },

@@ -167,16 +167,40 @@ export const searchResultCitizenApiResponse = async (action, state, dispatch) =>
     "orderColumn": "violationDate",
     "searchText": get(userInfo, "mobileNumber")
   }
+    await getMdmsEncroachmentSectorData(action, state, dispatch);
+
   const response = await fetchMasterChallanData(requestBody)
 
   console.log("res", response)
   try {
 
     if (response) {
+
+      let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+      let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
       dispatch(prepareFinalObject("searchResults", response.ResponseBody));
       dispatch(
         prepareFinalObject("myApplicationsCount", response.ResponseBody.length)
-      );
+      ); 
+      response.ResponseBody.map(function (item, index) {
+       
+        let __FOUND = sectorValue.find(function (sectorRecord, index) {
+          if (sectorRecord.code == item['sector'])
+            return true;
+        });
+        item.sector = __FOUND.name;
+        set(state, 'screenConfiguration.preparedFinalObject.searchResults.sector', __FOUND.name);
+
+        let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+          if (encroachRecord.code == item['encroachmentType'])
+            return true;
+        });
+        item.encroachmentType = __FOUNDENCROACH.name;
+        set(state, 'screenConfiguration.preparedFinalObject.searchResults.encroachmentType', __FOUNDENCROACH.name);
+
+      })
+      
+     
       showHideTable(true, dispatch);
     }
   } catch (error) {

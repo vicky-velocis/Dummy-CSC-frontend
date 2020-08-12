@@ -21,7 +21,7 @@ const getLocalTextFromCode = localCode => {
 };
 
 export const ArticleGridDetails = {
-  uiFramework: "custom-molecules",
+  uiFramework: "custom-molecules-local",
   moduleName: "egov-echallan",
   componentPath: "Table",
   visible: true,
