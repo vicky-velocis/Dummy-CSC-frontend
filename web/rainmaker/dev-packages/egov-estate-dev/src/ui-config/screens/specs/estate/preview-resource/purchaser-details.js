@@ -126,7 +126,7 @@ export const headerDiv = {
     }
 }
 
-   export const getPurchaserDetails = (isEditable = true) => {
+   export const getPurchaserDetails = (isEditable = true,index) => {
     return getCommonGrayCard({
       headerDiv: {
         ...headerDiv,
@@ -147,52 +147,52 @@ export const headerDiv = {
       viewFour: getCommonContainer({
         newOwnerName: getLabelWithValue(
             newOwnerNameField, {
-              jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].newOwnerName"
+              jsonPath: `Properties[0].propertyDetails.purchaseDetails[${index}].newOwnerName`
             }
           ),
           newOwnerFatherHusbandName: getLabelWithValue(
             newOwnerFatherHusbandNameField, {
-              jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].newOwnerFatherName"
+              jsonPath: `Properties[0].propertyDetails.purchaseDetails[${index}].newOwnerFatherName`
             }
           ),
           newOwnerAddress:getLabelWithValue(
             newOwnerAddressField, {
-              jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].newOwnerAddress"
+              jsonPath: `Properties[0].propertyDetails.purchaseDetails[${index}].newOwnerAddress`
             }
           ),
           newOwnerMobileNumber: getLabelWithValue(
             newOwnerMobileNumberField, {
-              jsonPath:  "Properties[0].propertyDetails.purchaseDetails[0].newOwnerMobileNumber"
+              jsonPath:  `Properties[0].propertyDetails.purchaseDetails[${index}].newOwnerMobileNumber`
             }
           ),
           sellerName: getLabelWithValue(
             sellerNameField, {
-              jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].sellerName"
+              jsonPath: `Properties[0].propertyDetails.purchaseDetails[${index}].sellerName`
             }
           ),
         sellerFatherHusbandName: getLabelWithValue(
             sellerFatherHusbandNameField, {
-              jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].sellerFatherName"
+              jsonPath: `Properties[0].propertyDetails.purchaseDetails[${index}].sellerFatherName`
             }
           ),
           share: getLabelWithValue(
             shareField, {
-              jsonPath:"Properties[0].propertyDetails.purchaseDetails[0].percentageOfShare"
+              jsonPath:`Properties[0].propertyDetails.purchaseDetails[${index}].percentageOfShare`
             }
           ),
           modeOfTransfer: getLabelWithValue(
             modeOfTransferField, {
-              jsonPath:"Properties[0].propertyDetails.purchaseDetails[0].modeOfTransfer"
+              jsonPath:`Properties[0].propertyDetails.purchaseDetails[${index}].modeOfTransfer`
             }
           ),
           registrationNumber: getLabelWithValue(
             registrationNumberField, {
-              jsonPath:"Properties[0].propertyDetails.purchaseDetails[0].registrationNumber"
+              jsonPath:`Properties[0].propertyDetails.purchaseDetails[${index}].registrationNumber`
             }
           ),
           dateOfRegistration: getLabelWithValue(
             dateOfRegistrationField, {
-              jsonPath:"Properties[0].propertyDetails.purchaseDetails[0].dateOfRegistration"
+              jsonPath:`Properties[0].propertyDetails.purchaseDetails[${index}].dateOfRegistration`
             }
           )
       })

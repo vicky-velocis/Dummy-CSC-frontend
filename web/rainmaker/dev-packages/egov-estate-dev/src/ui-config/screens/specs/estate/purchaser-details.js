@@ -5,7 +5,7 @@ import {
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getPurchaserDetails } from "./preview-resource/purchaser-details";
@@ -23,12 +23,22 @@ export const headerrow = getCommonContainer({
     labelKey: "ESTATE_COMMON_ESTATE"
   })
 });
-const purchaserDetails = getPurchaserDetails(false);
+// const purchaserDetails = getPurchaserDetails(false);
 
 
-export const propertyReviewDetails = getCommonCard({
-  purchaserDetails,
-});
+// export const propertyReviewDetails = getCommonCard({
+//   purchaserDetails,
+// });
+
+const purchaserContainer = {
+  uiFramework: "custom-atoms",
+componentPath: "Container",
+props: {
+  id: "docs"
+},
+children: {
+}
+}
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
   let queryObject = [
@@ -37,24 +47,20 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-
-    let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
-    const removedDocs = applicationDocuments.filter(item => !item.active)
-    applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
-    dispatch(prepareFinalObject("Properties[0]", properties[0]));
-    dispatch(
-      prepareFinalObject(
-        "PropertiesTemp[0].removedDocs",
-        removedDocs
-      )
-    );
-    await setDocuments(
-      payload,
-      "Properties[0].propertyDetails.applicationDocuments",
-      "PropertiesTemp[0].reviewDocData",
-      dispatch,'RP'
-    );
+    dispatch(prepareFinalObject("Properties", properties));
+    
+    let containers={}
+    properties[0].propertyDetails.purchaseDetails.forEach((element,index) => { 
+   containers[index] =  getPurchaserDetails(false,index);   
+});
+dispatch(
+  handleField(
+    "purchaser-details",
+    "components.div.children.purchaserContainer",
+    "children",
+    containers
+  )
+);
   }
 }
 
@@ -159,17 +165,7 @@ const EstatePurchaserDetails = {
             },
             type: "array",
           },
-          taskStatus: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-estate",
-            componentPath: "WorkFlowContainer",
-            props: {
-              dataPath: "Properties",
-              moduleName: "MasterRP",
-              updateUrl: "/csp/property/_update"
-            }
-          },
-        propertyReviewDetails
+          purchaserContainer
       }
     }
   }
