@@ -66,18 +66,25 @@ class MultipleDocuments extends Component {
 
   render() {
       let {data = [], btnhide,contents, classes , dispatch} = this.props
-      data = data.filter(dat => !!dat.applicationDocuments)
-        if(data.length==0){
+        if(data === null || data === undefined || data.length==0){
         return(
           <Card className="Multiple-card-212">  
           <CardContent>
           <Grid container>
           <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
           <Grid xs={12} sm={12} style={{textAlign: "center"}}>
-          <LabelContainer
+          {btnhide && (
+            <LabelContainer
               labelName= "No transit site images captured."
               style={labelHeader}
-          />
+          />)
+        }
+        {!btnhide && (
+            <LabelContainer
+              labelName= "No Notices generated."
+              style={labelHeader}
+          />)
+        }
           </Grid>
           </Grid>
           </Grid>
@@ -85,6 +92,8 @@ class MultipleDocuments extends Component {
           </Card>
         )
       }
+      data = data.filter(dat => !!dat.applicationDocuments)
+
       return (
           <div>
               {!!data.length && data.map((datum, index) => (
@@ -93,6 +102,11 @@ class MultipleDocuments extends Component {
                   <Grid container>
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
                   <Grid xs={12} sm={12} style={{textAlign: "left"}}>
+                    {!btnhide && (<LabelContainer   
+                      labelName= {`Notice Type : ${datum.noticeType}`} 
+                      style={documentTitle}
+                  />)
+                    }
                   <br></br>
                   {!btnhide && (<LabelContainer   
                       labelName= "Notice ID : "
@@ -100,7 +114,7 @@ class MultipleDocuments extends Component {
                   />)
                     }
                   {!btnhide && (<LabelContainer   
-                      labelName= {datum.id ? datum.id : 'NA'}
+                      labelName= {datum.memoNumber ? datum.memoNumber : 'NA'}
                       style={documentTitle}
                   />)
                     }
@@ -115,7 +129,7 @@ class MultipleDocuments extends Component {
                     }
                     <br></br>
                     {!btnhide && (<LabelContainer   
-                      labelName= {datum.memoDate ? moment(datum.memoDate).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
+                      labelName= {datum.applicationDocuments[0].auditDetails.createdTime ? moment(datum.applicationDocuments[0].auditDetails.createdTime).format('dddd, MMMM Do, YYYY h:mm:ss A') : 'NA'}
                       style={documentTitle}
                   />)
                     }
