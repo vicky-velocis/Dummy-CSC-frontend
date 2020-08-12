@@ -21,7 +21,6 @@ const header = getCommonHeader(
 );
 
 const searchApplications = (state, dispatch) => {
-  debugger
   const preparedFinalObject = get(state, "screenConfiguration.preparedFinalObject");
   const {actualResults, searchScreen = {}} = preparedFinalObject
   let searchResults = actualResults
@@ -35,7 +34,6 @@ const searchApplications = (state, dispatch) => {
 }
 
 const clearSearch = (state, dispatch) => {
-  debugger
   const preparedFinalObject = get(state, "screenConfiguration.preparedFinalObject");
   const {actualResults, searchScreen = {}} = preparedFinalObject
   if(!!searchScreen.applicationNumber || !!searchScreen.status) {
