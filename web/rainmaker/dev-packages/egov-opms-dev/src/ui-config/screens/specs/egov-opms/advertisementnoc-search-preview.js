@@ -17,6 +17,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchBill, createDemandForAdvNOC } from "../utils/index";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import { footer } from "./applyResource/employeeAdvertisementFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
@@ -380,95 +381,102 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
+  if (response === undefined) {
+    dispatch(setRoute(`/egov-opms/invalidIdErrorPage?applicationNumber=${applicationNumber}&tenantId=${tenantId}`))
+  }
+  else {
+    dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
+    // Set Institution/Applicant info card visibility
+    let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+    localStorageSet("app_noc_status", nocStatus);
+    let remarksData = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", []);
 
-  dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-  // Set Institution/Applicant info card visibility
-  let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
-  localStorageSet("app_noc_status", nocStatus);
-  let remarksData = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].remarks", []);
+    remarksData.forEach(doc => {
+      if (doc.applicationstatus == 'WITHDRAWAFTERAPRROVAL' || doc.applicationstatus == 'WITHDRAW') {
+        localStorageSet("pms_iswithdrawn", "yes");
+      }
+    });
 
-  remarksData.forEach(doc => {
-    if (doc.applicationstatus == 'WITHDRAWAFTERAPRROVAL' || doc.applicationstatus == 'WITHDRAW') {
-      localStorageSet("pms_iswithdrawn", "yes");
-    }
-  });
+    let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
+    localStorageSet("footerApplicationStatus", applicationStatus);
+    let exampted = get(state.screenConfiguration.preparedFinalObject, 'nocApplicationDetail[0].applicationdetail');
+    let exemptedcategory = JSON.parse(exampted)['exemptedCategory'];
+    await setCurrentApplicationProcessInstance(state);
 
-  let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
-  localStorageSet("footerApplicationStatus", applicationStatus);
-  let exampted = get(state.screenConfiguration.preparedFinalObject, 'nocApplicationDetail[0].applicationdetail');
-  let exemptedcategory = JSON.parse(exampted)['exemptedCategory'];
-  await setCurrentApplicationProcessInstance(state);
+    HideshowEdit(state, action, nocStatus, exemptedcategory, dispatch);
 
-  HideshowEdit(state, action, nocStatus, exemptedcategory, dispatch);
+    if (JSON.parse(exampted).hasOwnProperty('withdrawapprovalamount'))
+      dispatch(prepareFinalObject("advertisement[0].WithdraApproval.Amount", JSON.parse(exampted)['withdrawapprovalamount']));
 
-  if (JSON.parse(exampted).hasOwnProperty('withdrawapprovalamount'))
-    dispatch(prepareFinalObject("advertisement[0].WithdraApproval.Amount", JSON.parse(exampted)['withdrawapprovalamount']));
-
-  dispatch(
-    handleField(
-      "advertisementnoc-search-preview",
-      "components.div.children.body.children.cardContent.children.advertisementapplicantSummary",
-      "visible",
-      true
-    )
-  );
-
-  dispatch(
-    handleField(
-      "advertisementnoc-search-preview",
-      "components.div.children.body.children.cardContent.children.detailSummary",
-      "visible",
-      true
-    )
-  );
-
-
-  prepareDocumentsView(state, dispatch);
-  if (checkForRole(roles, 'CITIZEN'))
-    setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
-
-
-  getMdmsData(action, state, dispatch).then(response => {
-    //JSON.Parse(nocApplicationDetail[0].applicationdetail).typeOfAdvertisement
-
-    let advertisementtypeselected = '';
-    let advertisementsubtypeselected = '';
-    let advt = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationdetail",
-      {}
+    dispatch(
+      handleField(
+        "advertisementnoc-search-preview",
+        "components.div.children.body.children.cardContent.children.advertisementapplicantSummary",
+        "visible",
+        true
+      )
     );
 
-    //if (advertisementtypeselected !== null && advertisementtypeselected !== '' && advertisementtypeselected !== 'undefined') {
-    if (advt !== null && advt !== '' && advt !== 'undefined') {
-      advertisementtypeselected = JSON.parse(advt).typeOfAdvertisement;
-      advertisementsubtypeselected = JSON.parse(advt).subTypeOfAdvertisement;
+    dispatch(
+      handleField(
+        "advertisementnoc-search-preview",
+        "components.div.children.body.children.cardContent.children.detailSummary",
+        "visible",
+        true
+      )
+    );
 
-      let advertisementtypeid = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement",
-        []
+
+    prepareDocumentsView(state, dispatch);
+    if (checkForRole(roles, 'CITIZEN'))
+      setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+
+
+    getMdmsData(action, state, dispatch).then(response => {
+      //JSON.Parse(nocApplicationDetail[0].applicationdetail).typeOfAdvertisement
+
+      let advertisementtypeselected = '';
+      let advertisementsubtypeselected = '';
+      let advt = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationdetail",
+        {}
       );
-      let adv_id = advertisementtypeid.filter(item => {
-        if (item.name == advertisementtypeselected) {
-          localStorageSet("this_adv_code", item.code);
-          localStorageSet("this_adv_id", item.id);
-          item.subTypeOfAdvertisement.filter(subitem => {
-            if (subitem.name === advertisementsubtypeselected) {
-              localStorageSet("this_sub_adv_code", subitem.code);
-              localStorageSet("this_sub_adv_id", subitem.id);
-            }
-          });
 
-          //   createDemandForAdvNOC(state, dispatch, applicationNumber, tenantId);
-        }
-      });
+      //if (advertisementtypeselected !== null && advertisementtypeselected !== '' && advertisementtypeselected !== 'undefined') {
+      if (advt !== null && advt !== '' && advt !== 'undefined') {
+        advertisementtypeselected = JSON.parse(advt).typeOfAdvertisement;
+        advertisementsubtypeselected = JSON.parse(advt).subTypeOfAdvertisement;
+
+        let advertisementtypeid = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.typeOfAdvertisement",
+          []
+        );
+        let adv_id = advertisementtypeid.filter(item => {
+          if (item.name == advertisementtypeselected) {
+            localStorageSet("this_adv_code", item.code);
+            localStorageSet("this_adv_id", item.id);
+            item.subTypeOfAdvertisement.filter(subitem => {
+              if (subitem.name === advertisementsubtypeselected) {
+                localStorageSet("this_sub_adv_code", subitem.code);
+                localStorageSet("this_sub_adv_id", subitem.id);
+              }
+            });
+
+            //   createDemandForAdvNOC(state, dispatch, applicationNumber, tenantId);
+          }
+        });
 
 
-    }
-    else {
-      alert("Error Fetching advertisement code. Reload!")
-    }
+      }
+      else {
+        alert("Error Fetching advertisement code. Reload!")
+      }
 
 
-  });
+    });
+
+  }
+
 };
+
 
 let httpLinkPET;
 
