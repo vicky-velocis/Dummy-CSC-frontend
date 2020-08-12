@@ -644,4 +644,55 @@ export const getPattern = type => {
 export const checkValueForNA = value => {
   return value && value !== "null" ? value : "NA";
 };
+export const getCommonLabelWithValue = (paragraph, value, props = {}) => {
+  return getCommonLabelValue(paragraph, value, { variant: "caption", ...props });
+}
 
+export const getCommonLabelValue = (header, value, props) => {
+  return {
+    componentPath: "Typography",
+    props: {
+      variant: "headline",
+      ...props
+    },
+    children: {
+      // [header]: getLabel(header)
+      key: getLabelForModify(header, value),
+    }
+  };
+};
+
+export const getLabelForModify = (label, jsonPath, props = {}) => {
+  return {
+    uiFramework: "custom-containers",
+    componentPath: "ModifyLabelConatiner",
+    props: {
+      ...label,
+      ...jsonPath,
+      ...props
+    }
+  };
+};
+
+export const getLabelWithValueForModifiedLabel = (label, value, label2, value2, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 3
+    },
+    props: {
+      style: {
+        marginBottom: "16px",
+        wordBreak: "break-word"
+      },
+      ...props
+    },
+    children: {
+      label1: getCommonCaption(label),
+      value1: getCommonValue(value),
+      label2: getCommonLabelWithValue(label2, value2)
+    }
+  };
+};
