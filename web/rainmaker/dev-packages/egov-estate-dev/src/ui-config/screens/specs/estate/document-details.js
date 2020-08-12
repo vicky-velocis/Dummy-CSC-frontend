@@ -2,14 +2,14 @@ import {
     getCommonHeader,
     getCommonContainer,
     getLabel,
-    getCommonCard
+    getCommonCard,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { getReviewDocuments } from "./preview-resource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import {getReviewDocuments} from "./applyResource/reviewDocuments"
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
@@ -24,12 +24,15 @@ export const headerrow = getCommonContainer({
   })
 });
 
-// const documentPreviewDetails =  getReviewDocuments(false,'Preview');
-
-
-export const documentDetails = getCommonCard({
-  // documentPreviewDetails
-});
+const documentContainer = {
+  uiFramework: "custom-atoms",
+componentPath: "Container",
+props: {
+  id: "docs"
+},
+children: {
+}
+}
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
   let queryObject = [
@@ -38,23 +41,26 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-    let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
-    const removedDocs = applicationDocuments.filter(item => !item.active)
-    applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
-    dispatch(prepareFinalObject("Properties[0]", properties[0]));
-    dispatch(
-      prepareFinalObject(
-        "PropertiesTemp[0].removedDocs",
-        removedDocs
-      )
+    dispatch(prepareFinalObject("Properties", properties));
+
+    let containers={}
+    properties[0].propertyDetails.owners.forEach((element,index) => { 
+    setDocuments(
+    payload,
+    `Properties[0].propertyDetails.owners[${index}].ownerDetails.ownerDocuments`,
+    `PropertiesTemp[${index}].reviewDocData`,
+    dispatch,'EST'
     );
-    await setDocuments(
-      payload,
-      "Properties[3].propertyDetails.owners[0].ownerDetails.ownerDocuments",
-      "PropertiesTemp[0].reviewDocData",
-      dispatch,'RP'
-    );
+   containers[index] =  getReviewDocuments(false,'document-details',`PropertiesTemp[${index}].reviewDocData`);   
+});
+dispatch(
+  handleField(
+    "document-details",
+    "components.div.children.documentContainer",
+    "children",
+    containers
+  )
+);
   }
 }
 
@@ -124,11 +130,6 @@ const DocumentReviewDetails = {
   name: "document-details",
   beforeInitScreen: (action, state, dispatch) => {
     fileNumber = getQueryArg(window.location.href, "filenumber");
-    // set(
-    //   action.screenConfig,
-    //   "components.div.children.headerDiv.children.header1.children.applicationNumber.props.number",
-    //   fileNumber
-    // );
     beforeInitFn(action, state, dispatch, fileNumber);
     return action;
   },
@@ -164,20 +165,12 @@ const DocumentReviewDetails = {
             },
             type: "array",
           },
-          taskStatus: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-estate",
-            componentPath: "WorkFlowContainer",
-            props: {
-              dataPath: "Properties",
-              moduleName: "MasterRP",
-              updateUrl: "/csp/property/_update"
-            }
-          },
-        documentDetails
+        documentContainer
       }
     }
   }
 };
+
+
 
 export default DocumentReviewDetails;
