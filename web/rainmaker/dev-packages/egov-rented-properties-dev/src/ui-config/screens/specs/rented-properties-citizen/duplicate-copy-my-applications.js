@@ -65,7 +65,7 @@ const screenConfig = {
               }
             ],
             moduleName: "DUPLICATECOPYOFALLOTMENTLETTERRP",
-            homeURL: "/rented-properties/home"
+            homeURL: "/rented-properties-citizen/duplicate-copy-apply"
           }
         }
       }

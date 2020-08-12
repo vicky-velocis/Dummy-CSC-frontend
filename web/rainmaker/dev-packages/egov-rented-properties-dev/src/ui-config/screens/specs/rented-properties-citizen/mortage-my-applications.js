@@ -64,7 +64,7 @@ const screenConfig = {
               }
             ],
             moduleName: "MORTGAGERP",
-            homeURL: "/rented-properties/home"
+            homeURL: "/rented-properties-citizen/mortage-apply"
           }
         }
       }
