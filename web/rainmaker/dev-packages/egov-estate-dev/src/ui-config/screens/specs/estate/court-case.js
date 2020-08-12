@@ -5,7 +5,7 @@ import {
   getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getCourtCaseDetails } from "./preview-resource/courtCase-details";
@@ -23,12 +23,16 @@ header: getCommonHeader({
   labelKey: "ESTATE_COMMON_ESTATE"
 })
 });
-const courtCaseDetails = getCourtCaseDetails(false);
 
-
-export const courtCaseReview = getCommonCard({
-  courtCaseDetails
-});
+const courtCaseContainer = {
+  uiFramework: "custom-atoms",
+componentPath: "Container",
+props: {
+  id: "docs"
+},
+children: {
+}
+}
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
 let queryObject = [
@@ -37,24 +41,23 @@ let queryObject = [
 let payload = await getSearchResults(queryObject);
 if(payload) {
   let properties = payload.Properties;
-
-  let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
-  const removedDocs = applicationDocuments.filter(item => !item.active)
-  applicationDocuments = applicationDocuments.filter(item => !!item.active)
-  properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
-  dispatch(prepareFinalObject("Properties[0]", properties[0]));
-  dispatch(
-    prepareFinalObject(
-      "PropertiesTemp[0].removedDocs",
-      removedDocs
-    )
-  );
-  await setDocuments(
-    payload,
-    "Properties[0].propertyDetails.applicationDocuments",
-    "PropertiesTemp[0].reviewDocData",
-    dispatch,'RP'
-  );
+    dispatch(prepareFinalObject("Properties", properties));
+    
+    let containers={}
+    properties[0].propertyDetails.courtCases.forEach((element,index) => { 
+      let courtCaseDetails = getCourtCaseDetails(false,index);
+      containers[index] = getCommonCard({
+        courtCaseDetails
+      });  
+    });
+    dispatch(
+      handleField(
+      "court-case",
+      "components.div.children.courtCaseContainer",
+      "children",
+      containers
+      )
+    );
 }
 }
 
@@ -169,7 +172,7 @@ components: {
             updateUrl: "/csp/property/_update"
           }
         },
-      courtCaseReview
+        courtCaseContainer
     }
   }
 }

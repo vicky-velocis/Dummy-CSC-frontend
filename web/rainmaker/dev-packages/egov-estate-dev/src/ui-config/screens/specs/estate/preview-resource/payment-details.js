@@ -185,7 +185,7 @@ export const headerDiv = {
     }
 }
 
-export const getReviewPayment = (isEditable = true) => {
+export const getReviewPayment = (isEditable = true,parentIndex=0,index=0) => {
     return getCommonGrayCard({
       headerDiv: {
         ...headerDiv,
@@ -207,77 +207,77 @@ export const getReviewPayment = (isEditable = true) => {
         header: groundRentHeader,
         dueDateOfPayment: getLabelWithValue(
           dueDateOfPaymentLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDueDateOfPayment"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grDueDateOfPayment`
           }
         ),
         payable: getLabelWithValue(
           payableLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grPayable"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grPayable`
           }
         ),
         amountOfGR: getLabelWithValue(
           amountOfGRLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountOfGr"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grAmountOfGr`
           }
         ),
         totalGR: getLabelWithValue(
           totalGRLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalGr"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grTotalGr`
           }
         ),
         dateOfDeposit: getLabelWithValue(
           dateOfDepositLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDateOfDeposit"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grDateOfDeposit`
           }
         ),
         delayInPayment: getLabelWithValue(
           delayInPaymentLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDelayInPayment"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grDelayInPayment`
           }
         ),
         interestForDelay: getLabelWithValue(
           interestForDelayLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grInterestForDelay"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grInterestForDelay`
           }
         ),
         totalAmountDueWithInterest: getLabelWithValue(
           totalAmountDueWithInterestLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalAmountDueWithInterest"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grTotalAmountDueWithInterest`
           }
         ),
         amountDepositedGR: getLabelWithValue(
           amountDepositedGRLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountDepositedGr"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grAmountDepositedGr`
           }
         ),
         amountDepositedIntt: getLabelWithValue(
           amountDepositedInttLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountDepositedIntt"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grAmountDepositedIntt`
           }
         ),
         balanceGR: getLabelWithValue(
           balanceGRLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grBalanceGr"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grBalanceGr`
           }
         ),
         balanceIntt: getLabelWithValue(
           balanceInttLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grBalanceIntt"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grBalanceIntt`
           }
         ),
         totalDue: getLabelWithValue(
           totalDueLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalDue"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grTotalDue`
           }
         ),
         receiptNumber: getLabelWithValue(
             receiptNumberLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grReceiptNumber"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grReceiptNumber`
           }
         ),
         receiptDate : getLabelWithValue(
             receiptDateLabel,{
-                jsonPath:"Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grReceiptDate"
+                jsonPath:`Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].grReceiptDate`
             }
         )
       }),
@@ -285,72 +285,72 @@ export const getReviewPayment = (isEditable = true) => {
         header: serviceTaxHeader,
         rateOfStOrGst: getLabelWithValue(
           rateOfStOrGstLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stRateOfStGst"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stRateOfStGst`
           }
         ),
         amountOfGst: getLabelWithValue(
           amountOfGstLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountOfGst"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stAmountOfGst`
           }
         ),
         amountDue: getLabelWithValue(
           amountDueLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDue"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stAmountDue`
           }
         ),
         dateOfDeposit: getLabelWithValue(
           dateOfDepositLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stDateOfDeposit"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stDateOfDeposit`
           }
         ),
         delayInPayment: getLabelWithValue(
           delayInPaymentLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stDelayInPayment"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stDelayInPayment`
           }
         ),
         interestForDelay: getLabelWithValue(
           interestForDelayLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stInterestForDelay"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stInterestForDelay`
           }
         ),
         totalAmountDueWithInterest: getLabelWithValue(
           totalAmountDueWithInterestLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stTotalAmountDueWithInterest"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stTotalAmountDueWithInterest`
           }
         ),
         amountDepositedSt: getLabelWithValue(
           amountDepositedSTLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDepositedStGst"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stAmountDepositedStGst`
           }
         ),
         amountDepositedIntt: getLabelWithValue(
           amountDepositedInttLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDepositedIntt"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stAmountDepositedIntt`
           }
         ),
         balanceSt: getLabelWithValue(
           balanceStLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stBalanceStGst"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stBalanceStGst`
           }
         ),
         balanceIntt: getLabelWithValue(
           balanceInttLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stBalanceIntt"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stBalanceIntt`
           }
         ),
         totalDue: getLabelWithValue(
           totalDueLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stTotalDue"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stTotalDue`
           }
         ),
         receiptNumberAndDate: getLabelWithValue(
             receiptNumberLabel, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stReceiptNumber"
+            jsonPath: `Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stReceiptNumber`
           }
         ),
         receiptDate : getLabelWithValue(
             receiptDateLabel,{
-                jsonPath:"Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stReceiptDate"
+                jsonPath:`Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stReceiptDate`
             }
         )
       })

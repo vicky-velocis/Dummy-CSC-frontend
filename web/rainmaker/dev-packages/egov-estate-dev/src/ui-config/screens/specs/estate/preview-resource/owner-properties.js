@@ -144,7 +144,7 @@ export const headerDiv = {
     }
 }
 
-   export const getOwnerDetails = (isEditable = true) => {
+   export const getOwnerDetails = (isEditable = true,index=0) => {
     return getCommonGrayCard({
       headerDiv: {
         ...headerDiv,
@@ -165,44 +165,44 @@ export const headerDiv = {
       viewFour: getCommonContainer({
         ownerName: getLabelWithValue(
             ownerNameField, {
-              jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.ownerName"
+              jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.ownerName`
             }
           ),
         fatherHusbandName: getLabelWithValue(
             fatherHusbandNameField, {
-              jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianName"
+              jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.guardianName`
             }
           ),
         relationship:getLabelWithValue(
             getRelationshipLabel, {
-              jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.guardianRelation"
+              jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.guardianRelation`
             }
           ),
         address: getLabelWithValue(
             addressField, {
-              jsonPath:  "Properties[0].propertyDetails.owners[0].ownerDetails.address"
+              jsonPath:  `Properties[0].propertyDetails.owners[${index}].ownerDetails.address`
             }
           ),
         mobileNumber: getLabelWithValue(
             mobileNumberField, {
-              jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.mobileNumber"
+              jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.mobileNumber`
             }
           ),
         share: getLabelWithValue(
             shareField, {
-              jsonPath: "Properties[0].propertyDetails.owners[0].share"
+              jsonPath: `Properties[0].propertyDetails.owners[${index}].share`
             }
           ),
         cpNumber: getLabelWithValue(
             cpNumberField, {
-              jsonPath:"Properties[0].propertyDetails.owners[0].cpNumber"
+              jsonPath:`Properties[0].propertyDetails.owners[${index}].cpNumber`
             }
           )
       })
     })
   }
 
-  export const getAllotmentDetails = (isEditable = true) => {
+  export const getAllotmentDetails = (isEditable = true,index = 0) => {
     return getCommonGrayCard({
       headerDiv: {
         ...headerDiv,
@@ -223,17 +223,17 @@ export const headerDiv = {
       viewFour: getCommonContainer({
         possessionDate: getLabelWithValue(
             possessionDateField, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.possesionDate"
+            jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.possesionDate`
             }
         ),
         dateOfAllotment:getLabelWithValue(
             dateOfAllotmentField, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.dateOfAllotment"
+            jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.dateOfAllotment`
             }
         ),
         allotmentNumber: getLabelWithValue(
             allotmentNumberField, {
-            jsonPath: "Properties[0].propertyDetails.owners[0].ownerDetails.allotmentNumber"
+            jsonPath: `Properties[0].propertyDetails.owners[${index}].ownerDetails.allotmentNumber`
             }
         )        
       })

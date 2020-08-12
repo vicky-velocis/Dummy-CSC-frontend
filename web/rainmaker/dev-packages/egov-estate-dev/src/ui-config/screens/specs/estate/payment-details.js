@@ -5,7 +5,7 @@ import {
     getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
@@ -24,11 +24,21 @@ export const headerrow = getCommonContainer({
   })
 });
 
-const paymentReviewDetails = getReviewPayment(false)
+// const paymentReviewDetails = getReviewPayment(false)
 
-export const PaymentDetails = getCommonCard({
-  paymentReviewDetails
-});
+// export const PaymentDetails = getCommonCard({
+//   paymentReviewDetails
+// });
+
+const paymentContainer = {
+  uiFramework: "custom-atoms",
+componentPath: "Container",
+props: {
+  id: "docs"
+},
+children: {
+}
+}
 
 export const searchResults = async (action, state, dispatch, fileNumber) => {
   let queryObject = [
@@ -37,23 +47,28 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
+    dispatch(prepareFinalObject("Properties", properties));
 
-    let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
-    const removedDocs = applicationDocuments.filter(item => !item.active)
-    applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
-    dispatch(prepareFinalObject("Properties[0]", properties[0]));
+    let containers={}
+    properties[0].propertyDetails.owners.forEach((element,parentIndex) => { 
+      if(element.ownerDetails.paymentDetails){
+         let subContainer ={}
+         element.ownerDetails.paymentDetails.forEach((element,index) => { 
+            let paymentListContainer = getReviewPayment(false,parentIndex,index)
+            subContainer[index] = getCommonCard({
+              paymentListContainer
+              }); 
+           })
+           containers[parentIndex] = getCommonCard(subContainer); 
+      }
+    });
     dispatch(
-      prepareFinalObject(
-        "PropertiesTemp[0].removedDocs",
-        removedDocs
+      handleField(
+      "payment-details",
+      "components.div.children.paymentContainer",
+      "children",
+      containers
       )
-    );
-    await setDocuments(
-      payload,
-      "Properties[0].propertyDetails.applicationDocuments",
-      "PropertiesTemp[0].reviewDocData",
-      dispatch,'RP'
     );
   }
 }
@@ -169,7 +184,7 @@ const EstatePaymentDetails = {
               updateUrl: "/csp/property/_update"
             }
           },
-        PaymentDetails
+          paymentContainer
       }
     }
   }

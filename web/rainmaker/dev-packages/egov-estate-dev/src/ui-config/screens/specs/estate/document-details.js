@@ -51,16 +51,19 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     `PropertiesTemp[${index}].reviewDocData`,
     dispatch,'EST'
     );
-   containers[index] =  getReviewDocuments(false,'document-details',`PropertiesTemp[${index}].reviewDocData`);   
-});
-dispatch(
-  handleField(
-    "document-details",
-    "components.div.children.documentContainer",
-    "children",
-    containers
-  )
-);
+    let documentListContainer = getReviewDocuments(false,'document-details',`PropertiesTemp[${index}].reviewDocData`);
+    containers[index] = getCommonCard({
+      documentListContainer
+      }); 
+    });
+    dispatch(
+      handleField(
+      "document-details",
+      "components.div.children.documentContainer",
+      "children",
+      containers
+      )
+    );
   }
 }
 
