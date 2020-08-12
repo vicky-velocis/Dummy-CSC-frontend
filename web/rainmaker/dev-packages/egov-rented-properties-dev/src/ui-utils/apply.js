@@ -194,8 +194,6 @@ let userInfo = JSON.parse(getUserInfo());
       set(queryObject[0], "description", queryObject[0].description);
       let fileStoreId = filedata && filedata.map(item => item.fileStoreId).join(",");
       const fileUrlPayload =  fileStoreId && (await getFileUrlFromAPI(fileStoreId)); 
-      const test = Object.values(await getFileUrlFromAPI("59c95c89-ffbb-4614-b4dc-c758b3247311"))
-      const test2 = decodeURIComponent(getFileUrlFromAPI("59c95c89-ffbb-4614-b4dc-c758b3247311")).split("?")[0].split("/").pop().slice(13)
       const output = filedata.map((fileitem,index) => 
       
         ({
