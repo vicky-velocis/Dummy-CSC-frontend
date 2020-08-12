@@ -23,6 +23,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { searchBill } from "../utils/index";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import { footer } from "./applyResource/employeeSellMeatFooter";
 //import { footer ,footerReview} from "./applyResource/footer";
@@ -340,19 +341,23 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
+  if (response === undefined) {
+    dispatch(setRoute(`/egov-opms/invalidIdErrorPage?applicationNumber=${applicationNumber}&tenantId=${tenantId}`))
+  }
+  else {
+    dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
 
-  dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
+    nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+    localStorageSet("app_noc_status", nocStatus);
+    await setCurrentApplicationProcessInstance(state)
+    HideshowEdit(state, action, nocStatus);
 
-  nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
-  localStorageSet("app_noc_status", nocStatus);
-  await setCurrentApplicationProcessInstance(state)
-  HideshowEdit(state, action, nocStatus);
+    prepareDocumentsView(state, dispatch);
 
-  prepareDocumentsView(state, dispatch);
-
-  if (checkForRole(roles, 'CITIZEN'))
-    setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
-  //setDownloadMenu(state, dispatch);
+    if (checkForRole(roles, 'CITIZEN'))
+      setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+    //setDownloadMenu(state, dispatch);
+  }
 };
 
 let httpLinkPET;
@@ -449,8 +454,19 @@ const screenConfig = {
     //localStorageSet('applicationsellmeatNumber',applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        ""
+      )
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Forward.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Approve.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Reject.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "SellMeat[0].SellMeatDetails.Reassign.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    // searchBill(dispatch, applicationNumber, tenantId);
+
     setSearchResponse(state, action, dispatch, applicationNumber, tenantId);
 
     const queryObject = [

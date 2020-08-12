@@ -639,6 +639,12 @@ const getStatus = (status) => {
         "currentState": "DRAFT"
       };
       break;
+    case "RESENT":
+      return {
+        "dataPayload": {},
+        "currentState": "REASSIGN"
+      };
+      break;
   }
 }
 
@@ -1102,6 +1108,27 @@ export const getGridDataAdvertisement1 = async () => {
 
     }
 
+  }
+  try {
+    const payload = await httpRequest(
+      "post",
+      "/pm-services/noc/_get",
+      "",
+      queryObject,
+      requestBody
+    );
+    return payload;
+  } catch (error) {
+  }
+};
+
+export const getGridDataForSearchFilter = async (data) => {
+  let queryObject = [];
+  var requestBody = {
+    "tenantId": `${getOPMSTenantId()}`,
+    "applicationType": getapplicationType(),
+
+    "dataPayload": data
   }
   try {
     const payload = await httpRequest(
@@ -1847,7 +1874,7 @@ const getReassignStatus = (processInstanceData) => {
 }
 
 // export const checkVisibility = async (state, actions, button, action, buttonPath, extraCondtion) => {
-//   debugger
+//   
 //   let currentState = await getCurrentWFState();
 //   let found = false;
 //   //alert(JSON.stringify(currentState))
@@ -1996,7 +2023,6 @@ export const UpdateStatus = async (state, dispatch, url, queryObject, code) => {
           { labelName: 'Success', labelCode: 'Success' },
           "success"
         ));
-
       dispatch(setRoute(url))
       if (code.applicationStatus == "APPROVEFORWITHDRAW" || code.applicationStatus == "WITHDRAW") {
         callBackForRefund(code);

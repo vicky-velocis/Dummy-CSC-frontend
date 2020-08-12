@@ -11,19 +11,19 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData, truncData } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, numWords, getTextToLocalMapping, getDiffernceBetweenTodayDate, checkForRole, generateReceiptNumber, getTextToLocalMappingChallanSummary, fetchRoleCode, convertEpochToDate, getMdmsEncroachmentSectorData, truncData, integer_to_roman } from "../utils/index";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { searchResultsSummary, serachResultGridSM, searchResultsSummaryHOD, searchVehicleResultsSummary } from "./summaryResource/summaryGrid";
-import { footer} from "./summaryResource/footer";
-import {titlebarfooter} from "./summaryResource/citizenFooter";
+import { footer, takeactionfooter } from "./summaryResource/footer";
+import { titlebarfooter } from "./summaryResource/citizenFooter";
 import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchStoreItemHODMasterChallanData, fetchMdmsData } from "../../../../ui-utils/commons";
 import { setEncroachmentType, getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import store from "ui-redux/store";
 import "./index.css";
-import { adhocPopupReceivePayment, adhocPopupStockViolationForwardHOD } from "./payResource/adhocPopup";
+import { adhocPopupReceivePayment, adhocPopupStockViolationForwardHOD, challanDeletionPopup } from "./payResource/adhocPopup";
 
 let roles = JSON.parse(getUserInfo()).roles;
 
@@ -59,7 +59,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "challanNumber")
+      number: getQueryArg(window.location.href, "applicationNumber")
     }
   },
   applicationStatus: {
@@ -67,7 +67,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationStatusContainer",
     props: {
-      status: "Status : " + getQueryArg(window.location.href, "challanNumber")
+      status: "Status : " + getQueryArg(window.location.href, "applicationNumber")
     }
   },
   paymentStatus: {
@@ -107,8 +107,7 @@ const prepareDocumentsView = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.eChallanDetail[0].document",
     {}
   );
-
-  if (eChallanDocs.length > 0) {
+  if (eChallanDocs[0].documentUuid !== null) {
     eChallanDocs.forEach(element => {
       let docType = element.documentType.search('-') !== -1 ? element.documentType.split('-')[0].trim() : element.documentType
       documentsPreview.push({
@@ -190,12 +189,14 @@ const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appst
           let temp = [];
           if (item['violationItemUuid'] === element['violationItemUuid']) {
             let defectqty = parseInt(element['quantity']) - parseInt(item['quantity']);
-
-            temp[0] = truncData(item['itemName'],25);
+            let intactQty = parseInt(item['quantity']) - parseInt(item['damagedQuantity']);
+            temp[0] = truncData(item['itemName'], 25);
             temp[1] = element['quantity'];
             temp[2] = element['remark'];
-            temp[3] = item['quantity'];
-            temp[4] = defectqty === 0 ? '0' : defectqty;
+            temp[3] = intactQty;
+            temp[4] = item['damagedQuantity'];
+            // temp[3] = item['quantity'];
+            // temp[4] = defectqty === 0 ? '0' : defectqty;
             temp[5] = item['remark'];
             if (rolecode === 'challanHOD') {
               temp[6] = item['isVerified'];
@@ -215,7 +216,7 @@ const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appst
     } else {
       SeizedItemDetailList.map(function (item, index) {
         let temp = [];
-        temp[0] = truncData(item['itemName'],25);
+        temp[0] = truncData(item['itemName'], 25);
         temp[1] = item['quantity'];
         temp[2] = item['remark'];
         temp[3] = '';
@@ -295,6 +296,8 @@ const setReceiveButtonVisibleTrueFalse = (isVisible, dispatch, appstatus) => {
     case "CHALLAN ISSUED":
     case "SENT TO STORE":
     case "CLOSED":
+    case "RELEASED ON GROUND":
+    case "RELEASED FROM STORE":
       dispatch(
         handleField(
           "search-preview",
@@ -333,7 +336,7 @@ const setReceiveButtonVisibleTrueFalse = (isVisible, dispatch, appstatus) => {
       "search-preview",
       "components.div.children.citizenFooter.children.submitButton",
       "visible",
-      appstatus === 'CLOSED' ? false : isVisible
+      (appstatus === 'RELEASED FROM STORE' || appstatus === 'RELEASED ON GROUND' || appstatus === 'CLOSED') ? false : isVisible
 
     )
   );
@@ -578,7 +581,7 @@ const setSearchResponse = async (
   let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
     if (encroachRecord.code == sectorval.encroachmentType)
       return true;
-  });    
+  });
 
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
 
@@ -615,7 +618,7 @@ const setSearchResponse = async (
   setEncroachmentType(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", ''));
   let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
   let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'PENDING');
-  let appstatusVisible = appstatus === 'CLOSED' ? false : true;
+  let appstatusVisible = (appstatus === 'RELEASED FROM STORE' || appstatus === 'RELEASED ON GROUND' || appstatus === 'CLOSED') ? false : true;
   let receiveVisible = appstatus === "PENDING FOR AUCTION" ? false : paymentStatus === 'PAID' ? false : true;
   let onGroundPaymentVisible = appstatus !== 'CHALLAN ISSUED' ? false : true;
   let SentToStoreVisible = appstatus !== 'CHALLAN ISSUED' ? false : paymentStatus === 'PAID' ? false : true;
@@ -631,6 +634,8 @@ const setSearchResponse = async (
 
   switch (appstatus) {
     case "CLOSED":
+    case "RELEASED ON GROUND":
+    case "RELEASED FROM STORE":
       setReturnCloseButtonVisibleTrueFalse(appstatusVisible, dispatch);
       setAddToStoreButtonVisibleTrueFalse(appstatusVisible, dispatch);
       setHodApprovalButtonVisibleTrueFalse(appstatusVisible, dispatch);
@@ -716,6 +721,13 @@ const setSearchResponseForNocCretificate = async (
   let pdfCreateKey = '';
   let tenant = tenantId.length > 2 ? tenantId.split('.')[0] : tenantId;
 
+  let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+  let violationEncroached = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", "NA")
+
+  let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+    if (encroachRecord.code == violationEncroached)
+      return true;
+  });
 
   if (nocRemarks !== "") {
     let data = {};
@@ -736,11 +748,9 @@ const setSearchResponseForNocCretificate = async (
       //)
     );
 
-    data.encroachmentType = nullToNa(
-      get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", "NA")
-    );
+    data.encroachmentType = nullToNa(__FOUNDENCROACH.name);
 
-    switch (data.encroachmentType) {
+    switch (violationEncroached) {
       case "Unauthorized/Unregistered Vendor":
         encorachmentvalue = "unregisteredEchallan";
         pdfCreateKey = "unregistered-ec";
@@ -805,13 +815,26 @@ const setSearchResponseForNocCretificate = async (
       get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].siName", "NA")
     );
 
+    let article = []
     if (data.encroachmentType !== "Seizure of Vehicles") {
       let violationitemList = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", [])
       for (let index = 0; index < violationitemList.length; index++) {
         const element = violationitemList[index];
-        let articleobj = "article" + [index + 1];
-        data[articleobj] = element.itemName + " - " + element.quantity + " - " + element.remark;
+        // let articleobj = "article" + [index + 1];
+        let artilceName = "(" + integer_to_roman(index + 1) + ")  " + truncData(element.itemName, 25) + " - " + element.quantity + " - " + truncData(element.remark, 25);
+        if (artilceName.length < 80) {
+          while (artilceName.length < 160) {
+            artilceName = artilceName + " ";
+          }
+        }
+        article.push(artilceName);
       }
+      let art = "";
+      article.forEach(element => {
+        art += element;
+      });
+
+      data.article = art;
     }
 
     data.placeTime = nullToNa(
@@ -852,23 +875,28 @@ const setSearchResponseForNocCretificate = async (
   }
   if (paymentStatus === 'PAID') {
     let violatorDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
-
-    let numbertowords = numWords(violatorDetails.challanAmount) + ' ' + 'only.'
+    let paydetails = get(state, 'screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].billAccountDetails', []);
+    let numbertowords = numWords(violatorDetails.totalChallanAmount) + ' ' + 'only'
     //NOC_Receipts
     let paymentdata = {
       "receiptNo": generateReceiptNumber(violatorDetails.challanId),
       "dated": convertEpochToDate(violatorDetails.paymentDetails.lastModifiedTime),
       "violatorName": violatorDetails.violatorName, // get(state, 'screenConfiguration.preparedFinalObject.echallanDetail.violatorName', ''),
-      "amount": violatorDetails.challanAmount, //get(state, 'screenConfiguration.preparedFinalObject.echallanDetail.challanAmount', '0'),
+      "amount": violatorDetails.totalChallanAmount, //get(state, 'screenConfiguration.preparedFinalObject.echallanDetail.challanAmount', '0'),
       "amountInWord": numbertowords,
       "paymentMode": violatorDetails.paymentDetails.paymentMode,
       "memoNo": violatorDetails.challanId,
+      "fineAmount": violatorDetails.challanAmount,//paydetails[0].taxHeadCode === 'EC_ECHALLAN_FEE' ? paydetails[0].amount : paydetails[1].amount,
+      "storageAmount": violatorDetails.penaltyAmount, //paydetails[1].taxHeadCode === 'EC_ECHALLAN_PENALTY' ? paydetails[1].amount : paydetails[0].amount,
       //"smName" : nullToNa(JSON.parse(getUserInfo()).name, 'NA')
     }
 
     let getFileStoreIdFor_RECEIPT = { "paymentEchallan": [paymentdata] }
 
     let pdfCreateKey = "challanReceipt-ec";
+    if (violatorDetails.encroachmentType === "Seizure of Vehicles") {
+      pdfCreateKey = "challanReceiptVehicle-ec"
+    }
 
     const response1_RECEIPT = await getSearchResultsForNocCretificate([
       { key: "tenantId", value: tenantId },
@@ -955,7 +983,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "challanNumber");
+    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setapplicationType("egov-echallan");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
@@ -990,18 +1018,6 @@ const screenConfig = {
             }
           }
         },
-
-        // body: checkForRole(roles, 'challanSM') ? getCommonCard({
-        //   estimateSummary: estimateSummary,
-        //   violationsSummary: violationsSummary,
-        //   violatorSummary: violatorSummary,
-        //   documentsSummary: documentsSummary
-        // }) : checkForRole(roles, 'challanHOD') ? getCommonCard({
-        //   estimateSummary: estimateSummary,
-        //   violationsSummary: violationsSummary,
-        //   violatorSummary: violatorSummary,
-        //   documentsSummary: documentsSummary
-        // }) :
         body: getCommonCard({
           estimateSummary: estimateSummary,
           violationsSummary: violationsSummary,
@@ -1018,6 +1034,8 @@ const screenConfig = {
           process.env.REACT_APP_NAME === "Citizen" ? titlebarfooter : {},
         employeeFooter:
           process.env.REACT_APP_NAME === "Employee" ? footer : {},
+        employeeTakeActionFooter:
+          process.env.REACT_APP_NAME === "Employee" ? takeactionfooter : {},
 
       }
     },
@@ -1047,6 +1065,20 @@ const screenConfig = {
       children: {
         popup: adhocPopupStockViolationForwardHOD
       }
+    },
+    deleteConfirmation: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "DeleteConfirmationContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: challanDeletionPopup
+      },
+      visible: true
     },
   }
 };

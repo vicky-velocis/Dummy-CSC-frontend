@@ -126,13 +126,17 @@ export const header = getCommonContainer({
         mdmsBody
       );
       // document type 
+      //set url in case of edit
 
+      let fileUrl =
+      get(state, "screenConfiguration.preparedFinalObject.documentsPreview[0].link",'') 
      let  DocumentType_PriceList= [
         {
             code: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
             isMandatory: true, 
             required:true,
-            documentType:"STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION"  ,         
+            documentType:"STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION"  , 
+            url: fileUrl,       
             active: true
         },]
         dispatch(

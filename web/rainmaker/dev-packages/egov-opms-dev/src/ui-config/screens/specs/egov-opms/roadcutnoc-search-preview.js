@@ -30,6 +30,7 @@ import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 import { roadcutapplicantSummary } from "./summaryResource/roadcutapplicantSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 import { checkForRole } from "../utils";
 import { httpRequest } from "../../../../ui-utils";
@@ -106,23 +107,48 @@ const getMdmsData = async (action, state, dispatch) => {
           moduleName: "egpm",
           masterDetails: [
             {
-              name: "color"
+              name: "roadCutDivision"
             },
             {
               name: "sector"
-            },
-            {
-              name: "breed"
-            },
-            {
-              name: "sex"
-            },
-            {
-              name: "age"
             }
           ]
         },
         { moduleName: "RoadCutNOC", masterDetails: [{ name: "RoadCutNOCRemarksDocuments" }] }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+
+
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
+const getMdmsDataForTaxCode = async (action, state, dispatch) => {
+
+  let tenantId = getOPMSTenantId();
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "egpm",
+          masterDetails: [
+            {
+              name: "roadCutDivision"
+            }
+          ]
+        }
       ]
     }
   };
@@ -368,9 +394,9 @@ const HideshowEdit = (state, action, nocStatus, amount, applicationNumber) => {
   //   checkVisibility("INITIATED,REASSIGNTOEE,REASSIGNTOJE,REASSIGNTOSDO,REASSIGNTOSE") ? true : false
   // );            
   set(state, 'screenConfiguration.preparedFinalObject.WFStatus', []);
-  checkVisibility(state, "REJECT,REJECTED", "reject", action, "screenConfig.components.div.children.footerEmp.children.reject.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
+  checkVisibility(state, "REJECT,REJECTED", "reject", action, "screenConfig.components.div.children.footerEmp.children.reject.visible", (amount < 50000 && checkForRole(roles, 'EE') && (nocStatus == "REVIEWAPPROVEEE" || nocStatus == "REASSIGNAPPROVEEE")) || (amount < 200000 && checkForRole(roles, 'SE') && (nocStatus == "REVIEWAPPROVESE") || nocStatus == "REASSIGNAPPROVESE") || checkForRole(roles, 'CE'))
 
-  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footerEmp.children.approve.visible", (amount < 50000 && checkForRole(roles, 'EE') && nocStatus == "REVIEWAPPROVEEE") || (amount < 200000 && checkForRole(roles, 'SE') && nocStatus == "REVIEWAPPROVESE") || checkForRole(roles, 'CE'))
+  checkVisibility(state, "APPROVED", "approve", action, "screenConfig.components.div.children.footerEmp.children.approve.visible", (amount < 50000 && checkForRole(roles, 'EE') && (nocStatus == "REVIEWAPPROVEEE" || nocStatus == "REASSIGNAPPROVEEE")) || (amount < 200000 && checkForRole(roles, 'SE') && (nocStatus == "REVIEWAPPROVESE" || nocStatus == "REASSIGNAPPROVESE")) || checkForRole(roles, 'CE'))
 
   checkVisibility(state, "REASSIGN,REASSIGNAPPROVESE,REASSIGNAPPROVEEE,REASSIGNTOJE,REASSIGNTOSDO", "reassign", action, "screenConfig.components.div.children.footerEmp.children.reassign.visible", null)
 
@@ -403,17 +429,16 @@ const HideshowEdit = (state, action, nocStatus, amount, applicationNumber) => {
       : false
   );
 
-  // set(
-  //   action,
-  //   "screenConfig.components.div.children.footer.children.submitButton.visible",
-  //   checkForRole(roles, 'CITIZEN') ?
-  //     nocStatus === "DRAFT" || nocStatus === "REASSIGN" ?
-  //       true
-  //       : false
-  //     : false
-  // );
-
-
+  set(
+    action,
+    "screenConfig.components.div.children.takeactionfooter.children.actionbutton.visible",
+    checkForRole(roles, 'CITIZEN') ?
+      nocStatus === "DRAFT" || nocStatus === "REASSIGN" || nocStatus === "APPROVED" ?
+        true
+        : false
+      : true
+  );
+  //screenConfiguration.screenConfig["roadcutnoc-search-preview"].
 }
 
 const setSearchResponse = async (state, action, dispatch, applicationNumber, tenantId) => {
@@ -421,46 +446,64 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-
-  dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-  // Set Institution/Applicant info card visibility
-  let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
-
-  let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
-  localStorageSet("app_noc_status", nocStatus);
-  localStorageSet("applicationStatus", applicationStatus);
-  let amount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].amount", {});
-  let performancebankguaranteecharges = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].performancebankguaranteecharges", {});
-  let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
-  await setCurrentApplicationProcessInstance(state);
-  HideshowEdit(state, action, nocStatus, amount, applicationNumber);
-  if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
-    searchBill(dispatch, applicationNumber, tenantId);
-  } else {
-    if (amount > 0) {
-      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", amount));
-      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", gstamount));
-      dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", performancebankguaranteecharges));
-      if (checkForRole(roles, 'CITIZEN')) {
-        let res = await createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId);
-        if (res != null) {
-          const response = await fetchBill([
-            { key: "tenantId", value: tenantId },
-            { key: "consumerCode", value: applicationNumber },
-            { key: "businessService", value: "OPMS.ROADCUTNOC" }
-          ], dispatch);
-        }
-      }
-    } else {
-      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", {}));
-      dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", {}));
-    }
+  if (response === undefined) {
+    dispatch(setRoute(`/egov-opms/invalidIdErrorPage?applicationNumber=${applicationNumber}&tenantId=${tenantId}`))
   }
-  prepareDocumentsView(state, dispatch);
+  else {
+    dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
+    // Set Institution/Applicant info card visibility
+    let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
 
-  if (checkForRole(roles, 'CITIZEN'))
-    setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+    let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+    localStorageSet("app_noc_status", nocStatus);
+    localStorageSet("applicationStatus", applicationStatus);
+    let amount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].amount", {});
+    let performancebankguaranteecharges = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].performancebankguaranteecharges", {});
+    let gstamount = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].gstamount", {});
 
+    await setCurrentApplicationProcessInstance(state);
+    HideshowEdit(state, action, nocStatus, amount, applicationNumber);
+    if (nocStatus === 'PAID' && checkForRole(roles, 'CITIZEN')) {
+      searchBill(dispatch, applicationNumber, tenantId);
+    } else {
+      if (amount > 0) {
+        dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", amount));
+        dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", gstamount));
+        dispatch(prepareFinalObject("OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", performancebankguaranteecharges));
+        if (checkForRole(roles, 'CITIZEN')) {
+          await getMdmsDataForTaxCode(action, state, dispatch)
+          let division = JSON.parse(response.nocApplicationDetail[0].applicationdetail).division;
+          let divisionMDMS = get(
+            state,
+            "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egpm.roadCutDivision",
+            []
+          );
+          let divisionCode = divisionMDMS.find(item => {
+            return item.name == division;
+          });
+          let res = await createDemandForRoadCutNOC(state, dispatch, applicationNumber, tenantId, divisionCode.taxCode);
+          if (res != null) {
+            dispatch(prepareFinalObject("OPMS.RODCUTNOC.BusinessServiceCode", `OPMS.ROADCUTNOC_${divisionCode.taxCode}`));
+            const response = await fetchBill([
+              { key: "tenantId", value: tenantId },
+              { key: "consumerCode", value: applicationNumber },
+              {
+                key: "businessService", value: `OPMS.ROADCUTNOC_${divisionCode.taxCode}`
+              }
+            ], dispatch);
+          }
+
+        }
+      } else {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", {}));
+        dispatch(prepareFinalObject("applyScreenMdmsData.estimateCardData", {}));
+      }
+    }
+    prepareDocumentsView(state, dispatch);
+
+    if (checkForRole(roles, 'CITIZEN'))
+      setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+  }
 };
 
 let httpLinkPET;
@@ -598,6 +641,19 @@ const screenConfig = {
     setapplicationNumber(applicationNumber); //localStorage.setItem('ApplicationNumber', applicationNumber); , applicationNumber)
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        {}
+      )
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.FieldRoadCutForwardRemarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardAmount", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardGstAmount", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.RoadCutForwardPerformanceBankGuaranteeCharges", "");
+      set(state.screenConfiguration.preparedFinalObject, "OPMS[0].RoadCutUpdateStautsDetails.additionalDetail.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
 
     //setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
@@ -608,21 +664,6 @@ const screenConfig = {
       { key: "businessServices", value: "ROADCUTNOC" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
-    // if (checkForRole(roles, 'JE')) {
-    //   set(
-    //     action,
-    //     "screenConfig.components.adhocDialogForward.children.popup",
-    //     adhocPopupForJeRoadCutForward
-    //   );
-    // }
-    // else {
-    //   set(
-    //     action,
-    //     "screenConfig.components.adhocDialogForward.children.popup",
-    //     adhocPopupForSeRoadCutForward
-    //   );
-    // }
     getMdmsData(action, state, dispatch).then(response => {
       prepareDocumentsUploadData(state, dispatch, 'popup_rodcut');
     });

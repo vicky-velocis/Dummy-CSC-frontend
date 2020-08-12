@@ -8,6 +8,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { getTenantId } from "../../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
+import {  showHideAdhocPopupopmsReject } from "../../utils";
 
 
 
@@ -136,9 +137,16 @@ export const footer = getCommonApplyFooter({
         }
       }
     },
+    // onClickDefination: {
+    //   action: "condition",
+    //   callBack: cancelNocApplication
+    // },
     onClickDefination: {
       action: "condition",
-      callBack: cancelNocApplication
+       callBack: (state, dispatch) =>{
+        
+            showHideAdhocPopupopmsReject(state, dispatch, "summary", "pressMaster")
+    }
     },
     visible:getQueryArg(window.location.href,"status")==="EXPIRED"  || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" ?false:true
 

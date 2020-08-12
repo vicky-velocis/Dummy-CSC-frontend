@@ -46,6 +46,7 @@ import {
   getSearchResultsForNocCretificateDownload, preparepopupDocumentsUploadData, prepareDocumentsUploadData, checkVisibility, setCurrentApplicationProcessInstance
 } from "../../../../ui-utils/commons";
 import { citizenFooter } from "./searchResource/citizenFooter";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 
 let roles = JSON.parse(getUserInfo()).roles
@@ -296,26 +297,29 @@ const setSearchResponse = async (state, dispatch, action, applicationNumber, ten
     { key: "tenantId", value: tenantId },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-
-  dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
-  dispatch(prepareFinalObject("nocApplicationReceiptDetail", get(response, "nocApplicationDetail", [])));
-  dispatch(prepareFinalObject("nocApplicationCertificateDetail", get(response, "nocApplicationDetail", [])));
-
-  dispatch(prepareFinalObject("PetNoc[0].PetNocDetails.Approve.badgeNumber", JSON.parse(response.nocApplicationDetail[0].applicationdetail).badgeNumber));
-
-  let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
-  localStorageSet("app_noc_status", nocStatus);
-  await setCurrentApplicationProcessInstance(state);
-  HideshowEdit(state, action, nocStatus);
-
-
-  prepareDocumentsView(state, dispatch);
-
-  if (checkForRole(roles, 'CITIZEN')) {
-
-    setSearchResponseForNocCretificate(state, dispatch, action, applicationNumber, tenantId);
+  if (response === undefined) {
+    dispatch(setRoute(`/egov-opms/invalidIdErrorPage?applicationNumber=${applicationNumber}&tenantId=${tenantId}`))
   }
+  else {
+    dispatch(prepareFinalObject("nocApplicationDetail", get(response, "nocApplicationDetail", [])));
+    dispatch(prepareFinalObject("nocApplicationReceiptDetail", get(response, "nocApplicationDetail", [])));
+    dispatch(prepareFinalObject("nocApplicationCertificateDetail", get(response, "nocApplicationDetail", [])));
 
+    dispatch(prepareFinalObject("PetNoc[0].PetNocDetails.Approve.badgeNumber", JSON.parse(response.nocApplicationDetail[0].applicationdetail).badgeNumber));
+
+    let nocStatus = get(state, "screenConfiguration.preparedFinalObject.nocApplicationDetail[0].applicationstatus", {});
+    localStorageSet("app_noc_status", nocStatus);
+    await setCurrentApplicationProcessInstance(state);
+    HideshowEdit(state, action, nocStatus);
+
+
+    prepareDocumentsView(state, dispatch);
+
+    if (checkForRole(roles, 'CITIZEN')) {
+
+      setSearchResponseForNocCretificate(state, dispatch, action, applicationNumber, tenantId);
+    }
+  }
 
 };
 
@@ -531,6 +535,17 @@ const screenConfig = {
     setapplicationNumber(applicationNumber);
     const tenantId = getQueryArg(window.location.href, "tenantId");
     setOPMSTenantId(tenantId);
+    if (JSON.parse(getUserInfo()).type === "EMPLOYEE") {
+      set(state,
+        "screenConfiguration.preparedFinalObject.documentsUploadRedux[0]",
+        ""
+      )
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.additionalDetail.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Reaasign.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Reject.remarks", "");
+      set(state.screenConfiguration.preparedFinalObject, "PetNoc[0].PetNocDetails.Approve.remarks", "");
+    }
+
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, action, applicationNumber, tenantId);

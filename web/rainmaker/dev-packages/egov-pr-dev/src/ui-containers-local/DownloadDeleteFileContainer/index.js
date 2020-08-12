@@ -14,7 +14,10 @@ import { connect } from "react-redux";
 import get from "lodash/get";
 import "./index.scss";
 import "./index.css";
- 
+import store from "ui-redux/store";
+import {  showHideAdhocPopupopmsReject } from "../../ui-config/screens/specs/utils";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 const styles = {
   whiteCard: {
     maxWidth: 250,
@@ -30,7 +33,8 @@ const styles = {
     paddingTop: 7
   },
   body2: {
-    wordWrap: "break-word"
+	wordWrap: "break-word",
+	wordBreak: "break-all",
   }
 };
 
@@ -40,12 +44,19 @@ const documentTitle = {
   fontSize: "16px",
   fontWeight: 400,
   letterSpacing: "0.67px",
-  lineHeight: "19px"
+  lineHeight: "19px",
+  wordBreak: "break-all",
 };
 
 class DownloadDeleteFileContainer extends Component {
+handleEvent1=(fileid)=>{
+	store.dispatch(prepareFinalObject("fileid",fileid));
 
+	showHideAdhocPopupopmsReject(store.getState(), store.dispatch, "library-summary", "pressMaster")
+
+}
   handleEvent = (fileid) => {
+
    // alert("Bind Delete API : File ID" + fileid);
 		if(confirm("Are you sure you want to remove this media?"))
 	{
@@ -133,7 +144,7 @@ class DownloadDeleteFileContainer extends Component {
 						style={{padding: "15px 35px 15px 15px", margin:"10px", background:"#fff"}}
 					  >
 					  <Grid xs={12}>
-					  <Button  class="deletemedia" data={fileid} onClick={() => {this.handleEvent(item.fileStoreId)}} documentData={documentData} {...rest}  style={{border:"none",position:"relative",margin:"0% 90%",width:"50px",color:"RED",background:"TRANSPARENT"}}> <span class="material-icons"><i class="material-icons">clear</i></span></Button>
+					  <Button  class="deletemedia" data={fileid} onClick={() => {this.handleEvent1(item.fileStoreId)}} documentData={documentData} {...rest}  style={{border:"none",position:"relative",margin:"0% 90%",width:"50px",color:"RED",background:"TRANSPARENT"}}> <span class="material-icons"><i class="material-icons">clear</i></span></Button>
 					  </Grid>
 						<Grid xs={12}>
 						  <LabelContainer

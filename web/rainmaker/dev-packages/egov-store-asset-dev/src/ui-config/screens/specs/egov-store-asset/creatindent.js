@@ -77,8 +77,9 @@ export const header = getCommonContainer({
           {
             moduleName: "store-asset",
             masterDetails: [
-              { name: "Material" },
-              { name: "InventoryType", },
+              { name: "Material" }, //filter: "[?(@.active == true)]" },
+              { name: "InventoryType", filter: "[?(@.active == true)]" },
+              { name: "IndentPurpose"},// filter: "[?(@.active == true)]" },
               
             ],
           },

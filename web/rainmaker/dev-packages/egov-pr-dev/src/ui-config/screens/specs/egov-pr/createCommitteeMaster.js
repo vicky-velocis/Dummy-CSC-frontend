@@ -24,7 +24,7 @@ import {
   import get from "lodash/get";
   import {
     prepareDocumentsUploadData,
-    getSearchResults,
+    
     furnishResponse_Committee,
     setApplicationNumberBox,
     getsampleemailtemplate,
@@ -315,8 +315,9 @@ dispatch(
       const step = getQueryArg(window.location.href, "step");
       localStorageSet("committeelist",[]);
       localStorageSet("committeelistAll",[]);
-	  
-      
+     
+  lSRemoveItem("selectedDepartmentsInvite");
+  lSRemoveItemlocal("selectedDepartmentsInvite");
       //Set Module Name
       set(state, "screenConfiguration.moduleName", "PublicRelations");
   
