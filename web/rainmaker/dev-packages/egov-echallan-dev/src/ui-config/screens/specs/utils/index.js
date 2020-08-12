@@ -1367,6 +1367,7 @@ export const clearlocalstorageAppDetails = (state) => {
   lSRemoveItemlocal('ecroachmentType');
   lSRemoveItemlocal('FineMasterGrid');
   lSRemoveItemlocal('ItemMasterGrid');
+  lSRemoveItemlocal('EChallanPaymentMailSent');
   //lSRemoveItemlocal('eChallanMasterGrid');
 
   lSRemoveItem('applicationType');
@@ -1376,6 +1377,7 @@ export const clearlocalstorageAppDetails = (state) => {
   lSRemoveItem('ecroachmentType');
   lSRemoveItem('FineMasterGrid');
   lSRemoveItem('ItemMasterGrid');
+  lSRemoveItem('EChallanPaymentMailSent');
   //lSRemoveItem('eChallanMasterGrid');
 }
 
