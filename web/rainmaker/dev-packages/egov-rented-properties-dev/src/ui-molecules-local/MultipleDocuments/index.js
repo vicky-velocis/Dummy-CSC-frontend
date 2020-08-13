@@ -101,13 +101,25 @@ class MultipleDocuments extends Component {
                   <CardContent>
                   <Grid container>
                   <Grid xs={12} sm={12} style={{display: "flex", justifyContent: "flex-end"}}>
-                  <Grid xs={12} sm={12} style={{textAlign: "left"}}>
-                    {!btnhide && (<LabelContainer   
-                      labelName= {`Notice Type : ${datum.noticeType}`} 
+                    {btnhide &&
+                      (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
+                  <Button  mt={1} mr={0} color="primary"  variant="contained"  
+                  onClick={() => { 
+                    dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
+                    dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
+                    Create Violation
+                    </Button>
+                    </Grid>)
+                    } 
+                 </Grid>
+                 <Grid xs={12} sm={12} >
+                   {!btnhide && (<LabelContainer   
+                      labelName= {`Notice Type : ${datum.noticeType}`}
                       style={documentTitle}
-                  />)
-                    }
-                  <br></br>
+                      />)
+
+                   }
+                   <br></br>
                   {!btnhide && (<LabelContainer   
                       labelName= "Notice ID : "
                       style={documentTitle}
@@ -118,12 +130,12 @@ class MultipleDocuments extends Component {
                       style={documentTitle}
                   />)
                     }
-                  {btnhide && datum.id &&  (<Grid xs={6} align="left">
+                  {btnhide && !!datum.notices.length &&  (<Grid xs={6} align="left">
                   <Button color="primary"
                   onClick={() => { 
                     dispatch(setRoute(`/rented-properties/notices?tenantId=${getTenantId()}`)); 
                     }}> 
-                     Notice ID : {datum.id}
+                     Notice ID : {datum.notices.join(",")}
                     </Button>
                     </Grid>)
                     }
@@ -139,32 +151,7 @@ class MultipleDocuments extends Component {
                         style={documentTitle}
                     />)
                     }
-                    
-
                     </Grid> 
-                    {btnhide &&
-                      (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
-                  <Button  mt={1} mr={0} color="primary"  variant="contained"  
-                  onClick={() => { 
-                    dispatch(setRoute(`/rented-properties/notice-violation?tenantId=${getTenantId()}`)); 
-                    dispatch(prepareFinalObject("SingleImage[0]", datum));}}> 
-                    Create Violation
-                    </Button>
-                    </Grid>)
-                    } 
-
-                  {!btnhide && 
-                      (<Grid xs={12} sm={4} style={{textAlign: "right"}}>
-                  <Button  mt={1}  color="primary"  variant="contained"  
-                  onClick={() => { 
-                    dispatch(setRoute(`/rented-properties/notice-recovry?tenantId=${getTenantId()}`)); 
-                    }}> 
-                    Recovery Notice 
-                    </Button>
-                    </Grid>)
-                    } 
-                  
-                 </Grid>
                       {datum.applicationDocuments.map((content) => (
                           <Grid xs={6} sm={3} 
                           style={{
@@ -191,29 +178,16 @@ class MultipleDocuments extends Component {
                           </Grid>
                           <Grid container>
                             <Grid xs={6} className={classes.subtext}>
-                              {btnhide && (<Typography className={classes.body2}>{content.url.split("?")[0].split("/").pop().slice(13)}</Typography>)}
-                              {!btnhide && (<Typography className={classes.body2}>{content.fileStoreId && decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13)}</Typography>)}
+                              {btnhide && (<Typography className={classes.body2}>{!!content.url ? content.url.split("?")[0].split("/").pop().slice(13) : content.fileStoreId ? decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13) : ""}</Typography>)}
+                              {!btnhide && (<Typography className={classes.body2}>{!!content.url ? content.url.split("?")[0].split("/").pop().slice(13) : content.fileStoreId ? decodeURIComponent(getFileUrl(content.fileStoreId)).split("?")[0].split("/").pop().slice(13) : ""}</Typography>)}
                             </Grid>
                             <Grid xs={6} align="right">
-                              {
-                                btnhide && (
-                                  <Button href={content.url} color="primary">
-                                  Download
-                                </Button>
-                                )
-                              }
-                              {
-                                !btnhide && (
-                                  <Button href={getFileUrlFromAPI(content.fileStoreId)} color="primary">
-                                  Download
-                                </Button>
-                                )
-                              }
-                             
+                              <Button href={!!content.url ? content.url : getFileUrlFromAPI(content.fileStoreId)} color="primary">
+                              Download
+                              </Button>
                             </Grid>
                           </Grid>
                           </Grid>
-                      
                           </Grid>)
                       )}
                   </Grid>
