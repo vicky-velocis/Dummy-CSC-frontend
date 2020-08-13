@@ -142,14 +142,6 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         "transit-site-images"
       )
       
-      const isImageDetailsValid = validateFields(
-        "components.div.children.formwizardFirstStep.children.imageUploadDetailsProperties.children.cardContent.children.uploadimage.children.cardContent.children",       
-             
-        state,
-        dispatch,
-        "transit-site-images"
-      )
-
       const isDetailsValid = validateFields(
         "components.div.children.formwizardFirstStep.children.transitSitePropertyDetails.children.cardContent.children.detailsContainer.children",       
              
@@ -158,7 +150,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         "transit-site-images"
       )
       
-      if(!!isOwnerDetailsValid && !!isImageDetailsValid && !!isDetailsValid) {
+      if(!!isOwnerDetailsValid  && !!isDetailsValid) {
         const propertyId = get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications[0].property.id");
         let res = true;
         if(!propertyId) {
@@ -178,7 +170,17 @@ const callBackForNextTransitImages = async(state, dispatch) => {
        isFormValid = false;
      } 
     } 
-
+    if(isFormValid){
+      debugger
+    const uploadedDocData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PropertyImagesApplications[0].applicationDocuments",
+      []
+  );
+if(uploadedDocData.length!=6){
+  isFormValid = false;
+}
+}
     // isFormValid = await submittransitsiteimages(state, dispatch);
       if (isFormValid) {
         const transitData = get(
