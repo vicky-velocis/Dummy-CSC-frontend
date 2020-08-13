@@ -11,14 +11,6 @@ const getAcknowledgementCard = (
   serviceRequestId,
   tenant
 ) => {
-
-  dispatch(
-    toggleSnackbar(
-      false,
-      { labelName: "Please wait while your request being is generated", labelKey: "HC_SERVICE_REQUEST_BEING_GENERATED" },
-      "warning"
-    )
-  );
     return {
  
       serviceRequestSuccessCard: {
@@ -29,20 +21,20 @@ const getAcknowledgementCard = (
         },
         children: {
           card: acknowledgementCard({
-            icon: "done",
-            backgroundColor: "#39CB74",
+            icon: "close",
+            backgroundColor: "#E54D42",
             header: {
-              labelName: "Service Request Updated Successfully",
-              labelKey: "HC_SERVICE_REQUEST_UPDATE_MESSAGE"
+              labelName: "Authorisation Invalid",
+              labelKey: "HC_SERVICE_REQUEST_AUTHORIZATION_MESSAGE_MAIN"
             },
-            // body: {
-            //   labelName:"Service Request Updated Successfully",
-            //   labelKey: "HC_SERVICE_REQUEST_UPDATE_MESSAGE"
+            body: {
+              labelName:"Invalid User for this service request",
+              labelKey: "HC_SERVICE_REQUEST_AUTHORIZATION_MESSAGE"
+            },
+            // tailText: {
+            //   labelName: "Service Request ID",
+            //   labelKey: "HC_SERVICE_REQUEST_ID"
             // },
-            tailText: {
-              labelName: "Service Request ID",
-              labelKey: "HC_SERVICE_REQUEST_ID"
-            },
             number: serviceRequestId,
           })
         }
@@ -71,6 +63,7 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    
     const serviceRequestId = getQueryArg(window.location.href, "serviceRequestId");
     
     const tenant = "ch";
