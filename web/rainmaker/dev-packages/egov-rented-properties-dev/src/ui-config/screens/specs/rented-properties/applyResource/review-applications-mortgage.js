@@ -60,6 +60,16 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
                     jsonPath: "MortgageApplications[0].applicant[0].phone" 
                 }
             ),
+            guardian: getLabelWithValue(
+                {
+                    labelName: "Father/ Husband's Name",
+                    labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
+                },
+                {
+                    jsonPath: "MortgageApplications[0].applicant[0].guardian" 
+                }
+            ),
+            
             email: getLabelWithValue(
                 {
                     labelName: "Email",
@@ -108,13 +118,13 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
                 },
                 { jsonPath: "MortgageApplications[0].property.transitNumber" }
             ),
-            allotmentNumber: getLabelWithValue(
-                {
-                    labelName: "Allotment Number",
-                    labelKey: "RP_ALLOTMENT_NUMBER"
-                },
-                {jsonPath: "MortgageApplications[0].allotmentNumber"}
-            ),
+            // allotmentNumber: getLabelWithValue(
+            //     {
+            //         labelName: "Allotment Number",
+            //         labelKey: "RP_ALLOTMENT_NUMBER"
+            //     },
+            //     {jsonPath: "MortgageApplications[0].allotmentNumber"}
+            // ),
             area: getLabelWithValue(
                 areaLabel,
                 { jsonPath: "MortgageApplications[0].property.area" }
