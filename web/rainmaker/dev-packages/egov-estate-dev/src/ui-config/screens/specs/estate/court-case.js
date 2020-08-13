@@ -10,6 +10,8 @@ import { getSearchResults } from "../../../../ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getCourtCaseDetails } from "./preview-resource/courtCase-details";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import {onTabChange, headerrow, tabs} from './search-preview'
+
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
@@ -17,12 +19,6 @@ const findItem = roles.find(item => item.code === "CTL_CLERK");
 
 let fileNumber = getQueryArg(window.location.href, "fileNumber");
 
-export const headerrow = getCommonContainer({
-header: getCommonHeader({
-  labelName: "Estate",
-  labelKey: "ESTATE_COMMON_ESTATE"
-})
-});
 
 const courtCaseContainer = {
   uiFramework: "custom-atoms",
@@ -67,60 +63,6 @@ if(fileNumber){
   await searchResults(action, state, dispatch, fileNumber)
 }
 }
-
-export const onTabChange = async(tabIndex, dispatch, state) => {
-fileNumber = getQueryArg(window.location.href, "filenumber");
-let path = ""
-switch(tabIndex){
-  case 0:
-    path = `/estate/search-preview?filenumber=${fileNumber}`
-    break
-  case 1:
-    path = `/estate/owner-details?filenumber=${fileNumber}`
-    break
-  case 2:
-    path = `/estate/purchaser-details?filenumber=${fileNumber}`
-    break
-  case 3:
-    path = `/estate/payment-details?filenumber=${fileNumber}`
-    break
-  case 4:
-    path = `/estate/document-details?filenumber=${fileNumber}`
-    break
-  case 5:
-    path = `/estate/notices?filenumber=${fileNumber}`
-    break
-  case 6:
-    path = `/estate/court-case?filenumber=${fileNumber}`
-    break
-
-}
-dispatch(setRoute(path))
-}
-
-export const tabs = [
-{
-  tabButton: { labelName: "Property Details", labelKey: "ESTATE_PROPERTY_DETAILS" },
-},
-{
-  tabButton: { labelName: "Owner Details", labelKey: "ESTATE_OWNER_DETAILS" },
-},
-{
-  tabButton: { labelName: "Purchaser Details", labelKey: "ESTATE_PURCHASER_DETAILS" },
-},
-{
-  tabButton: { labelName: "Payment Details", labelKey: "ESTATE_PAYMENT_DETAILS" },
-},
-{
-  tabButton: { labelName: "Documents", labelKey: "ESTATE_DOCUMENTS" },
-},
-{
-  tabButton: { labelName: "Notices", labelKey: "ESTATE_NOTICES" },
-},
-{
-  tabButton: { labelName: "Court Case", labelKey: "ESTATE_COURT_CASE" },
-}
-]
 
 const CourtCaseDetails = {
 uiFramework: "material-ui",
