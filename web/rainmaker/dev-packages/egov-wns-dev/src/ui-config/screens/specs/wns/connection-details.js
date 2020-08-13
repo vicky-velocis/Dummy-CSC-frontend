@@ -9,7 +9,7 @@ import {
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getSearchResultsForSewerage, getDescriptionFromMDMS } from "../../../../ui-utils/commons";
-
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { connectionDetailsFooter } from "./connectionDetailsResource/connectionDetailsFooter";
 import { getServiceDetails } from "./connectionDetailsResource/service-details";
 import { getPropertyDetails } from "./connectionDetailsResource/property-details";
@@ -31,7 +31,7 @@ const getApplicationNumber = (dispatch,connectionsObj) => {
   dispatch(prepareFinalObject("applicationNos", appNos));
 }
 const showHideConnectionHolder = (dispatch,connectionHolders) => {
-  if(connectionHolders != 'NA' && connectionHolders.length > 0){
+  if(connectionHolders && connectionHolders != 'NA' && connectionHolders.length > 0){
         dispatch(
           handleField(
             "connection-details",
