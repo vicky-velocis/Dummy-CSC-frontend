@@ -17,10 +17,12 @@ import { httpRequest } from "../../../../../ui-utils"
 import {
   localStorageGet,
 } from "egov-ui-kit/utils/localStorageUtils";
+import React from 'react';
 
 export const getTextToLocalMapping = memoize((label) => _getTextToLocalMapping(label));
 
 export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100, hideTable = true) => {
+  dispatch(toggleSpinner());
   !!hideTable && showHideTable(false, dispatch);
   let queryObject = [
     {
@@ -68,6 +70,7 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         "warning"
       )
     );
+    dispatch(toggleSpinner());
   } else if ((Object.keys(searchScreenObject).length == 0 || Object.values(searchScreenObject).every(x => x === ""))) {
     dispatch(
       toggleSnackbar(
@@ -78,6 +81,7 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         "warning"
       )
     );
+    dispatch(toggleSpinner());
   }
   else {
     for (var key in searchScreenObject) {
@@ -114,9 +118,15 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
           )} (${length})`
         )
       );
+      let applyButtonStyle = {
+        "background-color": "#FE7A51",
+        "color": "#fff",
+        "height": "30px",
+        "padding": "6px 16px",
+        "width": "83px"
+      }
       let data = response.Properties.map(item => ({
-
-        [getTextToLocalMapping("Action")]: "SELECT",
+        [getTextToLocalMapping("Action")]: React.createElement('div', {style: applyButtonStyle}, "SELECT"),
         [getTextToLocalMapping("File No")]: item.fileNumber || "-",
         [getTextToLocalMapping("Property Id")]: item.propertyDetails.propertyId,
         [getTextToLocalMapping("House No")]: "-",
@@ -133,9 +143,11 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         )
       );
       !!hideTable && showHideTable(true, dispatch);
+      dispatch(toggleSpinner());
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);
+      dispatch(toggleSpinner());
     }
   }
 };

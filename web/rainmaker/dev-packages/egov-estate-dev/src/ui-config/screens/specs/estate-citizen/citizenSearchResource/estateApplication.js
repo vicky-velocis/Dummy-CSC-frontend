@@ -15,7 +15,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   searchApiCall
-} from "./searchFunctions"
+} from "./searchFunctions";
+import get from "lodash/get";
 
 const searchBy = {
   uiFramework: "custom-containers",
@@ -58,6 +59,14 @@ const searchBy = {
             true
           )
         )
+        dispatch(
+          handleField(
+            "property-search",
+            "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer",
+            "visible",
+            false
+          )
+        )
       }
       else {
         dispatch(
@@ -66,6 +75,14 @@ const searchBy = {
             "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.fileNumberContainer",
             "visible",
             false
+          )
+        )
+        dispatch(
+          handleField(
+            "property-search",
+            "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer",
+            "visible",
+            true
           )
         )
       }
@@ -97,11 +114,112 @@ export const estateApplication = getCommonCard({
           xs: 12,
           sm: 4
         },
-        required: false,
+        required: true,
         pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_INVALID_FILE_NO",
         jsonPath: "searchScreen.fileNumber"
       })
+    }),
+    siteNumberContainer: getCommonContainer({
+      style: {
+        display: "none"
+      },
+      category: getSelectField({
+        label: {
+            labelName: "Category",
+            labelKey: "EST_CATEGORY_LABEL"
+        },
+        placeholder: {
+            labelName: "Select Category",
+            labelKey: "EST_CATEGORY_PLACEHOLDER"
+        },
+        required: true,
+        jsonPath: "searchScreen.category",
+        sourceJsonPath: "searchScreenMdmsData.EstatePropertyService.categories",
+        gridDefination: {
+            xs: 12,
+            sm: 6
+        },
+        beforeFieldChange: (action, state, dispatch) => {
+            if (action.value == "CAT.RESIDENTIAL"  || action.value == "CAT.COMMERCIAL") {
+              dispatch(
+                  handleField(
+                      "property-search",
+                      "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children.subCategory",
+                      "visible",
+                      true
+                  )
+              );
+  
+              const categories = get(
+                  state.screenConfiguration.preparedFinalObject,
+                  "searchScreenMdmsData.EstatePropertyService.categories"
+              )
+  
+              const filteredCategory = categories.filter(item => item.code === action.value)
+              dispatch(
+                  handleField(
+                      "property-search",
+                      "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children.subCategory",
+                      "props.data",
+                      filteredCategory[0].SubCategory
+                  )
+              )
+          }
+        }
+      }),
+      subCategory: getSelectField({
+        label: {
+          labelName: "Sub Category",
+          labelKey: "EST_SUBCATEGORY_LABEL"
+        },
+        placeholder: {
+            labelName: "Select Sub Category",
+            labelKey: "EST_SUBCATEGORY_PLACEHOLDER"
+        },
+        required: true,
+        jsonPath: "searchScreen.subCategory",
+        visible: false,
+        gridDefination: {
+            xs: 12,
+            sm: 6
+        }
+      }),
+      siteNumber: getTextField({
+        label: {
+          labelName: "Site Number",
+          labelKey: "EST_SITE_NUMBER_LABEL"
+        },
+        placeholder: {
+            labelName: "Enter Site Number",
+            labelKey: "EST_SITE_NUMBER_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 6
+        },
+        required: true,
+        minLength: 1,
+        maxLength: 50,
+        jsonPath: "searchScreen.siteNumber"
+      }),
+      sectorNumber: getSelectField({
+        label: {
+            labelName: "Sector Number",
+            labelKey: "EST_SECTOR_NUMBER_LABEL"
+        },
+        placeholder: {
+            labelName: "Select Sector Number",
+            labelKey: "EST_SECTOR_NUMBER_PLACEHOLDER"
+        },
+        // required: true,
+        jsonPath: "searchScreen.sectorNumber",
+        sourceJsonPath: "searchScreenMdmsData.EstatePropertyService.SectorNumber",
+        gridDefination: {
+            xs: 12,
+            sm: 6
+        }
+      }),
     })
   }),
   button: getCommonContainer({

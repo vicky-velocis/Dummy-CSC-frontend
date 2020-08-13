@@ -12,7 +12,7 @@ export const searchResults = {
   uiFramework: "custom-molecules",
   moduleName: "egov-estate",
   componentPath: "Table",
-  visible: true,
+  visible: false,
   props: {
     columns: [
       getTextToLocalMapping("Action"),
