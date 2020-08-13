@@ -51,16 +51,17 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     
     let containers={}
     properties[0].propertyDetails.purchaseDetails.forEach((element,index) => { 
-   containers[index] =  getPurchaserDetails(false,index);   
-});
-dispatch(
-  handleField(
-    "purchaser-details",
-    "components.div.children.purchaserContainer",
-    "children",
-    containers
-  )
-);
+      let purchaseDetailContainer = getPurchaserDetails(false,index);
+      containers[index] = getCommonCard({purchaseDetailContainer})
+    });
+    dispatch(
+      handleField(
+      "purchaser-details",
+      "components.div.children.purchaserContainer",
+      "children",
+      containers
+      )
+    );
   }
 }
 

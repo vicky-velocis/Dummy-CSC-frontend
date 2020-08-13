@@ -92,6 +92,11 @@ const dueDateOfPaymentLabel = {
     labelName: "Receipt Date",
     labelKey: "EST_RECEIPT_DATE_LABEL"
   }
+
+   const paymentMadeByLabel = {
+    labelName: "Payment Made By",
+    labelKey: "EST_PAYMENT_MADE_BY_LABEL"
+  }
   
   export const groundRentHeader = getCommonTitle({
     labelName: "Ground Rent Details",
@@ -352,6 +357,11 @@ export const getReviewPayment = (isEditable = true,parentIndex=0,index=0) => {
             receiptDateLabel,{
                 jsonPath:`Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stReceiptDate`
             }
+        ),
+        paymentMadeBy: getLabelWithValue(
+          paymentMadeByLabel,{
+            jsonPath:`Properties[0].propertyDetails.owners[${parentIndex}].ownerDetails.paymentDetails[${index}].stPaymentMadeBy`
+          }
         )
       })
     })
