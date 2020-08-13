@@ -39,7 +39,7 @@ const dueDateOfPaymentField = {
   },
   pattern: getPattern("Date"),
   required: true,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.dueDateOfPayment`,
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDueDateOfPayment`,
   props: {
     inputProps: {
       max: getTodaysDateInYMD()
@@ -61,9 +61,8 @@ const payableField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.payable`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grPayable`
 }
 
 const amountOfGRField = {
@@ -80,9 +79,8 @@ const amountOfGRField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.amountOfGR`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountOfGr`
 }
 
 const totalGRField = {
@@ -99,9 +97,8 @@ const totalGRField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.totalGR`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalGr`
 }
 
 const dateOfDepositField = {
@@ -111,7 +108,7 @@ const dateOfDepositField = {
   },
   pattern: getPattern("Date"),
   required: true,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.dateOfDeposit`,
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDateOfDeposit`,
   props: {
     inputProps: {
       max: getTodaysDateInYMD()
@@ -133,9 +130,8 @@ const delayInPaymentField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.delayInPayment`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grDelayInPayment`
 }
 
 const interestForDelayField = {
@@ -152,9 +148,8 @@ const interestForDelayField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.interestForDelay`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grInterestForDelay`
 }
 
 const totalAmountDueWithInterestField = {
@@ -171,9 +166,8 @@ const totalAmountDueWithInterestField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.totalAmountDueWithInterest`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalAmountDueWithInterest`
 }
 
 const amountDepositedGRField = {
@@ -190,9 +184,8 @@ const amountDepositedGRField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.amountDepositedGR`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountDepositedGr`
 }
 
 const amountDepositedInttField = {
@@ -209,9 +202,8 @@ const amountDepositedInttField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.amountDepositedIntt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grAmountDepositedIntt`
 }
 
 const balanceGRField = {
@@ -228,9 +220,8 @@ const balanceGRField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.balanceGR`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grBalanceGr`
 }
 
 const balanceInttField = {
@@ -247,9 +238,8 @@ const balanceInttField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.balanceIntt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grBalanceIntt`
 }
 
 const totalDueField = {
@@ -266,28 +256,41 @@ const totalDueField = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.totalDue`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grTotalDue`
 }
 
-const receiptNumberAndDateField = {
+const receiptNumberField = {
   label: {
-    labelName: "Receipt No. & Date",
-    labelKey: "EST_RECEIPT_NUMBER_AND_DATE_LABEL"
+    labelName: "Receipt No.",
+    labelKey: "EST_RECEIPT_NUMBER_LABEL"
   },
   placeholder: {
-    labelName: "Enter Receipt No. & Date",
-    labelKey: "EST_RECEIPT_NUMBER_AND_DATE_PLACEHOLDER"
+    labelName: "Enter Receipt No.",
+    labelKey: "EST_RECEIPT_NUMBER_PLACEHOLDER"
   },
   gridDefination: {
     xs: 12,
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 75,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].groundRent.receiptNumberAndDate`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grReceiptNumber`
+}
+
+const receiptDateField = {
+  label: {
+    labelName: "Receipt Date",
+    labelKey: "EST_RECEIPT_DATE_LABEL"
+  },
+  pattern: getPattern("Date"),
+  required: true,
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].grReceiptDate`,
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
 }
 
 export const groundRentDetails_0 = getCommonCard({
@@ -306,7 +309,8 @@ export const groundRentDetails_0 = getCommonCard({
     balanceGR: getTextField(balanceGRField),
     balanceIntt: getTextField(balanceInttField),
     totalDue: getTextField(totalDueField),
-    receiptNumberAndDate: getTextField(receiptNumberAndDateField)
+    receiptNumber: getTextField(receiptNumberField),
+    receiptDate: getDateField(receiptDateField)
   })
 })
 
@@ -335,9 +339,8 @@ const rateOfStOrGstFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.rateOfStOrGst`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stRateOfStGst`
 }
 
 const amountOfGstFieldST = {
@@ -354,9 +357,8 @@ const amountOfGstFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.amountOfGst`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountOfGst`
 }
 
 const amountDueFieldST = {
@@ -373,9 +375,8 @@ const amountDueFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.amountDue`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDue`
 }
 
 const dateOfDepositFieldST = {
@@ -385,7 +386,7 @@ const dateOfDepositFieldST = {
   },
   pattern: getPattern("Date"),
   required: true,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.dateOfDeposit`,
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stDateOfDeposit`,
   props: {
     inputProps: {
       max: getTodaysDateInYMD()
@@ -407,9 +408,8 @@ const delayInPaymentFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.delayInPayment`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stDelayInPayment`
 }
 
 const interestForDelayFieldST = {
@@ -426,9 +426,8 @@ const interestForDelayFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.interestForDelay`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stInterestForDelay`
 }
 
 const totalAmountDueWithInterestFieldST = {
@@ -445,9 +444,8 @@ const totalAmountDueWithInterestFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.totalAmountDueWithInterest`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stTotalAmountDueWithInterest`
 }
 
 const amountDepositedFieldST = {
@@ -464,9 +462,8 @@ const amountDepositedFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.PropertyDetails.paymentDetails[0].serviceTax.amountDepositedSt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDepositedStGst`
 }
 
 const amountDepositedInttFieldST = {
@@ -483,9 +480,8 @@ const amountDepositedInttFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.amountDepositedIntt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stAmountDepositedIntt`
 }
 
 const balanceFieldST = {
@@ -502,9 +498,8 @@ const balanceFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.balanceSt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stBalanceStGst`
 }
 
 const balanceInttFieldST = {
@@ -521,9 +516,8 @@ const balanceInttFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.balanceIntt`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stBalanceIntt`
 }
 
 const totalDueFieldST = {
@@ -540,28 +534,41 @@ const totalDueFieldST = {
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.totalDue`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stTotalDue`
 }
 
-const receiptNumberAndDateFieldST = {
+const receiptNumberFieldST = {
   label: {
-    labelName: "Receipt No. & Date",
-    labelKey: "EST_RECEIPT_NUMBER_AND_DATE_LABEL"
+    labelName: "Receipt No.",
+    labelKey: "EST_RECEIPT_NUMBER_LABEL"
   },
   placeholder: {
-    labelName: "Enter Total Due",
-    labelKey: "EST_RECEIPT_NUMBER_AND_DATE_PLACEHOLDER"
+    labelName: "Enter Receipt No.",
+    labelKey: "EST_RECEIPT_NUMBER_PLACEHOLDER"
   },
   gridDefination: {
     xs: 12,
     sm: 6
   },
   required: true,
-  minLength: 1,
   maxLength: 75,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].serviceTax.receiptNumberAndDate`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stReceiptNumber`
+}
+
+const receiptDateFieldST = {
+  label: {
+    labelName: "Receipt Date",
+    labelKey: "EST_RECEIPT_DATE_LABEL"
+  },
+  pattern: getPattern("Date"),
+  required: true,
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stReceiptDate`,
+  props: {
+    inputProps: {
+      max: getTodaysDateInYMD()
+    }
+  }
 }
 
 export const serviceTaxDetails_0 = getCommonCard({
@@ -579,7 +586,8 @@ export const serviceTaxDetails_0 = getCommonCard({
     balanceSt: getTextField(balanceFieldST),
     balanceIntt: getTextField(balanceInttFieldST),
     totalDue: getTextField(totalDueFieldST),
-    receiptNumberAndDate: getTextField(receiptNumberAndDateFieldST)
+    receiptNumber: getTextField(receiptNumberFieldST),
+    receiptDate: getDateField(receiptDateFieldST)
   })
 })
 
@@ -600,9 +608,8 @@ const paymentMadeByField = {
     disabled: true
   },
   required: true,
-  minLength: 1,
   maxLength: 15,
-  jsonPath: `Properties[0].propertyDetails.paymentDetails[0].paymentMadeBy`
+  jsonPath: `Properties[0].propertyDetails.owners[0].ownerDetails.paymentDetails[0].stPaymentMadeBy`
 }
 
 export const paymentMadeBy_0 = getCommonCard({

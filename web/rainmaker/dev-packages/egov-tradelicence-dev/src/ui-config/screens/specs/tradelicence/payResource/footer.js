@@ -125,7 +125,7 @@ export const callPGService = async (state, dispatch, item) => {
     }
   } catch (e) {
     console.log(e);
-    if (e.message === "A transaction for this bill has been abruptly discarded, please retry after 15 mins"){
+    if (e.code === "A transaction for this bill has been abruptly discarded, please retry after 30 mins"){
       dispatch(
         toggleSnackbar(
           true,
@@ -183,6 +183,19 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
     }
   });
 };
+
+const showError = async (state, dispatch) => {
+  dispatch(
+    toggleSnackbar(
+      true,
+      {
+        labelName: "",
+        labelKey: "TL_ERR_AMOUNT_NULL"
+      },
+      "error"
+    )
+  );
+}
 
 const callBackForPay = async (state, dispatch) => {
   const { href } = window.location;
@@ -437,5 +450,25 @@ export const footer = getCommonApplyFooter({
         menu: []
       }
     },
+  },
+  errorButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({labelName : "MAKE PAYMENT" , labelKey :"COMMON_MAKE_PAYMENT"}),
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showError
+    },
+    visible: false
   }
 });

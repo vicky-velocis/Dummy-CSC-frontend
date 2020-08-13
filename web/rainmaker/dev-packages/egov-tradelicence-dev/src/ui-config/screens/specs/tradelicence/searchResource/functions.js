@@ -1,13 +1,14 @@
 import get from "lodash/get";
 import set from "lodash/set";
+import memoize from "lodash/memoize";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getCount } from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
-  getTextToLocalMapping
+  getTextToLocalMapping as _getTextToLocalMapping
 } from "../../utils/index";
-import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
@@ -16,6 +17,8 @@ import { httpRequest } from "../../../../../ui-utils"
 import {
   localStorageGet,
 } from "egov-ui-kit/utils/localStorageUtils";
+
+export const getTextToLocalMapping = memoize((label) => _getTextToLocalMapping(label));
 
 export const getStatusList = async (state, dispatch, screen, path) => {
   const queryObject = [{ key: "tenantId", value: getTenantId() }, 

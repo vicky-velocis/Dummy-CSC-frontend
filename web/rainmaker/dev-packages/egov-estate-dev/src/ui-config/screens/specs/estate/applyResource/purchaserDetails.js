@@ -166,7 +166,7 @@ const modeOfTransferField = {
   },
   required: true,
   jsonPath: "Properties[0].propertyDetails.purchaseDetails[0].modeOfTransfer",
-  sourceJsonPath: "applyScreenMdmsData.Estate.ModeOfTransfer",
+  sourceJsonPath: "applyScreenMdmsData.EstatePropertyService.modeOfTransfer",
   gridDefination: {
     xs: 12,
     sm: 6
@@ -258,7 +258,7 @@ export const purchaserDetails = getCommonCard({
             headerName: "Purchaser ",
             headerJsonPath:
               "children.cardContent.children.header.children.key.props.label",
-            sourceJsonPath: "Properties[0].purchaserDetails",
+            sourceJsonPath: "Properties[0].purchaseDetails",
             prefixSourceJsonPath: "children.cardContent.children.purchaserCard.children"
           },
           type: "array"

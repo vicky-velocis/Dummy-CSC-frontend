@@ -2,9 +2,8 @@ import React from "react";
 import {
   sortByEpoch,
   getEpochForDate,
-  getTextToLocalMapping
 } from "../../utils";
-import { searchApiCall } from "./functions";
+import { getTextToLocalMapping } from "./functions";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -49,13 +48,15 @@ export const searchResults = {
       {
         name: "tenantId",
         options: {
-          display: false
+          display: false,
+          viewColumns: false
         }
       },
       {
         name:"status1",
         options: {
-          display: false
+          display: false,
+          viewColumns: false
         }
       },
 

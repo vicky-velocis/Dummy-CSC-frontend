@@ -69,21 +69,40 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
     set(queryObject[0], "tenantId", tenantId);
     set(queryObject[0], "propertyDetails.dateOfAuction", convertDateToEpoch(queryObject[0].propertyDetails.dateOfAuction))
     set(queryObject[0], "propertyDetails.lastNocDate", convertDateToEpoch(queryObject[0].propertyDetails.lastNocDate))
-    set(queryObject[0], "propertyDetails.dateOfAllotment", convertDateToEpoch(queryObject[0].propertyDetails.dateOfAllotment))
-    set(queryObject[0], "propertyDetails.possesionDate", convertDateToEpoch(queryObject[0].propertyDetails.possesionDate))
 
     const purchaseDetails = get(
       queryObject[0],
       "propertyDetails.purchaseDetails",
       []
     )
-    purchaseDetails.map((item, index) => {
-      set(queryObject[0], `propertyDetails.purchaseDetails[${index}].dateOfRegistration`, convertDateToEpoch(queryObject[0].propertyDetails.purchaseDetails[index].dateOfRegistration));
-    })
+    if (purchaseDetails) {
+      purchaseDetails.map((item, index) => {
+        set(queryObject[0], `propertyDetails.purchaseDetails[${index}].dateOfRegistration`, convertDateToEpoch(queryObject[0].propertyDetails.purchaseDetails[index].dateOfRegistration));
+      })
+    }
+
+    const ownerDetails = get(
+      queryObject[0],
+      "propertyDetails.owners",
+      []
+    )
+    if (ownerDetails) {
+      ownerDetails.map((item, index) => {
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.possesionDate`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.possesionDate));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.dateOfAllotment`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.dateOfAllotment));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.paymentDetails[0].grDueDateOfPayment`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.paymentDetails[0].grDueDateOfPayment));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.paymentDetails[0].grDateOfDeposit`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.paymentDetails[0].grDateOfDeposit));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.paymentDetails[0].grReceiptDate`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.paymentDetails[0].grReceiptDate));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.paymentDetails[0].stDateOfDeposit`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.paymentDetails[0].stDateOfDeposit));
+        set(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.paymentDetails[0].stReceiptDate`, convertDateToEpoch(queryObject[0].propertyDetails.owners[index].ownerDetails.paymentDetails[0].stReceiptDate));
+      })
+    }
     
     if (!id) {
       console.log(queryObject[0]);
-      set(queryObject[0], "action", "DRAFT");
+      set(queryObject[0], "propertyDetails.owners", [])
+      set(queryObject[0], "propertyDetails.purchaseDetails", [])
+      set(queryObject[0], "action", "");
       response = await httpRequest(
         "post",
         "/property-service/property-master/_create",
@@ -94,8 +113,8 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         }
       );
     } else {
-      if (activeIndex === 0) {
-        set(queryObject[0], "action", "MODIFY")
+      if ([0,1,2,3].indexOf(activeIndex) !== -1) {
+        set(queryObject[0], "action", "")
       } else {
         set(queryObject[0], "action", "SUBMIT")
       }
@@ -106,7 +125,7 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
         []
       )
       owners.map((item, index) => {
-        let ownerDocuments = get(queryObject[0, `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`]) || [];
+        let ownerDocuments = get(queryObject[0], `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`) || [];
         ownerDocuments = ownerDocuments.map(item => ({
           ...item,
           isActive: true
@@ -146,18 +165,20 @@ export const applyEstates = async (state, dispatch, activeIndex) => {
       []
     )
 
-    owners.map((item, index) => {
-      let ownerDocuments = Properties[0].propertyDetails.owners[index].ownerDocuments || [];
-      const removedDocs = ownerDocuments.filter(item => !item.active)
-      ownerDocuments = ownerDocuments.filter(item => item.active)
-      Properties[0].propertyDetails.owners[index].ownerDetails.ownerDocuments = ownerDocuments;
-      dispatch(
-        prepareFinalObject(
-          `Properties[0].propertyDetails.owners[${index}].removedDocs`,
-          removedDocs
-        )
-      );
-    })
+    if (owners) {
+      owners.map((item, index) => {
+        let ownerDocuments = Properties[0].propertyDetails.owners[index].ownerDocuments || [];
+        const removedDocs = ownerDocuments.filter(item => !item.isActive)
+        ownerDocuments = ownerDocuments.filter(item => item.isActive)
+        Properties[0].propertyDetails.owners[index].ownerDetails.ownerDocuments = ownerDocuments;
+        dispatch(
+          prepareFinalObject(
+            `Properties[0].propertyDetails.owners[${index}].removedDocs`,
+            removedDocs
+          )
+        );
+      })
+    }
     // let ownerDocuments = Properties[0].propertyDetails.ownerDocuments || [];
     // const removedDocs = ownerDocuments.filter(item => !item.active)
     // ownerDocuments = ownerDocuments.filter(item => !!item.active)

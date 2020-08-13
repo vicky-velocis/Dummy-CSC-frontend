@@ -36,10 +36,11 @@ const userInfo = JSON.parse(getUserInfo());
 const {
   roles = []
 } = userInfo
-const findItem = roles.find(item => item.code === "CTL_CLERK");
+console.log(roles);
+const findItem = roles.find(item => item.code === "CPS_DS");
 const header = getCommonHeader({
-  labelName: "Search Estate Master",
-  labelKey: "EST_SEARCH_ESTSTE_MASTER_HEADER"
+  labelName: "Search Property Master",
+  labelKey: "EST_SEARCH_PROPERTY_MASTER_HEADER"
 });
 
 export const getStatusList = async (action, state, dispatch, queryObject, screenkey, path, businessService) => {
@@ -100,9 +101,9 @@ const estateSearchAndResult = {
               },
               ...header
             },
-            searchButton: {
+            addButton: {
               componentPath: "Button",
-              // visible: !!findItem,
+              visible: !!findItem,
               gridDefination: {
                 xs: 12,
                 sm: 4,
@@ -121,7 +122,7 @@ const estateSearchAndResult = {
               },
               children: {
                 buttonLabel: getLabel({
-                  labelName: "MASTER ADD",
+                  labelName: "Add Property Master",
                   labelKey: "EST_ESTATE_HOME_ADD_BUTTON"
                 })
               },
