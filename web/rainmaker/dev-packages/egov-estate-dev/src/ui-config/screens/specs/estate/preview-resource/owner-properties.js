@@ -70,7 +70,7 @@ import {
   const mobileNumberField = {
     
       labelName: "Mobile No.",
-      labelKey: "TL_MOBILE_NUMBER_LABEL",
+      labelKey: "ESTATE_MOBILE_NUMBER_LABEL",
   }
   
   const shareField = {

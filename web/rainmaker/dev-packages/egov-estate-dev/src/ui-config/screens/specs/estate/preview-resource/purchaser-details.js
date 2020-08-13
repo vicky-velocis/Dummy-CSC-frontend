@@ -48,7 +48,7 @@ export const purchaserHeader = getCommonTitle({
   
   const newOwnerMobileNumberField = {
       labelName: "New Owner Mobile No.",
-      labelKey: "TL_NEW_OWNER_MOBILE_NUMBER_LABEL",
+      labelKey: "ESTATE_NEW_OWNER_MOBILE_NUMBER_LABEL",
   }
   
   const sellerNameField = {
