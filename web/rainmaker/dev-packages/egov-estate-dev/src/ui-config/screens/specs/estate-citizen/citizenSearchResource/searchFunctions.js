@@ -37,18 +37,18 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
   queryObject = queryObject.filter(({
     value
   }) => !!value)
-  let searchScreenObject = get(
-    state.screenConfiguration.preparedFinalObject,
-    "searchScreen", {}
-  );
-
+  
   const searchBy = get(
     state.screenConfiguration.screenConfig,
     "property-search.components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.searchBy.props.value",
     ""
   )
-
+  var searchScreenObject;
   if (searchBy == "File Number") {
+    searchScreenObject = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenFileNo", {}
+    );
     var isSearchBoxValid = validateFields(
       "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.fileNumberContainer.children",
       state,
@@ -57,8 +57,19 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
     );
   }
   else {
-
+    searchScreenObject = get(
+      state.screenConfiguration.preparedFinalObject,
+      "searchScreenSiteNo", {}
+    );
+    var isSearchBoxValid = validateFields(
+      "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children",
+      state,
+      dispatch,
+      "property-search"
+    );
   }
+
+
 
   if (!isSearchBoxValid) {
     dispatch(
@@ -130,9 +141,11 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         [getTextToLocalMapping("File No")]: item.fileNumber || "-",
         [getTextToLocalMapping("Property Id")]: item.propertyDetails.propertyId,
         [getTextToLocalMapping("House No")]: "-",
-        [getTextToLocalMapping("Owner Name")]: item.propertyDetails.owners.map(item => item.ownerDetails.ownerName).join(",") || "-",
-        [getTextToLocalMapping("Mobile No")]: item.propertyDetails.owners.map(item => item.ownerDetails.mobileNumber).join(",") || "-"
+        [getTextToLocalMapping("Owner Name")]: item.propertyDetails ? item.propertyDetails.owners.map(item => item.ownerDetails.ownerName).join(",") || "-" : "",
+        [getTextToLocalMapping("Mobile No")]: item.propertyDetails ? item.propertyDetails.owners.map(item => item.ownerDetails.mobileNumber).join(",") || "-" : ""
       }));
+
+      
 
       dispatch(
         handleField(

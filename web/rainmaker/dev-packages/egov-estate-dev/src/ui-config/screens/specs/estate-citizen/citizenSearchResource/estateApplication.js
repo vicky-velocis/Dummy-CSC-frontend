@@ -36,9 +36,9 @@ const searchBy = {
         value: "File Number"
       },
       {
-        label: "House No.",
-        labelKey: "EST_HOUSE_NUMBER_LABEL",
-        value: "House Number"
+        label: "Site No.",
+        labelKey: "EST_SITE_NUMBER_LABEL",
+        value: "Site Number"
       }
     ],
     value: "File Number",
@@ -49,8 +49,8 @@ const searchBy = {
   jsonPath: "citizenSearchScreen.searchBy",
   beforeFieldChange: (action, state, dispatch) => {
     if (action.value) {
-      console.log(action.value);
       if (action.value == "File Number") {
+        let siteNumberContainerItems = ["category", "subCategory", "siteNumber", "sectorNumber"];
         dispatch(
           handleField(
             "property-search",
@@ -59,16 +59,21 @@ const searchBy = {
             true
           )
         )
-        dispatch(
-          handleField(
-            "property-search",
-            "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer",
-            "visible",
-            false
+
+        siteNumberContainerItems.map(item => {
+          dispatch(
+            handleField(
+              "property-search",
+              `components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children.${item}`,
+              "visible",
+              false
+            )
           )
-        )
+        })
+        
       }
       else {
+        let siteNumberContainerItems = ["category", "siteNumber", "sectorNumber"];
         dispatch(
           handleField(
             "property-search",
@@ -77,14 +82,16 @@ const searchBy = {
             false
           )
         )
-        dispatch(
-          handleField(
-            "property-search",
-            "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer",
-            "visible",
-            true
+        siteNumberContainerItems.map(item => {
+          dispatch(
+            handleField(
+              "property-search",
+              `components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children.${item}`,
+              "visible",
+              true
+            )
           )
-        )
+        })
       }
     }
   }
@@ -117,13 +124,10 @@ export const estateApplication = getCommonCard({
         required: true,
         pattern: /^[a-zA-Z0-9-]*$/i,
         errorMessage: "ERR_INVALID_FILE_NO",
-        jsonPath: "searchScreen.fileNumber"
+        jsonPath: "searchScreenFileNo.fileNumber"
       })
     }),
     siteNumberContainer: getCommonContainer({
-      style: {
-        display: "none"
-      },
       category: getSelectField({
         label: {
             labelName: "Category",
@@ -133,8 +137,9 @@ export const estateApplication = getCommonCard({
             labelName: "Select Category",
             labelKey: "EST_CATEGORY_PLACEHOLDER"
         },
+        visible: false,
         required: true,
-        jsonPath: "searchScreen.category",
+        jsonPath: "searchScreenSiteNo.category",
         sourceJsonPath: "searchScreenMdmsData.EstatePropertyService.categories",
         gridDefination: {
             xs: 12,
@@ -166,6 +171,16 @@ export const estateApplication = getCommonCard({
                   )
               )
           }
+          else {
+            dispatch(
+              handleField(
+                  "property-search",
+                  "components.div.children.estateApplication.children.cardContent.children.searchBoxContainer.children.siteNumberContainer.children.subCategory",
+                  "visible",
+                  false
+              )
+          );
+          }
         }
       }),
       subCategory: getSelectField({
@@ -178,7 +193,7 @@ export const estateApplication = getCommonCard({
             labelKey: "EST_SUBCATEGORY_PLACEHOLDER"
         },
         required: true,
-        jsonPath: "searchScreen.subCategory",
+        jsonPath: "searchScreenSiteNo.subCategory",
         visible: false,
         gridDefination: {
             xs: 12,
@@ -199,9 +214,10 @@ export const estateApplication = getCommonCard({
             sm: 6
         },
         required: true,
+        visible: false,
         minLength: 1,
         maxLength: 50,
-        jsonPath: "searchScreen.siteNumber"
+        jsonPath: "searchScreenSiteNo.siteNumber"
       }),
       sectorNumber: getSelectField({
         label: {
@@ -213,7 +229,8 @@ export const estateApplication = getCommonCard({
             labelKey: "EST_SECTOR_NUMBER_PLACEHOLDER"
         },
         // required: true,
-        jsonPath: "searchScreen.sectorNumber",
+        visible: false,
+        jsonPath: "searchScreenSiteNo.sectorNumber",
         sourceJsonPath: "searchScreenMdmsData.EstatePropertyService.SectorNumber",
         gridDefination: {
             xs: 12,
