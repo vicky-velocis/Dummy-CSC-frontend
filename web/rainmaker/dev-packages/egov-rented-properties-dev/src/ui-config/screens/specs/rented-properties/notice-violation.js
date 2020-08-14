@@ -13,6 +13,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { get } from "lodash";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./applyResource/review-documents";
+import { imageUploadDetailsProperties } from "./applyResource/imageUploadDetails";
 
 const reviewDocumentDetails = getReviewDocuments(false, "notice-violation")
 
@@ -71,6 +72,7 @@ const applyNoticeViolation = {
                 },
                 // stepper,
                 formwizardFirstStep: noticeViolationForm,
+                imageUploadDetailsProperties,
                 noticeDocumentDetails,
                 // formwizardThirdStep,
                 footer: Violationnoticegenfooter
