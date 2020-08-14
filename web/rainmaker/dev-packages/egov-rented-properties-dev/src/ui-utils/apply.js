@@ -265,7 +265,7 @@ let userInfo = JSON.parse(getUserInfo());
           "fileName" : fileitem.file.name,
           "fileStoreId" : fileitem.fileStoreId,
           "fileUrl" : Object.values(fileUrlPayload)[index],
-          "documentType" : fileitem.file.type,
+          "documentType" : `PROPERTYIMAGE ${index + 1}`,
           "tenantId" : tenantId,
           "active": true
         })
