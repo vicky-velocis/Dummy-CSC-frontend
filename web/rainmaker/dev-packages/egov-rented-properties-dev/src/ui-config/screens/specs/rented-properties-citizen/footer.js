@@ -171,7 +171,6 @@ const callBackForNextTransitImages = async(state, dispatch) => {
      } 
     } 
     if(isFormValid){
-      debugger
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "PropertyImagesApplications[0].applicationDocuments",
