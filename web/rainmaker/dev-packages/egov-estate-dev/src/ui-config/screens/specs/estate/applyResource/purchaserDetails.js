@@ -87,11 +87,11 @@ const newOwnerAddressField = {
 const newOwnerMobileNumberField = {
   label: {
     labelName: "New Owner Mobile No.",
-    labelKey: "TL_NEW_OWNER_MOBILE_NUMBER_LABEL"
+    labelKey: "ESTATE_NEW_OWNER_MOBILE_NUMBER_LABEL"
   },
   placeholder: {
     labelName: "Enter New Owner Mobile No.",
-    labelKey: "TL_NEW_OWNER_MOBILE_NUMBER_PLACEHOLDER"
+    labelKey: "EST_NEW_OWNER_MOBILE_NUMBER_PLACEHOLDER"
   },
   pattern: getPattern("MobileNo"),
   // props: {
