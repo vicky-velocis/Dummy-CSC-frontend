@@ -65,8 +65,8 @@ const clearSearch = (state, dispatch) => {
 
 const searchCard = getCommonCard({
   subHeader: getCommonTitle({
-    labelName: "Search Rented Properties Application",
-    labelKey: "RP_APPLICATION_SEARCH_RESULTS_HEADING"
+    labelName: "Search Duplicate Copy Application",
+    labelKey: "RP_DUPLICATE_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
