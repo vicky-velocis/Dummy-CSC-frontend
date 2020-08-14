@@ -280,7 +280,13 @@ const demandNoticeFromDate = {
     errorMessage:"RP_ERR_RECOVERY_TYPE_FIELD"
 }
 
-
+const recoveryTypeField = {
+    ...recoveryType,
+    beforeFieldChange: (action, state, dispatch) => {
+        const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+        const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+      }
+}
 
 const paymentAmountFieldNotice = {
     label: {
@@ -325,7 +331,7 @@ const getPaymentDetailsNotice = () => {
             detailsContainer: getCommonContainer({    
             demandNoticeFromDate: getDateField(demandNoticeFromDate),
             demandNoticeLastDate: getDateField(demandNoticeLastDate),
-            recoveryType: getSelectField(recoveryType),
+            recoveryType: getSelectField(recoveryTypeField),
             paymentAmount: getTextField(paymentAmountFieldNotice),
         })
     }
