@@ -364,8 +364,8 @@ export const allotmentDetails = getCommonCard({
 }) */
 
 const additionalDetailsHeader = getCommonTitle({
-    labelName: "Additional Details",
-    labelKey: "EST_ADDITIONAL_DETAILS_HEADER"
+    labelName: "NOC Details",
+    labelKey: "EST_NOC_DETAILS_HEADER"
 }, {
     style: {
         marginBottom: 18,

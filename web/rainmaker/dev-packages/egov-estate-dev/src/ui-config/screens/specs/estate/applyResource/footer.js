@@ -366,6 +366,9 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     for (var i = 0; i < propertyOwnersItems.length; i++) {
+      if (typeof propertyOwnersItems[i].isDeleted !== "undefined") {
+        continue;
+      }
       var isGroundRentDetailsValid = validateFields(
         `components.div.children.formwizardFifthStep.children.groundRentDetails_${i}.children.cardContent.children.detailsContainer.children`,
         state,

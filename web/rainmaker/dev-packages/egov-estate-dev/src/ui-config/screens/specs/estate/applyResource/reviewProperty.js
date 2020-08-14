@@ -247,8 +247,8 @@ export const getReviewAdditional = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Additional Details",
-            labelKey: "EST_ADDITIONAL_DETAILS_HEADER"
+            labelName: "NOC Details",
+            labelKey: "EST_NOC_DETAILS_HEADER"
           })
         },
         editSection: masterEntryEditSection(isEditable, 0)
@@ -289,7 +289,7 @@ const addressLabel = {
 }
 const mobileNumberLabel = {
   labelName: "Mobile No.",
-  labelKey: "TL_MOBILE_NUMBER_LABEL"
+  labelKey: "ESTATE_MOBILE_NUMBER_LABEL"
 }
 const shareLabel = {
   labelName: "Share",
@@ -390,7 +390,7 @@ const newOwnerAddressLabel = {
 }
 const newOwnerMobileNumberLabel = {
   labelName: "New Owner Mobile No.",
-  labelKey: "TL_NEW_OWNER_MOBILE_NUMBER_LABEL"
+  labelKey: "ESTATE_NEW_OWNER_MOBILE_NUMBER_LABEL"
 }
 const sellerNameLabel = {
   labelName: "Seller Name",
@@ -432,7 +432,7 @@ export const getReviewPurchaser = (isEditable = true, purchaser = 0) => {
             labelKey: "EST_PURCHASER_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable, 1)
+        editSection: masterEntryEditSection(isEditable, 2)
       }
     },
     viewFour: getCommonContainer({
@@ -625,7 +625,7 @@ export const getReviewPayment = (isEditable = true, owner) => {
             labelKey: "EST_PAYMENT_DETAILS_HEADER"
           })
         },
-        editSection: masterEntryEditSection(isEditable, 3)
+        editSection: masterEntryEditSection(isEditable, 4)
       }
     },
     viewGroundRent: getCommonContainer({
