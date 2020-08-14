@@ -141,8 +141,14 @@ export const searchApiCall = async (state, dispatch, onInit, offset, limit = 100
         [getTextToLocalMapping("File No")]: item.fileNumber || "-",
         [getTextToLocalMapping("Property Id")]: item.propertyDetails.propertyId,
         [getTextToLocalMapping("House No")]: "-",
-        [getTextToLocalMapping("Owner Name")]: item.propertyDetails ? item.propertyDetails.owners.map(item => item.ownerDetails.ownerName).join(",") || "-" : "",
-        [getTextToLocalMapping("Mobile No")]: item.propertyDetails ? item.propertyDetails.owners.map(item => item.ownerDetails.mobileNumber).join(",") || "-" : ""
+        [getTextToLocalMapping("Owner Name")]: item.propertyDetails ? item.propertyDetails.owners.map(item => item.ownerDetails.ownerName).join(",") || "-" : "-",
+        [getTextToLocalMapping("Mobile No")]: item.propertyDetails ? item.propertyDetails.owners.map(item => {
+          if (item.ownerDetails.mobileNumber) {
+          var mobileNo = item.ownerDetails.mobileNumber;
+          var replaced= mobileNo.replace(/.(?=....)/g, '*');
+          return replaced;
+          }
+        }).join(",") || "-" : "-"
       }));
 
       
