@@ -47,11 +47,8 @@ const header = getCommonHeader({
     }
   ]
     const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-    console.log(colonyRes)
      const {PropertyServices} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-     console.log(PropertyServices)
      const {colonies = []} = PropertyServices || []
-     console.log(PropertyServices.recoverytype)
       dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", PropertyServices.recoverytype))
       const propertyTypes = PropertyServices.recoverytype.map(item => ({
         code: item.code,
