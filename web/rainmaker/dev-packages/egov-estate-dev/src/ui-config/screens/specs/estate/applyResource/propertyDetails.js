@@ -166,6 +166,16 @@ const categoryField = {
                 )
             )
         }
+        else {
+            dispatch(
+                handleField(
+                    "apply",
+                    "components.div.children.formwizardFirstStep.children.propertyInfoDetails.children.cardContent.children.detailsContainer.children.subCategory",
+                    "visible",
+                    false
+                )
+            );
+        }
     }
 }
 

@@ -35,7 +35,8 @@ import {
 import {
   getReviewOwner,
   getReviewPurchaser,
-  getReviewPayment
+  getReviewPayment,
+  getReviewCourtCase
 } from "./reviewProperty";
 import {
   getReviewDocuments
@@ -103,7 +104,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === OWNER_DETAILS_STEP) {
-    const propertyOwners = get(
+    var propertyOwners = get(
       state.screenConfiguration.preparedFinalObject,
       "Properties[0].propertyDetails.owners"
     );
@@ -115,6 +116,9 @@ const callBackForNext = async (state, dispatch) => {
 
     if (propertyOwnersItems && propertyOwnersItems.length > 0) {
       for (var i = 0; i < propertyOwnersItems.length; i++) {
+        if (typeof propertyOwnersItems[i].isDeleted !== "undefined") {
+          continue;
+        }
         var isOwnerDetailsValid = validateFields(
           `components.div.children.formwizardSecondStep.children.ownerDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[${i}].item${i}.children.cardContent.children.ownerCard.children`,
           state,
@@ -282,6 +286,9 @@ const callBackForNext = async (state, dispatch) => {
 
     if (propertyPurchaserItems && propertyPurchaserItems.length > 0) {
       for (var i = 0; i < propertyPurchaserItems.length; i++) {
+        if (typeof propertyPurchaserItems[i].isDeleted !== "undefined") {
+          continue;
+        }
         var isPurchaserDetailsValid = validateFields(
           `components.div.children.formwizardThirdStep.children.purchaserDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[${i}].item${i}.children.cardContent.children.purchaserCard.children`,
           state,
@@ -313,11 +320,34 @@ const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === COURT_CASE_DETAILS_STEP) {
-    const isCourtCaseDetailsValid = validateFields(
-      "components.div.children.formwizardFourthStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children",
-      state,
-      dispatch
+    const courtCases = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].propertyDetails.courtCases"
     )
+    let courtCaseItems = get(
+      state,
+      "screenConfiguration.screenConfig.apply.components.div.children.formwizardFourthStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items"
+    );
+
+    if (courtCaseItems && courtCaseItems.length > 0) {
+      for (var i = 0; i < courtCaseItems.length; i++) {
+        if (typeof courtCaseItems[i].isDeleted !== "undefined") {
+          continue;
+        }
+        var isCourtCaseDetailsValid = validateFields(
+          `components.div.children.formwizardFourthStep.children.courtCaseDetails.children.cardContent.children.detailsContainer.children.multipleApplicantContainer.children.multipleApplicantInfo.props.items[${i}].item${i}.children.cardContent.children.courtCaseCard.children`,
+          state,
+          dispatch
+        )
+
+        const reviewCourtCaseDetails = getReviewCourtCase(true, i);
+        set(
+          state.screenConfiguration.screenConfig,
+          `apply.components.div.children.formwizardSeventhStep.children.reviewDetails.children.cardContent.children.reviewCourtCaseDetails_${i}`,
+          reviewCourtCaseDetails
+        )
+      }
+    }
 
     if (isCourtCaseDetailsValid) {
       const res = await applyEstates(state, dispatch, activeStep);
@@ -446,7 +476,8 @@ const callBackForNext = async (state, dispatch) => {
       };
       switch (activeStep) {
         case PROPERTY_DETAILS_STEP:
-        case OWNER_PURCHASER_DETAILS_STEP:
+        case OWNER_DETAILS_STEP:
+        case PURCHASER_DETAILS_STEP:
         case COURT_CASE_DETAILS_STEP:
         case PAYMENT_DETAILS_STEP:
           errorMessage = {

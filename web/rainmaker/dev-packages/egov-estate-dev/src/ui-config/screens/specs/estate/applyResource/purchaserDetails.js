@@ -211,7 +211,7 @@ const dateOfRegistrationField = {
 const commonPurchaserInformation = () => {
   return getCommonGrayCard({
     header: getCommonTitle({
-      labelName: "Purchaser",
+      labelName: "Purchaser Information",
       labelKey: "EST_COMMON_PURCHASER_INFORMATION"
     }, {
       style: {
@@ -255,10 +255,10 @@ export const purchaserDetails = getCommonCard({
               labelName: "Add Purchaser",
               labelKey: "EST_COMMON_ADD_PURCHASER_LABEL"
             },
-            headerName: "Purchaser ",
+            headerName: "Purchaser Information",
             headerJsonPath:
-              "children.cardContent.children.header.children.key.props.label",
-            sourceJsonPath: "Properties[0].purchaseDetails",
+              "children.cardContent.children.header.children.Purchaser Information.props.label",
+            sourceJsonPath: "Properties[0].propertyDetails.purchaseDetails",
             prefixSourceJsonPath: "children.cardContent.children.purchaserCard.children"
           },
           type: "array"
