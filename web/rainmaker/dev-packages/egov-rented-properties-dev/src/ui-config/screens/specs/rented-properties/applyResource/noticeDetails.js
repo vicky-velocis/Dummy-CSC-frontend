@@ -150,6 +150,7 @@ const getViolationField = {
     props: {
         disabled: true
       },
+      required:true,
     jsonPath: "SingleImage[0].description" 
 }
 

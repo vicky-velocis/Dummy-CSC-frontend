@@ -222,10 +222,10 @@ const screenConfig = {
               //   label: "RP_PROPERTY_ID_LABEL",
               //   jsonPath: "property.id"
               // },
-              {
-                label: "RP_ALLOTMENT_NUMBER",
-                jsonPath: "allotmentNumber",
-              },
+              // {
+              //   label: "RP_ALLOTMENT_NUMBER",
+              //   jsonPath: "allotmentNumber",
+              // },
               {
                 label: "RP_COMMON_TABLE_COL_OWNER_NAME",
                 jsonPath: "applicant[0].name"
