@@ -42,7 +42,11 @@ if(payload) {
     let containers={}
     properties[0].propertyDetails.courtCases.forEach((element,index) => { 
       let courtCaseDetails = getCourtCaseDetails(false,index);
+      let caseHeader = getCommonHeader({
+        labelName: `Case ${index + 1}`,
+      })
       containers[index] = getCommonCard({
+        caseHeader,
         courtCaseDetails
       });  
     });
