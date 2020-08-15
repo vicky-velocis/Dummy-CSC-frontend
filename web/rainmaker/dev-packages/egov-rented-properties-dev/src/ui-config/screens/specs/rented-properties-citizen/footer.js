@@ -176,17 +176,6 @@ const callBackForNextTransitImages = async(state, dispatch) => {
        isFormValid = false;
      } 
     } 
-//     if(isFormValid){
-//     const uploadedDocData = get(
-//       state.screenConfiguration.preparedFinalObject,
-//       "PropertyImagesApplications[0].applicationDocuments",
-//       []
-//   );
-// if(uploadedDocData.length!=6){
-//   isFormValid = false;
-// }
-//}
-    // isFormValid = await submittransitsiteimages(state, dispatch);
       if (isFormValid) {
         const transitData = get(
           state.screenConfiguration.preparedFinalObject,
