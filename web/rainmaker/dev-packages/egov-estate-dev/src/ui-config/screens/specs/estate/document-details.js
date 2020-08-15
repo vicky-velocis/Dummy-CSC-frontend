@@ -47,11 +47,7 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     dispatch,'EST'
     );
     let documentListContainer = getReviewDocuments(false,'document-details',`PropertiesTemp[${index}].reviewDocData`);
-    let ownerHeader = getCommonHeader({
-      labelName: `Owner ${index + 1}`,
-    })
     containers[index] = getCommonCard({
-      ownerHeader,
       documentListContainer
       }); 
     });

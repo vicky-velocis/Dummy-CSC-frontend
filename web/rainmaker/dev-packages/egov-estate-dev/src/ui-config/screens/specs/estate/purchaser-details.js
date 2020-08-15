@@ -48,10 +48,7 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     let containers={}
     properties[0].propertyDetails.purchaseDetails.forEach((element,index) => { 
       let purchaseDetailContainer = getPurchaserDetails(false,index);
-      let purchaserHeader = getCommonHeader({
-        labelName: `Purchaser ${index + 1}`,
-      })
-      containers[index] = getCommonCard({purchaserHeader,purchaseDetailContainer})
+      containers[index] = getCommonCard({purchaseDetailContainer})
     });
     dispatch(
       handleField(

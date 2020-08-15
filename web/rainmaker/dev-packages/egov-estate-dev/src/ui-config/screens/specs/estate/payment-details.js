@@ -50,11 +50,7 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
          let subContainer ={}
          element.ownerDetails.paymentDetails.forEach((element,index) => { 
             let paymentListContainer = getReviewPayment(false,parentIndex,index)
-            let ownerHeader = getCommonHeader({
-              labelName: `Owner ${index + 1}`,
-            })
             subContainer[index] = getCommonCard({
-              ownerHeader,
               paymentListContainer
               }); 
            })
