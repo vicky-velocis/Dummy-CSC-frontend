@@ -50,11 +50,7 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
     properties[0].propertyDetails.owners.forEach((element,index) => { 
       let ownerdetailsComponent = getOwnerDetails(false,index);
       let allotmentDetailsComponent = getAllotmentDetails(false,index);
-      let ownerHeader = getCommonHeader({
-        labelName: `Owner ${index + 1}`,
-      })
       containers[index] = getCommonCard({
-        ownerHeader,
         ownerdetailsComponent,
         allotmentDetailsComponent
       });  
