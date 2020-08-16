@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["indentNumber","indentDate","indentPurpose",  "inventoryType","issueStore"];
+  const textFields = ["indentNumber","indentDate","indentPurpose",  "inventoryType","indentStore"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-indent.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -130,18 +130,18 @@ export const searchForm = getCommonCard({
         },
       })
     },   
-    issueStore: {
+    indentStore: {
       ...getSelectField({
         label: {
-          labelName: "Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME"
+          labelName: "Indenting Store Name",
+          labelKey: "STORE_MATERIAL_INDENT_STORE_NAME"
         },
         placeholder: {
-          labelName: "Select Store Name",
-          labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
+          labelName: "Indenting Store Name",
+          labelKey: "STORE_MATERIAL_INDENT_STORE_NAME"
         },
         required: false,
-        jsonPath: "searchScreen.issueStore", 
+        jsonPath: "searchScreen.indentStore", 
         gridDefination: {
           xs: 12,
           sm: 4,

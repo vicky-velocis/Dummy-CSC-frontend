@@ -90,9 +90,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    getMdmsData(action, state, dispatch, tenantId);
     getMaterialNonIndentData(state, dispatch, issueNoteNumber, tenantId);
    // showHideAdhocPopup(state, dispatch);
-    getMdmsData(action, state, dispatch, tenantId);
+   
     return action;
   },
   components: {

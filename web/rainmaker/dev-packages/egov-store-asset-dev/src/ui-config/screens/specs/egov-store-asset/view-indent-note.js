@@ -102,9 +102,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let issueNumber = getQueryArg(window.location.href, "issueNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    getMdmsData(action, state, dispatch, tenantId);
     getMaterialIndentData(state, dispatch, issueNumber, tenantId);
    // showHideAdhocPopup(state, dispatch);
-    getMdmsData(action, state, dispatch, tenantId);
+   
     IsEdit = false;
     return action;
   },

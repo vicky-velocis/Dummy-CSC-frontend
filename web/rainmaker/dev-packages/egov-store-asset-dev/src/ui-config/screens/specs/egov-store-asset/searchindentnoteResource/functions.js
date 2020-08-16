@@ -93,7 +93,7 @@ export const searchApiCall = async (state, dispatch) => {
       ) {
 
         if (key === "indentDate") {
-          Dateselect = true;
+         let Dateselect = true;
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dob")

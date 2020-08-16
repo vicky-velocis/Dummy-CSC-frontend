@@ -36,7 +36,7 @@ const ScrapMaterialDetailsCard = {
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
-                optionLabel: "code"
+                optionLabel: "name"
               }
             }),
             beforeFieldChange: async (action, state, dispatch) => {

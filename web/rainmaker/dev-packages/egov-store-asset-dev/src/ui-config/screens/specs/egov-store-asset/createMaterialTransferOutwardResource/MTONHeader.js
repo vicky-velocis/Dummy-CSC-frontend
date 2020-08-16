@@ -257,39 +257,10 @@ export const MTONHeader = getCommonCard({
         let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
         let designation=action.value ;
         emp = emp.filter(x=>x.code ===action.value)
-        console.log(emp)
-        console.log("emp")
-        //alert(designation)
-        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
-       // alert(issuedToDesignation);
-        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
-      //   let designation='' ;
-      //   const empDetails =
-      //   emp.map((item, index) => {
-      //     const deptCode = item.dept;
-      //     const designation =   item.designation;
-      //     const empCode = item.code;
-      //     const empName = item.name;
-      //     if(empCode ===action.value)
-      //     {
-      //       designation = item.designation;
-      //   return {
-      //           code : empCode,
-      //           name : empName,
-      //           dept : deptCode,
-      //           designation:designation,
-      //   };
-      // }
-      // });
-      //   if(designation)
-      //   {
-      //     console.log(designation)
-      //     console.log("emp[0]")
-      //     let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
-      //     alert(issuedToDesignation);
-      //     dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
-
-      //   }
+        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation) 
+        const {designationsById} = state.common;
+       // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+     
 
       }
     },

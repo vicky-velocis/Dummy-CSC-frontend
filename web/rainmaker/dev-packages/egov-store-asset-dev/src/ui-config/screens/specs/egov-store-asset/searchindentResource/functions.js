@@ -37,6 +37,7 @@ export const getDesigName = (state, codes) => {
 
 export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
+  let Dateselect = true;
   showHideTable(false, dispatch);
   const tenantId =
     get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||

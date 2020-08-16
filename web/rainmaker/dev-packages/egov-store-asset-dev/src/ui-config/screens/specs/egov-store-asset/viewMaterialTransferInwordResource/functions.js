@@ -7,6 +7,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import {
   getIndentInwordSearchResults,
+  getmaterialOutwordSearchResults,
   updateIndentInword,
   creatIndentInword,
   GetMdmsNameBycode
@@ -199,6 +200,28 @@ for (let index = 0; index < response[0].receiptDetails.length; index++) {
     set(response[0], `receiptDetails[${index}].uom.name`, Uomname);  
 }
 dispatch(prepareFinalObject("transferInwards",response ));
+const tenantId = getTenantId();
+let queryObject = [
+  {
+    key: "tenantId",
+    value: tenantId
+  },
+  {
+    key: "materialIssueStatus",
+    value: "APPROVED"
+  }
+
+];
+try {
+  let responseOut = await getmaterialOutwordSearchResults(queryObject, dispatch);
+  dispatch(prepareFinalObject("materialOutword", responseOut));
+  if(responseOut)
+  {
+    var x = responseOut.materialIssues.filter(x=x.id ===5)
+  }
+} catch (e) {
+  console.log(e);
+}
 }
   furnishindentData(state, dispatch);
 };

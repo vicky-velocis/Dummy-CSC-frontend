@@ -187,6 +187,11 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "create-scrap-material",
   beforeInitScreen: (action, state, dispatch) => {
+    const step = getQueryArg(window.location.href, "step");
+    const scrapNumber = getQueryArg(window.location.href, "scrapNumber");
+    if(!step && !scrapNumber){
+      dispatch(prepareFinalObject("scraps[0]",null));
+    }
     getData(action, state, dispatch);
 
     return action;

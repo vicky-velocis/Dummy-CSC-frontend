@@ -1,4 +1,5 @@
 import get from "lodash/get";
+import set from "lodash/set";
 import {
   dispatchMultipleFieldChangeAction,
   getLabel
@@ -11,7 +12,8 @@ import {
   ifUserRoleExists,
   epochToYmd,
   validateFields,
-  getLocalizationCodeValue
+  getLocalizationCodeValue,
+  epochToYmdDate
 
 } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -24,6 +26,7 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 const moveToReview = dispatch => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const reviewUrl =
+  
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/egov-store-asset/reviewmaterialreceipt?step=0`
       : `/egov-store-asset/reviewmaterialreceipt?step=0`;
@@ -129,6 +132,23 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(isFormValid)
     {
+      let materialReceipt = get(
+        state.screenConfiguration.preparedFinalObject,
+        "materialReceipt",
+        []
+      );
+      if(materialReceipt && materialReceipt[0])
+      {
+      for (let index = 0; index < materialReceipt[0].receiptDetails.length; index++) {
+        const element = materialReceipt[0].receiptDetails[index];       
+           set(materialReceipt[0], `receiptDetails[${index}].lotNo`, element.receiptDetailsAddnInfo[0].lotNo);
+           set(materialReceipt[0], `receiptDetails[${index}].serialNo`, element.receiptDetailsAddnInfo[0].serialNo);
+           set(materialReceipt[0], `receiptDetails[${index}].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
+           set(materialReceipt[0], `receiptDetails[${index}].manufactureDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].manufactureDate));
+           set(materialReceipt[0], `receiptDetails[${index}].expiryDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].expiryDate));
+           
+      }
+    }
       moveToReview(dispatch);
     
   }

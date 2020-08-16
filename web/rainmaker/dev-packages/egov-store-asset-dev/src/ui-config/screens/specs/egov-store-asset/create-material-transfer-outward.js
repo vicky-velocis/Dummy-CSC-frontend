@@ -193,6 +193,11 @@ const getTransferIndentData = async (action, state, dispatch) => {
     uiFramework: "material-ui",
     name: "create-material-transfer-outward",
     beforeInitScreen: (action, state, dispatch) => {
+      const step = getQueryArg(window.location.href, "step");
+      const id = getQueryArg(window.location.href, "id");
+      if(!step && !id){
+        dispatch(prepareFinalObject("materialIssues[0]",null));
+      }
       getData(action, state, dispatch);
       // SEt Default data Start
      

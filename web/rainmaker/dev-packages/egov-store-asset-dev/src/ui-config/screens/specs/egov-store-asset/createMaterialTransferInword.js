@@ -204,10 +204,14 @@ export const header = getCommonContainer({
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
      
-      const tenantId = getstoreTenantId();
+      let tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = gettransferOutword(action,state, dispatch);
-     
+      const step = getQueryArg(window.location.href, "step");
+      tenantId = getQueryArg(window.location.href, "tenantId");
+      if(!step && !tenantId){
+        dispatch(prepareFinalObject("transferInwards[0]",null));
+      }
      // SEt Default data
 
      dispatch(

@@ -69,7 +69,15 @@ import {
       "purchaseOrders",
       []
     );
-     setDateInYmdFormat(purchaseOrders[0], ["expectedDeliveryDate", "purchaseOrderDate"]);    
+     setDateInYmdFormat(purchaseOrders[0], ["expectedDeliveryDate", "purchaseOrderDate"]); 
+     //get set total value
+     for (let index = 0; index < purchaseOrders[0].purchaseOrderDetails.length; index++) {
+       const element = purchaseOrders[0].purchaseOrderDetails[index];
+       let userQuantity = get(purchaseOrders[0], `purchaseOrderDetails[${index}].userQuantity`,0)
+       let unitPrice = get(purchaseOrders[0], `purchaseOrderDetails[${index}].unitPrice`,0)
+       set(purchaseOrders[0], `purchaseOrderDetails[${index}].totalValue`,unitPrice*userQuantity);
+       
+     } 
     dispatch(prepareFinalObject("purchaseOrders", purchaseOrders));
   };
   const screenConfig = {

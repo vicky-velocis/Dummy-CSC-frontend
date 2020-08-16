@@ -91,7 +91,7 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           labelName: "Issuing Store Name",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME"
         },
-        {  jsonPath: "materialIssues[0].fromStore.code", }
+        {  jsonPath: "materialIssues[0].fromStore.name", }
       ),
       IssueDate: getLabelWithValue(
         { labelName: "Issue Date",
@@ -102,7 +102,7 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
         {
           labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
         },
-        { jsonPath: "materialIssues[0].toStore.code" }
+        { jsonPath: "materialIssues[0].toStore.name" }
       ),
       IndentingDetpName: getLabelWithValue(
         { labelName: "Indenting Dept. Name",

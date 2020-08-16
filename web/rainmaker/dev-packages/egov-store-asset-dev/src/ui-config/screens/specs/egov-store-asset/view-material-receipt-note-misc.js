@@ -88,9 +88,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    getMdmsData(action, state, dispatch, tenantId);
     getmiscellaneousreceiptnotes(state, dispatch, id, tenantId);
    // showHideAdhocPopup(state, dispatch);
-    getMdmsData(action, state, dispatch, tenantId);
+   
     return action;
   },
   components: {

@@ -92,8 +92,8 @@ export const searchApiCall = async (state, dispatch) => {
         searchScreenObject[key].trim() !== ""
       ) {
 
-        if (key === "indentDate") {
-          Dateselect = true;
+        if (key === "issueDate") {
+        let  Dateselect = true;
           queryObject.push({
             key: key,
             value: convertDateToEpoch(searchScreenObject[key], "dob")

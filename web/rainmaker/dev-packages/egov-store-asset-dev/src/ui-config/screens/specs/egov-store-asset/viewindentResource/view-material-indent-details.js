@@ -55,22 +55,22 @@ import {
              
             }
           ),
-          // ProjectCode: getLabelWithValue(
-          //   { labelName: "Project Code",
-          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE" },
-          //   {
-          //     jsonPath: "indents[0].indentDetails[0].project.code",
-             
-          //   }
-          // ),
-          indentQuantity: getLabelWithValue(
-            {   labelName: "indentQuantity",
-            labelKey: "STORE_MATERIAL_INDENT_QUANTITY" },
+          ProjectCode: getLabelWithValue(
+            { labelName: "Project Code",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE" },
             {
-              jsonPath: "indents[0].indentDetails[0].indentQuantity",
+              jsonPath: "indents[0].indentDetails[0].project.code",
              
             }
           ),
+          // indentQuantity: getLabelWithValue(
+          //   {   labelName: "indentQuantity",
+          //   labelKey: "STORE_MATERIAL_INDENT_QUANTITY" },
+          //   {
+          //     jsonPath: "indents[0].indentDetails[0].indentQuantity",
+             
+          //   }
+          // ),
           QuantityRequired: getLabelWithValue(
             {   labelName: "QuantityRequired",
             labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED" },

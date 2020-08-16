@@ -520,6 +520,11 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT_MANUFACTURER_DATE_PLACEHOLDER"
                 },
                 required: true,
+                props: {
+                  inputProps: {
+                    max: new Date().toISOString().slice(0, 10),
+                  }
+                },
                 pattern: getPattern("Date") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate"
               })
@@ -535,6 +540,11 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT_EXPIRY_DATE_PLACEHOLDER"
                 },
                 required: true,
+                props: {
+                  inputProps: {
+                    min: new Date().toISOString().slice(0, 10),
+                  }
+                },
                 pattern: getPattern("Date") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate"
               })

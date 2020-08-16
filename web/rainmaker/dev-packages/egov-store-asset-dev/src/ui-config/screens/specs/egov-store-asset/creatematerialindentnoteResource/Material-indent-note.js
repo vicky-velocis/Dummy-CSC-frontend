@@ -81,12 +81,18 @@ console.log(matcodes)
      if (payload.Employees) {
        const {screenConfiguration} = state;
         // const {stores} = screenConfiguration.preparedFinalObject;
+        const {designationsById} = state.common;
+        const empdesignation = payload.Employees[0].assignments[0].designation;
        const empDetails =
        payload.Employees.filter((item, index) =>  stores[0].storeInCharge.code === item.code);
      
        if(empDetails && empDetails[0] ){
          //alert(empDetails[0].user.name)        
          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",empDetails[0].user.name));  
+         if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", desgnName[0].name));
+          }
        }
        else{
         dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",""));  
@@ -145,6 +151,7 @@ console.log(matcodes)
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.department",fromstore[0].department));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.divisionName", fromstore[0].divisionName));              
                 //dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
@@ -157,6 +164,57 @@ console.log(matcodes)
           }
           
         }
+      },
+      IndentingStore: {
+        ...getTextField({
+          label: { labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE" },
+          placeholder: {
+            labelName: "Indenting Store",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
+          },
+          props: {
+            disabled: true,       
+          },
+          required: false,
+          jsonPath: "materialIssues[0].toStore.name",
+          
+        })
+      },
+      divisionName: getTextField({
+        label: {
+          labelName: "Issuing Store Division Name",
+          labelKey: "STORE_DETAILS_ISSUING_STORE_DIVISION_NAME",
+        },
+        props: {
+          className: "applicant-details-error",
+          disabled: true
+        },
+        placeholder: {
+          labelName: "Enter Issuing Store Division Name",
+          labelKey: "STORE_DETAILS_ISSUING_STORE_DIVISION_NAME_PLACEHOLDER",
+        },
+        pattern: getPattern("non-empty-alpha-numeric"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "materialIssues[0].fromStore.divisionName",
+      }),
+  
+      IndentingDetpName: {
+        ...getTextField({
+          label: {
+            labelName: "Issuing Dept. Name",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_DEP_NAME"
+          },
+          placeholder: {
+            labelName: "Enter Issuing Dept. Name",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_DEP_NAME_PLACEHOLDER"
+          },
+          props: {
+            disabled: true,       
+          },
+          required: false,
+          pattern: getPattern("Name") || null,
+          jsonPath: "materialIssues[0].fromStore.department.name"
+        })
       },
       IssueDate: {
         ...getDateField({
@@ -176,39 +234,6 @@ console.log(matcodes)
               max: new Date().toISOString().slice(0, 10),
             }
           }
-        })
-      },
-      IndentingStore: {
-        ...getTextField({
-          label: { labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE" },
-          placeholder: {
-            labelName: "Indenting Store",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
-          },
-          props: {
-            disabled: true,       
-          },
-          required: false,
-          jsonPath: "materialIssues[0].toStore.name",
-          
-        })
-      },
-      IndentingDetpName: {
-        ...getTextField({
-          label: {
-            labelName: "Indenting Dept. Name",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_DEP_NAME"
-          },
-          placeholder: {
-            labelName: "Enter Indenting Dept. Name",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_DEP_NAME"
-          },
-          props: {
-            disabled: true,       
-          },
-          required: false,
-          pattern: getPattern("Name") || null,
-          jsonPath: "materialIssues[0].fromStore.department.name"
         })
       },
       IssueToEmployee: {
@@ -258,7 +283,7 @@ console.log(matcodes)
             multiline: "multiline",
             rowsMax: 2,
           },
-          required: false,
+          required: true,
           pattern: getPattern("eventDescription") || null,
           jsonPath: "materialIssues[0].description"
         })

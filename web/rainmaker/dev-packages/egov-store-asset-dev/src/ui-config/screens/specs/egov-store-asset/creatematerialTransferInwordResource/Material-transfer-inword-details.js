@@ -70,6 +70,7 @@ import {
                 dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].uom.name",uomname));
                 dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].unitRate",materials[0].unitRate));
                 dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].quantityIssued",materials[0].quantityIssued));             
+                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].userReceivedQty",materials[0].quantityIssued));             
 
               }
             },
@@ -102,7 +103,7 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT_QTY_ACCEPTED_PLACEHOLDER"
                 },
                 props:{
-                  disabled:false
+                  disabled:true
                 },
                 required: true,
                 pattern: getPattern("Amount") || null,
