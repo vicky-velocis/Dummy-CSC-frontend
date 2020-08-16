@@ -184,7 +184,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
       moveToSuccess(transitData, dispatch, TRANSITSITEIMAGES);
       }
 
-     if (!isFormValid && !uploadFlag&& !imageupload) {
+     if (!isFormValid) {
         
         let errorMessage = {
           labelName:
