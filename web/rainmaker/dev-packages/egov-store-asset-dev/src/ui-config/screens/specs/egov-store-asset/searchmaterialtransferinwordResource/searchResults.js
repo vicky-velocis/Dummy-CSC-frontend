@@ -16,7 +16,7 @@ export const getTextToLocalMapping = (label) => {
       case "Receipt Date":
         return getLocaleLabels(
           "Receipt Date",
-          "STORE_MATERIAL_RECEIPT_RECEIPT_DATE",
+          "STORE_MATERIAL_RECEIPT_RECEIPT_DATE ",
           localisationLabels
         );
     case "Issuing Store Name":

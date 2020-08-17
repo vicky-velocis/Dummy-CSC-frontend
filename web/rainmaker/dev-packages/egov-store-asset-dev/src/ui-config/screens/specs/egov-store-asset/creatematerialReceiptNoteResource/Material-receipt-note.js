@@ -108,9 +108,11 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           ); 
           store =  store.filter(x=> x.code === action.value)  
           if(store && store[0]) 
+          {
           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name",store[0].name));       
           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.department.name",store[0].department.name));
            //getpurchaseOrder(action,state, dispatch);
+          }
         }
       },
       departmentname: {

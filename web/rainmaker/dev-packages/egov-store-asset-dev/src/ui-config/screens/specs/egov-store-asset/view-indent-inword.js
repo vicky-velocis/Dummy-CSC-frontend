@@ -24,7 +24,7 @@ export const header = getCommonContainer({
 const createMatrialIndentInwordHandle = async (state, dispatch) => {
 
   let id = getQueryArg(window.location.href, "id");
-  dispatch(setRoute(`/egov-store-asset/createMaterialTransferInword?id=${id}`));
+  dispatch(setRoute(`/egov-store-asset/createMaterialTransferInword`));
 };
 
 

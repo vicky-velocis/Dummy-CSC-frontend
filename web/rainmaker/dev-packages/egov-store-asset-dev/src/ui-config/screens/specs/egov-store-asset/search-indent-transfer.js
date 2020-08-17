@@ -144,7 +144,7 @@ dispatch(prepareFinalObject("searchScreen",{}));
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add Material Indent Transfer",
+                    labelName: "Add Material Transfer Indent",
                     labelKey: "STORE_MATERIAL_INDENT_TRANSFER",//
                   }),
                 },

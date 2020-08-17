@@ -5,12 +5,12 @@ import { showHideAdhocPopup } from "../../utils";
 import { handleCreateUpdateMaterialInword } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const employeeCode = getQueryArg(window.location.href, "employeeID");
+  const id = getQueryArg(window.location.href, "id");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
-      ? `/egov-ui-framework/egov-store-asset/createMaterialTransferInword?tenantId=${tenantId}`
-      : `/egov-store-asset/createMaterialTransferInword?tenantId=${tenantId}`;
+      ? `/egov-ui-framework/egov-store-asset/createMaterialTransferInword?tenantId=${tenantId}&id=${id}`
+      : `/egov-store-asset/createMaterialTransferInword?tenantId=${tenantId}&id=${id}`;
   dispatch(setRoute(createUrl));
 };
 

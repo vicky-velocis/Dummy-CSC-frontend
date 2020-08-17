@@ -192,7 +192,7 @@ const screenConfig = {
                 },
 
                 buttonLabel: getLabel({
-                  labelName: "Add Material Indent Outword",
+                  labelName: "Add Material Transfer Outword Note",
                   labelKey: "STORE_MATERIAL_INDENT_OUTWORD",
                 }),
               },

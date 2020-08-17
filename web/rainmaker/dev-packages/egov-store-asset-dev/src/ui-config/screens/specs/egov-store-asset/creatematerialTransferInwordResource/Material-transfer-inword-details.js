@@ -57,20 +57,41 @@ import {
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 let materials = get(
                   state.screenConfiguration.preparedFinalObject,
                   `indentsOutmaterial`,
                   []
                 ); 
                 materials =  materials.filter(x=> x.code === action.value)   
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].material.name",materials[0].name));
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].uom.code",materials[0].uom.code));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].material.name`,materials[0].name));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].uom.code`,materials[0].uom.code));
                 let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",materials[0].uom.code) 
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].uom.name",uomname));
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].unitRate",materials[0].unitRate));
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].quantityIssued",materials[0].quantityIssued));             
-                dispatch(prepareFinalObject("transferInwards[0].receiptDetails[0].userReceivedQty",materials[0].quantityIssued));             
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].uom.name`,uomname));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].unitRate`,materials[0].unitRate));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].quantityIssued`,materials[0].quantityIssued));             
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].userReceivedQty`,materials[0].quantityIssued));             
+                // set other value on material select
+
+                let unitRate = get(state.screenConfiguration.preparedFinalObject,`transferInwards[0].receiptDetails[${cardIndex}].unitRate`,0)
+             
+                let totalValue = unitRate * materials[0].quantityIssued
+               
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].totalValue`, totalValue));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].acceptedQty`, materials[0].quantityIssued));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].userAcceptedQty`, materials[0].quantityIssued));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].isScrapItem`, false));
+                // default value not exist in UI
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].quantity`,materials[0].quantityIssued));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].lotNo`, ''));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].serialNo`, ''));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].expiryDate`, 0));
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].batchNo`, ''));
+                //set received date 
+                let receiptDate =
+               get(state, "screenConfiguration.preparedFinalObject.transferInwards[0].receiptDate",0) 
+               receiptDate = convertDateToEpoch(receiptDate);
+                dispatch(prepareFinalObject(`transferInwards[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].receivedDate`, receiptDate));
 
               }
             },
@@ -224,7 +245,7 @@ import {
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "transferInwards[0].receiptDetails",
       prefixSourceJsonPath:
-        "children.cardContent.children.materialIssueCardContainer.children"
+        "children.cardContent.children.materialReceiptCardContainer.children"
     },
     type: "array"
   };
@@ -234,7 +255,7 @@ import {
       {
         labelName: "Material Transfer Inward Details",
         labelKey: "STORE_MATERIAL_TRANSFER_INWARD_DETAILS"
-      },
+      },k,
       {
         style: {
           marginBottom: 18
