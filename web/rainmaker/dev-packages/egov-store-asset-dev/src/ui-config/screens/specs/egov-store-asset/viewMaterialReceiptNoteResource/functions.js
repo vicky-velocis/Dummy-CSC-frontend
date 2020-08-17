@@ -259,6 +259,17 @@ export const createUpdateMR = async (state, dispatch, action) => {
   let receiptDetails = returnEmptyArrayIfNull(
     get(materialReceipt[0], "receiptDetails[0].receiptDetailsAddnInfo", [])
   );
+
+
+  for (let index = 0; index < receiptDetails.length; index++) {
+    const element = receiptDetails[index];   
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].lotNo`, element.receiptDetailsAddnInfo[0].lotNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].serialNo`, element.receiptDetailsAddnInfo[0].serialNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].manufactureDate`, convertDateToEpoch(element.receiptDetailsAddnInfo[0].manufactureDate));
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].expiryDate`, convertDateToEpoch(element.receiptDetailsAddnInfo[0].expiryDate));
+       
+  }
   for (let i = 0; i < receiptDetails.length; i++) {
     set(
       materialReceipt[0],
