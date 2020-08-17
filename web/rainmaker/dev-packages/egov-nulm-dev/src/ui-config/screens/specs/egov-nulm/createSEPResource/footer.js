@@ -9,6 +9,7 @@ import {
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -95,7 +96,7 @@ if(NULMSEPRequest && ( !NULMSEPRequest.hasOwnProperty("gender") || !NULMSEPReque
           let obj = {
             title: documents[ele[0]].title,
             linkText: "VIEW", 
-            link:  ele[1].documents[0].fileUrl,  
+            link:  getFileUrl(ele[1].documents[0].fileUrl),  
             name:   ele[1].documents[0].fileName,    
           }
           let reqObj = {

@@ -23,21 +23,43 @@ export const SMIDDetails = getCommonCard({
     }
   ),
   SMIDDetailsContainer: getCommonContainer({
-   
     caste: {
-      ...getTextField({
-        label: {
-          labelName: "Caste of Applicant",
-          labelKey: "NULM_SMID_CASTE_OF_APPLICANT",
-        },
-        placeholder: {
-          labelName: "Enter Caste of Applicant",
-          labelKey: "NULM_SMID_CASTE_OF_APPLICANT_PLACEHOLDER",
-        },
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 6
+      },
+      jsonPath: "NULMSMIDRequest.caste",
+      type: "array",
+      props: {
         required: true,
-        pattern: getPattern("Name") || null,
-        jsonPath: "NULMSEPRequest.name",       
-      })
+        jsonPath: "NULMSMIDRequest.caste",
+        label: { name: "Caste of Applicant", key: "NULM_SMID_CASTE_OF_APPLICANT" },
+        buttons: [
+          {
+            labelName: "SC",
+            labelKey: "NULM_SEP_SC",
+            value:"SC",           
+          },
+          {
+            label: "ST",
+            labelKey: "NULM_SEP_ST",
+            value:"ST",           
+          },
+          {
+            label: "OBC",
+            labelKey: "NULM_SEP_OBC",
+            value:"OBC",           
+          },
+          {
+            label: "OTHERS",
+            labelKey: "NULM_SEP_GENDER_OTHERS",
+            value:"OTHERS",           
+          }
+        ],
+     //   defaultValue: "OTHERS"
+      },
+      type: "array",     
     },
 
     isUrbanPoor: {
@@ -46,11 +68,11 @@ export const SMIDDetails = getCommonCard({
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.isUrbanPoor",
+      jsonPath: "NULMSMIDRequest.isUrbanPoor",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.isUrbanPoor",
         label: { name: "Urban Poor", key: "NULM_SMID_URBAN_POOR" },
         buttons: [
           {
@@ -81,21 +103,21 @@ export const SMIDDetails = getCommonCard({
         },
         required: false,
         pattern: getPattern("alpha-numeric") || null,
-        jsonPath: "NULMSEPRequest.bplNo"
+        jsonPath: "NULMSMIDRequest.bplNo"
       })
     },
 
-    pwd: {
+    isPwd: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.isUrbanPoor",
+      jsonPath: "NULMSMIDRequest.isPwd",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.isPwd",
         label: { name: "PWD", key: "NULM_SMID_PWD" },
         buttons: [
           {
@@ -114,7 +136,7 @@ export const SMIDDetails = getCommonCard({
       type: "array",     
     },
 
-    nameofApplicant: {
+    name: {
       ...getTextField({
         label: {
           labelName: "Name of Applicant",
@@ -126,38 +148,10 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "NULMSEPRequest.name",       
+        jsonPath: "NULMSMIDRequest.name",       
       })
     },
-
-    qualification: {
-      ...getSelectField({
-        label: {
-          labelName: "Select Qualification",
-          labelKey: "NULM_SMID_QUALIFACATION"
-        },
-        placeholder: {
-          labelName: "Select Qualification",
-          labelKey: "NULM_SMID_QUALIFACATION_SELECT"
-        },
-        required: false,
-        pattern: getPattern("alpha-numeric-with-space") || null,
-        jsonPath: "NULMSEPRequest.qualification",
-        
-        sourceJsonPath:
-        "applyScreenMdmsData.pension.employeeGroup",
-
-        props: {
-          optionValue: "code",
-          optionLabel: "name",
-        },
-
-      })
-
-
-    },
-
-    fatherSpoucename: {
+    fatherOrHusbandName: {
       ...getTextField({
         label: {
           labelName: "Father/Spouse Name",
@@ -169,11 +163,26 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "NULMSEPRequest.fatherOrHusbandName"
+        jsonPath: "NULMSMIDRequest.fatherOrHusbandName"
+      })
+    },
+    qualification: {
+      ...getTextField({
+        label: {
+          labelName: "Qualification",
+          labelKey: "NULM_SEP_QUALIFACATION"
+        },
+        placeholder: {
+          labelName: "Enter Qualification",
+          labelKey: "NULM_SEP_QUALIFACATION_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("alpha-numeric-with-space") || null,
+        jsonPath: "NULMSMIDRequest.qualification"
       })
     },
 
-    dateofbirth: {
+    dob: {
       ...getDateField({
         label: {
           labelName: "Date Of Birth",
@@ -185,7 +194,7 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Date") || null,
-        jsonPath: "NULMSEPRequest.dob",
+        jsonPath: "NULMSMIDRequest.dob",
         props: {
           inputProps: {
             max: getTodaysDateInYMD()
@@ -194,8 +203,8 @@ export const SMIDDetails = getCommonCard({
       })
     },
 
-   emailId: {
-      ...getDateField({
+    emailId: {
+      ...getTextField({
         label: {
           labelName: "Email Id",
           labelKey: "NULM_SMID_EMAIL_ID"
@@ -205,16 +214,11 @@ export const SMIDDetails = getCommonCard({
           labelKey: "NULM_SMID_EMAIL_ID_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Date") || null,
-        jsonPath: "NULMSEPRequest.dob",
-        props: {
-          inputProps: {
-            max: getTodaysDateInYMD()
-          }
-        }
+        pattern: getPattern("Email") || null,
+        jsonPath: "NULMSMIDRequest.emailId",
       })
     },
-    mobilenumber: {
+    mobileNo: {
       ...getTextField({
         label: {
           labelName: "Mobile Number",
@@ -226,11 +230,11 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("MobileNo") || null,
-        jsonPath: "NULMSEPRequest.contact"
+        jsonPath: "NULMSMIDRequest.mobileNo"
       })
     },
 
-    phonenumber: {
+    phoneNo: {
       ...getTextField({
         label: {
           labelName: "Phone Number",
@@ -242,11 +246,11 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("MobileNo") || null,
-        jsonPath: "NULMSEPRequest.contact"
+        jsonPath: "NULMSMIDRequest.phoneNo"
       })
     },
       
-    mothername: {
+    motherName: {
       ...getTextField({
         label: {
           labelName: "Mother Name",
@@ -258,7 +262,7 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "NULMSEPRequest.motherName"
+        jsonPath: "NULMSMIDRequest.motherName"
       })
     },
     address: {
@@ -273,7 +277,7 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Address") || null,
-        jsonPath: "NULMSEPRequest.address"
+        jsonPath: "NULMSMIDRequest.address"
       })
     },
     
@@ -283,11 +287,11 @@ export const SMIDDetails = getCommonCard({
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.gender",
+      jsonPath: "NULMSMIDRequest.gender",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.gender",
         label: { name: "Gender", key: "NULM_SMID_GENDER" },
         buttons: [
           {
@@ -306,7 +310,7 @@ export const SMIDDetails = getCommonCard({
             value:"OTHERS",           
           }
         ],      
-        defaultValue: "MALE"
+       // defaultValue: "MALE"
       },
       type: "array",
      
@@ -317,10 +321,11 @@ export const SMIDDetails = getCommonCard({
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.isMinority",
+      jsonPath: "NULMSMIDRequest.isMinority",
       type: "array",
       props: {
         required: true,
+        jsonPath: "NULMSMIDRequest.isMinority",
         label: { name: "Minority", key: "NULM_SMID_MINORITY" },
         buttons: [
           {
@@ -345,11 +350,11 @@ export const SMIDDetails = getCommonCard({
       gridDefination: {
         xs: 12
       },
-      jsonPath: "NULMSEPRequest.minority",
+      jsonPath: "NULMSMIDRequest.minority",
       type: "array",
       props: {
         required: false,
-       
+        jsonPath: "NULMSMIDRequest.minority",
         label: { name: "Minority Religion", key: "NULM_SMID_MINORITY_RELIGION" },
         buttons: [
           {
@@ -384,11 +389,11 @@ export const SMIDDetails = getCommonCard({
           }
         ],
       
-        defaultValue: "MUSLIM"
+     //   defaultValue: "MUSLIM"
       },
       type: "array",     
     },
-    wardno: {
+    wardNo: {
       ...getTextField({
         label: {
           labelName: "Ward No",
@@ -400,7 +405,22 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Name") || null,
-        jsonPath: "NULMSEPRequest.motherName"
+        jsonPath: "NULMSMIDRequest.wardNo"
+      })
+    },
+    nameAsPerAdhar: {
+      ...getTextField({
+        label: {
+          labelName: "Name as per Adhar",
+          labelKey: "NULM_SMID_NAME_AS_PER_ADHAR"
+        },
+        placeholder: {
+          labelName: "Enter Name as per Adhar",
+          labelKey: "NULM_SMID_NAME_AS_PER_ADHAR_PLACEHOLDER"
+        },
+        required: true,
+        pattern: getPattern("Name") || null,
+        jsonPath: "NULMSMIDRequest.nameAsPerAdhar"
       })
     },
     adharNo: {
@@ -413,28 +433,12 @@ export const SMIDDetails = getCommonCard({
           labelName: "Enter Adhar Number",
           labelKey: "NULM_SMID_ADHAR_NUMBER_PLACEHOLDER"
         },
-        required: true,
-        pattern: getPattern("numeric-only") || null,
-        jsonPath: "NULMSEPRequest.adharNo"
-      })
-    },
-    nameasperadharNo: {
-      ...getTextField({
-        label: {
-          labelName: "Name as per Adhar",
-          labelKey: "NULM_SMID_NAME_AS_PER_ADHAR"
-        },
-        placeholder: {
-          labelName: "Enter Name as per Adhar",
-          labelKey: "NULM_SMID_NAME_AS_PER_ADHAR_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("numeric-only") || null,
-        jsonPath: "NULMSEPRequest.adharNo"
+        pattern: getPattern("aadhar") || null,
+        jsonPath: "NULMSMIDRequest.adharNo"
       })
     },
 
-    acknowledgementNo: {
+    adharAcknowledgementNo: {
       ...getTextField({
         label: {
           labelName: "Adhar Acknowledgement Number",
@@ -444,23 +448,22 @@ export const SMIDDetails = getCommonCard({
           labelName: "Enter Adhar Acknowledgement Number",
           labelKey: "NULM_SMID_ADHAR_ACKNOWLEDGEMENT_NUMBER_PLACEHOLDER"
         },
-        required: true,
-        pattern: getPattern("numeric-only") || null,
-        jsonPath: "NULMSEPRequest.adharNo"
+        pattern: getPattern("aadharAcknowledgementNo") || null,
+        jsonPath: "NULMSMIDRequest.adharAcknowledgementNo"
       })
     },
       
-    insurance: {
+    isInsurance: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.gender",
+      jsonPath: "NULMSMIDRequest.isInsurance",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.isInsurance",
         label: { name: "Insurance", key: "NULM_SMID_INSURANCE" },
         buttons: [
           {
@@ -475,7 +478,7 @@ export const SMIDDetails = getCommonCard({
           },
          
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",
      
@@ -490,23 +493,23 @@ export const SMIDDetails = getCommonCard({
           labelName: "Enter Insurance through",
           labelKey: "NULM_SMID_INSURANCE_THROUGH_PLACEHOLDER"
         },
-        required: true,
-        pattern: getPattern("numeric-only") || null,
-        jsonPath: "NULMSEPRequest.adharNo"
+     //   required: true,
+        pattern: getPattern("alpha-numeric") || null,
+        jsonPath: "NULMSMIDRequest.insuranceThrough"
       })
     },
 
-    streetVendor: {
+    isStreetVendor: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.gender",
+      jsonPath: "NULMSMIDRequest.isStreetVendor",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.isStreetVendor",
         label: { name: "Street vendor", key: "NULM_SMID_STREET_VENDOR" },
         buttons: [
           {
@@ -521,22 +524,22 @@ export const SMIDDetails = getCommonCard({
           },
          
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
       type: "array",
      
     },
-    homeless: {
+    isHomeless: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSEPRequest.gender",
+      jsonPath: "NULMSMIDRequest.isHomeless",
       type: "array",
       props: {
         required: true,
-       
+        jsonPath: "NULMSMIDRequest.isHomeless",
         label: { name: "Homeless", key: "NULM_SMID_HOMELESS" },
         buttons: [
           {
@@ -551,12 +554,9 @@ export const SMIDDetails = getCommonCard({
           },
          
         ],      
-        defaultValue: "YES"
+        defaultValue: "NO"
       },
-      type: "array",
-     
+      type: "array", 
     },
-  
-
   })
 });

@@ -3,7 +3,7 @@ import {
     getCommonHeader,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { footer } from "./createSEPResource/footer";
+  import { footer } from "./createSMIDResource/footer";
   
   import { SMIDDetails } from "./createSMIDResource/smid-Details";
   import { documentDetails } from "./createSMIDResource/documentDetails";
@@ -17,7 +17,7 @@ import {
   import commonConfig from "../../../../config/common";
   
   export const stepsData = [
-    { labelName: "SEP Details", labelKey: "NULM_APPLICATION_FOR_SEP_PROGRAM" },
+    { labelName: "SMID Details", labelKey: "NULM_APPLICATION_FOR_SMID_PROGRAM" },
     { labelName: "Documents", labelKey: "NULM_SEP_DOCUMENT_HEADER" },
   ];
   export const stepper = getStepperObject(
@@ -99,11 +99,20 @@ import {
       );
       // document type 
   
-      //  let DocumentType_PriceList = NULMConfiguration().DocumentType_SEP;
-      dispatch(prepareFinalObject("applyScreenMdmsData", get(response, "MdmsRes")));
+    const SMIDDocuments = [{ accept: "application/pdf,image/*",
+                      active: true,
+                      code: "NULM_SMID_DOCUMENT_UPLOAD",
+                      description: "Upload Relevent Document",
+                      documentType: "smidDocument",
+                      fileType: "PDF_IMAGE",
+                      required: true, 
+                    }]
+    const resp = {SMIDDocuments}
+    dispatch(prepareFinalObject("applyScreenMdmsData.NULM", resp));
+//dispatch(prepareFinalObject("applyScreenMdmsData", get(response, "MdmsRes")));
   
       // setting documents
-      prepareDocumentsUploadData(state, dispatch, 'SEPApplication');
+      prepareDocumentsUploadData(state, dispatch, 'SMIDApplication');
   
       return true;
     } catch (e) {
@@ -147,9 +156,6 @@ import {
           stepper,
           formwizardFirstStep,
           formwizardSecondStep,
-          // formwizardThirdStep,
-  
-  
           footer
         }
       }

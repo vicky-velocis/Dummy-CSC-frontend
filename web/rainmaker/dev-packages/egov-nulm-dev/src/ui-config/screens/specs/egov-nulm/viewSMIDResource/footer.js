@@ -4,7 +4,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { handleCreateUpdatePO } from "./functions";
 
 const gotoCreateFlow = (state, dispatch) => {
-  const createUrl = `/egov-nulm/create-sep`;
+  const createUrl = `/egov-nulm/create-smid`;
   dispatch(setRoute(createUrl));
 };
 

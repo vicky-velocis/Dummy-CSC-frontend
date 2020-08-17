@@ -29,7 +29,7 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-sep"
+    "search-smid"
   );
 
   if (!isSearchFormValid) {
@@ -71,20 +71,20 @@ export const searchApiCall = async (state, dispatch) => {
     //     queryObject.push({ key: key, value: searchScreenObject[key].trim() });
     //   }
     // }
-   let NULMSEPRequest = {...searchScreenObject};
-   NULMSEPRequest.tenantId = tenantId;
+   let NULMSMIDRequest = {...searchScreenObject};
+   NULMSMIDRequest.tenantId = tenantId;
 
-  if(get(NULMSEPRequest, "toDate")){
-    let toDate = get(NULMSEPRequest, "toDate").split("-").reverse().join("-");
-    set( NULMSEPRequest,"toDate",toDate );
+  if(get(NULMSMIDRequest, "toDate")){
+    let toDate = get(NULMSMIDRequest, "toDate").split("-").reverse().join("-");
+    set( NULMSMIDRequest,"toDate",toDate );
   }
-  if(get(NULMSEPRequest, "fromDate")){
-    let fromDate = get(NULMSEPRequest, "fromDate").split("-").reverse().join("-");
-    set( NULMSEPRequest,"fromDate",fromDate );
+  if(get(NULMSMIDRequest, "fromDate")){
+    let fromDate = get(NULMSMIDRequest, "fromDate").split("-").reverse().join("-");
+    set( NULMSMIDRequest,"fromDate",fromDate );
   }
   
-   const requestBody = {NULMSEPRequest}
-    let response = await getSearchResults([],requestBody, dispatch,"sep");
+   const requestBody = {NULMSMIDRequest}
+    let response = await getSearchResults([],requestBody, dispatch,"smid");
     try {
       let data = response.ResponseBody.map((item) => {
   
@@ -99,7 +99,7 @@ export const searchApiCall = async (state, dispatch) => {
 
       dispatch(
         handleField(
-          "search-sep",
+          "search-smid",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -107,10 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-sep",
+          "search-smid",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for SEP")} (${
+          `${getTextToLocalMapping("Search Results for SMID")} (${
             response.ResponseBody.length
           })`
         )
@@ -131,7 +131,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-sep",
+      "search-smid",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

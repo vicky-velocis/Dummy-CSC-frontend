@@ -9,6 +9,7 @@ import {
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -19,31 +20,30 @@ import {
 // import "./index.css";
 
   const moveToReview = dispatch => {
-    const reviewUrl =`/egov-nulm/review-sep`;
+    const reviewUrl =`/egov-nulm/review-smid`;
     dispatch(setRoute(reviewUrl));
   };
 
-
-
 export const callBackForNext = async (state, dispatch) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["create-sep"],
+    state.screenConfiguration.screenConfig["create-smid"],
     "components.div.children.stepper.props.activeStep",
     0
   );
-  const {NULMSEPRequest} = state.screenConfiguration.preparedFinalObject;
+  const {NULMSMIDRequest} = state.screenConfiguration.preparedFinalObject;
   let isFormValid = true;
   let documentsPreview =[];
+  let documentAttachemnt = "";
   if (activeStep === 0) {
-    const isSepDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.SepDetails.children.cardContent.children.SepDetailsContainer.children",
+    const isSmidDetailsValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children",
       state,
       dispatch,
-      "create-sep"
+      "create-smid"
     );
     
-if(NULMSEPRequest && NULMSEPRequest.isMinority){
-  if(NULMSEPRequest.isMinority =="YES" && !NULMSEPRequest.minority ){
+if(NULMSMIDRequest && NULMSMIDRequest.isMinority){
+  if(NULMSMIDRequest.isMinority =="YES" && !NULMSMIDRequest.minority ){
     const errorMessage = {
       labelName: "Please select the Minority",
       labelKey: "ERR_NULM_MINORTY"
@@ -53,8 +53,8 @@ if(NULMSEPRequest && NULMSEPRequest.isMinority){
   }
 }
 
-if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
-  if(NULMSEPRequest.isUrbanPoor =="YES" && !NULMSEPRequest.bplNo ){
+if(NULMSMIDRequest && NULMSMIDRequest.isUrbanPoor){
+  if(NULMSMIDRequest.isUrbanPoor =="YES" && !NULMSMIDRequest.bplNo ){
     const errorMessage = {
       labelName: "Please fill BPL Number",
       labelKey: "ERR_NULM_FILL_BPL_NUMBER"
@@ -63,11 +63,34 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
     return;
   }
 }
+if(NULMSMIDRequest && NULMSMIDRequest.isInsurance){
+  if(NULMSMIDRequest.isInsurance =="YES" && !NULMSMIDRequest.insuranceThrough ){
+    const errorMessage = {
+      labelName: "Please fill insurance through",
+      labelKey: "ERR_NULM_FILL_INSURANCE_THROUGH"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+}
+if(NULMSMIDRequest ){
+  if(!NULMSMIDRequest.adharNo  && !NULMSMIDRequest.adharAcknowledgementNo ){
+    const errorMessage = {
+      labelName: "Please fill either Aadhar No. or Aadhar acknowledgement number",
+      labelKey: "ERR_NULM_FILL_AADHAR_VALIDATION"
+    };
+    dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    return;
+  }
+}
+
+if(NULMSMIDRequest && ( !NULMSMIDRequest.hasOwnProperty("gender") || !NULMSMIDRequest.hasOwnProperty("caste"))){
+  isFormValid = false;
+}
 
 
-
-    if (!isSepDetailsValid) {
-   //   isFormValid = false;
+    if (!isSmidDetailsValid) {
+      isFormValid = false;
     }
   }
   if (activeStep === 1) {
@@ -85,9 +108,16 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
           let obj = {
             title: documents[ele[0]].title,
             linkText: "VIEW", 
-            link:    ele[1].documents[0].fileUrl,       
+            link:    getFileUrl(ele[1].documents[0].fileUrl),   
+            name:   (  decodeURIComponent(
+                        getFileUrl(ele[1].documents[0].fileUrl)
+                          .split("?")[0]
+                          .split("/")
+                          .pop().slice(13)
+                      )) ||
+                    `Document - ${index + 1}`     
           }
-  
+          documentAttachemnt = ele[1].documents[0].fileStoreId;
           documentsPreview.push(obj)
         }
     
@@ -122,7 +152,9 @@ if(NULMSEPRequest && NULMSEPRequest.isUrbanPoor){
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
 else if(activeStep == 1 && isFormValid){
-
+  dispatch(
+    prepareFinalObject("NULMSMIDRequest.documentAttachemnt", documentAttachemnt)
+  );
   dispatch(
     prepareFinalObject("documentsPreview", documentsPreview)
   );
@@ -140,7 +172,7 @@ export const changeStep = (
   defaultActiveStep = -1
 ) => {
   let activeStep = get(
-    state.screenConfiguration.screenConfig["create-sep"],
+    state.screenConfiguration.screenConfig["create-smid"],
     "components.div.children.stepper.props.activeStep",
     0
   );
@@ -175,7 +207,7 @@ export const changeStep = (
       value: isPayButtonVisible
     }
   ];
-  dispatchMultipleFieldChangeAction("create-sep", actionDefination, dispatch);
+  dispatchMultipleFieldChangeAction("create-smid", actionDefination, dispatch);
   renderSteps(activeStep, dispatch);
 };
 
@@ -183,7 +215,7 @@ export const renderSteps = (activeStep, dispatch) => {
   switch (activeStep) {
     case 0:
       dispatchMultipleFieldChangeAction(
-        "create-sep",
+        "create-smid",
         getActionDefinationForStepper(
           "components.div.children.formwizardFirstStep"
         ),
@@ -192,7 +224,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 1:
       dispatchMultipleFieldChangeAction(
-        "create-sep",
+        "create-smid",
         getActionDefinationForStepper(
           "components.div.children.formwizardSecondStep"
         ),
@@ -201,7 +233,7 @@ export const renderSteps = (activeStep, dispatch) => {
       break;
     case 2:
       dispatchMultipleFieldChangeAction(
-        "create-sep",
+        "create-smid",
         getActionDefinationForStepper(
           "components.div.children.formwizardThirdStep"
         ),
@@ -211,7 +243,7 @@ export const renderSteps = (activeStep, dispatch) => {
    
     default:
       dispatchMultipleFieldChangeAction(
-        "create-sep",
+        "create-smid",
         getActionDefinationForStepper(
           "components.div.children.formwizardFifthStep"
         ),

@@ -18,7 +18,9 @@ const code = getQueryArg(window.location.href, "code");
 const getLabelForStoreAsset = () => {
 let labelValue = "";
   switch(screenName){
-    case "SEP": labelValue = {
+    case "SEP":
+    case "SMID" :
+       labelValue = {
       labelName: "SEP Program Submitted Successfully",
       labelKey: `NULM_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
@@ -36,7 +38,9 @@ let labelValue = "";
 const getApplicationDisplayCode =() => {
   let labelValue = "";
   switch(screenName){
-    case "SEP": labelValue = {
+    case "SEP":
+    case "SMID" :
+         labelValue = {
       labelName: "Application Id",
       labelKey: `NULM_SEP_APPLICATION_ID`,
     }

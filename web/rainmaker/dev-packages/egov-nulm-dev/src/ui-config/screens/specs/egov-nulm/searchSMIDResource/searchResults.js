@@ -42,10 +42,10 @@ export const getTextToLocalMapping = (label) => {
           "STORE_MATERIAL_TYPE_CODE",
           localisationLabels
         );
-    case "Search Results for SEP":
+    case "Search Results for SMID":
       return getLocaleLabels(
-        "Search Results for SEP",
-        "NULM_SEP_SEARCH_RESULTS_TABLE_HEADING",
+        "Search Results for SMID",
+        "NULM_SMID_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
   }
@@ -68,7 +68,7 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for SEP"),
+    title: getTextToLocalMapping("Search Results for SMID"),
     options: {
       filter: false,
       download: false,
@@ -85,7 +85,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-  window.location.href = `view-sep?tenantId=${tenantId}&applicationNumber=${rowData[0]}&status=${rowData[2]}`;
+  window.location.href = `view-smid?tenantId=${tenantId}&applicationNumber=${rowData[0]}&status=${rowData[2]}`;
 };
 
 

@@ -253,6 +253,13 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
       []
     );
   }
+  else if (type === "SMIDApplication"){
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NULM.SMIDDocuments",
+      []
+    );
+  }
 
 
   documents = documents.filter(item => {

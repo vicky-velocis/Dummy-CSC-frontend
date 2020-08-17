@@ -46,6 +46,8 @@ export const getSearchResults = async (queryObject=[],requestBody={},dispatch,sc
   switch(screenName){
     case "sep": url =  "/nulm-services/v1/sep/_get";
     break;
+    case "smid": url =  "/nulm-services/v1/smid/_get";
+    break;
 
   }
   try {

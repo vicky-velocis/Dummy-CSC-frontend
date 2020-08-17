@@ -48,7 +48,7 @@ export const reviewDocuments = (isEditable = true) => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              const createUrl = `/egov-nulm/create-sep?step=1`;
+              const createUrl = `/egov-nulm/create-smid?step=1`;
               dispatch(setRoute(createUrl));
             }
           }

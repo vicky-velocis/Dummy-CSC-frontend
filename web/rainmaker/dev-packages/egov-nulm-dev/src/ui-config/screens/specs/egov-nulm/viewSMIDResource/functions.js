@@ -16,7 +16,7 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  handleCardDelete } from "../../../../../ui-utils/commons";
 import{httpRequest} from '../../../../../ui-utils/api'
@@ -124,7 +124,7 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 export const handleCreateUpdatePO = (state, dispatch) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
-    "NULMSEPRequest.applicationUuid",
+    "NULMSMIDRequest.applicationUuid",
     null
   );
   if (uuid) {
@@ -136,51 +136,55 @@ export const handleCreateUpdatePO = (state, dispatch) => {
 
 export const createUpdatePO = async (state, dispatch, action) => {
 
-  let NULMSEPRequest = get(
+  let NULMSMIDRequest = get(
     state.screenConfiguration.preparedFinalObject,
-    "NULMSEPRequest",
+    "NULMSMIDRequest",
     []
   );
 
-  const tenantId =  getTenantId();
-  NULMSEPRequest.tenantId = tenantId;
+  const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+ 
+  NULMSMIDRequest.tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
   if(action ==="CREATE")
-   NULMSEPRequest.applicationStatus = "CREATED";
+   NULMSMIDRequest.applicationStatus = "CREATED";
+
+   let dob = get(NULMSMIDRequest, "dob");
+   const formattedDOB = dob.split("-").reverse().join("-");
 
   set(
-    NULMSEPRequest,
+    NULMSMIDRequest,
     "dob",
-    convertDateToEpoch(get(NULMSEPRequest, "dob"), "dayStart")
+    formattedDOB
   );
 
-  const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
+  const radioButtonValue = ["isUrbanPoor","isPwd","isMinority","isInsurance","isStreetVendor","isHomeless"];
     
   radioButtonValue.forEach(value => {
-    if(NULMSEPRequest[value] && NULMSEPRequest[value]==="YES" ){
-      set( NULMSEPRequest, value, true );
+    if(NULMSMIDRequest[value] && NULMSMIDRequest[value]==="YES" ){
+      set( NULMSMIDRequest, value, true );
     }else{
-      set( NULMSEPRequest, value, false );
+      set( NULMSMIDRequest, value, false );
     }
   })
   
 
-  const requestBody = {NULMSEPRequest};
+  const requestBody = {NULMSMIDRequest};
   console.log("requestbody", requestBody);
 
   if (action === "CREATE") {
     try {
       const response = await httpRequest(
         "post",
-        "/v1/sep/_create",
+        "/nulm-services/v1/smid/_create",
         "",
         queryObject,
         requestBody
       );
        if(response){
-      //  dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
-       }
+        dispatch(setRoute(`/egov-nulm/acknowledgement?screen=smid&mode=create&code=${response.ResponseBody.applicationId}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
@@ -189,13 +193,13 @@ export const createUpdatePO = async (state, dispatch, action) => {
     try {
       const response = await httpRequest(
         "post",
-        "/v1/sep/_update",
+        "/nulm-services/v1/smid/_update",
         "",
         queryObject,
         requestBody
       );
        if(response){
-      //  dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+        dispatch(setRoute(`/egov-nulm/acknowledgement?screen=smid&mode=update&code=${response.ResponseBody.applicationId}`));
        }
   
     } catch (error) {

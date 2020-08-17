@@ -16,14 +16,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["applicationStatus","applicationId","fromDate","toDate"];
+  const textFields = ["applicationStatus","fromDate","toDate"];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-sep.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-smid.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-sep",
+          "search-smid",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -75,24 +75,24 @@ export const searchForm = getCommonCard({
         ],
       },
     }),
-    applicationId: {
-      ...getTextField({
-        label: {
-          labelName: "Application Id",
-          labelKey: "NULM_SEP_APPLICATION_ID"
-        },
-        placeholder: {
-          labelName: "Enter Application Id",
-          labelKey: "NULM_SEP_APPLICATION_ID_PLACEHOLDER"
-        },
-      //  pattern: getPattern("Amount"),
-        gridDefination: {
-          xs: 12,
-          sm: 4,
-        },
-        jsonPath: "searchScreen.applicationId"
-      })
-    },
+    // applicationId: {
+    //   ...getTextField({
+    //     label: {
+    //       labelName: "Application Id",
+    //       labelKey: "NULM_SEP_APPLICATION_ID"
+    //     },
+    //     placeholder: {
+    //       labelName: "Enter Application Id",
+    //       labelKey: "NULM_SEP_APPLICATION_ID_PLACEHOLDER"
+    //     },
+    //   //  pattern: getPattern("Amount"),
+    //     gridDefination: {
+    //       xs: 12,
+    //       sm: 4,
+    //     },
+    //     jsonPath: "searchScreen.applicationId"
+    //   })
+    // },
     fromDate: {
       ...getDateField({
         label: {
