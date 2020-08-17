@@ -263,11 +263,11 @@ export const createUpdateMR = async (state, dispatch, action) => {
 
   for (let index = 0; index < receiptDetails.length; index++) {
     const element = receiptDetails[index];   
-       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].lotNo`, element.receiptDetailsAddnInfo[0].lotNo);
-       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].serialNo`, element.receiptDetailsAddnInfo[0].serialNo);
-       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
-       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].manufactureDate`, convertDateToEpoch(element.receiptDetailsAddnInfo[0].manufactureDate));
-       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].expiryDate`, convertDateToEpoch(element.receiptDetailsAddnInfo[0].expiryDate));
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].lotNo`, element.lotNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].serialNo`, element.serialNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].batchNo`, element.batchNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].manufactureDate`, convertDateToEpoch(element.manufactureDate));
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].expiryDate`, convertDateToEpoch(element.expiryDate));
        
   }
   for (let i = 0; i < receiptDetails.length; i++) {
