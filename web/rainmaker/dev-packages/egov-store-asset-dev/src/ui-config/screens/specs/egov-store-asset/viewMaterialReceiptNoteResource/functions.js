@@ -256,7 +256,7 @@ export const createUpdateMR = async (state, dispatch, action) => {
   set(materialReceipt[0],"fileStoreId", fileStoreId);
 
   let receiptDetails_ = returnEmptyArrayIfNull(
-    get(materialReceipt[0], "receiptDetails[0]", [])
+    get(materialReceipt[0], "receiptDetails", [])
   );
   for (let index = 0; index < receiptDetails_.length; index++) {
     const element = receiptDetails_[index];   
