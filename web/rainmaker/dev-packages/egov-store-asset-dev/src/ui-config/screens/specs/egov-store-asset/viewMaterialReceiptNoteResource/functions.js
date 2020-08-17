@@ -255,10 +255,26 @@ export const createUpdateMR = async (state, dispatch, action) => {
   get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId",0)  
   set(materialReceipt[0],"fileStoreId", fileStoreId);
 
+  let receiptDetails_ = returnEmptyArrayIfNull(
+    get(materialReceipt[0], "receiptDetails[0]", [])
+  );
+  for (let index = 0; index < receiptDetails_.length; index++) {
+    const element = receiptDetails_[index];   
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].lotNo`, element.lotNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].serialNo`, element.serialNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].batchNo`, element.batchNo);
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].manufactureDate`, convertDateToEpoch(element.manufactureDate));
+       set(materialReceipt[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].expiryDate`, convertDateToEpoch(element.expiryDate));
+       
+  }
+
   // set date to epoch in  price list material name
   let receiptDetails = returnEmptyArrayIfNull(
     get(materialReceipt[0], "receiptDetails[0].receiptDetailsAddnInfo", [])
   );
+
+
+
   for (let i = 0; i < receiptDetails.length; i++) {
     set(
       materialReceipt[0],
