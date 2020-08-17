@@ -18,8 +18,14 @@ import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
+ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
-
+ const id = getQueryArg(window.location.href, "id");
+ let isEditMode = false
+ if(id)
+ {
+  isEditMode = true;
+ }
   export const MaterialTransferInwordNote = getCommonCard({
     header: getCommonTitle(
       {
@@ -49,7 +55,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           jsonPath: "materialReceipt[0].TransferOutwordNo.code",
           sourceJsonPath: "materialOutword.materialIssues",
             props: {
-              optionValue: "id",
+              disabled:isEditMode,
+              optionValue: "issueNumber",
               optionLabel: "issueNumber",
             },
         }),
@@ -59,7 +66,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             `materialOutword.materialIssues`,
             []
           ); 
-          materialIssues =  materialIssues.filter(x=> x.id === action.value)  
+          materialIssues =  materialIssues.filter(x=> x.issueNumber === action.value)  
           if(materialIssues && materialIssues[0]) 
           {
             dispatch(prepareFinalObject("transferInwards[0].issueNumber",materialIssues[0].issueNumber));

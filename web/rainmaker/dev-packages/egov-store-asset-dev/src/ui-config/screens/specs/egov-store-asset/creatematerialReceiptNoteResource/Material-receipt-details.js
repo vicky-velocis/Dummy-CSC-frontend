@@ -8,8 +8,13 @@ import {
     getPattern,
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
+  import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import get from "lodash/get";
   import filter from "lodash/filter";
+  import {   
+    getLocalizationCodeValue,
+  
+  } from "../../utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
@@ -124,8 +129,20 @@ import {
                 }
                 // set
                // alert(purchaseOrderDetails[0].id);
+               if(purchaseOrderDetails && purchaseOrderDetails[0])
+               {
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].purchaseOrderDetail.id`,purchaseOrderDetails[0].id));
+                if(material.length>0)
                 dispatch(prepareFinalObject("ReceiptMaterial",material));
+                else
+                {
+                  let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_NOT_EXIST_PO")
+                  const errorMessage = {
+                    labelName: "Material Receipt completed for selected PO Number",
+                    labelKey:   LocalizationCodeValue+' '+action.value
+                  };
+                  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+                }
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.code`,purchaseOrderDetails[0].uom.code));
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.name`,purchaseOrderDetails[0].uom.name));
                 //set AvailableQty from  po purchaseOrderDetails 0 index receivedQuantity,orderQuantity,unitPrice(unitRate)
@@ -138,6 +155,7 @@ import {
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].totalAcceptedvalue`,purchaseOrderDetails[0].orderQuantity * purchaseOrderDetails[0].unitPrice));
 
               }
+            }
 
             },
             MaterialName: {
@@ -464,7 +482,8 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].lotNo"
+                //jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].lotNo"
+                jsonPath: "materialReceipt[0].receiptDetails[0].lotNo"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                      }
@@ -484,7 +503,8 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo"
+                //jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo"
+                jsonPath: "materialReceipt[0].receiptDetails[0].lotNo"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                      }
@@ -504,7 +524,8 @@ import {
                 },
                 required: true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].batchNo"
+                //jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].batchNo"
+                jsonPath: "materialReceipt[0].receiptDetails[0].batchNo"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                      }
@@ -526,7 +547,8 @@ import {
                   }
                 },
                 pattern: getPattern("Date") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate"
+               // jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate"
+                jsonPath: "materialReceipt[0].receiptDetails[0].manufactureDate"
               })
             },
             expiryDate : {
@@ -546,7 +568,8 @@ import {
                   }
                 },
                 pattern: getPattern("Date") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate"
+               // jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate"
+                jsonPath: "materialReceipt[0].receiptDetails[0].expiryDate"
               })
             },
            
@@ -569,7 +592,7 @@ import {
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialReceipt[0].receiptDetails",
       prefixSourceJsonPath:
-        "children.cardContent.children.materialIssueCardContainer.children"
+        "children.cardContent.children.materialReceiptCardContainer.children"
     },
     type: "array"
   };

@@ -111,7 +111,7 @@ import {
                
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.code`,materials[0].uom.code));
                 let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",materials[0].uom.code)
-                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.code`,uomname)); 
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.name`,uomname)); 
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].qtyIssued`,materials[0].quantityIssued));
                 dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,1));
                 // isScrapItem based on purpose selection
@@ -267,7 +267,7 @@ import {
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialReceipt[0].receiptDetails",
       prefixSourceJsonPath:
-        "children.cardContent.children.materialIssueCardContainer.children"
+        "children.cardContent.children.materialReceiptCardContainer.children"
     },
     type: "array"
   };

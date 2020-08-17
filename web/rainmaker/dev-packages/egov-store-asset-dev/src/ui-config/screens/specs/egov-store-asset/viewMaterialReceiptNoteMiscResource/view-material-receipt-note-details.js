@@ -71,7 +71,7 @@ import {
           
           Remark: getLabelWithValue(
             {   labelName: "Remark",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK "},
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"},
             {
               jsonPath: "materialReceipt[0].receiptDetails[0].rejectionRemark",
              

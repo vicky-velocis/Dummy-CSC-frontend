@@ -158,7 +158,8 @@ const screenConfig = {
           }
         },
         masterView,
-        footer: IsEdit? masterViewFooter():{},
+        //footer: IsEdit? masterViewFooter():{},
+        footer:  masterViewFooter(),
       }
     },
    
