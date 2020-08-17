@@ -18,8 +18,8 @@ import {
   //enableButton = hasButton && hasButton === "false" ? false : true;
   
   const header = getCommonHeader({
-    labelName: "Materisl Indent List",
-    labelKey: "STORE_MATERIAL_INDENT_MATERIAL_INDENT_NOTE",
+    labelName: "Indent Material Issue Note",
+    labelKey: "STORE_COMMON_CREATE_INDENT_MATERIAL_ISSUE_NOTE",
   });
   
   const createMaterialIndentHandle = async (state, dispatch) => {
@@ -87,6 +87,8 @@ import {
     beforeInitScreen: (action, state, dispatch) => {
       getData(action, state, dispatch);
       const storedata = getstoreData(action,state, dispatch);
+      //set search param blank
+dispatch(prepareFinalObject("searchScreen",{}));
       return action;
     },
     components: {

@@ -87,7 +87,8 @@ export const purchaseOrderHeader = getCommonCard({
                 const description = material.description;
                 const uom = material.baseUom;
                 const indentQuantity = 0;
-                return{ name, code,description,uom ,indentQuantity}
+                const indentIssuedQuantity = 0;
+                return{ name, code,description,uom ,indentQuantity,indentIssuedQuantity}
             })
               if(indentNumber){
                 const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
@@ -101,8 +102,9 @@ export const purchaseOrderHeader = getCommonCard({
                           const description = ele.material.description;
                           const uom = ele.material.baseUom;
                           const indentQuantity = ele.indentQuantity;
+                          const indentIssuedQuantity = ele.indentIssuedQuantity;
                           if(!indentingMaterial.find(mat => mat.code === code))
-                               indentingMaterial.push({name,code,description,uom,indentQuantity})
+                               indentingMaterial.push({name,code,description,uom,indentQuantity,indentIssuedQuantity})
                         })
                       }
                     })
@@ -195,6 +197,10 @@ export const purchaseOrderHeader = getCommonCard({
           optionLabel: "name"
         }
       }),
+      beforeFieldChange: async (action, state, dispatch) => {
+        // when Type is GEM then Unit rate input by user
+        
+      }
     },
     supplier: {
       ...getSelectField({

@@ -98,10 +98,10 @@ export const searchApiCall = async (state, dispatch) => {
       ) {
 
         if (key === "receiptDate") {
-          Dateselect = true;
+          let Dateselect = true;
           queryObject.push({
             key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dob")
+            value: convertDateToEpoch(searchScreenObject[key])
           });
         } 
         else

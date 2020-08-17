@@ -81,6 +81,8 @@ import {
       
             // fetching MDMS data
      // getData(action, state, dispatch);
+     //set search param blank
+dispatch(prepareFinalObject("searchScreen",{}));
       return action;
     },
     components: {

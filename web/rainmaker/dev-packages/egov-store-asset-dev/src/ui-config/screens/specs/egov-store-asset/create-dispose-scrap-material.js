@@ -185,6 +185,10 @@ if(scrapNumber){
     uiFramework: "material-ui",
     name: "create-dispose-scrap-material",
     beforeInitScreen: (action, state, dispatch) => {
+      const step = getQueryArg(window.location.href, "step");
+      if(!step){
+        dispatch(prepareFinalObject("disposals[0]",null));
+      }
       getData(action, state, dispatch);
       
       return action;

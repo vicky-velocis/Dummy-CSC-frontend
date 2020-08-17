@@ -37,6 +37,7 @@ export const getDesigName = (state, codes) => {
 
 export const searchApiCall = async (state, dispatch) => {
   let { localisationLabels } = state.app || {};
+  let Dateselect = true;
   showHideTable(false, dispatch);
   const tenantId =
     get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
@@ -100,7 +101,7 @@ export const searchApiCall = async (state, dispatch) => {
           Dateselect = true;
           queryObject.push({
             key: key,
-            value: convertDateToEpoch(searchScreenObject[key], "dob")
+            value: convertDateToEpoch(searchScreenObject[key])
           });
         } 
         else

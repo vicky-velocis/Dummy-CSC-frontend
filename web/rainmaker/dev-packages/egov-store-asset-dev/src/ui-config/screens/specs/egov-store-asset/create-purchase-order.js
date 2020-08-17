@@ -171,7 +171,7 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
           const empdesignation = payload.Employees[0].assignments[0].designation;
           if(designationsById){
           const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
-          dispatch(prepareFinalObject("purchaseOrders[0].designation", desgnName[0].name));
+          dispatch(prepareFinalObject("purchaseOrders[0].issuedToDesignation", desgnName[0].name));
           }
         }
         
@@ -189,6 +189,11 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
       getData(action, state, dispatch);
       let indentNumber="";
       indentNumber = getQueryArg(window.location.href, "indentNumber");
+      const step = getQueryArg(window.location.href, "step");
+      const poNumber = getQueryArg(window.location.href, "poNumber");
+      if(!step && !poNumber){
+        dispatch(prepareFinalObject("purchaseOrders[0]",null));
+      }
       if(indentNumber){     
           dispatch(prepareFinalObject("purchaseOrders[0].purchaseType", "Indent"));   
           dispatch(prepareFinalObject("purchaseOrders[0].indentNumbers", [indentNumber]));
@@ -205,7 +210,7 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
             storecode = indents[0].indentStore.code;
             dispatch(prepareFinalObject("purchaseOrders[0].store.code", storecode)); 
           }          
-          storecode = getQueryArg(window.location.href, "indentNumber");
+         // storecode = getQueryArg(window.location.href, "indentNumber");
           if(storecode){
             const queryObject = [{ key: "tenantId", value: getTenantId()},{ key: "store", value: storecode}];
             getSearchResults(queryObject, dispatch,"materials")
@@ -244,19 +249,20 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
                             return materialNames.findIndex(mat => mat.code === ele.code) !== -1;
                         })
                   }
-                dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
+                dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));  
+                if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.storeNames){
+                  const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
+                  const storebj =  storeNames.filter(ele => ele.code === storecode);
+                  if(storebj && storebj[0]){
+                    dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name)); 
+                    dispatch(prepareFinalObject("purchaseOrders[0].store.department.name", storebj[0].department));      
+                    dispatch(prepareFinalObject("purchaseOrders[0].store.divisionName", storebj[0].divisionName));              
+                  }
+                }        
              }
               
             });   
-            if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.storeNames){
-                const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
-                const storebj =  storeNames.filter(ele => ele.code === storecode);
-                if(storebj && storebj[0]){
-                  dispatch(prepareFinalObject("purchaseOrders[0].store.name", storebj[0].name)); 
-                  dispatch(prepareFinalObject("purchaseOrders[0].store.department.name", storebj[0].department));      
-                  dispatch(prepareFinalObject("purchaseOrders[0].store.divisionName", storebj[0].divisionName));              
-                }
-              }
+
             }
       }
       else{

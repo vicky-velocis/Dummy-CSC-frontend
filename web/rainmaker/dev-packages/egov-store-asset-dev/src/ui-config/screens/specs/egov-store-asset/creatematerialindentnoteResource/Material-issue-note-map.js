@@ -149,7 +149,9 @@ import {
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].receiptDetailId`,indentsmaterial[0].receiptDetailId));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].receiptId`,indentsmaterial[0].receiptId));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].mrnNumber`,indentsmaterial[0].mrnNumber));
-                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material`,Material[0])); 
+                //dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material`,Material[0])); 
+                // pass only material code as per discussion 
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material.code`,Material[0].materialCode)); 
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].uom.code`,indentDetails[0].uom.code));              
                 let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",indentDetails[0].uom.code) 
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].uom.name`,uomname));              

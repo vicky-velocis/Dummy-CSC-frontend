@@ -88,7 +88,7 @@ const screenConfig = {
    
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
-    getIndentInwordData(state, dispatch, id, tenantId);
+    getIndentInwordData(state, dispatch, id, tenantId);    
     return action;
   },
   components: {

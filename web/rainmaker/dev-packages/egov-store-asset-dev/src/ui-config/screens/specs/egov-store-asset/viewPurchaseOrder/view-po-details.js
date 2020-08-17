@@ -75,10 +75,10 @@ const assignmentCard = {
             jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].unitPrice",
           }
         ),
-        receivedQuantity: getLabelWithValue(
+        totalValue: getLabelWithValue(
           { labelName: "Total Value", labelKey: "STORE_PURCHASE_ORDER_TOTAL_VALUE" },
           {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].receivedQuantity"
+            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].totalValue"
           }
         ),
         // tenderQuantity: getLabelWithValue(

@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["mrnNumber", "issueStorefrom","issueStoreto","receiptDate",];
+  const textFields = ["mrnNumber", "issueingStore","receiptDate",];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-material-transfer-inword.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`

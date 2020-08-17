@@ -313,7 +313,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             multiline: "multiline",
             rowsMax: 2,
           },
-          required: false,
+          required: true,
           pattern: getPattern("eventDescription") || null,
           jsonPath: "materialReceipt[0].description"
         })
@@ -330,12 +330,23 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           },         
           required: false,
           jsonPath: "materialReceipt[0].inspectedBy",         
-          sourceJsonPath: "supplier.supplier",
-            props: {
-              optionValue: "code",
-              optionLabel: "name",
-            },
-        })
+          sourceJsonPath: "createScreenMdmsData.employee",
+          props: {
+            className: "applicant-details-error",
+            optionLabel: "name",
+            optionValue: "code",
+          },
+        }),
+        beforeFieldChange: (action, state, dispatch) => {
+          // let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
+          // let designation=action.value ;
+          // emp = emp.filter(x=>x.code ===action.value)
+          // let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation)   
+       
+          // dispatch(prepareFinalObject("materialReceipt[0].issuedToDesignation", issuedToDesignation));
+
+  
+        }
       },
       inspectionDate: {
         ...getDateField({

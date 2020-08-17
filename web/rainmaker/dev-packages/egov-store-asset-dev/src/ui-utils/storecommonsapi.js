@@ -811,6 +811,7 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
     CardItem[index].isDeleted !== false)
     {
     let code = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${value}`,'') 
+    code = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",code)  
     let InputQtyValue_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${InputQtyValue}`,0) 
     let CompareQtyValue_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${CompareQtyValue}`,0) 
     let balanceQuantity_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${balanceQuantity}`,0) 
@@ -829,8 +830,20 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
 
     }
     else{
-      if(InputQtyValue_>CompareQtyValue_)       
+      if(pagename ==='create-purchase-order')
+      {
+        let IssueQty = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].issuedQuantity`,0)
+        CompareQtyValue_ = CompareQtyValue_ - IssueQty;
+        if(InputQtyValue_>CompareQtyValue_)       
+        matcode.push(code)
+
+      }
+      else{
+        if(InputQtyValue_>CompareQtyValue_)       
     matcode.push(code)
+
+      }
+      
     }
     }
     
@@ -886,6 +899,7 @@ export const ValidateCardQty = (state,dispatch,cardJsonPath,pagename,jasonpath,v
     CardItem[index].isDeleted !== false)
     {
     let code = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${value}`,'') 
+    code = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",code)  
     let InputQtyValue_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${InputQtyValue}`,0) 
     let InputQtyValue2_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${InputQtyValue2}`,0) 
     let CompareQtyValue_ = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${CompareQtyValue}`,0) 

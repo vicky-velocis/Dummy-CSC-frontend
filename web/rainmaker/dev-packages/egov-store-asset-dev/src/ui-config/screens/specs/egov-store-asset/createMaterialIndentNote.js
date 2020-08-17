@@ -140,12 +140,18 @@ export const header = getCommonContainer({
        if (payload.Employees) {
          const {screenConfiguration} = state;
           // const {stores} = screenConfiguration.preparedFinalObject;
+          const empdesignation = payload.Employees[0].assignments[0].designation;
          const empDetails =
          payload.Employees.filter((item, index) =>  stores[0].storeInCharge.code === item.code);
        
          if(empDetails && empDetails[0] ){
            //alert(empDetails[0].user.name)        
-           dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",empDetails[0].user.name));  
+           dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",empDetails[0].user.name));
+           if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+            dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", desgnName[0].name));
+            }  
+          // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",empDetails[0].user.name));  
          }
          else{
           dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",""));  
@@ -316,9 +322,13 @@ export const header = getCommonContainer({
      
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
-      const storedata = getstoreData(action,state, dispatch);   
-     
+      const storedata = getstoreData(action,state, dispatch);        
       const Indentdata = getIndentData(action,state, dispatch);
+      const step = getQueryArg(window.location.href, "step");
+      const issueNumber = getQueryArg(window.location.href, "issueNumber");
+      if(!step && !issueNumber){
+        dispatch(prepareFinalObject("materialIssues[0]",null));
+      }
      // SEt Default data
 
      dispatch(
@@ -379,6 +389,7 @@ export const header = getCommonContainer({
     else{
       dispatch(setRoute(`/egov-store-asset/search-indent`));
     }
+
       return action;
     },
   

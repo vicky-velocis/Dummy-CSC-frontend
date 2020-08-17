@@ -197,6 +197,7 @@ import {
                   disabled:false
                 },
                 required: true,
+                visible:false,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "indents[0].indentDetails[0].indentQuantity"
               })
@@ -217,7 +218,11 @@ import {
                 required: true,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "indents[0].indentDetails[0].userQuantity"
-              })
+              }),
+              beforeFieldChange: (action, state, dispatch) => {
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].userQuantity`,Number(action.value)));
+              }
             },
           },
           {
