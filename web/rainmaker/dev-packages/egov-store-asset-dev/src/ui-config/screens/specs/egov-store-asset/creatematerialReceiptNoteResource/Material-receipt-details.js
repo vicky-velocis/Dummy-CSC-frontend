@@ -15,6 +15,7 @@ import {
     getLocalizationCodeValue,
   
   } from "../../utils";
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
@@ -119,10 +120,20 @@ import {
                 );
                 for (let index = 0; index < purchaseOrderDetails.length; index++) {
                   const element = purchaseOrderDetails[index];
-                  if((element.orderQuantity-element.receivedQuantity)>0)
+                  const mrnNumber = getQueryArg(window.location.href, "mrnNumber");
+                  if(mrnNumber)
                   {
                     material.push( element.material)
+
                   }
+                  else{
+                    if((element.orderQuantity-element.receivedQuantity)>0)
+                    {
+                      material.push( element.material)
+                    }
+
+                  }
+                 
                 
                   //material.push( purchaseOrderDetails:element.id)
                   
