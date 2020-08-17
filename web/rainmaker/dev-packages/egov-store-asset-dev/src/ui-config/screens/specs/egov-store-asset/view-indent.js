@@ -113,8 +113,10 @@ const screenConfig = {
               componentPath: "Button",
               gridDefination: {
                 xs: 12,
-                sm: 6,
-                align: "right",
+                sm: 4,
+                md:3,
+                lg:3,
+                // align: "right",
               },
               visible: true,// enableButton,
               props: {
@@ -151,7 +153,14 @@ const screenConfig = {
               },
             },
             newPOButton: {
-              componentPath: "Button",            
+              componentPath: "Button", 
+              gridDefination: {
+                xs: 12,
+                sm: 4,
+                md:3,
+                lg:3,
+                // align: "right",
+              },             
               visible: true,// enableButton,
               props: {
                 variant: "contained",
