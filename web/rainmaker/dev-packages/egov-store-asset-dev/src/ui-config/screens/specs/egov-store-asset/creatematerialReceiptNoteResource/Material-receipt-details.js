@@ -504,7 +504,7 @@ import {
                 required: true,
                 pattern: getPattern("Name") || null,
                 //jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo"
-                jsonPath: "materialReceipt[0].receiptDetails[0].lotNo"
+                jsonPath: "materialReceipt[0].receiptDetails[0].serialNo"
               }),
               beforeFieldChange: (action, state, dispatch) => {
                      }

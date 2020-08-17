@@ -141,11 +141,11 @@ export const callBackForNext = async (state, dispatch) => {
       {
       for (let index = 0; index < materialReceipt[0].receiptDetails.length; index++) {
         const element = materialReceipt[0].receiptDetails[index];       
-           set(materialReceipt[0], `receiptDetails[${index}].lotNo`, element.receiptDetailsAddnInfo[0].lotNo);
-           set(materialReceipt[0], `receiptDetails[${index}].serialNo`, element.receiptDetailsAddnInfo[0].serialNo);
-           set(materialReceipt[0], `receiptDetails[${index}].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
-           set(materialReceipt[0], `receiptDetails[${index}].manufactureDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].manufactureDate));
-           set(materialReceipt[0], `receiptDetails[${index}].expiryDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].expiryDate));
+           set(materialReceipt[0], `receiptDetails[${index}].lotNo`, element.lotNo);
+           set(materialReceipt[0], `receiptDetails[${index}].serialNo`, element.serialNo);
+           set(materialReceipt[0], `receiptDetails[${index}].batchNo`, element.batchNo);
+           set(materialReceipt[0], `receiptDetails[${index}].manufactureDate`, epochToYmdDate(element.manufactureDate));
+           set(materialReceipt[0], `receiptDetails[${index}].expiryDate`, epochToYmdDate(element.expiryDate));
            
       }
     }
