@@ -2,7 +2,8 @@ import {
       getCommonHeader,
       getCommonContainer,
       getCommonCard,
-      getLabel
+      getLabel,
+      convertEpochToDate
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import {onTabChange, headerrow, tabs} from './search-preview'
@@ -138,7 +139,8 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
                     },
                     {
                       label: "RP_CREATED_DATE",
-                      jsonPath: "auditDetails.createdTime"
+                      jsonPath: "auditDetails.createdTime",
+                      callback: convertEpochToDate
                     },
                     {
                       label: "RP_COMMENTS_LABEL",
