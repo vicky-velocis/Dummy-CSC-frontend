@@ -27,19 +27,44 @@ const header = getCommonHeader({
   });
 
 const getData = async(action, state, dispatch) => {
+  let payload;
+  let propertyIdTransit = getQueryArg(window.location.href, "propertyIdTransit");
   const { screenConfiguration } = state;
-  let payload = get(
-    screenConfiguration.preparedFinalObject,
-    "SingleImage",
-    [])
-    
-  dispatch(prepareFinalObject("workflow.ProcessInstances", []))
-    await setDocuments(
-      payload[0],
-      "applicationDocuments",
-      "PropertiesTemp[0].reviewDocData",
-      dispatch,'RP'
-    );
+  if(!!propertyIdTransit){
+    payload = get(
+      screenConfiguration.preparedFinalObject,
+      "SingleImage",
+      [])
+      dispatch(prepareFinalObject("workflow.ProcessInstances", []))
+      await setDocuments(
+        payload[0],
+        "applicationDocuments",
+        "PropertiesTemp[0].reviewDocData",
+        dispatch,'RP'
+      );
+
+      let path = "components.div.children.imageUploadDetailsProperties"
+      dispatch(
+        handleField(
+          "notice-violation",
+          path,
+          "visible",
+          false
+        )
+      );
+  }
+  else if(propertyIdTransit === null || propertyIdTransit === undefined || !propertyIdTransit){
+      payload = []
+      let path = "components.div.children.imageUploadDetailsProperties"
+          dispatch(
+            handleField(
+              "notice-violation",
+              path,
+              "visible",
+              true
+            )
+          );
+  }
 }
 
 const applyNoticeViolation = {
@@ -70,11 +95,9 @@ const applyNoticeViolation = {
                           }
                     }
                 },
-                // stepper,
                 formwizardFirstStep: noticeViolationForm,
                 imageUploadDetailsProperties,
                 noticeDocumentDetails,
-                // formwizardThirdStep,
                 footer: Violationnoticegenfooter
             }
         }
