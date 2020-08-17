@@ -638,6 +638,10 @@ export const getPattern = type => {
       return /^[a-zA-Z\s\\/\-]{1,256}$/i;
     case "HCMobileNoSearch":
         return /^[0-9]{0,10}$/i;
+     case "aadhar":
+      return  /^[0-9]{12}$/i;
+     case "aadharAcknowledgementNo":
+      return  /^[0-9]{14}$/i;  
   }
 };
 
