@@ -64,7 +64,6 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
     ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item.active)
     Owners = [{...Owners[0], ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments}}]
     const status = Owners[0].applicationState
-    const amount=Owners[0].ownerDetails.dueAmount
     dispatch(prepareFinalObject("Owners", Owners))
     dispatch(
       prepareFinalObject(
