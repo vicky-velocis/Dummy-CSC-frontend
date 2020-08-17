@@ -42,7 +42,6 @@ const getData = async(action, state, dispatch) => {
         "PropertiesTemp[0].reviewDocData",
         dispatch,'RP'
       );
-
       let path = "components.div.children.imageUploadDetailsProperties"
       dispatch(
         handleField(
@@ -54,14 +53,14 @@ const getData = async(action, state, dispatch) => {
       );
   }
   else if(propertyIdTransit === null || propertyIdTransit === undefined || !propertyIdTransit){
-      payload = []
-      dispatch(prepareFinalObject("workflow.ProcessInstances", []))
-      await setDocuments(
-        payload[0],
-        "applicationDocuments",
-        "PropertiesTemp[0].reviewDocData",
-        dispatch,'RP'
-      );
+    payload = []
+    dispatch(prepareFinalObject("workflow.ProcessInstances", []))
+    await setDocuments(
+      payload[0],
+      "applicationDocuments",
+      "PropertiesTemp[0].reviewDocData",
+      dispatch,'RP'
+    );
       let path = "components.div.children.imageUploadDetailsProperties"
           dispatch(
             handleField(
@@ -71,6 +70,15 @@ const getData = async(action, state, dispatch) => {
               true
             )
           );
+      let pathDocs = "components.div.children.noticeDocumentDetails"
+      dispatch(
+        handleField(
+          "notice-violation",
+          pathDocs,
+          "visible",
+          false
+        )
+      );
   }
 }
 
