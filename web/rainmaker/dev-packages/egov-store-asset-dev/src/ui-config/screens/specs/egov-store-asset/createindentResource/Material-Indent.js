@@ -9,7 +9,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import get from "lodash/get";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
- import { getTodaysDateInYMD } from "../../utils";
+ import { convertDateToEpoch, convertDateToEpochIST } from "../../utils";
   
   export const MaterialIndentDetails = getCommonCard({
     header: getCommonTitle(
@@ -106,7 +106,8 @@ import {
               max: new Date().toISOString().slice(0, 10),
             }
           }
-        })
+        }),
+       
       },
       IndentPurpose: {
         ...getSelectField({

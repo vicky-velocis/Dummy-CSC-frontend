@@ -14,6 +14,7 @@ import {
   prepareFinalObject,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { searchApiCall } from "./functions";
+import { convertDateToEpoch, convertDateToEpochIST } from "../../utils";
 
 const resetFields = (state, dispatch) => {
   const textFields = ["indentNumber","indentDate","indentPurpose",  "inventoryType","indentStore"];
@@ -80,7 +81,8 @@ export const searchForm = getCommonCard({
           //   max: getTodaysDateInYMD()
           // }
         }
-      })
+      }),
+    
     },
     indentPurpose: {
       ...getSelectField({
