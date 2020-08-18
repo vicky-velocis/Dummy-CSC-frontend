@@ -953,17 +953,25 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses,mode="download") => {
+export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="download") => {
   const queryStr = [
-    { key: "key", value: "tlapplication" },
+    { key: "key", value: "rp-ownership-transfer-fresh" },
     { key: "tenantId", value: "ch" }
   ]
   let {documents} = Licenses[0].additionalDetails;
+  let fees = feeEstimate.map(item => ({
+    ...item,
+    label: getLocaleLabels(item.name.labelName, item.name.labelKey)
+  }))
+  const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
+  const {owners, additionalDetail = {}} = Licenses[0].ownerDetails;
+  let {businessStartDate} = additionalDetail;
+  businessStartDate = new Date(businessStartDate).getTime();
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
-  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : "https://egov.transerve.com/media/silhoutte-bust.png"};
+  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
   const length = documents.length % 4
-  documents = [...documents, ...new Array(length > 2 ? 4 - length : length).fill({title: "", name: ""})]
+  documents = !!length ? [...documents, ...new Array(4 - length).fill({title: "", name: ""})] : documents
   const myDocuments = documents.map((item) => ({
     ...item, title: getLocaleLabels(item.title, item.title)
   })).reduce((splits, i) => {
@@ -973,7 +981,9 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
     return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
   }, []);
   let licenses = Licenses[0];
-  licenses = {...licenses, additionalDetails: {documents: myDocuments}, ownerDocument}
+
+  licenses = {...licenses, ownerDetails: {...Licenses[0].ownerDetails, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}
+  licenses.ownerDetails.ownershipTransferDocuments = documents
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
@@ -981,7 +991,7 @@ export const downloadAcknowledgementForm = (Licenses,mode="download") => {
     },
   };
   try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses: [licenses] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Owners: [licenses] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
@@ -2581,3 +2591,4 @@ export const getLicensePeriod = licensePeriod => {
   const suffix = getLocaleLabels("TL_LOCALIZATION_YEARS", "TL_LOCALIZATION_YEARS")
   return !!licensePeriod ? `${licensePeriod} ${suffix}` : 'NA'
 }
+
