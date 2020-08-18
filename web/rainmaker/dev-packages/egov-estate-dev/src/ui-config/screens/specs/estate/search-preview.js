@@ -80,10 +80,10 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 1:
-        path = `/estate/owner-details?filenumber=${fileNumber}&relations=owner`
+        path = `/estate/owner-details?filenumber=${fileNumber}`
         break
       case 2:
-        path = `/estate/purchaser-details?filenumber=${fileNumber}&relations=purchase`
+        path = `/estate/purchaser-details?filenumber=${fileNumber}`
         break
       case 3:
         path = `/estate/payment-details?filenumber=${fileNumber}`
@@ -95,7 +95,7 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/notices?filenumber=${fileNumber}`
         break
       case 6:
-        path = `/estate/court-case?filenumber=${fileNumber}&relations=court`
+        path = `/estate/court-case?filenumber=${fileNumber}`
         break
 
   }

@@ -18,9 +18,6 @@ const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "CTL_CLERK");
 
 let fileNumber = getQueryArg(window.location.href, "fileNumber");
-let relations = getQueryArg(window.location.href, "relations");
-
-
 
 const courtCaseContainer = {
   uiFramework: "custom-atoms",
@@ -32,13 +29,11 @@ children: {
 }
 }
 
-export const searchResults = async (action, state, dispatch, fileNumber,relation=null) => {
+export const searchResults = async (action, state, dispatch, fileNumber) => {
 let queryObject = [
-  { key: "fileNumber", value: fileNumber }
+  { key: "fileNumber", value: fileNumber },
+  {key: "relations", value: "court"}
 ];
-if(relation){ 
-  queryObject.push({key: "relations", value: relation})
-}
 let payload = await getSearchResults(queryObject);
 if(payload) {
   let properties = payload.Properties;
@@ -81,8 +76,7 @@ uiFramework: "material-ui",
 name: "court-case",
 beforeInitScreen: (action, state, dispatch) => {
   fileNumber = getQueryArg(window.location.href, "filenumber");
-  relations = getQueryArg(window.location.href, "relations");
-  beforeInitFn(action, state, dispatch, fileNumber,relations);
+  beforeInitFn(action, state, dispatch, fileNumber);
   return action;
 },
 components: {
