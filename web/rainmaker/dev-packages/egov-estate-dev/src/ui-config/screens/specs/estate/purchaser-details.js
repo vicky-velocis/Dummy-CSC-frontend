@@ -37,7 +37,7 @@ children: {
 }
 }
 
-export const searchResults = async (action, state, dispatch, fileNumber,relation=null) => {
+export const searchResults = async (action, state, dispatch, fileNumber) => {
   let queryObject = [
     { key: "fileNumber", value: fileNumber },
     {key: "relations", value: "purchase"}
