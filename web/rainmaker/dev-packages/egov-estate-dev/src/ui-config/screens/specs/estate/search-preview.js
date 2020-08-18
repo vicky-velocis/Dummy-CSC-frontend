@@ -67,7 +67,8 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
 const beforeInitFn = async (action, state, dispatch, fileNumber) => {
   dispatch(prepareFinalObject("workflow.ProcessInstances", []))
   if(fileNumber){
-    await searchResults(action, state, dispatch, fileNumber)
+   
+     await searchResults(action, state, dispatch, fileNumber)
   }
 }
 
@@ -79,10 +80,10 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/search-preview?filenumber=${fileNumber}`
         break
       case 1:
-        path = `/estate/owner-details?filenumber=${fileNumber}`
+        path = `/estate/owner-details?filenumber=${fileNumber}&relations=owner`
         break
       case 2:
-        path = `/estate/purchaser-details?filenumber=${fileNumber}`
+        path = `/estate/purchaser-details?filenumber=${fileNumber}&relations=purchase`
         break
       case 3:
         path = `/estate/payment-details?filenumber=${fileNumber}`
@@ -94,7 +95,7 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
         path = `/estate/notices?filenumber=${fileNumber}`
         break
       case 6:
-        path = `/estate/court-case?filenumber=${fileNumber}`
+        path = `/estate/court-case?filenumber=${fileNumber}&relations=court`
         break
 
   }

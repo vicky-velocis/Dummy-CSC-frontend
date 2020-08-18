@@ -17,6 +17,8 @@ const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "CTL_CLERK");
 
 let fileNumber = getQueryArg(window.location.href, "fileNumber");
+let relations = getQueryArg(window.location.href, "relations");
+
 
 // const OwnerDetails = getOwnerDetails(false);
 // const AllotmentDetails = getAllotmentDetails(false);
@@ -37,24 +39,30 @@ children: {
 }
 }
 
-export const searchResults = async (action, state, dispatch, fileNumber) => {
+export const searchResults = async (action, state, dispatch, fileNumber,relation=null) => {
   let queryObject = [
     { key: "fileNumber", value: fileNumber }
   ];
+  if(relation){ 
+    queryObject.push({key: "relations", value: relation})
+  }
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
     dispatch(prepareFinalObject("Properties", properties));
     
     let containers={}
-    properties[0].propertyDetails.owners.forEach((element,index) => { 
-      let ownerdetailsComponent = getOwnerDetails(false,index);
-      let allotmentDetailsComponent = getAllotmentDetails(false,index);
-      containers[index] = getCommonCard({
-        ownerdetailsComponent,
-        allotmentDetailsComponent
-      });  
-    });
+    if(properties[0].propertyDetails.owners){
+      properties[0].propertyDetails.owners.forEach((element,index) => { 
+        let ownerdetailsComponent = getOwnerDetails(false,index);
+        let allotmentDetailsComponent = getAllotmentDetails(false,index);
+        containers[index] = getCommonCard({
+          ownerdetailsComponent,
+          allotmentDetailsComponent
+        });  
+      });
+    }
+    
     dispatch(
       handleField(
       "owner-details",
@@ -66,10 +74,15 @@ export const searchResults = async (action, state, dispatch, fileNumber) => {
   }
 }
 
-const beforeInitFn = async (action, state, dispatch, fileNumber) => {
+const beforeInitFn = async (action, state, dispatch, fileNumber,relation=null) => {
   dispatch(prepareFinalObject("workflow.ProcessInstances", []))
   if(fileNumber){
-    await searchResults(action, state, dispatch, fileNumber)
+    if(relation){
+      await searchResults(action, state, dispatch, fileNumber,relation)
+    }
+    else{
+      await searchResults(action, state, dispatch, fileNumber)
+    }
   }
 }
 
@@ -79,7 +92,8 @@ const EstateOwnerDetails = {
   name: "owner-details",
   beforeInitScreen: (action, state, dispatch) => {
     fileNumber = getQueryArg(window.location.href, "filenumber");
-    beforeInitFn(action, state, dispatch, fileNumber);
+    relations = getQueryArg(window.location.href, "relations");
+    beforeInitFn(action, state, dispatch, fileNumber,relations);
     return action;
   },
   components: {
