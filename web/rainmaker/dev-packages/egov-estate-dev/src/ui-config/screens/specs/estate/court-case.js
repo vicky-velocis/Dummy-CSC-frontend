@@ -59,16 +59,11 @@ if(payload) {
 }
 }
 
-const beforeInitFn = async (action, state, dispatch, fileNumber,relation=null) => {
+const beforeInitFn = async (action, state, dispatch, fileNumber) => {
 dispatch(prepareFinalObject("workflow.ProcessInstances", []))
 if(fileNumber){
-  if(relation){
-    await searchResults(action, state, dispatch, fileNumber,relation)
-  }
-  else{
     await searchResults(action, state, dispatch, fileNumber)
   }
-}
 }
 
 const CourtCaseDetails = {
