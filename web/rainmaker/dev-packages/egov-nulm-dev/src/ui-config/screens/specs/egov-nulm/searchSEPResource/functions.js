@@ -74,14 +74,14 @@ export const searchApiCall = async (state, dispatch) => {
    let NULMSEPRequest = {...searchScreenObject};
    NULMSEPRequest.tenantId = tenantId;
 
-  if(get(NULMSEPRequest, "toDate")){
-    let toDate = get(NULMSEPRequest, "toDate").split("-").reverse().join("-");
-    set( NULMSEPRequest,"toDate",toDate );
-  }
-  if(get(NULMSEPRequest, "fromDate")){
-    let fromDate = get(NULMSEPRequest, "fromDate").split("-").reverse().join("-");
-    set( NULMSEPRequest,"fromDate",fromDate );
-  }
+  // if(get(NULMSEPRequest, "toDate")){
+  //   let toDate = get(NULMSEPRequest, "toDate").split("-").reverse().join("-");
+  //   set( NULMSEPRequest,"toDate",toDate );
+  // }
+  // if(get(NULMSEPRequest, "fromDate")){
+  //   let fromDate = get(NULMSEPRequest, "fromDate").split("-").reverse().join("-");
+  //   set( NULMSEPRequest,"fromDate",fromDate );
+  // }
   
    const requestBody = {NULMSEPRequest}
     let response = await getSearchResults([],requestBody, dispatch,"sep");

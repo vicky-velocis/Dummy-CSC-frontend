@@ -514,12 +514,12 @@ export const SMIDDetails = getCommonCard({
         buttons: [
           {
             labelName: "YES",
-            labelKey: "NULM_SMID_STREET_VENDOR_YES",
+            labelKey: "NULM_SMID_YES",
             value:"YES",           
           },
           {
             label: "NO",
-            labelKey: "NULM_SMID_STREET_VENDOR_NO",
+            labelKey: "NULM_SMID_NO",
             value:"NO",           
           },
          
@@ -544,12 +544,12 @@ export const SMIDDetails = getCommonCard({
         buttons: [
           {
             labelName: "YES",
-            labelKey: "NULM_SMID_HOMELESS_YES",
+            labelKey: "NULM_SMID_YES",
             value:"YES",           
           },
           {
             label: "NO",
-            labelKey: "NULM_SMID_HOMELESS_NO",
+            labelKey: "NULM_SMID_NO",
             value:"NO",           
           },
          

@@ -25,7 +25,12 @@ let labelValue = "";
       labelKey: `NULM_APPLICATION_SUCCESS_${screenName}_${mode}`,
     }
     break;
-
+case "REGORGANIZATION" :
+  labelValue = {
+    labelName: "Organisation Registered Successfully",
+    labelKey: `NULM_APPLICATION_SUCCESS_${screenName}_${mode}`,
+  }
+  break;
     default :  labelValue = {
       labelName: "Submitted Successfully",
       labelKey: "",
@@ -45,7 +50,12 @@ const getApplicationDisplayCode =() => {
       labelKey: `NULM_SEP_APPLICATION_ID`,
     }
     break;
-  
+    case "REGORGANIZATION" :
+      labelValue = {
+        labelName: "Organization Name",
+        labelKey: `NULM_NGO_REG_ORGANIZATION_NAME`,
+      }
+      break;
     default :  labelValue = {
       labelName: "Application No.",
       labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL",

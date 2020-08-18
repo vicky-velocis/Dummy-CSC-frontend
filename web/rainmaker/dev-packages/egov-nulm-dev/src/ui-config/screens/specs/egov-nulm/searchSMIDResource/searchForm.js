@@ -16,7 +16,7 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["applicationStatus","fromDate","toDate"];
+  const textFields = ["applicationId","applicationStatus","fromDate","toDate"];
   for (let i = 0; i < textFields.length; i++) {
     if (
       `state.screenConfiguration.screenConfig.search-smid.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
@@ -43,56 +43,25 @@ export const searchForm = getCommonCard({
     labelName: "Provide at least one parameter to search for an application",
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
-  searchFormContainer: getCommonContainer({
-    applicationStatus: getSelectField({
-      label: { labelName: "Application Status", labelKey: "NULM_SEP_APPLICATION_STATUS" },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "NULM_SEP_APPLICATION_STATUS_SELECT",
-      },
-      jsonPath: "searchScreen.applicationStatus",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-    //  sourceJsonPath: "searchScreenMdmsData.store-asset.MaterialType",
-      props: {
-        optionValue: "value",
-        optionLabel: "label",
-        data: [
-          {
-            value: "CREATED",
-            label: "CREATED"
-          },
-          {
-            value: "DRAFTED",
-            label: "DRAFTED"
-          },
-          {
-            value: "APPROVED",
-            label: "APPROVED"
-          }
-        ],
-      },
-    }),
-    // applicationId: {
-    //   ...getTextField({
-    //     label: {
-    //       labelName: "Application Id",
-    //       labelKey: "NULM_SEP_APPLICATION_ID"
-    //     },
-    //     placeholder: {
-    //       labelName: "Enter Application Id",
-    //       labelKey: "NULM_SEP_APPLICATION_ID_PLACEHOLDER"
-    //     },
-    //   //  pattern: getPattern("Amount"),
-    //     gridDefination: {
-    //       xs: 12,
-    //       sm: 4,
-    //     },
-    //     jsonPath: "searchScreen.applicationId"
-    //   })
-    // },
+  searchFormContainer: getCommonContainer({ 
+    applicationId: {
+      ...getTextField({
+        label: {
+          labelName: "Application Id",
+          labelKey: "NULM_SEP_APPLICATION_ID"
+        },
+        placeholder: {
+          labelName: "Enter Application Id",
+          labelKey: "NULM_SEP_APPLICATION_ID_PLACEHOLDER"
+        },
+      //  pattern: getPattern("Amount"),
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+        },
+        jsonPath: "searchScreen.applicationId"
+      })
+    },
     fromDate: {
       ...getDateField({
         label: {
@@ -139,7 +108,36 @@ export const searchForm = getCommonCard({
         }
       })
     },
-  
+    applicationStatus: getSelectField({
+      label: { labelName: "Application Status", labelKey: "NULM_SEP_APPLICATION_STATUS" },
+      placeholder: {
+        labelName: "Select Application Status",
+        labelKey: "NULM_SEP_APPLICATION_STATUS_SELECT",
+      },
+      jsonPath: "searchScreen.applicationStatus",
+      gridDefination: {
+        xs: 12,
+        sm: 4,
+      },
+    //  sourceJsonPath: "searchScreenMdmsData.store-asset.MaterialType",
+      props: {
+        optionValue: "value",
+        optionLabel: "label",
+        style : {
+          display: process.env.REACT_APP_NAME === "Employee" ? "none" : "",
+        },
+        data: [
+          {
+            value: "CREATED",
+            label: "CREATED"
+          },
+          {
+            value: "DRAFTED",
+            label: "DRAFTED"
+          }
+        ],
+      },
+    }),
   }),
 
   button: getCommonContainer({

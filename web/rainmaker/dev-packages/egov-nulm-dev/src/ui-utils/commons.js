@@ -48,7 +48,8 @@ export const getSearchResults = async (queryObject=[],requestBody={},dispatch,sc
     break;
     case "smid": url =  "/nulm-services/v1/smid/_get";
     break;
-
+    case "organization": url = "/nulm-services/v1/organization/_get";
+    break;
   }
   try {
     const response = await httpRequest("post", url, "", queryObject, requestBody );

@@ -29,7 +29,7 @@ export const searchApiCall = async (state, dispatch) => {
     "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children",
     state,
     dispatch,
-    "search-smid"
+    "search-organization"
   );
 
   if (!isSearchFormValid) {
@@ -71,35 +71,35 @@ export const searchApiCall = async (state, dispatch) => {
     //     queryObject.push({ key: key, value: searchScreenObject[key].trim() });
     //   }
     // }
-   let NULMSMIDRequest = {...searchScreenObject};
-   NULMSMIDRequest.tenantId = tenantId;
+   let OrganizationRequest = {...searchScreenObject};
+   OrganizationRequest.tenantId = tenantId;
 
-  // if(get(NULMSMIDRequest, "toDate")){
-  //   let toDate = get(NULMSMIDRequest, "toDate").split("-").reverse().join("-");
-  //   set( NULMSMIDRequest,"toDate",toDate );
+  // if(get(OrganizationRequest, "toDate")){
+  //   let toDate = get(OrganizationRequest, "toDate").split("-").reverse().join("-");
+  //   set( OrganizationRequest,"toDate",toDate );
   // }
-  // if(get(NULMSMIDRequest, "fromDate")){
-  //   let fromDate = get(NULMSMIDRequest, "fromDate").split("-").reverse().join("-");
-  //   set( NULMSMIDRequest,"fromDate",fromDate );
+  // if(get(OrganizationRequest, "fromDate")){
+  //   let fromDate = get(OrganizationRequest, "fromDate").split("-").reverse().join("-");
+  //   set( OrganizationRequest,"fromDate",fromDate );
   // }
   
-   const requestBody = {NULMSMIDRequest}
-    let response = await getSearchResults([],requestBody, dispatch,"smid");
+   const requestBody = {OrganizationRequest}
+    let response = await getSearchResults([],requestBody, dispatch,"organization");
     try {
       let data = response.ResponseBody.map((item) => {
   
         return {
-          [getTextToLocalMapping("Application Id")]: get(item, "applicationId", "-") || "-",
-          [getTextToLocalMapping("Name of Applicant")]: get(item, "name", "-") || "-",
-          [getTextToLocalMapping("Application Status")]: get(item, "applicationStatus", "-") || "-",
-          [getTextToLocalMapping("Creation Date")]: get(item, "auditDetails.createdTime", "")? new Date(get(item, "auditDetails.createdTime", "-")).toISOString().substr(0,10) : "-",
-          ["code"]: get(item, "applicationUuid", "-")
+          [getTextToLocalMapping("Organization Name")]: get(item, "organizationName", "-") || "-",
+          [getTextToLocalMapping("Registration number of the organization")]: get(item, "registrationNo", "-") || "-",
+          [getTextToLocalMapping("Name of authorized representative")]: get(item, "representativeName", "-") || "-",
+          [getTextToLocalMapping("Active")]: get(item, "isActive", false)? "Yes": "No",
+          ["code"]: get(item, "organizationUuid", "-")
         };
       });
 
       dispatch(
         handleField(
-          "search-smid",
+          "search-organization",
           "components.div.children.searchResults",
           "props.data",
           data
@@ -107,10 +107,10 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search-smid",
+          "search-organization",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping("Search Results for SMID")} (${
+          `${getTextToLocalMapping("Search Results for Organization")} (${
             response.ResponseBody.length
           })`
         )
@@ -131,7 +131,7 @@ export const searchApiCall = async (state, dispatch) => {
 const showHideTable = (booleanHideOrShow, dispatch) => {
   dispatch(
     handleField(
-      "search-smid",
+      "search-organization",
       "components.div.children.searchResults",
       "visible",
       booleanHideOrShow

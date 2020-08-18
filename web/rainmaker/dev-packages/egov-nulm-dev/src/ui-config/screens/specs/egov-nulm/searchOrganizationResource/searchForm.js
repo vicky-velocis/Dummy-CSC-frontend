@@ -16,14 +16,14 @@ import {
 import { searchApiCall } from "./functions";
 
 const resetFields = (state, dispatch) => {
-  const textFields = ["applicationStatus","applicationId","fromDate","toDate"];
+  const textFields = ["organizationName","registrationNo","fromDate","toDate"];
   for (let i = 0; i < textFields.length; i++) {
     if (
-      `state.screenConfiguration.screenConfig.search-sep.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
+      `state.screenConfiguration.screenConfig.search-organization.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}.props.value`
     ) {
       dispatch(
         handleField(
-          "search-sep",
+          "search-organization",
           `components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.${textFields[i]}`,
           "props.value",
           ""
@@ -44,39 +44,41 @@ export const searchForm = getCommonCard({
     labelKey: "STORE_HOME_SEARCH_RESULTS_DESC",
   }),
   searchFormContainer: getCommonContainer({
-    applicationStatus: getSelectField({
-      label: { labelName: "Application Status", labelKey: "NULM_SEP_APPLICATION_STATUS" },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "NULM_SEP_APPLICATION_STATUS_SELECT",
-      },
-      jsonPath: "searchScreen.applicationStatus",
-      gridDefination: {
-        xs: 12,
-        sm: 4,
-      },
-      sourceJsonPath: "searchScreenMdmsData.sep.status",
-      props: {
-        optionValue: "value",
-        optionLabel: "label",
-      },
-    }),
-    applicationId: {
+  
+    organizationName: {
       ...getTextField({
         label: {
-          labelName: "Application Id",
-          labelKey: "NULM_SEP_APPLICATION_ID"
+          labelName: "Organization Name",
+          labelKey: "NULM_NGO_REG_ORGANIZATION_NAME"
         },
         placeholder: {
-          labelName: "Enter Application Id",
-          labelKey: "NULM_SEP_APPLICATION_ID_PLACEHOLDER"
+          labelName: "Enter Organization Name",
+          labelKey: "NULM_NGO_REG_ORGANIZATION_NAME_PLACEHOLDER"
         },
-      //  pattern: getPattern("Amount"),
+        pattern: getPattern("Name")|| null,
         gridDefination: {
           xs: 12,
           sm: 4,
         },
-        jsonPath: "searchScreen.applicationId"
+        jsonPath: "searchScreen.organizationName"
+      })
+    },
+    registrationNo: {
+      ...getTextField({
+        label: {
+          labelName: "Registration number of the organization",
+          labelKey: "NULM_NGO_REG_NUMBER_OF_THE_ORG"
+        },
+        placeholder: {
+          labelName: "Enter Registration number of the organization",
+          labelKey: "NULM_NGO_REG_NUMBER_OF_THE_ORG_PLACEHOLDER"
+        },
+        pattern: getPattern("alpha-numeric") || null,
+        gridDefination: {
+          xs: 12,
+          sm: 4,
+        },
+        jsonPath: "searchScreen.registrationNo"
       })
     },
     fromDate: {

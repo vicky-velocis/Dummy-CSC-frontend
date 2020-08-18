@@ -172,7 +172,7 @@ const getSEPDetails = async(state, dispatch) =>{
 }
 
 const roleBasedValidationForFooter = () => {
-  if(process.env.REACT_APP_NAME === "Employee"){
+  if(process.env.REACT_APP_NAME === "Employee" && status === "CREATED"){
       return poViewFooter();
   }
   else{

@@ -119,22 +119,34 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
   set(jsonObject, jsonPath, modifiedArray);
 };
 
-
-
-export const handleCreateUpdatePO = (state, dispatch) => {
+export const handleSubmitSMID = (state, dispatch) =>{
+  handleCreateUpdateSMID(state, dispatch,"CREATED")
+};
+export const handlesaveSMID = (state, dispatch) =>{
+  handleCreateUpdateSMID(state, dispatch,"DRAFTED")
+};
+export const handleRejectSMID = (state, dispatch) =>{
+  handleCreateUpdateSMID(state, dispatch,"REJECTED")
+};
+export const handleApproveSMID = (state, dispatch) =>{
+  handleCreateUpdateSMID(state, dispatch,"APPROVED")
+};
+export const handleCreateUpdateSMID = (state, dispatch,status) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
     "NULMSMIDRequest.applicationUuid",
     null
   );
   if (uuid) {
-    createUpdatePO(state, dispatch, "UPDATE");
+    createUpdatePO(state, dispatch, "UPDATE",status);
   } else {
-    createUpdatePO(state, dispatch, "CREATE");
+    createUpdatePO(state, dispatch, "CREATE",status);
   }
 };
 
-export const createUpdatePO = async (state, dispatch, action) => {
+
+
+export const createUpdatePO = async (state, dispatch, action ,status) => {
 
   let NULMSMIDRequest = get(
     state.screenConfiguration.preparedFinalObject,
@@ -147,17 +159,16 @@ export const createUpdatePO = async (state, dispatch, action) => {
   NULMSMIDRequest.tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
-  if(action ==="CREATE")
-   NULMSMIDRequest.applicationStatus = "CREATED";
+   NULMSMIDRequest.applicationStatus = status;
 
    let dob = get(NULMSMIDRequest, "dob");
    const formattedDOB = dob.split("-").reverse().join("-");
 
-  set(
-    NULMSMIDRequest,
-    "dob",
-    formattedDOB
-  );
+  // set(
+  //   NULMSMIDRequest,
+  //   "dob",
+  //   formattedDOB
+  // );
 
   const radioButtonValue = ["isUrbanPoor","isPwd","isMinority","isInsurance","isStreetVendor","isHomeless"];
     

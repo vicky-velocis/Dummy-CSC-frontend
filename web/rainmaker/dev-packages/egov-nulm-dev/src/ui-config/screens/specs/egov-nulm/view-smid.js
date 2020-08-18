@@ -169,6 +169,18 @@ import {
       }
     }
   }
+  const roleBasedValidationForFooter = () => {
+    if(process.env.REACT_APP_NAME === "Employee"){
+        return poViewFooter();
+    }
+    else{
+      if(status==="DRAFTED")
+          return poViewFooter() 
+      else
+        return{};
+    }
+   
+  }
   
   const screenConfig = {
     uiFramework: "material-ui",
@@ -209,7 +221,7 @@ import {
             }
           },
           tradeView,
-          footer: poViewFooter()
+          footer:  roleBasedValidationForFooter(),
         }
       },
     }

@@ -129,10 +129,42 @@ export const handlesaveSEP = (state, dispatch) =>{
   handleCreateUpdateSEP(state, dispatch,"DRAFTED")
 };
 export const handleRejectSEP = (state, dispatch) =>{
-  handleCreateUpdateSEP(state, dispatch,"APPROVED")
-};
-export const handleApproveSEP = (state, dispatch) =>{
   handleCreateUpdateSEP(state, dispatch,"REJECTED")
+};
+export const handleApproveSEP = async(state, dispatch) =>{
+ handleCreateUpdateSEP(state, dispatch,"APPROVED");
+ const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+ let uuid = get(
+  state.screenConfiguration.preparedFinalObject,
+  "NULMSEPRequest.applicationUuid",
+  null
+);
+let applicationId = get(
+  state.screenConfiguration.preparedFinalObject,
+  "NULMSEPRequest.applicationId",
+  null
+);
+// let NULMSEPRequest ={}
+// NULMSEPRequest.applicationUuid = uuid;
+// NULMSEPRequest.tenantId = tenantId;
+// NULMSEPRequest.applicationStatus = "APPROVED";
+
+// const requestBody = {NULMSEPRequest}
+// try {
+//   const response = await httpRequest(
+//     "post",
+//     "/nulm-services/v1/sep/_updateAppStatus",
+//     "",
+//     queryObject,
+//     requestBody
+//   );
+//    if(response){
+//     dispatch(setRoute(`/egov-nulm/acknowledgement?screen=sep&mode=update&code=${applicationId}`));
+//    }
+
+// } catch (error) {
+//   dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
+// }
 };
 
 
@@ -166,11 +198,11 @@ export const createUpdatePO = async (state, dispatch, action,status) => {
 let dob = get(NULMSEPRequest, "dob");
    const formattedDOB = dob.split("-").reverse().join("-");
 
-  set(
-    NULMSEPRequest,
-    "dob",
-    formattedDOB
-  );
+  // set(
+  //   NULMSEPRequest,
+  //   "dob",
+  //   formattedDOB
+  // );
 
   const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
     

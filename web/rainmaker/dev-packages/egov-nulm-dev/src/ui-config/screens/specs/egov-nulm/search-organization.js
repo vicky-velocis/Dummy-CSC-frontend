@@ -7,8 +7,8 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import set from "lodash/set";
   import { httpRequest } from "../../../../ui-utils";
-  import { searchForm } from "./searchSEPResource/searchForm";
-  import { searchResults } from "./searchSEPResource/searchResults";
+  import { searchForm } from "./searchOrganizationResource/searchForm";
+  import { searchResults } from "./searchOrganizationResource/searchResults";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import commonConfig from '../../../../config/common';
@@ -17,12 +17,12 @@ import {
   //enableButton = hasButton && hasButton === "false" ? false : true;
   
   const header = getCommonHeader({
-    labelName: "Application for SEP program",
-    labelKey: "NULM_APPLICATION_FOR_SEP_PROGRAM",
+    labelName: "Organization Search",
+    labelKey: "NULM_NGO_REG_ORGANIZATION_SEARCH",
   });
   
-  const createSEPHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-nulm/create-sep`));
+  const createOrganizationHandle = async (state, dispatch) => {
+    dispatch(setRoute(`/egov-nulm/register-organization`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
@@ -56,37 +56,12 @@ import {
   };
 
   const getData = async (action, state, dispatch) => {
-
-   const  data =  process.env.REACT_APP_NAME === "Employee" ?  [
-    {
-      value: "CREATED",
-      label: "CREATED"
-    },
-    {
-      value: "APPROVED",
-      label: "APPROVED"
-    }
-   ]:[
-      {
-        value: "CREATED",
-        label: "CREATED"
-      },
-      {
-        value: "DRAFTED",
-        label: "DRAFTED"
-      },
-      {
-        value: "APPROVED",
-        label: "APPROVED"
-      }
-    ];
-    dispatch(prepareFinalObject("searchScreenMdmsData.sep.status", data));
    // await getMDMSData(action, state, dispatch);
   };
   
-  const sepSearchAndResult = {
+  const organizationSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search-sep",
+    name: "search-organization",
     beforeInitScreen: (action, state, dispatch) => {
             // fetching MDMS data
       getData(action, state, dispatch);
@@ -120,7 +95,7 @@ import {
                   sm: 6,
                   align: "right",
                 },
-                visible: process.env.REACT_APP_NAME === "Employee"? false : true,
+                visible: process.env.REACT_APP_NAME === "Employee"? true : false,
                 props: {
                   variant: "contained",
                   color: "primary",
@@ -145,13 +120,13 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add SEP",
-                    labelKey: "NULM_ADD_NEW_SEP_BUTTON",
+                    labelName: "Add Organization",
+                    labelKey: "NULM_NGO_REG_ORGANIZATION_ADD_BUTTON",
                   }),
                 },
                 onClickDefination: {
                   action: "condition",
-                  callBack: createSEPHandle,
+                  callBack: createOrganizationHandle,
                 },
               },
             },
@@ -164,5 +139,5 @@ import {
     },
   };
   
-  export default sepSearchAndResult;
+  export default organizationSearchAndResult;
   
