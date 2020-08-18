@@ -981,7 +981,6 @@ export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="downloa
     return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
   }, []);
   let licenses = Licenses[0];
-
   licenses = {...licenses, ownerDetails: {...Licenses[0].ownerDetails, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}
   licenses.ownerDetails.ownershipTransferDocuments = documents
   const DOWNLOADRECEIPT = {

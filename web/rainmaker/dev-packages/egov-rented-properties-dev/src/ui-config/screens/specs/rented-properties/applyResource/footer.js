@@ -602,6 +602,7 @@ export const footer = getCommonApplyFooter({
     /** MenuButton data based on status */
     let downloadMenu = [];
     let printMenu = [];
+  
     
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
@@ -617,6 +618,7 @@ export const footer = getCommonApplyFooter({
     downloadMenu = [
       applicationDownloadObject
     ];
+   
   
     return {
       rightdiv: {
@@ -656,7 +658,10 @@ export const footer = getCommonApplyFooter({
           }
   
         },
-       
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6
+        // }
       }
     }
   };
