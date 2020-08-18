@@ -23,11 +23,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
   }
  
   export const getImages = (imageObs) => {
-    imageObs.map(img => {
-      if(img.applicationDocuments === null || img.applicationDocuments === undefined){
-        return img.applicationDocuments = []
-      }
-    })
+    imageObs = imageObs.map(img => ({...img,applicationDocuments: img.applicationDocuments || []}))
     return Promise.all(
       imageObs.map(imageOb =>
         Promise.all(imageOb.applicationDocuments.map(id => fetchImage(id))).then(urls => ({
