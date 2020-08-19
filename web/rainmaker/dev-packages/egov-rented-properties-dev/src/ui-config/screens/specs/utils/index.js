@@ -980,11 +980,8 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,mode="download"
     const lastArray = splits[length - 1] || [];
     return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
   }, []);
-  let licenses = Owners[0];
-  // licenses = {...licenses, ownerDetails: {...Owners[0].ownerDetails, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}
-  // licenses.ownerDetails.ownershipTransferDocuments = myDocuments
-  licenses = {...licenses, ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments: myDocuments, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}}
-
+  let ownerInfo = Owners[0];
+  ownerInfo = {...ownerInfo, ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments: myDocuments}}
     
   const DOWNLOADRECEIPT = {
     GET: {
@@ -993,7 +990,7 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,mode="download"
     },
   };
   try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Owners: [licenses] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Owners: [ownerInfo] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
       .then(res => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
