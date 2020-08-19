@@ -17,10 +17,8 @@ export const searchResults = {
     columns: [
       getTextToLocalMapping("Action"),
       getTextToLocalMapping("File No"),
-      getTextToLocalMapping("Property Id"),
-      getTextToLocalMapping("House No"), 
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Mobile No")
+      getTextToLocalMapping("Site Number"), 
+      getTextToLocalMapping("Owner Name")
     ],
     options: {
       filter: false,
