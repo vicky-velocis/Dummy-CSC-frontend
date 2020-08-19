@@ -953,18 +953,18 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="download") => {
+export const downloadAcknowledgementForm = (Owners, feeEstimate ,mode="download") => {
   const queryStr = [
     { key: "key", value: "rp-ownership-transfer-fresh" },
     { key: "tenantId", value: "ch" }
   ]
-  let {documents} = Licenses[0].additionalDetails;
+  let {documents} = Owners[0].additionalDetails;
   let fees = feeEstimate.map(item => ({
     ...item,
     label: getLocaleLabels(item.name.labelName, item.name.labelKey)
   }))
   const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
-  const {owners, additionalDetail = {}} = Licenses[0].ownerDetails;
+  const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
   let {businessStartDate} = additionalDetail;
   businessStartDate = new Date(businessStartDate).getTime();
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
@@ -980,9 +980,12 @@ export const downloadAcknowledgementForm = (Licenses, feeEstimate ,mode="downloa
     const lastArray = splits[length - 1] || [];
     return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
   }, []);
-  let licenses = Licenses[0];
-  licenses = {...licenses, ownerDetails: {...Licenses[0].ownerDetails, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}
-  licenses.ownerDetails.ownershipTransferDocuments = documents
+  let licenses = Owners[0];
+  // licenses = {...licenses, ownerDetails: {...Owners[0].ownerDetails, additionalDetail: {...additionalDetail, businessStartDate}}, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}
+  // licenses.ownerDetails.ownershipTransferDocuments = myDocuments
+  licenses = {...licenses, ownerDetails: {...Owners[0].ownerDetails, ownershipTransferDocuments: myDocuments, additionalDetails: {documents: myDocuments}, ownerDocument, feeEstimate: fees, totalAmount}}
+
+    
   const DOWNLOADRECEIPT = {
     GET: {
       URL: "/pdf-service/v1/_create",
