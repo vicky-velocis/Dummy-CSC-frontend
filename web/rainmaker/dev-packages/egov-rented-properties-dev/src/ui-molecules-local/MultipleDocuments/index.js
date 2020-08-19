@@ -67,7 +67,7 @@ class MultipleDocuments extends Component {
 
   render() {
       let {data = [], btnhide, contents, classes , dispatch} = this.props
-      data === null ? data : data.filter(dat => !!dat.applicationDocuments)
+      data = data.filter(dat => !!dat.applicationDocuments)
         if(data.length==0){
         return(
           <Card className="Multiple-card-212">  
@@ -129,7 +129,7 @@ class MultipleDocuments extends Component {
                             <LabelContainer
                               onClick={content.callBack ? content.callBack : content.url ? () => dispatch(setRoute(content.url)) : () => {}}
                               labelKey={
-                                content.label === "RP_MEMO_DATE" ? moment(get(datum, content.jsonPath, "")).format('dddd, MMMM Do, YYYY h:mm:ss A') : get(datum, content.jsonPath, "")
+                                content.type === "date" ? moment(get(datum, content.jsonPath, "")).format('dddd, MMMM Do, YYYY h:mm:ss A') : get(datum, content.jsonPath, "")
                                 }
                               fontSize={14}
                               checkValueForNA={checkValueForNA}
