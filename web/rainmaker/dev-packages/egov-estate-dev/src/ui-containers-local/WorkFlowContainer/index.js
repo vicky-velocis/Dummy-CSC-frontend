@@ -121,9 +121,12 @@ class WorkFlowContainer extends React.Component {
     let data = get(preparedFinalObject, dataPath, []);
     if (moduleName === "PropertyMaster") {
       if (getQueryArg(window.location.href, "edited")) {
+        // let owners = get(
+        //   preparedFinalObject
+        // )
         const removedDocs = get(
           preparedFinalObject,
-          "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.removedDocs",
+          "PropertiesTemp[0].removedDocs",
           []
         );
         // if (data[0] && data[0].commencementDate) {
@@ -135,10 +138,13 @@ class WorkFlowContainer extends React.Component {
         let owners = get(data[0], "propertyDetails.owners");
         owners = (owners && this.convertOwnerDobToEpoch(owners)) || [];
         set(data[0], "propertyDetails.owners", owners);
-        set(data[0], "tradeLicenseDetail.applicationDocuments", [
-          ...get(data[0], "tradeLicenseDetail.applicationDocuments", []),
-          ...removedDocs
-        ]);
+        owners.map((item, index) => {
+          set(data[0], `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`, [
+            ...get(data[0], `propertyDetails.owners[${index}].ownerDetails.ownerDocuments`, []),
+            ...removedDocs
+          ]);
+        })
+        
 
         // Accessories issue fix by Gyan
         // let accessories = get(data[0], "tradeLicenseDetail.accessories");
