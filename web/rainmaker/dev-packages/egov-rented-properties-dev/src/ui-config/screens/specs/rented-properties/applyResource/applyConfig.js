@@ -48,6 +48,20 @@ export const rentedDocumentsDetails = getCommonCard({
 });
 
 
+export const paymentDocumentsDetails = getCommonCard({
+  ...documentCardConfig,
+  documentList : {
+    ...documentList,
+    props: {
+      ...documentList.props,
+       documentsJsonPath: "PropertiesTemp[0].applicationPaymentDocuments",
+       uploadedDocumentsJsonPath: "PropertiesTemp[0].uploadedPaymentInRedux",
+       tenantIdJsonPath: "Properties[0].tenantId",
+      // removedJsonPath: "PropertiesTemp[0].removedPaymentDocs"
+    }
+  }
+});
+
 export const ownershipTransferDocumentsDetails = getCommonCard({
   ...documentCardConfig,
   documentList : {
@@ -82,12 +96,21 @@ export const stepsData = [
     { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
     { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
   ];
+  export const steps = [
+    { labelName: "Details", labelKey: "RP_COMMON_TR_DETAILS" },
+    { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
+    { labelName: "Payment", labelKey: "TL_COMMON_PAY" },
+    { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
+  ];
 
 export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
     stepsData
   );
-
+  export const addPropertyStepper = getStepperObject(
+    { props: { activeStep: 0 } },
+    steps
+  );
   export const mortgageDocumentsDetails = getCommonCard({
     ...documentCardConfig,
     documentList : {
@@ -128,12 +151,23 @@ export const stepper = getStepperObject(
     },
     visible: false
   };
+  export const formwizardThirdStep = {
+    uiFramework: "custom-atoms",
+    componentPath: "Form",
+    props: {
+      id: "apply_form3"
+    },
+    children: {
+      paymentDocumentsDetails
+    },
+    visible: false
+  };
 
-export const formwizardThirdStep = {
+export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
-    id: "apply_form3"
+    id: "apply_form4"
   },
   children: {
     rentedReviewDetails
