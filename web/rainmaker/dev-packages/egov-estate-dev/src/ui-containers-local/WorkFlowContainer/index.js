@@ -23,8 +23,6 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import orderBy from "lodash/orderBy";
 
-const tenant = getQueryArg(window.location.href, "tenantId");
-
 class WorkFlowContainer extends React.Component {
   state = {
     open: false,
@@ -33,13 +31,13 @@ class WorkFlowContainer extends React.Component {
 
   componentDidMount = async () => {
     const { prepareFinalObject, toggleSnackbar } = this.props;
-    const applicationNumber = getQueryArg(
+    const fileNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "filenumber"
     );
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryObject = [
-      { key: "businessIds", value: applicationNumber },
+      { key: "businessIds", value: fileNumber },
       { key: "history", value: true },
       { key: "tenantId", value: tenantId }
     ];
@@ -121,40 +119,40 @@ class WorkFlowContainer extends React.Component {
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
-    if (moduleName === "NewTL") {
+    if (moduleName === "PropertyMaster") {
       if (getQueryArg(window.location.href, "edited")) {
         const removedDocs = get(
           preparedFinalObject,
-          "LicensesTemp[0].removedDocs",
+          "PropertiesTemp[0].propertyDetails.owners[0].ownerDetails.removedDocs",
           []
         );
-        if (data[0] && data[0].commencementDate) {
-          data[0].commencementDate = convertDateToEpoch(
-            data[0].commencementDate,
-            "dayend"
-          );
-        }
-        let owners = get(data[0], "tradeLicenseDetail.owners");
+        // if (data[0] && data[0].commencementDate) {
+        //   data[0].commencementDate = convertDateToEpoch(
+        //     data[0].commencementDate,
+        //     "dayend"
+        //   );
+        // }
+        let owners = get(data[0], "propertyDetails.owners");
         owners = (owners && this.convertOwnerDobToEpoch(owners)) || [];
-        set(data[0], "tradeLicenseDetail.owners", owners);
+        set(data[0], "propertyDetails.owners", owners);
         set(data[0], "tradeLicenseDetail.applicationDocuments", [
           ...get(data[0], "tradeLicenseDetail.applicationDocuments", []),
           ...removedDocs
         ]);
 
         // Accessories issue fix by Gyan
-        let accessories = get(data[0], "tradeLicenseDetail.accessories");
-        let tradeUnits = get(data[0], "tradeLicenseDetail.tradeUnits");
-        set(
-          data[0],
-          "tradeLicenseDetail.tradeUnits",
-          getMultiUnits(tradeUnits)
-        );
-        set(
-          data[0],
-          "tradeLicenseDetail.accessories",
-          getMultiUnits(accessories)
-        );
+        // let accessories = get(data[0], "tradeLicenseDetail.accessories");
+        // let tradeUnits = get(data[0], "tradeLicenseDetail.tradeUnits");
+        // set(
+        //   data[0],
+        //   "tradeLicenseDetail.tradeUnits",
+        //   getMultiUnits(tradeUnits)
+        // );
+        // set(
+        //   data[0],
+        //   "tradeLicenseDetail.accessories",
+        //   getMultiUnits(accessories)
+        // );
       }
     }
     if (dataPath === "BPA") {
@@ -173,18 +171,18 @@ class WorkFlowContainer extends React.Component {
       }
     }
 
-    const applicationNumber = getQueryArg(
+    const fileNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "filenumber"
     );
 
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+    /* if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       data = data[0];
     }
 
     if (moduleName === "NewSW1") {
       dataPath = "SewerageConnection";
-    }
+    } */
 
     try {
       const payload = await httpRequest("post", updateUrl, "", [], {
@@ -205,13 +203,14 @@ class WorkFlowContainer extends React.Component {
           return;
         }
 
-        if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
+        if (moduleName == "PropertyMaster") path = "Properties[0].fileNumber";
+        else if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
         else path = "Licenses[0].licenseNumber";
-        const licenseNumber = get(payload, path, "");
+        const fileNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
-        )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
+        )}&fileNumber=${fileNumber}&tenantId=${tenant}`;
 
         if (moduleName === "NewWS1" || moduleName === "NewSW1") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
@@ -312,7 +311,11 @@ class WorkFlowContainer extends React.Component {
       bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
     } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
       baseUrl = "wns"
-    } else {
+    } 
+    else if (moduleName == "PropertyMaster"){
+      baseUrl = "estate"
+    }
+    else {
       baseUrl = "tradelicence";
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
