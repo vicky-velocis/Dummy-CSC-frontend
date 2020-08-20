@@ -407,6 +407,31 @@ export const getmaterialissuesSearchResults = async queryObject => {
   }
 
 };
+
+export const getprintpdf = async (queryObject , api) => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      api,     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
 export const getMaterialBalanceRateResults = async queryObject => {
 
   try {

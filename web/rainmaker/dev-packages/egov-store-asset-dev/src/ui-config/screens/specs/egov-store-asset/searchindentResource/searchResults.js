@@ -82,7 +82,7 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-indent?id=${rowData[5]}&tenantId=${tenantId}`;
+  window.location.href = `view-indent?id=${rowData[5]}&tenantId=${tenantId}&indentNumber=${rowData[0]}&Status=${rowData[4]}`;
 };
 
 

@@ -18,11 +18,76 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getSearchResults } from "../../../../ui-utils/commons";
+  import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
+  //print function UI start SE0001
+import { downloadAcknowledgementForm} from '../utils'
+//print function UI end SE0001
+let applicationNumber = getQueryArg(window.location.href, "poNumber");
+let status = getQueryArg(window.location.href, "Status");
+let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
+let IsEdit = true;
+console.log(ConfigStatus);
+ConfigStatus = ConfigStatus.filter(x=>x.code === status.toLocaleUpperCase())
+if(ConfigStatus.length >0)
+IsEdit = false;
+const applicationNumberContainer = () => {
+
+  if (applicationNumber)
+    return {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-store-asset",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: `${applicationNumber}`,
+        visibility: "hidden",
+        pagename:"PO"
+      },
+      visible: true
+    };
+  else return {};
+};
+const statusContainer = () => {
+
+if(status)
+    return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-store-asset",
+    componentPath: "ApplicationStatusContainer",
+    props: {
+     status: `${status}`,
+      visibility: "hidden"
+    },
+    visible: true
+  };
+ else return {};
+};
+//print function UI start SE0001
+/** MenuButton data based on status */
+let printMenu = [];
+let receiptPrintObject = {
+  label: { labelName: "Receipt", labelKey: "STORE_PRINT_INDENT_NOTE" },
+  link: () => {
+    downloadAcknowledgementForm("Purchase Order");
+  },
+  leftIcon: "receipt"
+};
+switch (status) {
+  case "APPROVED":
+   
+    printMenu = [receiptPrintObject];
+    break;
+  
+  default:
+    break;
+}
+//pint function UI End SE0001
   export const header = getCommonContainer({
     header: getCommonHeader({
       labelName: `View Purchase Order`,
       labelKey: "STORE_PURCHASE_ORDER_VIEW"
-    })
+    }),
+    applicationNumber: applicationNumberContainer(),
+    status: statusContainer()
   });
   
   const tradeView = POReviewDetails(false);
@@ -128,16 +193,44 @@ import {
             componentPath: "Container",
             children: {
               header: {
+                // gridDefination: {
+                //   xs: 12,
+                //   sm: 10
+                // },
+                ...header
+              },
+               //print function UI start SE0001
+               printMenu: {
+                uiFramework: "custom-atoms-local",
+                moduleName: "egov-tradelicence",
+                componentPath: "MenuButton",
                 gridDefination: {
                   xs: 12,
-                  sm: 10
-                },
-                ...header
+                  sm: 4,
+                  md:3,
+                  lg:3,
+                  align: "right",
+                },  
+                visible: true,// enableButton,
+                props: {
+                  data: {
+                    label: {
+                      labelName:"PRINT",
+                      labelKey:"STORE_PRINT"
+                    },
+                    leftIcon: "print",
+                    rightIcon: "arrow_drop_down",
+                    props: { variant: "outlined", style: { marginLeft: 10 } },
+                    menu: printMenu
+                  }
+                }
               }
+              //print function UI End SE0001
             }
           },
           tradeView,
-          footer: poViewFooter()
+          //footer: poViewFooter()
+          footer: IsEdit? poViewFooter():{},
         }
       },
     }

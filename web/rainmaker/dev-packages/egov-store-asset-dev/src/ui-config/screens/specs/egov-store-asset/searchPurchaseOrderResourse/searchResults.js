@@ -42,6 +42,12 @@ export const getTextToLocalMapping = (label) => {
         "STORE_PURCHASE_ORDR_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
+      case "Status":
+          return getLocaleLabels(
+            "Status",
+            "STORE_MATERIAL_INDENT_NOTE_STATUS",
+            localisationLabels
+          );
   }
 };
 
@@ -56,6 +62,7 @@ export const searchResults = {
       getTextToLocalMapping("Store Name"),
       getTextToLocalMapping("PO Rate Type"),
       getTextToLocalMapping("Supplier"),
+      getTextToLocalMapping("Status"),
     ],
     title: getTextToLocalMapping("Search Results for Purchase Order"),
     options: {
@@ -73,7 +80,7 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view-purchase-order?tenantId=${getTenantId()}&poNumber=${rowData[0]}`;
+  window.location.href = `view-purchase-order?tenantId=${getTenantId()}&poNumber=${rowData[0]}&Status=${rowData[5]}`;
 };
 
 
