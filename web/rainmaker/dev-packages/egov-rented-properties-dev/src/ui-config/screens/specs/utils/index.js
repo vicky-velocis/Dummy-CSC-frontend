@@ -958,16 +958,16 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
     { key: "key", value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ? `rp-${pdfkey}-paid`: `rp-${pdfkey}-fresh`},
     { key: "tenantId", value: "ch" }
   ]
-
+  
   let {documents} = Owners[0].additionalDetails;
-  let fees = feeEstimate.map(item => ({
-    ...item,
-    label: getLocaleLabels(item.name.labelName, item.name.labelKey)
-  }))
-  const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
-  const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
-  let {businessStartDate} = additionalDetail;
-  businessStartDate = new Date(businessStartDate).getTime();
+  // let fees = feeEstimate.map(item => ({
+  //   ...item,
+  //   label: getLocaleLabels(item.name.labelName, item.name.labelKey)
+  // }))
+  // const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
+  // const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
+  // let {businessStartDate} = additionalDetail;
+  // businessStartDate = new Date(businessStartDate).getTime();
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
   // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
@@ -1006,6 +1006,62 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+
+export const downloadAcknowledgementFormForMortagage = (Owners, feeEstimate ,status,pdfkey,applicationType,mode="download") => {
+  const  queryStr = [
+            { key: "key", value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ? `rp-${pdfkey}-approved-alternate`: `rp-${pdfkey}-fresh`},
+            { key: "tenantId", value: "ch" }
+  ]
+
+  let {documents} = Owners[0].additionalDetails;
+  // let fees = feeEstimate.map(item => ({
+  //   ...item,
+  //   label: getLocaleLabels(item.name.labelName, item.name.labelKey)
+  // }))
+  // const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
+  // const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
+  // let {businessStartDate} = additionalDetail;
+  // businessStartDate = new Date(businessStartDate).getTime();
+  const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
+  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
+  // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
+  const length = documents.length % 4
+  documents = !!length ? [...documents, ...new Array(4 - length).fill({title: "", name: ""})] : documents
+  const myDocuments = documents.map((item) => ({
+    ...item, title: getLocaleLabels(item.title, item.title)
+  })).reduce((splits, i) => {
+    const length = splits.length
+    const rest = splits.slice(0, length - 1);
+    const lastArray = splits[length - 1] || [];
+    return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
+  }, []);
+  let ownerInfo = Owners[0];
+  ownerInfo = {...ownerInfo, applicationDocuments: myDocuments}
+    
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { MortgageApplications: [ownerInfo] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+
 
 export const downloadCertificateForm = (Licenses, data, mode='download') => {
  const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";

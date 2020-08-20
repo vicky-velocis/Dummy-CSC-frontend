@@ -11,7 +11,8 @@ import { set } from "lodash";
 import { getreviewPropertyAddressDetailsMortgage, getReviewApplicantDetailsMortgage,getreviewGrantDetailsMortgage } from "./applyResource/review-applications-mortgage";
 import { getMortgageSearchResults } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import {  downloadPrintContainer,footerReviewTop } from "./applyResource/reviewFooter";
+import { footerReviewTop,mortagageDownloadPdfContainer} from "./applyResource/reviewFooter";
+
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 
@@ -81,13 +82,13 @@ const beforeInitFn = async(action, state, dispatch) => {
     );
       }
     }
-    const printCont = downloadPrintContainer(
+    const printCont = mortagageDownloadPdfContainer(
       action,
       state,
       dispatch,
       status,
       applicationNumber,
-      tenantId
+      tenantId,"mortgage","MG"
     );
     const CitizenprintCont=footerReviewTop(
       action,
