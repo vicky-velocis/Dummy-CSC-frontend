@@ -53,6 +53,7 @@ const beforeInitFn = async(action, state, dispatch) => {
       const response = await getMortgageSearchResults(queryObject);
       if (response && response.MortgageApplications) {
       let {MortgageApplications} = response
+      const status = MortgageApplications[0].state
       const grandDetails=MortgageApplications[0].mortgageApprovedGrantDetails
       let applicationDocuments = MortgageApplications[0].applicationDocuments|| [];
       const removedDocs = applicationDocuments.filter(item => !item.active)
@@ -80,8 +81,6 @@ const beforeInitFn = async(action, state, dispatch) => {
           getGrantDetailsAvailed
       ),
     );
-      }
-    }
     const printCont = mortagageDownloadPdfContainer(
       action,
       state,
@@ -112,6 +111,10 @@ const beforeInitFn = async(action, state, dispatch) => {
           "screenConfig.components.div.children.headerDiv.children.helpSection.children",
           printCont
         );
+      }
+     
+    }
+    
   }
 const mortgagePreviewDetails = {
     uiFramework: "material-ui",

@@ -4,7 +4,7 @@ import {
   import {
     getButtonVisibility,
     getCommonApplyFooter,
-    downloadAcknowledgementForm
+    downloadAcknowledgementForm,downloadAcknowledgementFormForMortagage
   } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import "./index.css";
@@ -210,9 +210,10 @@ import {
     pdfkey,
     applicationType
   ) => {
+    debugger
     /** MenuButton data based on status */
     let downloadMenu = [];
-    console.log(pdfkey,applicationType)
+    console.log(pdfkey,applicationType,status)
     let printMenu = [];  
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
@@ -221,7 +222,7 @@ import {
         const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = MortgageApplicationsTemp[0].reviewDocData;
         set(MortgageApplications[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementForm(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
+        downloadAcknowledgementFormForMortagage(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
       },
       leftIcon: "assignment"
     };

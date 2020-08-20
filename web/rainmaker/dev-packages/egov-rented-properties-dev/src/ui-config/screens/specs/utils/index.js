@@ -960,17 +960,9 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
   ]
   
   let {documents} = Owners[0].additionalDetails;
-  // let fees = feeEstimate.map(item => ({
-  //   ...item,
-  //   label: getLocaleLabels(item.name.labelName, item.name.labelKey)
-  // }))
-  // const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
-  // const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
-  // let {businessStartDate} = additionalDetail;
-  // businessStartDate = new Date(businessStartDate).getTime();
+ 
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
-  // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
   const length = documents.length % 4
   documents = !!length ? [...documents, ...new Array(4 - length).fill({title: "", name: ""})] : documents
   const myDocuments = documents.map((item) => ({
@@ -1008,23 +1000,15 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
 }
 
 export const downloadAcknowledgementFormForMortagage = (Owners, feeEstimate ,status,pdfkey,applicationType,mode="download") => {
+  debugger
   const  queryStr = [
-            { key: "key", value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ? `rp-${pdfkey}-approved-alternate`: `rp-${pdfkey}-fresh`},
+            { key: "key", value: status == `${applicationType}_APPROVED` ? `rp-${pdfkey}-approved-alternate`: `rp-${pdfkey}-fresh`},
             { key: "tenantId", value: "ch" }
   ]
 
   let {documents} = Owners[0].additionalDetails;
-  // let fees = feeEstimate.map(item => ({
-  //   ...item,
-  //   label: getLocaleLabels(item.name.labelName, item.name.labelKey)
-  // }))
-  // const totalAmount = feeEstimate.reduce((prev, curr) => prev + Number(curr.value), 0).toFixed(2);
-  // const {owners, additionalDetail = {}} = Owners[0].ownerDetails;
-  // let {businessStartDate} = additionalDetail;
-  // businessStartDate = new Date(businessStartDate).getTime();
   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
-  // documents = findIndex !== -1 ? [...documents.slice(0, findIndex), ...documents.slice(findIndex+1)] : documents
   const length = documents.length % 4
   documents = !!length ? [...documents, ...new Array(4 - length).fill({title: "", name: ""})] : documents
   const myDocuments = documents.map((item) => ({
