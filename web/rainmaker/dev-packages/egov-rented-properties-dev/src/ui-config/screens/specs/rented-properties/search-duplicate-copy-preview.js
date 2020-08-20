@@ -9,10 +9,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getDuplicateCopySearchResults} from "../../../../ui-utils/commons";
 import { getDuplicateCopyReviewPropertyAddressDetails , getDuplicateCopyPreviewApplicantDetails} from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { footerReview, downloadPrintContainer,footerReviewTop } from "./applyResource/reviewFooter";
+import { footerReview,footerReviewTop } from "./applyResource/reviewFooter";
 import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "../utils";
 import { set } from "lodash";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {downloadPrintContainer} from "./applyResource/footer"
 
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -116,9 +117,6 @@ const duplicateReviewDetails = getCommonCard({
               "screenConfig.components.div.children.headerDiv.children.helpSection.children",
               printCont
             );
-    
-
-
 
         const footer = footerReview(
           action,
