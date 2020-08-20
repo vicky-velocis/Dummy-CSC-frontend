@@ -210,10 +210,8 @@ import {
     pdfkey,
     applicationType
   ) => {
-    debugger
     /** MenuButton data based on status */
     let downloadMenu = [];
-    console.log(pdfkey,applicationType,status)
     let printMenu = [];  
     let applicationDownloadObject = {
       label: { labelName: "Application", labelKey: "TL_APPLICATION" },

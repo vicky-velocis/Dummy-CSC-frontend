@@ -1000,7 +1000,6 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
 }
 
 export const downloadAcknowledgementFormForMortagage = (Owners, feeEstimate ,status,pdfkey,applicationType,mode="download") => {
-  debugger
   const  queryStr = [
             { key: "key", value: status == `${applicationType}_APPROVED` ? `rp-${pdfkey}-approved-alternate`: `rp-${pdfkey}-fresh`},
             { key: "tenantId", value: "ch" }
