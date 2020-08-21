@@ -17,17 +17,19 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import { documentsEventSummary } from "./summaryResource/documentsSummary";
-import { footer,ApplySummaryfooter } from "./summaryResource/footer";
+import { EventSummaryFooter,ApplySummaryfooter } from "./summaryResource/footer";
 import { eventdetailsSummary } from "./summaryResource/eventdetailsSummary";
 import {getSearchResultsView} from "../egov-pr/searchResource/citizenSearchFunctions"
-import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageGet, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import {
   
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { cancelEventApplication } from "../../../../ui-utils/commons";
+import { cancelEventApplication,checkVisibility } from "../../../../ui-utils/commons";
 import {  showHideAdhocPopupopmsReject } from "../utils";
+import { httpRequest } from "../../../../ui-utils";
+import commonConfig from '../../../../config/common';
 
 const header = getCommonContainer({
   header: getCommonHeader({
@@ -39,25 +41,18 @@ const header = getCommonContainer({
     moduleName: "egov-pr",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "eventId")
+    number: ''
     }
 
   },
-  status:getQueryArg(window.location.href, "eventstatus")==="CANCELLED"?getQueryArg(window.location.href, "status")==="null"?{}: {
+  status:getQueryArg(window.location.href, "status")==="null"?{}: 
+  {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-pr",
     componentPath: "StatusContainer",
     props: {
-      number: "CANCELLED"
-    }
-
-  }:
-   getQueryArg(window.location.href, "status")==="null"?{}: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-pr",
-    componentPath: "StatusContainer",
-    props: {
-      number: getQueryArg(window.location.href, "status")
+      number: ''
+     
     }
 
   }
@@ -90,7 +85,41 @@ const closePopup = async (state, dispatch) => {
 
 
 
+  const getMdmsData = async (action, state, dispatch) => {
 
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: commonConfig.tenantId,
+        moduleDetails: [
+          {
+            moduleName: "RAINMAKER-PR",
+            masterDetails: [ { name: "StatusCheck" }
+            
+          ]
+          },
+         
+  
+       
+        ]
+      }
+    };
+    try {
+      let payload = null;
+      payload = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+    
+        
+
+      dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
 export const ConfirmMsg = getCommonContainer({
    
@@ -201,67 +230,103 @@ const prepareDocumentsView = async (state, dispatch) => {
  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
     
 }
-const HideshowEdit = (action, Status, ) => {
-  // set(
-  //   action,
-  //   "screenConfig.components.div.children.footer.children.testButton.visible",
-  //   Status === 'UPCOMING' ?  true  : false 
-  // );
-  // set(
-  //   action,
-  //   "screenConfig.components.div.children.footer.children.testButton.visible",
-  //   Status === 'ONGOING' ?  true  : false 
-  // );
-        
-      
-}
+
 const setSearchResponse = async (state, action, dispatch, tenantId,payload) => {
 
 
-  let response=await getSearchResultsView(state, dispatch,payload)
+let response=await getSearchResultsView(state, dispatch,payload)
+dispatch(prepareFinalObject("EventSummary", get(response, "ResponseBody", [])));
+let EventId=getQueryArg(window.location.href, "eventId")
+ dispatch(
+  handleField(
+    "summary",
+    "components.div.children.headerDiv.children.header.children.eventId",
+"props.number",
+EventId
+  )
+);
+let mdmsresponse=  get(
+  state,
+  "screenConfiguration.preparedFinalObject.applyScreenMdmsData",
+  {}
+);
+let status=getQueryArg(window.location.href, "status")
+let eventStatus=getQueryArg(window.location.href, "eventstatus")
+
+if(status!=="null")
+{
   
+mdmsresponse["RAINMAKER-PR"].StatusCheck.map(res => {
+  if(status === res.scheduleStatus && eventStatus==res.eventStatus)
+{
+ 
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.headerDiv.children.header.children.status",
+  "props.number",
+  res.isStatus
+    )
+  );
+}
 
-  dispatch(prepareFinalObject("EventSummary", get(response, "ResponseBody", [])));
-  
-  let Status = get(state, "screenConfiguration.preparedFinalObject.EventSummary[0].status", {});
-  
-  //
 
 
-localStorageGet("shoWHideCancel")==="apply"?'':HideshowEdit(action, Status);
-
-
-
+})
+}
+else{
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.headerDiv.children.header.children",
+  "status",
+  {}
+    )
+  );
+}
 }  
 const screenConfig = {
   uiFramework: "material-ui",
   name: "summary",
   beforeInitScreen: (action, state, dispatch) => {
-  
-
-    set(
-      action,
-      "screenConfig.components.div.children.footer.children.testButton.visible",
-      ((getQueryArg(window.location.href, "status") === 'UPCOMING' || getQueryArg(window.location.href, "status") === 'ONGOING')  && getQueryArg(window.location.href, "eventstatus")!=="CANCELLED") ?  true  : false 
-    );
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.footer.children.testButton.visible",
-    //   Status === 'ONGOING' ?  true  : false 
-    // );
-
-
-  set(
-    action,
-    "screenConfig.components.div.children.body.children.cardContent.children.eventdetailsSummary.children.cardContent.children.header.children.editSection.visible",
-    (getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" || getQueryArg(window.location.href, "status")==="ONGOING")===true ?false:true )
-
     
+    localStorageSet("EventId","")
+
+    let EventId=getQueryArg(window.location.href, "eventId")
+    localStorageSet("EventId",EventId)
+//  dispatch(
+//   handleField(
+//     "summary",
+//     "components.div.children.headerDiv.children.header.children.eventId",
+// "props.number",
+// EventId
+//   )
+// );
+
+    let eventstatus=getQueryArg(window.location.href, "status")
+    if(eventstatus!=="null")
+    {
     set(
       action,
-      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
-      getQueryArg(window.location.href, "status")==="EXPIRED" || getQueryArg(window.location.href, "eventstatus")==="CANCELLED" || getQueryArg(window.location.href, "status")==="ONGOING" ?false:true )
-    let payload={
+      "screenConfig.components.div.children.body.children.cardContent.children.eventdetailsSummary.children.cardContent.children.header.children.editSection.visible",
+     false )
+  
+      
+      set(
+        action,
+        "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+        false)
+      }
+    getMdmsData(action, state, dispatch).then(response => {
+      let mdmsresponse=  get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData",
+        {}
+      );
+      checkVisibility(action, state, dispatch,mdmsresponse,getQueryArg(window.location.href, "status"),getQueryArg(window.location.href, "eventstatus"))
+    })
+
+      let payload={
       "requestBody":{
               "tenantId":getTenantId(),
               "eventDetailUuid":getQueryArg(window.location.href, "eventuuId")            ,
@@ -307,7 +372,7 @@ const screenConfig = {
          
            documentsSummary: documentsEventSummary
         }),
-        footer: getQueryArg(window.location.href, "page")==="apply"?ApplySummaryfooter:footer
+        EventSummaryFooter: getQueryArg(window.location.href, "page")==="apply"?ApplySummaryfooter:EventSummaryFooter
       }
     },
     adhocDialog: {

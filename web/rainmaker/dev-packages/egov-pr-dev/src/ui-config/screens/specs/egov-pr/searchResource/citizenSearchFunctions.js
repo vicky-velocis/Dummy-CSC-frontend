@@ -618,8 +618,8 @@ export const getGridDataBilling = async (action, state, dispatch) => {
   }
 };
 
-export const getGridDataPublishTender = async (action, state, dispatch) => {
-  const response = await getPublishTenderGrid();
+export const getGridDataPublishTender = async (action, state, dispatch,status) => {
+  const response = await getPublishTenderGrid(status);
   
   try {
     if (response && response.ResponseBody && response.ResponseBody.length > 0) {
@@ -1345,9 +1345,7 @@ documentsPreview6.push(document);
 }
 export const getSearchResultsViewPressnote= async (state, dispatch,data) => {
   const response = await getSearchResultsViewPressnotedata(data);
-  
-  console.log("*******************");
-  console.log(response);
+ ;
   
  
   
@@ -1378,39 +1376,6 @@ dispatch(prepareFinalObject("ResponseBody", response.ResponseBody));
   
   let doc=PublicRelation.documentAttachment
 console.log(doc.length)
-// if(doc.length>0)
-// {
-//let pressDoc =  PublicRelation.hasOwnProperty('documentAttachment')?doc[0]['fileStoreId']:''
-
-// if (pressDoc !== '' || pressDoc!==undefined) {
-//   documentsPreview.push({
-//     title: "PR_PRESSNOTE_PRESSNOTE_FILE_DOCUMENT",
-//     fileStoreId: pressDoc,
-//     linkText: "View"
-//   })
-// }  let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
-// let fileUrls =
-//   fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
-// documentsPreview = documentsPreview.map(function (doc, index) {
-
-// doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
-// //  doc["name"] = `Document - ${index + 1}`
-//   doc["name"] =
-//     (fileUrls[doc.fileStoreId] &&
-//       decodeURIComponent(
-//         fileUrls[doc.fileStoreId]
-//           .split(",")[0]
-//           .split("?")[0]
-//           .split("/")
-//           .pop()
-//           .slice(13)
-//       )) ||
-//     `Document - ${index + 1}`;
-//   return doc;
-// });
-// }
-
-// dispatch(prepareFinalObject("documentsPreview", documentsPreview));
 
 let doctitle = [];
 if(doc.length>0)
@@ -1863,7 +1828,37 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
   }
   
 
-  
+ // let PublicRelation = get(state, "screenConfiguration.preparedFinalObject.eventDetails[0]", {});
+//   let doc=response.ResponseBody[0].tenderDocument
+
+//   let doctitle = [];
+//   if(doc.length>0)
+//   {
+//     for(let i=0; i<doc.length; i++) {
+//   let eventDoc =  doc[i]['fileStoreId']
+//       doctitle.push(doc[i]['fileName:']);
+ 
+//   if (eventDoc !== '' || eventDoc!==undefined) {
+//     documentsPreview.push({
+//       title: doc[i]['fileName:'],
+//       title: doc[i]['fileName:'],
+//       fileStoreId: eventDoc,
+//       linkText: "View"
+//     })
+//     let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
+//     let fileUrls =
+//       fileStoreIds.length > 0 ? await getFileUrlFromAPI(fileStoreIds) : {};
+
+//     documentsPreview = documentsPreview.map(function (doc, index) {
+
+//   doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+//   doc['fileUrl']=fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
+
+//       return doc;
+//     });
+//   }
+//   }
+// }
 
 
     dispatch(prepareFinalObject("documentsPreview", documentsPreview));

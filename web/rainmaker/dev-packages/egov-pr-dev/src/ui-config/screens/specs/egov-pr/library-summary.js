@@ -26,6 +26,12 @@ import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov
 import {getSearchResultsView,getSearchResultsViewLibrary} from "../egov-pr/searchResource/citizenSearchFunctions";
 import "./publishtender.css"
 import { httpRequest, baserequestURL } from "../../../../ui-utils";
+import { checkLibraryVisibility } from "../../../../ui-utils/commons";
+import commonConfig from '../../../../config/common';
+import {
+  getUserInfo
+ } from "egov-ui-kit/utils/localStorageUtils";
+
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Library Details",
@@ -205,13 +211,57 @@ const prepareDocumentsView = async (state, dispatch) => {
         dispatch(prepareFinalObject("documentsPreview", documentsPreview));
     
 }
+const getMdmsData = async (action, state, dispatch) => {
 
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "RAINMAKER-PR",
+          masterDetails: [ { name: "LibraryRoleCheck" }
+          
+        ]
+        },
+       
+
+     
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+  
+      
+    dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "library-summary",
   beforeInitScreen: (action, state, dispatch) => {
-  
+    
+    getMdmsData(action, state, dispatch).then(response => {
+      let mdmsresponse=  get(
+        state,
+        "screenConfiguration.preparedFinalObject.applyScreenMdmsData",
+        {}
+      );
+      checkLibraryVisibility(action, state, dispatch,mdmsresponse,JSON.parse(getUserInfo()).roles)
+    })
+
+
+
     let payload={
       "requestBody":{
               "tenantId":getTenantId(),

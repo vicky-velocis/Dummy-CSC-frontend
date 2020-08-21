@@ -1,8 +1,16 @@
+div#material-ui-cardContent div thead tr th {
+  padding-left: 22px !important; }
+
+div#material-ui-cardContent tbody {
+  word-break: break-all !important; }
+
+form#apply_form1 tbody {
+  word-break: break-all !important; }
+
 @media only screen and (min-width: 551px) {
   .apply-wizard-footer {
-    z-index: 101 !important;
-  }  
-}   
+    z-index: 201 !important; } }
+
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {
     background-color: #ffffff;
@@ -15,40 +23,16 @@
     width: 100vw;
     text-align: right;
     display: flex;
-    padding: initial;
-   
-  }
-
+    padding: initial; }
   .apply-wizard-footer button {
     width: 100% !important;
     margin: initial;
     border: none;
     margin: 0 !important;
-    border-radius: none !important;
-  }
-}
-.applicant-details-error{p{
-  font-size: 14px;
-}}
-#custom-containers-propertyMohalla{div{p{
-  font-size: 14px;
-}}}
+    border-radius: none !important; } }
 
+.applicant-details-error p {
+  font-size: 14px; }
 
-div#custom-atoms-footer.addpadding {
-  padding-bottom: 66px;
-  background: transparent;
-  box-shadow: none; }
-
-div#custom-atoms-footer {
-  display: none; }
-  @media only screen and (max-width: 768px) {
-     
-    div#custom-atoms-footer.addpadding {
-      padding-bottom: 45px;
-     
-    
-    
-    }
-  
-      }
+#custom-containers-propertyMohalla div p {
+  font-size: 14px; }

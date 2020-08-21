@@ -1,8 +1,27 @@
+div#material-ui-cardContent div thead tr th {
+  padding-left: 22px !important;
+}
+div#material-ui-cardContent tbody {
+  word-break: break-all !important;
+}
+form#apply_form1 tbody {
+  word-break: break-all !important;
+}
+// span[class*="MUIDataTableBody-emptyTitle"] {
+//   color: red !important;
+// }
+
+// @media only screen and (max-width: 900px) {
+//   span[class*="MUIDataTableBody-emptyTitle"] {
+//   margin-left: -100% !important;
+//   margin-top: 8% !important;
+// }}
+
 @media only screen and (min-width: 551px) {
   .apply-wizard-footer {
-    z-index: 101 !important;
+    z-index: 201 !important;
   }  
-}   
+}  
 @media only screen and (max-width: 551px) {
   .apply-wizard-footer {
     background-color: #ffffff;
@@ -16,7 +35,6 @@
     text-align: right;
     display: flex;
     padding: initial;
-   
   }
 
   .apply-wizard-footer button {
@@ -33,22 +51,3 @@
 #custom-containers-propertyMohalla{div{p{
   font-size: 14px;
 }}}
-
-
-div#custom-atoms-footer.addpadding {
-  padding-bottom: 66px;
-  background: transparent;
-  box-shadow: none; }
-
-div#custom-atoms-footer {
-  display: none; }
-  @media only screen and (max-width: 768px) {
-     
-    div#custom-atoms-footer.addpadding {
-      padding-bottom: 45px;
-     
-    
-    
-    }
-  
-      }
