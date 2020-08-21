@@ -7,6 +7,7 @@ import { serachVendorResultGrid, serachVendorErrorResultGrid, FileUpload, Sample
 import { setapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils/";
 import { showHideAdhocPopup, getCommonApplyFooter, clearlocalstorageAppDetails, showHideAdhocPopupVendorError } from "../utils";
 import { vendorChooseFile } from "./searchResource/vendorChooseFileUpload";
+import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -65,81 +66,89 @@ const VENDORSearchAndResult = {
         screenKey: "search"
       },
       children: { 
+        // div1: {
+        //   uiFramework: "custom-atoms",
+        //   componentPath: "Div",
+        //   gridDefination: {
+        //     xs: 10,
+        //     sm: 10
+        //   },
+        //   props: {
+        //     style: {
+        //       width: "100%",
+        //       float: "right"
+        //     }
+        //   },
+        //   children: {
+        //     div: getCommonHeader(
+        //       {
+        //         labelName: "Error Details",
+        //         labelKey: "EC_VENDOR_MASTER_ERROR_DETAILS"
+        //       },
+        //       {
+        //         style: {
+        //           fontSize: "20px",
+        //           padding: "20px",
+        //         }
+        //       },
+        //       {
+        //         classes: {
+        //           root: "common-header-cont"
+        //         }
+        //       }
+        //     )
+        //   }
+        // },
+        serachVendorErrorResultGrid,
         div2: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
-          gridDefination: {
-            align: "right"
-          },
           props: {
             style: {
               width: "100%",
-              float: "right",
-              cursor: "pointer"
+              //textAlign: "right",
+              display: "flex"
             }
           },
           children: {
-            closeButton: {
+            cancelApplicationButton: {
               componentPath: "Button",
+              visible: enableButton,
               props: {
+                variant: "outlined",
+                color: "primary",
                 style: {
-                  float: "right",
-                  color: "rgba(0, 0, 0, 0.60)"
+                  borderRadius: "2px",
+                  minWidth: "180px",
+                  height: "48px",
+                  marginRight: "16px",
+                  marginBottom: "8px",
+                  marginTop: "25px"
                 }
               },
+
               children: {
-                previousButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "close"
-                  }
-                }
+                buttonLabel: getLabel({
+                  labelName: "CANCEL",
+                  labelKey: "EC_POPUP_SEARCH_RESULTS_CANCEL_APP_BUTTON"
+                })
               },
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  showHideAdhocPopupVendorError(state, dispatch, "search")
+                  dispatch(
+                    handleField("search", "components.adhocDialog", "props.open", false)
+                  );
                 }
-              }
-            }
-          }
-        },
+              },
+            },
 
-        div1: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
+          },
           gridDefination: {
-            xs: 10,
-            sm: 10
-          },
-          props: {
-            style: {
-              width: "100%",
-              float: "right"
-            }
-          },
-          children: {
-            div: getCommonHeader(
-              {
-                labelName: "Error Details",
-                labelKey: "EC_VENDOR_MASTER_ERROR_DETAILS"
-              },
-              {
-                style: {
-                  fontSize: "20px",
-                  padding: "20px",
-                }
-              },
-              {
-                classes: {
-                  root: "common-header-cont"
-                }
-              }
-            )
+            xs: 12,
+            sm: 12
           }
         },
-        serachVendorErrorResultGrid
       },
     }
   }

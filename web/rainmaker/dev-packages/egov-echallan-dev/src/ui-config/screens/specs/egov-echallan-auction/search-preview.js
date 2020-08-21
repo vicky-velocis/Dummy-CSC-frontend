@@ -546,46 +546,6 @@ const screenConfig = {
         screenKey: "search-preview"
       },
       children: {
-        // div2: {
-        //   uiFramework: "custom-atoms",
-        //   componentPath: "Div",
-        //   gridDefination: {
-        //     align: "right"
-        //   },
-        //   props: {
-        //     style: {
-        //       width: "100%",
-        //       float: "right",
-        //       cursor: "pointer"
-        //     }
-        //   },
-        //   children: {
-        //     closeButton: {
-        //       componentPath: "Button",
-        //       props: {
-        //         style: {
-        //           float: "right",
-        //           color: "rgba(0, 0, 0, 0.60)"
-        //         }
-        //       },
-        //       children: {
-        //         previousButtonIcon: {
-        //           uiFramework: "custom-atoms",
-        //           componentPath: "Icon",
-        //           props: {
-        //             iconName: "close"
-        //           }
-        //         }
-        //       },
-        //       onClickDefination: {
-        //         action: "condition",
-        //         callBack: (state, dispatch) => {
-        //           showHideAdhocPopupAuction(state, dispatch, "search-preview")
-        //         }
-        //       }
-        //     }
-        //   }
-        // },
         div1: {
           uiFramework: "custom-atoms",
           componentPath: "Div",
@@ -635,37 +595,21 @@ const screenConfig = {
           children: {
             cancelApplicationButton: {
               componentPath: "Button",
-              // gridDefination: {
-              //   xs: 12,
-              //   sm: 6,
-              //   // align: "right"
-              // },
               visible: enableButton,
               props: {
                 variant: "outlined",
                 color: "primary",
                 style: {
-                  // color: "white",
                   borderRadius: "2px",
                   minWidth: "180px",
                   height: "48px",
                   marginRight: "16px",
-                  marginBottom: "8px"
+                  marginBottom: "8px",
+                  marginTop: "25px"
                 }
               },
       
               children: {
-                // cancelIconInsideButton: {
-                //   uiFramework: "custom-atoms",
-                //   componentPath: "Icon",
-                //   props: {
-                //    // iconName: "close"
-                //     // style: {
-                //     //   fontSize: "24px"
-                //     // }
-                //   }
-                // },
-      
                 buttonLabel: getLabel({
                   labelName: "CANCEL",
                   labelKey: "EC_POPUP_SEARCH_RESULTS_CANCEL_APP_BUTTON"
@@ -674,17 +618,11 @@ const screenConfig = {
               onClickDefination: {
                 action: "condition",
                 callBack: (state, dispatch) => {
-                  dispatch(prepareFinalObject("ItemMaster", []));
-      
-                  showHideAdhocPopup(state, dispatch, "search");
-                  setTimeout(() => window.location.reload(), 1000);
+                  dispatch(
+                    handleField("search-preview", "components.adhocDialog", "props.open", false)
+                  );
                 }
               },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["challanEAO"]
-                //path : "tradelicence/apply"
-              }
             },
          
           },

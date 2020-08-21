@@ -63,6 +63,10 @@ export const getHCRoles = () => {
   return localStorage.getItem("HCRoles");
 };
 
+export const getEChallanPaymentMailSent = () => {
+  return localStorage.getItem('EChallanPaymentMailSent');
+};
+
 
 //SET methods 
 export const setHCRoles = (HCRoles) => {
@@ -133,6 +137,11 @@ export const seteventuuid = (eventuuId) => {
 export const setEncroachmentType = (encroachmentType) => {
   localStorageSet('encroachmentType',encroachmentType);
 };
+
+export const setEChallanPaymentMailSent = (isChallanPayMailSent) => {
+  localStorageSet('EChallanPaymentMailSent',isChallanPayMailSent);
+};
+
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {

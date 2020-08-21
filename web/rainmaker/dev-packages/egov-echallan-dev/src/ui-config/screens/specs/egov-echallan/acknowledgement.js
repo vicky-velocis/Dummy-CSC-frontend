@@ -20,7 +20,8 @@ import get from "lodash/get";
 import { getCurrentFinancialYear, numWords, convertEpochToDate, convertDateToEpoch, generateReceiptNumber, sendReceiptBymail } from "../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload } from "../../../../ui-utils/commons";
-import { getapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { setEChallanPaymentMailSent, getEChallanPaymentMailSent,getapplicationType, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const getMdmsData = async (state, dispatch) => {
   try {
@@ -145,10 +146,10 @@ const setApplicationData = async (state, dispatch, applicationNumber, tenant, se
   const response = await getSearchResults(RequestBody);
 
   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody[0]", [])));
-  setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenant, secondNumber, true);
+  setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenant, secondNumber, true, false);
 };
 
-const setSearchResponseForNocCretificate = async (state, dispatch, applicationNumber, tenantId, secondNumber, ismailsend) => {
+const setSearchResponseForNocCretificate = async (state, dispatch, applicationNumber, tenantId, secondNumber, ismailsend, isDownload) => {
   let violatorDetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail', []);
   let numbertowords = numWords(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail.paymentDetails.paymentAmount', '0')) + ' ' + 'only'
   let paydetails = get(state, 'screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0].billAccountDetails',[]);
@@ -192,13 +193,16 @@ const setSearchResponseForNocCretificate = async (state, dispatch, applicationNu
 
   let httpLink_RECEIPT = get(response2_RECEIPT, get(response1_RECEIPT, "filestoreIds[0]", ""), "")
   //window.open(httpLink_RECEIPT,  "_blank");
+  
   if (ismailsend && violatorDetails.emailId !== "") {
-    sendReceiptBymail(state, dispatch, httpLink_RECEIPT, violatorDetails, true);
+    if(getEChallanPaymentMailSent() === null || getEChallanPaymentMailSent() === true ){
+      sendReceiptBymail(state, dispatch, httpLink_RECEIPT, violatorDetails, true);
+      setEChallanPaymentMailSent(true);
+    }
   }
 
-  if (httpLink_RECEIPT != "")
+  if (httpLink_RECEIPT != "" && isDownload)
     window.location.href = httpLink_RECEIPT;
-
 };
 
 
@@ -226,7 +230,7 @@ export const paymentSuccessFooter = (applicationNumber, tenant, secondNumber) =>
         action: "condition",
         callBack: (state, dispatch) => {
           //// generatePdf(state, dispatch, "receipt_download");
-          setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenant, secondNumber, false);
+          setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenant, secondNumber, false, true);
 
         }
       }

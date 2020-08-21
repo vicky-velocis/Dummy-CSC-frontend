@@ -18,6 +18,7 @@ import set from "lodash/set";
 import store from "ui-redux/store";
 import { getTranslatedLabel, convertDateTimeToEpoch, getTextToLocalMapping, getDiffernceBetweenTodayDate, getDiffernceBetweenTwoDates, fetchRoleCode, getEpochForDate } from "../ui-config/screens/specs/utils";
 import { getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   if (labelKey) {
@@ -1409,6 +1410,50 @@ export const getDashboardChallanCount = async () => {
         { labelName: error.message, labelCode: error.message },
         "error"
       )
+    );
+  }
+
+}
+
+export const setCurrentApplicationProcessInstance = async (state) => {
+  try {
+    const applicationNumber = getQueryArg(
+      window.location.href,
+      "applicationNumber"
+    );
+    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const queryObject = [
+      { key: "businessIds", value: applicationNumber },
+      { key: "history", value: true },
+      { key: "tenantId", value: tenantId }
+    ];
+
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    if (payload && payload.ProcessInstances.length > 0) {
+      set(state, 'screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData', payload);
+    } else {
+      toggleSnackbar(
+        true,
+        {
+          labelName: "Workflow returned empty object !",
+          labelKey: "WRR_WORKFLOW_ERROR"
+        },
+        "error"
+      );
+    }
+  } catch (e) {
+    toggleSnackbar(
+      true,
+      {
+        labelName: "Workflow returned empty object !",
+        labelKey: "WRR_WORKFLOW_ERROR"
+      },
+      "error"
     );
   }
 
