@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Select, { createFilter } from "react-select";
+import Select from "react-select";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -228,9 +228,7 @@ class IntegrationReactSelect extends React.Component {
           {...rest}
           onChange={this.handleChange("single")}
          
-          filterOption={createFilter({
-            matchFrom: 'start'
-          })}
+         
           
         />
       </div>
