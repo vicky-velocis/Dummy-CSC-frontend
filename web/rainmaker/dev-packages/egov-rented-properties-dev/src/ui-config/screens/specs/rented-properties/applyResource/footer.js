@@ -1,4 +1,4 @@
-import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
+import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download,downloadAcknowledgementFormForMortagageAndDC} from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -601,7 +601,8 @@ export const footer = getCommonApplyFooter({
     applicationNumber,
     tenantId,
     pdfkey,
-    applicationType
+    applicationType,
+    payloadName
   ) => {
     /** MenuButton data based on status */
     let downloadMenu = [];
@@ -629,13 +630,35 @@ export const footer = getCommonApplyFooter({
       );
       return {...data1, ...data2, ...data3, ...data4}
     }
-    let applicationDownloadObject = {
+    let applicationDownloadObjectForOT = {
       label: { labelName: "Application", labelKey: "TL_APPLICATION" },
       link: () => {
         const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
         set(Owners[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementForm(Owners, OwnersTemp[0].estimateCardData,status,pdfkey,applicationType);
+        downloadAcknowledgementFormForMortagageAndDC(Owners, OwnersTemp[0].estimateCardData,status,pdfkey,applicationType);
+      },
+      leftIcon: "assignment"
+    };
+
+    let applicationDownloadObjectForMG = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = MortgageApplicationsTemp[0].reviewDocData;
+        set(MortgageApplications[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementFormForMortagageAndDC(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
+      },
+      leftIcon: "assignment"
+    };
+
+    let applicationDownloadObjectForDC = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { DuplicateCopyApplications,DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = DuplicateTemp[0].reviewDocData;
+        set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementFormForMortagageAndDC(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData,status,pdfkey,applicationType,payloadName);
       },
       leftIcon: "assignment"
     };
@@ -684,7 +707,7 @@ export const footer = getCommonApplyFooter({
       case "OT_APPROVED":
         downloadMenu = [
           receiptDownloadObject,
-          applicationDownloadObject
+          applicationDownloadObjectForOT
         ];
         printMenu = [
           applicationPrintObject
@@ -693,11 +716,29 @@ export const footer = getCommonApplyFooter({
       case "DC_APPROVED":
           downloadMenu = [
             receiptDownloadObjectForDC,
+            applicationDownloadObjectForDC
           ];
           printMenu = [
             applicationPrintObject
           ];
         break;
+      case 'MG_APPROVED':
+      case "MG_PENDINGCLVERIFICATION":
+      case "MG_PENDINGJAVERIFICATION":
+      case "MG_PENDINGSAVERIFICATION":
+      case "MG_PENDINGCLARIFICATION":
+      case "MG_PENDINGSIVERIFICATION":
+      case "MG_PENDINGCAAPPROVAL":
+      case "MG_PENDINGAPRO":
+      case "MG_REJECTED":
+    
+          downloadMenu = [
+            applicationDownloadObjectForMG,
+          ];
+          printMenu = [
+            applicationPrintObject
+          ];
+        break;    
       case "DC_PENDINGCLVERIFICATION":
       case "DC_PENDINGJAVERIFICATION":
       case "DC_PENDINGSAVERIFICATION":
@@ -705,8 +746,10 @@ export const footer = getCommonApplyFooter({
       case "DC_PENDINGSIVERIFICATION":
       case "DC_PENDINGCAAPPROVAL":
       case "DC_PENDINGAPRO":
+      case "DC_REJECTED":
+
           downloadMenu = [
-            
+            applicationDownloadObjectForDC
           ];
           printMenu = [
             applicationPrintObject
@@ -719,13 +762,16 @@ export const footer = getCommonApplyFooter({
           case "OT_PENDINGSIVERIFICATION":
           case "OT_PENDINGCAAPPROVAL":
           case "OT_PENDINGAPRO":
+          case "OT_REJECTED":
               downloadMenu = [
-                applicationDownloadObject
+                applicationDownloadObjectForOT
               ];
               printMenu = [
                 applicationPrintObject
               ];  
-      break;   
+      break; 
+    default:
+      break;    
           
     }
     // downloadMenu = [

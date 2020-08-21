@@ -93,7 +93,7 @@ const duplicateReviewDetails = getCommonCard({
           dispatch,
           status,
           applicationNumber,
-          tenantId
+          tenantId, "duplicate-copy","DC" ,"DuplicateCopyApplications"  
         );
         const CitizenprintCont=footerReviewTop(
           action,
