@@ -1,4 +1,4 @@
-import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download,downloadAcknowledgementFormForMortagageAndDC} from "../../utils";
+import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -636,7 +636,7 @@ export const footer = getCommonApplyFooter({
         const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
         set(Owners[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementFormForMortagageAndDC(Owners, OwnersTemp[0].estimateCardData,status,pdfkey,applicationType);
+        downloadAcknowledgementForm(Owners, OwnersTemp[0].estimateCardData,status,pdfkey,applicationType);
       },
       leftIcon: "assignment"
     };
@@ -647,7 +647,7 @@ export const footer = getCommonApplyFooter({
         const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = MortgageApplicationsTemp[0].reviewDocData;
         set(MortgageApplications[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementFormForMortagageAndDC(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
+        downloadAcknowledgementForm(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
       },
       leftIcon: "assignment"
     };
@@ -658,7 +658,7 @@ export const footer = getCommonApplyFooter({
         const { DuplicateCopyApplications,DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
         set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
-        downloadAcknowledgementFormForMortagageAndDC(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData,status,pdfkey,applicationType,payloadName);
+        downloadAcknowledgementForm(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData,status,pdfkey,applicationType,payloadName);
       },
       leftIcon: "assignment"
     };
@@ -731,13 +731,12 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGCAAPPROVAL":
       case "MG_PENDINGAPRO":
       case "MG_REJECTED":
+      case "MG_PENDINGGRANTDETAIL":  
     
           downloadMenu = [
             applicationDownloadObjectForMG,
           ];
-          printMenu = [
-            applicationPrintObject
-          ];
+        
         break;    
       case "DC_PENDINGCLVERIFICATION":
       case "DC_PENDINGJAVERIFICATION":
@@ -751,9 +750,7 @@ export const footer = getCommonApplyFooter({
           downloadMenu = [
             applicationDownloadObjectForDC
           ];
-          printMenu = [
-            applicationPrintObject
-          ];  
+          
       break; 
           case "OT_PENDINGCLVERIFICATION":
           case "OT_PENDINGJAVERIFICATION":
@@ -766,20 +763,12 @@ export const footer = getCommonApplyFooter({
               downloadMenu = [
                 applicationDownloadObjectForOT
               ];
-              printMenu = [
-                applicationPrintObject
-              ];  
+             
       break; 
     default:
       break;    
           
     }
-    // downloadMenu = [
-    //   applicationDownloadObject
-    // ];
-    // printMenu = [
-    //   applicationPrintObject
-    // ];
   
     return {
       rightdiv: {
