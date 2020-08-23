@@ -7,10 +7,11 @@ import get from "lodash/get";
 import { getCommonApplyFooter, checkForRole } from "../../utils";
 import "./index.css";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { approverejectAuctionDetails ,findItemInArrayOfObject} from "../../../../../ui-utils/commons";
+import { approverejectAuctionDetails, findItemInArrayOfObject } from "../../../../../ui-utils/commons";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./customfooter.css"
 
 let roles = JSON.parse(getUserInfo()).roles;
 //alert('CITIZEN');
@@ -19,7 +20,7 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const callbackforsummaryaction = async (state, dispatch) => {
-  
+
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   const reviewUrl = `${appendUrl}/egov-echallan-auction/home`;
@@ -28,7 +29,7 @@ const callbackforsummaryaction = async (state, dispatch) => {
 };
 
 const callbackforAuction = async (state, dispatch) => {
- 
+
   let challandetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -40,7 +41,7 @@ const callbackforAuction = async (state, dispatch) => {
 };
 
 const callbackforAuctionApprove = async (state, dispatch) => {
-  
+
   try {
 
     dispatch(toggleSpinner());
@@ -49,7 +50,7 @@ const callbackforAuctionApprove = async (state, dispatch) => {
     let responseStatus = get(response, "status", "");
 
     if (responseStatus === 'SUCCESS' || responseStatus === 'success') {
-      
+
       dispatch(toggleSnackbar(true, {
         labelName: "Auction Details has been Approved!",
         labelKey: "EC_AUCTION_APPROVER_SUCCESS_TOASTER"
@@ -98,11 +99,18 @@ export const titlebarfooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-        height: "48px",
         minWidth: "200px",
+        height: "48px",
         marginRight: "16px",
-
-      }
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
+      },
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
     },
     children: {
       cancelButtonIcon: {
@@ -131,8 +139,16 @@ export const titlebarfooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
     },
     children: {
       nextButtonLabel: getLabel({
@@ -166,9 +182,18 @@ export const titlebarfooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
     },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
+    },
+
     children: {
       approveButtonLabel: getLabel({
         labelName: "APPROVE",
@@ -201,9 +226,18 @@ export const titlebarfooter = getCommonApplyFooter({
       style: {
         minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
       }
     },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
+    },
+
     children: {
       rejectButtonLabel: getLabel({
         labelName: "REJECT",
@@ -225,6 +259,60 @@ export const titlebarfooter = getCommonApplyFooter({
       rolePath: "user-info.roles",
       roles: ["challanHOD"],
       action: "AUCTION"
+    },
+    visible: true
+  }
+});
+
+
+const toggleactionmenu = (state, dispatch) => {
+
+  var x = document.getElementById("custom-atoms-employeeFooter");
+  // if (x.style.display === "none") {
+  if (window.getComputedStyle(x).display === "none") {
+    x.style.display = "block";
+    x.classList.add("addpadding");
+  } else {
+    x.style.display = "none";
+    x.classList.remove("addpadding");
+  }
+}
+
+export const takeactionfooter = getCommonApplyFooter({
+  actionbutton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "16px"
+      }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
+    },
+    children: {
+
+      pressguestbuttonLabel: getLabel({
+        labelName: "Take Action",
+        labelKey: "EC_TAKE_ACTION"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_up"
+        }
+      },
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        toggleactionmenu(state, dispatch)
+      }
     },
     visible: true
   }

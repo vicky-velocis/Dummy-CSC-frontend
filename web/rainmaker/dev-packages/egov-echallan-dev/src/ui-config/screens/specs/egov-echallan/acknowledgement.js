@@ -103,7 +103,15 @@ const getAcknowledgementCard = (
             },
             number: generateReceiptNumber(applicationNumber)
           })
-        }
+        },
+        iframeForPdf: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div"
+        },
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
       },
       paymentSuccessFooter: paymentSuccessFooter(applicationNumber, tenant, secondNumber)
     };

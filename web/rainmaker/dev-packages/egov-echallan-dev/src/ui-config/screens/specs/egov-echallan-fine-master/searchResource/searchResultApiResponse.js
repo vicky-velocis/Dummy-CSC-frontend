@@ -27,8 +27,8 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
         temp[0] = item['fineUuid'];
         temp[1] = __FOUND.name;
         temp[2] = item['numberOfViolation'];
-        temp[3] = item['penaltyAmount'];
-        temp[4] = item['storageCharges'];
+        temp[3] = item['penaltyAmount'].split('.')[0];
+        temp[4] = item['storageCharges'].split('.')[0];
         temp[5] = convertEpochToDate(item['effectiveStartDate']);
         temp[6] = convertEpochToDate(item['effectiveEndDate']);
         temp[7] = item['approvalStatus'];

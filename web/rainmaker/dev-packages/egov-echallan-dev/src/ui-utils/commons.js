@@ -738,7 +738,7 @@ export const getUserDetailsOnMobile = async (role, mobileNumber) => {
       "tenantId": tenantId,
       "mobileNumber": mobileNumber
     }
-    //http://192.168.12.74:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
+    //http://192.168.12.114:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
 
     payload = await httpRequest(
       "post",
@@ -1358,6 +1358,7 @@ export const auctionCreateMasterChallanData = async (state, dispatch, data) => {
   }
 
 };
+
 export const fetchViewHistorytData = async (data) => {
   try {
     const response = await httpRequest(
@@ -1415,12 +1416,14 @@ export const getDashboardChallanCount = async () => {
 
 }
 
-export const setCurrentApplicationProcessInstance = async (state) => {
+export const setCurrentApplicationProcessInstance = async (state, isPaymentCalled) => {
   try {
-    const applicationNumber = getQueryArg(
+    let challanUuidForPayment = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanUuid", "");
+    let applicationNumber = isPaymentCalled ? challanUuidForPayment : getQueryArg(
       window.location.href,
       "applicationNumber"
     );
+
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryObject = [
       { key: "businessIds", value: applicationNumber },
@@ -1435,7 +1438,12 @@ export const setCurrentApplicationProcessInstance = async (state) => {
       queryObject
     );
     if (payload && payload.ProcessInstances.length > 0) {
-      set(state, 'screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData', payload);
+      if (!isPaymentCalled) {
+        set(state, 'screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData', payload);
+      } else {
+        set(state, 'screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData.PaymentProcess', payload);
+      }
+
     } else {
       toggleSnackbar(
         true,
@@ -1458,3 +1466,50 @@ export const setCurrentApplicationProcessInstance = async (state) => {
   }
 
 }
+
+export const checkVisibility = async (state, actions, button, action, buttonPath, extraCondtion) => {
+  let processInstanceData = get(state, "screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData", []);
+
+  if (processInstanceData.length != 0) {
+    let currentState = extraCondtion ? processInstanceData.PaymentProcess.ProcessInstances[0] : processInstanceData.ProcessInstances[0];
+    let found = false;
+    let roles = JSON.parse(getUserInfo()).roles
+    let buttonPresent = false;
+    currentState.nextActions.map(item => {
+      if (actions.split(',').indexOf(item.action) != -1) {
+        roles.some(r => {
+          if (item.roles.includes(r.code)) {
+            found = true
+            let wfstatus = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+            if (wfstatus.length > 0) {
+              let __FOUND = wfstatus.find(function (wfstatusRecord, index) {
+                if (wfstatusRecord.buttonName == button) {
+                  buttonPresent = true;
+                  return true;
+                }
+              });
+            }
+            if (!buttonPresent) {
+              wfstatus.push({ "buttonName": button, "status": item.action })
+              set(state, 'screenConfiguration.preparedFinalObject.WFStatus', wfstatus);
+            }
+          }
+        })
+      }
+    });
+    // if (extraCondtion != null) {
+    //   set(
+    //     action,
+    //     buttonPath,
+    //     extraCondtion && found
+    //   );
+    // } else {
+    set(
+      action,
+      buttonPath,
+      found
+    );
+    //}
+  }
+}
+
