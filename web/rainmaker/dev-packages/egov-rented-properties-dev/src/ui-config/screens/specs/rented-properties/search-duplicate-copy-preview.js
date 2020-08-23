@@ -199,7 +199,7 @@ const duplicateCopySearchPreview = {
                   props: {
                     dataPath: "DuplicateCopyApplications",
                     moduleName: "DuplicateCopyOfAllotmentLetterRP",
-                    updateUrl: "/csp/duplicatecopy/_update"
+                    updateUrl: "/rp-services/duplicatecopy/_update"
                   }
                 },
               duplicateReviewDetails
