@@ -76,7 +76,6 @@ export const applicationSuccessFooter = (
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            debugger
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
                 const {
