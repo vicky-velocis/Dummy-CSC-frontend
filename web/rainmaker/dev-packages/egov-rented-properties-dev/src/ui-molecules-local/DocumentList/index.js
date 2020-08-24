@@ -11,7 +11,7 @@ import {
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
+import { handleFileUpload,getXLSFileUrlFromAPI } from "../../ui-utils/commons"
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -124,10 +124,20 @@ class DocumentList extends Component {
   };
 
   handleDocument = async (file, fileStoreId) => {
+    debugger
+    let fileUrl = {}
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId, uploadedDocumentsJsonPath } = this.props;
     const { jsonPath, name } = documents[uploadedDocIndex];
-    const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    switch(name){
+      case 'PAYMENT_DOCUMENT':
+          fileUrl = await getXLSFileUrlFromAPI(fileStoreId)
+        break;
+      default:
+          fileUrl = await getFileUrlFromAPI(fileStoreId);
+          break;
+    }
+  
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [

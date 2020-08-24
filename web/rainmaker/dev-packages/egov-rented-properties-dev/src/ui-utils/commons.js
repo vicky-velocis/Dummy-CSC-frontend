@@ -924,6 +924,25 @@ export const handleFileUpload = (event, handleDocument, props, stopLoading) => {
   }
 };
 
+export const getXLSFileUrlFromAPI = async (fileStoreId,tenantId) => {
+  const queryObject = [
+  	//{ key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
+    { key: "fileStoreId", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/rp-services/v1/excel/read",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getNextFinancialYearForRenewal = async (currentFinancialYear) => {
   let payload = null;
   let mdmsBody = {
