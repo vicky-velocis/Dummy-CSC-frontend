@@ -2,10 +2,11 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  ifUserRoleExists,
+  ifUserRoleExists,download,
   downloadAcknowledgementFormForCitizen
 } from "../../utils";
 import set from "lodash/set";
+import get from "lodash/get"
 
 const getCommonApplyFooter = children => {
   return {
@@ -72,6 +73,7 @@ export const applicationSuccessFooter = (
         onClickDefination: {
           action: "condition",
           callBack: () => {
+            debugger
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
                 const {
@@ -99,6 +101,26 @@ export const applicationSuccessFooter = (
                 break;
 
               default:
+                const data = []
+                // const ownersData = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
+                if(state.screenConfiguration.preparedFinalObject.hasOwnProperty('Owners')){
+                  const Owners = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
+                  const receiptQueryString = [
+                    { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "applicationNumber") },
+                    { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "tenantId") }
+                  ]
+                  download(receiptQueryString, Owners,data, userInfo.name);
+                }else{
+                  const OwnersDC = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
+                  const receiptQueryString = [
+                    { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "applicationNumber") },
+                    { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "tenantId") }
+                  ]
+                  download(receiptQueryString, OwnersDC, data,userInfo.name);
+                 
+                }
+                console.log(Owners)
+                
                 break;
             }
             console.log(type)
