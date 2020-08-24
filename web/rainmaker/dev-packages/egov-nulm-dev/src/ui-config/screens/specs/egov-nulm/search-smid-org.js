@@ -7,8 +7,8 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import set from "lodash/set";
   import { httpRequest } from "../../../../ui-utils";
-  import { searchForm } from "./searchSMIDResource/searchForm";
-  import { searchResults } from "./searchSMIDResource/searchResults";
+  import { searchForm } from "./searchSMIDOrgResource/searchForm";
+  import { searchResults } from "./searchSMIDOrgResource/searchResults";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import commonConfig from '../../../../config/common';
@@ -22,7 +22,7 @@ import {
   });
   
   const createSMIDHandle = async (state, dispatch) => {
-    dispatch(setRoute(`/egov-nulm/create-smid`));
+    dispatch(setRoute(`/egov-nulm/create-smid-org`));
   };
   
   const getMDMSData = async (action, state, dispatch) => {
@@ -61,7 +61,7 @@ import {
   
   const smidSearchAndResult = {
     uiFramework: "material-ui",
-    name: "search-smid",
+    name: "search-smid-org",
     beforeInitScreen: (action, state, dispatch) => {
             // fetching MDMS data
       getData(action, state, dispatch);
@@ -95,7 +95,7 @@ import {
                   sm: 6,
                   align: "right",
                 },
-                visible: process.env.REACT_APP_NAME === "Employee"? false : true,
+                visible: enableButton,
                 props: {
                   variant: "contained",
                   color: "primary",
@@ -120,8 +120,8 @@ import {
                   },
   
                   buttonLabel: getLabel({
-                    labelName: "Add SMID",
-                    labelKey: "NULM_ADD_NEW_SMID_BUTTON",
+                    labelName: "Add SMID for Organization",
+                    labelKey: "NULM_ADD_NEW_SHG_BUTTON",
                   }),
                 },
                 onClickDefination: {
