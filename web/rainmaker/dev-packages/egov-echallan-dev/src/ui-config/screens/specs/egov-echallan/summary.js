@@ -1048,7 +1048,7 @@ const setSearchResponse = async (
     let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'PENDING');
     let receiveVisible = appstatus === "PENDING FOR AUCTION" ? false : paymentStatus === 'PAID' ? false : true;
 
-    //setGridVisibleTrueFalse(state, encroachmentType, appstatus, dispatch);
+    setGridVisibleTrueFalse(state, encroachmentType, appstatus, dispatch);
 
     setReceiveButtonVisibleTrueFalse(false, dispatch, appstatus);
     setAuctionButtonVisibleTrueFalse(false, dispatch, appstatus);
@@ -1060,7 +1060,7 @@ const setSearchResponse = async (
 
     HideshowEdit(state, action,dispatch);
 
-    setModulesVisibleTrueFalse(true, dispatch);
+    //setModulesVisibleTrueFalse(true, dispatch);
     prepareDocumentsView(state, dispatch);
     prepareItemSeizedDetails(state, dispatch, encroachmentType, appstatus);
 
@@ -1079,6 +1079,99 @@ const setSearchResponse = async (
 };
 
 
+const setGridVisibleTrueFalse = (state, encroachmentType, appstatus, dispatch) => {
+
+  //#region Visible false all Search
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummary",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummarySM",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
+      "visible",
+      false
+    )
+  );
+  //#region 
+  let processInstanceData = get(state, "screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData.ProcessInstances[0]", []);
+  switch (processInstanceData.action) {
+    case "CHALLAN ISSUED":
+    case "CITIZEN":
+    case "CLOSED":
+      if (encroachmentType === 'Seizure of Vehicles') {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+            "visible",
+            true)
+        );
+      } else {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.body.children.cardContent.children.searchResultsSummary",
+            "visible",
+            true)
+        );
+      }
+      break;
+    case "RELEASED ON GROUND":
+    case "SENT TO STORE":
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.body.children.cardContent.children.searchResultsSummarySM",
+          "visible",
+          false
+        )
+      );
+      break;
+    case "RELEASED FROM STORE":
+    case "ADDED TO STORE":
+    case "PENDING FOR AUCTION":
+    case "PENDING FOR APPROVAL":
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
+          "visible",
+          false
+        )
+      );
+      break;
+    // case "PENDING FOR AUCTION":
+    //   break;
+
+    default:
+      break;
+  }
+}
 
 const screenConfig = {
   uiFramework: "material-ui",
