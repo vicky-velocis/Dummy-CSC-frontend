@@ -217,6 +217,8 @@ export const getIndentOutwordData = async (
  let response = await getmaterialOutwordSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
 response = response.materialIssues.filter(x=>x.id === id)
+let totalvalue = 0
+let TotalQty = 0;
 if(response && response[0])
 {
 for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
@@ -225,9 +227,14 @@ for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
  let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
     
     set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
-    set(response[0], `materialIssueDetails[${index}].material.name`, matname);    
+    set(response[0], `materialIssueDetails[${index}].material.name`, matname); 
+    totalvalue = totalvalue+( Number(element.value) )
+       
+    TotalQty = TotalQty + Number(element.quantityIssued)   
   
 }
+set(response[0],`totalQty`, TotalQty);
+ set(response[0],`totalvalue`, totalvalue);
 }
   dispatch(prepareFinalObject("materialIssues", response));
 

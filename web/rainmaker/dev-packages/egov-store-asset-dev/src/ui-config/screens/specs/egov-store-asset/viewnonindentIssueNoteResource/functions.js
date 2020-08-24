@@ -276,6 +276,8 @@ export const getMaterialNonIndentData = async (
  let response = await getNonIndentMaterialIssueSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
 response = get(response, "materialIssues")
+let totalvalue = 0
+let TotalQty = 0;
 if(response && response[0])
 {
 for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
@@ -283,9 +285,16 @@ for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
  let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
  let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
     set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
-    set(response[0], `materialIssueDetails[${index}].material.name`, matname);    
-  
+    set(response[0], `materialIssueDetails[${index}].material.name`, matname);
+    set(response[0], `materialIssueDetails[${index}].mrnNumber`, element.materialIssuedFromReceipts[index].materialReceiptDetail.mrnNumber);    
+    //set materialReceiptId
+    set(response[0], `materialIssueDetails[${index}].receiptId`, element.materialIssuedFromReceipts[index].materialReceiptId);    
+    totalvalue = totalvalue+ Number(element.value)   
+    TotalQty = TotalQty + Number(element.quantityIssued)
 }
+
+set(response[0],`totalQty`, TotalQty);
+set(response[0],`totalvalue`, totalvalue);
 }
   dispatch(prepareFinalObject("materialIssues", response));
 

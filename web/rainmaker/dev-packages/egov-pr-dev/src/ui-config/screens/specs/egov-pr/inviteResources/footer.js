@@ -28,7 +28,7 @@ let activeStepforbtn = 0;
 // toggleactionmenu
 const toggleactionmenu = (state, dispatch) => {
 	
-  var x = document.getElementById("custom-atoms-footer");
+  var x = document.getElementById("custom-atoms-Invitefooter");
  	 // if (x.style.display === "none") {
    if(window.getComputedStyle(x).display === "none") {   
     x.style.display = "block";
@@ -188,8 +188,7 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const callBackForNext = async (state, dispatch) => {
-  
- // dispatch(prepareFinalObject("documentsUploadRedux", {}));
+ // toggleactionmenu(state, dispatch)
  let doc =localStorageGet("EmaildAttachment")
 if(doc!=="null" )
 {
@@ -245,7 +244,7 @@ if(doc!=="null" )
       );
         }
 
-  var x = document.getElementById("custom-atoms-footer");
+  var x = document.getElementById("custom-atoms-Invitefooter");
   x.classList.remove("addpadding");
 
   let activeStep = get(
@@ -459,42 +458,42 @@ export const changeStep = (
       value: activeStep
     },
     {
-      path: "components.div.children.footer.children.previousButton",
+      path: "components.div.children.Invitefooter.children.previousButton",
       property: "visible",
       value: isPreviousButtonVisible
     },
     {
-      path: "components.div.children.footer.children.nextButton",
+      path: "components.div.children.Invitefooter.children.nextButton",
       property: "visible",
       value: isNextButtonVisible
     },
     {
-      path: "components.div.children.footer.children.payButton",
+      path: "components.div.children.Invitefooter.children.payButton",
       property: "visible",
       value: isPayButtonVisible
     },
 	{
-      path: "components.div.children.footer.children.pressguestbutton",
+      path: "components.div.children.Invitefooter.children.pressguestbutton",
       property: "visible",
       value: ispressinviteVisible
     },
 	{
-      path: "components.div.children.footer.children.internalguestbutton",
+      path: "components.div.children.Invitefooter.children.internalguestbutton",
       property: "visible",
       value: isinviteVisible
     },
 	{
-      path: "components.div.children.footer.children.externalguestbutton",
+      path: "components.div.children.Invitefooter.children.externalguestbutton",
       property: "visible",
       value: isinviteVisible 
     },
 	{
-      path: "components.div.children.footer.children.nextButton",
+      path: "components.div.children.Invitefooter.children.nextButton",
       property: "visible",
       value: isinviteVisible 
     },
 	{
-      path: "components.div.children.footer.children.InviteEmployeebtn",
+      path: "components.div.children.Invitefooter.children.InviteEmployeebtn",
       property: "visible",
       value: sendinviteVisible
     },
@@ -589,13 +588,14 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
-  var x = document.getElementById("custom-atoms-footer");
+  toggleactionmenu(state, dispatch)
+  var x = document.getElementById("custom-atoms-Invitefooter");
   x.classList.add("addpadding");
   changeStep(state, dispatch, "previous");
 };
 
 
-export const footer = getCommonApplyFooter({
+export const Invitefooter = getCommonApplyFooter({
   pressguestbutton: {
     componentPath: "Button",
     props: {

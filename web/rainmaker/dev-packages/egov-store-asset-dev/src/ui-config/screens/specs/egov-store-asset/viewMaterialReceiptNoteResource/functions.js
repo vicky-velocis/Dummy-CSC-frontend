@@ -368,7 +368,8 @@ export const getMaterialIndentData = async (
  let response = await getreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
 response = response.MaterialReceipt.filter(x=>x.id===id)
-  
+let totalvalue = 0
+let TotalQty = 0;
 
   if(response && response[0])
   {
@@ -377,6 +378,7 @@ response = response.MaterialReceipt.filter(x=>x.id===id)
     set(response[0], `receiptDate`, epochToYmdDate(response[0].receiptDate));
     set(response[0], `supplierBillDate`, epochToYmdDate(response[0].supplierBillDate));
     set(response[0], `inspectionDate`, epochToYmdDate(response[0].inspectionDate));
+   
   for (let index = 0; index < response[0].receiptDetails.length; index++) {
     const element = response[0].receiptDetails[index];
     let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)    
@@ -387,9 +389,15 @@ response = response.MaterialReceipt.filter(x=>x.id===id)
        set(response[0], `receiptDetails[${index}].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
        set(response[0], `receiptDetails[${index}].manufactureDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].manufactureDate));
        set(response[0], `receiptDetails[${index}].expiryDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].expiryDate));
+       totalvalue = totalvalue+( Number(element.acceptedQty) *element.unitRate)
+      
+       TotalQty = TotalQty + Number(element.acceptedQty)
        
   }
 }
+
+set(response[0],`totalQty`, TotalQty);
+set(response[0],`totalvalue`, totalvalue);
 getFileUrl(dispatch,tenantId,response[0].fileStoreId);
 dispatch(prepareFinalObject("materialReceipt", response));
  // furnishindentData(state, dispatch);

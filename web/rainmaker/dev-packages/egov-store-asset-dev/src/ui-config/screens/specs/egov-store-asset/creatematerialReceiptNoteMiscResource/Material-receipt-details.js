@@ -13,7 +13,7 @@ import {
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
-  import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+  import{GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
   const getBalanceQty = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
@@ -70,7 +70,8 @@ import {
   };
   
   const materialReceiptCard = {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
@@ -150,7 +151,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].uom.code"
+                jsonPath: "materialReceipt[0].receiptDetails[0].uom.name"
               })
             },
             qtyIssued: {
@@ -189,10 +190,27 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].receivedQty"
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].acceptedQty",Number(action.value)));
-                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[[${cardIndex}].acceptedQty`,Number(action.value)));
+                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,0)
                  let totalValue = unitRate * Number(action.value)
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].totalValue",totalValue));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[[${cardIndex}].totalValue`,totalValue));
+                //set total value on Qty Change
+                let cardJsonPath =
+                "components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items";
+               let pagename = `createMaterialReceiptNoteMisc`;
+               let jasonpath =  "materialReceipt[0].receiptDetails";
+               let InputQtyValue = "indentQuantity";
+               let TotalValue_ = "totalValue";
+               let TotalQty ="acceptedQty"
+               let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
+               if(Qty && Qty[0])
+               {
+               
+                dispatch(prepareFinalObject(`materialReceipt[0].totalvalue`, Qty[0].TotalValue));
+                dispatch(prepareFinalObject(`materialReceipt[0].totalQty`, Qty[0].TotalQty));
+
+               }
                      }
             },
             unitRate: {
@@ -206,7 +224,7 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
                 },
                 props:{
-                  disabled:false
+                  disabled:true
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
@@ -258,6 +276,9 @@ import {
         )
       }),
       items: [],
+      onMultiItemDelete:(state, dispatch)=>{       
+
+      },
       addItemLabel: {
         labelName: "Add ",
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
@@ -266,6 +287,16 @@ import {
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialReceipt[0].receiptDetails",
+       //Update Total value when delete any card configuration settings     
+       cardtotalpropes:{
+        totalIndentQty:false,
+        pagename:`createMaterialReceiptNoteMisc`,
+        cardJsonPath:"components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items",
+        jasonpath:"materialReceipt[0].receiptDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"acceptedQty"        
+      },
       prefixSourceJsonPath:
         "children.cardContent.children.materialReceiptCardContainer.children"
     },

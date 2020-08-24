@@ -8,7 +8,7 @@ import {
   getCommonCard 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { footer, takeactionfooter } from "./inviteResources/footer";
+import { Invitefooter, takeactionfooter } from "./inviteResources/footer";
 import { eventDetails } from "./applyResource/eventDetails";
 import { eventDescription } from "./applyResource/eventDescription";
 import { propertyDetails } from "./applyResource/propertyDetails";
@@ -463,7 +463,7 @@ const screenConfig = {
         );
         set(
           action.screenConfig,
-          `components.div.children.footer.children.previousButton.visible`,
+          `components.div.children.Invitefooter.children.previousButton.visible`,
           step != 0
         );
       }
@@ -527,7 +527,7 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        footer,
+        Invitefooter,
 		takeactionfooter
       }
     },

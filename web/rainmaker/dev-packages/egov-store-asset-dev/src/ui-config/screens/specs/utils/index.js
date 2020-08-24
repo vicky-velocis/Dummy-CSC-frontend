@@ -15,6 +15,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils/api";
+import { getprintpdf } from "../../../../ui-utils/storecommonsapi";
 import isUndefined from "lodash/isUndefined";
 import {
   getCommonCard,
@@ -1197,3 +1198,185 @@ export const getLocalizationCodeValue =lable =>{
   );
 
 }
+export const checkValueForNA = value => {
+  return value ? value : "NA";
+};
+// for file store id
+export const getFileUrlFromAPI = async (fileStoreId,tenantId) => {
+  const queryObject = [
+  	{ key: "tenantId", value: tenantId },
+   // { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/filestore/v1/files/url",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlFromAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+    
+    }
+  });
+  
+}
+export const downloadAcknowledgementForm = async ( pagename,mode="download") => {
+  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let APIUrl =`store-asset-services/indents/_print`
+  let ApplicationNo ='';
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ]
+switch(pagename)
+{
+  case "Indent":
+    ApplicationNo = getQueryArg(window.location.href, "indentNumber");
+    queryObject.push({
+      key: "indentNumber",
+      value:ApplicationNo
+    });
+    queryObject.push({
+      key: "indentType",
+      value:"Indent"
+    });
+    APIUrl = `store-asset-services/indents/_print`
+    break;
+    case "Non Indent":
+      ApplicationNo = getQueryArg(window.location.href, "issueNoteNumber");
+      queryObject.push({
+        key: "issueNoteNumber",
+        value:ApplicationNo
+      });
+     
+      APIUrl = `store-asset-services/materialissues-ni/_print`
+      break;
+
+    case "Material Receipt":
+      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+    queryObject.push({
+      key: "mrnNumber",
+      value:ApplicationNo
+    });
+   
+    APIUrl = `store-asset-services/receiptnotes/_print`
+    break;
+    case "Material Receipt Misc":
+      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+    queryObject.push({
+      key: "mrnNumber",
+      value:ApplicationNo
+    });
+   
+    APIUrl = `store-asset-services/miscellaneousreceiptnotes/_print`
+    break;
+    case "Indent Transfer":
+      ApplicationNo= getQueryArg(window.location.href, "indentNumber");
+    queryObject.push({
+      key: "indentNumber",
+      value:ApplicationNo
+    });
+    queryObject.push({
+      key: "indentType",
+      value:"Transfer Indent"
+    });
+    APIUrl = `store-asset-services/indents/_print`
+    break;
+    case "Purchase Order":
+      ApplicationNo = getQueryArg(window.location.href, "poNumber");
+    queryObject.push({
+      key: "purchaseOrderNumber",
+      value:ApplicationNo
+    });
+   
+    APIUrl = `store-asset-services/purchaseorders/_print`
+    break;
+    case "Indent Outward":
+      ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+      queryObject.push({
+        key: "issueNoteNumber",
+        value:ApplicationNo
+      });
+     
+      APIUrl = `store-asset-services/materialissues-to/_print`
+      break;
+    case "Indent Inward":
+        ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+        queryObject.push({
+          key: "mrnNumber",
+          value:ApplicationNo
+        });
+       
+        APIUrl = `store-asset-services/transferinwards/_print`
+        break;
+     case "Indent Issue":
+          ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+          queryObject.push({
+            key: "issueNoteNumber",
+            value:ApplicationNo
+          });
+          queryObject.push({
+            key: "indentType",
+            value:"Indent"
+          });
+          APIUrl = `store-asset-services/materialissues/_print`
+          break;
+    
+  
+
+}
+    // if(tenantId.includes("."))
+    // {
+
+    // var vStr = tenantId.split('.');
+
+    // tenantId = vStr[0];
+    // }  
+    try {    
+      const response = await getprintpdf(queryObject,APIUrl);
+      if(response)
+      {
+        let filestoreId = response.filestoreIds[0]
+        downloadReceiptFromFilestoreID(filestoreId,mode,tenantId)
+      }
+     
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  
+  }

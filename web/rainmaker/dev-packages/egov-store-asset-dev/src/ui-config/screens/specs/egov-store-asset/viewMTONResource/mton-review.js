@@ -4,7 +4,7 @@ import { getMTONHeaderView } from "./view-mton-header";
 import { getMTONDetailsView } from "./view-mton-details";
 import { getApprovalInfoView } from "./view-approvalInfo-details";
 import { poCommonFooter } from "./footer";
-
+import {totalIssueValue} from "../createMaterialTransferOutwardResource/totalIssueValue";
 export const MTONReviewDetails = isReview => {
   const viewMTONHeader = getMTONHeaderView(isReview);
   const viewMTONDetails = getMTONDetailsView(isReview);
@@ -13,6 +13,7 @@ export const MTONReviewDetails = isReview => {
   return getCommonCard({
     viewMTONHeader,
     viewMTONDetails,
+    totalIssueValue,
     viewApprovalInfo,
     footer
   });
