@@ -7,7 +7,10 @@ import {
 } from "../../utils";
 import set from "lodash/set";
 import get from "lodash/get"
+import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+const userInfo = JSON.parse(getUserInfo());
 const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -102,28 +105,16 @@ export const applicationSuccessFooter = (
 
               default:
                 const data = []
-                // const ownersData = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
-                if(state.screenConfiguration.preparedFinalObject.hasOwnProperty('Owners')){
-                  const Owners = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
+                let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+                let tenantId = getQueryArg(window.location.href, "tenantId");
+                  const OwnersData = [];
                   const receiptQueryString = [
-                    { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "applicationNumber") },
-                    { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "tenantId") }
+                    { key: "consumerCodes", value:consumerCodes},
+                    { key: "tenantId", value: tenantId }
                   ]
-                  download(receiptQueryString, Owners,data, userInfo.name);
-                }else{
-                  const OwnersDC = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
-                  const receiptQueryString = [
-                    { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "applicationNumber") },
-                    { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "tenantId") }
-                  ]
-                  download(receiptQueryString, OwnersDC, data,userInfo.name);
-                 
-                }
-                console.log(Owners)
-                
+                  download(receiptQueryString, OwnersData,data, userInfo.name);                
                 break;
             }
-            console.log(type)
           }
         },
         visible: true
