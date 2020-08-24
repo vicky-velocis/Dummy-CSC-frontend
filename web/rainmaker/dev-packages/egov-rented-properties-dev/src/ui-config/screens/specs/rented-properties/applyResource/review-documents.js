@@ -59,6 +59,7 @@ import {
             componentPath: "DownloadFileContainer",
             props: {
               sourceJsonPath,
+              datatoggle: true,
               className: "review-documents"
             }
           }
