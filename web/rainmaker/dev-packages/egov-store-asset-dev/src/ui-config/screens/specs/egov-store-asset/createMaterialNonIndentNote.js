@@ -8,6 +8,7 @@ import {
   import { IndentMaterialIssueDetails } from "./creatematerialNonindentnoteResource/Material-indent-note"; 
   import { materialIssue } from "./creatematerialNonindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialNonindentnoteResource/other-details";
+  import {totalValue} from './creatematerialNonindentnoteResource/totalValue';
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -62,7 +63,8 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
-      materialIssue
+      materialIssue,
+      totalValue
     },
     visible: false
   };

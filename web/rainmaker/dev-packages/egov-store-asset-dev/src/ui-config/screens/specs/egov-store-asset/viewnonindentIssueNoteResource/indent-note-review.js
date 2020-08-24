@@ -1,5 +1,5 @@
 import { getCommonCard } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import {totalValue} from '../creatematerialNonindentnoteResource/totalValue';
 import { getIndentNoteListDetailsView } from "./view-indent-note-details"
  import { getIndentIssueDetailsView } from "./view-material-indent-issue-details"
 // import { getOtherDetailsView } from "./view-other-details";
@@ -13,7 +13,7 @@ export const IndentNoteReviewDetails = isReview => {
   return getCommonCard({
     viewIndentnoteDetails, 
     viewIndentIssueDetails,   
-    // viewOtherDetails,
+    totalValue,
     footer
   });
 };

@@ -7,7 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
+import {handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const contractDetails = getCommonCard({
   header: getCommonTitle(
@@ -32,9 +32,10 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Rate Contract/Tender/Quotation No.",
           labelKey: "STORE_PURCHASE_ORDER_RC_NO_PLACEHOLDER"
         },
-        props: {
-          disabled: true
-        },
+        required:true,
+        // props: {
+        //   disabled: true
+        // },
         pattern: getPattern("alpha-numeric"),
         jsonPath: "purchaseOrders[0].priceList[0].rateContractNumber"
       })
@@ -49,10 +50,12 @@ export const contractDetails = getCommonCard({
           labelName: "Rate Contract/Tender/Quotation Date",
           labelKey: "STORE_PURCHASE_ORDER_RC_DATE",
         },
+        required:true,
         pattern: getPattern("Date"),
         props: {
           inputProps: {
-            disabled: true
+            disabled: false,
+            max: new Date().toISOString().slice(0, 10),
           }
         },
         jsonPath: "purchaseOrders[0].priceList[0].rateContractDate",
@@ -68,9 +71,10 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Agreement No.",
           labelKey: "STORE_PURCHASE_ORDER_AGRMENT_NO_PLACEHOLDER"
         },
-        props: {
-          disabled: true
-        },
+        required:true,
+        // props: {
+        //   disabled: true
+        // },
         pattern: getPattern("alpha-numeric"),
         jsonPath: "purchaseOrders[0].priceList[0].agreementNumber"
       })
@@ -85,12 +89,13 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Agreement Date",
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_DT"
         },
+        required:true,
         pattern: getPattern("Date"),
         jsonPath: "purchaseOrders[0].priceList[0].agreementDate",
         props: {
           inputProps: {
-            disabled: true
-        //    max: getTodaysDateInYMD()
+            disabled: false,
+            max: new Date().toISOString().slice(0, 10),
           }
         }
       })
@@ -105,14 +110,29 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Agreement From Date",
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_FRM_DT"
         },
+        required:true,
         pattern: getPattern("Date"),
         jsonPath: "purchaseOrders[0].priceList[0].agreementStartDate",
         props: {
           inputProps: {
-            disabled: true
+            disabled: false,
+            max: new Date().toISOString().slice(0, 10),
           }
         }
-      })
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+
+        let date = action.value;
+
+        dispatch(
+          handleField(
+            "create-purchase-order",
+            "components.div.children.formwizardSecondStep.children.contractDetails.children.cardContent.children.contractDetailsContainer.children.agreementEndDate",
+            "props.inputProps",
+            { min: new Date(date).toISOString().slice(0, 10)}
+          )
+        );
+      }
     },
     agreementEndDate: {
       ...getDateField({
@@ -124,11 +144,13 @@ export const contractDetails = getCommonCard({
           labelName: "Enter Agreement To Date",
           labelKey: "STORE_PURCHASE_ORDER_AGREEMNT_TO_DT"
         },
+        required:true,
         pattern: getPattern("Date"),
         jsonPath: "purchaseOrders[0].priceList[0].agreementEndDate",
         props: {
           inputProps: {
-            disabled: true
+            disabled: false,
+           
           }
         }
       })

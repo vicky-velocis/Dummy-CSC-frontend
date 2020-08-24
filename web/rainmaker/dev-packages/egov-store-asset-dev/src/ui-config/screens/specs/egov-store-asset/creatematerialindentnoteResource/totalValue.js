@@ -5,7 +5,7 @@ import {
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-  export const totalPOValue = getCommonCard({
+  export const totalValue = getCommonCard({
    
     totalValueContainer: getCommonContainer({  
       totalindentQuantity: {
@@ -21,14 +21,14 @@ import {
             xs: 12,
             sm: 4,
           },
-          jsonPath: "purchaseOrders[0].totalIndentQty"
+          jsonPath: "materialIssues[0].totalIndentQty"
         })
       },
-      totalPOQty: {
+      totalValue: {
         ...getTextField({
           label: {
-            labelName: "Total Order Quantity",
-            labelKey: "STORE_ORDER_QUANTITY"
+            labelName: "Total Issued Quantity",
+            labelKey: "STORE_ISSUED_QUANTITY"
           },
           props: {
             disabled: true
@@ -37,14 +37,14 @@ import {
             xs: 12,
             sm: 4,
           },
-          jsonPath: "purchaseOrders[0].totalQty"
+          jsonPath: "materialIssues[0].totalQty"
         })
       },
-      totalPOValue: {
+      totalqtyValue: {
         ...getTextField({
           label: {
-            labelName: "Total PO Value",
-            labelKey: "STORE_PURCHASE_ORDER_TOTAL_PO_VALUE"
+            labelName: "Total Qty Value",
+            labelKey: "STORE_QTY_VALUE"
           },
           props: {
             disabled: true
@@ -53,7 +53,7 @@ import {
             xs: 12,
             sm: 4,
           },
-          jsonPath: "purchaseOrders[0].totalvalue"
+          jsonPath: "materialIssues[0].totalvalue"
         })
       },
     })

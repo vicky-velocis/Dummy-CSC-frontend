@@ -1,12 +1,11 @@
 import {
     getCommonCard,
-    getCommonTitle,
     getTextField,
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-  export const totalIssueValue = getCommonCard({
+  export const totalValue = getCommonCard({
    
     totalValueContainer: getCommonContainer({  
 

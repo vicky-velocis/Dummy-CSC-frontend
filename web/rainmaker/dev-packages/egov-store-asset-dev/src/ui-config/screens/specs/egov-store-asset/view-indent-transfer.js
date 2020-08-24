@@ -14,11 +14,56 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
+import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
+//print function UI start SE0001
+import { downloadAcknowledgementForm} from '../utils'
+//print function UI end SE0001
+let applicationNumber = getQueryArg(window.location.href, "indentNumber");
+let status = getQueryArg(window.location.href, "Status");
+let IsEdit = true;
+let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
+console.log(ConfigStatus);
+ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+if(ConfigStatus.length >0)
+IsEdit = false;
+const applicationNumberContainer = () => {
+
+  if (applicationNumber)
+    return {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-store-asset",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: `${applicationNumber}`,
+        visibility: "hidden",
+        pagename:"Indent Transfer"
+      },
+      visible: true
+    };
+  else return {};
+};
+const statusContainer = () => {
+
+if(status)
+    return {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-store-asset",
+    componentPath: "ApplicationStatusContainer",
+    props: {
+     status: `${status}`,
+      visibility: "hidden",      
+    },
+    visible: true
+  };
+ else return {};
+};
 export const header = getCommonContainer({
   header: getCommonHeader({
     labelName: `View  Indent Transfer`,
     labelKey: "STORE_INDENT_TRANSFER_VIEW"
-  })
+  }),
+  applicationNumber: applicationNumberContainer(),
+  status: statusContainer()
 });
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
@@ -36,7 +81,18 @@ const createMatrialIndentOutwordHandle=async (state, dispatch) => {
   if(indentNumber)  
   dispatch(setRoute(`/egov-store-asset/create-material-transfer-outward?indentNumber=${indentNumber}`));
 };
-
+//print function UI start SE0001
+/** MenuButton data based on status */
+let printMenu = [];
+let receiptPrintObject = {
+  label: { labelName: "Receipt", labelKey: "STORE_PRINT_INDENT_TFR" },
+  link: () => {
+    downloadAcknowledgementForm("Indent Transfer");
+  },
+  leftIcon: "receipt"
+};
+printMenu = [receiptPrintObject];
+//pint function UI End SE0001
 const masterView = MTIReviewDetails(false);
 const getMdmsData = async (action, state, dispatch, tenantId) => {
   const tenant = getstoreTenantId();
@@ -105,10 +161,10 @@ const screenConfig = {
           componentPath: "Container",
           children: {
             header: {
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-              },
+              // gridDefination: {
+              //   xs: 12,
+              //   sm: 6,
+              // },
               ...header
             },
             newApplicationButton: {
@@ -120,7 +176,7 @@ const screenConfig = {
                 lg:3,
                 // align: "right",
               },  
-              visible: true,// enableButton,
+              visible: false,// enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -197,10 +253,37 @@ const screenConfig = {
                 callBack: createMatrialIndentOutwordHandle,
               },
             },
+                         //print function UI start SE0001
+                         printMenu: {
+                          uiFramework: "custom-atoms-local",
+                          moduleName: "egov-tradelicence",
+                          componentPath: "MenuButton",
+                          gridDefination: {
+                            xs: 12,
+                            sm: 4,
+                            md:3,
+                            lg:3,
+                            align: "right",
+                          },  
+                          visible: true,// enableButton,
+                          props: {
+                            data: {
+                              label: {
+                                labelName:"PRINT",
+                                labelKey:"STORE_PRINT"
+                              },
+                              leftIcon: "print",
+                              rightIcon: "arrow_drop_down",
+                              props: { variant: "outlined", style: { marginLeft: 10 } },
+                              menu: printMenu
+                            }
+                          }
+                        }
+                        //print function UI End SE0001
           }
         },
         masterView,
-        footer: poViewFooter()
+        footer: IsEdit? poViewFooter():{},
       }
     },
    

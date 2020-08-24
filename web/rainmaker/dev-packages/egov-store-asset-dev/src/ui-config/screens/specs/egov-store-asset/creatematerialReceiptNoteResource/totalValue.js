@@ -1,20 +1,18 @@
 import {
     getCommonCard,
-    getCommonTitle,
     getTextField,
     getCommonContainer,
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-  export const totalIssueValue = getCommonCard({
-   
+  export const totalValue = getCommonCard({
     totalValueContainer: getCommonContainer({  
 
       totalValue: {
         ...getTextField({
           label: {
-            labelName: "Total Issued Quantity",
-            labelKey: "STORE_ISSUED_QUANTITY"
+            labelName: "Total Qty. Accepted",
+            labelKey: "STORE_ACCEPTED_QUANTITY"
           },
           props: {
             disabled: true
@@ -23,7 +21,7 @@ import {
             xs: 12,
             sm: 4,
           },
-          jsonPath: "materialIssues[0].totalQty"
+          jsonPath: "materialReceipt[0].totalQty"
         })
       },
       totalqtyValue: {
@@ -39,7 +37,7 @@ import {
             xs: 12,
             sm: 4,
           },
-          jsonPath: "materialIssues[0].totalvalue"
+          jsonPath: "materialReceipt[0].totalvalue"
         })
       },
     })

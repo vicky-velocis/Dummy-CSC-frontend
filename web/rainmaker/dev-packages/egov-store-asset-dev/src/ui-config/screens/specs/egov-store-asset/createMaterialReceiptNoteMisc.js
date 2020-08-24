@@ -19,6 +19,7 @@ import {
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import {totalValue} from './creatematerialReceiptNoteMiscResource/totalValue';
   import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
@@ -64,7 +65,8 @@ export const header = getCommonContainer({
     },
     children: {
       
-      materialReceiptMiscDetail
+      materialReceiptMiscDetail,
+      totalValue
     },
     visible: false
   };
