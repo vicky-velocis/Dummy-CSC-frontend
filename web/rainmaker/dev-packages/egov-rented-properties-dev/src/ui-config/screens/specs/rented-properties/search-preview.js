@@ -14,7 +14,7 @@ import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
-const findItem = roles.find(item => item.code === "CTL_CLERK");
+const findItem = roles.find(item => item.code === "RP_CLERK");
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
@@ -214,7 +214,7 @@ const rentedPropertiesDetailPreview = {
             props: {
               dataPath: "Properties",
               moduleName: "MasterRP",
-              updateUrl: "/csp/property/_update"
+              updateUrl: "/rp-services/property/_update"
             }
           },
         propertyReviewDetails

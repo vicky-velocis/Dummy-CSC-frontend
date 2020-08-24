@@ -1,12 +1,15 @@
-import { getCommonApplyFooter, validateFields } from "../../utils";
+import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import set from "lodash/set";
 import { applyRentedProperties,applynoticegeneration,applyrecoveryNotice } from "../../../../../ui-utils/apply";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+const userInfo = JSON.parse(getUserInfo());
 export const DEFAULT_STEP = -1;
 export const DETAILS_STEP = 0;
 export const DOCUMENT_UPLOAD_STEP = 1;
@@ -47,7 +50,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
     case VIOLATION_NOTICE:
     case RECOVERY_NOTICE: {
       applicationNumber = get(rentedData, "notices[0].memoNumber")
-      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&transitNumber=${applicationNumber}&tenantId=${tenantId}&type=${NOTICE_GENERATION}`
+      path = `/rented-properties/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNumber}&tenantId=${tenantId}&type=${NOTICE_GENERATION}`
       break
     }
   }
@@ -217,16 +220,16 @@ if(isOwnerDetailsValid && isRentHolderValid && isPaymentDetailsValid) {
   if(!res) {
    return
   } 
+}
 else{
   isFormValid = false;
   } 
-}
 
 
 if (isFormValid) {
   const noticegendata = get(
     state.screenConfiguration.preparedFinalObject,
-    "NoticeApplications[0]"
+    "Properties[0]"
 );
 moveToSuccess(noticegendata, dispatch, RECOVERY_NOTICE);
 }
@@ -751,3 +754,228 @@ export const footer = getCommonApplyFooter({
       },
     }
   });
+
+  export const downloadPrintContainer = (
+    action,
+    state,
+    dispatch,
+    status,
+    applicationNumber,
+    tenantId,
+    pdfkey,
+    applicationType,
+    payloadName
+  ) => {
+    /** MenuButton data based on status */
+    let downloadMenu = [];
+    let printMenu = [];  
+    const data = function() {
+      let data1 = get(
+        state.screenConfiguration.preparedFinalObject,
+        "applicationDataForReceipt",
+        {}
+      );
+      let data2 = get(
+        state.screenConfiguration.preparedFinalObject,
+        "receiptDataForReceipt",
+        {}
+      );
+      let data3 = get(
+        state.screenConfiguration.preparedFinalObject,
+        "mdmsDataForReceipt",
+        {}
+      );
+      let data4 = get(
+        state.screenConfiguration.preparedFinalObject,
+        "userDataForReceipt",
+        {}
+      );
+      return {...data1, ...data2, ...data3, ...data4}
+    }
+    let applicationDownloadObjectForOT = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = OwnersTemp[0].reviewDocData;
+        set(Owners[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementForm(Owners, OwnersTemp[0].estimateCardData,status,pdfkey,applicationType);
+      },
+      leftIcon: "assignment"
+    };
+
+    let applicationDownloadObjectForMG = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = MortgageApplicationsTemp[0].reviewDocData;
+        set(MortgageApplications[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementForm(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData,status,pdfkey,applicationType);
+      },
+      leftIcon: "assignment"
+    };
+
+    let applicationDownloadObjectForDC = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { DuplicateCopyApplications,DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = DuplicateTemp[0].reviewDocData;
+        set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementForm(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData,status,pdfkey,applicationType,payloadName);
+      },
+      leftIcon: "assignment"
+    };
+    let applicationPrintObject = {
+      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      link: () => {
+        const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = OwnersTemp[0].reviewDocData;
+        set(Owners[0],"additionalDetails.documents",documents)
+        downloadAcknowledgementForm(Owners, OwnersTemp[0].estimateCardData, "print");
+      },
+      leftIcon: "assignment"
+    };
+
+    let receiptDownloadObject = {
+      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      link: () => {
+
+        const Owners = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
+        const receiptQueryString = [
+          { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Owners[0].ownerDetails, "applicationNumber") },
+          { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "tenantId") }
+        ]
+        download(receiptQueryString, Owners, data(), userInfo.name);
+        // generateReceipt(state, dispatch, "receipt_download");
+      },
+      leftIcon: "receipt"
+    };
+
+    let receiptDownloadObjectForDC = {
+      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      link: () => {
+
+        const Owners = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
+        console.log(Owners)
+        const receiptQueryString = [
+          { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "applicationNumber") },
+          { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "tenantId") }
+        ]
+        download(receiptQueryString, Owners, data(), userInfo.name);
+        // generateReceipt(state, dispatch, "receipt_download");
+      },
+      leftIcon: "receipt"
+    };
+    switch (status) {
+      case "OT_APPROVED":
+        downloadMenu = [
+          receiptDownloadObject,
+          applicationDownloadObjectForOT
+        ];
+        printMenu = [
+          applicationPrintObject
+        ];
+        break;
+      case "DC_APPROVED":
+          downloadMenu = [
+            receiptDownloadObjectForDC,
+            applicationDownloadObjectForDC
+          ];
+          printMenu = [
+            applicationPrintObject
+          ];
+        break;
+      case 'MG_APPROVED':
+      case "MG_PENDINGCLVERIFICATION":
+      case "MG_PENDINGJAVERIFICATION":
+      case "MG_PENDINGSAVERIFICATION":
+      case "MG_PENDINGCLARIFICATION":
+      case "MG_PENDINGSIVERIFICATION":
+      case "MG_PENDINGCAAPPROVAL":
+      case "MG_PENDINGAPRO":
+      case "MG_REJECTED":
+      case "MG_PENDINGGRANTDETAIL":  
+    
+          downloadMenu = [
+            applicationDownloadObjectForMG,
+          ];
+        
+        break;    
+      case "DC_PENDINGCLVERIFICATION":
+      case "DC_PENDINGJAVERIFICATION":
+      case "DC_PENDINGSAVERIFICATION":
+      case "DC_PENDINGCLARIFICATION":
+      case "DC_PENDINGSIVERIFICATION":
+      case "DC_PENDINGCAAPPROVAL":
+      case "DC_PENDINGAPRO":
+      case "DC_REJECTED":
+
+          downloadMenu = [
+            applicationDownloadObjectForDC
+          ];
+          
+      break; 
+          case "OT_PENDINGCLVERIFICATION":
+          case "OT_PENDINGJAVERIFICATION":
+          case "OT_PENDINGSAVERIFICATION":
+          case "OT_PENDINGCLARIFICATION":
+          case "OT_PENDINGSIVERIFICATION":
+          case "OT_PENDINGCAAPPROVAL":
+          case "OT_PENDINGAPRO":
+          case "OT_REJECTED":
+              downloadMenu = [
+                applicationDownloadObjectForOT
+              ];
+             
+      break; 
+    default:
+      break;    
+          
+    }
+  
+    return {
+      rightdiv: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          style: { textAlign: "right", display: "flex" }
+        },
+        children: {
+          downloadMenu: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-tradelicence",
+            componentPath: "MenuButton",
+            props: {
+              data: {
+                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+                 leftIcon: "cloud_download",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+                menu: downloadMenu
+              }
+            }
+          },
+          printMenu: {
+            uiFramework: "custom-atoms-local",
+            moduleName: "egov-tradelicence",
+            componentPath: "MenuButton",
+            props: {
+              data: {
+                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+                leftIcon: "print",
+                rightIcon: "arrow_drop_down",
+                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
+                menu: printMenu
+              }
+            }
+          }
+  
+        },
+        // gridDefination: {
+        //   xs: 12,
+        //   sm: 6
+        // }
+      }
+    }
+  };
+
+  

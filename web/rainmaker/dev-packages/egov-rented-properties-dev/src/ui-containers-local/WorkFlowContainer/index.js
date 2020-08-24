@@ -38,6 +38,10 @@ class WorkFlowContainer extends React.Component {
       window.location.href,
       "transitNumber"
     );
+    const propertyNumber = getQueryArg(
+      window.location.href,
+      "propertyNumber"
+    )
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"

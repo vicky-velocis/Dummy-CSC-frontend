@@ -1,7 +1,7 @@
 import {
     getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {noticePropertyDetails,ownerDetailsForNotice,paymentDetailsNotice} from './noticeDetails'
+import {noticePropertyDetails,ownerDetailsForNotice,ownerDetailsForViolationNotice,paymentDetailsNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
 import {propertyDetails, transitSiteDetails ,transitSiteDetailsForAccountStatement} from './propertyDetails';
 import {accountStatementGenerationDetails ,amountField} from './accountStatementDetails';
@@ -338,7 +338,7 @@ export const noticeViolationForm = {
   },
   children: {
     noticePropertyDetails,
-    ownerDetailsForNotice,
+    ownerDetailsForViolationNotice,
     document
   },
 }

@@ -23,7 +23,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
   }
  
   export const getImages = (imageObs) => {
-    imageObs = imageObs.filter(img => !!img.applicationDocuments)
+    imageObs = imageObs.map(img => ({...img,applicationDocuments: img.applicationDocuments || []}))
     return Promise.all(
       imageObs.map(imageOb =>
         Promise.all(imageOb.applicationDocuments.map(id => fetchImage(id))).then(urls => ({
@@ -141,7 +141,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
                     {
                       label: "RP_CREATED_DATE",
                       jsonPath: "auditDetails.createdTime",
-                      callback: convertEpochToDate
+                      type: "date"
                     },
                     {
                       label: "RP_COMMENTS_LABEL",

@@ -4,9 +4,11 @@ import {
   import {
     getButtonVisibility,
     getCommonApplyFooter,
+    downloadAcknowledgementForm,downloadAcknowledgementFormForMortagage
   } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import "./index.css";
+  import set from 'lodash/set'
 
   export const footerReview = (
     action,
@@ -197,3 +199,6 @@ import {
       }
     }
   };
+
+
+ 

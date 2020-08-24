@@ -132,7 +132,10 @@ const getAcknowledgementCard = (
       } : !!transitNumber ? {
         labelName: "Transit Number",
         labelKey: "RP_SITE_PLOT_LABEL"
-      } : {
+      } : type === NOTICE_GENERATION ? {
+        labelName: "Notice Number",
+        labelKey: "RP_NOTICE_NUMBER_LABEL"
+      }:{
         labelName: "Application Number",
         labelKey: "RP_APPLICATION_NUMBER_LABEL"
       }
@@ -164,7 +167,8 @@ const getAcknowledgementCard = (
           state,
           dispatch,
           transitNumber,
-          tenant
+          tenant,
+          type
         )
       };
     } else if(status === "failure" && purpose === "pay") {

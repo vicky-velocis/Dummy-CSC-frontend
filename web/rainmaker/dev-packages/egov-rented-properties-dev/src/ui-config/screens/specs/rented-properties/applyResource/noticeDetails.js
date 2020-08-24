@@ -148,7 +148,7 @@ const getViolationField = {
         rows: "4"
     },
     props: {
-        disabled: true
+        disabled: false
       },
       required:true,
     jsonPath: "SingleImage[0].description" 
@@ -310,6 +310,17 @@ const getOwnerDetailsForNotice = () => {
         detailsContainer: getCommonContainer({
         fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
         originalAllotte :getTextField(originalAllotteField),
+        // violations:getTextField(getViolationField),
+        editor : getTextField(getEditorField),
+        })
+    }
+}
+const getOwnerDetailsForViolationNotice = () => {
+    return {
+        header: rentHolderHeader,
+        detailsContainer: getCommonContainer({
+        fatherOrHusbandsName:getTextField(fatherOrHusbandsNameField),
+        originalAllotte :getTextField(originalAllotteField),
         violations:getTextField(getViolationField),
         editor : getTextField(getEditorField),
         })
@@ -338,6 +349,7 @@ const getPaymentDetailsNotice = () => {
 }
 
 export const ownerDetailsForNotice = getCommonCard(getOwnerDetailsForNotice())
+export const ownerDetailsForViolationNotice = getCommonCard(getOwnerDetailsForViolationNotice())
 export const noticePropertyDetails = getCommonCard(getPropertyDetailsForNotice())
 
 export const paymentDetailsNotice=getCommonCard(getPaymentDetailsNotice())

@@ -9,7 +9,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getOwnershipSearchResults } from "../../../../ui-utils/commons";
 import { getReviewApplicantDetails, getreviewPropertyAddressDetails } from "./applyResource/review-applications";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { footerReview, downloadPrintContainer,footerReviewTop } from "./applyResource/reviewFooter";
+import {downloadPrintContainer} from "./applyResource/footer"
+import { footerReview,footerReviewTop } from "./applyResource/reviewFooter";
 import { set } from "lodash";
 import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -91,7 +92,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       dispatch,
       status,
       applicationNumber,
-      tenantId
+      tenantId,"ownership-transfer","OT"
     );
     const CitizenprintCont=footerReviewTop(
       action,
@@ -104,19 +105,24 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
     );
 
 
-    process.env.REACT_APP_NAME === "Citizen"
-      ? set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          CitizenprintCont
-        )
-      : set(
-          action,
-          "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-          printCont
-        );
+    // process.env.REACT_APP_NAME === "Citizen"
+    //   ? set(
+    //       action,
+    //       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+    //       CitizenprintCont
+    //     )
+    //   : set(
+    //       action,
+    //       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+    //       printCont
+    //     );
 
-
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
+    
     const footer = footerReview(
       action,
       state,
@@ -190,7 +196,7 @@ const ownerShipDetailsPreview = {
                   props: {
                     dataPath: "Owners",
                     moduleName: "OwnershipTransferRP",
-                    updateUrl: "/csp/ownership-transfer/_update"
+                    updateUrl: "/rp-services/ownership-transfer/_update"
                   }
                 },
               transferReviewDetails
