@@ -11,36 +11,9 @@ import {  getUserInfo  } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from '../../../../../config/common';
 
 
-import { checkForRole } from "../../../../../ui-utils/commons";
-
-
  
-// const convertTime =(time)=> {
-//   // Check correct time format and split into components
-  
-//   //time=time+":00"
-//   time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)?$/) || [time];
-  
-//   if (time.length > 1) { // If time format correct
-//   time = time.slice(1); // Remove full string match value
-//   time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
-//   time[0] = +time[0] % 12 || 12; // Adjust hours
-//   }
-//   return time.join(''); // return adjusted time or original string
-//   }
-  // const truncData=(str, length, ending)=> {
-  //   if (length == null) {
-  //     length = 20;
-  //   }
-  //   if (ending == null) {
-  //     ending = '...';
-  //   }
-  //   if (str.length > length) {
-  //     return str.substring(0, length - ending.length) + ending;
-  //   } else {
-  //     return str;
-  //   }
-  // };
+
+
 ///eventFilter
 
 export const searchEventApiCall = async (state, dispatch) => {
@@ -629,6 +602,42 @@ let data1 = response.ResponseBody.map(item => ({
 
 
 export const searchTenderApiCall = async (state, dispatch) => {
+let Status=''
+  
+  
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: commonConfig.tenantId,
+      moduleDetails: [
+        {
+          moduleName: "RAINMAKER-PR",
+          masterDetails: [ { name: "TenderStatusCheck" }
+          
+        ]
+        },
+       
+
+     
+      ]
+    }
+  };
+ 
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+        let role=JSON.parse(getUserInfo()).roles
+        payload.MdmsRes["RAINMAKER-PR"].TenderStatusCheck.map(res => {
+      role.map(roleName=>{
+        if( roleName.code === res.isRole )
+        {
+        //  getGridDataPublishTender(action, state, dispatch,res.TenderListStatus);
+        Status=res.TenderListStatus
+        }})})
   let startDate=get(
     state.screenConfiguration.preparedFinalObject,
     "PublicRelation[0].filtertender.fromDate"
@@ -672,7 +681,7 @@ export const searchTenderApiCall = async (state, dispatch) => {
       "PublicRelation[0].filtertender.toDate"
     ) ||"",
    
-    "tenderNoticeStatus":checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER')?"CREATED":"",
+    "tenderNoticeStatus":Status,
     "tenderNoticeUuid":"",
     "tenderNoticeId":get(
       state.screenConfiguration.preparedFinalObject,

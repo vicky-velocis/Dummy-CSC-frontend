@@ -1,5 +1,5 @@
 import {getCommonContainer,getCommonHeader,getStepperObject,getCommonTitle ,getBreak} from "egov-ui-framework/ui-config/screens/specs/utils";
-import { tenderApplyfooter } from "./applyResource/tenderApplyfooter";
+import { tenderApplyfooter,takeactionfooter } from "./applyResource/tenderApplyfooter";
 import jp from "jsonpath";
 import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import { tenderDetails, EmailSmsContent} from "./tenderResources/tenderDetails";
@@ -397,7 +397,8 @@ const screenConfig = {
         formwizardSecondStep,
        formwizardThirdStep,
        
-        tenderApplyfooter
+        tenderApplyfooter,
+        takeactionfooter
       }
     }
   }

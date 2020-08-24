@@ -36,6 +36,19 @@ const state = store.getState();
 //     return str;
 //   }
 // };
+const toggleactionmenu = (state, dispatch) => {
+	
+  var x = document.getElementById("custom-atoms-tenderApplyfooter");
+ 	 // if (x.style.display === "none") {
+   if(window.getComputedStyle(x).display === "none") {   
+    x.style.display = "block";
+    x.classList.add("addpadding");
+	  } else {
+    x.style.display = "none";
+    x.classList.remove("addpadding");
+	  }
+}
+
 
 const setReviewPageRoute = (state, dispatch) => {
 	             let id=getQueryArg(window.location.href, "eventuuId")            
@@ -193,7 +206,8 @@ const callBackForSubmit = async (state, dispatch) => {
 
 
   const callBackForNext = async (state, dispatch) => {
-   
+    toggleactionmenu(state, dispatch)
+
 
 
     let activeStep = get(
@@ -319,7 +333,8 @@ if(doc)
           data
         ));
     
-    
+     
+
     changeStep(state, dispatch, 'next', activeStep);
     }
     else
@@ -542,6 +557,8 @@ export const getActionDefinationForStepper = path => {
 };
 
 export const callBackForPrevious = (state, dispatch) => {
+  toggleactionmenu(state, dispatch)
+
   changeStep(state, dispatch, "previous");
 };
 
@@ -559,19 +576,23 @@ export const tenderApplyfooter = getCommonApplyFooter({
       variant: "outlined",
       color: "primary",
       style: {
-       minWidth: "200px",
         height: "48px",
-        marginRight: "16px" 
+        marginRight: "16px",
+        // width: "30%"
+        minWidth: "220px",
+        background:"#fff",
+        border: "1px solid #ddd" ,
+        color: "#000"
+        
       }
     },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
+    },
     children: {
-      previousButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_left"
-        }
-      },
+     
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
         labelKey: "PR_COMMON_BUTTON_PREV_STEP"
@@ -589,28 +610,67 @@ export const tenderApplyfooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-       minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        // width: "30%"
+        minWidth: "220px",
+        background:"#fff",
+        border: "1px solid #ddd" ,
+        color: "#000"
+        
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
     },
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
         labelKey: "PR_COMMON_BUTTON_NXT_STEP"
-      }),
-      nextButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
+      })
+     
     },
     onClickDefination: {
       action: "condition",
       callBack: callBackForNext
     }
+  },
+ 
+  payButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "16px",
+        // width: "30%"
+        minWidth: "220px",
+        background:"#fff",
+        border: "1px solid #ddd" ,
+        color: "#000"
+        
+      }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "PR_COMMON_BUTTON_PUBLISH"
+      })
+     
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForSubmit
+    },
+visible:false
   },
   cancleButton: {
     componentPath: "Button",
@@ -618,59 +678,33 @@ export const tenderApplyfooter = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
         height: "48px",
-        marginRight: "16px"
+        marginRight: "16px",
+        // width: "30%"
+        minWidth: "220px",
+        background:"#fff",
+        border: "1px solid #ddd" ,
+        color: "#000"
+        
       }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12
     },
     children: {
       submitButtonLabel: getLabel({
-        labelName: "UPLOAD",
+        labelName: "Cancel",
         labelKey: "PR_COMMON_BUTTON_CANCLE"
       }),
-      submitButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
+     
     },
     onClickDefination: {
       action: "condition",
       callBack: redirectfunction
     },
     visible: false
-  },
-  payButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "16px"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Submit",
-        labelKey: "PR_COMMON_BUTTON_PUBLISH"
-      }),
-      submitButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForSubmit
-    },
-visible:false
   }
 });
 
@@ -717,3 +751,38 @@ export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
   }
   return [isFormValid, hasFieldToaster]
 };
+
+export const takeactionfooter = getCommonApplyFooter({
+  actionbutton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        height: "48px",
+        marginRight: "16px" 
+      }
+    },
+    children: {
+       
+      pressguestbuttonLabel: getLabel({
+        labelName: "Take Action",
+        labelKey: "PR_TAKE_ACTION"
+      }),
+	  nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_up"
+        }
+      },
+    },
+    onClickDefination: {
+      action: "condition",
+       callBack: (state, dispatch) =>{
+           toggleactionmenu(state, dispatch)
+    }
+    },
+    visible: true
+  }
+}); 

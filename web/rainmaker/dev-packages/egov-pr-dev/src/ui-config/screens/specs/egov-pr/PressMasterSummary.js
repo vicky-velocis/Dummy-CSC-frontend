@@ -18,10 +18,8 @@ import {
   import set from "lodash/set";
 
   import { presssummaryfooter } from './applyResource/presssummaryfooter'
-  import { nocSummary } from "./summaryResource/nocSummary";
-  import { propertySummary } from "./summaryResource/propertySummary";
-  import { generateBill } from "../utils/index";
-  import { getTenantId ,geteventuuid} from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
+ 
+  import { getTenantId } from "../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
   import {getPressMasterSearchResultsView} from "../egov-pr/searchResource/citizenSearchFunctions"
   import {localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
   import {
@@ -284,7 +282,7 @@ import {
             pressdetailsSummary: pressdetailsSummary,
             
           }),
-          footer: presssummaryfooter
+          presssummaryfooter: presssummaryfooter
         }
       },
     	adhocDialog: {

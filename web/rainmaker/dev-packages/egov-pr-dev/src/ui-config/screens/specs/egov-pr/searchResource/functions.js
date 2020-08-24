@@ -38,11 +38,12 @@ let year=get(
   state.screenConfiguration.preparedFinalObject,
   "TimeseriesReport.Year"
 )
+
 let Aggrigate=get(
   state.screenConfiguration.preparedFinalObject,
   "TimeseriesReport.AggrigatedBy"
 )
-if( year!==undefined && Aggrigate!==undefined)
+if(  year!==undefined && Aggrigate!==undefined && Aggrigate.label!=="Select Aggregated By" && year.label!=="Select Year" )
 {
   
   if(Aggrigate.label==="Department")

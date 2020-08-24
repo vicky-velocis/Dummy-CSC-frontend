@@ -228,9 +228,7 @@ class IntegrationReactSelect extends React.Component {
           {...rest}
           onChange={this.handleChange("single")}
          
-          // filterOption={createFilter({
-          //   matchFrom: 'start'
-          // })}
+         
           
         />
       </div>
