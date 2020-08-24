@@ -14,7 +14,7 @@ import { getNoticeReviewProperty, getNoticeViolationPreviewReviewRentDetails, ge
 const reviewNoticePropertyDetails = getNoticeReviewProperty(false);
 const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDetails(false);
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
-const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments");
+const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
 
 const header = getCommonContainer({
