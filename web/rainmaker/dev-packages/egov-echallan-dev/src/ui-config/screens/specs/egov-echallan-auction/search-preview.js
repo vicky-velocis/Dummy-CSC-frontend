@@ -20,13 +20,17 @@ import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
 import { documentsSummary } from "./summaryResource/documentsSummary";
 import { searchResultsSummary, searchResultsSummaryHOD } from "./summaryResource/summaryGrid";
-import { getSearchResultsView, fetchStoreItemHODMasterChallanData, fetchauctionHODMasterChallanData, findItemInArrayOfObject, approverejectAuctionDetails, fetchMdmsData } from "../../../../ui-utils/commons";
+import {
+  getSearchResultsView, fetchStoreItemHODMasterChallanData, fetchauctionHODMasterChallanData, findItemInArrayOfObject, approverejectAuctionDetails, fetchMdmsData, fetchMasterChallanHODAuction,
+  setCurrentApplicationProcessInstance, checkVisibility
+} from "../../../../ui-utils/commons";
 import { setEncroachmentType, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import { AuctionGridHistoryDetails } from "./auctionHistory/serachResultGrid"
 import { searchResultApiResponseViewHistory } from "./searchResource/searchResultApiResponse"
 import { getTextToLocalMapping, checkForRole, fetchRoleCode, getMdmsEncroachmentSectorData, truncData } from "../utils";
 import { showHideAdhocPopupAuction } from "../utils/index";
-import {titlebarfooter} from "./footer/footer";
+import { titlebarfooter, takeactionfooter } from "./footer/footer";
+import { adhocPopup } from "./Popup/addPopup";
 
 let roles = JSON.parse(getUserInfo()).roles;
 //alert('CITIZEN');
@@ -61,7 +65,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
+      number: ""
     }
   },
   applicationStatus: {
@@ -69,7 +73,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-echallan",
     componentPath: "ApplicationStatusContainer",
     props: {
-      status: "Status : " + getQueryArg(window.location.href, "applicationNumber")
+      status: "Status : "
     }
   },
   paymentStatus: {
@@ -100,7 +104,7 @@ const prepareDocumentsView = async (state, dispatch) => {
       documentsPreview.push({
         title: getTextToLocalMapping("EC_" + docType),
         fileStoreId: element.fileStoreId,
-        linkText: "View"
+        linkText: "Download"
       })
     });
   }
@@ -140,12 +144,18 @@ const prepareDocumentsView = async (state, dispatch) => {
 
 const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
   // Get all documents from response
-  let SeizedItemDetailList = get(
-    state,
-    "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", {}
+
+  let challanDetail = get(
+    state, "screenConfiguration.preparedFinalObject.eChallanDetail[0]", {}
   );
 
-  const challanUuid = getQueryArg(window.location.href, "Key");
+  let AuctionDetail = get(
+    state, "screenConfiguration.preparedFinalObject.eChallanAuctionDet[0]", {}
+  );
+
+  let SeizedItemDetailList = get(
+    state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem", {}
+  );
 
   let dataarray = [];
   let showstoredDetails = false;
@@ -166,8 +176,9 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
       "limit": -1,
       "orderDir": "DESC",
       "orderColumn": "",
-      "searchText": challanUuid
+      "searchText": challanDetail.challanUuid
     }
+
     let response = await fetchStoreItemHODMasterChallanData(requestBody);
 
 
@@ -180,7 +191,7 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
         if (item['violationItemUuid'] === element['violationItemUuid']) {
           //let defectqty = parseInt(item['quantity']) - parseInt(item['auctionedQuantity']);
           let intactQty = parseInt(item['quantity']) - parseInt(item['auctionedQuantity']);
-          temp[0] = truncData(item['itemName'],25);
+          temp[0] = truncData(item['itemName'], 25);
           temp[1] = element['quantity'];
           temp[2] = element['remark'];
           temp[3] = item['quantity'];
@@ -205,19 +216,18 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
       "limit": -1,
       "orderDir": "DESC",
       "orderColumn": "",
-      "searchText": challanUuid,
-      "challanUuid": challanUuid
+      "searchText": challanDetail.challanUuid,
+      "challanUuid": challanDetail.challanUuid
     }
 
     let approverejectList = [];
     let storeresponse = await fetchStoreItemHODMasterChallanData(requestBody);
     let Wauctionresponse = await fetchauctionHODMasterChallanData(requestBody);
-    const auctionUuId = getQueryArg(window.location.href, "aKey");
     let auctionresponse = [];
 
     Wauctionresponse.find(function (auctionRecord, index) {
 
-      if (auctionRecord.auctionUuid === auctionUuId) {
+      if (auctionRecord.auctionUuid === AuctionDetail.auctionUuid) {
         auctionresponse.push(auctionRecord);
         //return true;
       }
@@ -234,7 +244,7 @@ const prepareItemSeizedDetails = async (state, dispatch, appstatus) => {
               const seizedelement = SeizedItemDetailList[index];
               if (storeelement.violationItemUuid === seizedelement.violationItemUuid) {
                 let temp = [];
-                temp[0] = truncData(storeelement['itemName'],25);
+                temp[0] = truncData(storeelement['itemName'], 25);
                 temp[1] = seizedelement['quantity'].toString();
                 temp[2] = storeelement['quantity'].toString();
                 temp[3] = auctionelement['auctionDate'] === null ? '' : auctionelement['auctionDate'];
@@ -315,14 +325,14 @@ const setGridDatabasedOnRole = (appstatus, dataarray, dispatch) => {
     handleField(
       "search-preview",
       "components.div.children.body.children.cardContent.children.searchResultsSummary",
-      "props.data", ''
+      "props.data", []
     )
   );
   dispatch(
     handleField(
       "search-preview",
       "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
-      "props.data", ''
+      "props.data", []
     )
   );
 
@@ -411,21 +421,38 @@ const setRejectButtonVisibleTrueFalse = (isVisible, dispatch) => {
 const setSearchResponse = async (
   state,
   dispatch,
-  applicationNumber,
-  auctionUuid,
   tenantId,
   action
 ) => {
-  
+
   await getMdmsEncroachmentSectorData(action, state, dispatch);
+  let auctionUuid = getQueryArg(window.location.href, "applicationNumber") !== null ? getQueryArg(window.location.href, "applicationNumber") : "";
+  let challanUuid = getQueryArg(window.location.href, "challanNumber");
+
+  let requestBody = {
+    auctionUuid: auctionUuid,
+    tenantId: tenantId,
+    action: '',
+  }
+  let response = auctionUuid !== "" ? await fetchMasterChallanHODAuction(requestBody) : "";
+
+  if (response !== "" && response.ResponseBody.length > 0) {
+
+    dispatch(prepareFinalObject("eChallanAuctionDet", get(response, "ResponseBody", [])));
+    //68f93cf6-558f-469f-be38-77a00e4a3de7
+    challanUuid = response.ResponseBody[0].challanUuid
+    await setCurrentApplicationProcessInstance(state, false);
+  }
 
   let RequestBody = {
-    searchtext: applicationNumber,
+    searchtext: challanUuid,
     tenantId: tenantId,
     action: '',
   }
 
-  const response = await getSearchResultsView(RequestBody);
+  response = await getSearchResultsView(RequestBody);
+
+
   //
   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
   let sectorval = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
@@ -440,8 +467,7 @@ const setSearchResponse = async (
   let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
     if (encroachRecord.code == sectorval.encroachmentType)
       return true;
-  });    
-
+  });
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
 
   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
@@ -450,10 +476,22 @@ const setSearchResponse = async (
   let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
 
-
   let appstatus = auctionUuid === '' ? get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '') : 'PENDING FOR APPROVAL';
   let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
+  let appnumber = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId", '');
+
   let isVisible = auctionUuid === '' ? true : false;
+
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      appnumber
+    )
+  );
+
+
   dispatch(
     handleField(
       "search-preview",
@@ -476,13 +514,18 @@ const setSearchResponse = async (
   setEncroachmentType(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", ''));
 
   setModulesVisibleTrueFalse(true, dispatch);
-
   setAuctionButtonVisibleTrueFalse(isVisible, dispatch);
-  setApproveButtonVisibleTrueFalse(!isVisible, dispatch);
-  setRejectButtonVisibleTrueFalse(!isVisible, dispatch);
+  setApproveButtonVisibleTrueFalse(false, dispatch);
+  setRejectButtonVisibleTrueFalse(false, dispatch);
+
+  checkVisibility(state, "APPROVE", "approveButton", action, "screenConfig.components.div.children.employeeFooter.children.approveButton.visible", false);
+  checkVisibility(state, "REJECT", "rejectButton", action, "screenConfig.components.div.children.employeeFooter.children.rejectButton.visible", false);
+
+
 
   prepareDocumentsView(state, dispatch);
   prepareItemSeizedDetails(state, dispatch, appstatus);
+  searchResultApiResponseViewHistory(dispatch, challanUuid, tenantId);
 
 };
 
@@ -490,15 +533,11 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const challanUuid = getQueryArg(window.location.href, "Key");
-    const auctionUuid = getQueryArg(window.location.href, "aKey");
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     setapplicationType('eAuction');
 
-    setSearchResponse(state, dispatch, applicationNumber, auctionUuid, tenantId, action);
-    searchResultApiResponseViewHistory(action, state, dispatch, challanUuid, tenantId)
+    setSearchResponse(state, dispatch, tenantId, action);
     return action;
   },
   components: {
@@ -533,7 +572,8 @@ const screenConfig = {
         break: getBreak(),
         employeeFooter:
           process.env.REACT_APP_NAME === "Employee" ? titlebarfooter : {},
-
+        employeeTakeActionFooter:
+          process.env.REACT_APP_NAME === "Employee" ? takeactionfooter : {},
       }
     },
     adhocDialog: {
@@ -545,97 +585,58 @@ const screenConfig = {
         maxWidth: "xl",
         screenKey: "search-preview"
       },
-      children: {
-        div1: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          gridDefination: {
-            xs: 12,
-            sm: 12
-          },
-          props: {
-            style: {
-              width: "100%",
-              float: "right"
-            }
-          },
-          children: {
-            div: getCommonHeader(
-              {
-                labelName: "Auction History Details",
-                labelKey: "EC_AUCTION_HISTORY_DETAILS"
-              },
-              {
-                style: {
-                  fontSize: "20px",
-                  padding: "20px",
-                }
-              },
-              {
-                classes: {
-                  root: "common-header-cont"
-                }
-              }
-            )
+      div1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 12
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
           }
         },
-     
-        AuctionGridHistoryDetails,
-
-        div2: {
-          uiFramework: "custom-atoms",
-          componentPath: "Div",
-          props: {
-            style: {
-              width: "100%",
-              //textAlign: "right",
-              display: "flex"
-            }
-          },
-          children: {
-            cancelApplicationButton: {
-              componentPath: "Button",
-              visible: enableButton,
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  borderRadius: "2px",
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "16px",
-                  marginBottom: "8px",
-                  marginTop: "25px"
-                }
-              },
-      
-              children: {
-                buttonLabel: getLabel({
-                  labelName: "CANCEL",
-                  labelKey: "EC_POPUP_SEARCH_RESULTS_CANCEL_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  dispatch(
-                    handleField("search-preview", "components.adhocDialog", "props.open", false)
-                  );
-                }
-              },
-            },
-         
-          },
-          gridDefination: {
-            xs: 12,
-            sm: 12
-          }
-        },
-
 
       },
+      children: {
+        popup: adhocPopup,
+
+        cancelApplicationButton: {
+          componentPath: "Button",
+          visible: enableButton,
+          props: {
+            variant: "outlined",
+            color: "primary",
+            style: {
+              borderRadius: "2px",
+              minWidth: "180px",
+              height: "48px",
+              marginRight: "16px",
+              marginBottom: "8px",
+              marginTop: "25px"
+            }
+          },
+
+          children: {
+            buttonLabel: getLabel({
+              labelName: "CANCEL",
+              labelKey: "EC_POPUP_SEARCH_RESULTS_CANCEL_APP_BUTTON"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+            callBack: (state, dispatch) => {
+              dispatch(
+                handleField("search-preview", "components.adhocDialog", "props.open", false)
+              );
+            }
+          },
+        },
+      },
     }
-    
+
   },
 
 };

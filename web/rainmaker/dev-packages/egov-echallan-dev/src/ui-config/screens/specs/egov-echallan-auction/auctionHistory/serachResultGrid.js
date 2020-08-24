@@ -73,6 +73,7 @@ export const AuctionGridHistoryDetails = {
       disableToolbarSelect: true,
       resizableColumns: false,
       hover: true,
+      customToolbar: null,
       filterType: 'dropdown',
       fixedHeaderOptions: {
         xAxis: true,

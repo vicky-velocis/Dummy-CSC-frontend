@@ -10,19 +10,11 @@ import {
 } from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
-import cloneDeep from "lodash/cloneDeep";
-import { createEstimateData } from "../../utils";
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import jp from "jsonpath";
 import set from "lodash/set";
 import { UpdateStatus, addToStoreViolationData, UpdateChallanStatus } from "../../../../../ui-utils/commons";
 import { documentDetails } from "./documentDetails";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import store from "redux/store";
-import { createDemandForRoadCutNOCPOPup } from "../../utils/index";
-import {
-  localStorageGet, localStorageSet
-} from "egov-ui-kit/utils/localStorageUtils";
 import { callPGService } from "./footer";
 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -389,9 +381,10 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px",
           }
         },
         children: {
@@ -415,8 +408,9 @@ export const paymentGatewaySelectionPopup = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            minWidth: "200px",
-            height: "48px"
+            minWidth: "180px",
+            height: "48px",
+            marginBottom: "8px"
           }
         },
         children: {
@@ -890,6 +884,7 @@ export const ItemMasterDeletionPopup = getCommonContainer({
                 fontSize: "16px",
                 marginTop:"20px",
                 marginBottom:"20px",
+                wordbreak:"break-word !important"
               }
             }
           )
@@ -914,9 +909,10 @@ export const ItemMasterDeletionPopup = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px",
           }
         },
         children: {
@@ -938,8 +934,9 @@ export const ItemMasterDeletionPopup = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            minWidth: "200px",
-            height: "48px"
+            minWidth: "180px",
+            height: "48px",
+            marginBottom: "8px",
           }
         },
         children: {
@@ -1055,9 +1052,10 @@ export const challanDeletionPopup = getCommonContainer({
           variant: "outlined",
           color: "primary",
           style: {
-            minWidth: "200px",
+            minWidth: "180px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "16px",
+            marginBottom: "8px",
           }
         },
         children: {
@@ -1079,8 +1077,9 @@ export const challanDeletionPopup = getCommonContainer({
           variant: "contained",
           color: "primary",
           style: {
-            minWidth: "200px",
-            height: "48px"
+            minWidth: "180px",
+            height: "48px",
+            marginBottom: "8px",
           }
         },
         children: {
