@@ -1686,13 +1686,13 @@ const getBillingSlabData = async (
   }
 };
 
-const isApplicationPaid = (currentStatus, workflowCode) => {
-  let isPAID = false;
-  if (currentStatus === "CITIZENACTIONREQUIRED" || currentStatus === "PENDING Payment") {
-    return isPAID;
-  }
-  const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
 
+const isApplicationPaid = (currentStatus,workflowCode) => {
+let isPAID = false;
+if(currentStatus==="CITIZENACTIONREQUIRED" || currentStatus === "OT_PENDINGPAYMENT" || currentStatus === "DC_PENDINGPAYMENT"){
+  return isPAID;
+}
+const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
   if (!isEmpty(businessServiceData)) {
     const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === workflowCode)
     const states = tlBusinessService && tlBusinessService.length > 0 && tlBusinessService[0].states;
