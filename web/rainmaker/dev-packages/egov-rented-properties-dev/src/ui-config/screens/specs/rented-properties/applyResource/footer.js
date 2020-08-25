@@ -140,12 +140,21 @@ const callBackForNext = async(state, dispatch) => {
             );
     }
     }
-if(activeStep=== PAYMENT_DOCUMENT_UPLOAD_STEP){
-  
-}
+    if(activeStep=== PAYMENT_DOCUMENT_UPLOAD_STEP){
+      const paymentDocuments = get(state.screenConfiguration.preparedFinalObject, "paymentDocuments")
+      if(!paymentDocuments) {
+        isFormValid = false
+      }
+      if(isFormValid) {
+        dispatch(prepareFinalObject("Properties[0].fileStoreId", paymentDocuments.fileStoreId));
+        const res = await applyRentedProperties(state, dispatch, activeStep)
+        if(!res) {
+          return
+        }
+      }
+    }
     if(activeStep === PROPERTY_SUMMARY_STEP) {
-    isFormValid = await applyRentedProperties(state, dispatch);
-    isFormValid = true;
+    isFormValid = await applyRentedProperties(state, dispatch, activeStep);
       if (isFormValid) {
         const rentedData = get(
           state.screenConfiguration.preparedFinalObject,

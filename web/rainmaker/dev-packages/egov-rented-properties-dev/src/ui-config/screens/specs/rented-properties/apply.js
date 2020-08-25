@@ -7,7 +7,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import commonConfig from "config/common.js";
 import {footer} from './applyResource/footer';
 import { searchResults } from "./search-preview";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
@@ -36,10 +36,7 @@ export const getMdmsData = async (dispatch, body) => {
     }
   };
 
-
-
   const setPaymentDocumentData = async (action, state, dispatch) => {
-
     const paymentDocuments=[{
       type:"PAYMENT_DOCUMENT",
       description: {
@@ -60,11 +57,10 @@ export const getMdmsData = async (dispatch, body) => {
       {
       name: "PAYMENT_DOCUMENT",
       required: true,
-      jsonPath: `Payment[0].paymentDocuments`,
+      jsonPath: `paymentDocuments`,
       statement: "RP_UPLOAD_CSV"
       }
     ]
-    console.log(paymentDocuments)
     dispatch(
       handleField(
           "apply",
@@ -73,13 +69,32 @@ export const getMdmsData = async (dispatch, body) => {
           paymentDocuments
       )
   );
-    dispatch(prepareFinalObject("PropertiesTemp[0].applicationPaymentDocuments", documentsType))
+  dispatch(prepareFinalObject("PropertiesTemp[0].applicationPaymentDocuments", documentsType))
+  const fileStoreId = get(state.screenConfiguration, "preparedFinalObject.Properties[0].fileStoreId")
+  const tenantId = get(state.screenConfiguration, "preparedFinalObject.Properties[0].tenantId")
+  if(!!fileStoreId) {
+    const fileUrl = await getFileUrlFromAPI(fileStoreId);
+   const paymentDocuments = { "fileName" : (fileUrl &&
+    fileUrl[fileStoreId] &&
+      decodeURIComponent(
+        getFileUrl(fileUrl[fileStoreId])
+          .split("?")[0]
+          .split("/")
+          .pop()
+          .slice(13)
+      )) ||
+    `Document`,
+    "fileStoreId" : fileStoreId,
+    "fileUrl" : Object.values(fileUrl)[0],
+    "documentType" :  "PAYMENT_DOCUMENT",
+    "tenantId" : tenantId,
+    "active": true }
+
+    dispatch(prepareFinalObject(
+      "paymentDocuments", paymentDocuments
+    ))
   }
-
-
-
-
-
+  }
 
   const setDocumentData = async (action, state, dispatch) => {
     const documentTypePayload = [{
@@ -110,7 +125,6 @@ export const getMdmsData = async (dispatch, body) => {
         labelKey: item.description
     }
     }))
-    console.log(rentedMasterDocuments)
     const documentTypes = prepareDocumentTypeObj(masterDocuments);
     let applicationDocs = get(
       state.screenConfiguration.preparedFinalObject,

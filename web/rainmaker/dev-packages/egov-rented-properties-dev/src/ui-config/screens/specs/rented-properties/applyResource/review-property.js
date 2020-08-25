@@ -49,13 +49,13 @@ export const editSection = {
     }
 }
 
-const masterEntryEditSection = (isEditable) => ({
+const masterEntryEditSection = (isEditable, index = 0) => ({
     ...editSection,
     visible: isEditable,
     onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
-            changeStep(state, dispatch, "apply", "", 0);
+            changeStep(state, dispatch, "apply", "", index);
         }
     }
 })
@@ -551,30 +551,30 @@ export const getReviewPaymentDetails = (isEditable = true) => {
                         labelKey: "RP_PAYMENT_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                editSection: masterEntryEditSection(isEditable, 2)
             }
         },
         viewFour: getCommonContainer({
                 amountPaid: getLabelWithValue(
                     {
-                        labelName: "Payment Amount",
-                        labelKey: "RP_PAYMENT_AMOUNT_LABEL"
+                        labelName: "Balance Principal",
+                        labelKey: "RP_BALANCE_PRINCIPAL_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid" }
+                    { jsonPath: "Properties[0].rentSummary.balancePrincipal" }
                 ),
                 paymentDate: getLabelWithValue(
                     {
                         labelName: "Date of Payment",
-                        labelKey: "RP_DATE_PAYMENT_LABEL"
+                        labelKey: "RP_BALANCE_INTEREST_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentDate", callBack: convertEpochToDate }
+                    { jsonPath: "Properties[0].rentSummary.balanceInterest" }
                 ),
                 paymentMode: getLabelWithValue(
                     {
                         labelName: "Payment Mode",
-                        labelKey: "RP_PAYMENT_MODE_LABEL"
+                        labelKey: "RP_BALANCE_AMOUNT_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].paymentMode" }
+                    { jsonPath: "Properties[0].rentSummary.balanceAmount" }
                 ),
         })
     })
