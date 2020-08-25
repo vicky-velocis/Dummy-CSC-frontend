@@ -1457,7 +1457,7 @@ const getBillingSlabData = async (
 
 const isApplicationPaid = (currentStatus,workflowCode) => {
 let isPAID = false;
-if(currentStatus==="CITIZENACTIONREQUIRED" || currentStatus === "PENDING Payment"){
+if(currentStatus==="CITIZENACTIONREQUIRED" || currentStatus === "OT_PENDINGPAYMENT" || currentStatus === "DC_PENDINGPAYMENT"){
   return isPAID;
 }
 const businessServiceData = JSON.parse(localStorageGet("businessServiceData"));
