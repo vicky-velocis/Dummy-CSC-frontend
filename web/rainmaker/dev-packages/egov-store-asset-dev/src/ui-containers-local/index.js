@@ -76,7 +76,10 @@ const MultiItem = Loadable({
   loading: () => <Loading />
 });
 
-
+const WorkFlowContainer = Loadable({
+  loader: () => import("./WorkFlowContainer"),
+  loading: () => <Loading />
+})
 export {
   CustomTabContainer,
   LabelContainer,
@@ -94,5 +97,6 @@ export {
   ForwardContainer,
   UnderTakingContainer,
   DynamicTableContainer,
-  MultiItem
+  MultiItem,
+  WorkFlowContainer
 };

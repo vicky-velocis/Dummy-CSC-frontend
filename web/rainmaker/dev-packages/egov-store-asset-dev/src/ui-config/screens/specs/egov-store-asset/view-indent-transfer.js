@@ -18,7 +18,7 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "indentNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
@@ -67,8 +67,13 @@ export const header = getCommonContainer({
 });
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
-
-  let id = getQueryArg(window.location.href, "id");
+ //let id = getQueryArg(window.location.href, "id");
+  let indents = get(
+    state.screenConfiguration.preparedFinalObject,
+    `indents`,
+    []
+  );
+  let id = indents[0].id;
   dispatch(setRoute(`/egov-store-asset/create-material-transfer-indent?id=${id}`));
 };
 const createMatrialIndentOutwordHandle=async (state, dispatch) => {
@@ -142,10 +147,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-   
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
-    getMaterialIndentTransferData(state, dispatch, id, tenantId);
+    getMaterialIndentTransferData(state, dispatch, id, tenantId,applicationNumber);
     return action;
   },
   components: {
@@ -282,8 +287,19 @@ const screenConfig = {
                         //print function UI End SE0001
           }
         },
-        masterView,
-        footer: IsEdit? poViewFooter():{},
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "indents",
+            updateUrl: "/store-asset-services/indents/_updateStatus"
+          }
+        },
+        masterView
+        //footer: IsEdit? poViewFooter():{},
       }
     },
    

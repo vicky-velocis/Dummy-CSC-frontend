@@ -339,14 +339,14 @@ export const getMaterialIndentSearchResults = async queryObject => {
   }
 
 };
-export const createMaterialIndent = async (queryObject, payload, dispatch) => {
+export const createMaterialIndent = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/indents/_create",
       "",
       queryObject,
-      { indents: payload }
+      { indents: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -456,14 +456,14 @@ export const getMaterialBalanceRateResults = async queryObject => {
   }
 
 };
-export const creatematerialissues = async (queryObject, payload, dispatch) => {
+export const creatematerialissues = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/materialissues/_create",
       "",
       queryObject,
-      { materialIssues: payload }
+      { materialIssues: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -522,14 +522,14 @@ export const getreceiptnotesSearchResults = async queryObject => {
   }
 
 };
-export const creatreceiptnotes = async (queryObject, payload, dispatch) => {
+export const creatreceiptnotes = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/receiptnotes/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialReceipt: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -588,14 +588,14 @@ export const getmiscellaneousreceiptnotesSearchResults = async queryObject => {
   }
 
 };
-export const creatmiscellaneousreceiptnotes = async (queryObject, payload, dispatch) => {
+export const creatmiscellaneousreceiptnotes = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/miscellaneousreceiptnotes/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialReceipt: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -656,14 +656,14 @@ export const getNonIndentMaterialIssueSearchResults = async queryObject => {
   }
 
 };
-export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/materialissues-ni/_create",
       "",
       queryObject,
-      { materialIssues: payload }
+      { materialIssues: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -1085,14 +1085,14 @@ export const getIndentInwordSearchResults = async queryObject => {
   }
 
 };
-export const creatIndentInword = async (queryObject, payload, dispatch) => {
+export const creatIndentInword = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/transferinwards/_create",
       "",
       queryObject,
-      { transferInwards: payload }
+      { transferInwards: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -1116,6 +1116,38 @@ export const updateIndentInword = async (queryObject, payload, dispatch) => {
       { transferInwards: payload }
     );
     return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const getWFPayload = (state, dispatch) => {
+  try {
+    let businessSeviceTypeData =
+      get(state, "screenConfiguration.preparedFinalObject.businessServiceTypeData.store-asset.businessService", [])
+
+    let roles = JSON.parse(getUserInfo()).roles
+    let businessServiceName = "";
+    businessSeviceTypeData.map(item => {
+      roles.some(r => {
+        if (item.role.includes(r.code)) {
+          businessServiceName = item.name
+        }
+      })
+    });
+    let wfobject = {
+      "businessService": businessServiceName,
+      "action": "CREATED",
+      "comments": ""
+    }
+    return wfobject;
   } catch (error) {
     dispatch(
       toggleSnackbar(

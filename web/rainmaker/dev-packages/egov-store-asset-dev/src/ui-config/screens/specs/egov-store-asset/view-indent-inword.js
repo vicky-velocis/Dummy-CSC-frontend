@@ -18,7 +18,7 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "mrnNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
@@ -68,7 +68,13 @@ export const header = getCommonContainer({
 
 const createMatrialIndentInwordHandle = async (state, dispatch) => {
 
-  let id = getQueryArg(window.location.href, "id");
+//  let id = getQueryArg(window.location.href, "id");
+  let indents = get(
+    state.screenConfiguration.preparedFinalObject,
+    `transferInwards`,
+    []
+  );
+  let IndentId = indents[0].id;
   dispatch(setRoute(`/egov-store-asset/createMaterialTransferInword`));
 };
 //print function UI start SE0001
@@ -141,10 +147,10 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-   
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
-    getIndentInwordData(state, dispatch, id, tenantId);    
+    getIndentInwordData(state, dispatch, id, tenantId,applicationNumber);    
     return action;
   },
   components: {
@@ -236,8 +242,19 @@ const screenConfig = {
             //print function UI End SE0001
           }
         },
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "transferInwards",
+            updateUrl: "/store-asset-services/transferinwards/_updateStatus"
+          }
+        },
         masterView,
-        footer: IsEdit? masterViewFooter():{},
+        //footer: IsEdit? masterViewFooter():{},
       }
     },
    

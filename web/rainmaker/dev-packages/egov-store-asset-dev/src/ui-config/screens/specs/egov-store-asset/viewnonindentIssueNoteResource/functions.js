@@ -3,7 +3,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+import{GetMdmsNameBycode, getWFPayload} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -223,17 +223,20 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatNonIndentMaterialIssue(
         queryObject,        
         materialIssues,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let issueNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=create&code=${issueNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=create&code=${issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-non-indent-issue-note?applicationNumber=${issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
+      }
     } catch (error) {
       //alert('123')
       furnishindentData(state, dispatch);
@@ -247,8 +250,9 @@ export const createUpdateIndent = async (state, dispatch, action) => {
       );
       if(response){
         let issueNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=update&code=${issueNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=update&code=${issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-non-indent-issue-note?applicationNumber=${issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }

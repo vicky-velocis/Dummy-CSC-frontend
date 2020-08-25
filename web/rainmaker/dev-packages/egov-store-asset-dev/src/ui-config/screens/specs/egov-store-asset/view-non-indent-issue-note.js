@@ -19,7 +19,7 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "issueNoteNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
@@ -70,11 +70,11 @@ export const header = getCommonContainer({
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
 
-  let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
+  let issueNoteNumber = getQueryArg(window.location.href, "applicationNumber");
   dispatch(setRoute(`/egov-store-asset/createMaterialNonIndentNote?issueNoteNumber=${issueNoteNumber}`));
 };
 const creatScrapHandle = async (state, dispatch) => {
-  let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
+  let issueNoteNumber = getQueryArg(window.location.href, "applicationNumber");
   dispatch(setRoute(`/egov-store-asset/create-scrap-material?issueNoteNumber=${issueNoteNumber}`));
 };
 //print function UI start SE0001
@@ -140,8 +140,9 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-non-indent-issue-note",
   beforeInitScreen: (action, state, dispatch) => {
-    let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
+    //let issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    let issueNoteNumber = getQueryArg(window.location.href, "applicationNumber");
     getMdmsData(action, state, dispatch, tenantId);
     getMaterialNonIndentData(state, dispatch, issueNoteNumber, tenantId);
    // showHideAdhocPopup(state, dispatch);
@@ -283,8 +284,20 @@ const screenConfig = {
             //print function UI End SE0001
           }
         },
-        masterView,
-        footer: IsEdit? masterViewFooter():{},
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "materialIssues",
+            updateUrl: "/store-asset-services/materialissues/_updateStatus"
+
+          }
+        },
+        masterView
+       // footer: IsEdit? masterViewFooter():{},
       }
     },
    
