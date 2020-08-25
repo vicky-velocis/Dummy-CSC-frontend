@@ -33,14 +33,14 @@ const rentAmountField = {
     errorMessage: "RP_ERR_RENT_AMOUNT_FIELD",
   }
 
-const revisedPeriodField = {
+const interestRateOrYearField = {
     label: {
-        labelName: "Rent Amount Revised Period",
-        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_LABEL"
+        labelName: "Interest Rate/Year",
+        labelKey: "RP_INTEREST_RATE_OR_YEAR_LABEL"
     },
     placeholder: {
-        labelName: "Enter Rent Amount Revised Period",
-        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_PLACEHOLDER"
+        labelName: "Enter Interest Rate/Year",
+        labelKey: "RP_INTEREST_RATE_OR_YEAR_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
@@ -49,18 +49,38 @@ const revisedPeriodField = {
     minLength: 1,
     maxLength: 5,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.revisionPeriod",
-    errorMessage: "RP_ERR_REVISED_PERIOD_FIELD",
-  }
+    jsonPath: "Properties[0].owners[0].ownerDetails.interestRateOrYear",
+    errorMessage: "RP_ERR_INTEREST_RATE_OR_YEAR_FIELD"
+}
 
-const revisedPercentageField = {
+const rentIncrementPeriodField = {
     label: {
-        labelName: "Rent Amount Revision Percentage",
-        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
+        labelName: "Rent Increment Period(in years)",
+        labelKey: "RP_RENT_INCREMENT_PERIOD_LABEL"
     },
     placeholder: {
-        labelName: "Enter Rent Amount Revised Percentage",
-        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_PLACEHOLDER"
+        labelName: "Enter Rent Increment Period(in years)",
+        labelKey: "RP_RENT_INCREMENT_PERIOD_PLACEHOLDER"
+    },
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    minLength: 1,
+    maxLength: 5,
+    required: true,
+    jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPeriod",
+    errorMessage: "RP_ERR_RENT_INCREMENT_PERIOD_FIELD",
+  }
+
+const rentIncrementPercentageField = {
+    label: {
+        labelName: "Rent Increment Percentage",
+        labelKey: "RP_RENT_INCREMENT_PERCENTAGE_LABEL"
+    },
+    placeholder: {
+        labelName: "Enter Rent Increment Percentage",
+        labelKey: "RP_RENT_INCREMENT_PERCENTAGE_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
@@ -69,17 +89,17 @@ const revisedPercentageField = {
     minLength: 1,
     maxLength: 3,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.revisionPercentage",
-    errorMessage: "RP_ERR_REVISED_PERCENTAGE_FIELD",
+    jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPercentage",
+    errorMessage: "RP_ERR_RENT_INCREMENT_PERCENTAGE_FIELD",
   }
 
 const getRentDetails = () => {
     return {
         header: rentHeader,
         detailsContainer: getCommonContainer({
-            rentAmount: getTextField(rentAmountField),
-            revisedPeriod: getTextField(revisedPeriodField),
-            revisedPercentage: getTextField(revisedPercentageField)
+            interestRateOrYear: getTextField(interestRateOrYearField),
+            rentIncrementPeriod: getTextField(rentIncrementPeriodField),
+            rentIncrementPercentage: getTextField(rentIncrementPercentageField)
         })
     }
 }
