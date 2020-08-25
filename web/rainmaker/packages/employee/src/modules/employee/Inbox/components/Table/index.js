@@ -102,11 +102,13 @@ class InboxData extends React.Component {
     const status = row[2].text && row[2].text.props.defaultLabel;
     const taskId = index === 0 && item.text;
     const tenantId = getTenantId();
+	    const wfStatus = row[2].text.props.label.substring(row[2].text.props.label.lastIndexOf('_') + 1);
+
     // const processInstances = await this.getProcessIntanceData(row[0].text);
     // if (processInstances && processInstances.length > 0) {
     //   await addWflowFileUrl(processInstances, prepareFinalObject);
     // }
-    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext).DEFAULT;
+    let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext,taskId).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext,taskId).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     //for only pension module
     if(row[0].subtext.toUpperCase()==='RRP_SERVICE' ||row[0].subtext.toUpperCase()=='DOE_SERVICE'||row[0].subtext.toUpperCase()=='DOP_SERVICE')
@@ -125,6 +127,10 @@ class InboxData extends React.Component {
     else if (row[0].subtext === "NewSW1") {
       queryParams += '&history=true&service=SEWERAGE';
     }
+    else if (row[0].subtext == "Engineering" || row[0].subtext == "IT" || row[0].subtext == "Caretaker" || row[0].subtext == "MOH") {
+      queryParams += `&Status=${wfStatus}`;
+    }
+	
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
 
