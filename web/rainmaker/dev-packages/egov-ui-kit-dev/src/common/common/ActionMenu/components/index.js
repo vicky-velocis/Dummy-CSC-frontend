@@ -79,7 +79,7 @@ class ActionMenuComp extends Component {
   fetchLocales = ()=>{
     setModule(getModuleName());
     const tenantId = getTenantId();
-    this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
+   // this.props.fetchLocalizationLabel(getLocale(), tenantId, tenantId);
   }
 
   componentDidMount() {
