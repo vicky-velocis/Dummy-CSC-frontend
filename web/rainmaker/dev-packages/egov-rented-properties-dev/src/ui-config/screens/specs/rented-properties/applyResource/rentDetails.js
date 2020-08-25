@@ -49,7 +49,7 @@ const interestRateField = {
     // minLength: 1,
     maxLength: 5,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.interestRate",
+    jsonPath: "Properties[0].propertyDetails.interestRate",
     errorMessage: "RP_ERR_INTEREST_RATE_OR_YEAR_FIELD"
 }
 
@@ -69,7 +69,7 @@ const rentIncrementPeriodField = {
     // minLength: 1,
     maxLength: 5,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPeriod",
+    jsonPath: "Properties[0].propertyDetails.rentIncrementPeriod",
     errorMessage: "RP_ERR_RENT_INCREMENT_PERIOD_FIELD",
   }
 
@@ -89,7 +89,7 @@ const rentIncrementPercentageField = {
     // minLength: 1,
     maxLength: 3,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPercentage",
+    jsonPath: "Properties[0].propertyDetails.rentIncrementPercentage",
     errorMessage: "RP_ERR_RENT_INCREMENT_PERCENTAGE_FIELD",
   }
 

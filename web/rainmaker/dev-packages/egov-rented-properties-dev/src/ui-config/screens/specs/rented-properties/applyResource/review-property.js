@@ -311,21 +311,21 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelName: "Interest Rate/Year",
                         labelKey: "RP_INTEREST_RATE_PER_YEAR_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.interestRate" }
+                    { jsonPath: "Properties[0].propertyDetails.interestRate" }
                 ),
                 rentIncrementPeriod: getLabelWithValue(
                     {
                         labelName: "Rent Increment Period",
                         labelKey: "RP_RENT_INCREMENT_PERIOD_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPeriod" }
+                    { jsonPath: "Properties[0].propertyDetails.rentIncrementPeriod" }
                 ),
                 rentIncrementPercentage: getLabelWithValue(
                     {
                         labelName: "Rent Increment Percentage",
                         labelKey: "RP_RENT_INCREMENT_PERCENTAGE_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPercentage" }
+                    { jsonPath: "Properties[0].propertyDetails.rentIncrementPercentage" }
                 ),
         })
     })
