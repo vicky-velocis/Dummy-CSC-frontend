@@ -299,26 +299,33 @@ export const getReviewRentDetails = (isEditable = true) => {
             }
         },
         viewFour: getCommonContainer({
-                monthlyRentAmount: getLabelWithValue(
+                // monthlyRentAmount: getLabelWithValue(
+                //     {
+                //         labelName: "Monthly Rent Amount",
+                //         labelKey: "RP_MONTHLY_RENT_LABEL"
+                //     },
+                //     { jsonPath: "Properties[0].owners[0].ownerDetails.monthlyRent" }
+                // ),
+                interestRatePerYear: getLabelWithValue(
                     {
-                        labelName: "Monthly Rent Amount",
-                        labelKey: "RP_MONTHLY_RENT_LABEL"
+                        labelName: "Interest Rate/Year",
+                        labelKey: "RP_INTEREST_RATE_PER_YEAR_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.monthlyRent" }
+                    { jsonPath: "Properties[0].propertyDetails.interestRate" }
                 ),
-                revisionPeriod: getLabelWithValue(
+                rentIncrementPeriod: getLabelWithValue(
                     {
-                        labelName: "Rent Amount Revised Period",
-                        labelKey: "RP_RENT_AMOUNT_REVISED_PERIOD_LABEL"
+                        labelName: "Rent Increment Period",
+                        labelKey: "RP_RENT_INCREMENT_PERIOD_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.revisionPeriod" }
+                    { jsonPath: "Properties[0].propertyDetails.rentIncrementPeriod" }
                 ),
-                revisionPercentage: getLabelWithValue(
+                rentIncrementPercentage: getLabelWithValue(
                     {
-                        labelName: "Rent Amount Revision Percentage",
-                        labelKey: "RP_RENT_AMOUNT_REVISED_PERCENTAGE_LABEL"
+                        labelName: "Rent Increment Percentage",
+                        labelKey: "RP_RENT_INCREMENT_PERCENTAGE_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[0].ownerDetails.revisionPercentage" }
+                    { jsonPath: "Properties[0].propertyDetails.rentIncrementPercentage" }
                 ),
         })
     })

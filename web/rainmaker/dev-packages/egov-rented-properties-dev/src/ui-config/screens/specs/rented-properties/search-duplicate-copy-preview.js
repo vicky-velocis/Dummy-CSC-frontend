@@ -93,7 +93,7 @@ const duplicateReviewDetails = getCommonCard({
           dispatch,
           status,
           applicationNumber,
-          tenantId, "duplicate-copy","DC" ,"DuplicateCopyApplications"  
+          tenantId, "duplicate-copy","DC" ,"DuplicateCopyApplications",
         );
 
     set(
