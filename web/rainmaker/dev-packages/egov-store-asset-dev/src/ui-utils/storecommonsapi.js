@@ -858,7 +858,9 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
       if(pagename ==='create-purchase-order')
       {
         let IssueQty = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].issuedQuantity`,0)
-        CompareQtyValue_ = CompareQtyValue_ - IssueQty;
+        let poOrderedQuantity = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].poOrderedQuantity`,0)
+        
+        CompareQtyValue_ = CompareQtyValue_ - (IssueQty+poOrderedQuantity);
         if(InputQtyValue_>CompareQtyValue_)       
         matcode.push(code)
 

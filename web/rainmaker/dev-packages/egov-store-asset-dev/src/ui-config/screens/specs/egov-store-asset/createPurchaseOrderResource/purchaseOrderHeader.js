@@ -88,7 +88,8 @@ export const purchaseOrderHeader = getCommonCard({
                 const uom = material.baseUom;
                 const indentQuantity = 0;
                 const indentIssuedQuantity = 0;
-                return{ name, code,description,uom ,indentQuantity,indentIssuedQuantity}
+                const poOrderedQuantity = 0;
+                return{ name, code,description,uom ,indentQuantity,indentIssuedQuantity,poOrderedQuantity}
             })
               if(indentNumber){
                 const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
@@ -103,8 +104,9 @@ export const purchaseOrderHeader = getCommonCard({
                           const uom = ele.material.baseUom;
                           const indentQuantity = ele.indentQuantity;
                           const indentIssuedQuantity = ele.indentIssuedQuantity;
+                          const poOrderedQuantity = ele.poOrderedQuantity;
                           if(!indentingMaterial.find(mat => mat.code === code))
-                               indentingMaterial.push({name,code,description,uom,indentQuantity,indentIssuedQuantity})
+                               indentingMaterial.push({name,code,description,uom,indentQuantity,indentIssuedQuantity,poOrderedQuantity})
                         })
                       }
                     })

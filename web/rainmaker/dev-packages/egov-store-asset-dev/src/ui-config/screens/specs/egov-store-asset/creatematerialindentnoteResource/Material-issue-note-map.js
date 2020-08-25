@@ -254,6 +254,7 @@ import {
                 let indentQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.indentQuantity`,0)
                 pendingIndentQuantity = indentQty- Number(action.value)
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].userQuantityIssued`,Number(action.value)));
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].quantityIssued`,Number(action.value)));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.userQuantity`,Number(action.value)));
                 // calculation after input qty
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.BalanceQtyAfterIssue`,BalanceQtyAfterIssue));

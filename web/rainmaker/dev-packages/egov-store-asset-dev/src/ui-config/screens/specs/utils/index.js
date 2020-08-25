@@ -1266,7 +1266,7 @@ export const downloadAcknowledgementForm = async ( pagename,mode="download") => 
 switch(pagename)
 {
   case "Indent":
-    ApplicationNo = getQueryArg(window.location.href, "indentNumber");
+    ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "indentNumber",
       value:ApplicationNo
@@ -1278,7 +1278,7 @@ switch(pagename)
     APIUrl = `store-asset-services/indents/_print`
     break;
     case "Non Indent":
-      ApplicationNo = getQueryArg(window.location.href, "issueNoteNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
       queryObject.push({
         key: "issueNoteNumber",
         value:ApplicationNo
@@ -1288,7 +1288,7 @@ switch(pagename)
       break;
 
     case "Material Receipt":
-      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "mrnNumber",
       value:ApplicationNo
@@ -1297,7 +1297,7 @@ switch(pagename)
     APIUrl = `store-asset-services/receiptnotes/_print`
     break;
     case "Material Receipt Misc":
-      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "mrnNumber",
       value:ApplicationNo
@@ -1306,7 +1306,7 @@ switch(pagename)
     APIUrl = `store-asset-services/miscellaneousreceiptnotes/_print`
     break;
     case "Indent Transfer":
-      ApplicationNo= getQueryArg(window.location.href, "indentNumber");
+      ApplicationNo= getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "indentNumber",
       value:ApplicationNo
@@ -1318,7 +1318,7 @@ switch(pagename)
     APIUrl = `store-asset-services/indents/_print`
     break;
     case "Purchase Order":
-      ApplicationNo = getQueryArg(window.location.href, "poNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "purchaseOrderNumber",
       value:ApplicationNo
@@ -1327,7 +1327,7 @@ switch(pagename)
     APIUrl = `store-asset-services/purchaseorders/_print`
     break;
     case "Indent Outward":
-      ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
       queryObject.push({
         key: "issueNoteNumber",
         value:ApplicationNo
@@ -1336,7 +1336,7 @@ switch(pagename)
       APIUrl = `store-asset-services/materialissues-to/_print`
       break;
     case "Indent Inward":
-        ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+        ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
         queryObject.push({
           key: "mrnNumber",
           value:ApplicationNo
@@ -1345,7 +1345,7 @@ switch(pagename)
         APIUrl = `store-asset-services/transferinwards/_print`
         break;
      case "Indent Issue":
-          ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+          ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
           queryObject.push({
             key: "issueNoteNumber",
             value:ApplicationNo
