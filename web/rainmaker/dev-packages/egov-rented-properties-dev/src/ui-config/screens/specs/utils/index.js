@@ -964,7 +964,8 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate ,status,pdfkey,a
     case 'DC':
     case 'OT':
         queryStr = [
-          { key: "key", value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ? `rp-${pdfkey}-paid`: `rp-${pdfkey}-fresh`},
+          { key: "key", value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` ||
+          status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid`: `rp-${pdfkey}-fresh`},
           { key: "tenantId", value: "ch" }
         ]
     break;   
@@ -1154,10 +1155,9 @@ export const downloadAcknowledgementFormForCitizen = (Owners , feeEstimate , typ
   }
 }
 
-export const downloadCertificateForm = (Owners, data, mode='download') => {
-  const applicationType= Owners &&  Owners.length >0 ? get(Owners[0],"applicationType") : "NEW";
+export const downloadCertificateForm = (Owners, data,applicationType, mode='download') => {
    const queryStr = [
-     { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
+     { key: "key", value: `rp-${applicationType}-allotment-letter`},
      { key: "tenantId", value: "ch" }
    ]
    let {documents} = Owners[0].additionalDetails;
@@ -1172,17 +1172,34 @@ export const downloadCertificateForm = (Owners, data, mode='download') => {
      },
    };
    try {
-     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Onwers: [owners], data }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-       .then(res => {
-         res.filestoreIds[0]
-         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-           res.filestoreIds.map(fileStoreId => {
-             downloadReceiptFromFilestoreID(fileStoreId,mode)
-           })
-         } else {
-           console.log("Error In Acknowledgement form Download");
-         }
-       });
+      switch (applicationType) {
+        case 'dc':
+            httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { DuplicateCopyApplications: [ownersData] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+              res.filestoreIds[0]
+              if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                res.filestoreIds.map(fileStoreId => {
+                  downloadReceiptFromFilestoreID(fileStoreId,mode)
+                })
+              } else {
+                console.log("Error In Acknowledgement form Download");
+              }
+            });
+          break;
+        case 'ot':
+            httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Owners: [ownersData] }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+            .then(res => {
+              res.filestoreIds[0]
+              if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+                res.filestoreIds.map(fileStoreId => {
+                  downloadReceiptFromFilestoreID(fileStoreId,mode)
+                })
+              } else {
+                console.log("Error In Acknowledgement form Download");
+              }
+            });
+            break;
+      }
    } catch (exception) {
      alert('Some Error Occured while downloading Acknowledgement form!');
    }

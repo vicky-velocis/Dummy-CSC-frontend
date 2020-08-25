@@ -602,7 +602,7 @@ export const footer = getCommonApplyFooter({
     tenantId,
     pdfkey,
     applicationType,
-    payloadName
+    payloadName,
   ) => {
     /** MenuButton data based on status */
     let downloadMenu = [];
@@ -707,7 +707,7 @@ export const footer = getCommonApplyFooter({
         const { DuplicateCopyApplications, DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
         set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
-        downloadCertificateForm(DuplicateCopyApplications, data());
+        downloadCertificateForm(DuplicateCopyApplications, data(),'dc');
       },
       leftIcon: "book"
     };
@@ -718,32 +718,55 @@ export const footer = getCommonApplyFooter({
         const { Owners, OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
         set(Owners[0],"additionalDetails.documents",documents)
-        downloadCertificateForm(Owners, data());
+        downloadCertificateForm(Owners, data(),'ot');
       },
       leftIcon: "book"
     };
-
     switch (status) {
       case "OT_APPROVED":
-        downloadMenu = [
-          receiptDownloadObject,
-          applicationDownloadObjectForOT,
-          certificateDownloadObjectOT
-          
-        ];
-        printMenu = [
-          applicationPrintObject
-        ];
+          if(process.env.REACT_APP_NAME === "Citizen"){
+            downloadMenu = [
+              receiptDownloadObject,
+              applicationDownloadObjectForOT,
+            ];
+            printMenu = [
+              applicationPrintObject
+            ];
+          }else{
+            downloadMenu = [
+              receiptDownloadObject,
+              applicationDownloadObjectForOT,
+              certificateDownloadObjectOT
+              
+            ];
+            printMenu = [
+              applicationPrintObject
+            ];
+          }
+     
+       
         break;
       case "DC_APPROVED":
+        if(process.env.REACT_APP_NAME === "Citizen"){
+          downloadMenu = [
+            receiptDownloadObjectForDC,
+            applicationDownloadObjectForDC,
+          ];
+          printMenu = [
+            applicationPrintObject
+          ];
+        }else{
+          printMenu = [
+            applicationPrintObject
+          ];
           downloadMenu = [
             receiptDownloadObjectForDC,
             applicationDownloadObjectForDC,
             certificateDownloadObjectDC
           ];
-          printMenu = [
-            applicationPrintObject
-          ];
+        }
+         
+          
         break;
       case 'MG_APPROVED':
       case "MG_PENDINGCLVERIFICATION":
@@ -754,7 +777,8 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGCAAPPROVAL":
       case "MG_PENDINGAPRO":
       case "MG_REJECTED":
-      case "MG_PENDINGGRANTDETAIL":  
+      case "MG_PENDINGGRANTDETAIL": 
+      case "MG_PENDINGCLAPPROVAL":   
     
           downloadMenu = [
             applicationDownloadObjectForMG,
@@ -769,6 +793,7 @@ export const footer = getCommonApplyFooter({
       case "DC_PENDINGCAAPPROVAL":
       case "DC_PENDINGAPRO":
       case "DC_REJECTED":
+      case "DC_PENDINGCLAPPROVAL":  
 
           downloadMenu = [
             applicationDownloadObjectForDC
@@ -783,6 +808,8 @@ export const footer = getCommonApplyFooter({
           case "OT_PENDINGCAAPPROVAL":
           case "OT_PENDINGAPRO":
           case "OT_REJECTED":
+          case "OT_PENDINGCLAPPROVAL": 
+          case "OT_PENDINGSAAPPROVAL" :
               downloadMenu = [
                 applicationDownloadObjectForOT
               ];
