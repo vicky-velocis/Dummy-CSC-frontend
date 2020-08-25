@@ -33,23 +33,23 @@ const rentAmountField = {
     errorMessage: "RP_ERR_RENT_AMOUNT_FIELD",
   }
 
-const interestRateOrYearField = {
+const interestRateField = {
     label: {
         labelName: "Interest Rate/Year",
-        labelKey: "RP_INTEREST_RATE_OR_YEAR_LABEL"
+        labelKey: "RP_INTEREST_RATE_PER_YEAR_LABEL"
     },
     placeholder: {
         labelName: "Enter Interest Rate/Year",
-        labelKey: "RP_INTEREST_RATE_OR_YEAR_PLACEHOLDER"
+        labelKey: "RP_INTEREST_RATE_PER_YEAR_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
+    // minLength: 1,
     maxLength: 5,
     required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.interestRateOrYear",
+    jsonPath: "Properties[0].owners[0].ownerDetails.interestRate",
     errorMessage: "RP_ERR_INTEREST_RATE_OR_YEAR_FIELD"
 }
 
@@ -66,7 +66,7 @@ const rentIncrementPeriodField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
+    // minLength: 1,
     maxLength: 5,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPeriod",
@@ -86,7 +86,7 @@ const rentIncrementPercentageField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
+    // minLength: 1,
     maxLength: 3,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.rentIncrementPercentage",
@@ -97,7 +97,7 @@ const getRentDetails = () => {
     return {
         header: rentHeader,
         detailsContainer: getCommonContainer({
-            interestRateOrYear: getTextField(interestRateOrYearField),
+            interestRatePerYear: getTextField(interestRateField),
             rentIncrementPeriod: getTextField(rentIncrementPeriodField),
             rentIncrementPercentage: getTextField(rentIncrementPercentageField)
         })
