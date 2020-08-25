@@ -1,4 +1,4 @@
-import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
+import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,downloadCertificateForm,download} from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -683,7 +683,6 @@ export const footer = getCommonApplyFooter({
           { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "tenantId") }
         ]
         download(receiptQueryString, Owners, data(), userInfo.name);
-        // generateReceipt(state, dispatch, "receipt_download");
       },
       leftIcon: "receipt"
     };
@@ -693,21 +692,44 @@ export const footer = getCommonApplyFooter({
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
-        console.log(Owners)
         const receiptQueryString = [
           { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "applicationNumber") },
           { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "tenantId") }
         ]
         download(receiptQueryString, Owners, data(), userInfo.name);
-        // generateReceipt(state, dispatch, "receipt_download");
       },
       leftIcon: "receipt"
     };
+
+    let certificateDownloadObjectDC = {
+      label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+      link: () => {
+        const { DuplicateCopyApplications, DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = DuplicateTemp[0].reviewDocData;
+        set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(DuplicateCopyApplications, data());
+      },
+      leftIcon: "book"
+    };
+
+    let certificateDownloadObjectOT = {
+      label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+      link: () => {
+        const { Owners, OwnersTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = OwnersTemp[0].reviewDocData;
+        set(Owners[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(Owners, data());
+      },
+      leftIcon: "book"
+    };
+
     switch (status) {
       case "OT_APPROVED":
         downloadMenu = [
           receiptDownloadObject,
-          applicationDownloadObjectForOT
+          applicationDownloadObjectForOT,
+          certificateDownloadObjectOT
+          
         ];
         printMenu = [
           applicationPrintObject
@@ -716,7 +738,8 @@ export const footer = getCommonApplyFooter({
       case "DC_APPROVED":
           downloadMenu = [
             receiptDownloadObjectForDC,
-            applicationDownloadObjectForDC
+            applicationDownloadObjectForDC,
+            certificateDownloadObjectDC
           ];
           printMenu = [
             applicationPrintObject

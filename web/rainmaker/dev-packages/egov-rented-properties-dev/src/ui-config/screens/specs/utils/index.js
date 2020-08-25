@@ -1154,6 +1154,40 @@ export const downloadAcknowledgementFormForCitizen = (Owners , feeEstimate , typ
   }
 }
 
+export const downloadCertificateForm = (Owners, data, mode='download') => {
+  const applicationType= Owners &&  Owners.length >0 ? get(Owners[0],"applicationType") : "NEW";
+   const queryStr = [
+     { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
+     { key: "tenantId", value: "ch" }
+   ]
+   let {documents} = Owners[0].additionalDetails;
+   const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
+   const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`};
+   let ownersData = Owners[0];
+   ownersData = {...ownersData, ownerDocument}
+   const DOWNLOADRECEIPT = {
+     GET: {
+       URL: "/pdf-service/v1/_create",
+       ACTION: "_get",
+     },
+   };
+   try {
+     httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Onwers: [owners], data }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+       .then(res => {
+         res.filestoreIds[0]
+         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+           res.filestoreIds.map(fileStoreId => {
+             downloadReceiptFromFilestoreID(fileStoreId,mode)
+           })
+         } else {
+           console.log("Error In Acknowledgement form Download");
+         }
+       });
+   } catch (exception) {
+     alert('Some Error Occured while downloading Acknowledgement form!');
+   }
+ }
+
 
 export const download = (receiptQueryString, Owners, data, generateBy, mode = "download") => {
   const FETCHRECEIPT = {
@@ -1202,39 +1236,6 @@ export const download = (receiptQueryString, Owners, data, generateBy, mode = "d
   }
 }
 
-export const downloadCertificateForm = (Licenses, data, mode='download') => {
- const applicationType= Licenses &&  Licenses.length >0 ? get(Licenses[0],"applicationType") : "NEW";
-  const queryStr = [
-    { key: "key", value:applicationType==="RENEWAL"?"tlrenewalcertificate": "tlcertificate" },
-    { key: "tenantId", value: "ch" }
-  ]
-  let {documents} = Licenses[0].additionalDetails;
-  const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
-  const ownerDocument = findIndex !== -1 ? documents[findIndex] : {link : "https://egov.transerve.com/media/silhoutte-bust.png"};
-  let licenses = Licenses[0];
-  licenses = {...licenses, ownerDocument}
-  const DOWNLOADRECEIPT = {
-    GET: {
-      URL: "/pdf-service/v1/_create",
-      ACTION: "_get",
-    },
-  };
-  try {
-    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses: [licenses], data }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
-      .then(res => {
-        res.filestoreIds[0]
-        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
-          res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId,mode)
-          })
-        } else {
-          console.log("Error In Acknowledgement form Download");
-        }
-      });
-  } catch (exception) {
-    alert('Some Error Occured while downloading Acknowledgement form!');
-  }
-}
 
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
