@@ -103,6 +103,16 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
         ),
       );
   
+    if(state == "PM_APPROVED"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.rightdiv",
+          "visible",
+          true
+        )
+      );
+    }  
         
     if(state == 'PM_REJECTED'){
       let path = "components.div.children.headerDiv.children.searchButton"
@@ -243,6 +253,7 @@ const rentedPropertiesDetailPreview = {
             type: "array",
           },
           rightdiv: {
+            visible:false,
             uiFramework: "custom-atoms",
             componentPath: "Container",
             props: {
@@ -251,7 +262,7 @@ const rentedPropertiesDetailPreview = {
             gridDefination: {
               xs: 12,
               sm: 12,
-              align: "right"
+              align: "right",
             },
             children: {
               allotmentButton: buttonComponent("Download Original Allotment Letter"),
