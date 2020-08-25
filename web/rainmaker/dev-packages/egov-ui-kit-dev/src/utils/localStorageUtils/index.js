@@ -150,6 +150,9 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+
+  if(window.localStorage.getItem("module"))
+  window.localStorage.removeItem("module");
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
