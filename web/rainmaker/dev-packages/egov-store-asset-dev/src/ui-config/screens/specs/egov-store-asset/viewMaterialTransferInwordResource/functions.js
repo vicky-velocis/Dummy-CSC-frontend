@@ -10,7 +10,8 @@ import {
   getmaterialOutwordSearchResults,
   updateIndentInword,
   creatIndentInword,
-  GetMdmsNameBycode
+  GetMdmsNameBycode,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -140,17 +141,20 @@ export const createUpdateIndentInword = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatIndentInword(
         queryObject,        
         transferInwards,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let mrnNumber = response.transferInwards[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTINWORD&mode=create&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTINWORD&mode=create&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-inword?applicationNumber=${mrnNumber}&tenantId=${response.transferInwards[0].tenantId}&Status=${response.transferInwards[0].mrnStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -163,8 +167,9 @@ export const createUpdateIndentInword = async (state, dispatch, action) => {
       );
       if(response){
         let mrnNumber = response.transferInwards[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTINWORD&mode=update&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTINWORD&mode=update&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-inword?applicationNumber=${mrnNumber}&tenantId=${response.transferInwards[0].tenantId}&Status=${response.transferInwards[0].mrnStatus}`)); 
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -176,12 +181,17 @@ export const getIndentInwordData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  mrnNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "mrnNumber",
+      value: mrnNumber
     },
     {
       key: "tenantId",

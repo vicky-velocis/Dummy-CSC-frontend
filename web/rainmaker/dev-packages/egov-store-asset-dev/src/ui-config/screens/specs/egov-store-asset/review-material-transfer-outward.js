@@ -4,7 +4,11 @@ import {
     getCommonSubHeader
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { MTONReviewDetails } from "./viewMTONResource/mton-review";
-  
+  import { httpRequest } from "../../../../ui-utils/api";
+  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import get from "lodash/get";
+  import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
+    
   
   export const header = getCommonContainer({
     header: getCommonHeader({
@@ -22,12 +26,41 @@ import {
   });
   
   const tradeReview = MTONReviewDetails(true);
-  
+  const getMdmsData = async (action, state, dispatch) => {
+    let mdmsBody = {
+      MdmsCriteria: {
+        tenantId: getstoreTenantId(),
+        moduleDetails: [
+          {
+            moduleName: "store-asset",
+            masterDetails: [
+              { name: "businessService" },
+            ]
+          }
+        ]
+      }
+    };
+    try {
+      const response = await httpRequest(
+        "post",
+        "/egov-mdms-service/v1/_search",
+        "_search",
+        [],
+        mdmsBody
+      );
+      dispatch(prepareFinalObject("businessServiceTypeData", get(response, "MdmsRes")));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const getData = async (action, state, dispatch) => {
+    await getMdmsData(action, state, dispatch);
+  } 
   const screenConfig = {
     uiFramework: "material-ui",
     name: "review-material-transfer-outward",
     beforeInitScreen: (action, state, dispatch) => {
-     
+      getData(action, state, dispatch);
       return action;
     },
     components: {

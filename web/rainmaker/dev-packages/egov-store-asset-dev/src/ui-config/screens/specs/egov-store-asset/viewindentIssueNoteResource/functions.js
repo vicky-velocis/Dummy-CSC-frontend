@@ -11,7 +11,8 @@ import {
   getMaterialIndentSearchResults,
   getPriceListSearchResults,
   GetMdmsNameBycode,
-  updatematerialissues
+  updatematerialissues,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -277,17 +278,21 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
+
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatematerialissues(
         queryObject,        
         materialIssues,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let indentNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-indent-note?applicationNumber=${indentNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`)); 
+      }
     } catch (error) {
       //alert('123')
       furnishindentData(state, dispatch);
@@ -301,8 +306,9 @@ export const createUpdateIndent = async (state, dispatch, action) => {
       );
       if(response){
         let indentNumber = response.materialIssues[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-note?applicationNumber=${indentNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`)); 
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }

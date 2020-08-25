@@ -22,7 +22,7 @@ import {
   //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "poNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 let IsEdit = true;
@@ -154,7 +154,9 @@ printMenu = [receiptPrintObject];
     uiFramework: "material-ui",
     name: "view-purchase-order",
     beforeInitScreen: (action, state, dispatch) => {
-      let poNumber = getQueryArg(window.location.href, "poNumber");
+      //let poNumber = getQueryArg(window.location.href, "poNumber");
+      let poNumber = getQueryArg(window.location.href, "applicationNumber");
+
       let tenantId = getQueryArg(window.location.href, "tenantId");
       const queryObject = [{ key: "tenantId", value: tenantId},{ key: "purchaseOrderNumber", value: poNumber}];
       getSearchResults(queryObject, dispatch,"purchaseOrder")
@@ -233,9 +235,20 @@ printMenu = [receiptPrintObject];
               //print function UI End SE0001
             }
           },
-          tradeView,
+          taskStatus: {
+            uiFramework: "custom-containers-local",
+            componentPath: "WorkFlowContainer",
+            moduleName: "egov-store-asset",
+            visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+            props: {
+              moduleName: "StoreManagement",
+              dataPath: "purchaseOrders",
+              updateUrl: "/store-asset-services/purchaseorders/_updateStatus"
+            }
+          },
+            tradeView
           //footer: poViewFooter()
-          footer: IsEdit? poViewFooter():{},
+          //footer: IsEdit? poViewFooter():{},
         }
       },
     }
