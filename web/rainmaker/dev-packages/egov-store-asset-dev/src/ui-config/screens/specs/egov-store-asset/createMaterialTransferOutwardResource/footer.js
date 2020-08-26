@@ -115,7 +115,10 @@ export const callBackForNext = async (state, dispatch) => {
             dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails",storeMappingTemp)
           );
             }
-              changeStep(state, dispatch);
+            if(activeStep ===1)
+            moveToReview(dispatch)
+            else
+            changeStep(state, dispatch);
             }
             else{
               if(DuplicatItem[0].IsDuplicatItem)

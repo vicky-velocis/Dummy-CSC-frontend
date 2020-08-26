@@ -412,7 +412,7 @@ export const purchaseOrderHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "purchaseOrders[0].poCreatedBy"
       })
     },
     designation: {

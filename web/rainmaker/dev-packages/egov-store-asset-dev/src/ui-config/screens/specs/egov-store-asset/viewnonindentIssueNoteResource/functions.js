@@ -293,6 +293,7 @@ for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
     set(response[0], `materialIssueDetails[${index}].mrnNumber`, element.materialIssuedFromReceipts[index].materialReceiptDetail.mrnNumber);    
     //set materialReceiptId
     set(response[0], `materialIssueDetails[${index}].receiptId`, element.materialIssuedFromReceipts[index].materialReceiptId);    
+    set(response[0], `materialIssueDetails[${index}].totalValue`, Number(element.value));    
     totalvalue = totalvalue+ Number(element.value)   
     TotalQty = TotalQty + Number(element.quantityIssued)
 }

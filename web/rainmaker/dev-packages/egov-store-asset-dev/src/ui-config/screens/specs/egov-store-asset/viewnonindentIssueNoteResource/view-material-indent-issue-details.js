@@ -86,7 +86,7 @@ import {
             { labelName: "Total Value",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"},
             {
-              jsonPath: "materialIssues[0].materialIssueDetails[0].value"
+              jsonPath: "materialIssues[0].materialIssueDetails[0].totalValue"
              
             }
           ),
