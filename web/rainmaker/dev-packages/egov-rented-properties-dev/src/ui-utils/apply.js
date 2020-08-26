@@ -302,7 +302,7 @@ let userInfo = JSON.parse(getUserInfo());
         [],
         { NoticeApplications }
       );
-      return true;
+      return response;
   } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
       console.log(error);

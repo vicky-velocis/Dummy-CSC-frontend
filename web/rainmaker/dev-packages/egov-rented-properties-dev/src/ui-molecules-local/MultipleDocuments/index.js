@@ -71,8 +71,7 @@ class MultipleDocuments extends Component {
 
   render() {
       let {data = [], btnhide, contents, classes , dispatch} = this.props
-      data = data.filter(dat => !!dat.applicationDocuments)
-        if(data.length==0){
+        if(data === null || data.length == 0){
         return(
           <Card className="Multiple-card-212">  
           <CardContent>
@@ -97,6 +96,9 @@ class MultipleDocuments extends Component {
           </CardContent>
           </Card>
         )
+      }
+      else{
+        data = data.filter(dat => !!dat.applicationDocuments)
       }
       return (
           <div>
@@ -147,7 +149,7 @@ class MultipleDocuments extends Component {
                         </Grid>
                       );
                     })}
-                      {datum.applicationDocuments.map((content) => (
+                      {btnhide && (datum.applicationDocuments.map((content) => (
                           <Grid xs={6} sm={3} 
                           style={{
                               marginBottom: "8px",
@@ -183,6 +185,7 @@ class MultipleDocuments extends Component {
                           </Grid>
                           </Grid>
                           </Grid>)
+                      )
                       )}
                   </Grid>
                   </CardContent>
