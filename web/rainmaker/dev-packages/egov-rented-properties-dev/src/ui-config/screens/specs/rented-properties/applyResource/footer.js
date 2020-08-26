@@ -8,6 +8,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 
 const userInfo = JSON.parse(getUserInfo());
 export const DEFAULT_STEP = -1;
@@ -138,15 +139,31 @@ const callBackForNext = async(state, dispatch) => {
               dispatch(
                 prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
             );
+            const transitNumber = get(state.screenConfiguration, "preparedFinalObject.Properties[0].transitNumber")
+            let queryObject = [
+              { key: "transitNumber", value: transitNumber },
+              { key: "relations", value: "finance"}
+            ];
+            const payload = await getSearchResults(queryObject)
+            if(!!payload) {
+              const {Properties} = payload
+              const {demands, payments} = Properties[0];
+              let propertyData = get(state.screenConfiguration, "preparedFinalObject.Properties[0]")
+              propertyData = {...propertyData, demands, payments}
+              dispatch(
+                prepareFinalObject("Properties[0]", propertyData)
+            );
+            }
     }
     }
     if(activeStep=== PAYMENT_DOCUMENT_UPLOAD_STEP){
-      const paymentDocuments = get(state.screenConfiguration.preparedFinalObject, "paymentDocuments")
-      if(!paymentDocuments) {
+      const demands = get(state.screenConfiguration.preparedFinalObject, "Properties[0].demands") || []
+      const payments = get(state.screenConfiguration.preparedFinalObject, "Properties[0].payments") || []
+      if(!demands.length && !payments.length) {
         isFormValid = false
       }
       if(isFormValid) {
-        dispatch(prepareFinalObject("Properties[0].fileStoreId", paymentDocuments.fileStoreId));
+        // dispatch(prepareFinalObject("Properties[0].fileStoreId", paymentDocuments.fileStoreId));
         const res = await applyRentedProperties(state, dispatch, activeStep)
         if(!res) {
           return
