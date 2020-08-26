@@ -1,5 +1,5 @@
 import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
-import { getLabel, dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getLabel, dispatchMultipleFieldChangeAction, convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -184,6 +184,8 @@ const callBackForNext = async(state, dispatch) => {
 const callBackForNextrecoveryNoticegeneration = async(state, dispatch) => {
 
   let isFormValid = true;
+  let isDateValid = true;
+  let isPaymentAmountValid = true;
 
 const isOwnerDetailsValid = validateFields(
   "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
@@ -215,8 +217,18 @@ else{
   isFormValid = false;
   } 
 
+const dateFrom = get(state.screenConfiguration.screenConfig["notice-recovry"],"components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.demandNoticeFromDate.props.value")
+const dateTo = get(state.screenConfiguration.screenConfig["notice-recovry"],"components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.demandNoticeLastDate.props.value")
+if(convertDateToEpoch(dateTo) - convertDateToEpoch(dateFrom) < 0){
+  isDateValid = false
+}
 
-if (isFormValid) {
+const paymentValid = get(state.screenConfiguration.screenConfig["notice-recovry"],"components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount.props.value")
+if(parseInt(paymentValid) == 0 || paymentValid === ""){
+  isPaymentAmountValid = false
+}
+
+if (isFormValid && isDateValid && isPaymentAmountValid) {
   const noticegendata = get(
     state.screenConfiguration.preparedFinalObject,
     "Properties[0]"
@@ -234,6 +246,26 @@ if (!isFormValid) {
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
 }   
+if (!isDateValid) {
+  
+  let errorMessage = {
+    labelName:
+        "From date cannot be greater than To date!",
+    labelKey: "ERR_FROM_DATE_GREATER_THAN_TO_DATE"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}   
+if (!isPaymentAmountValid) {
+  
+  let errorMessage = {
+    labelName:
+        "Due Amount Cannot be 0 or empty!",
+    labelKey: "ERR_DUE_AMOUNT_0_OR_EMPTY"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}  
 }
 
 const callBackForNextViolationnoticegeneration = async(state, dispatch) => {

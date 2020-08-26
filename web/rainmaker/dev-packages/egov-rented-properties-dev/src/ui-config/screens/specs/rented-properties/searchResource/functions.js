@@ -369,7 +369,7 @@ export const searchApiCall = async (state, dispatch, onInit, relations, offset, 
       let data = response.Properties.map(item => ({
         [getTextToLocalMapping("Transit No")]: item.transitNumber || "-",
         [getTextToLocalMapping("Colony")]: getLocaleLabels(item.colony, item.colony) || "-",
-        [getTextToLocalMapping("Owner")]: item.propertyDetails.currentOwner || "-",
+        [getTextToLocalMapping("Owner")]: [item.owners.find(itemdat => itemdat.activeState === true)][0].ownerDetails.name || "-",
         [getTextToLocalMapping("Status")]: getLocaleLabels(item.masterDataState, item.masterDataState) || "-",
         [LAST_MODIFIED_ON]: convertEpochToDate(item.auditDetails.lastModifiedTime) || "-"
       }));
