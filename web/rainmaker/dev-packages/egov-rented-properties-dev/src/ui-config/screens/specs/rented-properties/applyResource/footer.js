@@ -873,7 +873,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let certificateDownloadObjectDC = {
-      label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+      label: { labelName: "Duplicate copy Letter", labelKey: "RP_DUPLICATE_COPY_LETTER" },
       link: () => {
         const { DuplicateCopyApplications, DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
@@ -884,7 +884,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let certificateDownloadObjectOT = {
-      label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
+      label: { labelName: "Ownership transfer Letter", labelKey: "RP_OWNERSHIP_TRANSFER_LETTER" },
       link: () => {
         const { Owners, OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
