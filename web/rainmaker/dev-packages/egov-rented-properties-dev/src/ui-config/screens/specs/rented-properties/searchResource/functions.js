@@ -298,7 +298,7 @@ export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit
   }
 }
 
-export const searchApiCall = async (state, dispatch, onInit, relations, offset, limit , hideTable = true) => {
+export const searchApiCall = async (state, dispatch, onInit, relations = "owner", offset, limit , hideTable = true) => {
   !!hideTable && showHideTable(false, dispatch, "search");
   let queryObject = [
     {

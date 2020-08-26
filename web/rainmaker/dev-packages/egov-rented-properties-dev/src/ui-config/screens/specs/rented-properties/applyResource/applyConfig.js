@@ -1,5 +1,6 @@
+import React from "react";
 import {
-    getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph
+    getStepperObject, getCommonCard, getCommonTitle, getCommonParagraph, getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {noticePropertyDetails,ownerDetailsForNotice,ownerDetailsForViolationNotice,paymentDetailsNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
@@ -11,8 +12,9 @@ import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'
 import {documentList} from './documentList'
 import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails,duplicateCopyDetails} from './reviewDetails'
-
-
+import { getEpochForDate, sortByEpoch } from "../../utils";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import {RP_MONTH, RP_ASSESSMENT_AMOUNT, RP_REALIZATION_AMOUNT, RP_RECEIPT_NO} from '../../../../../ui-constants'
 
 const documentCardConfig = {
   header: getCommonTitle(
@@ -48,6 +50,73 @@ export const rentedDocumentsDetails = getCommonCard({
 });
 
 
+export const paymentDocumentsDetails = getCommonCard({
+  ...documentCardConfig,
+  documentList : {
+    ...documentList,
+    props: {
+      ...documentList.props,
+       documentsJsonPath: "PropertiesTemp[0].applicationPaymentDocuments",
+       uploadedDocumentsJsonPath: "PropertiesTemp[0].uploadedPaymentInRedux",
+       tenantIdJsonPath: "Properties[0].tenantId",
+       getUrl: "/rp-services/v1/excel/read",
+       screenKey: "apply",
+       componentJsonPath: "components.div.children.formwizardThirdStep.children.paymentDetailsTable",
+      // removedJsonPath: "PropertiesTemp[0].removedPaymentDocs"
+    }
+  }
+});
+
+export const paymentDetailsTable =  {
+  uiFramework: "custom-molecules",
+  componentPath: "Table",
+  visible: false,
+  props: {
+    columns: [
+      {
+        name: RP_MONTH,
+        options: {
+          customBodyRender: value => (
+            <span style={{ color: "black" }}>
+              {value}
+            </span>
+          )
+        }
+      },
+      RP_ASSESSMENT_AMOUNT,
+      RP_REALIZATION_AMOUNT,
+      RP_RECEIPT_NO
+    ],
+    options: {
+      pagination: false,
+      filter: false,
+      download: false,
+      print: false,
+      search:false,
+      viewColumns:false,
+      responsive: "stacked",
+      selectableRows: false,
+      hover: true,
+      rowsPerPageOptions: [10, 15, 20]
+    },
+    customSortColumn: {
+      column: "Application Date",
+      sortingFn: (data, i, sortDateOrder) => {
+        const epochDates = data.reduce((acc, curr) => {
+          acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+          return acc;
+        }, []);
+        const order = sortDateOrder === "asc" ? true : false;
+        const finalData = sortByEpoch(epochDates, !order).map(item => {
+          item.pop();
+          return item;
+        });
+        return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+      }
+    }
+  }
+}
+
 export const ownershipTransferDocumentsDetails = getCommonCard({
   ...documentCardConfig,
   documentList : {
@@ -82,12 +151,21 @@ export const stepsData = [
     { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
     { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
   ];
+  export const steps = [
+    { labelName: "Details", labelKey: "RP_COMMON_TR_DETAILS" },
+    { labelName: "Documents", labelKey: "TL_COMMON_DOCS" },
+    { labelName: "Rent History", labelKey: "RP_COMMON_RENT_HISTORY" },
+    { labelName: "Summary", labelKey: "TL_COMMON_SUMMARY" }
+  ];
 
 export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
     stepsData
   );
-
+  export const addPropertyStepper = getStepperObject(
+    { props: { activeStep: 0 } },
+    steps
+  );
   export const mortgageDocumentsDetails = getCommonCard({
     ...documentCardConfig,
     documentList : {
@@ -112,8 +190,7 @@ export const stepper = getStepperObject(
       propertyDetails,
       addressDetails,
       rentHolderDetails,
-      rentDetails,
-      paymentDetails
+      rentDetails
     }
   };
 
@@ -128,12 +205,25 @@ export const stepper = getStepperObject(
     },
     visible: false
   };
+  export const formwizardThirdStep = {
+    uiFramework: "custom-atoms",
+    componentPath: "Form",
+    props: {
+      id: "apply_form3"
+    },
+    children: {
+      paymentDocumentsDetails,
+      breakAfterSearch: getBreak(),
+      paymentDetailsTable
+    },
+    visible: false
+  };
 
-export const formwizardThirdStep = {
+export const formwizardFourthStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
   props: {
-    id: "apply_form3"
+    id: "apply_form4"
   },
   children: {
     rentedReviewDetails
