@@ -339,14 +339,14 @@ export const getMaterialIndentSearchResults = async queryObject => {
   }
 
 };
-export const createMaterialIndent = async (queryObject, payload, dispatch) => {
+export const createMaterialIndent = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/indents/_create",
       "",
       queryObject,
-      { indents: payload }
+      { indents: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -407,6 +407,31 @@ export const getmaterialissuesSearchResults = async queryObject => {
   }
 
 };
+
+export const getprintpdf = async (queryObject , api) => {
+
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      api,     
+      "",
+      queryObject
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+   // throw error;
+  }
+
+};
 export const getMaterialBalanceRateResults = async queryObject => {
 
   try {
@@ -431,14 +456,14 @@ export const getMaterialBalanceRateResults = async queryObject => {
   }
 
 };
-export const creatematerialissues = async (queryObject, payload, dispatch) => {
+export const creatematerialissues = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/materialissues/_create",
       "",
       queryObject,
-      { materialIssues: payload }
+      { materialIssues: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -497,14 +522,14 @@ export const getreceiptnotesSearchResults = async queryObject => {
   }
 
 };
-export const creatreceiptnotes = async (queryObject, payload, dispatch) => {
+export const creatreceiptnotes = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/receiptnotes/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialReceipt: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -563,14 +588,14 @@ export const getmiscellaneousreceiptnotesSearchResults = async queryObject => {
   }
 
 };
-export const creatmiscellaneousreceiptnotes = async (queryObject, payload, dispatch) => {
+export const creatmiscellaneousreceiptnotes = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/miscellaneousreceiptnotes/_create",
       "",
       queryObject,
-      { materialReceipt: payload }
+      { materialReceipt: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -631,14 +656,14 @@ export const getNonIndentMaterialIssueSearchResults = async queryObject => {
   }
 
 };
-export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch) => {
+export const creatNonIndentMaterialIssue = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/materialissues-ni/_create",
       "",
       queryObject,
-      { materialIssues: payload }
+      { materialIssues: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -833,7 +858,9 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
       if(pagename ==='create-purchase-order')
       {
         let IssueQty = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].issuedQuantity`,0)
-        CompareQtyValue_ = CompareQtyValue_ - IssueQty;
+        let poOrderedQuantity = get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].poOrderedQuantity`,0)
+        
+        CompareQtyValue_ = CompareQtyValue_ - (IssueQty+poOrderedQuantity);
         if(InputQtyValue_>CompareQtyValue_)       
         matcode.push(code)
 
@@ -963,6 +990,38 @@ export const ValidateCardQty = (state,dispatch,cardJsonPath,pagename,jasonpath,v
   return DuplicatItem;
 };
 
+export const GetTotalQtyValue = (state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty) => {
+  let  CardTotalQty =[];
+  let InputQtyValue_ =0;
+  let TotalValue_ = 0;
+  let TotalQty_ = 0;
+  let CardItem = get(
+    state.screenConfiguration.screenConfig[`${pagename}`],
+    cardJsonPath,
+    []
+  );
+
+  for (let index = 0; index < CardItem.length; index++) {
+    if(CardItem[index].isDeleted === undefined ||
+    CardItem[index].isDeleted !== false)
+    {   
+     InputQtyValue_ = InputQtyValue_+ get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${InputQtyValue}`,0) 
+    TotalValue_  = TotalValue_+ get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${TotalValue}`,0)  
+    TotalQty_ = TotalQty_ + Number( get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${TotalQty}`,0))
+    }
+  }
+  CardTotalQty.push(
+    {
+      InputQtyValue: InputQtyValue_,
+      TotalValue : TotalValue_,
+      TotalQty:TotalQty_
+    }
+  )
+
+  return CardTotalQty;
+};
+
+
 
 export const getCommonFileUrl = (linkText="") => {
   const linkList = linkText.split(",");
@@ -1028,14 +1087,14 @@ export const getIndentInwordSearchResults = async queryObject => {
   }
 
 };
-export const creatIndentInword = async (queryObject, payload, dispatch) => {
+export const creatIndentInword = async (queryObject, payload, dispatch,wfobject) => {
   try {
     const response = await httpRequest(
       "post",
       "/store-asset-services/transferinwards/_create",
       "",
       queryObject,
-      { transferInwards: payload }
+      { transferInwards: payload, workFlowDetails: wfobject }
     );
     return response;
   } catch (error) {
@@ -1059,6 +1118,38 @@ export const updateIndentInword = async (queryObject, payload, dispatch) => {
       { transferInwards: payload }
     );
     return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
+
+export const getWFPayload = (state, dispatch) => {
+  try {
+    let businessSeviceTypeData =
+      get(state, "screenConfiguration.preparedFinalObject.businessServiceTypeData.store-asset.businessService", [])
+
+    let roles = JSON.parse(getUserInfo()).roles
+    let businessServiceName = "";
+    businessSeviceTypeData.map(item => {
+      roles.some(r => {
+        if (item.role.includes(r.code)) {
+          businessServiceName = item.name
+        }
+      })
+    });
+    let wfobject = {
+      "businessService": businessServiceName,
+      "action": "CREATED",
+      "comments": ""
+    }
+    return wfobject;
   } catch (error) {
     dispatch(
       toggleSnackbar(

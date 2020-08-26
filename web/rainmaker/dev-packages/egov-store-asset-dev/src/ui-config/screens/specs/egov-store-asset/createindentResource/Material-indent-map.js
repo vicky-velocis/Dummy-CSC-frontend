@@ -10,6 +10,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { getTodaysDateInYMD } from "../../utils";
   import get from "lodash/get";
+  import{GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
   import set from "lodash/set";
   import { handleScreenConfigurationFieldChange as handleField , prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
   
@@ -25,7 +26,8 @@ import {
   };
   
   const MaterialIndentDetailsCard = {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
@@ -57,7 +59,8 @@ import {
                 {
                   dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].material.name`,MaterialType[0].name));
                 dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].uom.code`,MaterialType[0].baseUom.code));
-                dispatch(prepareFinalObject(`ndents[0].indentDetails[${cardIndex}].uom.name`,MaterialType[0].baseUom.name));
+                let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code) 
+                dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].uom.name`,uomname));
               }
               }
             },
@@ -222,6 +225,21 @@ import {
               beforeFieldChange: (action, state, dispatch) => {
                 let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].userQuantity`,Number(action.value)));
+                 //set total value on Qty Change
+                 let cardJsonPath =
+                 "components.div.children.formwizardSecondStep.children.MaterialIndentMapDetails.children.cardContent.children.MaterialIndentDetailsCard.props.items";
+                 let pagename = `creatindent`;
+                 let jasonpath =  "indents[0].indentDetails";
+                 let InputQtyValue = "indentQuantity";
+                 let TotalValue = "totalValue";
+                 let TotalQty ="userQuantity"
+                 let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty)
+                 if(Qty && Qty[0])
+                 {
+                  
+                  dispatch(prepareFinalObject(`indents[0].totalQty`, Qty[0].TotalQty));
+
+                 }
               }
             },
           },
@@ -232,6 +250,9 @@ import {
           }
         )
       }),
+      onMultiItemDelete:(state, dispatch)=>{       
+
+      },
       onMultiItemAdd: (state, muliItemContent) => {
         let indentPurpose = get(
           state.screenConfiguration.preparedFinalObject,
@@ -256,11 +277,13 @@ import {
               if ( key === "AssestCode") {
                 //set(muliItemContent[key], "props.visible", true);
                 muliItemContent[key].props.style = {display:"inline-block"};
+                muliItemContent["AssestCode"].props.disabled = false;
                 //set(muliItemContent[key], "props.value", indentNumber);
               }
               if ( key === "ProjectCode") {
                 //set(muliItemContent[key], "props.visible", false);
-                muliItemContent[key].props.style = {display:"none"};
+                muliItemContent[key].props.style = {display:"inline-block"};
+                muliItemContent["ProjectCode"].props.disabled = true;
                 
               }
             }
@@ -269,12 +292,14 @@ import {
             {
               if ( key === "AssestCode") {
                 //set(muliItemContent[key], "props.visible", false);
-                muliItemContent[key].props.style = {display:"none"};
+                muliItemContent[key].props.style = {display:"inline-block"};
+                muliItemContent["AssestCode"].props.disabled = true;
                 //set(muliItemContent[key], "props.value", indentNumber);
               }
               if ( key === "ProjectCode") {
                 //set(muliItemContent[key], "props.visible", true);
                 muliItemContent[key].props.style = {display:"inline-block"};
+                muliItemContent["ProjectCode"].props.disabled = false;
                 
               }
 
@@ -292,9 +317,20 @@ import {
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
       },
       headerName: "Store",
+      totalIndentQty:false,
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "indents[0].indentDetails",
+       //Update Total value when delete any card configuration settings     
+      cardtotalpropes:{
+        totalIndentQty:false,
+        pagename:`creatindent`,
+        cardJsonPath:"components.div.children.formwizardSecondStep.children.MaterialIndentMapDetails.children.cardContent.children.MaterialIndentDetailsCard.props.items",
+        jasonpath:"indents[0].indentDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"userQuantity"
+      },
       prefixSourceJsonPath:
         "children.cardContent.children.storeDetailsCardContainer.children"
     },

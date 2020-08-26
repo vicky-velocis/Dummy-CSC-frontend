@@ -10,7 +10,8 @@ import {
   getMaterialIndentSearchResults,
   getPriceListSearchResults,
   GetMdmsNameBycode,
-  updateMaterialIndent
+  updateMaterialIndent,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -251,17 +252,21 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
+
       console.log(queryObject)
       console.log("queryObject")
       let response = await createMaterialIndent(
         queryObject,        
         indents,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let indentNumber = response.indents[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-indent?applicationNumber=${indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -274,8 +279,9 @@ export const createUpdateIndent = async (state, dispatch, action) => {
       );
       if(response){
         let indentNumber = response.indents[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
-       }
+//        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
+          dispatch(setRoute(`/egov-store-asset/view-indent?applicationNumber=${indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -287,12 +293,17 @@ export const getMaterialIndentData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  applicationNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "indentNumber",
+      value: applicationNumber
     },
     {
       key: "tenantId",
@@ -302,16 +313,22 @@ export const getMaterialIndentData = async (
 
  let response = await getMaterialIndentSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-response = response.indents.filter(x=>x.id === id)
+//response = response.indents.filter(x=>x.id === id)
+response = response.indents.filter(x => x.indentNumber === applicationNumber)
 //dispatch(prepareFinalObject("priceLists", get(response, "priceLists")));
+
+let TotalQty = 0;
 if(response && response[0])
 {
   for (let index = 0; index < response[0].indentDetails.length; index++) {
     const element = response[0].indentDetails[index];
    let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)   
    set(response[0], `indentDetails[${index}].uom.name`, Uomname);
+   TotalQty = TotalQty + Number(element.indentQuantity)
   }
 }
+set(response[0], `totalQty`, TotalQty);
+//dispatch(prepareFinalObject(`indents[0].totalQty`, TotalQty));
 dispatch(prepareFinalObject("indents", response));
   //dispatch(prepareFinalObject("indents", get(response, "indents")));
  

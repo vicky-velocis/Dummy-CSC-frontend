@@ -11,7 +11,8 @@ import {
   getPriceListSearchResults,
   GetMdmsNameBycode,
   getCommonFileUrl,
-  updatereceiptnotes
+  updatereceiptnotes,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";  
 import {
@@ -316,17 +317,19 @@ export const createUpdateMR = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatreceiptnotes(
         queryObject,        
         materialReceipt,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-material-receipt-note?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));}
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -339,8 +342,8 @@ export const createUpdateMR = async (state, dispatch, action) => {
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-material-receipt-note?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));}
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -352,12 +355,17 @@ export const getMaterialIndentData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  mrnNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "mrnNumber",
+      value: mrnNumber
     },
     {
       key: "tenantId",
@@ -367,8 +375,10 @@ export const getMaterialIndentData = async (
 
  let response = await getreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-response = response.MaterialReceipt.filter(x=>x.id===id)
-  
+//response = response.MaterialReceipt.filter(x=>x.id===id)
+response = response.MaterialReceipt.filter(x => x.mrnNumber === mrnNumber)
+let totalvalue = 0
+let TotalQty = 0;
 
   if(response && response[0])
   {
@@ -377,6 +387,7 @@ response = response.MaterialReceipt.filter(x=>x.id===id)
     set(response[0], `receiptDate`, epochToYmdDate(response[0].receiptDate));
     set(response[0], `supplierBillDate`, epochToYmdDate(response[0].supplierBillDate));
     set(response[0], `inspectionDate`, epochToYmdDate(response[0].inspectionDate));
+   
   for (let index = 0; index < response[0].receiptDetails.length; index++) {
     const element = response[0].receiptDetails[index];
     let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)    
@@ -387,9 +398,15 @@ response = response.MaterialReceipt.filter(x=>x.id===id)
        set(response[0], `receiptDetails[${index}].batchNo`, element.receiptDetailsAddnInfo[0].batchNo);
        set(response[0], `receiptDetails[${index}].manufactureDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].manufactureDate));
        set(response[0], `receiptDetails[${index}].expiryDate`, epochToYmdDate(element.receiptDetailsAddnInfo[0].expiryDate));
+       totalvalue = totalvalue+( Number(element.acceptedQty) *element.unitRate)
+      
+       TotalQty = TotalQty + Number(element.acceptedQty)
        
   }
 }
+
+set(response[0],`totalQty`, TotalQty);
+set(response[0],`totalvalue`, totalvalue);
 getFileUrl(dispatch,tenantId,response[0].fileStoreId);
 dispatch(prepareFinalObject("materialReceipt", response));
  // furnishindentData(state, dispatch);

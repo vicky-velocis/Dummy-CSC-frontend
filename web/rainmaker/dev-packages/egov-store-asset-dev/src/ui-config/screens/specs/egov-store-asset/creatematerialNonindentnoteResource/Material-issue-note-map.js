@@ -11,7 +11,7 @@ import {
   import filter from "lodash/filter";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import{getMaterialBalanceRateResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+  import{getMaterialBalanceRateResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
 
 
   const getMaterialData = async (action, state, dispatch,mrnNumber_) => {   
@@ -76,7 +76,8 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
   };
   
   const materialIssueCard = {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
@@ -207,10 +208,27 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[${cardIndex}].balanceQty`,0)
                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[${cardIndex}].unitRate`,0)
                 let balanceQtyAfterIssue =BalanceQty - Number(action.value) 
-                let totalValue = unitRate *  Number(action.value)           
+                let totalValue = unitRate *  Number(action.value)  
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].userQuantityIssued`, Number(action.value)));         
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].balanceQtyAfterIssue`,balanceQtyAfterIssue));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].totalValue`,totalValue));
                 //totalValue
+                //set total value on Qty Change
+                let cardJsonPath =
+                "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
+               let pagename = `createMaterialNonIndentNote`;
+               let jasonpath =  "materialIssues[0].materialIssueDetails";
+               let InputQtyValue = "indentQuantity";
+               let TotalValue_ = "totalValue";
+               let TotalQty ="userQuantityIssued"
+               let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
+               if(Qty && Qty[0])
+               {
+               
+                dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, Qty[0].TotalValue));
+                dispatch(prepareFinalObject(`materialIssues[0].totalQty`, Qty[0].TotalQty));
+
+               }
               }
             },
             uomCode: {
@@ -228,7 +246,7 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].uom.code"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].uom.name"
               })
             },
             unitRate: {
@@ -310,6 +328,9 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
         )
       }),
       items: [],
+      onMultiItemDelete:(state, dispatch)=>{       
+
+      },
       addItemLabel: {
         labelName: "Add ",
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
@@ -318,6 +339,16 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialIssues[0].materialIssueDetails",
+      //Update Total value when delete any card configuration settings     
+      cardtotalpropes:{
+        totalIndentQty:false,
+        pagename:`createMaterialNonIndentNote`,
+        cardJsonPath:"components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items",
+        jasonpath:"materialIssues[0].materialIssueDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"userQuantityIssued"
+      },
       prefixSourceJsonPath:
         "children.cardContent.children.materialIssueCardContainer.children"
     },

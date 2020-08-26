@@ -115,7 +115,7 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-export const searchResultApiResponseViewHistory = async (action, state, dispatch, challanUuid, tenantId) => {
+export const searchResultApiResponseViewHistory = async (dispatch, challanUuid, tenantId) => {
 
   let requestBody = {
     "tenantId": tenantId,
@@ -138,12 +138,14 @@ export const searchResultApiResponseViewHistory = async (action, state, dispatch
       dataarray.push(temp);
     });
 
+    dispatch(prepareFinalObject('eAuctionGridHistoryDetails', dataarray));
+
     dispatch(
       handleField(
-        "search-preview", "components.adhocDialog.children.AuctionGridHistoryDetails",
+        "search-preview", "components.adhocDialog.children.popup.children.GridDetails.children.AuctionGridHistoryDetails",
         "props.data", dataarray)
     );
-    showHideViewDetailsTable(true, dispatch);
+    //showHideViewDetailsTable(true, dispatch);
   } catch (error) {
     dispatch(
       toggleSnackbar(

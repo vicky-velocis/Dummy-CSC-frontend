@@ -142,7 +142,7 @@ export const searchResultViewSeizureApiResponse = async (state, dispatch) => {
           temp[3] = __FOUNDENCROACH.name;
           temp[4] = item['siName'];
           temp[5] = __FOUND.name;
-          temp[6] = item['paymentAmount'];
+          temp[6] = item['paymentAmount'].toString();
           temp[7] = item['challanStatus'];
           temp[8] = paymentStatus;
           data.push(temp);
@@ -264,7 +264,7 @@ export const searchResultPaymentDetailsApiResponse = async (state, dispatch) => 
           temp[0] = item['challanId'] || "-";
           temp[1] = item['encroachmentType'] || "-";
           temp[2] = truncData(item['violatorName'], 25) || "-";
-          temp[3] = item['paymentAmount'] || "-";
+          temp[3] = item['paymentAmount'].toString() || "-";
           temp[4] = convertEpochToDate(item['violationDate']) || "-";
           temp[5] = item['siName'] || "-";
           temp[6] = item['paymentMode'] || "NA";

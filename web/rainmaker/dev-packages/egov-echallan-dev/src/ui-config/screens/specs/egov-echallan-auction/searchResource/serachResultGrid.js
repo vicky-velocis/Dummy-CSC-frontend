@@ -149,16 +149,16 @@ export const serachResultGrid = {
 
 const onRowClick = rowData => {
   console.log("rowData[10]",rowData[9],rowData[10])
-  switch (rowData[5]) {
-    case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[5]
+  switch (rowData[7]) {
+    case "PENDING FOR AUCTION":
+      window.location.href = `search-preview?challanNumber=${rowData[9]}&tenantId=${
+        rowData[8]
         }`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-        }&tenantId=${rowData[8]}&Key=${rowData[9]}&aKey=${rowData[10]}`;
+        rowData[10]
+        }&tenantId=${rowData[8]}`;
       break;
   }
 };

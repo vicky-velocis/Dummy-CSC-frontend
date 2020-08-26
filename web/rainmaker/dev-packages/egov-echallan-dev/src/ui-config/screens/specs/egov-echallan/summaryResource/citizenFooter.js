@@ -29,7 +29,7 @@ import {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     let appStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
     let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'PENDING');
-    let encroachmentType = new Date(get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType', ''));
+    let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType', '');
   
     if (appStatus !== ('RELEASED FROM STORE' || 'RELEASED ON GROUND' || 'CLOSED') && paymentStatus === 'PENDING') {
       //make payment code

@@ -14,11 +14,12 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import{getmaterialissuesSearchResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+import{getmaterialissuesSearchResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const MTONDetailsCard = {
-  uiFramework: "custom-containers",
-  componentPath: "MultiItem",
+  uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
+    componentPath: "MultiItem",
   props: {
     scheama: getCommonGrayCard({
       MTONDetailsCardContainer: getCommonContainer(
@@ -141,9 +142,23 @@ const MTONDetailsCard = {
              let balAfterIssue = BalanceQty - Number(action.value)
              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].totalValue`, totalValue));
              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.tenantId`, getTenantId()));
-             dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.userQuantity`, balAfterIssue));
-             dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.userQuantityIssued`, balAfterIssue));
-
+             dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.userQuantity`, Number(action.value)));
+             dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.userQuantityIssued`, Number(action.value)));
+             dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.balAfterIssue`, balAfterIssue));
+            //set total value on Qty Change
+            let cardJsonPath =
+            "components.div.children.formwizardSecondStep.children.MTONDetails.children.cardContent.children.MTONDetailsCard.props.items";
+            let pagename = `create-material-transfer-outward`;
+            let jasonpath =  "materialIssues[0].materialIssueDetails";
+            let InputQtyValue = "indentQuantity";
+            let TotalValue_ = "totalValue";
+            let TotalQty ="indentDetail.userQuantity"
+            let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
+            if(Qty && Qty[0])
+            {                
+            dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, Qty[0].TotalValue));
+            dispatch(prepareFinalObject(`materialIssues[0].totalQty`, Qty[0].TotalQty)); 
+            }
             }
           },
           uomName: {
@@ -154,7 +169,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_UOM"
               },
               required: true,
-              jsonPath: "materialIssues[0].materialIssueDetails[0].uom.code",
+              jsonPath: "materialIssues[0].materialIssueDetails[0].uom.name",
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
               props: {
                 disabled:true,
@@ -239,6 +254,9 @@ const MTONDetailsCard = {
       return muliItemContent;
     },
     items: [],
+    onMultiItemDelete:(state, dispatch)=>{       
+
+    },
     addItemLabel: {
       labelName: "ADD",
       labelKey: "STORE_COMMON_ADD_BUTTON"
@@ -247,6 +265,16 @@ const MTONDetailsCard = {
     headerJsonPath:
       "children.cardContent.children.header.children.head.children.Accessories.props.label",
     sourceJsonPath: "materialIssues[0].materialIssueDetails",
+     //Update Total value when delete any card configuration settings     
+     cardtotalpropes:{
+      totalIndentQty:false,
+      pagename:`create-material-transfer-outward`,
+      cardJsonPath:"components.div.children.formwizardSecondStep.children.MTONDetails.children.cardContent.children.MTONDetailsCard.props.items",
+      jasonpath:"materialIssues[0].materialIssueDetails",
+      InputQtyValue:"indentQuantity",
+      TotalValue:"totalValue",
+      TotalQty:"indentDetail.userQuantity"        
+    },
     prefixSourceJsonPath:
       "children.cardContent.children.MTONDetailsCardContainer.children",
    // disableDeleteIfKeyExists: "id"

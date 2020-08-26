@@ -63,6 +63,10 @@ export const getHCRoles = () => {
   return localStorage.getItem("HCRoles");
 };
 
+export const getEChallanPaymentMailSent = () => {
+  return localStorage.getItem('EChallanPaymentMailSent');
+};
+
 
 //SET methods 
 export const setHCRoles = (HCRoles) => {
@@ -134,6 +138,11 @@ export const setEncroachmentType = (encroachmentType) => {
   localStorageSet('encroachmentType',encroachmentType);
 };
 
+export const setEChallanPaymentMailSent = (isChallanPayMailSent) => {
+  localStorageSet('EChallanPaymentMailSent',isChallanPayMailSent);
+};
+
+
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
   Object.keys(localStorage).forEach((key) => {
@@ -141,6 +150,9 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+
+  if(window.localStorage.getItem("module"))
+  window.localStorage.removeItem("module");
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

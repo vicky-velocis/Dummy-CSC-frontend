@@ -10,6 +10,7 @@ import {
   import { MaterialReceiptNote } from "./creatematerialReceiptNoteResource/Material-receipt-note"; 
   import { otherDetails } from "./creatematerialReceiptNoteResource/other-details";
   import { documentDetails } from "./creatematerialReceiptNoteResource/documentDetails";
+  import {totalValue} from './creatematerialReceiptNoteResource/totalValue';
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -70,7 +71,8 @@ export const header = getCommonContainer({
     },
     children: {
       documentDetails,
-      materialReceiptDetail
+      materialReceiptDetail,
+      totalValue
     },
     visible: false
   };
