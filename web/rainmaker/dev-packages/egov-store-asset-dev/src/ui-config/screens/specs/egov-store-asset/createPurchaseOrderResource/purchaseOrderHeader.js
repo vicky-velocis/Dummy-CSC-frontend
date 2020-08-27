@@ -10,7 +10,7 @@ import {
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecommonsapi";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as  handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 let indentNumber="";
@@ -33,7 +33,7 @@ export const purchaseOrderHeader = getCommonCard({
         label: { labelName: "Purchase Type", labelKey: "STORE_PURCHASE_ORDER_TYPE" },
         placeholder: {
           labelName: "Select Purchase Type",
-          labelKey: "STORE_PURCHASE_ORDER_TYPE_SELECT"
+          labelKey: "STORE_PURCHASE_ORDER_TYPE"
         },
        
         required: true,
@@ -68,6 +68,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].store.code",
         sourceJsonPath: "searchMaster.storeNames",
         props: {
+          disabled : indentNumber ? true : false,
           className: "hr-generic-selectfield",
           optionValue: "code",
           optionLabel: "name"
@@ -84,7 +85,11 @@ export const purchaseOrderHeader = getCommonCard({
                 const name = material.name;
                 const code = material.code;
                 const description = material.description;
-                return{ name, code,description }
+                const uom = material.baseUom;
+                const indentQuantity = 0;
+                const indentIssuedQuantity = 0;
+                const poOrderedQuantity = 0;
+                return{ name, code,description,uom ,indentQuantity,indentIssuedQuantity,poOrderedQuantity}
             })
               if(indentNumber){
                 const queryObj = [{ key: "tenantId", value: getTenantId()},{ key: "indentNumber", value: indentNumber}];               
@@ -96,16 +101,20 @@ export const purchaseOrderHeader = getCommonCard({
                           const name = ele.material.name;
                           const code = ele.material.code;
                           const description = ele.material.description;
+                          const uom = ele.material.baseUom;
+                          const indentQuantity = ele.indentQuantity;
+                          const indentIssuedQuantity = ele.indentIssuedQuantity;
+                          const poOrderedQuantity = ele.poOrderedQuantity;
                           if(!indentingMaterial.find(mat => mat.code === code))
-                               indentingMaterial.push({name,code,description})
+                               indentingMaterial.push({name,code,description,uom,indentQuantity,indentIssuedQuantity,poOrderedQuantity})
                         })
                       }
                     })
                 }
 
                 // finding common material
-                   materialNames = materialNames.filter(function(ele) {
-                        return indentingMaterial.findIndex(mat => mat.code === ele.code) !== -1;
+                   materialNames = indentingMaterial.filter(function(ele) {
+                        return materialNames.findIndex(mat => mat.code === ele.code) !== -1;
                     })
               }
             dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));          
@@ -186,10 +195,25 @@ export const purchaseOrderHeader = getCommonCard({
         sourceJsonPath: "createScreenMdmsData.store-asset.PORateType",
         props: {
           className: "hr-generic-selectfield",
+          //  data: [
+          // {
+          //   code: "Gem",
+          //   name: "GEM"
+          // },         
+          //],
           optionValue: "code",
           optionLabel: "name"
         }
       }),
+      beforeFieldChange: async (action, state, dispatch) => {
+        // when Type is GEM then Unit rate input by user
+        if(action.value.toLocaleUpperCase() ==="GEM")
+        {
+         
+          dispatch(prepareFinalObject("purchaseOrders[0].rateType", "Gem"));  
+        }
+        
+      }
     },
     supplier: {
       ...getSelectField({
@@ -214,15 +238,34 @@ export const purchaseOrderHeader = getCommonCard({
         getSearchResults(queryObject, dispatch,"priceList")
         .then(response =>{
           if(response){
+            const {purchaseOrders}  = state.screenConfiguration.preparedFinalObject;
+            const {rateType} = purchaseOrders[0];
             let priceList = [{rateContractNumber:"",rateContractDate:"",agreementNumber:"",agreementDate:"",agreementStartDate:"",agreementEndDate:""}];
-            priceList[0].rateContractNumber  =  response.priceLists[0].rateContractNumber;
-            priceList[0].rateContractDate   = new Date(response.priceLists[0].rateContractDate).toISOString().substr(0,10);
-            priceList[0].agreementNumber   =   response.priceLists[0].agreementNumber;
-            priceList[0].agreementDate   =   new Date(response.priceLists[0].agreementDate).toISOString().substr(0,10);
-            priceList[0].agreementStartDate   = new Date(response.priceLists[0].agreementStartDate).toISOString().substr(0,10);
-            priceList[0].agreementEndDate   =  new Date(response.priceLists[0].agreementEndDate).toISOString().substr(0,10);
+            if(rateType.toLocaleUpperCase() === 'GEM')
+            {
+              
+              priceList[0].rateContractNumber  =  "";
+              priceList[0].rateContractDate   = new Date().toISOString().slice(0, 10);
+              priceList[0].agreementNumber   =   "";
+              priceList[0].agreementDate   =   new Date().toISOString().slice(0, 10);
+              priceList[0].agreementStartDate   = new Date().toISOString().slice(0, 10);
+              priceList[0].agreementEndDate   =  new Date().toISOString().slice(0, 10);
+
+            }
+            else{
+              
+              priceList[0].rateContractNumber  =  response.priceLists[0].rateContractNumber;
+              priceList[0].rateContractDate   = new Date(response.priceLists[0].rateContractDate).toISOString().substr(0,10);
+              priceList[0].agreementNumber   =   response.priceLists[0].agreementNumber;
+              priceList[0].agreementDate   =   new Date(response.priceLists[0].agreementDate).toISOString().substr(0,10);
+              priceList[0].agreementStartDate   = new Date(response.priceLists[0].agreementStartDate).toISOString().substr(0,10);
+              priceList[0].agreementEndDate   =  new Date(response.priceLists[0].agreementEndDate).toISOString().substr(0,10);
+
+            }
+           
             dispatch(prepareFinalObject("searchMaster.priceList", response.priceLists));  
-                dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));          
+                dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));    
+               
            }  
            if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.supplierName){
            const {supplierName} = state.screenConfiguration.preparedFinalObject.searchMaster;
@@ -369,7 +412,7 @@ export const purchaseOrderHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "purchaseOrders[0].createdBy"
+        jsonPath: "purchaseOrders[0].poCreatedBy"
       })
     },
     designation: {

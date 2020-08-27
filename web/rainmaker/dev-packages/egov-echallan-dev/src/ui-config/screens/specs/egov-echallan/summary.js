@@ -13,7 +13,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { searchBill, generateBill, createDemandForChallan, getTextToLocalMapping, convertEpochToDate, sendReceiptBymail, truncData, integer_to_roman } from "../utils/index";
+import { searchBill, generateBill, createDemandForChallan, getTextToLocalMapping, convertEpochToDate, sendReceiptBymail, truncData, integer_to_roman, getDiffernceBetweenTodayDate, fetchRoleCode } from "../utils/index";
 import { httpRequest } from "../../../../ui-utils";
 import { violatorSummary } from "./summaryResource/violatorSummary";
 import { violationsSummary } from "./summaryResource/violationsSummary";
@@ -21,9 +21,9 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { searchResultsSummary, searchVehicleResultsSummary } from "./summaryResource/summaryGrid";
 import { footer, takeactionfooter } from "./summaryResource/footer";
-import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchMdmsData } from "../../../../ui-utils/commons";
+import { getSearchResultsView, getSearchResultsForNocCretificate, getSearchResultsForNocCretificateDownload, fetchMdmsData, checkVisibility, setCurrentApplicationProcessInstance } from "../../../../ui-utils/commons";
 import "./index.css";
-import { getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, setapplicationType, getTenantId, getLocale, getUserInfo, localStorageGet, localStorageSet, setapplicationNumber, setEncroachmentType } from "egov-ui-kit/utils/localStorageUtils";
 
 export const stepsData = [
   { labelName: "Violations Details", labelKey: "EC_STEPPER_VIOLATIONS_STEP_1" },
@@ -127,14 +127,14 @@ const prepareDocumentsView = async (state, dispatch) => {
     {}
   );
 
-  if (eChallanDocs[0].documentUuid !== null) {
+  if (eChallanDocs !== {} && eChallanDocs[0].documentUuid !== null) {
     eChallanDocs.forEach(element => {
       let docType = element.documentType.search('-') !== -1 ? element.documentType.split('-')[0].trim() : element.documentType
 
       documentsPreview.push({
         title: getTextToLocalMapping("EC_" + docType),
         fileStoreId: element.fileStoreId,
-        linkText: "View"
+        linkText: "Download"
       })
     });
   }
@@ -172,73 +172,243 @@ const prepareDocumentsView = async (state, dispatch) => {
   //}
 };
 
-const prepareItemSeizedDetails = async (state, dispatch) => {
-  let documentsPreview = [];
-  let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
+// const prepareItemSeizedDetails = async (state, dispatch) => {
+//   let documentsPreview = [];
+//   let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
 
+//   // Get all documents from response
+//   let SeizedItemDetailList = get(
+//     state,
+//     "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem",
+//     {}
+//   );
+//   let siarray = [];
+//   if (SeizedItemDetailList.length > 0) {
+
+
+//     SeizedItemDetailList.map(function (item, index) {
+//       let temp1 = [];
+//       temp1[0] = item['itemName'];
+//       if (encroachmentType === 'Seizure of Vehicles') {
+//         temp1[1] = item['itemType'];
+//         temp1[2] = item['vehicleNumber'];
+//         temp1[3] = item['quantity'];
+//         temp1[4] = item['remark'];
+//       } else {
+//         temp1[1] = item['quantity'];
+//         temp1[2] = item['remark'];
+//       }
+//       siarray.push(temp1);
+//     });
+
+//     if (encroachmentType === 'Seizure of Vehicles') {
+//       dispatch(
+//         handleField(
+//           "summary",
+//           "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+//           "props.data",
+//           siarray
+//         )
+//       );
+//       dispatch(
+//         handleField(
+//           "summary",
+//           "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+//           "visible",
+//           true
+//         )
+//       );
+//       dispatch(
+//         handleField(
+//           "summary",
+//           "components.div.children.body.children.cardContent.children.searchResultsSummary",
+//           "visible",
+//           false
+//         )
+//       );
+//     } else {
+//       dispatch(
+//         handleField(
+//           "summary",
+//           "components.div.children.body.children.cardContent.children.searchResultsSummary",
+//           "props.data",
+//           siarray
+//         )
+//       );
+//     }
+
+//   }
+
+// }
+
+const prepareItemSeizedDetails = async (state, dispatch, encroachmentType, appstatus) => {
   // Get all documents from response
   let SeizedItemDetailList = get(
     state,
     "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationItem",
     {}
   );
-  let siarray = [];
-  if (SeizedItemDetailList.length > 0) {
+  let processInstanceData = get(state, "screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData.ProcessInstances[0]", []);
+  const challanUuid = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanUuid", "");
+  let showstoredDetails = false;
+  let showSeizureOfVehicle = false;
+  if (challanUuid !== "") {
 
-
-    SeizedItemDetailList.map(function (item, index) {
-      let temp1 = [];
-      temp1[0] = item['itemName'];
-      if (encroachmentType === 'Seizure of Vehicles') {
-        temp1[1] = item['itemType'];
-        temp1[2] = item['vehicleNumber'];
-        temp1[3] = item['quantity'];
-        temp1[4] = item['remark'];
-      } else {
-        temp1[1] = item['quantity'];
-        temp1[2] = item['remark'];
-      }
-      siarray.push(temp1);
-    });
-
-    if (encroachmentType === 'Seizure of Vehicles') {
-      dispatch(
-        handleField(
-          "summary",
-          "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
-          "props.data",
-          siarray
-        )
-      );
-      dispatch(
-        handleField(
-          "summary",
-          "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
-          "visible",
-          true
-        )
-      );
-      dispatch(
-        handleField(
-          "summary",
-          "components.div.children.body.children.cardContent.children.searchResultsSummary",
-          "visible",
-          false
-        )
-      );
-    } else {
-      dispatch(
-        handleField(
-          "summary",
-          "components.div.children.body.children.cardContent.children.searchResultsSummary",
-          "props.data",
-          siarray
-        )
-      );
+    let rolecode = fetchRoleCode(true, appstatus);
+    switch (processInstanceData.action) {
+      case "CHALLAN ISSUED":
+      case "CITIZEN":
+      case "CLOSED":
+      case "RELEASED ON GROUND":
+      case "SENT TO STORE":
+        if (encroachmentType === 'Seizure of Vehicles') {
+          showSeizureOfVehicle = true;
+        } else {
+          showSeizureOfVehicle = false;
+        }
+        break;
+      case "RELEASED FROM STORE":
+      case "ADDED TO STORE":
+      case "PENDING FOR AUCTION":
+      case "PENDING FOR APPROVAL":
+        showstoredDetails = true;
+        break;
     }
 
-  }
+    if (SeizedItemDetailList.length > 0) {
+      //const challanUuid = getQueryArg(window.location.href, "Key");
+      let dataarray = [];
+      let siarray = [];
 
+      if (showstoredDetails) {
+        let requestBody = {
+          "tenantId": getTenantId(),
+          "action": "",
+          "offset": 1,
+          "limit": -1,
+          "orderDir": "DESC",
+          "orderColumn": "",
+          "searchText": challanUuid
+        }
+        let response = await fetchStoreItemHODMasterChallanData(requestBody);
+
+        for (let storedItemIndex = 0; storedItemIndex < response.length; storedItemIndex++) {
+          const item = response[storedItemIndex];
+          for (let seizedItemList = 0; seizedItemList < SeizedItemDetailList.length; seizedItemList++) {
+            const element = SeizedItemDetailList[seizedItemList];
+            let temp = [];
+            if (item['violationItemUuid'] === element['violationItemUuid']) {
+              let defectqty = parseInt(element['quantity']) - parseInt(item['quantity']);
+              let intactQty = parseInt(item['quantity']) - parseInt(item['damagedQuantity']);
+              temp[0] = truncData(item['itemName'], 25);
+              temp[1] = element['quantity'];
+              temp[2] = element['remark'];
+              temp[3] = intactQty;
+              temp[4] = item['damagedQuantity'];
+              temp[5] = item['remark'];
+              if (rolecode === 'challanHOD') {
+                temp[6] = item['isVerified'];
+                temp[7] = item['isAuctioned'];
+                temp[8] = item['isReturned'];
+                temp[9] = item['violationItemUuid'];
+                temp[10] = item['violationUuid'];
+              } else if (rolecode === 'challanSM') {
+                temp[6] = item['violationItemUuid'];
+                temp[7] = item['violationUuid'];
+              }
+              dataarray.push(temp);
+            }
+
+          }
+        }
+      } else {
+        SeizedItemDetailList.map(function (item, index) {
+          let temp = [];
+          temp[0] = truncData(item['itemName'], 25);
+          temp[1] = item['quantity'];
+          temp[2] = item['remark'];
+          temp[3] = '';
+          temp[4] = '';
+          temp[5] = '';
+          temp[6] = item['violationItemUuid'];
+          temp[7] = item['violationUuid'];
+          dataarray.push(temp);
+          let temp1 = [];
+          temp1[0] = item['itemName'];
+          if (encroachmentType === 'Seizure of Vehicles' && showSeizureOfVehicle) {
+            temp1[1] = item['itemType'];
+            temp1[2] = item['vehicleNumber'];
+            temp1[3] = item['quantity'];
+            temp1[4] = item['remark'];
+          } else if (encroachmentType !== 'Seizure of Vehicles' && (!showSeizureOfVehicle)) {
+            temp1[1] = item['quantity'];
+            temp1[2] = item['remark'];
+          }
+          siarray.push(temp1);
+        });
+      }
+
+      dispatch(prepareFinalObject('eChallanSMSeizedList', dataarray));
+
+
+      switch (processInstanceData.action) {
+        case "CHALLAN ISSUED":
+        case "CITIZEN":
+        case "CLOSED":
+          if (encroachmentType === 'Seizure of Vehicles' && showSeizureOfVehicle) {
+            dispatch(
+              handleField(
+                "summary",
+                "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+                "props.data",
+                siarray
+              )
+            );
+          } else {
+            dispatch(
+              handleField(
+                "summary",
+                "components.div.children.body.children.cardContent.children.searchResultsSummary",
+                "props.data",
+                siarray
+              )
+            );
+          }
+          break;
+        case "RELEASED ON GROUND":
+        case "SENT TO STORE":
+          dispatch(
+            handleField(
+              "summary",
+              "components.div.children.body.children.cardContent.children.searchResultsSummarySM",
+              "props.data",
+              dataarray
+              // dataarray
+            )
+          );
+          break;
+        case "RELEASED FROM STORE":
+        case "ADDED TO STORE":
+        case "PENDING FOR AUCTION":
+        case "PENDING FOR APPROVAL":
+          dispatch(
+            handleField(
+              "summary",
+              "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
+              "props.data",
+              dataarray
+              // dataarray
+            )
+          );
+          break;
+        // case "PENDING FOR AUCTION":
+        //   break;
+
+        default:
+          break;
+      }
+    }
+  }
 }
 
 const setModulesVisibleTrueFalse = (isVisible, dispatch) => {
@@ -315,111 +485,122 @@ const setEditVisibleTrueFalse = (action) => {
 };
 
 
-const setSearchResponse = async (
-  state,
-  dispatch,
-  applicationNumber,
-  tenantId,
-  action
-) => {
+// const setSearchResponse = async (
+//   state,
+//   dispatch,
+//   applicationNumber,
+//   tenantId,
+//   action
+// ) => {
 
-  let RequestBody = {
-    searchtext: applicationNumber,
-    tenantId: tenantId,
-    action: '',
-  }
-  // const response = await getSearchResultsView([
-  //   { key: "applicationNumber", value: applicationNumber }
-  // ]);
-  await getMdmsData(action, state, dispatch);
-  const response = await getSearchResultsView(RequestBody);
 
-  dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
-  if (response.ResponseBody.length > 0) {
-    let sectorval = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
-    let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
-    let __FOUND = sectorValue.find(function (sectorRecord, index) {
-      if (sectorRecord.code == sectorval.sector)
-        return true;
-    });
-    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+//   let RequestBody = {
+//     searchtext: applicationNumber,
+//     tenantId: tenantId,
+//     action: '',
+//   }
+//   // const response = await getSearchResultsView([
+//   //   { key: "applicationNumber", value: applicationNumber }
+//   // ]);
+//   await getMdmsData(action, state, dispatch);
+//   const response = await getSearchResultsView(RequestBody);
 
-    let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
-    let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
-      if (encroachRecord.code == sectorval.encroachmentType)
-        return true;
-    });
+//   dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
+//   if (response.ResponseBody.length > 0) {
+//     let sectorval = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
+//     let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+//     let __FOUND = sectorValue.find(function (sectorRecord, index) {
+//       if (sectorRecord.code == sectorval.sector)
+//         return true;
+//     });
+//     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
 
-    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
+//     let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+//     let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+//       if (encroachRecord.code == sectorval.encroachmentType)
+//         return true;
+//     });
 
-    let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
-    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
+//     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
 
-  }
+//     let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
+//     set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
 
-  let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
-  set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate', formatedDate);
-  let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
-  let appstatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
-  let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
+//   }
 
-  // Set Institution/Applicant info card visibility
+//   let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
+//   set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate', formatedDate);
+//   let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
+//   let appstatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
+//   let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
 
-  dispatch(
-    handleField(
-      "summary",
-      "components.div.children.headerDiv.children.header.children.applicationStatus",
-      "props.status",
-      "Status : " + appstatus
-    )
-  );
+//   // Set Institution/Applicant info card visibility
+//   let appnumber = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId", '');
+//   dispatch(
+//     handleField(
+//       "summary",
+//       "components.div.children.headerDiv.children.header.children.applicationNumber",
+//       "props.number",
+//       appnumber
+//     )
+//   );
 
-  dispatch(
-    handleField(
-      "summary",
-      "components.div.children.headerDiv.children.header.children.paymentStatus",
-      "props.status",
-      "Payment Status : " +
-      paystatus
-    )
-  );
 
-  setModulesVisibleTrueFalse(true, dispatch);
-  prepareDocumentsView(state, dispatch);
-  prepareItemSeizedDetails(state, dispatch);
+//   dispatch(
+//     handleField(
+//       "summary",
+//       "components.div.children.headerDiv.children.header.children.applicationStatus",
+//       "props.status",
+//       "Status : " + appstatus
+//     )
+//   );
 
-  createDemandforChallanCertificate(state, dispatch, tenantId);
-  setReceiveButtonVisibleTrueFalse(false, dispatch);
-  setReturnCloseButtonVisibleTrueFalse(false, dispatch);
-  setAddToStoreButtonVisibleTrueFalse(false, dispatch);
-  setHodApprovalButtonVisibleTrueFalse(false, dispatch);
-  setOnGroundButtonVisibleTrueFalse(false, dispatch);
-  setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
+//   dispatch(
+//     handleField(
+//       "summary",
+//       "components.div.children.headerDiv.children.header.children.paymentStatus",
+//       "props.status",
+//       "Payment Status : " +
+//       paystatus
+//     )
+//   );
 
-  switch (appstatus) {
-    case "CHALLAN ISSUED":
-      setSendtoSoreButtonVisibleTrueFalse(true, dispatch);
-      if (encroachmentType === 'Unauthorized/Unregistered Vendor') {
-        setOnGroundButtonVisibleTrueFalse(false, dispatch);
-      } else {
-        setOnGroundButtonVisibleTrueFalse(true, dispatch);
-      }
-      break;
-    case "CLOSED":
-    case "SENT TO STORE":
-    case "ADDED TO STORE":
-    case "PENDING FOR AUCTION":
-    case "RELEASED ON GROUND":
-    case "RELEASED FROM STORE":
-      setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
-      setOnGroundButtonVisibleTrueFalse(false, dispatch);
-      break;
+//   setModulesVisibleTrueFalse(true, dispatch);
+//   prepareDocumentsView(state, dispatch);
+//   prepareItemSeizedDetails(state, dispatch);
 
-  }
+//   createDemandforChallanCertificate(state, dispatch, tenantId);
+//   setReceiveButtonVisibleTrueFalse(false, dispatch);
+//   setReturnCloseButtonVisibleTrueFalse(false, dispatch);
+//   setAddToStoreButtonVisibleTrueFalse(false, dispatch);
+//   setHodApprovalButtonVisibleTrueFalse(false, dispatch);
+//   setOnGroundButtonVisibleTrueFalse(false, dispatch);
+//   setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
 
-  setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+//   switch (appstatus) {
+//     case "CHALLAN ISSUED":
+//       setSendtoSoreButtonVisibleTrueFalse(true, dispatch);
+//       if (encroachmentType === 'Unauthorized/Unregistered Vendor') {
+//         setOnGroundButtonVisibleTrueFalse(false, dispatch);
+//       } else {
+//         setOnGroundButtonVisibleTrueFalse(true, dispatch);
+//       }
+//       break;
+//     case "CLOSED":
+//     case "SENT TO STORE":
+//     case "ADDED TO STORE":
+//     case "PENDING FOR AUCTION":
+//     case "RELEASED ON GROUND":
+//     case "RELEASED FROM STORE":
+//       setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
+//       setOnGroundButtonVisibleTrueFalse(false, dispatch);
+//       break;
 
-};
+//   }
+
+//   setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+
+// };
 
 
 const setOnGroundButtonVisibleTrueFalse = (isVisible, dispatch) => {
@@ -490,7 +671,6 @@ const setSendtoSoreButtonVisibleTrueFalse = (isVisible, dispatch) => {
 }
 
 let httpLinkEchallan;
-let httpLinkEchallan_RECEIPT;
 
 const nullToNa = value => {
   return ["", "NA", "null", null].includes(value) ? "NA" : value;
@@ -720,6 +900,279 @@ const titleHeader = getCommonSubHeader(
   }
 );
 
+const setAuctionButtonVisibleTrueFalse = (isVisible, dispatch,appstatus) => {
+  switch (appstatus) {
+    case "CHALLAN ISSUED":
+    case "SENT TO STORE":
+    case "CLOSED":
+    case "RELEASED ON GROUND":
+    case "RELEASED FROM STORE":
+    case "ADDED TO STORE":
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.employeeFooter.children.auctionButton",
+          "visible",
+          false
+        )
+      );
+      break;
+    case "PENDING FOR AUCTION":
+      if (checkForRole(roles, 'challanSM')) {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.employeeFooter.children.auctionButton",
+            "visible",
+            isVisible
+          )
+        );
+      } else {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.employeeFooter.children.auctionButton",
+            "visible",
+            false
+          )
+        );
+      }
+      break;
+  }
+}
+
+const HideshowEdit = (state, action,dispatch) => {
+  let processInstanceData = get(state, "screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData.ProcessInstances[0]", []);
+  let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
+  set(state, 'screenConfiguration.preparedFinalObject.WFStatus', []);
+
+  checkVisibility(state, "SENT TO STORE", "sendtoSoreButton", action, "screenConfig.components.div.children.employeeFooter.children.sendtoSoreButton.visible", false);
+  checkVisibility(state, "ADDED TO STORE", "StoreManagerAddToStoreProcess", action, "screenConfig.components.div.children.employeeFooter.children.StoreManagerAddToStoreProcess.visible", false);
+  //checkVisibility(state, "SENT TO STORE", "StoreManagerHODApprovalProcess", action, "screenConfig.components.div.children.employeeFooter.children.StoreManagerHODApprovalProcess.visible", null)
+  if (encroachmentType !== 'Unauthorized/Unregistered Vendor') {
+    processInstanceData.action !== 'PENDING FOR AUCTION' ?
+      processInstanceData.action !== 'CHALLAN ISSUED' ?
+        checkVisibility(state, "CLOSED", "StoreManagerReturnandCloseProcess", action, "screenConfig.components.div.children.employeeFooter.children.StoreManagerReturnandCloseProcess.visible", false)
+        : "" : "";
+    processInstanceData.action === 'ADDED TO STORE' ? checkVisibility(state, "PAID", "StoreManagerReceivePaymentProcess", action, "screenConfig.components.div.children.employeeFooter.children.StoreManagerReceivePaymentProcess.visible", true) : "";
+    processInstanceData.action === 'CHALLAN ISSUED' ? setOnGroundButtonVisibleTrueFalse(true, dispatch) : "";
+  }
+
+
+
+};
+
+const setSearchResponse = async (
+  state,
+  dispatch,
+  applicationNumber,
+  tenantId,
+  action
+) => {
+  let RequestBody = {
+    searchtext: applicationNumber,
+    tenantId: tenantId,
+    action: '',
+  }
+  // const response = await getSearchResultsView([
+  //   { key: "applicationNumber", value: applicationNumber }
+  // ]);
+  await getMdmsData(action, state, dispatch);
+  const response = await getSearchResultsView(RequestBody);
+  //
+  if (response.ResponseBody.length > 0) {
+
+    dispatch(prepareFinalObject("eChallanDetail", get(response, "ResponseBody", [])));
+
+    await setCurrentApplicationProcessInstance(state, false);
+    await setCurrentApplicationProcessInstance(state, true);
+
+    let sectorval = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', []);
+    let sectorValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.sector', []);
+    let __FOUND = sectorValue.find(function (sectorRecord, index) {
+      if (sectorRecord.code == sectorval.sector)
+        return true;
+    });
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].sector', __FOUND.name);
+
+    let encroachValue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.EncroachmentType', []);
+    let __FOUNDENCROACH = encroachValue.find(function (encroachRecord, index) {
+      if (encroachRecord.code == sectorval.encroachmentType)
+        return true;
+    });
+
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentTypeName', __FOUNDENCROACH.name);
+    setEncroachmentType(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", ''));
+
+
+    let processedViolationTime = sectorval.violationTime.split(':')[0] + ":" + sectorval.violationTime.split(':')[1];
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationTime', processedViolationTime);
+
+    // Set Institution/Applicant info card visibility
+    let formatedDate = convertEpochToDate(get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date()));
+    set(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate', formatedDate);
+
+    let appstatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].status", '');
+    let paystatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", '') === 'PENDING' ? 'UNPAID' : 'PAID';
+    let appnumber = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].challanId", '');
+
+    dispatch(
+      handleField(
+        "summary",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        appnumber
+      )
+    );
+
+    dispatch(
+      handleField(
+        "summary",
+        "components.div.children.headerDiv.children.header.children.applicationStatus",
+        "props.status",
+        "Status : " + appstatus
+      )
+    );
+    dispatch(
+      handleField(
+        "summary",
+        "components.div.children.headerDiv.children.header.children.paymentStatus",
+        "props.status",
+        "Payment Status : " +
+        paystatus
+      )
+    );
+
+
+    let encroachmentType = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].encroachmentType", '');
+    let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'PENDING');
+    let receiveVisible = appstatus === "PENDING FOR AUCTION" ? false : paymentStatus === 'PAID' ? false : true;
+
+    setGridVisibleTrueFalse(state, encroachmentType, appstatus, dispatch);
+
+    setReceiveButtonVisibleTrueFalse(false, dispatch, appstatus);
+    setAuctionButtonVisibleTrueFalse(false, dispatch, appstatus);
+    setReturnCloseButtonVisibleTrueFalse(false, dispatch);
+    setAddToStoreButtonVisibleTrueFalse(false, dispatch);
+    setHodApprovalButtonVisibleTrueFalse(false, dispatch);
+    setOnGroundButtonVisibleTrueFalse(false, dispatch);
+    setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
+
+    HideshowEdit(state, action,dispatch);
+
+    //setModulesVisibleTrueFalse(true, dispatch);
+    prepareDocumentsView(state, dispatch);
+    prepareItemSeizedDetails(state, dispatch, encroachmentType, appstatus);
+
+    createDemandforChallanCertificate(state, dispatch, tenantId);
+    setSearchResponseForNocCretificate(state, dispatch, applicationNumber, tenantId);
+
+    let violationDate = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].violationDate", new Date());
+    if (getDiffernceBetweenTodayDate(violationDate) > 30 && encroachmentType !== "Seizure of Vehicles") {
+      setReturnCloseButtonVisibleTrueFalse(false, dispatch);
+      setAddToStoreButtonVisibleTrueFalse(false, dispatch);
+      setHodApprovalButtonVisibleTrueFalse(false, dispatch);
+      setOnGroundButtonVisibleTrueFalse(false, dispatch);
+      setSendtoSoreButtonVisibleTrueFalse(false, dispatch);
+    }
+  }
+};
+
+
+const setGridVisibleTrueFalse = (state, encroachmentType, appstatus, dispatch) => {
+
+  //#region Visible false all Search
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummary",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummarySM",
+      "visible",
+      false
+    )
+  );
+
+  dispatch(
+    handleField(
+      "summary",
+      "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
+      "visible",
+      false
+    )
+  );
+  //#region 
+  let processInstanceData = get(state, "screenConfiguration.preparedFinalObject.ECHALLAN.WF.ProcessInstanceData.ProcessInstances[0]", []);
+  switch (processInstanceData.action) {
+    case "CHALLAN ISSUED":
+    case "CITIZEN":
+    case "CLOSED":
+      if (encroachmentType === 'Seizure of Vehicles') {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.body.children.cardContent.children.searchVehicleResultsSummary",
+            "visible",
+            true)
+        );
+      } else {
+        dispatch(
+          handleField(
+            "summary",
+            "components.div.children.body.children.cardContent.children.searchResultsSummary",
+            "visible",
+            true)
+        );
+      }
+      break;
+    case "RELEASED ON GROUND":
+    case "SENT TO STORE":
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.body.children.cardContent.children.searchResultsSummarySM",
+          "visible",
+          false
+        )
+      );
+      break;
+    case "RELEASED FROM STORE":
+    case "ADDED TO STORE":
+    case "PENDING FOR AUCTION":
+    case "PENDING FOR APPROVAL":
+      dispatch(
+        handleField(
+          "summary",
+          "components.div.children.body.children.cardContent.children.searchResultsSummaryHOD",
+          "visible",
+          false
+        )
+      );
+      break;
+    // case "PENDING FOR AUCTION":
+    //   break;
+
+    default:
+      break;
+  }
+}
+
 const screenConfig = {
   uiFramework: "material-ui",
   name: "summary",
@@ -731,19 +1184,7 @@ const screenConfig = {
     set(state, 'form.apply_Violator_ID_PROOF.files.echallanViolaterIDProofImage', []);
     set(state, 'form.apply_Violations_Image.files.echallanViolationImage', []);
 
-    let responsecreateDemand = '';
-    //responsecreateDemand = createDemandforChallanCertificate(state, dispatch);
-    // //calculate search Bill called\
-    //searchBill(dispatch, applicationNumber, tenantId);
     setSearchResponse(state, dispatch, applicationNumber, tenantId, action);
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "eChallan" }
-    ];
-    let status = localStorageGet("app_noc_status") == "REASSIGN" ? "RESENT" : "INITIATED";
-
-    //setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-
     // Hide edit buttons
     setEditVisibleTrueFalse(action)
 

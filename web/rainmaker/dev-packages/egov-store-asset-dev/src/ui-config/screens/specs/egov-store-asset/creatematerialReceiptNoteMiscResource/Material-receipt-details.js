@@ -13,6 +13,7 @@ import {
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
+  import{GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
   const getBalanceQty = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
@@ -69,7 +70,8 @@ import {
   };
   
   const materialReceiptCard = {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
@@ -97,7 +99,7 @@ import {
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 let materials = get(
                   state.screenConfiguration.preparedFinalObject,
                   `MiscMaterilList`,
@@ -106,27 +108,29 @@ import {
                 materials =  materials.filter(x=> x.materialcode === action.value)  
                 if(materials && materials[0]) 
                 {
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].material.name",materials[0].materialName));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].material.name`,materials[0].materialName));
                
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.code",materials[0].uom.code));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].qtyIssued",materials[0].quantityIssued));
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].unitRate",1));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.code`,materials[0].uom.code));
+                let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",materials[0].uom.code)
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].uom.name`,uomname)); 
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].qtyIssued`,materials[0].quantityIssued));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,1));
                 // isScrapItem based on purpose selection
                 let receiptPurpose = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptPurpose`,'')
                 if(receiptPurpose ==="SCRAP")
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",true));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].isScrapItem`,true));
                 else
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].isScrapItem",false));
-                dispatch(prepareFinalObject("materialReceipt[0].receivedBy", materials[0].issuedToEmployee,));
-                dispatch(prepareFinalObject("materialReceipt[0].inspectedBy", materials[0].issuedToEmployee,));
-                dispatch(prepareFinalObject("materialReceipt[0].designation", materials[0].issuedToDesignation,));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[0].isScrapItem`,false));
+                dispatch(prepareFinalObject(`materialReceipt[0].receivedBy`, materials[0].issuedToEmployee,));
+                dispatch(prepareFinalObject(`materialReceipt[0].inspectedBy`, materials[0].issuedToEmployee,));
+                dispatch(prepareFinalObject(`materialReceipt[0].designation`, materials[0].issuedToDesignation,));
 
               }
-              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].purchaseOrderDetail.id",null));
-              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].manufactureDate",''));
-              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].serialNo",''));
-              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",''));
-              dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].batchNo",''));
+              dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].purchaseOrderDetail.id`,null));
+              dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].manufactureDate`,''));
+              dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].serialNo`,''));
+              dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].expiryDate`,''));
+              dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[${cardIndex}].receiptDetailsAddnInfo[0].batchNo`,''));
                // dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].uom.name",materials[0].name));
 
               }
@@ -147,7 +151,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialReceipt[0].receiptDetails[0].uom.code"
+                jsonPath: "materialReceipt[0].receiptDetails[0].uom.name"
               })
             },
             qtyIssued: {
@@ -186,10 +190,27 @@ import {
                 jsonPath: "materialReceipt[0].receiptDetails[0].receivedQty"
               }),
               beforeFieldChange: (action, state, dispatch) => {
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].acceptedQty",Number(action.value)));
-                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[0].unitRate`,0)
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[[${cardIndex}].acceptedQty`,Number(action.value)));
+                 let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialReceipt[0].receiptDetails[${cardIndex}].unitRate`,0)
                  let totalValue = unitRate * Number(action.value)
-                dispatch(prepareFinalObject("materialReceipt[0].receiptDetails[0].totalValue",totalValue));
+                dispatch(prepareFinalObject(`materialReceipt[0].receiptDetails[[${cardIndex}].totalValue`,totalValue));
+                //set total value on Qty Change
+                let cardJsonPath =
+                "components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items";
+               let pagename = `createMaterialReceiptNoteMisc`;
+               let jasonpath =  "materialReceipt[0].receiptDetails";
+               let InputQtyValue = "indentQuantity";
+               let TotalValue_ = "totalValue";
+               let TotalQty ="acceptedQty"
+               let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
+               if(Qty && Qty[0])
+               {
+               
+                dispatch(prepareFinalObject(`materialReceipt[0].totalvalue`, Qty[0].TotalValue));
+                dispatch(prepareFinalObject(`materialReceipt[0].totalQty`, Qty[0].TotalQty));
+
+               }
                      }
             },
             unitRate: {
@@ -203,7 +224,7 @@ import {
                   labelKey: "STORE_MATERIAL_RECEIPT__UNIT_RATE_PLACEHOLDER"
                 },
                 props:{
-                  disabled:false
+                  disabled:true
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
@@ -255,6 +276,9 @@ import {
         )
       }),
       items: [],
+      onMultiItemDelete:(state, dispatch)=>{       
+
+      },
       addItemLabel: {
         labelName: "Add ",
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
@@ -263,8 +287,18 @@ import {
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialReceipt[0].receiptDetails",
+       //Update Total value when delete any card configuration settings     
+       cardtotalpropes:{
+        totalIndentQty:false,
+        pagename:`createMaterialReceiptNoteMisc`,
+        cardJsonPath:"components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items",
+        jasonpath:"materialReceipt[0].receiptDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"acceptedQty"        
+      },
       prefixSourceJsonPath:
-        "children.cardContent.children.materialIssueCardContainer.children"
+        "children.cardContent.children.materialReceiptCardContainer.children"
     },
     type: "array"
   };

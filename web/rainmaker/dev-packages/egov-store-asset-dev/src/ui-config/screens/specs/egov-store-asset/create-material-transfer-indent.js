@@ -20,7 +20,7 @@ import {
   export const stepsData = [
     { labelName: "Material Transfer Indent", labelKey: "STORE_MTI_HEADER" },
     { labelName: "Material Transfer Indent Details", labelKey: "STORE_MTI_DETAILS_HEADER" },
-    { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
+    // { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
   ];
   export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
@@ -118,7 +118,33 @@ import {
       }];
     try {
       let response = await getSearchResults(queryObject, dispatch,"storeMaster");
-      dispatch(prepareFinalObject("store", response));       
+      dispatch(prepareFinalObject("store", response));  
+              // fetching employee designation
+    const userInfo = JSON.parse(getUserInfo());
+    if(userInfo){
+      dispatch(prepareFinalObject("indents[0].createdByName", userInfo.name));
+      const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+      try { 
+        const payload = await httpRequest(
+          "post",
+          "/egov-hrms/employees/_search",
+          "_search",
+          queryParams
+        );
+        if(payload){
+          const {designationsById} = state.common;
+          const empdesignation = payload.Employees[0].assignments[0].designation;
+          if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+         
+          dispatch(prepareFinalObject("indents[0].designation", desgnName[0].name));
+          }
+        }
+        
+      } catch (e) {
+        console.log(e);
+      }
+    }     
     } catch (e) {
       console.log(e);
     }
@@ -131,10 +157,15 @@ import {
     uiFramework: "material-ui",
     name: "create-material-transfer-indent",
     beforeInitScreen: (action, state, dispatch) => {
+      const step = getQueryArg(window.location.href, "step");
+      const id = getQueryArg(window.location.href, "id");
+      if(!step && !id){
+        dispatch(prepareFinalObject("indents[0]",null));
+      }
       getData(action, state, dispatch);
            // SEt Default data Start
      dispatch(prepareFinalObject("indents[0].indentType", "Transfer Indent"));
-     dispatch(prepareFinalObject("indents[0].designation", "MD",));
+    // dispatch(prepareFinalObject("indents[0].designation", "MD",));
      dispatch(prepareFinalObject("indents[0].materialHandOverTo", "",));
      dispatch(prepareFinalObject("indents[0].inventoryType", "",));
      dispatch(prepareFinalObject("indents[0].expectedDeliveryDate", 1609353000000,));//31 DEC 2020

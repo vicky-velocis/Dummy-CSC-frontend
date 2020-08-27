@@ -6,10 +6,12 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import {
-  createEmployee,
-  getSearchResults,
-  updateEmployee
-} from "../../../../../ui-utils/commons";
+  
+  getMaterialIndentSearchResults,  
+  GetMdmsNameBycode,
+  getWFPayload,
+  
+} from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
   epochToYmdDate,
@@ -130,7 +132,7 @@ const handleDeletedCards = (jsonObject, jsonPath, key) => {
 
 
 
-export const handleCreateUpdatePO = (state, dispatch) => {
+export const handleCreateUpdateIT = (state, dispatch) => {
   let uuid = get(
     state.screenConfiguration.preparedFinalObject,
     "indents[0].id",
@@ -147,13 +149,13 @@ export const handleCreateUpdatePO = (state, dispatch) => {
   set(indents[0],"indentDate", indentDate);
   //furnishindentData(state, dispatch);
   if (uuid) {
-    createUpdatePO(state, dispatch, "UPDATE");
+    createUpdateIT(state, dispatch, "UPDATE");
   } else {
-    createUpdatePO(state, dispatch, "CREATE");
+    createUpdateIT(state, dispatch, "CREATE");
   }
 };
 
-export const createUpdatePO = async (state, dispatch, action) => {
+export const createUpdateIT = async (state, dispatch, action) => {
 
   let indents = get(
     state.screenConfiguration.preparedFinalObject,
@@ -182,16 +184,18 @@ export const createUpdatePO = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       const response = await httpRequest(
         "post",
         "/store-asset-services/indents/_create",
         "",
         queryObject,
-        requestBody
+        { indents: requestBody.indents, workFlowDetails: wfobject }
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${response.indents[0].indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=create&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-transfer?applicationNumber=${response.indents[0].indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
@@ -206,13 +210,52 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${response.indents[0].indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=update&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-transfer?applicationNumber=${response.indents[0].indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
     }
   } 
+};
+
+export const getMaterialIndentTransferData = async (
+  state,
+  dispatch,
+  id,
+  tenantId,
+  applicationNumber
+) => {
+  let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
+    {
+      key: "indentNumber",
+      value: applicationNumber
+    },
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ];
+
+ let response = await getMaterialIndentSearchResults(queryObject, dispatch);
+//response = response.indents.filter(x=>x.id === id)
+response = response.indents.filter(x => x.indentNumber === applicationNumber)
+if (response && response[0])
+{
+  for (let index = 0; index < response[0].indentDetails.length; index++) {
+    const element = response[0].indentDetails[index];
+   let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)   
+   set(response[0], `indentDetails[${index}].uom.name`, Uomname);
+  }
+}
+dispatch(prepareFinalObject("indents", response));
+ 
+  furnishindentData(state, dispatch);
 };
 
 

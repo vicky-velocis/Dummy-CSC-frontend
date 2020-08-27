@@ -77,7 +77,8 @@ export const searchResults = {
 
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
-  window.location.href = `view-material-receipt-note-misc?id=${rowData[4]}&tenantId=${tenantId}`;
+ // window.location.href = `view-material-receipt-note-misc?id=${rowData[4]}&tenantId=${tenantId}&Status=${rowData[3]}&mrnNumber=${rowData[0]}`;
+ window.location.href = `view-material-receipt-note-misc?applicationNumber=${rowData[0]}&tenantId=${tenantId}&Status=${rowData[3]}`;
 };
 
 

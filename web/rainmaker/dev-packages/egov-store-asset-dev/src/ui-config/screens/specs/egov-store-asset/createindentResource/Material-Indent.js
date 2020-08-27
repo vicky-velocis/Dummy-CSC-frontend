@@ -9,7 +9,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import get from "lodash/get";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
- import { getTodaysDateInYMD } from "../../utils";
+ import { convertDateToEpoch, convertDateToEpochIST } from "../../utils";
   
   export const MaterialIndentDetails = getCommonCard({
     header: getCommonTitle(
@@ -106,7 +106,8 @@ import {
               max: new Date().toISOString().slice(0, 10),
             }
           }
-        })
+        }),
+       
       },
       IndentPurpose: {
         ...getSelectField({
@@ -119,13 +120,7 @@ import {
           jsonPath: "indents[0].indentPurpose",
           sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
         props: {
-          // data: [
-          //   {
-          //     code: "Consumption",
-          //     name: "Capital/Repair/Consumption"
-          //   },
-           
-          // ],
+          
           optionValue: "code",
           optionLabel: "name",
         },
@@ -189,6 +184,40 @@ import {
           },
           pattern: getPattern("eventDescription") || null,
           jsonPath: "indents[0].narration"
+        })
+      },
+      createdBy: {
+        ...getTextField({
+          label: {
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+          },
+          placeholder: {
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "indents[0].createdByName"
+        })
+      },
+      designation: {
+        ...getTextField({
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
+          placeholder: {
+            labelName: "Enter Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "indents[0].designation"
         })
       },
     })

@@ -121,6 +121,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
           jsonPath: "materialReceipt[0].receivingStore.code",
           sourceJsonPath: "store.stores",
             props: {
+              disabled: true, 
               optionValue: "code",
               optionLabel: "name",
             },
@@ -150,7 +151,12 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
           },
           required: true,
           pattern: getPattern("Date") || null,
-          jsonPath: "materialReceipt[0].receiptDate"
+          jsonPath: "materialReceipt[0].receiptDate",
+          props: {
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
         })
       },
       receiptType: {
@@ -234,7 +240,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
             multiline: "multiline",
             rowsMax: 2,
           },
-          required: false,
+          required: true,
           pattern: getPattern("eventDescription") || null,
           jsonPath: "materialReceipt[0].description"
         })
@@ -248,12 +254,12 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
       issueNumber: {
         ...getTextField({
           label: {
-            labelName: "Remark",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
+            labelName: "Material Issue Number",
+            labelKey: "STORE_COMMON_MRN_ISSUE_NUMBER"
           },
           placeholder: {
-            labelName: "Enter Remark",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
+            labelName: "Enter Material Issue Number",
+            labelKey: "STORE_COMMON_MRN_ISSUE_NUMBER_PLACEHOLDER"
           },
           props: {
             className: "applicant-details-error",

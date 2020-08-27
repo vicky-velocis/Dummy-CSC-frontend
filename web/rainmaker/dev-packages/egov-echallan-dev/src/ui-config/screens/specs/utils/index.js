@@ -1367,6 +1367,7 @@ export const clearlocalstorageAppDetails = (state) => {
   lSRemoveItemlocal('ecroachmentType');
   lSRemoveItemlocal('FineMasterGrid');
   lSRemoveItemlocal('ItemMasterGrid');
+  lSRemoveItemlocal('EChallanPaymentMailSent');
   //lSRemoveItemlocal('eChallanMasterGrid');
 
   lSRemoveItem('applicationType');
@@ -1376,6 +1377,7 @@ export const clearlocalstorageAppDetails = (state) => {
   lSRemoveItem('ecroachmentType');
   lSRemoveItem('FineMasterGrid');
   lSRemoveItem('ItemMasterGrid');
+  lSRemoveItem('EChallanPaymentMailSent');
   //lSRemoveItem('eChallanMasterGrid');
 }
 
@@ -2028,6 +2030,9 @@ export const getMdmsEncroachmentSectorData = async (action, state, dispatch) => 
             },
             {
               name: "ChallanStatus"
+            },
+            {
+              name: "cardList"
             }
           ]
         },
@@ -2055,7 +2060,7 @@ export const truncData = (str, length, ending) => {
 
 
 export const getSiNameDetails = async (action, state, dispatch) => {
-  //http://192.168.12.74:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
+  //http://192.168.12.114:8096/egov-hrms/employees/_search?roles=challanSM&tenantId=ch.chandigarh
   try {
     const queryStr = [
       { key: "tenantId", value: getTenantId() },

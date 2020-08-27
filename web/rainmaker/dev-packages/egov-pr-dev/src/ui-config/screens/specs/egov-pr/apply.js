@@ -4,7 +4,7 @@ import {
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { footer } from "./applyResource/footer";
+import { EventFooter } from "./applyResource/footer";
 import { eventDetails } from "./applyResource/eventDetails";
 import { eventDescription } from "./applyResource/eventDescription";
 import jp from "jsonpath";
@@ -110,7 +110,11 @@ const getMdmsData = async (action, state, dispatch) => {
       moduleDetails: [
         {
           moduleName: "RAINMAKER-PR",
-          masterDetails: [{ name: "eventType" }, { name: "eventStatus" },{ name: "eventDocuments" },  { name: "eventSector" },{ name: "localityAreaName" }]
+          masterDetails: [{ name: "eventType" }, { name: "eventStatus" },{ name: "eventDocuments" },  { name: "eventSector" },{ name: "localityAreaName" }
+
+        
+          
+        ]
         },
         {
           moduleName: "tenant",
@@ -429,7 +433,7 @@ const screenConfig = {
         );
         set(
           action.screenConfig,
-          `components.div.children.footer.children.previousButton.visible`,
+          `components.div.children.EventFooter.children.previousButton.visible`,
           step != 0
         );
       }
@@ -462,7 +466,7 @@ const screenConfig = {
         stepper,
         formwizardFirstStep,
         formwizardSecondStep,
-        footer
+        EventFooter
       }
     }
   }

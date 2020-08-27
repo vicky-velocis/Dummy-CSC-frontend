@@ -9,16 +9,37 @@ import {
   export const totalIssueValue = getCommonCard({
    
     totalValueContainer: getCommonContainer({  
+
       totalValue: {
         ...getTextField({
           label: {
-            labelName: "Total Issue Value",
-            labelKey: "STORE_MTON_TOTAL_ISSUE_VALUE"
+            labelName: "Total Issued Quantity",
+            labelKey: "STORE_ISSUED_QUANTITY"
           },
           props: {
             disabled: true
           },
-          jsonPath: "purchaseOrders[0].totalValue"
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+          },
+          jsonPath: "materialIssues[0].totalQty"
+        })
+      },
+      totalqtyValue: {
+        ...getTextField({
+          label: {
+            labelName: "Total Qty Value",
+            labelKey: "STORE_QTY_VALUE"
+          },
+          props: {
+            disabled: true
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 4,
+          },
+          jsonPath: "materialIssues[0].totalvalue"
         })
       },
     })

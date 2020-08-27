@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {  checkValueForNA } from "../../utils";
 const gotoCreatePage = (state, dispatch) => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const createUrl =
@@ -91,12 +92,22 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           labelName: "Issuing Store Name",
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME"
         },
-        {  jsonPath: "materialIssues[0].fromStore.code", }
+        {  jsonPath: "materialIssues[0].fromStore.name", }
       ),
       IssueDate: getLabelWithValue(
         { labelName: "Issue Date",
         labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE" },
         { jsonPath: "materialIssues[0].issueDate", }
+      ),
+      indentNumber: getLabelWithValue(
+        {
+          labelName: "Indent No.",
+          labelKey: "STORE_PURCHASE_ORDER_INDENT_NO"
+        },
+        { 
+        jsonPath: "materialIssues[0].indent.indentNumber",
+        callBack: checkValueForNA
+      }
       ),
       IndentingStore: getLabelWithValue(
         {
@@ -111,19 +122,19 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           jsonPath: "materialIssues[0].fromStore.department.name",
         }
       ),
-      IssueToEmployee: getLabelWithValue(
-        { labelName: "Issue To Employee",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE" },
-        {
-          jsonPath: "materialIssues[0].issuedToEmployee"
-        }
-      ),
-      issuedToDesignation: getLabelWithValue(
-        {labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
-        {
-          jsonPath: "materialIssues[0].issuedToDesignation",
-        }
-      ),
+      // IssueToEmployee: getLabelWithValue(
+      //   { labelName: "Issue To Employee",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE" },
+      //   {
+      //     jsonPath: "materialIssues[0].issuedToEmployee"
+      //   }
+      // ),
+      // issuedToDesignation: getLabelWithValue(
+      //   {labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //   {
+      //     jsonPath: "materialIssues[0].issuedToDesignation",
+      //   }
+      // ),
       Remark: getLabelWithValue(
         { labelName: "Remark",
         labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK" },
@@ -131,24 +142,36 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           jsonPath: "materialIssues[0].description",
         }
       ),
-      IssueBy: getLabelWithValue(
-        { labelName: "Issue By",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_BY" },
+      // IssueBy: getLabelWithValue(
+      //   { labelName: "Issue By",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_BY" },
+      //   {
+      //     jsonPath: "materialIssues[0].IssueBy",
+      //   }
+      // ),
+      // DesignationIssueBy: getLabelWithValue(
+      //   { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //   {
+      //     jsonPath: "materialIssues[0].DesignationIssueBy",
+      //   }
+      // ),
+      // Status: getLabelWithValue(
+      //   { labelName: "Status",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_STATUS" },
+      //   {
+      //     jsonPath: "materialIssues[0].materialIssueStatus",
+      //   }
+      // ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
         {
-          jsonPath: "materialIssues[0].IssueBy",
+          jsonPath: "materialIssues[0].createdByName",
         }
       ),
-      DesignationIssueBy: getLabelWithValue(
-        { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
         {
-          jsonPath: "materialIssues[0].DesignationIssueBy",
-        }
-      ),
-      Status: getLabelWithValue(
-        { labelName: "Status",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_STATUS" },
-        {
-          jsonPath: "materialIssues[0].materialIssueStatus",
+          jsonPath: "materialIssues[0].designation",
         }
       ),
       

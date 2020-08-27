@@ -13,7 +13,10 @@ import {
 import { fetchBill } from "../utils";
 import set from "lodash/set";
 import { getPaymentGateways } from "../../../../ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { get } from "lodash";
 
+var consumerCode = getQueryArg(window.location.href, "consumerCode");
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Application for New Trade License (2018-2019)",
@@ -24,7 +27,7 @@ const header = getCommonContainer({
     moduleName: "egov-tradelicence",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "consumerCode")
+      number: consumerCode
     }
   }
 });
@@ -41,18 +44,49 @@ const setPaymentMethods = async (action, state, dispatch) => {
   }
 }
 
-const screenConfig = {
-  uiFramework: "material-ui",
-  name: "pay",
-  beforeInitScreen: (action, state, dispatch) => {
-    const tenantId = getQueryArg(window.location.href, "tenantId");
+const beforeScreenInit = async(action, state, dispatch) => {
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  consumerCode = getQueryArg(window.location.href, "consumerCode");
     const queryObject = [
       { key: "tenantId", value: tenantId },
       { key: "businessServices", value: "NewTL" }
     ];
-    setPaymentMethods(action, state, dispatch)
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
-    fetchBill(action, state, dispatch);
+    await fetchBill(action, state, dispatch);
+    setPaymentMethods(action, state, dispatch)
+    const estimateCardData = get(state.screenConfiguration, "preparedFinalObject.LicensesTemp[0].estimateCardData") || [];
+    const showPaymentButton = estimateCardData.some(item => !!Number(item.value))
+    dispatch(
+      handleField(
+        "pay",
+        "components.div.children.footer.children.makePayment",
+        "visible",
+        showPaymentButton && !estimateCardData["payStatus"]
+      )
+    );
+    dispatch(
+      handleField(
+        "pay",
+        "components.div.children.footer.children.errorButton",
+        "visible",
+        !showPaymentButton || !!estimateCardData["payStatus"]
+      )
+    );
+    dispatch(
+      handleField(
+        "pay",
+        "components.div.children.headerDiv.children.header.children.applicationNumber.props",
+        "number",
+        consumerCode
+      )
+    )
+}
+
+const screenConfig = {
+  uiFramework: "material-ui",
+  name: "pay",
+  beforeInitScreen: (action, state, dispatch) => {
+    beforeScreenInit(action, state, dispatch)
     return action;
   },
   components: {

@@ -10,6 +10,7 @@ import {
   import { MaterialReceiptNote } from "./creatematerialReceiptNoteResource/Material-receipt-note"; 
   import { otherDetails } from "./creatematerialReceiptNoteResource/other-details";
   import { documentDetails } from "./creatematerialReceiptNoteResource/documentDetails";
+  import {totalValue} from './creatematerialReceiptNoteResource/totalValue';
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -19,7 +20,7 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
-  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
@@ -35,7 +36,7 @@ import {
       labelName: "Material Receipt Details",
       labelKey: "STORE_MATERIAL_RECEIPT_MATERIAL_RECEIPT_DETAILS"
     },
-    { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
+    // { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
   ];
   export const stepper = getStepperObject(
@@ -70,7 +71,8 @@ export const header = getCommonContainer({
     },
     children: {
       documentDetails,
-      materialReceiptDetail
+      materialReceiptDetail,
+      totalValue
     },
     visible: false
   };
@@ -177,6 +179,32 @@ export const header = getCommonContainer({
     try {
       let response = await getStoresSearchResults(queryObject, dispatch);
       dispatch(prepareFinalObject("store", response));
+      // fetching employee designation
+      const userInfo = JSON.parse(getUserInfo());
+      if(userInfo){
+        dispatch(prepareFinalObject("materialIssues[0].createdByName", userInfo.name));
+        const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+        try { 
+          const payload = await httpRequest(
+            "post",
+            "/egov-hrms/employees/_search",
+            "_search",
+            queryParams
+          );
+          if(payload){
+            const {designationsById} = state.common;
+            const empdesignation = payload.Employees[0].assignments[0].designation;
+            if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+            
+            dispatch(prepareFinalObject("materialIssues[0].designation", desgnName[0].name));
+            }
+          }
+          
+        } catch (e) {
+          console.log(e);
+        }
+      }
     } catch (e) {
       console.log(e);
     }
@@ -195,7 +223,39 @@ export const header = getCommonContainer({
       console.log(e);
     }
   }
+  const getEmployeeData = async (action, state, dispatch) => {
+    //fecthing employee details 
+    const queryParams = [{ key: "roles", value: "EMPLOYEE" },{ key: "tenantId", value:  getTenantId() }];
+    const payload = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "_search",
+      queryParams,
+    );
+    if(payload){
+      if (payload.Employees) {
+        const empDetails =
+        payload.Employees.map((item, index) => {
+            const deptCode = item.assignments[0] && item.assignments[0].department;
+            const designation =   item.assignments[0] && item.assignments[0].designation;
+            const empCode = item.code;
+            const empName = `${item.user.name}`;
+          return {
+                  code : empCode,
+                  name : empName,
+                  dept : deptCode,
+                  designation:designation,
+          };
+        });
+      
+        if(empDetails){
+          dispatch(prepareFinalObject("createScreenMdmsData.employee",empDetails));  
+        }
+        
+      }
+    }
 
+  }
   const getYearsList = (startYear, state, dispatch) => {
     var currentYear = new Date().getFullYear(),
       years = [];
@@ -246,18 +306,25 @@ export const header = getCommonContainer({
       dispatch(prepareFinalObject("Employee[0].employeeStatus", "EMPLOYED"));
     }
   };
-  
+  const getData = async (action, state, dispatch) => {
+    
+    await getEmployeeData(action, state, dispatch);
+  }
   const screenConfig = {
     uiFramework: "material-ui",
     name: "createMaterialReceiptNote",
     // hasBeforeInitAsync:true,
     beforeInitScreen: (action, state, dispatch) => {
-     
+      getData(action, state, dispatch);
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
       const SupllierData = getSupllierData(action,state, dispatch);
-     // const purchaseOrder = getpurchaseOrder(action,state, dispatch);
+      const step = getQueryArg(window.location.href, "step");
+      const mrnNumber = getQueryArg(window.location.href, "mrnNumber");
+      if(!step && !mrnNumber){
+       dispatch(prepareFinalObject("materialReceipt[0]",null));
+     }
      // SEt Default data
 
      dispatch(

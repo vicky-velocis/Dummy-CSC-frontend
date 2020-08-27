@@ -24,6 +24,19 @@ let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false :
   paymentStatus === 'PAID' ? false : true;
 
+
+const callbackforAuction = async (state, dispatch) => {
+
+  let challandetails = get(state, 'screenConfiguration.preparedFinalObject.eChallanDetail[0]', {});
+  const appendUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  const reviewUrl = `${appendUrl}/egov-echallan-auction/apply?applicationNumber=${
+    challandetails.challanId
+    }&tenantId=${challandetails.tenantId}&Key=${challandetails.challanUuid}`;
+  dispatch(setRoute(reviewUrl));
+
+};
+
 const updateonGroundPayment = async (state, dispatch) => {
   let paymentStatus = get(state, "screenConfiguration.preparedFinalObject.eChallanDetail[0].paymentDetails.paymentStatus", 'Not Available');
   if (paymentStatus !== 'PAID') {
@@ -414,7 +427,7 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: updateonGroundPayment
     },
-    visible: enableButton,
+    visible: false,
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSI"]
@@ -456,6 +469,7 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: updateonSentToStore
     },
+    visible: false,
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSI"]
@@ -542,7 +556,8 @@ export const footer = getCommonApplyFooter({
       action: "condition",
       callBack: returnandClosePayment
     },
-    roleDefination: {
+    visible: false,
+      roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSM"]
     }
@@ -585,6 +600,7 @@ export const footer = getCommonApplyFooter({
       callBack: (state, dispatch) =>
         callBackAddToStore(state, dispatch, true)
     },
+    visible: false,
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSM"]
@@ -629,12 +645,57 @@ export const footer = getCommonApplyFooter({
         callBackForwardUpload(state, dispatch)
       //callBackForwardAddToStore(state, dispatch, false)
     },
+    visible: false,
     roleDefination: {
       rolePath: "user-info.roles",
       roles: ["challanSM"]
     }
   },
 
+  auctionButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "16px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        color: "#000"
+      }
+    },
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 12,
+    },
+    children: {
+      nextButtonLabel: getLabel({
+        labelName: "INITATE AUCTION",
+        labelKey: "EC_AUCTION_BUTTON"
+      }),
+      nextButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callbackforAuction
+    },
+    visible: false,
+    roleDefination: {
+      rolePath: "user-info.roles",
+      roles: ["challanSM"],
+      action: "AUCTION"
+    },
+    visible: true
+  },
 });
 
 

@@ -3,6 +3,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import{GetMdmsNameBycode, getWFPayload} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -222,17 +223,20 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatNonIndentMaterialIssue(
         queryObject,        
         materialIssues,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let issueNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=create&code=${issueNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=create&code=${issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-non-indent-issue-note?applicationNumber=${issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
+      }
     } catch (error) {
       //alert('123')
       furnishindentData(state, dispatch);
@@ -246,8 +250,9 @@ export const createUpdateIndent = async (state, dispatch, action) => {
       );
       if(response){
         let issueNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=update&code=${issueNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENTNOTE&mode=update&code=${issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-non-indent-issue-note?applicationNumber=${issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -274,17 +279,29 @@ export const getMaterialNonIndentData = async (
 
  let response = await getNonIndentMaterialIssueSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-  dispatch(prepareFinalObject("materialIssues", get(response, "materialIssues")));
-  dispatch(
-    handleField(
-      "create",
-      "components.div.children.headerDiv.children.header.children.header.children.key",
-      "props",
-      {
-        labelName: "Edit Material Indent",
-        labelKey: "STORE_EDITMATERIAL_MASTER_INDENT_HEADER"
-      }
-    )
-  );
+response = get(response, "materialIssues")
+let totalvalue = 0
+let TotalQty = 0;
+if(response && response[0])
+{
+for (let index = 0; index < response[0].materialIssueDetails.length; index++) {
+  const element = response[0].materialIssueDetails[index];
+ let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
+ let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code) 
+    set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
+    set(response[0], `materialIssueDetails[${index}].material.name`, matname);
+    set(response[0], `materialIssueDetails[${index}].mrnNumber`, element.materialIssuedFromReceipts[index].materialReceiptDetail.mrnNumber);    
+    //set materialReceiptId
+    set(response[0], `materialIssueDetails[${index}].receiptId`, element.materialIssuedFromReceipts[index].materialReceiptId);    
+    set(response[0], `materialIssueDetails[${index}].totalValue`, Number(element.value));    
+    totalvalue = totalvalue+ Number(element.value)   
+    TotalQty = TotalQty + Number(element.quantityIssued)
+}
+
+set(response[0],`totalQty`, TotalQty);
+set(response[0],`totalvalue`, totalvalue);
+}
+  dispatch(prepareFinalObject("materialIssues", response));
+
   furnishindentData(state, dispatch);
 };

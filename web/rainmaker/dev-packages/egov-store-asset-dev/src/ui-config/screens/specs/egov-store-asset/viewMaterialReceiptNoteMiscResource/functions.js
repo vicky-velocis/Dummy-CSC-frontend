@@ -3,6 +3,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import{GetMdmsNameBycode, getWFPayload} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -139,17 +140,20 @@ export const createUpdateMR = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatmiscellaneousreceiptnotes(
         queryObject,        
         materialReceipt,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=create&code=${mrnNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-material-receipt-note-misc?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -162,8 +166,9 @@ export const createUpdateMR = async (state, dispatch, action) => {
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=update&code=${mrnNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-material-receipt-note-misc?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -175,12 +180,17 @@ export const getmiscellaneousreceiptnotes = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  mrnNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "mrnNumber",
+      value: mrnNumber
     },
     {
       key: "tenantId",
@@ -190,8 +200,31 @@ export const getmiscellaneousreceiptnotes = async (
 
  let response = await getmiscellaneousreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-let MaterialReceipt = response.MaterialReceipt.filter(x=>x.id === id)
-  dispatch(prepareFinalObject("materialReceipt", MaterialReceipt));
+ //response = response.MaterialReceipt.filter(x=>x.id === id)
+ response = response.MaterialReceipt.filter(x => x.mrnNumber === mrnNumber)
+ let totalvalue = 0
+ let TotalQty = 0;
+if(response && response[0])
+{
+  for (let index = 0; index < response[0].receiptDetails.length; index++) {
+    const element = response[0].receiptDetails[index];
+   let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)   
+   set(response[0], `receiptDetails[${index}].uom.name`, Uomname);
+   totalvalue = totalvalue+( Number(element.acceptedQty) *element.unitRate)
+      
+   TotalQty = TotalQty + Number(element.acceptedQty)
+  }
+}
+set(response[0],`totalQty`, TotalQty);
+set(response[0],`totalvalue`, totalvalue);
+// for (let index = 0; index < MaterialReceipt[0].receiptDetails.length; index++) {
+//   const element = MaterialReceipt[0].receiptDetails[index];
+//  let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code) 
+ 
+//     set(MaterialReceipt[0], `materialReceipt[${index}].uom.name`, Uomname);
+     
+// }
+  dispatch(prepareFinalObject("materialReceipt", response));
   //dispatch(prepareFinalObject("materialReceipt", get(response, "MaterialReceipt")));
  
   furnishindentData(state, dispatch);

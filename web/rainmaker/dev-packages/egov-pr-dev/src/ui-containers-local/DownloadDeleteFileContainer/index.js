@@ -153,15 +153,17 @@ handleEvent1=(fileid)=>{
 							style={documentTitle}
 						  />
 						</Grid>
-						<Grid container>
+						<Grid xs={6} container>
 						  <Grid xs={12} className="subtext">
 							<Typography className="NAME">{item.name}</Typography>
 						  </Grid>
 						 
 						</Grid>
-						 <Grid xs={12} align="right">
-							<Button href={item.link} color="primary" style={{position:"relative",margin:"0% 85%"}}>
-							  {item.linkText}
+						 <Grid xs={6} align="right">
+							{/* <Button href={item.link} color="primary" style={{position:"relative",margin:"0% 85%"}}> */}
+							<Button href={item.link} color="primary" style={{position:"relative"}}>
+							  {/* {item.linkText} */}
+							  Download
 							</Button>
 						  </Grid>
 					  </Grid>

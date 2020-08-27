@@ -48,8 +48,8 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Indent Material Issue",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE"
+            labelName: "Non-Indent Material Issue",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_NON_INDENT_MATERIAL_ISSUE_NOTE"
           })
         },
         editSection: {
@@ -118,28 +118,40 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           jsonPath: "materialIssues[0].description",
         }
       ),
-      IssueBy: getLabelWithValue(
-        { labelName: "Issue By",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_BY" },
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
         {
-          jsonPath: "materialIssues[0].issuedToEmployee"
+          jsonPath: "materialIssues[0].createdByName",
         }
       ),
-
-
       designation: getLabelWithValue(
-        { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
         {
           jsonPath: "materialIssues[0].designation",
         }
       ),
-      Status: getLabelWithValue(
-        { labelName: "Status",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_STATUS" },
-        {
-          jsonPath: "materialIssues[0].materialIssueStatus",
-        }
-      ),
+      // IssueBy: getLabelWithValue(
+      //   { labelName: "Issue By",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_BY" },
+      //   {
+      //     jsonPath: "materialIssues[0].issuedToEmployee"
+      //   }
+      // ),
+
+
+      // designation: getLabelWithValue(
+      //   { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //   {
+      //     jsonPath: "materialIssues[0].designation",
+      //   }
+      // ),
+      // Status: getLabelWithValue(
+      //   { labelName: "Status",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_STATUS" },
+      //   {
+      //     jsonPath: "materialIssues[0].materialIssueStatus",
+      //   }
+      // ),
       
     }),
 

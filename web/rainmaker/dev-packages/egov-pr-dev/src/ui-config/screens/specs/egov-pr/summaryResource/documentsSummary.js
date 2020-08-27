@@ -89,39 +89,7 @@ export const documentsPressNoteSummary = getCommonGrayCard({
           labelKey: "NOC_SUMMARY_DOCUMENTS_HEADER﻿"
         })
       },
-      // editSection: {
-      //   componentPath: "Button",
-      //   props: {
-      //     color: "primary",
-      //     style: {
-      //       marginTop: "-10px",
-      //       marginRight: "-18px"
-      //     }
-      //   },
-      //   gridDefination: {
-      //     xs: 4,
-      //     align: "right"
-      //   },
-      //   children: {
-      //     editIcon: {
-      //       uiFramework: "custom-atoms",
-      //       componentPath: "Icon",
-      //       props: {
-      //         iconName: "edit"
-      //       }
-      //     },
-      //     buttonLabel: getLabel({
-      //       labelName: "Edit",
-      //       labelKey: "PR_SUMMARY_EDIT"
-      //     })
-      //   },
-      //   onClickDefination: {
-      //     action: "condition",
-      //     callBack: (state, dispatch) => {
-      //       gotoApplyWithStepPressNote(state, dispatch, 1);
-      //     }
-      //   }
-      // }
+     
     }
   },
   
@@ -198,7 +166,7 @@ export const documentslibrarySummary = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -211,7 +179,7 @@ export const documentslibrarySummary = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -279,7 +247,7 @@ export const documentsSummary = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -292,7 +260,7 @@ export const documentsSummary = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -360,7 +328,7 @@ export const documentslibrarySummary1 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -373,7 +341,7 @@ export const documentslibrarySummary1 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -440,7 +408,7 @@ export const documentslibrarySummary2 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -453,7 +421,7 @@ export const documentslibrarySummary2 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -520,7 +488,7 @@ export const documentslibrarySummary3 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -533,7 +501,7 @@ export const documentslibrarySummary3 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -600,7 +568,7 @@ export const documentslibrarySummary4 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -613,7 +581,7 @@ export const documentslibrarySummary4 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });
@@ -680,7 +648,7 @@ export const documentslibrarySummary5 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["APRO"],
+      roles: [localStorage.getItem('libraryFirstRole')],
    }
   },
   body1: {
@@ -693,7 +661,7 @@ export const documentslibrarySummary5 = getCommonGrayCard({
     },
 	 roleDefination: {
       rolePath: "user-info.roles",
-      roles: ["DEPARTMENTUSER"],
+      roles: [localStorage.getItem('librarySecondRole')],
    }
   },
 });

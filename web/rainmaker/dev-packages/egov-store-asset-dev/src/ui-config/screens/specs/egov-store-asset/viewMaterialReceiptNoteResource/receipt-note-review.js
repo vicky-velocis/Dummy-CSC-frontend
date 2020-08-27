@@ -5,7 +5,7 @@ import { getReceiptNoteListDetailsView } from "./view-receipt-note-details"
 // import { getOtherDetailsView } from "./view-other-details";
 import { documentsSummary } from "./documentsSummary";
 import { masterCommonFooter } from "./footer";
-
+import {totalValue} from '../creatematerialReceiptNoteResource/totalValue';
 export const MaterialReceiptReviewDetails = isReview => {
   const viewReceiptNoteListDetails = getReceiptNoteListDetailsView(isReview);
     const viewReceiptNoteDetails = getReceiptNoteDetailsView(isReview); 
@@ -13,7 +13,8 @@ export const MaterialReceiptReviewDetails = isReview => {
   const footer = isReview ? masterCommonFooter() : {};
   return getCommonCard({
     viewReceiptNoteListDetails, 
-    viewReceiptNoteDetails,   
+    viewReceiptNoteDetails, 
+    totalValue,  
     // viewOtherDetails,
     documentsSummary: documentsSummary,
     footer

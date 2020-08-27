@@ -11,7 +11,7 @@ import {
   import filter from "lodash/filter";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-  import{getMaterialBalanceRateResults,GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+  import{getMaterialBalanceRateResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
 
 
   const getMaterialData = async (action, state, dispatch,mrnNumber_) => {   
@@ -76,7 +76,8 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
   };
   
   const materialIssueCard = {
-    uiFramework: "custom-containers",
+    uiFramework: "custom-containers-local",
+    moduleName: "egov-store-asset",
     componentPath: "MultiItem",
     props: {
       scheama: getCommonGrayCard({
@@ -138,6 +139,7 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 },
               }),
               beforeFieldChange: (action, state, dispatch) => {
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 let Material = get(
                   state.screenConfiguration.preparedFinalObject,
                   `NonIndentsmaterial`,
@@ -146,13 +148,17 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 Material = Material.filter(x=>x.receiptId === action.value)
                 if(Material && Material[0])
                 {
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].balanceQty",Material[0].balance));         
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].tenantId",Material[0].tenantId));                
-               dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].uom.code",Material[0].uomCode)); 
-              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].unitRate",Material[0].unitRate));
-              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].indentDetail",null)); 
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].balanceQty`,Material[0].balance));         
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].tenantId`,Material[0].tenantId));                
+               dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].uom.code`,Material[0].uomCode));
+               let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",Material[0].uomCode) 
+               dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].uom.name`,uomname)); 
+              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].unitRate`,Material[0].unitRate));
+              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail`,null)); 
               //materialCode
-              dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.code",Material[0].materialCode));
+              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material.code`,Material[0].materialCode));
+              let matname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode) 
+              dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].material.name`,matname));
               //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.name",GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode)));
               //GetMdmsNameBycodelet matname = ''
                
@@ -198,13 +204,31 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 jsonPath: "materialIssues[0].materialIssueDetails[0].userQuantityIssued"
               }),
               beforeFieldChange: (action, state, dispatch) => { 
-                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].balanceQty`,0)
-                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[0].unitRate`,0)
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                let BalanceQty = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[${cardIndex}].balanceQty`,0)
+                let unitRate = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].materialIssueDetails[${cardIndex}].unitRate`,0)
                 let balanceQtyAfterIssue =BalanceQty - Number(action.value) 
-                let totalValue = unitRate *  Number(action.value)           
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].balanceQtyAfterIssue",balanceQtyAfterIssue));
-                dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].totalValue",totalValue));
+                let totalValue = unitRate *  Number(action.value)  
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].userQuantityIssued`, Number(action.value)));         
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].balanceQtyAfterIssue`,balanceQtyAfterIssue));
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].totalValue`,totalValue));
                 //totalValue
+                //set total value on Qty Change
+                let cardJsonPath =
+                "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
+               let pagename = `createMaterialNonIndentNote`;
+               let jasonpath =  "materialIssues[0].materialIssueDetails";
+               let InputQtyValue = "indentQuantity";
+               let TotalValue_ = "totalValue";
+               let TotalQty ="userQuantityIssued"
+               let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
+               if(Qty && Qty[0])
+               {
+               
+                dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, Qty[0].TotalValue));
+                dispatch(prepareFinalObject(`materialIssues[0].totalQty`, Qty[0].TotalQty));
+
+               }
               }
             },
             uomCode: {
@@ -222,7 +246,7 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "materialIssues[0].materialIssueDetails[0].uom.code"
+                jsonPath: "materialIssues[0].materialIssueDetails[0].uom.name"
               })
             },
             unitRate: {
@@ -304,6 +328,9 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
         )
       }),
       items: [],
+      onMultiItemDelete:(state, dispatch)=>{       
+
+      },
       addItemLabel: {
         labelName: "Add ",
         labelKey: "STORE_MATERIAL_COMMON_CARD_ADD"
@@ -312,6 +339,16 @@ let mrnNumber = get(state,"screenConfiguration.preparedFinalObject.materialIssue
       headerJsonPath:
         "children.cardContent.children.header.children.head.children.Accessories.props.label",
       sourceJsonPath: "materialIssues[0].materialIssueDetails",
+      //Update Total value when delete any card configuration settings     
+      cardtotalpropes:{
+        totalIndentQty:false,
+        pagename:`createMaterialNonIndentNote`,
+        cardJsonPath:"components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items",
+        jasonpath:"materialIssues[0].materialIssueDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"userQuantityIssued"
+      },
       prefixSourceJsonPath:
         "children.cardContent.children.materialIssueCardContainer.children"
     },

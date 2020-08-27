@@ -13,6 +13,8 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 //import store from "ui-redux/store";
 
+import { ResendTenderInviteGrid } from '../ui-config/screens/specs/egov-pr/tenderResources/tenderDetails';
+import {  getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 
 const role_name = JSON.parse(getUserInfo()).roles[0].code
@@ -731,7 +733,7 @@ export const getBillingGrid = async () => {
   }
 };
 
-export const getPublishTenderGrid = async () => {
+export const getPublishTenderGrid = async (status) => {
 
   let queryObject = [];
   let requestBody = {
@@ -739,7 +741,7 @@ export const getPublishTenderGrid = async () => {
       "tenantId": getTenantId(),
       "moduleCode": localStorageGet("modulecode"),
       "tenderNoticeUuid": "",
-      "tenderNoticeStatus": checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER') ? "CREATED" : "",
+      "tenderNoticeStatus":status
     }
   }
 
@@ -2034,4 +2036,144 @@ export const convertTime =(time)=> {
         return 0;    
     }    
 }    
-   
+export const checkVisibility=(action, state, dispatch,response,status,eventStatus)=>{
+  
+  response["RAINMAKER-PR"].StatusCheck.map(res => {
+    if( status === res.scheduleStatus   && eventStatus===res.eventStatus)
+{
+    res.btnName.map(btn=>{
+      set(
+        action,
+        `screenConfig.components.div.children.EventSummaryFooter.children.${btn}.visible`,
+        status === res.scheduleStatus   && eventStatus===res.eventStatus ?  true  : false 
+      )
+    })
+
+    if(res.isEdit)
+{
+
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.eventdetailsSummary.children.cardContent.children.header.children.editSection.visible",
+   true )
+
+    
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
+     true)
+}
+}
+
+
+  })
+  
+}
+export const checkTenderVisibility=(action, state, dispatch,response,status,role)=>{
+  //MdmsRes["RAINMAKER-PR"].TenderStatusCheck
+  
+  response["RAINMAKER-PR"].TenderStatusCheck.map(res => {
+    role.map(roleName=>{
+      if( roleName.code === res.isRole   && status===res.Status )
+      {
+        
+          res.btnName && res.btnName.map(btn=>{
+            set(
+              action,
+              `screenConfig.components.div.children.tenderSummaryfooter.children.${btn}.visible`,
+             true
+            )
+          })
+        
+          //screenConfiguration.screenConfig["tender-Summary-Publish"].
+          if(res.isEdit)
+      {
+      
+        set(
+          action,
+          "screenConfig.components.div.children.body.children.cardContent.children.tenderPublishSummary.children.cardContent.children.header.children.editSection.visible",
+          true
+        );
+      }
+      if(res.isResendGrid)
+      {
+        let header= getCommonHeader({
+					labelName: "Invited Press List",
+					labelKey: "PR_INVITED_PRESS_LIST"
+      },
+      {
+        style: {
+          marginBottom: 18,
+        }
+      }
+      )
+      dispatch(
+        handleField(
+          "tender-Summary-Publish",
+          "components.div.children.Resendbody.children.cardContent.children",
+     "headerresend",
+     header
+        )
+      );
+
+        dispatch(
+          handleField(
+            "tender-Summary-Publish",
+            "components.div.children.Resendbody.children.cardContent.children",
+       "ResendTenderInviteGrid",
+            ResendTenderInviteGrid
+          )
+        );
+
+
+    
+      //  screenConfiguration.screenConfig["tender-Summary-Publish"].
+      }
+
+
+
+      }
+    })
+
+
+
+  })
+  
+}
+
+export const checkLibraryVisibility=(action, state, dispatch,response,role)=>{
+  //MdmsRes["RAINMAKER-PR"].TenderStatusCheck
+  
+  response["RAINMAKER-PR"].LibraryRoleCheck.map(res => {
+    role.map(roleName=>{
+      if( roleName.code === res.isRole)
+      {
+        
+          res.btnName && res.btnName.map(btn=>{
+            set(
+              action,
+              `screenConfig.components.div.children.librarysummaryFooter.children.${btn}.visible`,
+             true
+            )
+          })
+        //  screenConfiguration.screenConfig["library-summary"].components.div.children.librarysummaryFooter.children.uploadButton.visible
+    if(res.isDelete)
+      {
+        dispatch(prepareFinalObject("LibraryRole",res.isRole));
+
+        localStorage.setItem('libraryFirstRole',res.isRole)
+      }
+      else{
+        localStorage.setItem('librarySecondRole',res.isRole) 
+      }
+      
+
+
+      }
+    })
+
+
+
+  })
+  
+}

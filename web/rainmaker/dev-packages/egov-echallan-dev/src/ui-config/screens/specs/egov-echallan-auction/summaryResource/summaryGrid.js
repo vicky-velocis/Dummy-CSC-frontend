@@ -14,7 +14,6 @@ export const searchResultsSummary = {
   componentPath: "CustomizeTable",
   visible: true,
   props: {
-    id:"searchResultSummary",
     data: [],
     columns: [
       {
@@ -135,7 +134,6 @@ export const searchResultsSummaryHOD = {
   componentPath: "CustomizeTable",
   visible: true,
   props: {
-    id:"searchResultSummaryHOD",
     data: [],
     columns: [
       {

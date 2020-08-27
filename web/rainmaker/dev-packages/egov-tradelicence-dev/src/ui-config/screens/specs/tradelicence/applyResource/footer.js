@@ -874,16 +874,9 @@ export const footerReview = (
                 }
               },
               children: {
-                previousButtonIcon: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "keyboard_arrow_left"
-                  }
-                },
                 previousButtonLabel: getLabel({
-                  labelName: "Edit for Renewal",
-                  labelKey: "TL_RENEWAL_BUTTON_EDIT"
+                  labelName: "Edit",
+                  labelKey: "TL_BUTTON_EDIT"
                 })
               },
               onClickDefination: {
@@ -895,11 +888,11 @@ export const footerReview = (
                      `/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL`
                     ) 
                   ); */
-                  window.location.href = `${process.env.NODE_ENV === "production" ? "/citizen" : ""}/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&licenseNumber=${licenseNumber}&tenantId=${tenantId}&action=EDITRENEWAL&tlType=${tlType}`
+                  window.location.href = `${process.env.NODE_ENV === "production" ? "/citizen" : ""}/tradelicense-citizen/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}&tlType=${tlType}`
                 },
 
               },
-              visible: false
+              visible: getButtonVisibility(status, "EDIT"),
               // visible:(getButtonVisibility(status, "APPROVED")||getButtonVisibility(status, "EXPIRED"))&&(responseLength === 1 ),
             },
             submitButton: {
@@ -1101,6 +1094,8 @@ export const footerReviewTop = (
         applicationPrintObject
       ];
       break;
+    case "PENDINGCLARIFICATION":
+    case "MODIFIED":
     case "APPLIED":
     case "CITIZENACTIONREQUIRED":
     case "PENDINGPAYMENT":

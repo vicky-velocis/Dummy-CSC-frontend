@@ -7,7 +7,7 @@ import {
 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
-import { pressapplyfooter } from "./applyResource/pressapplyfooter";
+import { pressapplyfooter,takeactionfooter } from "./applyResource/pressapplyfooter";
 
 import jp from "jsonpath";
 import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
@@ -441,7 +441,8 @@ const screenConfig = {
         formwizardFirstStep,
         formwizardSecondStep,
        formwizardThirdStep,
-        pressapplyfooter
+        pressapplyfooter,
+        takeactionfooter
       }
     }
   }

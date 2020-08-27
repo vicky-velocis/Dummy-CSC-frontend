@@ -14,8 +14,13 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import{GetMdmsNameBycode, GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
 const purchaseOrderDetailsCard = {
-  uiFramework: "custom-containers",
+  // uiFramework: "custom-containers",
+  // componentPath: "MultiItem",
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-store-asset",
   componentPath: "MultiItem",
   props: {
     scheama: getCommonGrayCard({
@@ -46,7 +51,18 @@ const purchaseOrderDetailsCard = {
                  if(index !== -1){
                   const itemIndex = action.componentJsonpath.charAt(index + 6);
                   dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.name`, matObj[0].name)); 
-                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.description`, matObj[0].description));          
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].material.description`, matObj[0].description)); 
+                  if(matObj[0].uom.code)  
+                  {
+                    dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].uom.code`, matObj[0].uom.code));
+                    let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",matObj[0].uom.code) 
+                    dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].uom.name`, uomname));
+                  }      
+                  
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].indentQuantity`, matObj[0].indentQuantity));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].issuedQuantity`, matObj[0].indentIssuedQuantity));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].poOrderedQuantity`, matObj[0].poOrderedQuantity));
+                 
                  }
                 }
               }
@@ -80,49 +96,6 @@ const purchaseOrderDetailsCard = {
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.description"
             })
           },
-          indentQuantity: {
-            ...getTextField({
-              label: {
-                labelName: "Total Indent Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_INDENT_QUNTITY"
-              },
-              placeholder: {
-                labelName: "Enter Indent Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_INDENTT_QUNTITY_PLACEHOLDER"
-              },
-              pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentQuantity"
-            })
-          },
-          userQuantity: {
-            ...getTextField({
-              label: {
-                labelName: "Balance Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY"
-              },
-              placeholder: {
-                labelName: "Enter Balance Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY_PLACEHOLDER"
-              },
-              required: true,
-              pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity"
-            })
-          },
-          orderQuantity: {
-            ...getTextField({
-              label: {
-                labelName: "Order Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY"
-              },
-              placeholder: {
-                labelName: "Enter Order Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_BLNC_ORDR_PLACEHOLDER"
-              },
-              pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].orderQuantity"
-            })
-          },  
           uomName: {
             ...getSelectField({
               label: { labelName: "UOM Name", labelKey: "STORE_PURCHASE_ORDER_UOM" },
@@ -134,6 +107,7 @@ const purchaseOrderDetailsCard = {
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].uom.code",
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
               props: {
+                disabled:true, 
                 className: "hr-generic-selectfield",
                 optionValue: "code",
                 optionLabel: "name"
@@ -153,6 +127,86 @@ const purchaseOrderDetailsCard = {
               }
             }
           },
+          indentQuantity: {
+            ...getTextField({
+              label: {
+                labelName: "Total Indent Quantity",
+                labelKey: "STORE_PURCHASE_ORDER_INDENT_QUNTITY"
+              },
+              placeholder: {
+                labelName: "Enter Indent Quantity",
+                labelKey: "STORE_PURCHASE_ORDER_INDENTT_QUNTITY_PLACEHOLDER"
+              },
+              pattern: getPattern("numeric-only"),
+              props: {
+                disabled:true,     
+              },
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentQuantity"
+            })
+          },
+          issuedQuantity: {
+            ...getTextField({
+              label: {
+                labelName: "Qty.  Issued",
+                labelKey: "STORE_MATERIAL_RECEIPT_QTY_ISSUED"
+              },
+              placeholder: {
+                labelName: "Enter Qty.  Issued",
+                labelKey: "STORE_MATERIAL_RECEIPT_QTY_ISSUED"
+              },
+              required: false,
+              props: {
+                disabled:true,     
+              },
+              pattern: getPattern("numeric-only"),
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].issuedQuantity"
+            })
+          },
+          orderQuantity: {
+            ...getTextField({
+              label: {
+                labelName: "Order Quantity",
+                labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY"
+              },
+              placeholder: {
+                labelName: "Enter Order Quantity",
+                labelKey: "STORE_PURCHASE_ORDER_BLNC_ORDR_PLACEHOLDER"
+              },
+              pattern: getPattern("numeric-only"),
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].orderQuantity"
+            }),
+            beforeFieldChange: async (action, state, dispatch) => {
+              const index= action.componentJsonpath.indexOf("items[");
+                 if(index !== -1){
+                  const itemIndex = action.componentJsonpath.charAt(index + 6);
+                  // let unitPrice =   get(state.screenConfiguration.preparedFinalObject,`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].unitPrice`,0)
+                  // let totalAcceptedvalue = unitPrice * Number(action.value)
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].receivedQuantity`, 0));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].userQuantity`, Number(action.value)));
+                  let unitPrice =   get(state.screenConfiguration.preparedFinalObject,`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].unitPrice`,0)
+                  let totalAcceptedvalue = unitPrice * Number(action.value)
+                 dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].totalValue`, totalAcceptedvalue));
+                 //set total value on Qty Change
+                 let cardJsonPath =
+                  "components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items";
+                 let pagename = `create-purchase-order`;
+                 let jasonpath =  "purchaseOrders[0].purchaseOrderDetails";
+                 let InputQtyValue = "indentQuantity";
+                 let TotalValue = "totalValue";
+                 let TotalQty ="userQuantity"
+                 let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty)
+                 if(Qty && Qty[0])
+                 {
+                  dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].totalvalue`, Qty[0].TotalValue));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].totalQty`, Qty[0].TotalQty));
+
+                 }
+                 }
+
+            }
+          }, 
+
           unitPrice: {
             ...getTextField({
               label: {
@@ -166,9 +220,36 @@ const purchaseOrderDetailsCard = {
               },
               pattern: getPattern("numeric-only"),
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].unitPrice"
-            })
+            }),
+            beforeFieldChange: async (action, state, dispatch) => {
+              const index= action.componentJsonpath.indexOf("items[");
+                 if(index !== -1){
+                  const itemIndex = action.componentJsonpath.charAt(index + 6);
+                  let orderQuantity =   get(state.screenConfiguration.preparedFinalObject,`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].orderQuantity`,0)
+                  let totalAcceptedvalue = orderQuantity * Number(action.value)
+                 dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].totalValue`, totalAcceptedvalue));
+                  //set total value on Qty Change
+                  let cardJsonPath =
+                  "components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items";
+                  let pagename = `create-purchase-order`;
+                  let jasonpath =  "purchaseOrders[0].purchaseOrderDetails";
+                  let InputQtyValue = "indentQuantity";
+                  let TotalValue = "totalValue";
+                  let TotalQty ="orderQuantity"
+                  let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty)
+                  if(Qty && Qty[0])
+                  {
+                   dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
+                   dispatch(prepareFinalObject(`purchaseOrders[0].totalvalue`, Qty[0].TotalValue));
+                   dispatch(prepareFinalObject(`purchaseOrders[0].totalQty`, Qty[0].TotalQty));
+ 
+                  }
+                }
+
+            }
+
           },
-          receivedQuantity: {
+          totalValue: {
             ...getTextField({
               label: {
                 labelName: "Total Value",
@@ -179,38 +260,41 @@ const purchaseOrderDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_TOTAL_VALUE_PLACEHOLDER"
               },
               required: true,
-              pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].receivedQuantity"
-            })
-          },
-          tenderQuantity: {
-            ...getTextField({
-              label: {
-                labelName: "Tender Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY"
-              },
-              placeholder: {
-                labelName: "Enter Tender Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY_PLACEHOLDER"
+              props: {
+                disabled: true,       
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity"
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].totalValue"
             })
           },
-          usedQuantity: {
-            ...getTextField({
-              label: {
-                labelName: "Used Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_USED_QLTY"
-              },
-              placeholder: {
-                labelName: "Enter Used Quantity",
-                labelKey: "STORE_PURCHASE_ORDER_USED_QLTY_PLACEHOLDER"
-              },
-              pattern: getPattern("numeric-only"),
-              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity"
-            })
-          },
+          // tenderQuantity: {
+          //   ...getTextField({
+          //     label: {
+          //       labelName: "Tender Quantity",
+          //       labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY"
+          //     },
+          //     placeholder: {
+          //       labelName: "Enter Tender Quantity",
+          //       labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY_PLACEHOLDER"
+          //     },
+          //     pattern: getPattern("numeric-only"),
+          //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity"
+          //   })
+          // },
+          // usedQuantity: {
+          //   ...getTextField({
+          //     label: {
+          //       labelName: "Used Quantity",
+          //       labelKey: "STORE_PURCHASE_ORDER_USED_QLTY"
+          //     },
+          //     placeholder: {
+          //       labelName: "Enter Used Quantity",
+          //       labelKey: "STORE_PURCHASE_ORDER_USED_QLTY_PLACEHOLDER"
+          //     },
+          //     pattern: getPattern("numeric-only"),
+          //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity"
+          //   })
+          // },
       
         },
         {
@@ -220,6 +304,9 @@ const purchaseOrderDetailsCard = {
         }
       )
     }),
+     onMultiItemDelete:(state, dispatch)=>{       
+
+      },
     onMultiItemAdd: (state, muliItemContent) => {
       let indentNumber="";
        indentNumber = getQueryArg(window.location.href, "indentNumber");
@@ -240,8 +327,11 @@ const purchaseOrderDetailsCard = {
           if ( key === "indentNumber") {
             set(muliItemContent[key], "props.disabled", true);
             set(muliItemContent[key], "props.value", indentNumber);
-          } else {
+          } 
+          else {
+            if(!indentNumber)
             set(muliItemContent[key], "props.disabled", false);
+            
           }
         });
 
@@ -261,6 +351,22 @@ const purchaseOrderDetailsCard = {
     sourceJsonPath: "purchaseOrders[0].purchaseOrderDetails",
     prefixSourceJsonPath:
       "children.cardContent.children.poDetailsCardContainer.children",
+      //Update Total value when delete any card configuration settings
+      //  cardJsonPath =
+      // "components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items";
+      //  pagename = `create-purchase-order`;
+      // jasonpath =  "purchaseOrders[0].purchaseOrderDetails";
+      // InputQtyValue = "indentQuantity";
+      // TotalValue = "totalValue";
+      cardtotalpropes:{
+        totalIndentQty:true,
+        pagename:`create-purchase-order`,
+        cardJsonPath:"components.div.children.formwizardThirdStep.children.purchaseOrderDetails.children.cardContent.children.purchaseOrderDetailsCard.props.items",
+        jasonpath:"purchaseOrders[0].purchaseOrderDetails",
+        InputQtyValue:"indentQuantity",
+        TotalValue:"totalValue",
+        TotalQty:"totalValue"
+      }
    // disableDeleteIfKeyExists: "id"
   },
   type: "array"
@@ -270,7 +376,7 @@ export const purchaseOrderDetails = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "Purchase Order Details",
-      labelKey: "STORE_PO_DETAILS_HEADER "
+      labelKey: "STORE_PO_DETAILS_HEADER"
     },
     {
       style: {  

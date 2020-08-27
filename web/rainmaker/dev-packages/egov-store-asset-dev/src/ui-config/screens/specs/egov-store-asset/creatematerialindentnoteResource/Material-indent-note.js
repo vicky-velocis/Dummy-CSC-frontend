@@ -37,6 +37,9 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     `indents`,
     []
   );
+  indents = get(indents,'indents');
+  if(indents && indents[0])
+  {
   let indentDetails = get(
     indents[0],
     `indentDetails`,
@@ -78,12 +81,18 @@ console.log(matcodes)
      if (payload.Employees) {
        const {screenConfiguration} = state;
         // const {stores} = screenConfiguration.preparedFinalObject;
+        const {designationsById} = state.common;
+        const empdesignation = payload.Employees[0].assignments[0].designation;
        const empDetails =
        payload.Employees.filter((item, index) =>  stores[0].storeInCharge.code === item.code);
      
        if(empDetails && empDetails[0] ){
          //alert(empDetails[0].user.name)        
          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",empDetails[0].user.name));  
+         if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", desgnName[0].name));
+          }
        }
        else{
         dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",""));  
@@ -93,6 +102,7 @@ console.log(matcodes)
   } catch (e) {
     console.log(e);
   }
+}
 };
   export const IndentMaterialIssueDetails = getCommonCard({
     header: getCommonTitle(
@@ -141,6 +151,7 @@ console.log(matcodes)
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.description",fromstore[0].description));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.billingAddress",fromstore[0].billingAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.department",fromstore[0].department));
+                dispatch(prepareFinalObject("materialIssues[0].fromStore.divisionName", fromstore[0].divisionName));              
                 //dispatch(prepareFinalObject("materialIssues[0].fromStore.department.name",fromstore[0].department));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
@@ -153,21 +164,6 @@ console.log(matcodes)
           }
           
         }
-      },
-      IssueDate: {
-        ...getDateField({
-          label: {
-            labelName: "Issue Date",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE"
-          },
-          placeholder: {
-            labelName: "Enter Issue Date",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Date") ,
-          jsonPath: "materialIssues[0].issueDate"
-        })
       },
       IndentingStore: {
         ...getTextField({
@@ -184,15 +180,33 @@ console.log(matcodes)
           
         })
       },
+      divisionName: getTextField({
+        label: {
+          labelName: "Issuing Store Division Name",
+          labelKey: "STORE_DETAILS_ISSUING_STORE_DIVISION_NAME",
+        },
+        props: {
+          className: "applicant-details-error",
+          disabled: true
+        },
+        placeholder: {
+          labelName: "Enter Issuing Store Division Name",
+          labelKey: "STORE_DETAILS_ISSUING_STORE_DIVISION_NAME_PLACEHOLDER",
+        },
+        pattern: getPattern("non-empty-alpha-numeric"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "materialIssues[0].fromStore.divisionName",
+      }),
+  
       IndentingDetpName: {
         ...getTextField({
           label: {
-            labelName: "Indenting Dept. Name",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_DEP_NAME"
+            labelName: "Issuing Dept. Name",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_DEP_NAME"
           },
           placeholder: {
-            labelName: "Enter Indenting Dept. Name",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_DEP_NAME"
+            labelName: "Enter Issuing Dept. Name",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_DEP_NAME_PLACEHOLDER"
           },
           props: {
             disabled: true,       
@@ -202,38 +216,92 @@ console.log(matcodes)
           jsonPath: "materialIssues[0].fromStore.department.name"
         })
       },
-      IssueToEmployee: {
+      IssueDate: {
+        ...getDateField({
+          label: {
+            labelName: "Issue Date",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE"
+          },
+          placeholder: {
+            labelName: "Enter Issue Date",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
+          },
+          required: true,
+          pattern: getPattern("Date") ,
+          jsonPath: "materialIssues[0].issueDate",
+          props: {           
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
+        })
+      },
+      createdBy: {
         ...getTextField({
           label: {
-            labelName: "Issue To Employee",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
           },
           placeholder: {
-            labelName: "Select Issue To Employee",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
-          },         
-          required: false,
-          jsonPath: "materialIssues[0].issuedToEmployee",         
-          props: {
-            disabled: true,       
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
           },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialIssues[0].createdByName"
         })
       },
-      issuedToDesignation: {
+      designation: {
         ...getTextField({
-          label: { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
           placeholder: {
             labelName: "Enter Designation",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION_PLACEHOLDER"
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
           },
-          required: false,
-          jsonPath: "materialIssues[0].issuedToDesignation",
-          
           props: {
-            disabled: true,       
+            disabled: true
           },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialIssues[0].designation"
         })
       },
+      // IssueToEmployee: {
+      //   ...getTextField({
+      //     label: {
+      //       labelName: "Issue To Employee",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+      //     },
+      //     placeholder: {
+      //       labelName: "Select Issue To Employee",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+      //     },         
+      //     required: false,
+      //     jsonPath: "materialIssues[0].issuedToEmployee",         
+      //     props: {
+      //       disabled: true,       
+      //     },
+      //   })
+      // },
+      // issuedToDesignation: {
+      //   ...getTextField({
+      //     label: { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //     placeholder: {
+      //       labelName: "Enter Designation",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION_PLACEHOLDER"
+      //     },
+      //     required: false,
+      //     jsonPath: "materialIssues[0].issuedToDesignation",
+          
+      //     props: {
+      //       disabled: true,       
+      //     },
+      //   })
+      // },
       Remark: {
         ...getTextField({
           label: {
@@ -249,7 +317,7 @@ console.log(matcodes)
             multiline: "multiline",
             rowsMax: 2,
           },
-          required: false,
+          required: true,
           pattern: getPattern("eventDescription") || null,
           jsonPath: "materialIssues[0].description"
         })

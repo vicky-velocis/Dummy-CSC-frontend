@@ -7,6 +7,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {  checkValueForNA } from "../../utils";
 const indentNumber = getQueryArg(window.location.href, "indentNumber");
 const gotoCreatePage = (state, dispatch) => {
   let createUrl="";
@@ -36,7 +37,10 @@ const assignmentCard = {
             labelName: "Indent No.",
             labelKey: "STORE_PURCHASE_ORDER_INDENT_NO"
           },
-          { jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentNumber" }
+          { 
+          jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentNumber",
+          callBack: checkValueForNA
+        }
         ),
         materialDscptn: getLabelWithValue(
           {
@@ -49,14 +53,15 @@ const assignmentCard = {
           { labelName: "Total Indent Quantity", labelKey: "STORE_PURCHASE_ORDER_INDENT_QUNTITY" },
           {
             jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].indentQuantity",
+            callBack: checkValueForNA
           }
         ),
-        userQuantity: getLabelWithValue(
-          { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
-          }
-        ),
+        // userQuantity: getLabelWithValue(
+        //   { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
+        //   }
+        // ),
         orderQuantity: getLabelWithValue(
           { labelName: "Order Quantity", labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY" },
           {
@@ -75,24 +80,24 @@ const assignmentCard = {
             jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].unitPrice",
           }
         ),
-        receivedQuantity: getLabelWithValue(
+        totalValue: getLabelWithValue(
           { labelName: "Total Value", labelKey: "STORE_PURCHASE_ORDER_TOTAL_VALUE" },
           {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].receivedQuantity"
+            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].totalValue"
           }
         ),
-        tenderQuantity: getLabelWithValue(
-          { labelName: "Tender Quantity", labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity",    
-          }
-        ),
-        usedQuantity: getLabelWithValue(
-          { labelName: "Used Quantity", labelKey: "STORE_PURCHASE_ORDER_USED_QLTY" },
-          {
-            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity",    
-          }
-        )
+        // tenderQuantity: getLabelWithValue(
+        //   { labelName: "Tender Quantity", labelKey: "STORE_PURCHASE_ORDER_TENDER_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].tenderQuantity",    
+        //   }
+        // ),
+        // usedQuantity: getLabelWithValue(
+        //   { labelName: "Used Quantity", labelKey: "STORE_PURCHASE_ORDER_USED_QLTY" },
+        //   {
+        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].usedQuantity",    
+        //   }
+        // )
       })
     }),
 
@@ -106,6 +111,11 @@ const assignmentCard = {
   },
   type: "array"
 };
+
+// const Total = {
+//   uiFramework: "custom-containers",
+//   componentPath: "MultiItem",
+// },
 
 export const getPODetailsView = (isReview = true) => {
   return getCommonGrayCard({
@@ -157,6 +167,7 @@ export const getPODetailsView = (isReview = true) => {
         }
       }
     },
-    viewOne: assignmentCard
+    viewOne: assignmentCard,
+   
   });
 };

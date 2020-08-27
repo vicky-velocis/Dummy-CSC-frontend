@@ -90,7 +90,7 @@ export const getIndentListDetailsView = (isReview = true) => {
           labelName: "Store Name",
             labelKey: "STORE_DETAILS_STORE_NAME"
         },
-        {  jsonPath: "indents[0].issueStore.name", }
+        {  jsonPath: "indents[0].indentStore.name", }
       ),
       divisionName: getLabelWithValue(
         { labelName: "Division Name", labelKey: "STORE_DETAILS_DIVISION_NAME" },
@@ -129,6 +129,18 @@ export const getIndentListDetailsView = (isReview = true) => {
         labelKey: "STORE_MATERIAL_INDENT_NARATION" },
         {
           jsonPath: "indents[0].narration",
+        }
+      ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "indents[0].createdByName",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "indents[0].designation",
         }
       ),
       

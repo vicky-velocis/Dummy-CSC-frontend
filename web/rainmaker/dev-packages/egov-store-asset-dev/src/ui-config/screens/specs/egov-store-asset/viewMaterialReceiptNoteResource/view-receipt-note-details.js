@@ -86,6 +86,13 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
    
     break1: getBreak(),
     viewOne: getCommonContainer({
+      mrnNumber: getLabelWithValue(
+        {
+          labelName: " Material Receipt Number",
+          labelKey: "STORE_MATERIAL_COMMON_MRN_NUMBER"
+        },
+        {  jsonPath: "materialReceipt[0].mrnNumber", }
+      ),
       StoreName: getLabelWithValue(
         {
           labelName: " Store Name",
@@ -95,7 +102,7 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
       ),
       ReceiptDate: getLabelWithValue(
         {labelName: "Receipt Date",
-        labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_DATE" },
+        labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_DATE " },
         { jsonPath: "materialReceipt[0].receiptDate", }
       ),
       ReceiptType: getLabelWithValue(
@@ -120,7 +127,7 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
       ),
       SupplierBillDate: getLabelWithValue(
         {labelName: "Supplier Bill Date",
-        labelKey: "STORE_MATERIAL_RECEIPT_SUPPLIER_BILL_DATE " },
+        labelKey: "STORE_MATERIAL_RECEIPT_SUPPLIER_BILL_DATE" },
         {
           jsonPath: "materialReceipt[0].supplierBillDate",
         }
@@ -164,6 +171,18 @@ export const getReceiptNoteListDetailsView = (isReview = true) => {
         labelKey: "STORE_MATERIAL_RECEIPT_INSPECTION_REMARK"},
         {
           jsonPath: "materialReceipt[0].inspectionRemarks",
+        }
+      ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "materialReceipt[0].createdByName",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "materialReceipt[0].designation",
         }
       ),
     }),

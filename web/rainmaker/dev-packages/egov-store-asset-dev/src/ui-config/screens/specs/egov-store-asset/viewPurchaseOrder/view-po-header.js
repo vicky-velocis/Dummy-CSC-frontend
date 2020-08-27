@@ -151,7 +151,7 @@ export const getPurchaseOrderHeaderView = (isReview = true) => {
       createdBy: getLabelWithValue(
         { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
         {
-          jsonPath: "purchaseOrders[0].createdBy",
+          jsonPath: "purchaseOrders[0].poCreatedBy",
         }
       ),
       designation: getLabelWithValue(

@@ -8,6 +8,7 @@ import {
   import { IndentMaterialIssueDetails } from "./creatematerialNonindentnoteResource/Material-indent-note"; 
   import { materialIssue } from "./creatematerialNonindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialNonindentnoteResource/other-details";
+  import {totalValue} from './creatematerialNonindentnoteResource/totalValue';
   import set from "lodash/set";
   import get from "lodash/get";
   import map from "lodash/map";
@@ -18,7 +19,7 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
-  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import { getTenantId ,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import {
     NonIndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
@@ -28,7 +29,7 @@ import {
       labelName: "Non-Indent Material Issue Details",
       labelKey: "STORE_MATERIAL_INDENT_NOTE_NON_INDENT_MATERIAL_ISSUE_NOTE_DETAILS"
     },
-    { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
+    // { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
   ];
   export const stepper = getStepperObject(
@@ -62,7 +63,8 @@ export const header = getCommonContainer({
       id: "apply_form2"
     },
     children: {
-      materialIssue
+      materialIssue,
+      totalValue
     },
     visible: false
   };
@@ -153,6 +155,32 @@ export const header = getCommonContainer({
     try {
       let response = await getStoresSearchResults(queryObject, dispatch);
       dispatch(prepareFinalObject("store", response));
+      // fetching employee designation
+      const userInfo = JSON.parse(getUserInfo());
+      if(userInfo){
+        dispatch(prepareFinalObject("materialIssues[0].createdByName", userInfo.name));
+        const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+        try { 
+          const payload = await httpRequest(
+            "post",
+            "/egov-hrms/employees/_search",
+            "_search",
+            queryParams
+          );
+          if(payload){
+            const {designationsById} = state.common;
+            const empdesignation = payload.Employees[0].assignments[0].designation;
+            if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+            
+            dispatch(prepareFinalObject("materialIssues[0].designation", desgnName[0].name));
+            }
+          }
+          
+        } catch (e) {
+          console.log(e);
+        }
+      }
     } catch (e) {
       console.log(e);
     }
@@ -232,6 +260,11 @@ export const header = getCommonContainer({
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);
       const SupllierData = getSupllierData(action,state, dispatch);
+      const step = getQueryArg(window.location.href, "step");
+      const issueNoteNumber = getQueryArg(window.location.href, "issueNoteNumber");
+      if(!step && !issueNoteNumber){
+        dispatch(prepareFinalObject("materialIssues[0]",null));
+      }
      // SEt Default data
 
      dispatch(
@@ -275,7 +308,7 @@ export const header = getCommonContainer({
     )
   );
  }
-   
+
       return action;
     },
   
