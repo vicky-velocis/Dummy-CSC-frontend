@@ -544,3 +544,167 @@ export const IndentConfigType = () => {
       },
   }
 }
+
+export const InventoryData = () => {
+  let Inventory = {
+    ResponseInfo: {
+      apiId: "Rainmaker",
+      ver: ".01",
+      ts: null,
+      resMsgId: "uief87324",
+      msgId: "20170310130900|en_IN",
+      status: "successful"
+    },
+    InventoryHeaderData: [
+      {
+        Title:
+        {
+          key:"MUNICIPAL_CORPORATION_CHANDIGARH",
+          value:"MUNICIPAL CORPORATION CHANDIGARH",
+        },
+        SubTitle:
+        {
+          key:"STORE_INVENTORY_REGISTER",
+          value:"Inventory Register",
+        },
+        StoreName:
+        {
+          key:"STORE_DETAILS_STORE_NAME",
+          value:"Store Name",
+        },
+        DepartmentName:
+        {
+          key:"STORE_DETAILS_DEPARTMENT_NAME",
+          value:"Department Name",
+        },
+        MaterialName:
+        {
+          key:"STORE_MATERIAL_NAME",
+          value:"Material  Name",
+        },
+        Rowdata:[
+          {
+            key:"STORE_COL_SL_NUMBER",
+            value:"Sr No.",
+            data:[
+              {
+
+              }
+            ],
+          },
+          {
+            key:"STORE_COL_OPENNING_BALENCE",
+            value:"Opening Balance",
+            data:[
+              {
+                key:"",
+                value:"Qty.",
+              },
+              {
+                key:"",
+                value:"Unit",
+              },
+              {
+                key:"",
+                value:"Value",
+              },
+            ],
+          },
+          {
+            key:"STORE_COL_RECEIPT",
+            value:"Receipt",
+            data:[
+              {
+                key:"",
+                value:"Receipt Date",
+              },
+              {
+                key:"",
+                value:"Material Receipt No.",
+              },
+              {
+                key:"",
+                value:"Department",
+              },
+              {
+                key:"",
+                value:"Purchase Qty.",
+              },
+              {
+                key:"",
+                value:"Purchase Unit",
+              },
+              {
+                key:"",
+                value:"Rate per Unit",
+              },
+              {
+                key:"",
+                value:"Total value of Inventory",
+              },
+              
+            ],
+          },
+          {
+            key:"STORE_COL_RECEIPT",
+            value:"Issue",
+            data:[
+              {
+                key:"",
+                value:"Issue Date",
+              },
+              {
+                key:"",
+                value:"Issue No.",
+              },
+              {
+                key:"",
+                value:"Issued Department Name",
+              },
+              {
+                key:"",
+                value:"Issued Qty.",
+              },
+              {
+                key:"",
+                value:"Issued Qty Unit",
+              },
+              {
+                key:"",
+                value:"Rate per Unit",
+              },
+              {
+                key:"",
+                value:"Total Value",
+              },
+            ],
+          },
+          {
+            key:"STORE_COL_BALENCE",
+            value:"Balance",
+            data:[
+              {
+                key:"",
+                value:"Qty.",
+              },
+              {
+                key:"",
+                value:"Unit",
+              },
+              {
+                key:"",
+                value:"Value",
+              },
+            ],
+          },
+        ]     
+
+      }
+     
+    ],
+    InventoryRowdata: [
+     
+    ]
+  };
+  return Inventory;
+}

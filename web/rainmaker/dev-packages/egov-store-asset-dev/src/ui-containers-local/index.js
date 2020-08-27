@@ -80,6 +80,10 @@ const WorkFlowContainer = Loadable({
   loader: () => import("./WorkFlowContainer"),
   loading: () => <Loading />
 })
+const InventoryContainer = Loadable({
+  loader: () => import("./InventoryContainer"),
+  loading: () => <Loading />
+})
 export {
   CustomTabContainer,
   LabelContainer,
@@ -98,5 +102,6 @@ export {
   UnderTakingContainer,
   DynamicTableContainer,
   MultiItem,
-  WorkFlowContainer
+  WorkFlowContainer,
+  InventoryContainer
 };
