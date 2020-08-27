@@ -39,6 +39,8 @@ import { uploadFile } from "egov-ui-framework/ui-utils/api";
 import commonConfig from "config/common.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
+import {RP_MONTH, RP_ASSESSMENT_AMOUNT, RP_REALIZATION_AMOUNT, RP_RECEIPT_NO} from '../ui-constants'
+import moment from "moment";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -359,17 +361,28 @@ export const updatePFOforSearchResults = async (
   action,
   state,
   dispatch,
-  transitNumber
+  transitNumber,
+  relations
 ) => {
 
   let queryObject = [
-    { key: "transitNumber", value: transitNumber }
+    { key: "transitNumber", value: transitNumber },
+    { key: "relations", value: relations}
   ];
 
   const payload = await getSearchResults(queryObject)
 
   if (payload && payload.Properties) {
-    dispatch(prepareFinalObject("Properties", payload.Properties));
+    const properies = payload.Properties.reduce((prev, curr) => {
+      let keys = Object.keys(curr);
+      keys = keys.filter(key => !!curr[key]).reduce((acc, key) => {
+        return {...acc, [key]: curr[key]}
+      }, {})
+      return [...prev, {
+        ...keys
+      }]
+    }, [])
+    dispatch(prepareFinalObject("Properties", properies));
   }
   setDocsForEditFlow(state, dispatch, "Properties[0].propertyDetails.applicationDocuments", "PropertiesTemp[0].uploadedDocsInRedux");
 };
@@ -921,6 +934,100 @@ export const handleFileUpload = (event, handleDocument, props, stopLoading) => {
         }
       }
     });
+  }
+};
+
+export const getXLSData = async (getUrl, componentJsonPath, screenKey, fileStoreId) => {
+  const queryObject = [
+    {key: "tenantId", value: "ch"},
+    {key: "fileStoreId", value: fileStoreId}
+  ]
+  try {
+    const response = await httpRequest(
+      "post",
+      getUrl,
+      "",
+      queryObject
+    )
+
+    if(!!response) {
+      const {demand, payment} = response;
+      let data = demand.map(item => {
+        const findItem = payment.find(payData => moment(new Date(payData.dateOfPayment)).format("MMM YYYY") === moment(new Date(item.generationDate)).format("MMM YYYY"));
+        return !!findItem ? {...item, ...findItem} : {...item}
+      })
+      data = data.map(item => ({
+        [RP_MONTH]: moment(new Date(item.generationDate)).format("MMM YYYY"),
+        [RP_ASSESSMENT_AMOUNT]: item.collectionPrincipal.toFixed(2),
+        [RP_REALIZATION_AMOUNT]: item.amountPaid.toFixed(2),
+        [RP_RECEIPT_NO]: item.receiptNo
+      }))
+
+      const {totalAssessment, totalRealization} = data.reduce((prev, curr) => {
+        prev = {
+          totalAssessment: prev.totalAssessment + Number(curr[RP_ASSESSMENT_AMOUNT]),
+          totalRealization: prev.totalRealization + Number(curr[RP_REALIZATION_AMOUNT])
+        } 
+        return prev
+      }, {totalAssessment: 0, totalRealization: 0})
+
+      data = [...data, {
+        [RP_MONTH]: "Total",
+        [RP_ASSESSMENT_AMOUNT]: totalAssessment.toFixed(2),
+        [RP_REALIZATION_AMOUNT]: totalRealization.toFixed(2),
+        [RP_RECEIPT_NO]: ""
+      }]
+
+      store.dispatch(
+        handleField(
+            screenKey,
+            componentJsonPath,
+            "props.data",
+            data
+        )
+      );
+      store.dispatch(
+        handleField(
+            screenKey,
+            componentJsonPath,
+            "visible",
+            true
+        )
+      );
+      store.dispatch(
+        prepareFinalObject("Properties[0].demands", demand)
+      )
+      store.dispatch(
+        prepareFinalObject("Properties[0].payments", payment)
+      )
+    }
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+  }
+}
+
+export const getXLSFileUrlFromAPI = async (fileStoreId,tenantId) => {
+  const queryObject = [
+  	//{ key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: tenantId || commonConfig.tenantId.length > 2 ? commonConfig.tenantId.split('.')[0] : commonConfig.tenantId },
+    { key: "fileStoreId", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/rp-services/v1/excel/read",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
   }
 };
 

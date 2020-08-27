@@ -1,4 +1,4 @@
-import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm ,download} from "../../utils";
+import { getCommonApplyFooter, validateFields,downloadAcknowledgementForm,downloadCertificateForm ,download} from "../../utils";
 import { getLabel, dispatchMultipleFieldChangeAction, convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
@@ -8,12 +8,15 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getSearchResults } from "../../../../../ui-utils/commons";
 
 const userInfo = JSON.parse(getUserInfo());
 export const DEFAULT_STEP = -1;
 export const DETAILS_STEP = 0;
 export const DOCUMENT_UPLOAD_STEP = 1;
 export const SUMMARY_STEP = 2;
+export const PAYMENT_DOCUMENT_UPLOAD_STEP = 2;
+export const PROPERTY_SUMMARY_STEP = 3;
 
 export const moveToSuccess = (rentedData, dispatch, type) => {
   const status = "success";
@@ -59,7 +62,7 @@ export const moveToSuccess = (rentedData, dispatch, type) => {
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["apply"],
-        "components.div.children.stepper.props.activeStep",
+        "components.div.children.addPropertyStepper.props.activeStep",
         0
     );
     let isFormValid = true;
@@ -136,12 +139,39 @@ const callBackForNext = async(state, dispatch) => {
               dispatch(
                 prepareFinalObject("PropertiesTemp[0].reviewDocData", reviewDocData)
             );
+            const transitNumber = get(state.screenConfiguration, "preparedFinalObject.Properties[0].transitNumber")
+            let queryObject = [
+              { key: "transitNumber", value: transitNumber },
+              { key: "relations", value: "finance"}
+            ];
+            const payload = await getSearchResults(queryObject)
+            if(!!payload) {
+              const {Properties} = payload
+              const {demands, payments} = Properties[0];
+              let propertyData = get(state.screenConfiguration, "preparedFinalObject.Properties[0]")
+              propertyData = {...propertyData, demands, payments}
+              dispatch(
+                prepareFinalObject("Properties[0]", propertyData)
+            );
+            }
     }
     }
-
-    if(activeStep === SUMMARY_STEP) {
-    isFormValid = await applyRentedProperties(state, dispatch);
-    isFormValid = true;
+    if(activeStep=== PAYMENT_DOCUMENT_UPLOAD_STEP){
+      const demands = get(state.screenConfiguration.preparedFinalObject, "Properties[0].demands") || []
+      const payments = get(state.screenConfiguration.preparedFinalObject, "Properties[0].payments") || []
+      if(!demands.length && !payments.length) {
+        isFormValid = false
+      }
+      if(isFormValid) {
+        // dispatch(prepareFinalObject("Properties[0].fileStoreId", paymentDocuments.fileStoreId));
+        const res = await applyRentedProperties(state, dispatch, activeStep)
+        if(!res) {
+          return
+        }
+      }
+    }
+    if(activeStep === PROPERTY_SUMMARY_STEP) {
+    isFormValid = await applyRentedProperties(state, dispatch, activeStep);
       if (isFormValid) {
         const rentedData = get(
           state.screenConfiguration.preparedFinalObject,
@@ -151,10 +181,10 @@ const callBackForNext = async(state, dispatch) => {
       }
     }
 
-    if(activeStep !== SUMMARY_STEP) {
+    if(activeStep !== PROPERTY_SUMMARY_STEP) {
         if (isFormValid) {
           
-            changeStep(state, dispatch, "apply");
+            changePropertyStep(state, dispatch, "apply");
         } else if (hasFieldToaster) {
             let errorMessage = {
                 labelName:
@@ -170,6 +200,12 @@ const callBackForNext = async(state, dispatch) => {
                     };
                     break;
                 case DOCUMENT_UPLOAD_STEP:
+                    errorMessage = {
+                        labelName: "Please upload all the required documents !",
+                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                    };
+                    break;
+                    case PAYMENT_DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
                         labelName: "Please upload all the required documents !",
                         labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
@@ -316,6 +352,67 @@ dispatch(toggleSnackbar(true, errorMessage, "warning"));
 }   
 }
 
+
+export const changePropertyStep = (
+  state,
+  dispatch,
+  screenName,
+  mode = "next",
+  defaultActiveStep = -1
+) => {
+  let activeStep = get(
+      state.screenConfiguration.screenConfig[screenName],
+      "components.div.children.addPropertyStepper.props.activeStep",
+      0
+  );
+  if (defaultActiveStep === DEFAULT_STEP) {
+      if (activeStep === PROPERTY_SUMMARY_STEP && mode === "next") {
+          activeStep = PROPERTY_SUMMARY_STEP
+          // const isDocsUploaded = get(
+          //     state.screenConfiguration.preparedFinalObject,
+          //     "LicensesTemp[0].reviewDocData",
+          //     null
+          // );
+          // activeStep = isDocsUploaded ? SUMMARY_STEP : DOCUMENT_UPLOAD_STEP;
+      } else {
+          activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
+      }
+  } else {
+      activeStep = defaultActiveStep;
+  }
+
+  const isPreviousButtonVisible = activeStep > DETAILS_STEP ? true : false;
+  const isNextButtonVisible = activeStep < PROPERTY_SUMMARY_STEP ? true : false;
+  const isSubmitButtonVisible = activeStep === PROPERTY_SUMMARY_STEP ? true : false;
+  const actionDefination = [
+      {
+          path: "components.div.children.addPropertyStepper.props",
+          property: "activeStep",
+          value: activeStep
+      },
+      {
+          path: "components.div.children.footer.children.previousButton",
+          property: "visible",
+          value: isPreviousButtonVisible
+      },
+      {
+          path: "components.div.children.footer.children.nextButton",
+          property: "visible",
+          value: isNextButtonVisible
+      },
+      {
+          path: "components.div.children.footer.children.submitButton",
+          property: "visible",
+          value: isSubmitButtonVisible
+      }
+  ];
+  dispatchMultipleFieldChangeAction(screenName, actionDefination, dispatch);
+  renderPropertySteps(activeStep, dispatch, screenName);
+};
+
+
+
+
 export const changeStep = (
     state,
     dispatch,
@@ -373,6 +470,50 @@ export const changeStep = (
     renderSteps(activeStep, dispatch, screenName);
   };
   
+
+  
+  export const renderPropertySteps = (activeStep, dispatch, screenName) => {
+    switch (activeStep) {
+        case DETAILS_STEP:
+            dispatchMultipleFieldChangeAction(
+                screenName,
+                getActionDefinationForPropertyStepper(
+                    "components.div.children.formwizardFirstStep"
+                ),
+                dispatch
+            );
+            break;
+        case DOCUMENT_UPLOAD_STEP:
+            dispatchMultipleFieldChangeAction(
+                screenName,
+                getActionDefinationForPropertyStepper(
+                    "components.div.children.formwizardSecondStep"
+                ),
+                dispatch
+            );
+            break;
+            case PAYMENT_DOCUMENT_UPLOAD_STEP:
+            dispatchMultipleFieldChangeAction(
+                screenName,
+                getActionDefinationForPropertyStepper(
+                    "components.div.children.formwizardThirdStep"
+                ),
+                dispatch
+            );
+            break;
+        default:
+            dispatchMultipleFieldChangeAction(
+                screenName,
+                getActionDefinationForPropertyStepper(
+                    "components.div.children.formwizardFourthStep"
+                ),
+                dispatch
+            );
+    }
+  };
+
+
+
   export const renderSteps = (activeStep, dispatch, screenName) => {
     switch (activeStep) {
         case DETAILS_STEP:
@@ -404,6 +545,48 @@ export const changeStep = (
     }
   };
   
+
+  export const getActionDefinationForPropertyStepper = path => {
+    const actionDefination = [
+        {
+            path: "components.div.children.formwizardFirstStep",
+            property: "visible",
+            value: true
+        },
+        {
+          path: "components.div.children.formwizardSecondStep",
+          property: "visible",
+          value: false
+        },
+        {
+            path: "components.div.children.formwizardThirdStep",
+            property: "visible",
+            value: false
+        },
+        {
+          path: "components.div.children.formwizardFourthStep",
+          property: "visible",
+          value: false
+      }
+    ];
+    for (var i = 0; i < actionDefination.length; i++) {
+        actionDefination[i] = {
+            ...actionDefination[i],
+            value: false
+        };
+        if (path === actionDefination[i].path) {
+            actionDefination[i] = {
+                ...actionDefination[i],
+                value: true
+            };
+        }
+    }
+    return actionDefination;
+  };
+
+
+
+
   export const getActionDefinationForStepper = path => {
     const actionDefination = [
         {
@@ -440,6 +623,11 @@ export const changeStep = (
   export const callBackForPrevious = (state, dispatch) => {
     changeStep(state, dispatch, "apply", "previous");
   };
+  
+  export const callBackForPreviousProperty = (state, dispatch) => {
+    changePropertyStep(state, dispatch, "apply", "previous");
+  };
+
 
 export const previousButton = {
   componentPath: "Button",
@@ -585,7 +773,7 @@ export const footer = getCommonApplyFooter({
       ...previousButton, 
       onClickDefination: {
         action: "condition",
-        callBack: callBackForPrevious
+        callBack: callBackForPreviousProperty
       },
     },
     nextButton: {
@@ -635,7 +823,7 @@ export const footer = getCommonApplyFooter({
     tenantId,
     pdfkey,
     applicationType,
-    payloadName
+    payloadName,
   ) => {
     /** MenuButton data based on status */
     let downloadMenu = [];
@@ -716,7 +904,6 @@ export const footer = getCommonApplyFooter({
           { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Owners[0], "tenantId") }
         ]
         download(receiptQueryString, Owners, data(), userInfo.name);
-        // generateReceipt(state, dispatch, "receipt_download");
       },
       leftIcon: "receipt"
     };
@@ -726,34 +913,81 @@ export const footer = getCommonApplyFooter({
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
-        console.log(Owners)
         const receiptQueryString = [
           { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "applicationNumber") },
           { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.DuplicateCopyApplications[0], "tenantId") }
         ]
         download(receiptQueryString, Owners, data(), userInfo.name);
-        // generateReceipt(state, dispatch, "receipt_download");
       },
       leftIcon: "receipt"
     };
+
+    let certificateDownloadObjectDC = {
+      label: { labelName: "Duplicate copy Letter", labelKey: "RP_DUPLICATE_COPY_LETTER" },
+      link: () => {
+        const { DuplicateCopyApplications, DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = DuplicateTemp[0].reviewDocData;
+        set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(DuplicateCopyApplications, data(),'dc');
+      },
+      leftIcon: "book"
+    };
+
+    let certificateDownloadObjectOT = {
+      label: { labelName: "Ownership transfer Letter", labelKey: "RP_OWNERSHIP_TRANSFER_LETTER" },
+      link: () => {
+        const { Owners, OwnersTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = OwnersTemp[0].reviewDocData;
+        set(Owners[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(Owners, data(),'ot');
+      },
+      leftIcon: "book"
+    };
     switch (status) {
       case "OT_APPROVED":
-        downloadMenu = [
-          receiptDownloadObject,
-          applicationDownloadObjectForOT
-        ];
-        printMenu = [
-          applicationPrintObject
-        ];
+          if(process.env.REACT_APP_NAME === "Citizen"){
+            downloadMenu = [
+              receiptDownloadObject,
+              applicationDownloadObjectForOT,
+            ];
+            printMenu = [
+              applicationPrintObject
+            ];
+          }else{
+            downloadMenu = [
+              receiptDownloadObject,
+              applicationDownloadObjectForOT,
+              certificateDownloadObjectOT
+              
+            ];
+            printMenu = [
+              applicationPrintObject
+            ];
+          }
+     
+       
         break;
       case "DC_APPROVED":
+        if(process.env.REACT_APP_NAME === "Citizen"){
           downloadMenu = [
             receiptDownloadObjectForDC,
-            applicationDownloadObjectForDC
+            applicationDownloadObjectForDC,
           ];
           printMenu = [
             applicationPrintObject
           ];
+        }else{
+          printMenu = [
+            applicationPrintObject
+          ];
+          downloadMenu = [
+            receiptDownloadObjectForDC,
+            applicationDownloadObjectForDC,
+            certificateDownloadObjectDC
+          ];
+        }
+         
+          
         break;
       case 'MG_APPROVED':
       case "MG_PENDINGCLVERIFICATION":
@@ -764,7 +998,8 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGCAAPPROVAL":
       case "MG_PENDINGAPRO":
       case "MG_REJECTED":
-      case "MG_PENDINGGRANTDETAIL":  
+      case "MG_PENDINGGRANTDETAIL": 
+      case "MG_PENDINGCLAPPROVAL":   
     
           downloadMenu = [
             applicationDownloadObjectForMG,
@@ -779,6 +1014,7 @@ export const footer = getCommonApplyFooter({
       case "DC_PENDINGCAAPPROVAL":
       case "DC_PENDINGAPRO":
       case "DC_REJECTED":
+      case "DC_PENDINGCLAPPROVAL":  
 
           downloadMenu = [
             applicationDownloadObjectForDC
@@ -793,6 +1029,8 @@ export const footer = getCommonApplyFooter({
           case "OT_PENDINGCAAPPROVAL":
           case "OT_PENDINGAPRO":
           case "OT_REJECTED":
+          case "OT_PENDINGCLAPPROVAL": 
+          case "OT_PENDINGSAAPPROVAL" :
               downloadMenu = [
                 applicationDownloadObjectForOT
               ];

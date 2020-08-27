@@ -71,7 +71,9 @@ class MultipleDocuments extends Component {
 
   render() {
       let {data = [], btnhide, contents, classes , dispatch} = this.props
-        if(data === null || data.length == 0){
+      data = !!data ? data : [];
+      data = data.filter(dat => !!dat.applicationDocuments)
+        if(data.length==0){
         return(
           <Card className="Multiple-card-212">  
           <CardContent>
@@ -96,9 +98,6 @@ class MultipleDocuments extends Component {
           </CardContent>
           </Card>
         )
-      }
-      else{
-        data = data.filter(dat => !!dat.applicationDocuments)
       }
       return (
           <div>

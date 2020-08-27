@@ -12,7 +12,7 @@ import { set } from "lodash";
 import {downloadPrintContainer} from "./applyResource/footer"
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getNoticeReviewProperty, getNoticeViolationPreviewReviewRentDetails, getNoticeRecoveryPreviewReviewRentDetails} from "./applyResource/review-property";
-
+import {downloadNoticeForm} from '../utils/index'
 
 const reviewNoticePropertyDetails = getNoticeReviewProperty(false);
 const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDetails(false);

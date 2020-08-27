@@ -6,12 +6,14 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { downloadCertificateForm} from "../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails,getReviewGrantDetails ,getGrantDetails,getGrantDetailsAvailed} from "./applyResource/review-property";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import set from "lodash/set"
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "RP_CLERK");
@@ -60,7 +62,11 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
     let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
     const removedDocs = applicationDocuments.filter(item => !item.active)
     applicationDocuments = applicationDocuments.filter(item => !!item.active)
-    properties = [{...properties[0], propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
+    properties = [{...properties[0], rentSummary: !!properties[0].rentSummary ? properties[0].rentSummary : {
+      balancePrincipal: "0",
+	    balanceInterest: "0",
+	    balanceAmount: "0"
+    } , propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
     dispatch(prepareFinalObject("Properties[0]", properties[0]));
     dispatch(
       prepareFinalObject(
@@ -103,6 +109,16 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
         ),
       );
   
+    if(state == "PM_APPROVED"){
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.rightdiv",
+          "visible",
+          true
+        )
+      );
+    }  
         
     if(state == 'PM_REJECTED'){
       let path = "components.div.children.headerDiv.children.searchButton"
@@ -153,7 +169,10 @@ export const onTabChange = async(tabIndex, dispatch, state) => {
     path = `/rented-properties/property-transitImages?transitNumber=${transitNumber}&tenantId=${tenantId}`
   } else if(tabIndex === 2) {
     path = `/rented-properties/notices?transitNumber=${transitNumber}&tenantId=${tenantId}`
-  }
+  } 
+  // else if(tabIndex === 3) {
+  //   path = `/rented-properties/rent-history?transitNumber=${transitNumber}&tenantId=${tenantId}`
+  // }
   dispatch(setRoute(path))
 }
 
@@ -166,8 +185,44 @@ export const tabs = [
   },
   {
     tabButton: { labelName: "Notices", labelKey: "RP_NOTICES" },
-  }
+  },
+  // {
+  //   tabButton: {labelName: "Rent History", labelKey: "RP_COMMON_RENT_HISTORY"}
+  // }
 ]
+
+const buttonComponent = (label) => ({
+  componentPath: "Button",
+  gridDefination: {
+    xs: 12,
+    sm: 2
+  },
+  props: {
+    variant: "contained",
+    style: {
+      color: "white",
+      backgroundColor: "#fe7a51",
+      borderColor:"#fe7a51",
+      borderRadius: "2px",
+      height: "48px"
+    }
+  },
+  children: {
+    buttonLabel: getLabel({
+      labelName: label,
+      labelKey: label
+    })
+  },
+  onClickDefination: {
+    action: "condition",
+    callBack: (state, dispatch) => {
+      const { Properties, PropertiesTemp } = state.screenConfiguration.preparedFinalObject;
+      const documents = PropertiesTemp[0].reviewDocData;
+      set(Properties[0],"additionalDetails.documents",documents)
+      downloadCertificateForm(Properties, [],'original');
+    }
+  }
+})
 
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
@@ -208,6 +263,22 @@ const rentedPropertiesDetailPreview = {
               onTabChange
             },
             type: "array",
+          },
+          rightdiv: {
+            visible:false,
+            uiFramework: "custom-atoms",
+            componentPath: "Container",
+            props: {
+              style: { justifyContent: "flex-end", marginTop: 10 }
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12,
+              align: "right",
+            },
+            children: {
+              allotmentButton: buttonComponent("Download Original Allotment Letter"),
+            }
           },
           taskStatus: {
             uiFramework: "custom-containers-local",
