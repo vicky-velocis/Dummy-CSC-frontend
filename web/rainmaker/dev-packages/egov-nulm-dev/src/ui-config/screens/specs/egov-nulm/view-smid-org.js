@@ -62,6 +62,7 @@ import {
 
   const createShgMemberHandle = (state, dispatch) => {
     const createUrl = `/egov-nulm/create-shg-member`;
+    dispatch(prepareFinalObject("NulmShgMemberRequest",{}))
     dispatch(setRoute(createUrl));
   };
 
@@ -156,8 +157,8 @@ const getSMIDOrgDetails = async(action,state, dispatch) =>{
 
   let NulmShgRequest = {};
   NulmShgRequest.tenantId = tenantId;
- // NulmShgRequest.shgId= applicationNumber;
-  NulmShgRequest.shgUuid=id;
+  NulmShgRequest.shgId= applicationNumber;
+ // NulmShgRequest.shgUuid=id;
   const requestBody = {NulmShgRequest}
   let response = await getSearchResults([],requestBody, dispatch,"smid-org");
 
@@ -188,6 +189,7 @@ const getSMIDOrgDetails = async(action,state, dispatch) =>{
     beforeInitScreen: (action, state, dispatch) => {
       getSMIDOrgDetails(action,state,dispatch);
       localStorage.setItem("shgUuid", id);
+      localStorage.setItem("shgApplicationNumber", applicationNumber);
       set(
         action.screenConfig,
         "components.div.children.headerDiv.children.header.children.applicationNumber.props.number",

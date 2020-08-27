@@ -145,6 +145,11 @@ export const handleDelete =  async(state, dispatch) =>{
     "NulmShgMemberRequest.applicationUuid",
     null
   );
+  let appStatus = get(
+    state.screenConfiguration.preparedFinalObject,
+    "NulmShgMemberRequest.applicationStatus",
+    null
+  );
   let NulmShgMemberRequest ={}
   NulmShgMemberRequest.shgUuid = shgUuid;
   NulmShgMemberRequest.applicationUuid = applicationUuid;
@@ -153,6 +158,7 @@ export const handleDelete =  async(state, dispatch) =>{
   
   const requestBody = {NulmShgMemberRequest}
   if(NulmShgMemberRequest.applicationUuid){
+    if( appStatus !== "DELETIONINPROGRESS"){
   try {
     const response = await httpRequest(
       "post",
@@ -168,6 +174,15 @@ export const handleDelete =  async(state, dispatch) =>{
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
   }
+}
+else{
+  const errorMessage = {
+    labelName: "Application is already in Deletion Progress",
+    labelKey: "NULM_SHG_MEMBER_MESSAGE_DELETE_STATUS"
+  };
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  return true;
+}
 }
 };
 
@@ -220,6 +235,7 @@ export const createUpdatePO = async (state, dispatch, action ,status) => {
     }
   })
  const shgUuid = localStorage.getItem("shgUuid");
+ 
 NulmShgMemberRequest.shgUuid = shgUuid;
 //localStorage.removeItem("shgUuid");
   const requestBody = {NulmShgMemberRequest};
@@ -235,7 +251,8 @@ NulmShgMemberRequest.shgUuid = shgUuid;
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-nulm/view-smid-org?id=${NulmShgMemberRequest.shgUuid}`));
+        const applNumber = localStorage.getItem("shgApplicationNumber");
+        dispatch(setRoute(`/egov-nulm/view-smid-org?applicationNumber=${applNumber}&id=${NulmShgMemberRequest.shgUuid}`));
       }
   
     } catch (error) {

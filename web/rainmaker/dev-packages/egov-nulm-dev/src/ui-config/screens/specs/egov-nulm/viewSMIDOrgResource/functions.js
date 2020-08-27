@@ -20,6 +20,8 @@ import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  handleCardDelete } from "../../../../../ui-utils/commons";
 import{httpRequest} from '../../../../../ui-utils/api'
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+let status = getQueryArg(window.location.href, "status");
 // SET ALL SIMPLE DATES IN YMD FORMAT
 const setDateInYmdFormat = (obj, values) => {
   values.forEach(element => {
@@ -135,7 +137,85 @@ export const handleApprove = async(state, dispatch) =>{
 handleRejectApprove(state, dispatch,"APPROVED");
 };
 export const handleApprovalAwait  = async(state, dispatch) =>{
- console.log("forward to employee if shg members more than 10")
+ //forward to employee if shg members more than 10
+ if(status !=="AWAITINGFORAPPROVAL"){
+ const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
+ let queryObject = [{ key: "tenantId", value: tenantId }];
+ let uuid = get(
+  state.screenConfiguration.preparedFinalObject,
+  "NulmShgRequest.shgUuid",
+  null
+);
+
+let NulmShgMemberRequest ={}
+NulmShgMemberRequest.shgUuid = uuid;
+NulmShgMemberRequest.tenantId = tenantId;
+const requestBody = {NulmShgMemberRequest}
+try {
+  const response = await httpRequest(
+    "post",
+    "/nulm-services/v1/smid/shg/member/_memberCount",
+    "",
+    queryObject,
+    requestBody
+  );
+   if(response && response.ResponseBody[0]){
+     const {membercount} = response.ResponseBody[0];
+     if(parseInt(membercount,10) >= 10){
+      let queryObject1  = [{ key: "tenantId", value: tenantId }];
+      let uuid = get(
+       state.screenConfiguration.preparedFinalObject,
+       "NulmShgRequest.shgUuid",
+       null
+     );
+     let applicationId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "NulmShgRequest.shgId",
+      null
+    );
+     let NulmShgRequest ={}
+     NulmShgRequest.shgUuid = uuid;
+     NulmShgRequest.tenantId = tenantId;
+     
+     const requestBody = {NulmShgRequest}
+     try {
+       const response = await httpRequest(
+         "post",
+         "/nulm-services/v1/smid/shg/_forwardToApproval",
+         "",
+         queryObject1,
+         requestBody
+       );
+        if(response){
+         dispatch(setRoute(`/egov-nulm/acknowledgement?screen=smidOrg&mode=forwardtoapproval&code=${applicationId}`));
+        }
+     
+     } catch (error) {
+       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
+     }
+     }
+     else{
+      const errorMessage = {
+        labelName: "SHG Member should be more than 10",
+        labelKey: "NULM_SHG_MEMBER_COUNT"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+      return true;
+     }
+   }
+
+} catch (error) {
+  dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
+}
+ }
+ else{
+  const errorMessage = {
+    labelName: "Application is already in awaiting for approval status",
+    labelKey: "NULM_SHG_MEMBER_MESSAGE_AWAIT_APPROVAL"
+  };
+  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+  return true;
+ }
  };
 
 const handleRejectApprove =  async(state, dispatch,status) => {

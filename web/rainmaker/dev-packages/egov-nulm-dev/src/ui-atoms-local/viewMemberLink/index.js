@@ -24,13 +24,13 @@ class  ViewMemberLinkContainer extends React.Component {
   }
 
   render() {
-    const {url,localizationLabels,labelText} =  this.props
+    const {url,localizationLabels,labelText,isDisabled} =  this.props
     let translatedLabel = getLocaleLabels(
       labelText,
       labelText,
       localizationLabels
     );
-    return <Button onClick = {()=> this.handleClick(url)}>{translatedLabel}</Button>;
+    return <Button disabled={isDisabled} onClick = {()=> this.handleClick(url)}>{translatedLabel}</Button>;
   }
  
 }
@@ -39,9 +39,12 @@ const mapStateToProps = (state, ownprops) => {
   const { jsonPath,urlLink } = ownprops;
   const { preparedFinalObject } = screenConfiguration;
   const applicationId = get(preparedFinalObject,jsonPath, "");
-  const url = `${urlLink}?applicationId=${applicationId}`;
+  const jsonPathStatus = jsonPath.replace("applicationId","applicationStatus")
+  const status = get(preparedFinalObject,jsonPathStatus, "");
+  const isDisabled = status ==="DELETED"?true : false;
+  const url = `${urlLink}?applicationId=${applicationId}&status=${status}`;
   const { localizationLabels } = app;
-  return { preparedFinalObject, jsonPath, url,localizationLabels };
+  return { preparedFinalObject, jsonPath, url,localizationLabels,isDisabled };
 };
 const mapDispatchToProps = (dispatch) => {
   return {

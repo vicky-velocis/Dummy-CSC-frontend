@@ -53,7 +53,7 @@ import {
               urlLink: `view-shg-member`,
               visibility: "hidden",
               labelText:"NULM_SHG_MEMBER_VIEW_DETAIL",
-              jsonPath: "NulmShgRequest.smidShgMemberApplication[0].applicationUuid",
+              jsonPath: "NulmShgRequest.smidShgMemberApplication[0].applicationId",
             },
             visible: true
           },

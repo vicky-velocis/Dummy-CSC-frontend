@@ -10,8 +10,8 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getSearchResults } from "../../../../ui-utils/commons";
-  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
-  let status = getQueryArg(window.location.href, "status");
+  const applicationNumber = getQueryArg(window.location.href, "applicationId");
+  const status = getQueryArg(window.location.href, "status");
 
   const applicationNumberContainer = () => {
 
@@ -142,11 +142,11 @@ import {
   const getSMIDDetails = async(state, dispatch) =>{
     
     const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-  
+    const applicationNumber = getQueryArg(window.location.href, "applicationId");
     let NulmShgMemberRequest = {};
     NulmShgMemberRequest.tenantId = tenantId;
-    //NulmShgMemberRequest.applicationId= applicationNumber;
-    NulmShgMemberRequest.applicationUuid= applicationNumber;
+    NulmShgMemberRequest.applicationId= applicationNumber;
+   // NulmShgMemberRequest.applicationUuid= applicationNumber;
     
     const requestBody = {NulmShgMemberRequest}
     let response = await getSearchResults([],requestBody, dispatch,"shgMember");
@@ -172,11 +172,12 @@ import {
     }
   }
   const roleBasedValidationForFooter = () => {
+    const status = getQueryArg(window.location.href, "status");
     if(process.env.REACT_APP_NAME === "Employee"){
-        return poViewFooter();
+        return {};
     }
     else{
-          return poViewFooter() 
+          return status==="DELETED" ? {} : poViewFooter() 
     }
    
   }
@@ -186,6 +187,8 @@ import {
     name: "view-shg-member",
     beforeInitScreen: (action, state, dispatch) => {
       getSMIDDetails(state, dispatch);
+      const applicationNumber = getQueryArg(window.location.href, "applicationId");
+      const status = getQueryArg(window.location.href, "status");
       set(
         action.screenConfig,
         "components.div.children.headerDiv.children.header.children.applicationNumber.props.number",

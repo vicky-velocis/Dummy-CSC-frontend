@@ -56,8 +56,33 @@ import {
   };
 
   const getData = async (action, state, dispatch) => {
-   // await getMDMSData(action, state, dispatch);
-  };
+
+    const  data =  process.env.REACT_APP_NAME === "Employee" ?  [
+     {
+       value: "AWAITINGFORAPPROVAL",
+       label: "Awaiting for Approval"
+     },
+     {
+       value: "APPROVED",
+       label: "Approved"
+     }
+    ]:[
+       {
+         value: "CREATED",
+         label: "Created"
+       },
+       {
+         value: "REJECTED",
+         label: "Rejected"
+       },
+       {
+         value: "APPROVED",
+         label: "Approved"
+       }
+     ];
+     dispatch(prepareFinalObject("searchScreenMdmsData.smidOrg.status", data));
+    // await getMDMSData(action, state, dispatch);
+   };
   
   const smidSearchAndResult = {
     uiFramework: "material-ui",

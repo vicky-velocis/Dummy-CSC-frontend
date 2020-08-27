@@ -119,23 +119,13 @@ export const searchForm = getCommonCard({
         xs: 12,
         sm: 4,
       },
-    //  sourceJsonPath: "searchScreenMdmsData.store-asset.MaterialType",
+      sourceJsonPath: "searchScreenMdmsData.smidOrg.status",
       props: {
         optionValue: "value",
         optionLabel: "label",
         style : {
         //  display: process.env.REACT_APP_NAME === "Employee" ? "none" : "",
         },
-        data: [
-          {
-            value: "CREATED",
-            label: "CREATED"
-          },
-          {
-            value: "APPROVED",
-            label: "APPROVED"
-          }
-        ],
       },
     }),
   }),
