@@ -2,7 +2,7 @@ import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTit
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
-import { getDetailsFromProperty ,getDuplicateDetailsFromProperty} from "../../../../../ui-utils/apply";
+import { getDetailsFromProperty ,getDuplicateDetailsFromProperty, getOfflineRentPaymentDetailsFromProperty} from "../../../../../ui-utils/apply";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const propertyHeader = getCommonTitle(
@@ -326,6 +326,60 @@ const getPropertyDetailsForAccount = () => {
     }
 }
 
+const offlinePaymentTransitNumberField = {
+    ...transitNumberConfig,
+    jsonPath: "OfflineRentPayment[0].property.transitNumber",
+    iconObj: {
+        iconName: "search",
+        position: "end",
+        color: "#FE7A51",
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) => {
+            getOfflineRentPaymentDetailsFromProperty(state, dispatch);
+          }
+        }
+      },
+      title: {
+        value:
+          "If you have already assessed your property, then please search your property by your transit Number",
+        key: "If you have already assessed your property, then please search your property by your transit Number"
+      },
+      infoIcon: "info_circle",
+      beforeFieldChange: (action, state, dispatch) => {
+        dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.id",
+              ""
+            )
+          )
+        dispatch(
+            prepareFinalObject(
+              "Properties[0].colony",
+              ""
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].pincode",
+              ""
+            )
+          )
+      }
+}
+const getPropertyDetailsForOfflineRentPayment = () => {
+    return {
+        header: transitSiteHeader,
+        detailsContainer: getCommonContainer({
+            transitNumber: getTextField(offlinePaymentTransitNumberField),
+            colony: getTextField({...colonyFieldConfig,jsonPath: "Properties[0].colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            pincode: getTextField({...pincodeField, jsonPath: "OfflineRentPayment[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+            ownername: getTextField({...ownerNameField , jsonPath: "OfflineRentPayment[0].applicant[0].name", props: {...ownerNameField.props, disabled: true}})
+        })
+    }
+}
+
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
 export const transitSiteDetailsForAccountStatement = getCommonCard(getPropertyDetailsForAccount())
+export const transitSiteDetailsForOfflineRentPayment = getCommonCard(getPropertyDetailsForOfflineRentPayment())

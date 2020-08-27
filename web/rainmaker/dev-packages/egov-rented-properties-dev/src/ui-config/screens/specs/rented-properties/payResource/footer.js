@@ -393,3 +393,43 @@ export const footer = getCommonApplyFooter({
     },
   }
 });
+
+export const offlinePaymentfooter = getCommonApplyFooter({
+  submitButton: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      style: {
+        minWidth: "200px",
+        height: "48px",
+        marginRight: "45px"
+      }
+    },
+    children: {
+      submitButtonLabel: getLabel({
+        labelName: "Submit",
+        labelKey: "RP_COMMON_BUTTON_SUBMIT"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: callBackForOfflinePay
+    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   action: "PAY"
+    // }
+  }
+})
+
+const callBackForOfflinePay = async(state, dispatch) => {
+  console.log("paid")
+}

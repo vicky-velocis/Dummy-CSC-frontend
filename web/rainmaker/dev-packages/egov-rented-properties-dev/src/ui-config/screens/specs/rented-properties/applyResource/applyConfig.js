@@ -4,7 +4,7 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {noticePropertyDetails,ownerDetailsForNotice,ownerDetailsForViolationNotice,paymentDetailsNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
-import {propertyDetails, transitSiteDetails ,transitSiteDetailsForAccountStatement} from './propertyDetails';
+import {propertyDetails, transitSiteDetails ,transitSiteDetailsForAccountStatement, transitSiteDetailsForOfflineRentPayment} from './propertyDetails';
 import {accountStatementGenerationDetails ,amountField} from './accountStatementDetails';
 import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite,transitSitePropertyDetails,transitSiteComments} from './addressDetails';
 import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
@@ -14,7 +14,8 @@ import {documentList} from './documentList'
 import {rentedReviewDetails, ownerShipReviewDetails, mortgageReviewDetails,duplicateCopyDetails} from './reviewDetails'
 import { getEpochForDate, sortByEpoch } from "../../utils";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
-import {RP_MONTH, RP_ASSESSMENT_AMOUNT, RP_REALIZATION_AMOUNT, RP_RECEIPT_NO} from '../../../../../ui-constants'
+import {RP_MONTH, RP_ASSESSMENT_AMOUNT, RP_REALIZATION_AMOUNT, RP_RECEIPT_NO} from '../../../../../ui-constants';
+import { rentSummaryDetails, paymentInfo } from './offlineRentPaymentDetails'
 
 const documentCardConfig = {
   header: getCommonTitle(
@@ -398,3 +399,17 @@ export const noticeViolationForm = {
     document
   },
 }
+
+export const formwizardOfflineRentPayment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form1"
+  },
+  children: {
+    transitSiteDetailsForOfflineRentPayment,
+    rentSummaryDetails,
+    paymentInfo
+  },
+  visible: true
+};
