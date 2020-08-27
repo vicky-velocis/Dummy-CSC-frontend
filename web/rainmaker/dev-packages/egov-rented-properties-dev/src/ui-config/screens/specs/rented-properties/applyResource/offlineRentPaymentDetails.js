@@ -52,7 +52,7 @@ const principalAmountField = {
   maxLength: 40,
   required: false,
   disabled: true,
-  jsonPath: "",
+  jsonPath: "OfflineRentPayment[0].property.balancePrincipal",
   errorMessage: "",
 }
 
@@ -71,7 +71,7 @@ const interestField = {
   },
   minLength: 4,
   maxLength: 40,
-  jsonPath: "",
+  jsonPath: "OfflineRentPayment[0].property.balanceInterest",
   disabled: true,
   errorMessage: "",
 }
@@ -91,7 +91,7 @@ const totalField = {
   },
   minLength: 4,
   maxLength: 40,
-  jsonPath: "",
+  jsonPath: "OfflineRentPayment[0].property.balanceAmount",
   disabled: true,
   errorMessage: "",
 }

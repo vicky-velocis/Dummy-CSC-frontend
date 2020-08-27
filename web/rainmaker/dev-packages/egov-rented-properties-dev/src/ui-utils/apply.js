@@ -941,6 +941,24 @@ export const getOfflineRentPaymentDetailsFromProperty = async (state, dispatch) 
               findOwner.ownerDetails.name
             )
           )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.balancePrincipal",
+              Properties[0].rentSummary.balancePrincipal
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.balanceInterest",
+              Properties[0].rentSummary.balanceInterest
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.balanceAmount",
+              Properties[0].rentSummary.balanceAmount
+            )
+          )
           
           return true
         }
