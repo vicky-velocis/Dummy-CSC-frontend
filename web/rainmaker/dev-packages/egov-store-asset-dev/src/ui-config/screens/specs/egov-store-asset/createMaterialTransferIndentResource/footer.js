@@ -116,7 +116,10 @@ export const callBackForNext = async (state, dispatch) => {
             dispatch(prepareFinalObject("indents[0].indentDetails",storeMappingTemp)
           );
             }
-              changeStep(state, dispatch);
+            if(activeStep ===1)
+            moveToReview(dispatch)
+            else
+            changeStep(state, dispatch);
             }
             else{
               const LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")

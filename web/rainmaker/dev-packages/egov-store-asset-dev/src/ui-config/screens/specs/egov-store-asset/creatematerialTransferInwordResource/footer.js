@@ -168,7 +168,10 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject("transferInwards[0].receiptDetails",storeMappingTemp)
       );
         }
-          changeStep(state, dispatch);
+        if(activeStep ===1)
+        moveToReview(dispatch)
+        else
+        changeStep(state, dispatch);
         }
         else{
           if(DuplicatItem[0].IsDuplicatItem)

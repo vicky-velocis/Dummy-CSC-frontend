@@ -20,7 +20,7 @@ import {
   export const stepsData = [
     { labelName: "Material Transfer Outward", labelKey: "STORE_MTON_HEADER" },
     { labelName: "Material Transfer Outward Details", labelKey: "STORE_MTON_DETAILS_HEADER" },
-    { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
+    // { labelName: "Approval Information", labelKey: "STORE_PO_APPROVAL_INFO_HEADER" },
   ];
   export const stepper = getStepperObject(
     { props: { activeStep: 0 } },
@@ -126,6 +126,32 @@ const getTransferIndentData = async (action, state, dispatch) => {
      
     // }
     dispatch(prepareFinalObject("TransferIndent", response));
+          // fetching employee designation
+          const userInfo = JSON.parse(getUserInfo());
+          if(userInfo){
+            dispatch(prepareFinalObject("materialIssues[0].createdByName", userInfo.name));
+            const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+            try { 
+              const payload = await httpRequest(
+                "post",
+                "/egov-hrms/employees/_search",
+                "_search",
+                queryParams
+              );
+              if(payload){
+                const {designationsById} = state.common;
+                const empdesignation = payload.Employees[0].assignments[0].designation;
+                if(designationsById){
+                const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+               
+                dispatch(prepareFinalObject("materialIssues[0].designation", desgnName[0].name));
+                }
+              }
+              
+            } catch (e) {
+              console.log(e);
+            }
+          }
       
     } catch (e) {
       console.log(e);

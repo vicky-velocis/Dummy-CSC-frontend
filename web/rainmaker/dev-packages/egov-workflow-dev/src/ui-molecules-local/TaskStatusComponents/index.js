@@ -188,7 +188,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         style={{ marginTop: 15, paddingRight: 20 }}
       >
         <Typography variant="caption">
-          <LabelContainer labelName="Date" labelKey="TL_DATE_LABEL" />
+          {/* <LabelContainer labelName="Date" labelKey="TL_DATE_LABEL" /> */}
+          <LabelContainer labelName="Date" labelKey="Date" />
         </Typography>
         <Typography variant="body2">
           <LabelContainer
@@ -209,7 +210,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         <Typography variant="caption">
           <LabelContainer
             labelName="Updated By"
-            labelKey="TL_UPDATED_BY_LABEL"
+            // labelKey="TL_UPDATED_BY_LABEL"
+            labelKey="Updated By"
           />
         </Typography>
         <Typography variant="body2">
@@ -227,7 +229,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         <Typography variant="caption">
           <LabelContainer
             labelName="Status"
-            labelKey="TL_COMMON_TABLE_COL_STATUS"
+            // labelKey="TL_COMMON_TABLE_COL_STATUS"
+            labelKey="Status"
           />
         </Typography>
         <Typography

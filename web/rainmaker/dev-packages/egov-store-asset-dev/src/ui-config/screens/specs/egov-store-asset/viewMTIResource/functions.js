@@ -9,6 +9,7 @@ import {
   
   getMaterialIndentSearchResults,  
   GetMdmsNameBycode,
+  getWFPayload,
   
 } from "../../../../../ui-utils/storecommonsapi";
 import {
@@ -183,16 +184,18 @@ export const createUpdateIT = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       const response = await httpRequest(
         "post",
         "/store-asset-services/indents/_create",
         "",
         queryObject,
-        requestBody
+        { indents: requestBody.indents, workFlowDetails: wfobject }
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=create&code=${response.indents[0].indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=create&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-transfer?applicationNumber=${response.indents[0].indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
@@ -207,8 +210,9 @@ export const createUpdateIT = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=update&code=${response.indents[0].indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=INDENTTFR&mode=update&code=${response.indents[0].indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-transfer?applicationNumber=${response.indents[0].indentNumber}&tenantId=${response.indents[0].tenantId}&Status=${response.indents[0].indentStatus}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
@@ -220,12 +224,17 @@ export const getMaterialIndentTransferData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  applicationNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "indentNumber",
+      value: applicationNumber
     },
     {
       key: "tenantId",
@@ -234,8 +243,9 @@ export const getMaterialIndentTransferData = async (
   ];
 
  let response = await getMaterialIndentSearchResults(queryObject, dispatch);
-response = response.indents.filter(x=>x.id === id)
-if(response && response[0])
+//response = response.indents.filter(x=>x.id === id)
+response = response.indents.filter(x => x.indentNumber === applicationNumber)
+if (response && response[0])
 {
   for (let index = 0; index < response[0].indentDetails.length; index++) {
     const element = response[0].indentDetails[index];

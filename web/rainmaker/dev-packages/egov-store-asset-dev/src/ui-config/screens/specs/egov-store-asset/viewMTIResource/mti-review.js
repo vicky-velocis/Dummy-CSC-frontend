@@ -13,7 +13,7 @@ export const MTIReviewDetails = isReview => {
   return getCommonCard({
     viewMTIHeader,
     viewMTIDetails,
-    viewApprovalInfo,
+   // viewApprovalInfo,
     footer
   });
 };
