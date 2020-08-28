@@ -228,89 +228,56 @@ class SingleApplication extends React.Component {
         return content
       }
     })
-    return (
-      <div className="application-card">
-        {searchResults && searchResults.length > 0 ? (
-          searchResults.map(item => {
-            return (
-              <Card className={classes.card}>
-                <CardContent>
-                  {
-                    applicationType === 'OT' && (
-                      <div>
-                      {(item.applicationState === `${applicationType}_PENDINGCLVERIFICATION`|| 
-                      item.applicationState === `${applicationType}_PENDINGJAVERIFICATION`||
-                      item.applicationState === `${applicationType}_PENDINGSAVERIFICATION` ||
-                      item.applicationState === `${applicationType}_PENDINGCLARIFICATION` ||
-                      item.applicationState === `${applicationType}_PENDINGSIVERIFICATION` ||
-                      item.applicationState === `${applicationType}_PENDINGCAAPPROVAL` ||
-                      item.applicationState === `${applicationType}_PENDINGCLAPPROVAL` ||
-                      item.applicationState === `${applicationType}_PENDINGAPRO` ||
-                      item.applicationState === `${applicationType}_PENDINGPAYMENT` ||
-                      item.applicationState ===` ${applicationType}_REJECTED` ||
-                      item.applicationState === `${applicationType}_PENDINGGRANTDETAIL`) && contentsWithoutAllotment.map(content => {
-                        return (
-                          <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={6}>
-                              <Label
-                                labelKey={content.label}
-                                fontSize={14}
-                                style={{
-                                  fontSize: 14,
-                                  color: "rgba(0, 0, 0, 0.60"
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Label
-                                labelKey={this.generateLabelKey(content, item)}
-                                fontSize={14}
-                                checkValueForNA={checkValueForNA}
-                                style={{
-                                  fontSize: 14,
-                                  color: "rgba(0, 0, 0, 0.87"
-                                }}
-                              />
-                            </Grid>
-                          </Grid>
-                        );
-                      })
-                      }
-                       {item.applicationState === `${applicationType}_APPROVED` && contents.map(content => {
-                        return (
-                          <Grid container style={{ marginBottom: 12 }}>
-                            <Grid item xs={6}>
-                              <Label
-                                labelKey={content.label}
-                                fontSize={14}
-                                style={{
-                                  fontSize: 14,
-                                  color: "rgba(0, 0, 0, 0.60"
-                                }}
-                              />
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Label
-                                labelKey={this.generateLabelKey(content, item)}
-                                fontSize={14}
-                                checkValueForNA={checkValueForNA}
-                                style={{
-                                  fontSize: 14,
-                                  color: "rgba(0, 0, 0, 0.87"
-                                }}
-                              />
-                            </Grid>
-                          </Grid>
-                        );
-                      })}
-                      {/* </Link> */}
-                    </div>
-                    )
-                  }
-                  {
-                      (applicationType === 'DC' || applicationType === 'MG') && (
+    if(moduleName == 'OWNERSHIPTRANSFERRP'){
+      return (
+        <div className="application-card">
+          {searchResults && searchResults.length > 0 ? (
+            searchResults.map(item => {
+              return (
+                <Card className={classes.card}>
+                  <CardContent>
+                    {
+                      applicationType === 'OT' && (
                         <div>
-                         { contents.map(content => {
+                        {(item.applicationState === `${applicationType}_PENDINGCLVERIFICATION`|| 
+                        item.applicationState === `${applicationType}_PENDINGJAVERIFICATION`||
+                        item.applicationState === `${applicationType}_PENDINGSAVERIFICATION` ||
+                        item.applicationState === `${applicationType}_PENDINGCLARIFICATION` ||
+                        item.applicationState === `${applicationType}_PENDINGSIVERIFICATION` ||
+                        item.applicationState === `${applicationType}_PENDINGCAAPPROVAL` ||
+                        item.applicationState === `${applicationType}_PENDINGCLAPPROVAL` ||
+                        item.applicationState === `${applicationType}_PENDINGAPRO` ||
+                        item.applicationState === `${applicationType}_PENDINGPAYMENT` ||
+                        item.applicationState ===` ${applicationType}_REJECTED` ||
+                        item.applicationState === `${applicationType}_PENDINGGRANTDETAIL`) && contentsWithoutAllotment.map(content => {
+                          return (
+                            <Grid container style={{ marginBottom: 12 }}>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey={content.label}
+                                  fontSize={14}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.60"
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey={this.generateLabelKey(content, item)}
+                                  fontSize={14}
+                                  checkValueForNA={checkValueForNA}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.87"
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                          );
+                        })
+                        }
+                         {item.applicationState === `${applicationType}_APPROVED` && contents.map(content => {
                           return (
                             <Grid container style={{ marginBottom: 12 }}>
                               <Grid item xs={6}>
@@ -337,15 +304,128 @@ class SingleApplication extends React.Component {
                             </Grid>
                           );
                         })}
+                        {/* </Link> */}
                       </div>
                       )
-                  }
-                    {moduleName === "TL" &&
-                        <div>
+                    }
+                    {
+                        (applicationType === 'DC' || applicationType === 'MG') && (
+                          <div>
+                           { contents.map(content => {
+                            return (
+                              <Grid container style={{ marginBottom: 12 }}>
+                                <Grid item xs={6}>
+                                  <Label
+                                    labelKey={content.label}
+                                    fontSize={14}
+                                    style={{
+                                      fontSize: 14,
+                                      color: "rgba(0, 0, 0, 0.60"
+                                    }}
+                                  />
+                                </Grid>
+                                <Grid item xs={6}>
+                                  <Label
+                                    labelKey={this.generateLabelKey(content, item)}
+                                    fontSize={14}
+                                    checkValueForNA={checkValueForNA}
+                                    style={{
+                                      fontSize: 14,
+                                      color: "rgba(0, 0, 0, 0.87"
+                                    }}
+                                  />
+                                </Grid>
+                              </Grid>
+                            );
+                          })}
+                        </div>
+                        )
+                    }
+                      {moduleName === "TL" &&
+                          <div>
+                            <Grid container style={{ marginBottom: 12 }}>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey="TL_COMMON_TABLE_VALIDITY"
+                                  fontSize={14}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.60"
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey={this.generatevalidity(item)}
+                                  fontSize={14}
+                                  checkValueForNA={checkValueForNA}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.87"
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
+                        }
+    
+                        {/* <Link to={this.onCardClick(item)}> */}
+                        <div style={{ cursor: "pointer" }} onClick={() => {
+                          const url = this.onCardClick(item);
+                          // setRoute(url);
+                        }}>
+                          <Label
+                            labelKey={moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
+                            textTransform={"uppercase"}
+                            style={{
+                              color: "#fe7a51",
+                              fontSize: 14,
+                              textTransform: "uppercase"
+                            }}
+                          />
+                        </div>
+                  </CardContent>
+                </Card>
+              );
+            })
+          ) : (
+              <div className="no-assessment-message-cont">
+                <Label
+                  labelKey={"No results Found!"}
+                  style={{ marginBottom: 10 }}
+                />
+                <Button
+                  style={{
+                    height: 36,
+                    lineHeight: "auto",
+                    minWidth: "inherit"
+                  }}
+                  className="assessment-button"
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onButtonCLick}
+                >
+                  <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+                </Button>
+              </div>
+            )}
+        </div>
+      );
+    }else{
+      return (
+        <div className="application-card">
+          {searchResults && searchResults.length > 0 ? (
+            searchResults.map(item => {
+              return (
+                <Card className={classes.card}>
+                  <CardContent>
+                    <div>
+                      {contents.map(content => {
+                        return (
                           <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={6}>
                               <Label
-                                labelKey="TL_COMMON_TABLE_VALIDITY"
+                                labelKey={content.label}
                                 fontSize={14}
                                 style={{
                                   fontSize: 14,
@@ -355,7 +435,7 @@ class SingleApplication extends React.Component {
                             </Grid>
                             <Grid item xs={6}>
                               <Label
-                                labelKey={this.generatevalidity(item)}
+                                labelKey={this.generateLabelKey(content, item)}
                                 fontSize={14}
                                 checkValueForNA={checkValueForNA}
                                 style={{
@@ -365,8 +445,9 @@ class SingleApplication extends React.Component {
                               />
                             </Grid>
                           </Grid>
-                        </div>
-                      }
+                        );
+                      })}
+
   
                       {/* <Link to={this.onCardClick(item)}> */}
                       <div style={{ cursor: "pointer" }} onClick={() => {
@@ -383,33 +464,37 @@ class SingleApplication extends React.Component {
                           }}
                         />
                       </div>
-                </CardContent>
-              </Card>
-            );
-          })
-        ) : (
-            <div className="no-assessment-message-cont">
-              <Label
-                labelKey={"No results Found!"}
-                style={{ marginBottom: 10 }}
-              />
-              <Button
-                style={{
-                  height: 36,
-                  lineHeight: "auto",
-                  minWidth: "inherit"
-                }}
-                className="assessment-button"
-                variant="contained"
-                color="primary"
-                onClick={this.onButtonCLick}
-              >
-                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-              </Button>
-            </div>
-          )}
-      </div>
-    );
+                      {/* </Link> */}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })
+          ) : (
+              <div className="no-assessment-message-cont">
+                <Label
+                  labelKey={"No results Found!"}
+                  style={{ marginBottom: 10 }}
+                />
+                <Button
+                  style={{
+                    height: 36,
+                    lineHeight: "auto",
+                    minWidth: "inherit"
+                  }}
+                  className="assessment-button"
+                  variant="contained"
+                  color="primary"
+                  onClick={this.onButtonCLick}
+                >
+                  <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+                </Button>
+              </div>
+            )}
+        </div>
+      );
+    }
+ 
   }
 }
 
