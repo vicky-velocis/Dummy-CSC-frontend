@@ -236,6 +236,7 @@ const screenConfig = {
               }
             ],
             moduleName: "OWNERSHIPTRANSFERRP",
+            applicationType:'OT',
             homeURL: "/rented-properties-citizen/ownership-apply"
           }
         }
