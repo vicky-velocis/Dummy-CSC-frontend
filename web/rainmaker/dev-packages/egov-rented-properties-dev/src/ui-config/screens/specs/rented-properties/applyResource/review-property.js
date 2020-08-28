@@ -421,7 +421,7 @@ export const getNoticeViolationPreviewReviewRentDetails = (isEditable = true) =>
                         labelName: "Violations",
                         labelKey: "RP_VIOLATIONS_LABEL"
                     },
-                    { jsonPath: "SingleProperties[0].violations" }
+                    { jsonPath: "Images[0].description" }
                 ),
                 editor: getLabelWithValue(
                     {
@@ -486,7 +486,7 @@ export const getNoticeRecoveryPreviewReviewRentDetails = (isEditable = true) => 
                         labelName: "Father/ Husband's Name",
                         labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[1].ownerDetails.fatherOrHusband" },
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband" },
                     {visible: false}
                 ),
                 originalAllotte: getLabelWithValue(

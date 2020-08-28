@@ -228,6 +228,7 @@ const callBackForNextrecoveryNoticegeneration = async(state, dispatch) => {
   let isFormValid = true;
   let isDateValid = true;
   let isPaymentAmountValid = true;
+  let isAmountValid = true;
 
 const isOwnerDetailsValid = validateFields(
   "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
@@ -249,8 +250,9 @@ const isPaymentDetailsValid = validateFields(
   dispatch,
   "notice-recovry"
 )
+let res = []
 if(isOwnerDetailsValid && isRentHolderValid && isPaymentDetailsValid) {
-  const res = await applynoticegeneration(state, dispatch, "Recovery")
+  res = await applynoticegeneration(state, dispatch, "Recovery")
   if(!res) {
    return
   } 
@@ -270,12 +272,12 @@ if(parseInt(paymentValid) == 0 || paymentValid === ""){
   isPaymentAmountValid = false
 }
 
+if(paymentValid.length > 8 || paymentValid.length === 0){
+  isAmountValid = false
+}
+
 if (isFormValid && isDateValid && isPaymentAmountValid) {
-  const noticegendata = get(
-    state.screenConfiguration.preparedFinalObject,
-    "Properties[0]"
-);
-moveToSuccess(noticegendata, dispatch, RECOVERY_NOTICE);
+moveToSuccess(res.NoticeApplications[0], dispatch, RECOVERY_NOTICE);
 }
 
 if (!isFormValid) {
@@ -308,6 +310,16 @@ if (!isPaymentAmountValid) {
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
 }  
+if (!isAmountValid) {
+  
+  let errorMessage = {
+    labelName:
+        "Please enter Amount between 1 and 8 digits!",
+    labelKey: "ERR_AMOUNT_BETWEEN_1_AND_8_DIGITS"
+};
+
+dispatch(toggleSnackbar(true, errorMessage, "warning"));
+}   
 }
 
 const callBackForNextViolationnoticegeneration = async(state, dispatch) => {
