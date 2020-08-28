@@ -50,8 +50,8 @@ const getData = async(action, state, dispatch) => {
     singleNoticeDetails = [...singleNoticeDetails,notices]  
     dispatch(prepareFinalObject("SingleProperties[0]", singleNoticeDetails[0]));
 
-    const findOwner = propertyArr.owners.find(item => !!item.activeState) || {}
-    const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner) || {}
+    const findOwner = propertyArr.owners.find(item => !!item.activeState)
+    const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner)
     if(!!orgOwner){
         dispatch(
             prepareFinalObject(

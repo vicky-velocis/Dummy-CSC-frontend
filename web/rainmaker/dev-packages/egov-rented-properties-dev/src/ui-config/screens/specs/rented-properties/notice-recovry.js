@@ -63,7 +63,7 @@ const header = getCommonHeader({
       state.screenConfiguration.preparedFinalObject,
       "Properties[0]",
       [])
-    const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner) || {}
+    const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner)
       if(!!orgOwner){
           dispatch(
               prepareFinalObject(
