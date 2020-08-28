@@ -5,13 +5,15 @@ import {
   getDateField,
   getCommonTitle,
   getPattern,
-  getCommonContainer
+  getCommonContainer,
+  getCommonGrayCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
-  getTodaysDateInYMD
+  getTodaysDateInYMD,
+  getRentSummaryCard
 } from "../../utils";
 import get from "lodash/get";
 
@@ -35,87 +37,6 @@ const paymentInfoHeader = getCommonTitle({
   }
 })
 
-const principalAmountField = {
-  label: {
-    labelName: "Principal Amount",
-    labelKey: "RP_PRINCIPAL_AMOUNT_LABEL"
-  },
-  placeholder: {
-    labelName: "Principal Amount",
-    labelKey: "RP_PRINCIPAL_AMOUNT_LABEL"
-  },
-  gridDefination: {
-    xs: 12,
-    sm: 6
-  },
-  minLength: 4,
-  maxLength: 40,
-  required: false,
-  disabled: true,
-  jsonPath: "OfflineRentPayment[0].property.balancePrincipal",
-  errorMessage: "",
-}
-
-const interestField = {
-  label: {
-    labelName: "Interest",
-    labelKey: "RP_INTEREST_LABEL"
-  },
-  placeholder: {
-    labelName: "Interest",
-    labelKey: "RP_INTEREST_LABEL"
-  },
-  gridDefination: {
-    xs: 12,
-    sm: 6
-  },
-  minLength: 4,
-  maxLength: 40,
-  jsonPath: "OfflineRentPayment[0].property.balanceInterest",
-  disabled: true,
-  errorMessage: "",
-}
-
-const totalField = {
-  label: {
-    labelName: "Total",
-    labelKey: "RP_TOTAL_AMOUNT_LABEL"
-  },
-  placeholder: {
-    labelName: "Total",
-    labelKey: "RP_TOTAL_AMOUNT_LABEL"
-  },
-  gridDefination: {
-    xs: 12,
-    sm: 6
-  },
-  minLength: 4,
-  maxLength: 40,
-  jsonPath: "OfflineRentPayment[0].property.balanceAmount",
-  disabled: true,
-  errorMessage: "",
-}
-
-const outstandingField = {
-  label: {
-    labelName: "Outstanding",
-    labelKey: "RP_OUSTANDING_AMOUNT_LABEL"
-  },
-  placeholder: {
-    labelName: "Outstanding",
-    labelKey: "RP_OUSTANDING_AMOUNT_LABEL"
-  },
-  gridDefination: {
-    xs: 12,
-    sm: 6
-  },
-  minLength: 4,
-  maxLength: 40,
-  jsonPath: "",
-  disabled: true,
-  errorMessage: "",
-}
-
 const amountField = {
   label: {
     labelName: "Amount",
@@ -132,7 +53,7 @@ const amountField = {
   required: true,
   minLength: 4,
   maxLength: 40,
-  jsonPath: "",
+  jsonPath: "OfflineRentPayment[0].paymentInfo.amount",
   errorMessage: ""
 }
 
@@ -152,7 +73,7 @@ const bankNameField = {
   required: true,
   maxLength: 40,
   jsonPath: "",
-  errorMessage: ""
+  errorMessage: "OfflineRentPayment[0].paymentInfo.bankName"
 }
 
 const transactionNumberField = {
@@ -170,55 +91,24 @@ const transactionNumberField = {
   },
   required: true,
   maxLength: 40,
-  jsonPath: "",
+  jsonPath: "OfflineRentPayment[0].paymentInfo.transactionNumber",
   errorMessage: ""
 }
+
+const rentSummary = getCommonGrayCard({
+  rentSection: getRentSummaryCard({
+    sourceJsonPath: "OfflineRentPayment[0].rentSummary"
+  })
+});
+
 
 
 const getRentSummaryDetails = () => {
   return {
     header: rentSummaryHeader,
-    detailsContainer: getCommonContainer({
-      principalAmount: getTextField({
-        ...principalAmountField,
-        jsonPath: "",
-        required: false,
-        props: {
-          ...principalAmountField.props,
-          disabled: true
-        }
-      }),
-      interest: getTextField({
-        ...interestField,
-        jsonPath: "",
-        required: false,
-        props: {
-          ...interestField.props,
-          disabled: true
-        }
-      }),
-      total: getTextField({
-        ...totalField,
-        jsonPath: "",
-        required: false,
-        props: {
-          ...totalField.props,
-          disabled: true
-        }
-      }),
-      outstanding: getTextField({
-        ...outstandingField,
-        jsonPath: "",
-        required: false,
-        props: {
-          ...outstandingField.props,
-          disabled: true
-        }
-      })
-    })
+    detailsContainer: rentSummary
   }
 }
-
 const getPaymentInfo = () => {
   return {
     header: paymentInfoHeader,
@@ -229,7 +119,6 @@ const getPaymentInfo = () => {
     })
   }
 }
-
 
 
 export const rentSummaryDetails = getCommonCard(getRentSummaryDetails())

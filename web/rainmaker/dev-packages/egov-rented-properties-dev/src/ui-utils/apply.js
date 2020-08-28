@@ -943,20 +943,8 @@ export const getOfflineRentPaymentDetailsFromProperty = async (state, dispatch) 
           )
           dispatch(
             prepareFinalObject(
-              "OfflineRentPayment[0].property.balancePrincipal",
-              Properties[0].rentSummary.balancePrincipal
-            )
-          )
-          dispatch(
-            prepareFinalObject(
-              "OfflineRentPayment[0].property.balanceInterest",
-              Properties[0].rentSummary.balanceInterest
-            )
-          )
-          dispatch(
-            prepareFinalObject(
-              "OfflineRentPayment[0].property.balanceAmount",
-              Properties[0].rentSummary.balanceAmount
+              "OfflineRentPayment[0].rentSummary",
+              Properties[0].rentSummary
             )
           )
           

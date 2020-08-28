@@ -394,6 +394,9 @@ export const footer = getCommonApplyFooter({
   }
 });
 
+const callBackForOfflinePay = async(state, dispatch) => {
+  console.log("submit");
+}
 export const offlinePaymentfooter = getCommonApplyFooter({
   submitButton: {
     componentPath: "Button",
@@ -422,14 +425,10 @@ export const offlinePaymentfooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: callBackForOfflinePay
-    },
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   action: "PAY"
-    // }
+    }
   }
 })
 
-const callBackForOfflinePay = async(state, dispatch) => {
-  console.log("paid")
-}
+
+
+
