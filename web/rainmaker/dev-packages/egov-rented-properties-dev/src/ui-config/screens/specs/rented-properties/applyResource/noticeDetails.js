@@ -2,7 +2,7 @@ import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTit
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
-import { getDetailsFromProperty ,getDuplicateDetailsFromProperty} from "../../../../../ui-utils/apply";
+import { getDetailsFromProperty ,getDuplicateDetailsFromProperty,getRecoveryValueProperty} from "../../../../../ui-utils/apply";
 export const propertyHeader = getCommonTitle(
     {
         labelName: "Property Details",
@@ -282,10 +282,18 @@ const demandNoticeFromDate = {
 
 const recoveryTypeField = {
     ...recoveryType,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            getRecoveryValueProperty(state, dispatch);
+        }
+      },
     beforeFieldChange: (action, state, dispatch) => {
         const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
         const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+        //getRecoveryValueProperty(state, dispatch);
       }
+       
 }
 
 const paymentAmountFieldNotice = {

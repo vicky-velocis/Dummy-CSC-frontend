@@ -862,3 +862,85 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
   console.log(e);
   }
 }
+
+
+export const getRecoveryValueProperty = async (state, dispatch) => {
+  try {
+    
+    const recoveryType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].owners[0].ownerDetails.recoveryType",
+      ""
+    );
+    const monthlyRent = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balancePrincipal",
+      ""
+    );
+    const onlyInterest = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balanceInterest",
+      ""
+    );
+    const balanceAmount=get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balanceAmount",
+      ""
+    );
+    const totalDues = Math.max(0 , monthlyRent + onlyInterest - balanceAmount)
+
+    if(!!recoveryType) {
+      if(recoveryType==="RECOVERY.MONTHLYRENT"){
+
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+            monthlyRent
+          )
+        )
+      }
+      if(recoveryType==="RECOVERY.INTEREST"){
+
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+            onlyInterest          
+            )
+        )
+      }
+      if(recoveryType==="RECOVERY.DUES"){
+
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+            totalDues          
+            )
+        )
+      }
+      if(recoveryType==="RECOVERY.INTERESTPLUSMONTHLYRENT"){
+
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+            ""         
+            )
+        )
+      }
+      if(recoveryType==="RECOVERY.LEASE"){
+
+        dispatch(
+          prepareFinalObject(
+            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+            ""         
+            )
+        )
+      }
+          return true
+        }
+
+  }
+ catch (error) {
+  console.log(e);
+  }
+}
+

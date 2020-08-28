@@ -142,7 +142,68 @@ export const getreviewPropertyAddressDetails = (isEditable = true) => {
         })
     })
 }
-
+export const getreviewChargesDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Payment Charges Details",
+                        labelKey: "RP_PAYMENT_CHARGES_HEADER"
+                    })
+                },
+                //editSection: freshLicenseEditSection(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+           
+            applicationCharges: getLabelWithValue(
+                {
+                    labelName: "Application Charges",
+                    labelKey: "RP_APPLICATION_CHARGES"
+                },
+                { jsonPath: "Owners[0].ownerDetails.dueAmount" }
+            ),
+           
+        })
+    })
+}
+export const getduplicatereviewChargesDetails = (isEditable = true) => {
+    return getCommonGrayCard({
+        headerDiv: {
+            ...headerDiv,
+            children: {
+                header: {
+                    gridDefination: {
+                        xs: 12,
+                        sm: 10
+                    },
+                    ...getCommonSubHeader({
+                        labelName: "Payment Charges Details",
+                        labelKey: "RP_PAYMENT_CHARGES_HEADER"
+                    })
+                },
+                //editSection: freshLicenseEditSection(isEditable)
+            }
+        },
+        viewFour: getCommonContainer({
+           
+            applicationCharges: getLabelWithValue(
+                {
+                    labelName: "Application Charges",
+                    labelKey: "RP_APPLICATION_CHARGES"
+                },
+                { jsonPath: "DuplicateCopyApplications[0].applicant[0].feeAmount" }
+            ),
+           
+        })
+    })
+}
 export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
     return getCommonGrayCard({
         headerDiv: {
