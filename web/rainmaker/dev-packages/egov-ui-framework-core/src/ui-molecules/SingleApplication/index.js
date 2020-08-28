@@ -303,7 +303,44 @@ class SingleApplication extends React.Component {
                           </Grid>
                         );
                       })}
-                      {moduleName === "TL" &&
+                      {/* </Link> */}
+                    </div>
+                    )
+                  }
+                  {
+                      (applicationType === 'DC' || applicationType === 'MG') && (
+                        <div>
+                         { contents.map(content => {
+                          return (
+                            <Grid container style={{ marginBottom: 12 }}>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey={content.label}
+                                  fontSize={14}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.60"
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Label
+                                  labelKey={this.generateLabelKey(content, item)}
+                                  fontSize={14}
+                                  checkValueForNA={checkValueForNA}
+                                  style={{
+                                    fontSize: 14,
+                                    color: "rgba(0, 0, 0, 0.87"
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                          );
+                        })}
+                      </div>
+                      )
+                  }
+                    {moduleName === "TL" &&
                         <div>
                           <Grid container style={{ marginBottom: 12 }}>
                             <Grid item xs={6}>
@@ -346,87 +383,6 @@ class SingleApplication extends React.Component {
                           }}
                         />
                       </div>
-                      {/* </Link> */}
-                    </div>
-                    )
-                  }
-                  {
-                      (applicationType === 'DC' || applicationType === 'MG') && (
-                        <div>
-                         { contents.map(content => {
-                          return (
-                            <Grid container style={{ marginBottom: 12 }}>
-                              <Grid item xs={6}>
-                                <Label
-                                  labelKey={content.label}
-                                  fontSize={14}
-                                  style={{
-                                    fontSize: 14,
-                                    color: "rgba(0, 0, 0, 0.60"
-                                  }}
-                                />
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Label
-                                  labelKey={this.generateLabelKey(content, item)}
-                                  fontSize={14}
-                                  checkValueForNA={checkValueForNA}
-                                  style={{
-                                    fontSize: 14,
-                                    color: "rgba(0, 0, 0, 0.87"
-                                  }}
-                                />
-                              </Grid>
-                            </Grid>
-                          );
-                        })}
-                        {moduleName === "TL" &&
-                          <div>
-                            <Grid container style={{ marginBottom: 12 }}>
-                              <Grid item xs={6}>
-                                <Label
-                                  labelKey="TL_COMMON_TABLE_VALIDITY"
-                                  fontSize={14}
-                                  style={{
-                                    fontSize: 14,
-                                    color: "rgba(0, 0, 0, 0.60"
-                                  }}
-                                />
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Label
-                                  labelKey={this.generatevalidity(item)}
-                                  fontSize={14}
-                                  checkValueForNA={checkValueForNA}
-                                  style={{
-                                    fontSize: 14,
-                                    color: "rgba(0, 0, 0, 0.87"
-                                  }}
-                                />
-                              </Grid>
-                            </Grid>
-                          </div>
-                        }
-    
-                        {/* <Link to={this.onCardClick(item)}> */}
-                        <div style={{ cursor: "pointer" }} onClick={() => {
-                          const url = this.onCardClick(item);
-                          // setRoute(url);
-                        }}>
-                          <Label
-                            labelKey={moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
-                            textTransform={"uppercase"}
-                            style={{
-                              color: "#fe7a51",
-                              fontSize: 14,
-                              textTransform: "uppercase"
-                            }}
-                          />
-                        </div>
-                        {/* </Link> */}
-                      </div>
-                      )
-                  }
                 </CardContent>
               </Card>
             );
