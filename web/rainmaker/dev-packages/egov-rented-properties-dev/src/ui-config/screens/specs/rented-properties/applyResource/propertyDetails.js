@@ -77,7 +77,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.interestRatePerYear",
                         "props.value",
-                        item.interestRateOrYear ? item.interestRateOrYear : "0"
+                        item.interestRateOrYear.toString()
                     )
                 )
                 dispatch(
@@ -85,7 +85,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.rentIncrementPercentage",
                         "props.value",
-                        item.rentIncrementPercentage ? item.rentIncrementPercentage : "0"
+                        item.rentIncrementPercentage.toString()
                     )
                 )
                 dispatch(
@@ -93,7 +93,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.rentIncrementPeriod",
                         "props.value",
-                        item.rentIncrementPeriod ? item.rentIncrementPeriod : "0"
+                        item.rentIncrementPeriod.toString()
                     )
                 )
             }
