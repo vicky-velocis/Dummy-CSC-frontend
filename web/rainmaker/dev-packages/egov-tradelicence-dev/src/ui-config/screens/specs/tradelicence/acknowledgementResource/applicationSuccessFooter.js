@@ -35,11 +35,12 @@ export const generatePdfAndDownload = (
     )
   );
   const tradeLicenseType = getQueryArg(window.location.href, "tlType");
-  var iframe = document.createElement("iframe");
-  iframe.src =
-    document.location.origin +
-    window.basename +
-    `/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
+  // Issue fix to prevent accesses attack method not in uae
+  // var iframe = document.createElement("iframe");
+  // iframe.src =
+  //   document.location.origin +
+  //   window.basename +
+  //   `/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
   var hasIframeLoaded = false,
     hasEstimateLoaded = false;
   iframe.onload = function(e) {

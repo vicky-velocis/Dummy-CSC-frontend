@@ -31,15 +31,27 @@ import {
   InventoryData
   } from "../../../../ui-utils/sampleResponses";
   import { httpRequest } from "../../../../ui-utils";
-  import { getSearchResults } from "../../../../ui-utils/commons";  
+  import { getSearchResults } from "../../../../ui-utils/commons"; 
+  const resetFields = (state, dispatch) => {
+    const textFields = ["storeName","materialName",];
+    for (let i = 0; i < textFields.length; i++) {
+      if (
+        `state.screenConfiguration.screenConfig.InvenrtyRegister.components.div.children.SearchCard.children.cardContent.children.appPRSearchContainer.children.${textFields[i]}.props.value`
+      ) {
+        dispatch(
+          handleField(
+            "InvenrtyRegister",
+            `components.div.children.SearchCard.children.cardContent.children.appPRSearchContainer.children.${textFields[i]}`,
+            "props.value",
+            ""
+          )
+        );
+      }
+    }
+    dispatch(prepareFinalObject("searchScreen", {}));
+  }; 
 const ActionSubmit = async (state, dispatch) => {
-  
-
-const pensionerNumber = getQueryArg(
-  window.location.href,
-  "pensionerNumber"
-);
-let queryObject = [
+  let queryObject = [
   {
     key: "tenantId",
     value: getTenantId()
@@ -51,7 +63,6 @@ let searchScreenObject = get(
   "searchScreen",
   {}
 );
-let Validyear = true;
 if( Object.keys(searchScreenObject).length == 0 )
 {
   dispatch(
@@ -68,54 +79,32 @@ if( Object.keys(searchScreenObject).length == 0 )
 else
 {
 
-
-for (var key in searchScreenObject) {
-  if (key === "year") {
-    if(Number(searchScreenObject[key])<= Number(new Date().getFullYear()))
-    {
-      Validyear = true
-    }
-  }
+for (var key in searchScreenObject) {  
   
-  queryObject.push({ key: key, value: Number(searchScreenObject[key]) });
+  queryObject.push({ key: key, value: (searchScreenObject[key]) });
 }
-  // queryObject.push({
-  //   key: "year",
-  //   value: "2020"
-  // });
+
 queryObject.push({
-  key: "pensionerNumber",
-  value: pensionerNumber
+  key: "isprint",
+  value: false
 });
 
 try {
   let payload =[];
-  if(Validyear)
-  {
-//  payload = await httpRequest(
-//     "post",
-//     "/pension-services/v1/_searchPensionRegister",
-//     "_search",
-    
-//     queryObject
-//   );
+
+ let Responce = await httpRequest(
+    "post",
+    "/store-asset-services/receiptnotes/_inventoryreport",
+    "_inventoryreport",    
+    queryObject
+  );
 
 payload = InventoryData()
 dispatch(prepareFinalObject("InventoryData", payload));
+dispatch(prepareFinalObject("InventoryAPIData", get(Responce,"printData")));
   console.log(payload)
- }
- else{
-  dispatch(
-    toggleSnackbar(
-      true,
-      {
-        labelName: "Please SELECT year equal to year or less then current year",
-        labelKey: "PENSION_INVALID_YEAR_SELECTION"
-      },
-      "warning"
-    )
-  );
- }
+
+
   
 
 
@@ -131,7 +120,7 @@ return payload
 
 export const getData = async (action, state, dispatch) => {
  
-  await getMdmsData(action, state, dispatch);
+  await getMdmsData(state, dispatch);
   
    //fetching store name
    const queryObject = [{ key: "tenantId", value: getTenantId()  }];
@@ -149,8 +138,8 @@ export const getData = async (action, state, dispatch) => {
      }
    });
 };
-const getMdmsData = async (state, dispatch, tenantId) => {
-   tenantId =  getstoreTenantId();
+const getMdmsData = async (state, dispatch) => {
+  const tenantId =  getstoreTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,
@@ -173,84 +162,15 @@ const getMdmsData = async (state, dispatch, tenantId) => {
       [],
       mdmsBody
     );
-    dispatch(
-      prepareFinalObject("searchScreenMdmsData", get(response, "MdmsRes"))
+    dispatch(prepareFinalObject("searchScreenMdmsData", get(response, "MdmsRes"))
     );
-    setRolesList(state, dispatch);
-    setHierarchyList(state, dispatch);
+
     return true;
   } catch (e) {
     console.log(e);
   }
 };
-// export const prepareEditFlow = async (
-//   state,
-//   dispatch,  
-//   tenantId
-// ) => {
- 
-//   let applicationNumber=""
-//   if (applicationNumber) {
-//     let queryObject = [
-//       {
-//         key: "pensionerNumber",
-//       value: applicationNumber
-       
-//       }];
-//     queryObject.push({
-//       key: "tenantId",
-//       value: tenantId
-//     });
-     
-//     const response_ = await getSearchPensioner(queryObject);
-//     let queryObject_ = [
-//       {
-//         key: "pensionerNumber",
-//       value: applicationNumber
-       
-//       }];
-//       queryObject_.push({
-//       key: "year",
-//       value: Number(new Date().getFullYear())
-//     });
-//     queryObject_.push({
-//       key: "tenantId",
-//       value: tenantId
-//     });
-//     //const response = await getSearchPensionerForPensionRevision(queryObject);
 
-//     const  response = await httpRequest(
-//       "post",
-//       "/pension-services/v1/_searchPensionRegister",
-//       "_search",
-      
-//       queryObject_
-//     );
-    
-//      dispatch(prepareFinalObject("ProcessInstancesTemp", get(response, "Pensioners", [])));
-
-//      let  data_ =[
-//       {
-//         pensionRegister:response.ProcessInstances[0].pensionRegister,
-//         pensioner :response.ProcessInstances[0].pensioner,
-//         pensionerFinalCalculatedBenefitDetails:response.ProcessInstances[0].pensionerFinalCalculatedBenefitDetails,
-//         PensionersBasicData : get(response_, "Pensioners", [])
-//       } ];
-//    dispatch(prepareFinalObject("searchScreen", {year:Number(new Date().getFullYear())}, {}));
-//     dispatch(prepareFinalObject("ProcessInstances", data_, []));
-//     // dispatch(prepareFinalObject("ProcessInstancesTemp", get(response, "Pensioners", [])));
-//      dispatch(
-//       handleField(
-//         "revision",
-//         "components.div.children.pensionerverifiedData",
-//         "props.style",
-//         { display: "none" }
-//       )
-//     );
-   
-
-//   }
-// };
 const header = getCommonHeader({
   labelName: "Inventory Register",
   labelKey: "STORE_INVENTORY_REGISTER"
@@ -308,8 +228,8 @@ const RegisterReviewResult = {
               labelName: "Select Store Name",
               labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
             },
-            required: true,
-            jsonPath: "searchScreen.storeName",
+            required: false,
+            jsonPath: "searchScreen.storecode",
             sourceJsonPath: "searchMaster.storeNames",
             props: {
               disabled : false,
@@ -327,7 +247,7 @@ const RegisterReviewResult = {
             labelKey: "STORE_MATERIAL_NAME_SELECT",
           },
           required: false,
-          jsonPath: "searchScreen.code",
+          jsonPath: "searchScreen.material",
           gridDefination: {
             xs: 12,
             sm: 4,
@@ -340,39 +260,69 @@ const RegisterReviewResult = {
          
         }),
   }),
-      button: getCommonContainer({
-        buttonContainer: getCommonContainer({
-    
-          searchButton: {
-            componentPath: "Button",
-            gridDefination: {
-              xs: 12,
-              sm: 6
-              // align: "center"
-            },
-            props: {
-              variant: "contained",
-              color: "primary",
-              style: {
-                //minWidth: "200px",
-                height: "48px",
-                marginRight: "10px",
-        
-              }
-            },
-            children: {
-              buttonLabel: getLabel({
-                labelName: "searchdoe",
-                labelKey: "PENSION_SEARCH_RESULTS_BUTTON_SEARCH"
-              })
-            },
-            onClickDefination: {
-              action: "condition",
-              callBack: ActionSubmit
-            }
-          }
-        })
-      }),
+  button: getCommonContainer({
+    buttonContainer: getCommonContainer({
+      resetButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+          // align: "center"
+        },
+        props: {
+          variant: "outlined",
+          style: {
+            color: "#FE7A51",
+            borderColor: "#FE7A51",
+            //   borderRadius: "2px",
+            width: "220px",
+            height: "48px",
+            margin: "8px",
+            float: "right",
+          },
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "STORE_COMMON_RESET_BUTTON",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetFields,
+        },
+      },
+      searchButton: {
+        componentPath: "Button",
+        gridDefination: {
+          xs: 12,
+          sm: 6,
+          // align: "center"
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "white",
+            margin: "8px",
+            backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
+            borderRadius: "2px",
+            width: "220px",
+            height: "48px",
+          },
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Search",
+            labelKey: "STORE_COMMON_SEARCH_BUTTON",
+          }),
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: ActionSubmit,
+        },
+      },
+    }),
+  }),
 
     }),
  
