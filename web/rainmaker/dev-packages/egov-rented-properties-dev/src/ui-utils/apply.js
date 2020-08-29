@@ -876,15 +876,6 @@ export const getRecoveryValueProperty = async (state, dispatch) => {
             )
         )
       }
-      if(recoveryType==="RECOVERY.INTERESTPLUSMONTHLYRENT"){
-
-        dispatch(
-          prepareFinalObject(
-            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
-            ""         
-            )
-        )
-      }
       if(recoveryType==="RECOVERY.LEASE"){
 
         dispatch(
@@ -903,3 +894,96 @@ export const getRecoveryValueProperty = async (state, dispatch) => {
   }
 }
 
+export const getOfflineRentPaymentDetailsFromProperty = async (state, dispatch) => {
+  try {
+    
+    const transitNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "OfflineRentPayment[0].property.transitNumber",
+      ""
+    );
+    if(!!transitNumber) {
+      let queryObject = [
+        { key: "transitNumber", value: transitNumber },
+        { key: "state", value: "PM_APPROVED" }
+      ];
+      const payload = await getSearchResults(queryObject)
+      if (
+        payload &&
+        payload.Properties
+      ) {
+        if (!payload.Properties.length) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "Property is not found with this Transit Number",
+                labelKey: "ERR_PROPERTY_NOT_FOUND_WITH_PROPERTY_ID"
+              },
+              "info"
+            )
+          );
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.transitNumber",
+              ""
+            )
+          )
+          dispatch(
+            handleField(
+              "offline-rent-payment",
+              "components.div.children.formwizardFirstStep.children.transitSiteDetails.children.cardContent.children.detailsContainer.children.transitNumber",
+              "props.value",
+              ""
+            )
+          );
+        } else {
+          const {Properties} = payload;
+          const {owners = []} = Properties[0]
+          const findOwner = owners.find(item => !!item.activeState) || {}
+        
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.pincode",
+              Properties[0].propertyDetails.address.pincode
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.id",
+              Properties[0].propertyDetails.propertyId
+            )
+          )
+           dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].property.colony",
+              Properties[0].propertyDetails.address.colony
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "Properties[0].colony",
+              getLocaleLabels("colony",Properties[0].propertyDetails.address.colony)
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].applicant[0].name",
+              findOwner.ownerDetails.name
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "OfflineRentPayment[0].rentSummary",
+              Properties[0].rentSummary
+            )
+          )
+          
+          return true
+        }
+    }
+  }
+ } catch (error) {
+  console.log(e);
+  }
+}
