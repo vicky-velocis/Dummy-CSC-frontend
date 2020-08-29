@@ -47,13 +47,10 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
         let data = properties[0].propertyImages;
         data = data.filter(image => !!image.applicationDocuments)
         if(notices != null){
-        data.map(item => {
-          transitNotices = notices.filter(notice => notice.propertyImageId === item.id).map(notice => notice.memoNumber)
-          return {...item, notices: transitNotices.join(",")}
-      })
-    
+      transitNotices =   notices.reduce((noticeArray, notice) => (data.find(item => item.id === notice.propertyImageId)) ? noticeArray.concat(notice.memoNumber) : noticeArray, [])
     }
     transitNotices = transitNotices.join(",")
+    
     let images;
         if(!!properties[0].propertyImages){
           images = await getImages(data);
