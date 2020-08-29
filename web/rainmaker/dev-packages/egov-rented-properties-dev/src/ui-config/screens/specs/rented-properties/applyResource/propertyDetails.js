@@ -4,6 +4,7 @@ import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
 import { getDetailsFromProperty ,getDuplicateDetailsFromProperty, getOfflineRentPaymentDetailsFromProperty} from "../../../../../ui-utils/apply";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { set } from "lodash";
 
 export const propertyHeader = getCommonTitle(
         {
@@ -76,7 +77,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.interestRatePerYear",
                         "props.value",
-                        item.interestRateOrYear
+                        item.interestRateOrYear ? item.interestRateOrYear : "0"
                     )
                 )
                 dispatch(
@@ -84,7 +85,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.rentIncrementPercentage",
                         "props.value",
-                        item.rentIncrementPercentage
+                        item.rentIncrementPercentage ? item.rentIncrementPercentage : "0"
                     )
                 )
                 dispatch(
@@ -92,7 +93,7 @@ const colonyField = {
                         "apply",
                         "components.div.children.formwizardFirstStep.children.rentDetails.children.cardContent.children.detailsContainer.children.rentIncrementPeriod",
                         "props.value",
-                        item.rentIncrementPeriod
+                        item.rentIncrementPeriod ? item.rentIncrementPeriod : "0"
                     )
                 )
             }
