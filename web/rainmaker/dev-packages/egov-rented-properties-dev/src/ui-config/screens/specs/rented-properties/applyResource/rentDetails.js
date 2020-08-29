@@ -48,7 +48,7 @@ const interestRateField = {
     },
     // minLength: 1,
     maxLength: 5,
-    required: true,
+    // required: true,
     jsonPath: "Properties[0].propertyDetails.interestRate",
     errorMessage: "RP_ERR_INTEREST_RATE_OR_YEAR_FIELD"
 }
