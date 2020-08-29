@@ -79,22 +79,15 @@ import {
     });
   };
 
-  export const handleFieldChange  = (jsonPath, value) => {
-    console.log(value)
-    // const { prepareFinalObject, bpaDetails } = this.props;
-    // bpaDetails.comment = value
-    // prepareFinalObject(`BPA`, bpaDetails);
-  };
-
   const showOrHidePopup = (state, dispatch) => {
-    // const {fineMasterEditData} = state.screenConfiguration.preparedFinalObject
-    // const screenKey = fineMasterEditData.businessService.replace(".", "_")
-    dispatch(handleField(
-      "search-preview",
-      "components.div.children.adhocDialog",
-      "props.open",
-      false
-    ))
+    dispatch(
+      handleField(
+        "search-preview",
+        "components.div.children.adhocDialog",
+        "props.open",
+        true
+    ),
+  )
   }
 
   export const editFooter = (
@@ -143,8 +136,9 @@ import {
                 },
                 onClickDefination: {
                   action: "condition",
-                  callBack: showOrHidePopup
-  
+                  callBack: (state, dispatch) => {
+                    showOrHidePopup(state, dispatch);
+                  }  
                 },
                 visible: process.env.REACT_APP_NAME != "Citizen" && getButtonVisibility(state, "APPROVED") ? true : false
               }

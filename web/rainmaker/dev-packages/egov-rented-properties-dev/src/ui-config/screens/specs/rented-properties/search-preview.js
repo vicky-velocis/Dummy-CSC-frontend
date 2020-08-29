@@ -242,7 +242,7 @@ const buttonComponent = (label) => ({
   }
 })
 
-const handleClose = (dispatch) => {
+const handleClose = (state,dispatch) => {
   dispatch(
     handleField(
       "search-preview",
@@ -255,7 +255,6 @@ const handleClose = (dispatch) => {
 
 const update = async (state, dispatch) => {
   const {Properties} = state.screenConfiguration.preparedFinalObject
-  // if(!!Number(rate)) {
   try {
   await httpRequest(
     "post",
@@ -264,18 +263,14 @@ const update = async (state, dispatch) => {
     [],
     {"Properties": Properties}
   );
-  // const screenKey = fineMasterEditData.businessService.replace(".", "_")
   dispatch(handleField(
     "search-preview",
     "components.div.children.adhocDialog",
     "props.open",
     false
   ))
-  // let queryObject = [
-  //   { key: "transitNumber", value: transitNumber }
-  // ];
+
   await searchResults(action, state, dispatch, transitNumber) 
-   // getFineMasterList(state, dispatch, fineMasterEditData.businessService, screenKey)
 } catch (error) {
   dispatch(
     toggleSnackbar(
@@ -286,7 +281,7 @@ const update = async (state, dispatch) => {
   );
 }
 }
-// }
+
 
 const phoneField = {
   label: {
@@ -414,7 +409,9 @@ export const editPopup = getCommonContainer({
             },
             onClickDefination: {
               action: "condition",
-              callBack: handleClose
+              callBack: (state, dispatch) => {
+                handleClose(state, dispatch);
+              }
             }
           }
         }
@@ -535,10 +532,10 @@ const rentedPropertiesDetailPreview = {
           },
           adhocDialog: {
             uiFramework: "custom-containers-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "DialogContainer",
             props: {
-              open: true,
+              open: false,
               screenKey: "search-preview"
             },
             children: {
