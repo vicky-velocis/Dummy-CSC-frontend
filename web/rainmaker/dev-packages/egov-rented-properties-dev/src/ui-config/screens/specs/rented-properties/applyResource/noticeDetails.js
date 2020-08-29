@@ -282,18 +282,13 @@ const demandNoticeFromDate = {
 
 const recoveryTypeField = {
     ...recoveryType,
-    onClickDefination: {
-        action: "condition",
-        callBack: (state, dispatch) => {
-            getRecoveryValueProperty(state, dispatch);
-        }
-      },
     beforeFieldChange: (action, state, dispatch) => {
         const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
         const findItem = rentedPropertyColonies.find(item => item.code === action.value)
-        //getRecoveryValueProperty(state, dispatch);
+      },
+      afterFieldChange:(action, state, dispatch)=>{
+        getRecoveryValueProperty(action, state, dispatch);
       }
-       
 }
 
 const paymentAmountFieldNotice = {
@@ -306,7 +301,7 @@ const paymentAmountFieldNotice = {
         labelKey: "RP_ENTER_DUE_AMOUNT"
     },
     minLength: 1,
-    maxLength: 8,
+    //maxLength: 8,
     required: true,
     jsonPath: "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
     errorMessage:"RP_ERR_DUE_AMOUNT_FIELD"

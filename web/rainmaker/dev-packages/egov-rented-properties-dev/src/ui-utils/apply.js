@@ -823,14 +823,8 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
 }
 
 
-export const getRecoveryValueProperty = async (state, dispatch) => {
+export const getRecoveryValueProperty = async (action,state, dispatch) => {
   try {
-    
-    const recoveryType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Properties[0].owners[0].ownerDetails.recoveryType",
-      ""
-    );
     const monthlyRent = get(
       state.screenConfiguration.preparedFinalObject,
       "Properties[0].rentSummary.balancePrincipal",
@@ -848,45 +842,52 @@ export const getRecoveryValueProperty = async (state, dispatch) => {
     );
     const totalDues = Math.max(0 , monthlyRent + onlyInterest - balanceAmount)
 
-    if(!!recoveryType) {
-      if(recoveryType==="RECOVERY.MONTHLYRENT"){
+      if(action.value==="RECOVERY.MONTHLYRENT"){
 
         dispatch(
-          prepareFinalObject(
-            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
             monthlyRent
           )
         )
+       
       }
-      if(recoveryType==="RECOVERY.INTEREST"){
+      if(action.value==="RECOVERY.INTEREST"){
 
         dispatch(
-          prepareFinalObject(
-            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
-            onlyInterest          
-            )
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            onlyInterest
+          )
         )
       }
-      if(recoveryType==="RECOVERY.DUES"){
+      if(action.value==="RECOVERY.DUES"){
 
         dispatch(
-          prepareFinalObject(
-            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
-            totalDues          
-            )
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            totalDues
+          )
         )
       }
-      if(recoveryType==="RECOVERY.LEASE"){
+      if(action.value==="RECOVERY.LEASE"){
 
         dispatch(
-          prepareFinalObject(
-            "Properties[0].owners[0].ownerDetails.payment[0].amountPaid",
-            ""         
-            )
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            ""
+          )
         )
       }
           return true
-        }
 
   }
  catch (error) {
