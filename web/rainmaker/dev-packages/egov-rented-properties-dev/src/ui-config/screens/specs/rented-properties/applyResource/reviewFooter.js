@@ -8,7 +8,8 @@ import {
   } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import "./index.css";
-  import set from 'lodash/set'
+  import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
+  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
   export const footerReview = (
     action,
@@ -66,6 +67,86 @@ import {
   
                 },
                 visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
+              }
+            },
+            gridDefination: {
+              xs: 12,
+              sm: 12
+            }
+          },     
+        }
+      }
+    });
+  };
+
+  export const handleFieldChange  = (jsonPath, value) => {
+    console.log(value)
+    // const { prepareFinalObject, bpaDetails } = this.props;
+    // bpaDetails.comment = value
+    // prepareFinalObject(`BPA`, bpaDetails);
+  };
+
+  const showOrHidePopup = (state, dispatch) => {
+    // const {fineMasterEditData} = state.screenConfiguration.preparedFinalObject
+    // const screenKey = fineMasterEditData.businessService.replace(".", "_")
+    dispatch(handleField(
+      "search-preview",
+      "components.div.children.adhocDialog",
+      "props.open",
+      false
+    ))
+  }
+
+  export const editFooter = (
+    action,
+    state,
+    dispatch,
+    status,
+    applicationNumber,
+    tenantId,
+    businessService
+  ) => {
+    /** MenuButton data based on status */
+
+    return getCommonApplyFooter({
+      container: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        children: {
+          rightdiv: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            props: {
+              style: {
+              float:"right",
+              display:"flex"
+              }
+            },
+            children: {
+              makePayment: {
+                componentPath: "Button",
+                props: {
+                  variant: "contained",
+                  color: "primary",
+                  style: {
+                    minWidth: "180px",
+                    height: "48px",
+                    marginRight: "45px",
+                    borderRadius: "inherit"
+                  }
+                },
+                children: {
+                  submitButtonLabel: getLabel({
+                    labelName: "Edit",
+                    labelKey: "EDIT_PROPERTY_DETAILS"
+                  })
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: showOrHidePopup
+  
+                },
+                visible: process.env.REACT_APP_NAME != "Citizen" && getButtonVisibility(state, "APPROVED") ? true : false
               }
             },
             gridDefination: {

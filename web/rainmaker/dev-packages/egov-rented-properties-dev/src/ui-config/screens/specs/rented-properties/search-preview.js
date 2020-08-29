@@ -2,7 +2,7 @@ import {
     getCommonHeader,
     getCommonContainer,
     getLabel,
-    getCommonCard
+    getCommonCard,getTextField
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
@@ -11,8 +11,11 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getReviewOwner, getReviewProperty, getReviewAddress, getReviewRentDetails, getReviewPaymentDetails,getReviewGrantDetails ,getGrantDetails,getGrantDetailsAvailed} from "./applyResource/review-property";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
+import { prepareFinalObject, toggleSnackbar,handleScreenConfigurationFieldChange as handleField,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { editFooter,footerReviewTop } from "./applyResource/reviewFooter";
+import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
+
 import set from "lodash/set"
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
@@ -150,7 +153,21 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
           props
         )
       );
+
+ 
     }
+    const footer = editFooter(
+      action,
+      state,
+      dispatch,
+      status,
+      "applicationNumber",
+      "tenantId",
+      "OwnershipTransferRP"
+    );
+    process.env.REACT_APP_NAME != "Citizen"
+        ? set(action, "screenConfig.components.div.children.footer", footer)
+        : set(action, "screenConfig.components.div.children.footer", {});
   }
 }
 
@@ -225,6 +242,231 @@ const buttonComponent = (label) => ({
   }
 })
 
+const handleClose = (dispatch) => {
+  dispatch(
+    handleField(
+      "search-preview",
+      "components.div.children.adhocDialog",
+      "props.open",
+      false
+  ),
+)
+};
+
+const update = async (state, dispatch) => {
+  const {Properties} = state.screenConfiguration.preparedFinalObject
+  // if(!!Number(rate)) {
+  try {
+  await httpRequest(
+    "post",
+    "/rp-services/property/_update",
+    "",
+    [],
+    {"Properties": Properties}
+  );
+  // const screenKey = fineMasterEditData.businessService.replace(".", "_")
+  dispatch(handleField(
+    "search-preview",
+    "components.div.children.adhocDialog",
+    "props.open",
+    false
+  ))
+  // let queryObject = [
+  //   { key: "transitNumber", value: transitNumber }
+  // ];
+  await searchResults(action, state, dispatch, transitNumber) 
+   // getFineMasterList(state, dispatch, fineMasterEditData.businessService, screenKey)
+} catch (error) {
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: error.message, labelKey: error.message },
+      "error"
+    )
+  );
+}
+}
+// }
+
+const phoneField = {
+  label: {
+    labelName: "phone number",
+    labelKey: "RP_COMMON_PHONE_NUMBER"
+  },
+  placeholder: {
+    labelName: "Enter Phone Number",
+    labelKey: "RP_COMMON_PHONE_NUMBER_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 12
+  },
+  required: true,
+  jsonPath: "Properties[0].owners[0].ownerDetails.phone",
+  // pattern: getPattern("Amount")
+}
+
+const pincodeField = {
+  label: {
+    labelName: "Pincode",
+    labelKey: "RP_COMMON_PINCODE_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Pincode",
+    labelKey: "RP_COMMON_PINCODE_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 12
+  },
+  required: true,
+  jsonPath: "Properties[0].propertyDetails.address.pincode",
+  // pattern: getPattern("Amount")
+}
+
+const areaField = {
+  label: {
+    labelName: "Area",
+    labelKey: "RP_COMMON_AREA_LABEL"
+  },
+  placeholder: {
+    labelName: "Enter Area",
+    labelKey: "RP_COMMON_AREA_LABEL_PLACEHOLDER"
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 12
+  },
+  required: true,
+  jsonPath: "Properties[0].propertyDetails.address.area",
+  // pattern: getPattern("Amount")
+}
+
+export const editPopup = getCommonContainer({
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: {
+        width: "100%",
+        float: "right"
+      }
+    },
+    children: {
+      div1: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 10,
+          sm: 10
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right"
+          }
+        },
+        children: {
+          div: getCommonHeader(
+            {
+              labelName: "Edit Fine Master",
+              labelKey: "TL_FINE_MASTER_EDIT_HEADER"
+            },
+            {
+              style: {
+                fontSize: "20px"
+              }
+            }
+          )
+        }
+      },
+      div2: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 2,
+          sm: 2
+        },
+        props: {
+          style: {
+            width: "100%",
+            float: "right",
+            cursor: "pointer"
+          }
+        },
+        children: {
+          closeButton: {
+            componentPath: "Button",
+            props: {
+              style: {
+                float: "right",
+                color: "rgba(0, 0, 0, 0.60)"
+              }
+            },
+            children: {
+              previousButtonIcon: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+                props: {
+                  iconName: "close"
+                }
+              }
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: handleClose
+            }
+          }
+        }
+      }
+    }
+  },
+  phoneNumber: getCommonContainer({
+      phone: getTextField(phoneField)
+    }),
+
+  pinCode: getCommonContainer({
+      rateField: getTextField(pincodeField)
+  }),  
+
+  area: getCommonContainer({
+    rateField: getTextField(areaField)
+}), 
+    div: {
+      uiFramework: "custom-atoms",
+      componentPath: "Div",
+      props: {
+        style: {
+          width: "100%",
+          textAlign: "right"
+        }
+      },
+      children: {
+        updateButton: {
+          componentPath: "Button",
+          props: {
+            variant: "contained",
+            color: "primary",
+            style: {
+              width: "140px",
+              height: "48px"
+            }
+          },
+          children: {
+            previousButtonLabel: getLabel({
+              labelName: "UPDATE",
+              labelKey: "TL_COMMON_UPDATE_BUTTON"
+            })
+          },
+          onClickDefination: {
+            action: "condition",
+            callBack: update
+          }
+        }
+      }
+    }
+})
+
 const rentedPropertiesDetailPreview = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -289,6 +531,18 @@ const rentedPropertiesDetailPreview = {
               dataPath: "Properties",
               moduleName: "MasterRP",
               updateUrl: "/rp-services/property/_update"
+            }
+          },
+          adhocDialog: {
+            uiFramework: "custom-containers-local",
+            moduleName: "egov-tradelicence",
+            componentPath: "DialogContainer",
+            props: {
+              open: true,
+              screenKey: "search-preview"
+            },
+            children: {
+              popup: editPopup
             }
           },
         propertyReviewDetails
