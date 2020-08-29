@@ -170,7 +170,26 @@ const callBackForNext = async(state, dispatch) => {
       }
       if(isFormValid) {
         // dispatch(prepareFinalObject("Properties[0].fileStoreId", paymentDocuments.fileStoreId));
-        const res = await applyRentedProperties(state, dispatch, activeStep)
+        const res = await applyRentedProperties(state, dispatch, activeStep);
+
+        const interestRate = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Properties[0].propertyDetails.interestRate"
+        )
+        const rentIncrementPeriod = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Properties[0].propertyDetails.rentIncrementPeriod"
+        )
+        const rentIncrementPercentage = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Properties[0].propertyDetails.rentIncrementPercentage"
+        )
+        
+        // convert rent detail values to string to avoid empty values at summary page
+        set(state.screenConfiguration.preparedFinalObject, "Properties[0].propertyDetails.interestRate", interestRate.toString());
+        set(state.screenConfiguration.preparedFinalObject, "Properties[0].propertyDetails.rentIncrementPeriod", rentIncrementPeriod.toString());
+        set(state.screenConfiguration.preparedFinalObject, "Properties[0].propertyDetails.rentIncrementPercentage", rentIncrementPercentage.toString());
+
         if(!res) {
           return
         }

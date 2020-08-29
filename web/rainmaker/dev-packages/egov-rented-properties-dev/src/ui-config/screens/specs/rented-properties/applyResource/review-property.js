@@ -326,7 +326,7 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelKey: "RP_RENT_INCREMENT_PERCENTAGE_LABEL"
                     },
                     { jsonPath: "Properties[0].propertyDetails.rentIncrementPercentage" }
-                ),
+                )
         })
     })
 }
