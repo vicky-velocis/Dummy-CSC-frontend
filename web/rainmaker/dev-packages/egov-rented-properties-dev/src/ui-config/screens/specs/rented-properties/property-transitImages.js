@@ -42,23 +42,22 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
     if(payload) {
       let properties = payload.Properties;
       if(properties[0].propertyImages){
-        const {notices = []} = properties[0]
+        const notices = properties[0].notices
+        let transitNotices = []
         let data = properties[0].propertyImages;
         data = data.filter(image => !!image.applicationDocuments)
         if(notices != null){
-        data.map(item => {
-          const transitNotices = notices.filter(notice => notice.propertyImageId === item.id).map(notice => notice.memoNumber)
-          return {...item, notices: transitNotices.join(",")}
-      })
-    
+      transitNotices =   notices.reduce((noticeArray, notice) => (data.find(item => item.id === notice.propertyImageId)) ? noticeArray.concat(notice.memoNumber) : noticeArray, [])
     }
+    transitNotices = transitNotices.join(",")
+    
     let images;
         if(!!properties[0].propertyImages){
           images = await getImages(data);
           images = images.map(item => {
             let { applicationDocuments, urls } = item;
             applicationDocuments = applicationDocuments.map((image, index) => ({ ...image, url: urls[index], name: urls[index].split("?")[0].split("/").pop().slice(13) }));
-            return { ...item, applicationDocuments };
+            return { ...item, applicationDocuments,transitNotices };
           });
         }
         else{
@@ -141,7 +140,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
                   contents: [
                     {
                       label: "RP_NOTICE_ID",
-                      jsonPath: "notices",
+                      jsonPath: "transitNotices",
                       url:`/rented-properties/notices?tenantId=${getTenantId()}` 
                     },
                     {

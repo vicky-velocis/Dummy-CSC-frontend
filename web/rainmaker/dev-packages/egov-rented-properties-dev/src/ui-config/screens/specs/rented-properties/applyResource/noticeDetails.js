@@ -151,7 +151,7 @@ const getViolationField = {
         disabled: false
       },
       required:true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.violations" 
+    jsonPath: "SingleImage[0].description" 
 }
 
 export const transitNumberConfig = {
