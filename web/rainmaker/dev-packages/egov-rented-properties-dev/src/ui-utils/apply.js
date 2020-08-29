@@ -829,6 +829,79 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
   }
 }
 
+
+export const getRecoveryValueProperty = async (action,state, dispatch) => {
+  try {
+    const monthlyRent = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balancePrincipal",
+      ""
+    );
+    const onlyInterest = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balanceInterest",
+      ""
+    );
+    const balanceAmount=get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].rentSummary.balanceAmount",
+      ""
+    );
+    const totalDues = Math.max(0 , monthlyRent + onlyInterest - balanceAmount)
+
+      if(action.value==="RECOVERY.MONTHLYRENT"){
+
+        dispatch(
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            monthlyRent
+          )
+        )
+       
+      }
+      if(action.value==="RECOVERY.INTEREST"){
+
+        dispatch(
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            onlyInterest
+          )
+        )
+      }
+      if(action.value==="RECOVERY.DUES"){
+
+        dispatch(
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            totalDues
+          )
+        )
+      }
+      if(action.value==="RECOVERY.LEASE"){
+
+        dispatch(
+          handleField(
+            "notice-recovry",
+            "components.div.children.formwizardFirstStep.children.paymentDetailsNotice.children.cardContent.children.detailsContainer.children.paymentAmount",
+            "props.value",
+            ""
+          )
+        )
+      }
+          return true
+
+  }
+ catch (error) {
+  console.log(e);
+  }
+}
+
 export const getOfflineRentPaymentDetailsFromProperty = async (state, dispatch) => {
   try {
     

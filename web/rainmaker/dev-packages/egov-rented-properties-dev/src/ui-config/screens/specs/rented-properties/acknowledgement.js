@@ -120,7 +120,8 @@ const getAcknowledgementCard = (
       : type === NOTICE_GENERATION ? {
         labelName: "Notice Generated Successfully",
         labelKey: "RP_NOTICE_GENERATED_SUCCESS_MESSAGE_MAIN"
-      } : {
+      }
+      : {
         labelName: "",
         labelKey: ""
       }
