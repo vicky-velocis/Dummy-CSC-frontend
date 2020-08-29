@@ -104,6 +104,10 @@ export const getRelationshipRadioButton = {
       jsonPath: "Owners[0].ownerDetails.relationWithDeceasedAllottee",
       props: {
           ...getRelationshipRadioButton.props,
+          label: {
+            name: "Relationship with deceased",
+            key: "TL_COMMON_RELATIONSHIP_WITH_DECEASED_LABEL"
+          },
           buttons: [
             {
               labelName: "Legal Heir",
@@ -574,14 +578,14 @@ const ownerShipRelationShipduplicate = {
         ...getRelationshipRadioButton.props,
         buttons: [
             {
-                labelName: "Father",
-                labelKey: "COMMON_RELATION_FATHER",
-                value: "FATHER"
+                labelName: "Legal Heir",
+                labelKey: "COMMON_RELATION_LEGAL_HEIR",
+                value: "LEGAL_HEIR"
               },
               {
-                label: "Husband",
-                labelKey: "COMMON_RELATION_HUSBAND",
-                value: "HUSBAND"
+                label: "Spouse",
+                labelKey: "COMMON_RELATION_SPOUSE",
+                value: "SPOUSE"
               }
         ],
         props: {

@@ -326,7 +326,7 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelKey: "RP_RENT_INCREMENT_PERCENTAGE_LABEL"
                     },
                     { jsonPath: "Properties[0].propertyDetails.rentIncrementPercentage" }
-                ),
+                )
         })
     })
 }
@@ -486,7 +486,7 @@ export const getNoticeRecoveryPreviewReviewRentDetails = (isEditable = true) => 
                         labelName: "Father/ Husband's Name",
                         labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
                     },
-                    { jsonPath: "Properties[0].owners[1].ownerDetails.fatherOrHusband" },
+                    { jsonPath: "Properties[0].owners[0].ownerDetails.fatherOrHusband" },
                     {visible: false}
                 ),
                 originalAllotte: getLabelWithValue(

@@ -153,7 +153,11 @@ const getAcknowledgementCard = (
               icon: purpose ==="reject" ? "close" : "done",
               backgroundColor: purpose ==="reject" ? "#E54D42" : "#39CB74",
               header,
-              body: {
+              body: type === NOTICE_GENERATION ? {
+                labelName:
+                  "A notification regarding notice has been sent to trade owner at registered Mobile No.",
+                labelKey: "TL_APPLICATION_NOTICE_SUCCESS_MESSAGE_SUB"
+              } : {
                 labelName:
                   "A notification regarding Application Submission has been sent to the owner at registered Mobile No.",
                 labelKey: "RP_APPLICATION_SUCCESS_MESSAGE_SUB"
