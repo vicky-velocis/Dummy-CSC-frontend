@@ -121,10 +121,7 @@ const getAcknowledgementCard = (
         labelName: "Notice Generated Successfully",
         labelKey: "RP_NOTICE_GENERATED_SUCCESS_MESSAGE_MAIN"
       }
-      : purpose === "pay" ? {
-        labelName: "Payment is collected successfully",
-        labelKey: "RP_PAYMENT_SUCCESS_MESSAGE_HEAD"
-      } : {
+      : {
         labelName: "",
         labelKey: ""
       }
