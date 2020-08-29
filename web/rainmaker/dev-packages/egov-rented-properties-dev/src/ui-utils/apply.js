@@ -254,7 +254,7 @@ let userInfo = JSON.parse(getUserInfo());
   }
   }
 
-  export const applynoticegeneration = async (state, dispatch, str) => {
+  export const applynoticegeneration = async (state, dispatch, str, propertyIdTransitNumber) => {
     try {
 
       
@@ -262,10 +262,10 @@ let userInfo = JSON.parse(getUserInfo());
       const id = get(state.screenConfiguration.preparedFinalObject, "Properties[0].id")
       const pincode = get(state.screenConfiguration.preparedFinalObject, "Properties[0].pincode")
       const area = get(state.screenConfiguration.preparedFinalObject, "Properties[0].area")
-      const filedataImages = get(state.screenConfiguration.preparedFinalObject, "SingleImage[0].applicationDocuments",[]);
+      const filedataImages = !!propertyIdTransitNumber ? get(state.screenConfiguration.preparedFinalObject, "SingleImage[0].applicationDocuments") : get(state.form.newapplication, "files.media",[]);
       const filedata = get(state.screenConfiguration.preparedFinalObject, "SingleImage",[]);
       const memoDate = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.allotmentStartdate")
-      const violations = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.violations")
+      const violations = get(state.screenConfiguration.screenConfig["notice-violation"],"components.div.children.formwizardFirstStep.children.ownerDetailsForViolationNotice.children.cardContent.children.detailsContainer.children.violations.props.value") || get(state.screenConfiguration.preparedFinalObject, "Images[0].description")
       const description = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.editor")
       const relationship = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.relation")
       const fatherOrHusbandname = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.fatherOrHusband")

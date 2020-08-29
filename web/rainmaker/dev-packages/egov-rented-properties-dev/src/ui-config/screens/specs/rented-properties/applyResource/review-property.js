@@ -421,7 +421,7 @@ export const getNoticeViolationPreviewReviewRentDetails = (isEditable = true) =>
                         labelName: "Violations",
                         labelKey: "RP_VIOLATIONS_LABEL"
                     },
-                    { jsonPath: "Images[0].description" }
+                    { jsonPath: "SingleProperties[0].violations" }
                 ),
                 editor: getLabelWithValue(
                     {

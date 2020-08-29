@@ -9,6 +9,7 @@ import { some } from "lodash";
 import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults, setXLSTableData } from "../../../../../ui-utils/commons";
+import { getQueryArg,setDocuments } from "egov-ui-framework/ui-utils/commons";
 
 const userInfo = JSON.parse(getUserInfo());
 export const DEFAULT_STEP = -1;
@@ -325,6 +326,7 @@ dispatch(toggleSnackbar(true, errorMessage, "warning"));
 const callBackForNextViolationnoticegeneration = async(state, dispatch) => {
 
   let isFormValid = true;
+  let propertyIdTransit = getQueryArg(window.location.href, "propertyIdTransit");
 
 const isOwnerDetailsValid = validateFields(
   "components.div.children.formwizardFirstStep.children.noticePropertyDetails.children.cardContent.children.detailsContainer.children",   
@@ -341,7 +343,7 @@ const isRentHolderValid = validateFields(
 )
 let res = [];
 if(isOwnerDetailsValid && isRentHolderValid) {
-  res = await applynoticegeneration(state, dispatch, "Violation")
+  res = await applynoticegeneration(state, dispatch, "Violation",propertyIdTransit)
   if(!res) {
    return
   } 
