@@ -101,7 +101,13 @@ try {
 
 payload = InventoryData()
 dispatch(prepareFinalObject("InventoryData", payload));
-dispatch(prepareFinalObject("InventoryAPIData", get(Responce,"printData")));
+if(get(Responce,"printData",[]))
+dispatch(prepareFinalObject("InventoryAPIData", get(Responce,"printData",[])));
+else
+{
+ let  InventoryAPIData =[] 
+ dispatch(prepareFinalObject("InventoryAPIData",InventoryAPIData));
+}
   console.log(payload)
 
 

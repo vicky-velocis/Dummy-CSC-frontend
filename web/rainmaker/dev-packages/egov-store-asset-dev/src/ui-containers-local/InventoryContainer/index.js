@@ -225,13 +225,13 @@ class InventoryContainer extends Component {
            )
          } */}
          {
-           InventoryData&&InventoryData[0]&&( 
+          //  InventoryData&&InventoryData[0]&&( 
            <div style={{ overscrollBehaviorX:"overlay",overflow:"overlay"}}>
              
               <table  id="reportTable"
              style={{
                width: "100%",
-               marginBottom:"0px"
+               marginBottom:"20px"
              }}
              className="table table-striped table-bordered">
              <thead>
@@ -416,12 +416,35 @@ class InventoryContainer extends Component {
               />
              </th>
              </tr>
+             {
+               InventoryData&&(
+                 <tr>
+                   {
+                      InventoryData.length==0?(                      
+                        
+                          <th  style={{ verticalAlign:"middle", textAlign: "center"}}colSpan="21" ><Label labelClassName="" label="COMMON_INBOX_NO_DATA" /></th>
+                       
+                       
+                      ):(
+                        <div  style={{ display:"none"}}></div>
+                      )
+                   }
+                 </tr>
+               )
+             }
              </thead>
              {
-                InventoryData[0]&&(
+                InventoryData&&(
                   <tbody>
                      {
-                       InventoryData[0].invetoryDetails.map((item,i)=>{
+                       InventoryData.length==0?(
+                        
+                         <tr  style={{ display:"none"}}>
+                           {/* <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"21"}} ><Label labelClassName="" label="COMMON_INBOX_NO_DATA" /></th> */}
+                         </tr>
+                        
+                       ):(
+                        InventoryData[0].invetoryDetails.map((item,i)=>{
                           return(
                             <tr>
                               <th>{item.srNo}</th>
@@ -449,15 +472,16 @@ class InventoryContainer extends Component {
                           )
                         
                         })
+                       )
+                      
                      }
 
                 </tbody>
-                )
-                
+                )                
               }
              </table>
              </div>
-           )
+           //)
         }
            
            </div>);
