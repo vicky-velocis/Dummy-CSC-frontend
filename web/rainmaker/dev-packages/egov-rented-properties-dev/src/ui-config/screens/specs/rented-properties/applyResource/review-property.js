@@ -7,7 +7,7 @@ import {
     getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { convertEpochToDate, } from "../../utils";
-import { changeStep } from "./footer";
+import { changeStep, changePropertyStep } from "./footer";
 
 export const areaLabel = {
     labelName: "Area",
@@ -60,6 +60,17 @@ const masterEntryEditSection = (isEditable, index = 0) => ({
     }
 })
 
+const propertyMasterEditSection = (isEditable, index = 0) => ({
+    ...editSection,
+    visible: isEditable,
+    onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) => {
+            changePropertyStep(state, dispatch, "apply", "", index);
+        }
+    }
+})
+
 export const headerDiv = {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -83,7 +94,7 @@ export const getReviewProperty = (isEditable = true) => {
                         labelKey: "RP_PROPERTY_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                editSection: propertyMasterEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -212,7 +223,7 @@ export const getReviewOwner = (isEditable = true) => {
                         labelKey: "TL_OWNER_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                editSection: propertyMasterEditSection(isEditable)
             }
         },
         viewFour: {
@@ -264,7 +275,7 @@ export const getReviewAddress = (isEditable = true) => {
                         labelKey: "RP_ADDRESS_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                editSection: propertyMasterEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -295,7 +306,7 @@ export const getReviewRentDetails = (isEditable = true) => {
                         labelKey: "RP_RENT_DETAILS_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable)
+                editSection: propertyMasterEditSection(isEditable)
             }
         },
         viewFour: getCommonContainer({
@@ -560,11 +571,11 @@ export const getReviewPaymentDetails = (isEditable = true) => {
                         sm: 10
                     },
                     ...getCommonSubHeader({
-                        labelName: "Payment Details",
-                        labelKey: "RP_PAYMENT_DETAILS_HEADER"
+                        labelName: "Rent Summary",
+                        labelKey: "RP_RENT_SUMMARY_HEADER"
                     })
                 },
-                editSection: masterEntryEditSection(isEditable, 2)
+                editSection: propertyMasterEditSection(isEditable, 2)
             }
         },
         viewFour: getCommonContainer({
