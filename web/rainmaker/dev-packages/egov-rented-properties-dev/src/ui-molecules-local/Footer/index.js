@@ -15,6 +15,7 @@ import isEmpty from "lodash/isEmpty";
 import "./index.css";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { WORKFLOW_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_DC } from "../../ui-constants";
 
 class Footer extends React.Component {
   state = {
@@ -85,7 +86,7 @@ class Footer extends React.Component {
           }
           break
         }
-        case "OwnershipTransferRP": {
+        case WORKFLOW_BUSINESS_SERVICE_OT: {
           if(!!action && dataPath[0].applicationState !== "OT_PENDINGCLVERIFICATION") {
             const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
             assignee = !!assigner.uuid ? [assigner.uuid] : []
@@ -93,7 +94,7 @@ class Footer extends React.Component {
           break
         }
         case "PermissionToMortgage":
-        case "DuplicateCopyOfAllotmentLetterRP": {
+        case WORKFLOW_BUSINESS_SERVICE_DC: {
           if(!!action && (dataPath[0].state !== "DC_PENDINGCLVERIFICATION" || dataPath[0].state !== "MG_PENDINGCLVERIFICATION")) {
             const {assigner = {}} = this.findAssigner(action, ProcessInstances) || {}
             assignee = !!assigner.uuid ? [assigner.uuid] : []

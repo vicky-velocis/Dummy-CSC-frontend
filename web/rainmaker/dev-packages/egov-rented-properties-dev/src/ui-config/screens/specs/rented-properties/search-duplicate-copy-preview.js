@@ -14,6 +14,7 @@ import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "..
 import { set } from "lodash";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {downloadPrintContainer} from "./applyResource/footer"
+import { WORKFLOW_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
 
 
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -85,7 +86,7 @@ const duplicateReviewDetails = getCommonCard({
           "DuplicateTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          "DuplicateCopyOfAllotmentLetterRP"
+          BILLING_BUSINESS_SERVICE_DC
         );
      
         const printCont = downloadPrintContainer(
@@ -110,7 +111,7 @@ const duplicateReviewDetails = getCommonCard({
           status,
           applicationNumber,
           tenantId,
-          "DuplicateCopyOfAllotmentLetterRP"
+          BILLING_BUSINESS_SERVICE_DC
         );
 
         process.env.REACT_APP_NAME === "Citizen"
@@ -188,7 +189,7 @@ const duplicateCopySearchPreview = {
                   componentPath: "WorkFlowContainer",
                   props: {
                     dataPath: "DuplicateCopyApplications",
-                    moduleName: "DuplicateCopyOfAllotmentLetterRP",
+                    moduleName: WORKFLOW_BUSINESS_SERVICE_DC,
                     updateUrl: "/rp-services/duplicatecopy/_update"
                   }
                 },

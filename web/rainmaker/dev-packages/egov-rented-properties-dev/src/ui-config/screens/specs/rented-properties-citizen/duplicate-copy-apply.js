@@ -10,6 +10,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { getMdmsData } from "../rented-properties/apply";
+import { WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
 const header = getCommonHeader({
     labelName: "Apply Duplicate Copy Of Allotment",
     labelKey: "RP_COMMON_DUPLICATE_COPY_APPLY"
@@ -51,7 +52,7 @@ const getData = async(action, state, dispatch) => {
     }
     setDocsForEditFlow(state, dispatch, "DuplicateCopyApplications[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
   }
-  setDocumentData(action, state, dispatch, {documentCode: "DuplicateCopyOfAllotmentLetterRP", jsonPath: "DuplicateCopyApplications[0].applicationDocuments", screenKey: "duplicate-copy-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"DuplicateTemp[0].ownershipTransferDocuments"})
+  setDocumentData(action, state, dispatch, {documentCode: WORKFLOW_BUSINESS_SERVICE_DC, jsonPath: "DuplicateCopyApplications[0].applicationDocuments", screenKey: "duplicate-copy-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"DuplicateTemp[0].ownershipTransferDocuments"})
 }
 
 
