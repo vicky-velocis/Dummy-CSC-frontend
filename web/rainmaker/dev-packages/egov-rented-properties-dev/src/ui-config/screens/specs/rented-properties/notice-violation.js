@@ -14,7 +14,7 @@ import { get } from "lodash";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { imageUploadDetailsProperties } from "./applyResource/imageUploadDetails";
-
+import set from "lodash/set";
 const getMdmsData = async (dispatch, body) => {
   let mdmsBody = {
         MdmsCriteria: {
@@ -131,6 +131,9 @@ const getData = async(action, state, dispatch) => {
 }
 
 const beforeInitFn =async(action, state, dispatch)=>{
+  set(state, 'form.newapplication.files.media', []);
+  set(state,'screenConfiguration.preparedFinalObject.SingleImage',[]);
+  set(state,'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.editor',"")
   const transitImagesPayload = [{
     moduleName: "PropertyServices",
     masterDetails: [{name: "applications"}]

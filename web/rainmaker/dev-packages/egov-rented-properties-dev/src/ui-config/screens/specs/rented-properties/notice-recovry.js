@@ -11,6 +11,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
+import set from "lodash/set";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 
 
@@ -57,6 +58,14 @@ const header = getCommonHeader({
       dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
   }
 
+  const beforeInitFn =async(action, state, dispatch)=>{
+    set(state, 'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.demandStartdate',"");
+    set(state,'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.demandlastdate',"");
+    set(state,'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.recoveryType',"");
+    set(state,'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.payment[0].amountPaid',"");
+    set(state,'screenConfiguration.preparedFinalObject.Properties[0].owners[0].ownerDetails.editor',"")
+  }
+
   const getData = async(action, state, dispatch) => {
     getColonyTypes(action, state, dispatch);
     const propertyArr = get(
@@ -78,7 +87,8 @@ const recoveryNotice = {
     uiFramework: "material-ui",
     name: "notice-recovry",
     beforeInitScreen: (action, state, dispatch) => {
-        getData(action, state, dispatch)
+        getData(action, state, dispatch);
+        beforeInitFn(action, state, dispatch);
         return action;
       },
     components: {

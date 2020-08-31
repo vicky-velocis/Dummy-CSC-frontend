@@ -308,6 +308,7 @@ const allotmentDateField = {
     required: true,
     pattern: getPattern("Date"),
     jsonPath: "Properties[0].owners[0].ownerDetails.allotmentStartdate",
+    errorMessage:"RP_ERR_ALLOTMENT_DATE_FEILD",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
@@ -330,6 +331,7 @@ const allotmentDateField = {
     minLength: 3,
     maxLength: 20,
     required: true,
+    errorMessage:"RP_ERR_ALLOTMENT_NUMBER_FIELD",
     jsonPath: "Properties[0].owners[0].allotmenNumber"
   }
 
@@ -345,6 +347,7 @@ const allotmentDateField = {
     required: true,
     pattern: getPattern("Date"),
     jsonPath: "Properties[0].owners[0].ownerDetails.posessionStartdate",
+    errorMessage:"RP_ERR_POSSESION_DATE_FIELD",
     props: {
         inputProps: {
             max: getTodaysDateInYMD()
