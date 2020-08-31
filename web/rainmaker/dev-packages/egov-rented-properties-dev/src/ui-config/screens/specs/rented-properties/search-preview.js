@@ -296,7 +296,6 @@ const phoneField = {
     xs: 12,
     sm: 12
   },
-  required: true,
   jsonPath: "Properties[0].owners[0].ownerDetails.phone",
   // pattern: getPattern("Amount")
 }
@@ -314,7 +313,6 @@ const pincodeField = {
     xs: 12,
     sm: 12
   },
-  required: true,
   jsonPath: "Properties[0].propertyDetails.address.pincode",
   // pattern: getPattern("Amount")
 }
@@ -332,7 +330,6 @@ const areaField = {
     xs: 12,
     sm: 12
   },
-  required: true,
   jsonPath: "Properties[0].propertyDetails.address.area",
   // pattern: getPattern("Amount")
 }
