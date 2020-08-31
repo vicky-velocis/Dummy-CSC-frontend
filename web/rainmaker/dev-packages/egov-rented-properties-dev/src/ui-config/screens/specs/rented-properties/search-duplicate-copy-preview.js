@@ -118,7 +118,7 @@ const duplicateReviewDetails = getCommonCard({
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
 
-        const showEstimate = process.env.REACT_APP_NAME === "Citizen" ? status === "DC_PENDINGPAYMENT" || status === "DC_PENDINGCLAPPROVAL" || status === "DC_PENDINGSAREJECTION" || status === "DC_APPROVED" || status === "OT_REJECTEDPAID" : !!estimateResponse
+        const showEstimate = process.env.REACT_APP_NAME === "Citizen" ? status === "DC_PENDINGPAYMENT" || status === "DC_PENDINGCLAPPROVAL" || status === "DC_PENDINGSAREJECTION" || status === "DC_APPROVED" || status === "DC_REJECTEDPAID" : !!estimateResponse
 
         // const showEstimate = status !== "DC_DRAFTED" && status !== "DC_PENDINGCLVERIFICATION" && status !== "DC_PENDINGJAVERIFICATION" && status !== "DC_PENDINGSAVERIFICATION" && status!=="DC_PENDINGCLARIFICATION" && status!=="DC_PENDINGSIVERIFICATION" && status!=="DC_PENDINGCAAPPROVAL" && status!=="DC_PENDINGAPRO"
         dispatch(
