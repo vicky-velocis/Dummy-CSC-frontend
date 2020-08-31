@@ -17,6 +17,18 @@ const header = getCommonHeader({
 });
 
 const getData = async(action, state, dispatch) => {
+  dispatch(
+    prepareFinalObject(
+      "DuplicateCopyApplications",
+      []
+      )
+      )
+  dispatch(
+    prepareFinalObject(
+      "DuplicateTemp",
+      []
+    )
+  )
   const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   if(!!applicationNumber) {
     const queryObject = [
@@ -24,22 +36,21 @@ const getData = async(action, state, dispatch) => {
     ]
     const response = await getDuplicateCopySearchResults(queryObject);
     if (response && response.DuplicateCopyApplications) {
-    dispatch(prepareFinalObject("DuplicateCopyApplications", response.DuplicateCopyApplications))
+      let {DuplicateCopyApplications} = response
+      let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
+      const removedDocs = applicationDocuments.filter(item => !item.active)
+      applicationDocuments = applicationDocuments.filter(item => !!item.active)
+      DuplicateCopyApplications = [{...DuplicateCopyApplications[0], applicationDocuments}]
+      const status = DuplicateCopyApplications[0].state
+      dispatch(prepareFinalObject("DuplicateCopyApplications", DuplicateCopyApplications))
+      dispatch(
+        prepareFinalObject(
+          "DuplicateTemp[0].removedDocs",
+          removedDocs
+        )
+      );
     }
     setDocsForEditFlow(state, dispatch, "DuplicateCopyApplications[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
-  } else {
-    dispatch(
-      prepareFinalObject(
-        "DuplicateCopyApplications",
-        []
-        )
-        )
-    dispatch(
-      prepareFinalObject(
-        "DuplicateTemp",
-        []
-      )
-    )
   }
   setDocumentData(action, state, dispatch, {documentCode: WORKFLOW_BUSINESS_SERVICE_DC, jsonPath: "DuplicateCopyApplications[0].applicationDocuments", screenKey: "duplicate-copy-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"DuplicateTemp[0].ownershipTransferDocuments"})
 }
