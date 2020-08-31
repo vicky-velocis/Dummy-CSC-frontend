@@ -25,6 +25,10 @@ const callBackForNext = async(state, dispatch) => {
         state.screenConfiguration.preparedFinalObject, 
         "Owners[0].property.transitNumber",
         "");
+      const applicationNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Owners[0].ownerDetails.applicationNumber"
+      )
 
       // the following block of code prevents a citizen from initiating a new application in case if another application with same transit number is in progress i.e. it is not rejected or approved
       if (!!transitNumber) {
@@ -38,7 +42,7 @@ const callBackForNext = async(state, dispatch) => {
           labelKey: "ERR_OT_ANOTHER_APPLICATION_ALREADY_IN_PROGRESS_ERR"
         };
 
-        const applicationNo = getQueryArg(window.location.href, "applicationNumber")
+        const applicationNo = getQueryArg(window.location.href, "applicationNumber") || applicationNumber
         let response = await getOwnershipSearchResults(queryObject);
         response = response.Owners;
 
@@ -241,7 +245,6 @@ const callBackForNextDuplicate = async(state, dispatch) => {
         "components.div.children.stepper.props.activeStep",
         0
     );
-    
     let isFormValid = true;
     let hasFieldToaster = true;
     if(activeStep === DETAILS_STEP) {
@@ -249,6 +252,10 @@ const callBackForNextDuplicate = async(state, dispatch) => {
           state.screenConfiguration.preparedFinalObject, 
           "DuplicateCopyApplications[0].property.transitNumber",
           "");
+        const applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "DuplicateCopyApplications[0].applicationNumber"
+        )
 
         // the following block of code prevents a citizen from initiating a new application in case if another application with same transit number is in progress i.e. it is not rejected or approved
         if (!!transitNumber) {
@@ -262,7 +269,7 @@ const callBackForNextDuplicate = async(state, dispatch) => {
             labelKey: "ERR_DC_ANOTHER_APPLICATION_ALREADY_IN_PROGRESS_ERR"
           };
 
-          const applicationNo = getQueryArg(window.location.href, "applicationNumber")
+          const applicationNo = getQueryArg(window.location.href, "applicationNumber") || applicationNumber
           let response = await getDuplicateCopySearchResults(queryObject);
           response = response.DuplicateCopyApplications;
 

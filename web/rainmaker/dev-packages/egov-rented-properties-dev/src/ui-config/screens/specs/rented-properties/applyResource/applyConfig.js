@@ -36,6 +36,20 @@ const documentCardConfig = {
   }),
 }
 
+const documentHeaderConfig = {
+  header: getCommonTitle(
+    {
+      labelName: "Required Documents",
+      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
+    },
+    {
+      style: {
+        marginBottom: 18
+      }
+    }
+  )
+}
+
 export const rentedDocumentsDetails = getCommonCard({
   ...documentCardConfig,
   documentList : {
@@ -52,7 +66,7 @@ export const rentedDocumentsDetails = getCommonCard({
 
 
 export const paymentDocumentsDetails = getCommonCard({
-  ...documentCardConfig,
+  ...documentHeaderConfig,
   documentList : {
     ...documentList,
     props: {
