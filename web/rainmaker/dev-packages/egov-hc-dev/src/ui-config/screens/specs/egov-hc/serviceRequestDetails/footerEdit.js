@@ -3,7 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getapplicationNumber, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { EditServiceRequest, furnishServiceRequestDetailResponseForEdit } from "../../../../../ui-utils/commons";
+import { EditServiceRequest, furnishServiceRequestDetailResponseForEdit, commonConfig } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";  
@@ -150,7 +150,14 @@ export const getRedirectionURL = () => {
         if (typeOfService != undefined && locality != undefined )
     {if (activeStep === 1) { 
           let status = 'INITIATED'
-          serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
+          var tenantIdCommonConfig
+          if (getTenantId() != commonConfig.tenantId){
+              tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+          }
+          else{
+            tenantIdCommonConfig = getTenantId()
+          }
+          serviceRequest['city']= tenantIdCommonConfig,
           serviceRequest['media'] = media,
           serviceRequest['currentState'] = processInstanceCurrentState,
           serviceRequest['isEditState'] = 1
