@@ -1255,8 +1255,13 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
   
 }
-export const downloadInventoryPdf = async ( searchScreenObject,mode="download") => {
+export const downloadInventoryPdf = async ( searchScreenObject, Reportname,mode="download") => {
   let tenantId =  getTenantId()
+  let Url =``;
+  if(Reportname ==="OB")
+  Url =`/store-asset-services/openingbalance/_report`
+  else if(Reportname==='INV')
+  Url =`/store-asset-services/receiptnotes/_inventoryreport`
   let queryObject = [
     {
       key: "tenantId",
@@ -1272,7 +1277,7 @@ export const downloadInventoryPdf = async ( searchScreenObject,mode="download") 
               key: "isprint",
               value: true
             });   
-      const response = await getprintpdf(queryObject,"/store-asset-services/receiptnotes/_inventoryreport");
+      const response = await getprintpdf(queryObject,Url);
       if(response)
       {
         let filestoreId = response.filestoreIds[0]
