@@ -1161,7 +1161,8 @@ export const getWFPayload = (state, dispatch) => {
     let wfobject = {
       "businessService": businessServiceName,
       "action": "CREATED",
-      "comments": ""
+      "comments": "",
+      "assignee":[JSON.parse(getUserInfo()).uuid]
     }
     return wfobject;
   } catch (error) {
