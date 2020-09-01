@@ -158,15 +158,26 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
           showEstimate
       )
   );
+  
   const showCharge =  status === "OT_PENDINGSIVERIFICATION" || status === "OT_PENDINGCAAPPROVAL" || status === "OT_PENDINGAPRO" 
-  dispatch(
+  process.env.REACT_APP_NAME === "Citizen"
+  ? dispatch(
     handleField(
         "ownership-search-preview",
         "components.div.children.transferReviewDetails.children.cardContent.children.getreviewCharges",
         "visible",
-        showCharge
+        false
     )
-);
+)
+:
+dispatch(
+  handleField(
+      "ownership-search-preview",
+      "components.div.children.transferReviewDetails.children.cardContent.children.getreviewCharges",
+      "visible",
+      showCharge
+  )
+)
     }
   }
 }
