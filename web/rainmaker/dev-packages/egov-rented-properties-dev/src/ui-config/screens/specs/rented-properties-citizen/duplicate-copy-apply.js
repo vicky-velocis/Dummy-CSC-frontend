@@ -1,5 +1,5 @@
 import {
-    getCommonHeader
+    getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import {stepper, formwizardDuplicateCopyFirstStep,formwizardDuplicateCopySecondStep,formwizardDuplicateCopyThirdStep } from '../rented-properties/applyResource/applyConfig';
@@ -11,9 +11,15 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { get } from "lodash";
 import { getMdmsData } from "../rented-properties/apply";
 import { WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
-const header = getCommonHeader({
-    labelName: "Apply Duplicate Copy Of Allotment",
-    labelKey: "RP_COMMON_DUPLICATE_COPY_APPLY"
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
+import {applicationNumber} from '../rented-properties/apply'
+
+const header = getCommonContainer({
+    header: getCommonHeader({
+      labelName: "Apply Duplicate Copy Of Allotment",
+      labelKey: "RP_COMMON_DUPLICATE_COPY_APPLY"
+  }),
+  applicationNumber
 });
 
 const getData = async(action, state, dispatch) => {
@@ -35,6 +41,7 @@ const getData = async(action, state, dispatch) => {
       {key: "applicationNumber", value: applicationNumber}
     ]
     const response = await getDuplicateCopySearchResults(queryObject);
+    setApplicationNumberBox(state, dispatch, applicationNumber, "duplicate-copy-apply")
     if (response && response.DuplicateCopyApplications) {
       let {DuplicateCopyApplications} = response
       let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];

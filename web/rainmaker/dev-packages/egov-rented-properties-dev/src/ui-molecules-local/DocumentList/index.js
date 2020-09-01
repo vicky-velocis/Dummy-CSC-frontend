@@ -171,7 +171,7 @@ class DocumentList extends Component {
 
   removeDocument = remDocIndex => {
     let { uploadedDocuments } = this.state;
-    const { prepareFinalObject, documents, preparedFinalObject, uploadedDocumentsJsonPath, removedJsonPath } = this.props;
+    const { prepareFinalObject, documents, preparedFinalObject, uploadedDocumentsJsonPath, removedJsonPath, componentJsonPath, getUrl, handleField, screenKey } = this.props;
     const jsonPath = documents[remDocIndex].jsonPath;
       uploadedDocuments[remDocIndex][0].id &&
       prepareFinalObject(removedJsonPath, [
@@ -189,6 +189,16 @@ class DocumentList extends Component {
     );
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(false, remDocIndex);
+      if(!!getUrl) {
+        handleField(
+          screenKey,
+          componentJsonPath,
+          "visible",
+          false
+      )
+      prepareFinalObject("Properties[0].demands", [])
+      prepareFinalObject("Properties[0].payments", [])
+      }
   };
 
   getFileUploadStatus = (status, index) => {

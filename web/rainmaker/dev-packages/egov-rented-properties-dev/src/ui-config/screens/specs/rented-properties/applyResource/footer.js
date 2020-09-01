@@ -1095,7 +1095,7 @@ export const footer = getCommonApplyFooter({
         children: {
           downloadMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -1109,7 +1109,7 @@ export const footer = getCommonApplyFooter({
           },
           printMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -1142,7 +1142,7 @@ export const footer = getCommonApplyFooter({
     let downloadMenu = [];
     let printMenu = [];  
     let noticeFormObject = {
-      label: { labelName: "Notice", labelKey: "RP_Notice" },
+      label: { labelName: "Notice", labelKey: "RP_NOTICE" },
       link: () => {
         const { SingleProperties } = state.screenConfiguration.preparedFinalObject;
         downloadNoticeForm(SingleProperties);
@@ -1162,7 +1162,7 @@ export const footer = getCommonApplyFooter({
         children: {
           downloadMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -1176,7 +1176,7 @@ export const footer = getCommonApplyFooter({
           },
           printMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {

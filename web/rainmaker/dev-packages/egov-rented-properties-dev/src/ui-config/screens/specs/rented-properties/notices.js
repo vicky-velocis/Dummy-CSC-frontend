@@ -11,6 +11,7 @@ import { getImages } from "./property-transitImages";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import NoticedetailsPreview from "./noticestabNoticepreview";
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 
 
 let transitNumber = getQueryArg(window.location.href, "transitNumber");
@@ -62,6 +63,7 @@ const findItem = roles.find(item => item.code === "RP_CLERK");
   dispatch(prepareFinalObject("workflow.ProcessInstances", []))
   if(transitNumber){
     await searchResults(action, state, dispatch, transitNumber)
+    setApplicationNumberBox(state, dispatch, transitNumber, "notices")   
   }
   // const printCont = downloadPrintContainer(
   //   action,
@@ -143,7 +145,7 @@ const notices = {
             uiFramework: "custom-atoms",
             componentPath: "Container",
             children: {
-              header1: {
+              header: {
                 gridDefination: {
                   xs: 12,
                   sm: 8
