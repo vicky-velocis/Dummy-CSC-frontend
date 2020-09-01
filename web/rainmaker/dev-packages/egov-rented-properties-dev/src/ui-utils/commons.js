@@ -43,6 +43,7 @@ import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import {RP_DEMAND_GENERATION_DATE, RP_PAYMENT_DATE, RP_ASSESSMENT_AMOUNT, RP_REALIZATION_AMOUNT, RP_RECEIPT_NO} from '../ui-constants'
 import moment from "moment";
+import { setApplicationNumberBox } from "./apply";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -386,6 +387,7 @@ export const updatePFOforSearchResults = async (
     }, [])
     dispatch(prepareFinalObject("Properties", properies));
   }
+  setApplicationNumberBox(state, dispatch, transitNumber, "apply")
   setDocsForEditFlow(state, dispatch, "Properties[0].propertyDetails.applicationDocuments", "PropertiesTemp[0].uploadedDocsInRedux");
 };
 
@@ -774,7 +776,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
-    setApplicationNumberBox(state, dispatch);
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -824,31 +825,6 @@ export const isFileValid = (file, acceptedFiles) => {
   );
 };
 
-const setApplicationNumberBox = (state, dispatch) => {
-  let applicationNumber = get(
-    state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
-    null
-  );
-  if (applicationNumber) {
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
-        "visible",
-        true
-      )
-    );
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
-        "props.number",
-        applicationNumber
-      )
-    );
-  }
-};
 
 export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
   for (let i = 0; i < arr.length; i++) {

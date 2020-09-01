@@ -1,5 +1,5 @@
 import {
-    getCommonHeader
+    getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import {stepper, formwizardMortgageFirstStep,formwizardMortgageSecondStep, formwizardMortgageThirdStep } from '../rented-properties/applyResource/applyConfig';
@@ -10,10 +10,15 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
+import {applicationNumber} from '../rented-properties/apply'
 
-  const header = getCommonHeader({
-      labelName: "Apply Mortage License",
-      labelKey: "RP_COMMON_MORTAGE_LICENSE_APPLY"
+  const header = getCommonContainer({
+        header: getCommonHeader({
+          labelName: "Apply Mortage License",
+          labelKey: "RP_COMMON_MORTAGE_LICENSE_APPLY"
+      }),
+      applicationNumber
   });
   
   const getData = async(action, state, dispatch) => {
@@ -35,6 +40,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
         {key: "applicationNumber", value: applicationNumber}
       ]
       const response = await getMortgageSearchResults(queryObject);
+      setApplicationNumberBox(state, dispatch, applicationNumber, "mortage-apply")
       if (response && response.MortgageApplications) {
       let applicationDocuments = response.MortgageApplications[0].applicationDocuments|| [];
       const removedDocs = applicationDocuments.filter(item => !item.active)

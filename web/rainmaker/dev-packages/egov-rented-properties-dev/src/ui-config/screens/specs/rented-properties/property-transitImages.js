@@ -14,6 +14,7 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 
   let transitNumber = getQueryArg(window.location.href, "transitNumber");
 
@@ -39,6 +40,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
       { key: "transitNumber", value: transitNumber }
     ];
     let payload = await getSearchResults(queryObject);
+    setApplicationNumberBox(state, dispatch, transitNumber, "property-transitImages")   
     if(payload) {
       let properties = payload.Properties;
       if(properties[0].propertyImages){
@@ -63,7 +65,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
           images = []
         }
         dispatch(prepareFinalObject("Images", images));
-        dispatch(prepareFinalObject("Properties[0]", properties[0]));     
+        dispatch(prepareFinalObject("Properties[0]", properties[0]));
       }
     }
    }
@@ -94,7 +96,7 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
               uiFramework: "custom-atoms",
               componentPath: "Container",
               children: {
-                header1: {
+                header: {
                   gridDefination: {
                     xs: 12,
                     sm: 8

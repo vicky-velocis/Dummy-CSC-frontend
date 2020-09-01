@@ -5,6 +5,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults, setXLSTableData } from "../../../../ui-utils/commons";
 import {paymentDetailsTable} from './applyResource/applyConfig'
 import { getBreak } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 
 
 const beforeInitFn = async (action, state, dispatch, transitNumber) => {
@@ -15,6 +16,7 @@ const beforeInitFn = async (action, state, dispatch, transitNumber) => {
             {key: "relations", value: "finance"}
           ];
       const response = await getSearchResults(queryObject);
+      setApplicationNumberBox(state, dispatch, transitNumber, "rent-history")   
       if(!!response) {
         let {demands, payments} = response.Properties[0];
         demands = demands || []
@@ -44,7 +46,7 @@ const rentHistory = {
               uiFramework: "custom-atoms",
               componentPath: "Container",
               children: {
-                header1: {
+                header: {
                   gridDefination: {
                     xs: 12,
                     sm: 8

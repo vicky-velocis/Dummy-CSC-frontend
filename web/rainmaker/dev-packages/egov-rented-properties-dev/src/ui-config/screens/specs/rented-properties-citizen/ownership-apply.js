@@ -1,5 +1,5 @@
 import {
-    getCommonHeader
+    getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {stepper, formwizardOwnershipFirstStep, formwizardOwnershipSecondStep, formwizardOwnershipThirdStep } from '../rented-properties/applyResource/applyConfig';
 import {footer} from './footer';
@@ -9,11 +9,17 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { get } from "lodash";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getOwnershipSearchResults, setDocsForEditFlow, setDocumentData } from "../../../../ui-utils/commons";
+import {applicationNumber} from '../rented-properties/apply'
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 
-const header = getCommonHeader({
+const header = getCommonContainer({
+  header: getCommonHeader({
     labelName: "Apply for Ownership Transfer",
     labelKey: "RP_APPLY_OWNERSHIP_TRANFER"
-});
+}),
+applicationNumber
+})
+
 
 const getData = async(action, state, dispatch) => {
   dispatch(
@@ -34,6 +40,7 @@ const getData = async(action, state, dispatch) => {
       {key: "applicationNumber", value: applicationNumber}
     ]
     const response = await getOwnershipSearchResults(queryObject);
+    setApplicationNumberBox(state, dispatch, applicationNumber, "ownership-apply")
     if (response && response.Owners) {
       let {Owners} = response
     let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];

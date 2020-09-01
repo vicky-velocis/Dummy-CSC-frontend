@@ -14,6 +14,8 @@ import { getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set"
+import {applicationNumber} from './apply'
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "RP_CLERK");
@@ -24,7 +26,8 @@ export const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES"
-  })
+  }),
+  applicationNumber
 });
 const reviewOwnerDetails = getReviewOwner(false);
 const reviewPropertyDetails = getReviewProperty(false);
@@ -87,6 +90,7 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
       "PropertiesTemp[0].reviewDocData",
       dispatch,'RP'
     );
+    setApplicationNumberBox(state, dispatch, transitNumber, "search-preview")
 
     const getGrantDetailsAvailed = grandDetails !==null
     dispatch(
@@ -250,7 +254,7 @@ const rentedPropertiesDetailPreview = {
           uiFramework: "custom-atoms",
           componentPath: "Container",
           children: {
-            header1: {
+            header: {
               gridDefination: {
                 xs: 12,
                 sm: 8
