@@ -542,6 +542,7 @@ export const IndentConfigType = () => {
         INDENT_TFR:"Transfer Indent",
         
       },
+      indentStatus:"APPROVED"
   }
 }
 
