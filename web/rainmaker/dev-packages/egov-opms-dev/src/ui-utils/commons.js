@@ -924,7 +924,7 @@ export const furnishRoadcutNocResponse = response => {
   set(refurnishresponse, "division", applicationdetail.division);
   set(refurnishresponse, "uploadDocuments", applicationdetail.uploadDocuments);
   set(refurnishresponse, "remarks", applicationdetail.remarks);
-
+  set(refurnishresponse, "gstin", applicationdetail.gstin);
   return refurnishresponse;
 };
 
@@ -1789,7 +1789,9 @@ export const callBackForRefund = async data => {
 };
 export const getWFStatus = (actions, state) => {
   let processInstances = get(state, "screenConfiguration.preparedFinalObject.workflow.ProcessInstances", []);
-  let currentState = processInstances.pop().state
+  let length = processInstances.length;
+  let currentState = processInstances[length-1].state
+  // let currentState = processInstances.pop().state
   let status = "";
   let roles = JSON.parse(getUserInfo()).roles
   currentState.actions.map(item => {
@@ -2010,7 +2012,8 @@ export const UpdateStatus = async (state, dispatch, url, queryObject, code) => {
   try {
     //    dispatch(toggleSpinner());
     let processInstances = get(state, "screenConfiguration.preparedFinalObject.workflow.ProcessInstances", []);
-    code.currentState = checkForRole(JSON.parse(getUserInfo()).roles, 'CITIZEN') ? getCurrentWFStateNameForCitizen(state) : processInstances.pop().state.state;
+    let length = processInstances.length;
+    code.currentState = checkForRole(JSON.parse(getUserInfo()).roles, 'CITIZEN') ? getCurrentWFStateNameForCitizen(state) : processInstances[length-1].state.state;
     const response = await httpRequest(
       "post", "/pm-services/noc/_updateappstatus", "", [], code
     );

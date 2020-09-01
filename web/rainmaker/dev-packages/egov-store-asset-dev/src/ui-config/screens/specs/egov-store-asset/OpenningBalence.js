@@ -33,14 +33,14 @@ import {
   import { httpRequest } from "../../../../ui-utils";
   import { getSearchResults } from "../../../../ui-utils/commons"; 
   const resetFields = (state, dispatch) => {
-    const textFields = ["storeName","materialName",];
+    const textFields = ["storeName","financialYear",];
     for (let i = 0; i < textFields.length; i++) {
       if (
-        `state.screenConfiguration.screenConfig.InvenrtyRegister.components.div.children.SearchCard.children.cardContent.children.appPRSearchContainer.children.${textFields[i]}.props.value`
+        `state.screenConfiguration.screenConfig.OpenningBalence.components.div.children.SearchCard.children.cardContent.children.appPRSearchContainer.children.${textFields[i]}.props.value`
       ) {
         dispatch(
           handleField(
-            "InvenrtyRegister",
+            "OpenningBalence",
             `components.div.children.SearchCard.children.cardContent.children.appPRSearchContainer.children.${textFields[i]}`,
             "props.value",
             ""
@@ -94,8 +94,8 @@ try {
 
  let Responce = await httpRequest(
     "post",
-    "/store-asset-services/receiptnotes/_inventoryreport",
-    "_inventoryreport",    
+    "store-asset-services/openingbalance/_report",
+    "_report",    
     queryObject
   );
 
@@ -151,11 +151,8 @@ const getMdmsData = async (state, dispatch) => {
       tenantId: tenantId,
       moduleDetails: [
         {
-          moduleName: "store-asset",
-          masterDetails: [
-            { name: "Material", },
-           
-          ],
+          moduleName: "egf-master",
+          masterDetails: [{ name: "FinancialYear" }]
         },
       ]
     }
@@ -178,12 +175,12 @@ const getMdmsData = async (state, dispatch) => {
 };
 
 const header = getCommonHeader({
-  labelName: "Inventory Register",
-  labelKey: "STORE_INVENTORY_REGISTER"
+  labelName: "Openning Balence Report",
+  labelKey: "STORE_OB_REPORT"
 });
 const RegisterReviewResult = {
   uiFramework: "material-ui",
-  name: "InvenrtyRegister",
+  name: "OpenningBalence",
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();   
@@ -234,11 +231,11 @@ const RegisterReviewResult = {
               labelName: "Select Store Name",
               labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
             },
-            required: false,
+            required: true,
             jsonPath: "searchScreen.storecode",
             sourceJsonPath: "searchMaster.storeNames",
             props: {
-              disabled : true,
+              disabled : false,
               className: "hr-generic-selectfield",
               optionValue: "code",
               optionLabel: "name"
@@ -246,24 +243,27 @@ const RegisterReviewResult = {
           }),
 
         },
-        materialName: getSelectField({
-          label: { labelName: "Material  Name", labelKey: "STORE_MATERIAL_NAME" },
+        financialYear: getSelectField({
+          label: { labelName: "Financial Year", labelKey: "STORE_MATERIAL_OPENNING_BALANCE_FINANCIAL_YEAR"},
           placeholder: {
-            labelName: "Select Materila  Name",
-            labelKey: "STORE_MATERIAL_NAME_SELECT",
+            labelName: "Select Financial Year",
+                  labelKey: "STORE_MATERIAL_OPENNING_BALANCE_FINANCIAL_YEAR_SELECT"
           },
           required: true,
-          jsonPath: "searchScreen.material",
+          jsonPath: "searchScreen.financialyear",
           gridDefination: {
             xs: 12,
             sm: 4,
           },
-          sourceJsonPath: "searchScreenMdmsData.store-asset.Material",
+          sourceJsonPath: "searchScreenMdmsData.egf-master.FinancialYear",
           props: {
             optionValue: "code",
             optionLabel: "name",
           },
-         
+          // localePrefix: {
+          //   moduleName: "common-masters",
+          //   masterName: "Designation",
+          // },
         }),
   }),
   button: getCommonContainer({
@@ -340,7 +340,8 @@ const RegisterReviewResult = {
             props: {
               dataPath: "InventoryData",
               moduleName: "STORE_ASSET",
-              pageName:"INVENTRY"
+              pageName:"OB",
+
             }
         },
 

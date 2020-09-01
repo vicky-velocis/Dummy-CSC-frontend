@@ -1,6 +1,10 @@
 import React from "react";
+import Button from '@material-ui/core/Button';
+import { connect } from "react-redux";
+import get from "lodash/get";
+import { getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
-
 const styles = {
   color: "rgba(0, 0, 0, 0.87)",
   marginLeft: "3%",
@@ -14,20 +18,36 @@ const clickHereStyles = {
   textDecoration: "none",
   color: "#FE7A51"
 }
+class  AddLinkForProperty extends React.Component {
 
-function AddLinkForProperty(props) {
-  const { url } = props;
-  let link = window.location.origin+"/"+process.env.REACT_APP_NAME.toLowerCase()+`/pt-common-screens/propertySearch?redirectUrl=${url}`
-  return (
+handleClick = (url) => {
+  const {onsetRoute} = this.props;
+  url = `/pt-common-screens/propertySearch?redirectUrl=${url}`;
+    onsetRoute(url);
+}
+render() {
+
+  const { url } = props; 
+  let translatedLabel = getLocaleLabels(
+    "WS_APPLY_CLICK_HERE",
+    "WS_APPLY_CLICK_HERE",
+    localizationLabels
+  );
+  return (   
     <div style={styles}>
-      <LabelContainer
-        labelName="To Find/Create Property ID"
-        labelKey="WS_APPLY_CREATE_MSG" /><span> </span><a href={`${link}`} ><LabelContainer
-          style={clickHereStyles}
-          labelKey="WS_APPLY_CLICK_HERE" />
-      </a>
+       <Button  onClick = {()=> this.handleClick(url)}>{translatedLabel}</Button>
+     
     </div>
   );
-}
 
-export default AddLinkForProperty;
+}
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onsetRoute: (url) => {
+      dispatch(setRoute(url));
+    },
+  };
+};
+export default  connect(mapStateToProps, mapDispatchToProps)(AddLinkForProperty) ;
+//export default AddLinkForProperty;

@@ -1,4 +1,5 @@
 import { getBreak, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, setHCRoles } from "egov-ui-kit/utils/localStorageUtils";
@@ -73,7 +74,6 @@ import "./index.css";
         [],
         mdmsBody
       );
-      debugger
       dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
 
       //setting horticulture roles into mdms
@@ -97,6 +97,15 @@ import "./index.css";
 
       getMdmsData(dispatch).then(response => {  
       }) 
+
+      dispatch(
+        handleField(
+          "employeeServiceRequestsFilter",
+          "components.div.children.searchResultsServiceRequest",
+          "visible",
+          false
+        )
+      );
       
       return action;
     },

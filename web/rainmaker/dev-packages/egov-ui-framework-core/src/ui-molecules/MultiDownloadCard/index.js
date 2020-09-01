@@ -16,7 +16,7 @@ const styles = {
     paddingRight: 0,
     paddingTop: 11,
     paddingBottom: 0,
-    marginRight: 16,
+    marginRight: 10,
     marginTop: 16
   },
   subtext: {
