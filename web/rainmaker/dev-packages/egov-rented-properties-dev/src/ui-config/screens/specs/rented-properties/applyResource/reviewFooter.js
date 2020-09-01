@@ -105,7 +105,7 @@ import {
         children: {
           downloadMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -119,7 +119,7 @@ import {
           },
           printMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -164,7 +164,7 @@ import {
         children: {
           downloadMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
@@ -178,7 +178,7 @@ import {
           },
           printMenu: {
             uiFramework: "custom-atoms-local",
-            moduleName: "egov-tradelicence",
+            moduleName: "egov-rented-properties",
             componentPath: "MenuButton",
             props: {
               data: {
