@@ -130,14 +130,24 @@ const duplicateReviewDetails = getCommonCard({
           )
       );
       const showCharge =  status === "DC_PENDINGSIVERIFICATION" || status === "DC_PENDINGCAAPPROVAL" || status === "DC_PENDINGAPRO" 
-  dispatch(
+      process.env.REACT_APP_NAME === "Citizen"
+    ?  dispatch(
     handleField(
         "search-duplicate-copy-preview",
         "components.div.children.duplicateReviewDetails.children.cardContent.children.duplicatereviewChargesDetails",
         "visible",
-        showCharge
+        false
     )
-);
+)
+:
+dispatch(
+  handleField(
+      "search-duplicate-copy-preview",
+      "components.div.children.duplicateReviewDetails.children.cardContent.children.duplicatereviewChargesDetails",
+      "visible",
+      showCharge
+  )
+)
         }
       }
     }
