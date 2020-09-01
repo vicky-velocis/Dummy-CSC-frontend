@@ -26,6 +26,7 @@ export const getWFConfig = (module,businessService,taskId) => {
     }
 
   }
+ 
 else if (businessService == "Engineering" || businessService == "IT" || businessService == "Caretaker" || businessService == "MOH") {
     if (taskId.includes('MRNIN')) {
       return {
@@ -84,6 +85,14 @@ else if (businessService == "Engineering" || businessService == "IT" || business
     }
 
   }
+   // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE" Chnage
+  else if (businessService == "RRP_SERVICE" || businessService == "DOE_SERVICE" || businessService == "DOP_SERVICE")
+  {
+    return {
+      INITIATED: "/pms/pmsmap",
+      DEFAULT: "/pms/pmsmap",
+    };
+  }
   else {
     switch (module.toUpperCase()) {
       case "TL-SERVICES":
@@ -138,21 +147,21 @@ else if (businessService == "Engineering" || businessService == "IT" || business
           };
         }
   // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE":
-      case "RRP_SERVICE":
-        return {
-          INITIATED: "/pms/pmsmap",
-          DEFAULT: "/pms/pmsmap",
-        };
-        case "DOE_SERVICE":
-          return {
-            INITIATED: "/pms/pmsmap",
-            DEFAULT: "/pms/pmsmap",
-          };
-          case "DOP_SERVICE":
-          return {
-            INITIATED: "/pms/pmsmap",
-            DEFAULT: "/pms/pmsmap",
-          };
+      // case "RRP_SERVICE":
+      //   return {
+      //     INITIATED: "/pms/pmsmap",
+      //     DEFAULT: "/pms/pmsmap",
+      //   };
+      //   case "DOE_SERVICE":
+      //     return {
+      //       INITIATED: "/pms/pmsmap",
+      //       DEFAULT: "/pms/pmsmap",
+      //     };
+      //     case "DOP_SERVICE":
+      //     return {
+      //       INITIATED: "/pms/pmsmap",
+      //       DEFAULT: "/pms/pmsmap",
+      //     };
 
     }
   }

@@ -24,7 +24,9 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-
+import {
+  getTenantId
+} from "egov-ui-kit/utils/localStorageUtils";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1253,8 +1255,42 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
   
 }
+export const downloadInventoryPdf = async ( searchScreenObject, Reportname,mode="download") => {
+  let tenantId =  getTenantId()
+  let Url =``;
+  if(Reportname ==="OB")
+  Url =`/store-asset-services/openingbalance/_report`
+  else if(Reportname==='INV')
+  Url =`/store-asset-services/receiptnotes/_inventoryreport`
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ]
+     for (var key in searchScreenObject) {  
+  
+              queryObject.push({ key: key, value: (searchScreenObject[key]) });
+            }
+    try { 
+        queryObject.push({
+              key: "isprint",
+              value: true
+            });   
+      const response = await getprintpdf(queryObject,Url);
+      if(response)
+      {
+        let filestoreId = response.filestoreIds[0]
+        downloadReceiptFromFilestoreID(filestoreId,mode,tenantId)
+      }
+     
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  
+  }
 export const downloadAcknowledgementForm = async ( pagename,mode="download") => {
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId =  getQueryArg(window.location.href, "tenantId");
   let APIUrl =`store-asset-services/indents/_print`
   let ApplicationNo ='';
   let queryObject = [
@@ -1266,7 +1302,7 @@ export const downloadAcknowledgementForm = async ( pagename,mode="download") => 
 switch(pagename)
 {
   case "Indent":
-    ApplicationNo = getQueryArg(window.location.href, "indentNumber");
+    ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "indentNumber",
       value:ApplicationNo
@@ -1278,7 +1314,7 @@ switch(pagename)
     APIUrl = `store-asset-services/indents/_print`
     break;
     case "Non Indent":
-      ApplicationNo = getQueryArg(window.location.href, "issueNoteNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
       queryObject.push({
         key: "issueNoteNumber",
         value:ApplicationNo
@@ -1288,7 +1324,7 @@ switch(pagename)
       break;
 
     case "Material Receipt":
-      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "mrnNumber",
       value:ApplicationNo
@@ -1297,7 +1333,7 @@ switch(pagename)
     APIUrl = `store-asset-services/receiptnotes/_print`
     break;
     case "Material Receipt Misc":
-      ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "mrnNumber",
       value:ApplicationNo
@@ -1306,7 +1342,7 @@ switch(pagename)
     APIUrl = `store-asset-services/miscellaneousreceiptnotes/_print`
     break;
     case "Indent Transfer":
-      ApplicationNo= getQueryArg(window.location.href, "indentNumber");
+      ApplicationNo= getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "indentNumber",
       value:ApplicationNo
@@ -1318,7 +1354,7 @@ switch(pagename)
     APIUrl = `store-asset-services/indents/_print`
     break;
     case "Purchase Order":
-      ApplicationNo = getQueryArg(window.location.href, "poNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
     queryObject.push({
       key: "purchaseOrderNumber",
       value:ApplicationNo
@@ -1327,7 +1363,7 @@ switch(pagename)
     APIUrl = `store-asset-services/purchaseorders/_print`
     break;
     case "Indent Outward":
-      ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+      ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
       queryObject.push({
         key: "issueNoteNumber",
         value:ApplicationNo
@@ -1336,7 +1372,7 @@ switch(pagename)
       APIUrl = `store-asset-services/materialissues-to/_print`
       break;
     case "Indent Inward":
-        ApplicationNo = getQueryArg(window.location.href, "mrnNumber");
+        ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
         queryObject.push({
           key: "mrnNumber",
           value:ApplicationNo
@@ -1345,7 +1381,7 @@ switch(pagename)
         APIUrl = `store-asset-services/transferinwards/_print`
         break;
      case "Indent Issue":
-          ApplicationNo = getQueryArg(window.location.href, "issueNumber");
+          ApplicationNo = getQueryArg(window.location.href, "applicationNumber");
           queryObject.push({
             key: "issueNoteNumber",
             value:ApplicationNo
@@ -1356,6 +1392,30 @@ switch(pagename)
           });
           APIUrl = `store-asset-services/materialissues/_print`
           break;
+          // case "Inventry":
+          //   // let searchScreenObject = get(
+          //   //   state.screenConfiguration.preparedFinalObject,
+          //   //   "searchScreen",
+          //   //   {}
+          //   // );
+          //   let queryObject = [
+          //     {
+          //       key: "tenantId",
+          //       value: getTenantId()
+          //     }
+             
+          //   ];
+          //   for (var key in searchScreenObject) {  
+  
+          //     queryObject.push({ key: key, value: (searchScreenObject[key]) });
+          //   }
+           
+          //   queryObject.push({
+          //     key: "isprint",
+          //     value: true
+          //   });
+          //   APIUrl = `/store-asset-services/receiptnotes/_inventoryreport`
+          //   break;
     
   
 

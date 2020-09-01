@@ -347,8 +347,11 @@ if(response && response[0])
    let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code)  
    set(response[0], `materialIssueDetails[${index}].material.name`, matname);
    set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
+   if(Number(response[0].indent.indentDetails[index].indentQuantity))
+   set(response[0], `materialIssueDetails[${index}].indentDetail.indentQuantity`, Number(response[0].indent.indentDetails[index].indentQuantity) );
+   set(response[0], `materialIssueDetails[${index}].indentDetail.TotalValue`,  Number(element.value));
    totalvalue = totalvalue+ Number(element.value)
-   totalIndentQty = totalIndentQty+  Number(element.indentDetail.indentQuantity)
+   totalIndentQty = totalIndentQty+ Number(response[0].indent.indentDetails[index].indentQuantity)
    TotalQty = TotalQty + Number(element.quantityIssued)
   }
   set(response[0],`totalIndentQty`, totalIndentQty);

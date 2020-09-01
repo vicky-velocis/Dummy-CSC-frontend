@@ -28,8 +28,10 @@ export const getCurrentStatus = status => {
 
 const TaskStatusComponents = ({ currentObj, index }) => {
   if (currentObj.moduleName === 'HORTICULTURE'){
+    debugger
     var role_name = ""
-
+    
+    
     var current_assigner_roles = get(currentObj, "assigner")
     for (var i = 0; i < current_assigner_roles.roles.length; i++) {
       
@@ -38,7 +40,19 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       else{
         role_name += current_assigner_roles.roles[i].name 
       }}}
-      
+      var allDocumentsDownloadButton = []
+      var allDocuments = []
+      if(get(currentObj, "documents") != null)
+     { allDocuments = get(currentObj, "documents")
+      allDocuments.map((item) => {
+        allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+          documentType:item.documentType,
+          fileStoreId: item.fileStoreId, 
+          id: item.id,
+          link: item.link,
+          linkText: "Download", 
+          name: item.name, tenantId: item.tenantId,title: "Document" })
+      });}
     return (
     <Grid
       container={true}
@@ -165,7 +179,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       {get(currentObj, "documents") && (     
 
         <DownloadFileContainer
-          data={get(currentObj, "documents")}
+          data={allDocumentsDownloadButton}
           className="review-documents"
           backgroundGrey={true}
         />
@@ -188,7 +202,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         style={{ marginTop: 15, paddingRight: 20 }}
       >
         <Typography variant="caption">
-          <LabelContainer labelName="Date" labelKey="TL_DATE_LABEL" />
+          {/* <LabelContainer labelName="Date" labelKey="TL_DATE_LABEL" /> */}
+          <LabelContainer labelName="Date" labelKey="Date" />
         </Typography>
         <Typography variant="body2">
           <LabelContainer
@@ -209,7 +224,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         <Typography variant="caption">
           <LabelContainer
             labelName="Updated By"
-            labelKey="TL_UPDATED_BY_LABEL"
+            // labelKey="TL_UPDATED_BY_LABEL"
+            labelKey="Updated By"
           />
         </Typography>
         <Typography variant="body2">
@@ -227,7 +243,8 @@ const TaskStatusComponents = ({ currentObj, index }) => {
         <Typography variant="caption">
           <LabelContainer
             labelName="Status"
-            labelKey="TL_COMMON_TABLE_COL_STATUS"
+            // labelKey="TL_COMMON_TABLE_COL_STATUS"
+            labelKey="Status"
           />
         </Typography>
         <Typography

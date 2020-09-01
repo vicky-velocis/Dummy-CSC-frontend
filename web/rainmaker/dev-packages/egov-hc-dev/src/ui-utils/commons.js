@@ -11,6 +11,12 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 
 
 const role_name = JSON.parse(getUserInfo()).roles[0].code
+export const commonConfig = {
+  
+  tenantId: "ch.chandigarh"
+  // forgotPasswordTenant: "ch.chandigarh",
+};
+
 
 
 export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
@@ -81,12 +87,19 @@ export const getSearchResults = async queryObject => {
 };
 
 export const getCurrentAssigneeUserNameAndRole = async (dispatch,userId) => {
-  let tenantId = JSON.parse(getUserInfo()).permanentCity;
+  var tenantIdCommonConfig
+      if (getTenantId() != commonConfig.tenantId){
+          tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+      }
+      else{
+        tenantIdCommonConfig = getTenantId()
+      }
+  
   try {
     let payload = null;
     payload = await httpRequest(
       "post",
-      `/egov-hrms/employees/_search?ids=${userId}&tenantId=${tenantId}`,
+      `/egov-hrms/employees/_search?ids=${userId}&tenantId=${tenantIdCommonConfig}`,
       "_search",  
       [],
       
@@ -98,9 +111,11 @@ export const getCurrentAssigneeUserNameAndRole = async (dispatch,userId) => {
   }};
 
   export const getSearchResultsForFilters = async (filterdata) => {
-  
+    
     let data = filterdata
+   
     try {
+      store.dispatch(toggleSpinner());
       const response = await httpRequest(
         "post",
         "/hc-services/serviceRequest/_get",
@@ -108,11 +123,11 @@ export const getCurrentAssigneeUserNameAndRole = async (dispatch,userId) => {
         [],
         data
       );
-      store.dispatch(toggleSpinner);
+      store.dispatch(toggleSpinner());
       return response;
   
     } catch (error) {
-      store.dispatch(toggleSpinner);
+      store.dispatch(toggleSpinner());
       store.dispatch(
         toggleSnackbar(
           true,
@@ -125,6 +140,8 @@ export const getCurrentAssigneeUserNameAndRole = async (dispatch,userId) => {
   };
 
 export const getSearchResultsView = async queryObject => {
+
+
   try {
     //debugger
     const response = await httpRequest(

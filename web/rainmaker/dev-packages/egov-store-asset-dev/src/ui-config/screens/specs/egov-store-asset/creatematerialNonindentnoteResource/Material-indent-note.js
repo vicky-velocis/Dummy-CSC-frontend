@@ -222,6 +222,40 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           jsonPath: "materialIssues[0].materialIssueStatus"
         })
       },
+      createdBy: {
+        ...getTextField({
+          label: {
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+          },
+          placeholder: {
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "indents[0].createdByName"
+        })
+      },
+      designation: {
+        ...getTextField({
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
+          placeholder: {
+            labelName: "Enter Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "indents[0].designation"
+        })
+      },
       PurposeofIssue: {
         ...getSelectField({
           label: { labelName: "Purpose of Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_PURPOSE" },
