@@ -78,7 +78,7 @@ const setDocumentTypes = (state, code) => {
 export const getAsteric = () => {
   return {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-rented-properties",
     componentPath: "Asteric"
   };
 };
@@ -109,7 +109,7 @@ export const getTooltip = (children, toolTipProps) => {
 export const getCheckbox = (content, jsonPath, props = {}) => {
   return {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-rented-properties",
     componentPath: "CheckboxContainer",
     props: {
       content,
@@ -213,7 +213,7 @@ export const getRadioGroupWithLabel = (
 export const getApplicationNoContainer = number => {
   return {
     uiFramework: "custom-atoms-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-rented-properties",
     componentPath: "ApplicationNoContainer",
     props: {
       number
@@ -658,7 +658,7 @@ export const getReceiptData = async queryObject => {
 export const getAutoSelector = textScheama => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-rented-properties",
     componentPath: "AutoSelector",
     gridDefination: {
       xs: 6,
@@ -673,7 +673,7 @@ export const getAutoSelector = textScheama => {
 export const getMapLocator = textSchema => {
   return {
     uiFramework: "custom-molecules-local",
-    moduleName: "egov-tradelicence",
+    moduleName: "egov-rented-properties",
     componentPath: "MapLocator",
     props: {}
   };

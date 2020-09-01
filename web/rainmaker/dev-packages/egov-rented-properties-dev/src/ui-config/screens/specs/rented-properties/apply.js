@@ -1,5 +1,5 @@
 import {
-    getCommonHeader
+    getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {stepper, formwizardFirstStep, formwizardSecondStep, formwizardThirdStep,addPropertyStepper,formwizardFourthStep} from './applyResource/applyConfig'
 import { httpRequest } from "../../../../ui-utils";
@@ -178,11 +178,23 @@ export const getColonyTypes = async(action, state, dispatch) => {
       dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
   }
 
+export const applicationNumber = {
+  uiFramework: "custom-atoms-local",
+  moduleName: "egov-rented-properties",
+  componentPath: "ApplicationNoContainer",
+  props: {
+    number: "NA"
+  },
+  visible: false
+}
 
-const header = getCommonHeader({
+const header = getCommonContainer({
+  header: getCommonHeader({
     labelName: "Add Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD"
-  });
+  }),
+  applicationNumber
+});
 
 const getData = async(action, state, dispatch) => {
   const transitNumber = getQueryArg(window.location.href, "transitNumber");
