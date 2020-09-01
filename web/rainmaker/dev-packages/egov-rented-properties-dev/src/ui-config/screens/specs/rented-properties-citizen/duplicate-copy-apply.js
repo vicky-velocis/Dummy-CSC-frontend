@@ -22,7 +22,25 @@ const header = getCommonContainer({
   applicationNumber
 });
 
+export const getColonyTypes = async(action, state, dispatch) => {
+  const colonyTypePayload = [{
+    moduleName: "PropertyServices",
+    masterDetails: [{name: "colonies"}, {name: "applications"}]
+  }
+]
+  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
+  const {PropertyServices} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+  const {colonies = []} = PropertyServices || {}
+    dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
+    const propertyTypes = colonies.map(item => ({
+      code: item.code,
+      label: item.code
+    }))
+    dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
+}
+
 const getData = async(action, state, dispatch) => {
+  getColonyTypes(action, state, dispatch);
   dispatch(
     prepareFinalObject(
       "DuplicateCopyApplications",
