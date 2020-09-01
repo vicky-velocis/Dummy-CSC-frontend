@@ -1142,7 +1142,7 @@ export const footer = getCommonApplyFooter({
     let downloadMenu = [];
     let printMenu = [];  
     let noticeFormObject = {
-      label: { labelName: "Notice", labelKey: "RP_Notice" },
+      label: { labelName: "Notice", labelKey: "RP_NOTICE" },
       link: () => {
         const { SingleProperties } = state.screenConfiguration.preparedFinalObject;
         downloadNoticeForm(SingleProperties);

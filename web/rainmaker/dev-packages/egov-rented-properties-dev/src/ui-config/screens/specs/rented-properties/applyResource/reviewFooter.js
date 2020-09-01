@@ -10,7 +10,11 @@ import {
   import "./index.css";
   import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField,
   } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+  const userInfo = JSON.parse(getUserInfo());
+  const {roles = []} = userInfo
+  const findItem = roles.find(item => item.code === "RP_CLERK");
   export const footerReview = (
     action,
     state,
@@ -66,7 +70,7 @@ import {
                   },
   
                 },
-                visible: process.env.REACT_APP_NAME === "Citizen" && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
+                visible: process.env.REACT_APP_NAME === "Citizen"  && getButtonVisibility(status, "PENDINGPAYMENT") ? true : false
               }
             },
             gridDefination: {
@@ -140,7 +144,7 @@ import {
                     showOrHidePopup(state, dispatch);
                   }  
                 },
-                visible: process.env.REACT_APP_NAME != "Citizen" && getButtonVisibility(state, "APPROVED") ? true : false
+                visible: process.env.REACT_APP_NAME != "Citizen" &&  !!findItem && getButtonVisibility(state, "APPROVED") ? true : false
               }
             },
             gridDefination: {
