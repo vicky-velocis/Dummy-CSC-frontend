@@ -355,7 +355,7 @@ const isOwnerDetailsValid = validateFields(
 )
 
 const isRentHolderValid = validateFields(
-  "components.div.children.formwizardFirstStep.children.ownerDetailsForNotice.children.cardContent.children.detailsContainer.children",   
+  "components.div.children.formwizardFirstStep.children.ownerDetailsForViolationNotice.children.cardContent.children.detailsContainer.children",   
   state,
   dispatch,
   "notice-violation"

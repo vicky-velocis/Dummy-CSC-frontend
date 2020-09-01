@@ -117,6 +117,7 @@ export const transitNumberConfig = {
     minLength: 4,
     maxLength: 25,
     required: true,
+    pattern:getPattern("TransitNumberValidation"),
     errorMessage: "RP_ERR_TRANSIT_FIELD",
 }
 

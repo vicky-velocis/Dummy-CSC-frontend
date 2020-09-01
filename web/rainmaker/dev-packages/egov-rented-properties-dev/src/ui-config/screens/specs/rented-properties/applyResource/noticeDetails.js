@@ -147,9 +147,7 @@ const getViolationField = {
         multiline: true,
         rows: "4"
     },
-    props: {
-        disabled: false
-      },
+    visible:true,
       required:true,
     jsonPath: "SingleImage[0].description" 
 }
