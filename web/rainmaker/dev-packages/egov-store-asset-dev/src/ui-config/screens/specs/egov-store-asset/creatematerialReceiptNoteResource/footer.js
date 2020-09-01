@@ -34,8 +34,10 @@ const moveToReview = dispatch => {
 };
 const getpurchaseOrder = async ( state,dispatch)=>{
   const tenantId = getTenantId();
-  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.name",'')
-  let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.name",'')
+  let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
+  let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.code",'')
+  let storecodename = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.name",'')
+  let suppliercodename = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.name",'')
  // alert(storecode +'_'+suppliercode)
   let queryObject = [
     {
@@ -64,7 +66,7 @@ const getpurchaseOrder = async ( state,dispatch)=>{
         const errorMessage = {
               
           labelName: "Purchase Orders does not exit for",
-          labelKey:   LocalizationCodeValue+' store  '+storecode +' and supplier '+suppliercode
+          labelKey:   LocalizationCodeValue+' store  '+storecodename +' and supplier '+suppliercodename
         };
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
