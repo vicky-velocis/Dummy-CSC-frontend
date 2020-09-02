@@ -663,17 +663,25 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
 
   if (isFormValid) {
     dispatch(toggleSpinner());
+    const nocApplicationDetail = get(
+      state.screenConfiguration.preparedFinalObject,
+      "nocApplicationDetail");
+
+    
     const Amount = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].WithdraApproval.Amount");
 
+    const Tax = get(
+        state.screenConfiguration.preparedFinalObject,
+        "advertisement[0].WithdraApproval.Tax");
+  
     const Remark = get(
       state.screenConfiguration.preparedFinalObject,
       "advertisement[0].WithdraApproval.Remark");
 
-    const BillAmount = get(
-      state.screenConfiguration.preparedFinalObject,
-      "ReceiptTemp[0].Bill[0].totalAmount");
+    const BillAmount = nocApplicationDetail[0].amount;
+    const TaxAmount = nocApplicationDetail[0].gstamount;
 
     let data = {}
     if (file) {
@@ -686,7 +694,7 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
         }],
         "remarks": Remark,
         "withdrawapprovalamount": Amount,
-
+        "withdrawapprovaltaxamount":Tax
       }
     }
     else {
@@ -696,37 +704,46 @@ const updateAdhocAdvWithdrawApp = (state, dispatch) => {
         }],
         "remarks": Remark,
         "withdrawapprovalamount": Amount,
+        "withdrawapprovaltaxamount":Tax
       }
     }
 
 
-    if (BillAmount != undefined && BillAmount != null && Amount < BillAmount) {
-      let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
-      //    //alert(JSON.stringify(wfstatus))
-      let wfstatus = {};
-      if (get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")) {
-        wfstatus.status = get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")
-      } else {
-        wfstatus = wfstatuslist.find(item => {
-          return item.buttonName == "withdrawapprove";
-        });
-      }
-
-      //alert(wfstatus.status)
-      UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
-
-        {
-          "applicationType": "ADVERTISEMENTNOC",
-          "tenantId": getOPMSTenantId(),
-          "applicationStatus": wfstatus.status,
-          //checkForRole(roles, 'JEX') ? "REVIEWOFSPAFTERWITHDRAW" : checkForRole(roles, 'OSD') ? "PENDINGAPPROVALFORWITHDRAW" : '',
-          "applicationId": localStorage.getItem('ApplicationNumber'),
-          "dataPayload": data
+    if (BillAmount != undefined && BillAmount != null && Number(Amount) < Number(BillAmount)) {
+      if (TaxAmount != undefined && TaxAmount != null && Number(Tax) < Number(TaxAmount)) {
+        let wfstatuslist = get(state, "screenConfiguration.preparedFinalObject.WFStatus", [])
+        //    //alert(JSON.stringify(wfstatus))
+        let wfstatus = {};
+        if (get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")) {
+          wfstatus.status = get(state, "screenConfiguration.preparedFinalObject.OPMS.AdvertisementNOC.typeOfCommissioner")
+        } else {
+          wfstatus = wfstatuslist.find(item => {
+            return item.buttonName == "withdrawapprove";
+          });
         }
-      );
+
+        //alert(wfstatus.status)
+        UpdateStatus(state, dispatch, '/egov-opms/advertisement-search', [],
+          {
+            "applicationType": "ADVERTISEMENTNOC",
+            "tenantId": getOPMSTenantId(),
+            "applicationStatus": wfstatus.status,
+            "applicationId": localStorage.getItem('ApplicationNumber'),
+            "dataPayload": data
+          }
+        );
+      }else {
+        dispatch(toggleSpinner());
+        store.dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: "Withdraw tax amount should be less than actual tax amount", labelCode: "ADV_WITHDRAWAPP_TAX_INVALID_AMOUNT" },
+            "error"
+          )
+        );
+      }
     } else {
       dispatch(toggleSpinner());
-
       store.dispatch(
         toggleSnackbar(
           true,
@@ -3538,7 +3555,6 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           required: false
         }),
         advertisementOSDWithdraApprovalAmountField: getTextField({
-
           label: {
             labelName: "Enter Amount",
             labelKey: "NOC_ADVERTISEMENT_OSD_WITHDRAW_APPROVAL_AMOUNT_LABEL"
@@ -3561,6 +3577,30 @@ export const adhocPopupAdvertisementwithdrawApproval = getCommonContainer({
           pattern: getPattern("Amountopms"),
 
         }),
+        advertisementOSDWithdraApprovalTaxAmountField: getTextField({
+
+          label: {
+            labelName: "Enter Withdraw Tax Amount",
+            labelKey: "NOC_ADVERTISEMENT_WITHDRAW_APPROVAL_TAX_AMOUNT_LABEL"
+          },
+          placeholder: {
+            labelName: "Enter Withdraw Tax Amount",
+            labelKey: "NOC_ADVERTISEMENT_WITHDRAW_APPROVAL_TAX_AMOUNT_LABEL"
+          },
+          gridDefination: {
+            xs: 12,
+            sm: 12
+          },
+          props: {
+            style: {
+              width: "100%"
+            }
+          },
+          jsonPath: "advertisement[0].WithdraApproval.Tax",
+          required: true,
+          pattern: getPattern("Amountopms"),
+
+        })
 
       })
     },

@@ -8,6 +8,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {  checkValueForNA } from "../../utils";
 const gotoCreatePage = (state, dispatch) => {
   const IndentId = getQueryArg(window.location.href, "IndentId");
   const createUrl =
@@ -98,6 +99,16 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
         labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE" },
         { jsonPath: "materialIssues[0].issueDate", }
       ),
+      indentNumber: getLabelWithValue(
+        {
+          labelName: "Indent No.",
+          labelKey: "STORE_PURCHASE_ORDER_INDENT_NO"
+        },
+        { 
+        jsonPath: "materialIssues[0].indent.indentNumber",
+        callBack: checkValueForNA
+      }
+      ),
       IndentingStore: getLabelWithValue(
         {
           labelName: "Indenting Store", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENTING_STORE"
@@ -111,19 +122,19 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           jsonPath: "materialIssues[0].fromStore.department.name",
         }
       ),
-      IssueToEmployee: getLabelWithValue(
-        { labelName: "Issue To Employee",
-        labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE" },
-        {
-          jsonPath: "materialIssues[0].issuedToEmployee"
-        }
-      ),
-      issuedToDesignation: getLabelWithValue(
-        {labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
-        {
-          jsonPath: "materialIssues[0].issuedToDesignation",
-        }
-      ),
+      // IssueToEmployee: getLabelWithValue(
+      //   { labelName: "Issue To Employee",
+      //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE" },
+      //   {
+      //     jsonPath: "materialIssues[0].issuedToEmployee"
+      //   }
+      // ),
+      // issuedToDesignation: getLabelWithValue(
+      //   {labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //   {
+      //     jsonPath: "materialIssues[0].issuedToDesignation",
+      //   }
+      // ),
       Remark: getLabelWithValue(
         { labelName: "Remark",
         labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK" },
@@ -151,6 +162,18 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
       //     jsonPath: "materialIssues[0].materialIssueStatus",
       //   }
       // ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "materialIssues[0].createdByName",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "materialIssues[0].designation",
+        }
+      ),
       
     }),
 

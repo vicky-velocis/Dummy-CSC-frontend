@@ -129,7 +129,7 @@ export const searchApiCall = async (state, dispatch) => {
         return {
           [getTextToLocalMapping("mrnNumber")]: get(item, "mrnNumber", "-") || "-",
           [getTextToLocalMapping("receipt Date")]:  convertEpochToDate(Number(item.receiptDate,"receiptDate" ,"-")) || "-", 
-         [getTextToLocalMapping("receiving Store Name")]: get(item, "receivingStore.code", "-") || "-", 
+         [getTextToLocalMapping("receiving Store Name")]: get(item, "receivingStore.name", "-") || "-", 
          // [getTextToLocalMapping("Indent Purpose")]: get(item, "receiptPurpose", "-") || "-",  
           [getTextToLocalMapping("Status")]: get(item, "mrnStatus", "-") || "-",  
           id: item.id,       

@@ -80,7 +80,8 @@ export const searchResults = {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `view-purchase-order?tenantId=${getTenantId()}&poNumber=${rowData[0]}&Status=${rowData[5]}`;
+//  window.location.href = `view-purchase-order?tenantId=${getTenantId()}&poNumber=${rowData[0]}&Status=${rowData[5]}`;
+window.location.href = `view-purchase-order?applicationNumber=${rowData[0]}&tenantId=${getTenantId()}&Status=${rowData[5]}`;
 };
 
 

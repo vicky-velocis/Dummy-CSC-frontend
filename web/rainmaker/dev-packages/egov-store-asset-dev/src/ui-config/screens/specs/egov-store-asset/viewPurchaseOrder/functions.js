@@ -21,6 +21,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {  handleCardDelete } from "../../../../../ui-utils/commons";
 import{httpRequest} from '../../../../../ui-utils/api'
+import { getWFPayload } from "../../../../../ui-utils/storecommonsapi";
 // SET ALL SIMPLE DATES IN YMD FORMAT
 const setDateInYmdFormat = (obj, values) => {
   values.forEach(element => {
@@ -269,15 +270,17 @@ export const createUpdatePO = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       const response = await httpRequest(
         "post",
         "/store-asset-services/purchaseorders/_create",
         "",
         queryObject,
-        requestBody
+        { purchaseOrders: requestBody.purchaseOrders, workFlowDetails: wfobject }
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=create&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+         dispatch(setRoute(`/egov-store-asset/view-purchase-order?applicationNumber=${response.purchaseOrders[0].purchaseOrderNumber}&tenantId=${getTenantId()}&Status=${response.purchaseOrders[0].status}`));
        }
   
     } catch (error) {
@@ -293,8 +296,9 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
-       }
+//        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=purchaseOrder&mode=update&code=${response.purchaseOrders[0].purchaseOrderNumber}`));
+          dispatch(setRoute(`/egov-store-asset/view-purchase-order?applicationNumber=${response.purchaseOrders[0].purchaseOrderNumber}&tenantId=${getTenantId()}&Status=${response.purchaseOrders[0].status}`));
+}
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );

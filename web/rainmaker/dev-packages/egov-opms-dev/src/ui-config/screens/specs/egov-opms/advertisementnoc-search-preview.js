@@ -127,6 +127,14 @@ const titlebar = getCommonContainer({
       number: getapplicationNumber()
     }
   },
+  withdrawRequest: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-opms",
+    componentPath: "WithdrawRequestContainer",
+    props: {
+      isVisible: false
+    }
+  },
   downloadMenu: {
     uiFramework: "custom-atoms",
     componentPath: "MenuButton",
@@ -154,6 +162,11 @@ const titlebar = getCommonContainer({
   //   }
   // }
 });
+const withdrawRequest={
+  uiFramework: "custom-atoms-local",
+  moduleName: "egov-opms",
+  componentPath: "WithdrawRequestContainer"
+}
 
 const prepareDocumentsView = async (state, dispatch) => {
   let documentsPreview = [];
@@ -354,6 +367,11 @@ const HideshowEdit = (state, action, nocStatus, exemptedcategory, dispatch) => {
     "screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.body.children.withdrawapprovalamount.visible",
     localStorageGet('pms_iswithdrawn') === "yes" ? true : false
   );
+  set(
+    action,
+    "screenConfig.components.div.children.body.children.cardContent.children.detailSummary.children.cardContent.children.body.children.withdrawapprovaltaxamount.visible",
+    localStorageGet('pms_iswithdrawn') === "yes" ? true : false
+  );
 
   set(
     action,
@@ -397,6 +415,17 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
       }
     });
 
+    if (localStorageGet('pms_iswithdrawn') === "yes") {
+      dispatch(
+        handleField(
+          "advertisementnoc-search-preview",
+          "components.div.children.headerDiv.children.header.children.withdrawRequest",
+          "props.isVisible",
+          true
+        )
+      );
+    }
+  
     let applicationStatus = get(response, "nocApplicationDetail.[0].applicationstatus");
     localStorageSet("footerApplicationStatus", applicationStatus);
     let exampted = get(state.screenConfiguration.preparedFinalObject, 'nocApplicationDetail[0].applicationdetail');
@@ -408,6 +437,10 @@ const setSearchResponse = async (state, action, dispatch, applicationNumber, ten
     if (JSON.parse(exampted).hasOwnProperty('withdrawapprovalamount'))
       dispatch(prepareFinalObject("advertisement[0].WithdraApproval.Amount", JSON.parse(exampted)['withdrawapprovalamount']));
 
+    if (JSON.parse(exampted).hasOwnProperty('withdrawapprovaltaxamount'))
+      dispatch(prepareFinalObject("advertisement[0].WithdraApproval.Tax", JSON.parse(exampted)['withdrawapprovaltaxamount']));
+
+    
     dispatch(
       handleField(
         "advertisementnoc-search-preview",
@@ -648,6 +681,7 @@ const screenConfig = {
       set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Reject.Remark", "");
       set(state.screenConfiguration.preparedFinalObject, "advertisement[0].Reassign.Remark", "");
       set(state.screenConfiguration.preparedFinalObject, "advertisement[0].WithdraApproval.Amount", "");
+      set(state.screenConfiguration.preparedFinalObject, "advertisement[0].WithdraApproval.Tax", "");
       set(state.screenConfiguration.preparedFinalObject, "advertisement[0].WithdraApproval.Remark", "");
       set(state.screenConfiguration.preparedFinalObject, "OPMS.AdvertisementNOC.typeOfCommissioner", "");
     }

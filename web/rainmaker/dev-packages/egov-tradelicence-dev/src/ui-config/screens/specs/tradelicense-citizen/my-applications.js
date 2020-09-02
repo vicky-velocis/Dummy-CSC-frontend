@@ -120,11 +120,12 @@ const searchCard = getCommonCard({
         variant: "contained",
         style: {
           color: "white",
-          marginBottom: "10px",
+          // marginBottom: "10px",
           backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
           borderRadius: "2px",
           width: "80%",
-          height: "48px"
+          height: "48px",
+          marginTop: "8px"
         }
       },
       children: {
@@ -154,7 +155,8 @@ const searchCard = getCommonCard({
           backgroundColor: "white",
           borderRadius: "2px",
           width: "80%",
-          height: "48px"
+          height: "48px",
+          marginTop: "8px"
         }
       },
       children: {

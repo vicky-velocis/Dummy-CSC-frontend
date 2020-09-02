@@ -36,6 +36,8 @@ const getpurchaseOrder = async ( state,dispatch)=>{
   const tenantId = getTenantId();
   let storecode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.code",'')
   let suppliercode = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.code",'')
+  let storecodename = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].receivingStore.name",'')
+  let suppliercodename = get(state,"screenConfiguration.preparedFinalObject.materialReceipt[0].supplier.name",'')
  // alert(storecode +'_'+suppliercode)
   let queryObject = [
     {
@@ -58,13 +60,13 @@ const getpurchaseOrder = async ( state,dispatch)=>{
     dispatch(prepareFinalObject("purchaseOrder", response));
     if(response)
     {
-      if(response.purchaseOrder.purchaseOrders.length ===0)
+      if(response.purchaseOrders.length ===0)
       {
         let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_PO_LIST_VALIDATION")
         const errorMessage = {
               
           labelName: "Purchase Orders does not exit for",
-          labelKey:   LocalizationCodeValue+' store  '+storecode +' and supplier'+suppliercode
+          labelKey:   LocalizationCodeValue+' store  '+storecodename +' and supplier '+suppliercodename
         };
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
@@ -280,7 +282,10 @@ export const callBackForNext = async (state, dispatch) => {
           dispatch(prepareFinalObject("materialReceipt[0].receiptDetails",storeMappingTemp)
         );
           }
-            changeStep(state, dispatch);
+          if(activeStep ===1)
+          moveToReview(dispatch)
+          else
+          changeStep(state, dispatch);
           }
           else{
             if(DuplicatItem[0].IsDuplicatItem)

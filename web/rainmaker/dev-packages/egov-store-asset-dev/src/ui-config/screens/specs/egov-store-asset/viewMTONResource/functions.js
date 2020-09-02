@@ -8,7 +8,8 @@ import set from "lodash/set";
 import {
   getmaterialOutwordSearchResults,
   GetMdmsNameBycode,
-  getMaterialBalanceRateResults
+  getMaterialBalanceRateResults,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import {
   convertDateToEpoch,
@@ -164,15 +165,17 @@ export const createUpdatePO = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      const wfobject=getWFPayload(state,dispatch)
       const response = await httpRequest(
         "post",
         "/store-asset-services/materialissues-to/_create",
         "",
         queryObject,
-        requestBody
+        { materialIssues:requestBody.materialIssues,workFlowDetails:wfobject }
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=create&code=${response.materialIssues[0].issueNumber}`));
+        // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=create&code=${response.materialIssues[0].issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-outword?applicationNumber=${response.materialIssues[0].issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
        }
   
     } catch (error) {
@@ -188,8 +191,9 @@ export const createUpdatePO = async (state, dispatch, action) => {
         requestBody
       );
        if(response){
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=update&code=${response.materialIssues[0].issueNumber}`));
-       }
+      //  dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=indentOutword&mode=update&code=${response.materialIssues[0].issueNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-outword?applicationNumber=${response.materialIssues[0].issueNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`));
+      }
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
@@ -201,12 +205,17 @@ export const getIndentOutwordData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  issueNoteNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "issueNumber",
+      value: issueNoteNumber
     },
     {
       key: "tenantId",
@@ -216,7 +225,7 @@ export const getIndentOutwordData = async (
 
  let response = await getmaterialOutwordSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-response = response.materialIssues.filter(x=>x.id === id)
+response = response.materialIssues.filter(x=>x.issueNumber === issueNoteNumber)
 let totalvalue = 0
 let TotalQty = 0;
 if(response && response[0])

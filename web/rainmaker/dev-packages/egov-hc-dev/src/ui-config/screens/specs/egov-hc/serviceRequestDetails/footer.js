@@ -3,7 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getapplicationNumber, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { createServiceRequest } from "../../../../../ui-utils/commons";
+import { createServiceRequest, commonConfig } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -151,11 +151,16 @@ const callBackForNext = async (state, dispatch) => {
 
       if (typeOfService != undefined && locality != undefined )
     {if (activeStep === 1) { 
-      // "custom-containers-nextButtonLabel"
-      // debugger
+      var tenantIdCommonConfig
+      if (getTenantId() != commonConfig.tenantId){
+          tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+      }
+      else{
+        tenantIdCommonConfig = getTenantId()
+      }
       let status = 'INITIATED'
-      serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
-      serviceRequest['tenantId']= getTenantId(),
+      serviceRequest['city']= tenantIdCommonConfig,
+      serviceRequest['tenantId']= tenantIdCommonConfig,
       serviceRequest['media'] = media,
       // serviceRequest['address'] = 'hardcoded value',
       serviceRequest['isEditState'] = 0

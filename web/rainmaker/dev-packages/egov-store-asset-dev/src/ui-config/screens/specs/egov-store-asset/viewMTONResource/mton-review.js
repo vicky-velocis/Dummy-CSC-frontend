@@ -14,7 +14,7 @@ export const MTONReviewDetails = isReview => {
     viewMTONHeader,
     viewMTONDetails,
     totalIssueValue,
-    viewApprovalInfo,
+   // viewApprovalInfo,
     footer
   });
 };
