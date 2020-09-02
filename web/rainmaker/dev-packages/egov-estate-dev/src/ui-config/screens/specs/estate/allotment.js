@@ -2,14 +2,14 @@ import {
   getCommonHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
-  stepper,
-  formwizardFirstStep,
-  formwizardSecondStep,
-  formwizardThirdStep,
-  formwizardFourthStep,
-  formwizardFifthStep,
-  formwizardSixthStep,
-  formwizardSeventhStep
+  stepperAllotment,
+  formwizardFirstStepAllotment,
+  formwizardSecondStepAllotment,
+  formwizardThirdStepAllotment,
+  formwizardFourthStepAllotment,
+  formwizardFifthStepAllotment,
+  formwizardSixthStepAllotment,
+  formwizardSeventhStepAllotment
 } from './applyResource/applyConfig'
 import {
   httpRequest
@@ -19,13 +19,12 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import {
-  footer
-} from './applyResource/footer';
+  footerAllotment
+} from './applyResource/footerAllotment';
 import {
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 import {
-  prepareDocumentTypeObj,
   prepareDocumentTypeObjMaster
 } from "../utils";
 import {
@@ -176,9 +175,9 @@ const getData = async (action, state, dispatch) => {
 
 const applyAllotment = {
   uiFramework: "material-ui",
-  name: "apply",
+  name: "allotment",
   beforeInitScreen: (action, state, dispatch) => {
-    getData(action, state, dispatch)
+    // getData(action, state, dispatch)
     return action;
   },
   components: {
@@ -202,15 +201,15 @@ const applyAllotment = {
             }
           }
         },
-        stepper,
-        formwizardFirstStep,
-        formwizardSecondStep,
-        formwizardThirdStep,
-        formwizardFourthStep,
-        formwizardFifthStep,
-        formwizardSixthStep,
-        formwizardSeventhStep,
-        footer
+        stepperAllotment,
+        formwizardFirstStepAllotment,
+        formwizardSecondStepAllotment,
+        formwizardThirdStepAllotment,
+        formwizardFourthStepAllotment,
+        formwizardFifthStepAllotment,
+        formwizardSixthStepAllotment,
+        formwizardSeventhStepAllotment,
+        footerAllotment
       }
     }
   }

@@ -205,6 +205,44 @@ export const formwizardSeventhStep = {
 }
 
 /* Allotment of site */
+export const stepsDataAllotment = [{
+  labelName: "Property Details",
+  labelKey: "EST_COMMON_PROPERTY_DETAILS"
+},
+{
+  labelName: "Auction Details",
+  labelKey: "EST_COMMON_AUCTION_DETAILS"
+},
+{
+  labelName: "Owner Details",
+  labelKey: "EST_COMMON_OWNER_DETAILS"
+},
+{
+  labelName: "Court Case",
+  labelKey: "EST_COMMON_COURT_CASE_DETAILS"
+},
+{
+  labelName: "Payment Details",
+  labelKey: "EST_COMMON_PAYMENT_DETAILS"
+},
+{
+  labelName: "Documents",
+  labelKey: "EST_COMMON_DOCUMENTS"
+},
+{
+  labelName: "Summary",
+  labelKey: "EST_COMMON_SUMMARY"
+}
+];
+
+export const stepperAllotment = getStepperObject({
+  props: {
+    activeStep: 0
+  }
+},
+stepsDataAllotment
+);
+
 export const formwizardFirstStepAllotment = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
