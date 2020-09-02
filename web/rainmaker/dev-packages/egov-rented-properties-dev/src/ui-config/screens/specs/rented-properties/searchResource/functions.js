@@ -554,13 +554,13 @@ const getMdmsData = async (dispatch, body) => {
 
 export const getColonyTypes = async(action, state, dispatch) => {
   const colonyTypePayload = [{
-    moduleName: "PropertyServices",
+    moduleName: "RentedProperties",
     masterDetails: [{name: "colonies"}]
   }]
   const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-  const {PropertyServices = []} = colonyRes.MdmsRes || {}
-  dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", PropertyServices.colonies))
-  const propertyTypes = PropertyServices.colonies.map(item => ({
+  const {RentedProperties = []} = colonyRes.MdmsRes || {}
+  dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", RentedProperties.colonies))
+  const propertyTypes = RentedProperties.colonies.map(item => ({
     code: item.code,
     label: item.code
   }))

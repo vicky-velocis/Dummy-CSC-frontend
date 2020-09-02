@@ -42,13 +42,13 @@ const beforeInitFn =async(action, state, dispatch)=>{
 
     console.log(state)
     const transitImagesPayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "applications"}]
     }]
     let documentsRes = await getMdmsData(dispatch, transitImagesPayload);
 
     if (documentsRes) {
-      documentsRes = documentsRes.MdmsRes.PropertyServices.applications[0].documentList;
+      documentsRes = documentsRes.MdmsRes.RentedProperties.applications[0].documentList;
 
       documentsRes = documentsRes.filter(item => item.code == "TRANSIT_SITE_IMAGES");
       const imageLength = documentsRes[0].maxCount;

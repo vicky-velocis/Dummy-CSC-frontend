@@ -43,15 +43,15 @@ const header = getCommonHeader({
   };
   export const getColonyTypes = async(action, state, dispatch) => {
     const colonyTypePayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "recoverytype"}]
     }
   ]
     const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-     const {PropertyServices} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-     const {colonies = []} = PropertyServices || []
-      dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", PropertyServices.recoverytype))
-      const propertyTypes = PropertyServices.recoverytype.map(item => ({
+     const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+     const {colonies = []} = RentedProperties || []
+      dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", RentedProperties.recoverytype))
+      const propertyTypes = RentedProperties.recoverytype.map(item => ({
         code: item.code,
         label: item.code
       }))

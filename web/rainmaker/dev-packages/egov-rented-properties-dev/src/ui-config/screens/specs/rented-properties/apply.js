@@ -97,13 +97,13 @@ export const getMdmsData = async (dispatch, body) => {
 
   const setDocumentData = async (action, state, dispatch) => {
     const documentTypePayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "applications"}]
     }
   ]
     const documentRes = await getMdmsData(dispatch, documentTypePayload);
-    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-    const {applications = []} = PropertyServices || {}
+    const {RentedProperties} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
+    const {applications = []} = RentedProperties || {}
     const findMasterItem = applications.find(item => item.code === "MasterRP")
     const masterDocuments = !!findMasterItem ? findMasterItem.documentList : [];
     console.log(masterDocuments)
@@ -162,13 +162,13 @@ export const getMdmsData = async (dispatch, body) => {
   
 export const getColonyTypes = async(action, state, dispatch) => {
     const colonyTypePayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "colonies"}, {name: "applications"}]
     }
   ]
     const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-    const {PropertyServices} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-    const {colonies = []} = PropertyServices || {}
+    const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+    const {colonies = []} = RentedProperties || {}
       dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
       const propertyTypes = colonies.map(item => ({
         code: item.code,
