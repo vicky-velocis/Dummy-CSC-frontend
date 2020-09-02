@@ -130,7 +130,6 @@ export const formwizardFirstStep = {
   }
 };
 
-
 export const formwizardSecondStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -201,6 +200,88 @@ export const formwizardSeventhStep = {
   },
   children: {
     reviewDetails
+  },
+  visible: false
+}
+
+/* Allotment of site */
+export const formwizardFirstStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form1"
+  },
+  children: {
+    propertyInfoDetails,
+    additionalDetails
+  }
+};
+
+export const formwizardSecondStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form2"
+  },
+  children: {
+  },
+  visible: false
+};
+
+export const formwizardThirdStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form3"
+  },
+  children: {
+    ownerDetails
+  },
+  visible: false
+};
+
+export const formwizardFourthStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    courtCaseDetails
+  },
+  visible: false
+};
+
+export const formwizardFifthStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form5"
+  },
+  children: {
+  },
+  visible: false
+};
+
+export const formwizardSixthStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form6"
+  },
+  children: {
+    ownerDocumentDetails_0
+  },
+  visible: false
+}
+
+export const formwizardSeventhStepAllotment = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form7"
+  },
+  children: {
   },
   visible: false
 }
