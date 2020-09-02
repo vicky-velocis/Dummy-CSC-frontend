@@ -177,7 +177,7 @@ export const SMIDDetails = getCommonCard({
           labelKey: "NULM_SEP_QUALIFACATION_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("alpha-numeric-with-space") || null,
+        pattern: getPattern("Address") || null,
         jsonPath: "NULMSMIDRequest.qualification"
       })
     },
@@ -197,7 +197,7 @@ export const SMIDDetails = getCommonCard({
         jsonPath: "NULMSMIDRequest.dob",
         props: {
           inputProps: {
-            max: getTodaysDateInYMD()
+            max:  new Date().toISOString().slice(0, 10),
           }
         }
       })
@@ -245,7 +245,7 @@ export const SMIDDetails = getCommonCard({
           labelKey: "NULM_SMID_PHONE_NUMBER_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("MobileNo") || null,
+        pattern: getPattern("numeric-only") || null,
         jsonPath: "NULMSMIDRequest.phoneNo"
       })
     },
