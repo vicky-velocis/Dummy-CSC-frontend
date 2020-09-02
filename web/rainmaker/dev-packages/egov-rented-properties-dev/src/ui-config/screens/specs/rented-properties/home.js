@@ -67,7 +67,7 @@ const header = getCommonHeader(
         labelName: "Offline rent amount"
     },
     icon: <FormIcon />,
-    route: "offline-rent-payment"
+    route: "payment"
   },
   {
     label: {
@@ -113,7 +113,7 @@ const citizenCardItems = [{
           labelKey: "RP_PAY_RENT_HEADER"
         },
         icon: <TradeLicenseIcon />,
-        route: `/rented-properties-citizen/account-statement-apply`
+        route: `payment`
       }
 ]
 

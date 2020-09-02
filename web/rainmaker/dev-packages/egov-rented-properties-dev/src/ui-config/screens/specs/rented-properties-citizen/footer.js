@@ -465,15 +465,3 @@ export const duplicatefooter = getCommonApplyFooter({
       },
     }
   });
-
-export const accountGenerationFooter = getCommonApplyFooter({ 
-  submitButton: {
-    ...payment,
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch) => {
-        dispatch(setRoute(`/rented-properties-citizen/PaymentRedirectPage?tenantId=${getTenantId()}`));
-      }
-    },
-  }
-});

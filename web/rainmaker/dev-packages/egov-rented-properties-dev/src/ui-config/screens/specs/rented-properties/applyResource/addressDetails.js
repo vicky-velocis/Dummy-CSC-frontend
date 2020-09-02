@@ -1,5 +1,5 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { transitNumberConfig, propertyHeader } from '../applyResource/propertyDetails'
+import { transitNumberLookUp, propertyHeader, pincodeField } from '../applyResource/propertyDetails'
 import { getDetailsFromProperty,getDetailsFromPropertyMortgage,getDetailsFromPropertyTransit } from "../../../../../ui-utils/apply";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -47,24 +47,6 @@ export const areaField = {
     errorMessage: "RP_ERR_AREA_FIELD",
   }
 
-export const pincodeField = {
-    label: {
-        labelName: "Pincode",
-        labelKey: "RP_PINCODE_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Pincode",
-        labelKey: "RP_PINCODE_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 6,
-    maxLength: 6,
-    required: true,
-    errorMessage: "RP_ERR_PINCODE_FIELD",
-  }
   export const commentsField = {
     label: {
         labelName: "Comments",
@@ -108,12 +90,10 @@ const areaNameField = {
 }
 
 const ownershipTransitNumberField = {
-    ...transitNumberConfig,
+    ...transitNumberLookUp,
     jsonPath: "Owners[0].property.transitNumber",
     iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
+        ...transitNumberLookUp.iconObj,
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
@@ -121,12 +101,6 @@ const ownershipTransitNumberField = {
           }
         }
       },
-      title: {
-        value:
-          "If you have already assessed your property, then please search your property by your transit Number",
-        key: "If you have already assessed your property, then please search your property by your transit Number"
-      },
-      infoIcon: "info_circle",
       beforeFieldChange: (action, state, dispatch) => {
         dispatch(
             prepareFinalObject(
@@ -150,12 +124,10 @@ const ownershipTransitNumberField = {
 }
 
 const mortgageTransitNumberField = {
-  ...transitNumberConfig,
+  ...transitNumberLookUp,
   jsonPath: "MortgageApplications[0].property.transitNumber",
   iconObj: {
-      iconName: "search",
-      position: "end",
-      color: "#FE7A51",
+      ...transitNumberLookUp.iconObj,
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
@@ -163,12 +135,6 @@ const mortgageTransitNumberField = {
         }
       }
     },
-    title: {
-      value:
-        "If you have already assessed your property, then please search your property by your transit Number",
-      key: "If you have already assessed your property, then please search your property by your transit Number"
-    },
-    infoIcon: "info_circle",
     beforeFieldChange: (action, state, dispatch) => {
       dispatch(
           prepareFinalObject(
@@ -192,12 +158,10 @@ const mortgageTransitNumberField = {
 }
 
 const TransitsiteTransitNumberField = {
-  ...transitNumberConfig,
+  ...transitNumberLookUp,
   jsonPath: "PropertyImagesApplications[0].property.transitNumber",
   iconObj: {
-      iconName: "search",
-      position: "end",
-      color: "#FE7A51",
+      ...transitNumberLookUp.iconObj,
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
@@ -205,12 +169,6 @@ const TransitsiteTransitNumberField = {
         }
       }
     },
-    title: {
-      value:
-        "If you have already assessed your property, then please search your property by your transit Number",
-      key: "If you have already assessed your property, then please search your property by your transit Number"
-    },
-    infoIcon: "info_circle",
     beforeFieldChange: (action, state, dispatch) => {
       dispatch(
           prepareFinalObject(

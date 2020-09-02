@@ -1,13 +1,12 @@
 import {
     getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardFirstStep, formwizardSecondStep, formwizardThirdStep,addPropertyStepper,formwizardFourthStep} from './applyResource/applyConfig'
+import { formwizardFirstStep, formwizardSecondStep, formwizardThirdStep,addPropertyStepper,formwizardFourthStep} from './applyResource/applyConfig'
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import {footer} from './applyResource/footer';
-import { searchResults } from "./search-preview";
-import { getQueryArg, getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
@@ -193,7 +192,13 @@ const header = getCommonContainer({
     labelName: "Add Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD"
   }),
-  applicationNumber
+  applicationNumber : {
+    ...applicationNumber,
+    props: {
+      ...applicationNumber.props,
+      type: "RP_MASTER"
+    }
+  }
 });
 
 const getData = async(action, state, dispatch) => {

@@ -5,7 +5,6 @@ import get from "lodash/get";
 import { getDetailsFromProperty ,getDuplicateDetailsFromProperty, getOfflineRentPaymentDetailsFromProperty} from "../../../../../ui-utils/apply";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
-
 export const propertyHeader = getCommonTitle(
         {
             labelName: "Property Details",
@@ -18,25 +17,8 @@ export const propertyHeader = getCommonTitle(
             }
         }
       )
-export const pincodeField = {
-    label: {
-        labelName: "Pincode",
-        labelKey: "RP_PINCODE_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Pincode",
-        labelKey: "RP_PINCODE_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 6,
-    maxLength: 6,
-    required: true,
-    errorMessage: "RP_ERR_PINCODE_FIELD",
-  }
-const colonyFieldConfig = {
+
+export const colonyFieldConfig = {
     label: {
         labelName: "Colony",
         labelKey: "RP_COLONY_LABEL"
@@ -118,33 +100,65 @@ const colonyField = {
       }
 }
 
-export const transitNumberConfig = {
+export const pincodeField = {
     label: {
-        labelName: "Transit Site/Plot number",
-        labelKey: "RP_SITE_PLOT_LABEL"
+        labelName: "Pincode",
+        labelKey: "RP_PINCODE_LABEL"
     },
     placeholder: {
-        labelName: "Enter Transit Site/Plot number",
-        labelKey: "RP_SITE_PLOT_PLACEHOLDER"
+        labelName: "Enter Pincode",
+        labelKey: "RP_PINCODE_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
         sm: 6
     },
-    minLength: 4,
-    maxLength: 25,
+    minLength: 6,
+    maxLength: 6,
     required: true,
-    pattern:getPattern("TransitNumberValidation"),
-    errorMessage: "RP_ERR_TRANSIT_FIELD",
+    errorMessage: "RP_ERR_PINCODE_FIELD",
+  }
+
+export const transitNumberConfig = {
+        label: {
+            labelName: "Transit Site/Plot number",
+            labelKey: "RP_SITE_PLOT_LABEL"
+        },
+        placeholder: {
+            labelName: "Enter Transit Site/Plot number",
+            labelKey: "RP_SITE_PLOT_PLACEHOLDER"
+        },
+        gridDefination: {
+            xs: 12,
+            sm: 6
+        },
+        minLength: 1,
+        maxLength: 5,
+        required: true,
+        pattern:getPattern("TransitNumberValidation"),
+        errorMessage: "RP_ERR_TRANSIT_FIELD",
 }
 
-const ownershipTransitNumberField = {
+export const transitNumberLookUp = {
     ...transitNumberConfig,
+    iconObj: {
+      iconName: "search",
+      position: "end",
+      color: "#FE7A51"
+    },
+    title: {
+      value:
+        "If you have already assessed your property, then please search your property by your transit Number",
+      key: "If you have already assessed your property, then please search your property by your transit Number"
+    },
+    infoIcon: "info_circle",
+}
+
+const duplicateCopyTransitField = {
+    ...transitNumberLookUp,
     jsonPath: "DuplicateCopyApplications[0].property.transitNumber",
     iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
+        ...transitNumberLookUp.iconObj,
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
@@ -152,12 +166,6 @@ const ownershipTransitNumberField = {
           }
         }
       },
-      title: {
-        value:
-          "If you have already assessed your property, then please search your property by your transit Number",
-        key: "If you have already assessed your property, then please search your property by your transit Number"
-      },
-      infoIcon: "info_circle",
       beforeFieldChange: (action, state, dispatch) => {
         dispatch(
             prepareFinalObject(
@@ -289,7 +297,7 @@ const getPropertyDetails = () => {
     }
 }
 
-const transitSiteHeader = getCommonTitle(
+export const transitSiteHeader = getCommonTitle(
     {
         labelName: "Transit Site Details",
         labelKey: "RP_TRANSIT_SITE_DETAILS_HEADER"
@@ -326,7 +334,7 @@ const getTransitSiteDetails = () => {
     return {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
-            transitNumber: getTextField(ownershipTransitNumberField),
+            transitNumber: getTextField(duplicateCopyTransitField),
             colony:getSelectField(colonyFieldDup),
             //colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
@@ -334,72 +342,5 @@ const getTransitSiteDetails = () => {
     }
 }
 
-const getPropertyDetailsForAccount = () => {
-    return {
-        header: transitSiteHeader,
-        detailsContainer: getCommonContainer({
-            transitNumber: getTextField(ownershipTransitNumberField),
-            colony: getTextField({...colonyFieldConfig,jsonPath: "", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
-            pincode: getTextField({...pincodeField, jsonPath: "", required: false, props: {...pincodeField.props, disabled: true}}),
-            ownername: getTextField({...ownerNameField , props: {...ownerNameField.props, disabled: true}})
-        })
-    }
-}
-
-const offlinePaymentTransitNumberField = {
-    ...transitNumberConfig,
-    jsonPath: "OfflineRentPayment[0].property.transitNumber",
-    iconObj: {
-        iconName: "search",
-        position: "end",
-        color: "#FE7A51",
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            getOfflineRentPaymentDetailsFromProperty(state, dispatch);
-          }
-        }
-      },
-      title: {
-        value:
-          "If you have already assessed your property, then please search your property by your transit Number",
-        key: "If you have already assessed your property, then please search your property by your transit Number"
-      },
-      infoIcon: "info_circle",
-      beforeFieldChange: (action, state, dispatch) => {
-        dispatch(
-            prepareFinalObject(
-              "OfflineRentPayment[0].property.id",
-              ""
-            )
-          )
-        dispatch(
-            prepareFinalObject(
-              "Properties[0].colony",
-              ""
-            )
-          )
-          dispatch(
-            prepareFinalObject(
-              "Properties[0].pincode",
-              ""
-            )
-          )
-      }
-}
-const getPropertyDetailsForOfflineRentPayment = () => {
-    return {
-        header: transitSiteHeader,
-        detailsContainer: getCommonContainer({
-            transitNumber: getTextField(offlinePaymentTransitNumberField),
-            colony: getTextField({...colonyFieldConfig,jsonPath: "Properties[0].colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
-            pincode: getTextField({...pincodeField, jsonPath: "OfflineRentPayment[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
-            ownername: getTextField({...ownerNameField , jsonPath: "OfflineRentPayment[0].applicant[0].name", props: {...ownerNameField.props, disabled: true}})
-        })
-    }
-}
-
 export const propertyDetails = getCommonCard(getPropertyDetails())
 export const transitSiteDetails = getCommonCard(getTransitSiteDetails())
-export const transitSiteDetailsForAccountStatement = getCommonCard(getPropertyDetailsForAccount())
-export const transitSiteDetailsForOfflineRentPayment = getCommonCard(getPropertyDetailsForOfflineRentPayment())
