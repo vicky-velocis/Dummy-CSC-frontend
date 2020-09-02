@@ -15,22 +15,15 @@ import { set } from "lodash";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {downloadPrintContainer} from "./applyResource/footer"
 import { WORKFLOW_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
+import {applicationNumber} from './apply'
 
-
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Duplicate Copy Application",
       labelKey: "DUPLICATE_COPY_APPLICATION_HEADER"
     }),
-    applicationNumber: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-rented-properties",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: applicationNumber
-      }
-    }
+    applicationNumber
 });
 
 const reviewApplicantDetails = getDuplicateCopyPreviewApplicantDetails(false);
@@ -60,6 +53,7 @@ const duplicateReviewDetails = getCommonCard({
           {key: "applicationNumber", value: applicationNumber}
         ]
         const response = await getDuplicateCopySearchResults(queryObject);
+        setApplicationNumberBox(state, dispatch, applicationNumber, "search-duplicate-copy-preview")
         if (response && response.DuplicateCopyApplications) {
         let {DuplicateCopyApplications} = response
         let applicationDocuments = DuplicateCopyApplications[0].applicationDocuments|| [];
@@ -130,14 +124,24 @@ const duplicateReviewDetails = getCommonCard({
           )
       );
       const showCharge =  status === "DC_PENDINGSIVERIFICATION" || status === "DC_PENDINGCAAPPROVAL" || status === "DC_PENDINGAPRO" 
-  dispatch(
+      process.env.REACT_APP_NAME === "Citizen"
+    ?  dispatch(
     handleField(
         "search-duplicate-copy-preview",
         "components.div.children.duplicateReviewDetails.children.cardContent.children.duplicatereviewChargesDetails",
         "visible",
-        showCharge
+        false
     )
-);
+)
+:
+dispatch(
+  handleField(
+      "search-duplicate-copy-preview",
+      "components.div.children.duplicateReviewDetails.children.cardContent.children.duplicatereviewChargesDetails",
+      "visible",
+      showCharge
+  )
+)
         }
       }
     }

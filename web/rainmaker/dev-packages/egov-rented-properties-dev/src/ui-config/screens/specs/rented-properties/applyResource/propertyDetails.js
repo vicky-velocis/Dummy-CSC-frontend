@@ -56,7 +56,24 @@ const colonyFieldConfig = {
     },
     errorMessage: "RP_ERR_COLONY_FIELD",
 }
-
+const colonyFieldDup = {
+  ...colonyFieldConfig,
+  required:false,
+  props: {
+    disabled: true
+  },
+  jsonPath: "DuplicateCopyApplications[0].property.colony",
+  beforeFieldChange: (action, state, dispatch) => {
+      const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+      const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+      const propertyAreas = !!findItem ? findItem.area.map(item => ({
+        code: item.code,
+        label: item.sqyd
+      })) : [];
+      const rentPerSqyd = !!findItem ? findItem.costPerSqyd : ""
+      dispatch(prepareFinalObject("applyScreenMdmsData.propertyAreas", propertyAreas))
+      dispatch(prepareFinalObject("Properties[0].propertyDetails.rentPerSqyd", rentPerSqyd))
+    }}
 const colonyField = {
     ...colonyFieldConfig,
     beforeFieldChange: (action, state, dispatch) => {
@@ -117,6 +134,7 @@ export const transitNumberConfig = {
     minLength: 4,
     maxLength: 25,
     required: true,
+    pattern:getPattern("TransitNumberValidation"),
     errorMessage: "RP_ERR_TRANSIT_FIELD",
 }
 
@@ -309,7 +327,8 @@ const getTransitSiteDetails = () => {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(ownershipTransitNumberField),
-            colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            colony:getSelectField(colonyFieldDup),
+            //colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }

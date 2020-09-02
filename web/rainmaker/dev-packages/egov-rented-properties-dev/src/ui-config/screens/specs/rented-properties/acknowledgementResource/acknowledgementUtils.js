@@ -19,7 +19,8 @@ import {
       // fontSize: 24,
       // fontWeight: 500
       fontSize: 15,
-    fontWeight: 500
+    fontWeight: 500,
+    display: "flex",
     },
     tailBox: {
       textAlign: "right",
@@ -145,7 +146,7 @@ import {
                 {
                   labelName: number
                 },
-                { style: style.tailNumber }
+                { style: style.tailNumber}
               )
             },
             props: {

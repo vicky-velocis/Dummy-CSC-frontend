@@ -39,6 +39,26 @@ import { setDocsForEditFlow } from "./commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 let userInfo = JSON.parse(getUserInfo());
 
+
+export const setApplicationNumberBox = (state, dispatch, applicationNumber, screenKey) => {
+  dispatch(
+    handleField(
+      screenKey,
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "visible",
+      true
+    )
+  );
+  dispatch(
+    handleField(
+      screenKey,
+      "components.div.children.headerDiv.children.header.children.applicationNumber",
+      "props.number",
+      applicationNumber
+    )
+  );
+};
+
   export const applyRentedProperties = async (state, dispatch, activeIndex) => {
     try {
         dispatch(toggleSpinner())
@@ -120,6 +140,8 @@ let userInfo = JSON.parse(getUserInfo());
           )
         );
         await setDocsForEditFlow(state, dispatch, "Properties[0].propertyDetails.applicationDocuments", "PropertiesTemp[0].uploadedDocsInRedux");
+        const {transitNumber} = Properties[0]
+        setApplicationNumberBox(state, dispatch, transitNumber, "apply")
         dispatch(toggleSpinner())
         return true;
     } catch (error) {
@@ -192,7 +214,9 @@ let userInfo = JSON.parse(getUserInfo());
             removedDocs
           )
         );
+        const applicationNumber = Owners[0].ownerDetails.applicationNumber
         await setDocsForEditFlow(state, dispatch, "Owners[0].ownerDetails.ownershipTransferDocuments", "OwnersTemp[0].uploadedDocsInRedux");
+        setApplicationNumberBox(state, dispatch, applicationNumber, "ownership-apply")
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -391,7 +415,9 @@ let userInfo = JSON.parse(getUserInfo());
             removedDocs
           )
         );
+        const applicationNumber = MortgageApplications[0].applicationNumber
         await setDocsForEditFlow(state, dispatch, "MortgageApplications[0].applicationDocuments", "MortgageApplicationsTemp[0].uploadedDocsInRedux");
+        setApplicationNumberBox(state, dispatch, applicationNumber, "mortage-apply")
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
@@ -460,7 +486,9 @@ export const applyDuplicateCopy = async (state, dispatch, activeIndex) => {
             removedDocs
           )
         );
+        const applicationNumber = DuplicateCopyApplications[0].applicationNumber
         await setDocsForEditFlow(state, dispatch, "DuplicateCopyApplications[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
+        setApplicationNumberBox(state, dispatch, applicationNumber, "duplicate-copy-apply")
         return true;
     } catch (error) {
         dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));

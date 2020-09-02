@@ -13,23 +13,15 @@ import { getMortgageSearchResults } from "../../../../ui-utils/commons";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { footerReviewTop} from "./applyResource/reviewFooter";
 import {downloadPrintContainer} from './applyResource/footer';
-
-
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
+import {applicationNumber} from './apply'
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
     labelName: "Mortgage Application",
     labelKey: "MORTGAGE_APPLICATION_HEADER"
   }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-rented-properties",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: applicationNumber
-    }
-  }
+  applicationNumber
 });
 
 const reviewPropertyAddressDetailsMortgage = getreviewPropertyAddressDetailsMortgage(false);
@@ -52,6 +44,7 @@ const beforeInitFn = async(action, state, dispatch) => {
         {key: "applicationNumber", value: applicationNumber}
       ]
       const response = await getMortgageSearchResults(queryObject);
+      setApplicationNumberBox(state, dispatch, applicationNumber, "mortgage-search-preview")
       if (response && response.MortgageApplications) {
       let {MortgageApplications} = response
       const status = MortgageApplications[0].state

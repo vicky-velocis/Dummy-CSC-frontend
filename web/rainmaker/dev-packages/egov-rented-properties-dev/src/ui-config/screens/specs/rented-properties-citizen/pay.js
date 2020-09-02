@@ -46,6 +46,7 @@ import { BILLING_BUSINESS_SERVICE_OT, BILLING_BUSINESS_SERVICE_DC } from "../../
 
   const beforeScreenInit = async (action, state, dispatch) => {
     const tenantId = getQueryArg(window.location.href, "tenantId");
+    const consumerCode = getQueryArg(window.location.href, "consumerCode");
       const businessService = getQueryArg(window.location.href, "businessService")
       const queryObject = [
         { key: "tenantId", value: tenantId },
@@ -73,6 +74,14 @@ import { BILLING_BUSINESS_SERVICE_OT, BILLING_BUSINESS_SERVICE_DC } from "../../
             estimateDetails(sourceJsonPath)
         )
     );
+    dispatch(
+      handleField(
+        "pay",
+        "components.div.children.headerDiv.children.header.children.applicationNumber.props",
+        "number",
+        consumerCode
+      )
+    )
   }
   
   const screenConfig = {

@@ -15,22 +15,15 @@ import { set } from "lodash";
 import { getFeesEstimateCard, createEstimateData, getButtonVisibility } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT } from "../../../../ui-constants";
-
-let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+import {applicationNumber} from './apply'
+import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Ownership Transfer Application",
       labelKey: "OWNER_SHIP_TRANSFER_APPLICATION_HEADER"
     }),
-    applicationNumber: {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-rented-properties",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: applicationNumber
-      }
-    }
+    applicationNumber
   });
 
 const reviewApplicantDetails = getReviewApplicantDetails(false);
@@ -63,6 +56,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       {key: "applicationNumber", value: applicationNumber}
     ]
     const response = await getOwnershipSearchResults(queryObject);
+    setApplicationNumberBox(state, dispatch, applicationNumber, "ownership-search-preview")
     if (response && response.Owners) {
     let {Owners} = response
     let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];
@@ -164,15 +158,26 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
           showEstimate
       )
   );
+  
   const showCharge =  status === "OT_PENDINGSIVERIFICATION" || status === "OT_PENDINGCAAPPROVAL" || status === "OT_PENDINGAPRO" 
-  dispatch(
+  process.env.REACT_APP_NAME === "Citizen"
+  ? dispatch(
     handleField(
         "ownership-search-preview",
         "components.div.children.transferReviewDetails.children.cardContent.children.getreviewCharges",
         "visible",
-        showCharge
+        false
     )
-);
+)
+:
+dispatch(
+  handleField(
+      "ownership-search-preview",
+      "components.div.children.transferReviewDetails.children.cardContent.children.getreviewCharges",
+      "visible",
+      showCharge
+  )
+)
     }
   }
 }
@@ -196,7 +201,7 @@ const ownerShipDetailsPreview = {
                 uiFramework: "custom-atoms",
                 componentPath: "Container",
                 children: {
-                  header1: {
+                  header: {
                     gridDefination: {
                       xs: 12,
                       sm: 8

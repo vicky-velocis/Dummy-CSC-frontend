@@ -18,12 +18,20 @@ const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDeta
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
 const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
-
 const header = getCommonContainer({
     header : getCommonHeader({
     labelName: "Notice Summary",
     labelKey: "RP_NOTICE_PREVIEW_SUMMARY"
-  })
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-rented-properties",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number: NoticedetailsId,
+      notice:"Notice"
+    }
+  }
 });
 
 const getData = async(action, state, dispatch) => {
@@ -103,8 +111,16 @@ const getData = async(action, state, dispatch) => {
               "visible",
               false
             )
-          );
+          );      
     }
+    dispatch(
+      handleField(
+        "noticestabNoticepreview",
+        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "props.number",
+        NoticeId
+      )
+    );   
     
     const printCont = downloadNoticeContainer(
       action,

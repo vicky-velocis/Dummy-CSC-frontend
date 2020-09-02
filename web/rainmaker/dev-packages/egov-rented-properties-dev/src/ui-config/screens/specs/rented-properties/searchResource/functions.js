@@ -284,10 +284,12 @@ export const searchAccountStatement = async (state, dispatch) => {
 }
 
 export const downloadAccountStatementPdf = async(state, dispatch) => {
-  debugger
   const { RentAccountStatements } = state.screenConfiguration.preparedFinalObject;
   const {Properties} = state.screenConfiguration.preparedFinalObject;
-  console.log(state)
+  const data = RentAccountStatements.map(item =>{
+    item.date = moment(new Date(item.date)).format("DD/MM/YYYY") || "-"
+    return item
+  });
   const mode = "download"
   let   queryStr = [{
     key: "key",
@@ -307,7 +309,7 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
   };
   try {
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
-          Properties : Properties,RentAccountStatements: RentAccountStatements 
+          Properties : Properties,RentAccountStatements: data 
           }, {
             'Accept': 'application/json'
           }, {
