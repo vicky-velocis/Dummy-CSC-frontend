@@ -232,8 +232,8 @@ export const getReviewPropertyDetailsWithoutAllotmentNumber = (isEditable = true
                     { jsonPath: "Owners[0].property.transitNumber" }
                 ),
                 area: getLabelWithValue(
-                    areaLabel,
-                    { jsonPath: "Owners[0].property.area" }
+                    colonyLabel,
+                    { jsonPath: "Owners[0].property.colony" }
                 ),
                 pincode: getLabelWithValue(
                     pincodeLabel,
