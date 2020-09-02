@@ -149,7 +149,7 @@ const getViolationField = {
     },
     visible:true,
       required:true,
-    jsonPath: "SingleImage[0].description" 
+    jsonPath: "Images[0].description" 
 }
 
 export const transitNumberConfig = {
