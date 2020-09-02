@@ -1,13 +1,13 @@
 import get from "lodash/get";
 import set from "lodash/set";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults, getCount, getDuplicateCopySearchResults , getOwnershipSearchResults, getMortgageSearchResults} from "../../../../..//ui-utils/commons";
 import {
   convertEpochToDate,
   convertDateToEpoch,
   getTextToLocalMapping
 } from "../../utils/index";
-import { toggleSnackbar, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
@@ -16,7 +16,9 @@ import { httpRequest } from "../../../../../ui-utils"
 import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS, LAST_MODIFIED_ON, DATE, AMOUNT, TYPE, REMAINING_INTEREST, REMAINING_PRINCIPAL, TOTAL_DUE, ACCOUNT_BALANCE } from "./searchResults";
 import { getAccountStatementProperty } from "../../../../../ui-utils/apply";
 import moment from "moment";
-
+import {
+  downloadReceiptFromFilestoreID
+} from "egov-common/ui-utils/commons"
 export const getStatusList = async (state, dispatch, screen, path) => {
   const queryObject = [{ key: "tenantId", value: getTenantId() }, 
                       { key: "businessServices", value: "NewTL" }]
@@ -243,6 +245,12 @@ export const searchAccountStatement = async (state, dispatch) => {
         )
 
         try {
+          dispatch(
+            prepareFinalObject(
+              "RentAccountStatements",
+              response.RentAccountStatements
+            )
+          );
           let data = response.RentAccountStatements.map(item => ({
             [DATE]: moment(new Date(item.date)).format("DD/MM/YYYY") || "-",
             [AMOUNT]: item.amount.toFixed(2) || "-",
@@ -272,6 +280,52 @@ export const searchAccountStatement = async (state, dispatch) => {
           dispatch(toggleSnackbar(true, error.message, "error"));
         }
     }
+  }
+}
+
+export const downloadAccountStatementPdf = async(state, dispatch) => {
+  debugger
+  const { RentAccountStatements } = state.screenConfiguration.preparedFinalObject;
+  const {Properties} = state.screenConfiguration.preparedFinalObject;
+  console.log(state)
+  const mode = "download"
+  let   queryStr = [{
+    key: "key",
+    value: "rp-account-statement-generation"
+  },
+  {
+    key: "tenantId",
+    value: "ch"
+  }
+]
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
+          Properties : Properties,RentAccountStatements: RentAccountStatements 
+          }, {
+            'Accept': 'application/json'
+          }, {
+            responseType: 'arraybuffer'
+          })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Acknowledgement form Download");
+            }
+          });
+   
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
 

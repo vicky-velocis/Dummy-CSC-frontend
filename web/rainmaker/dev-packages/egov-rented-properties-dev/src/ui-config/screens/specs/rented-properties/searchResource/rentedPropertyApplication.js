@@ -11,7 +11,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { searchApiCall, searchTransferProperties,searchDuplicateCopy, searchMortgage, searchAccountStatement} from "./functions";
+import { searchApiCall, searchTransferProperties,searchDuplicateCopy, searchMortgage, searchAccountStatement ,downloadAccountStatementPdf} from "./functions";
 import { getAccountStatementProperty } from "../../../../../ui-utils/apply";
 
 const colonyField = {
@@ -403,6 +403,40 @@ const filterButtonItem = {
   }
 }
 
+const downloadPdfButton = {
+  firstCont: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    }
+  },
+  pdfButton: {
+    componentPath: "Button",
+    gridDefination: {
+      xs: 12,
+      sm: 4
+    },
+    props: {
+      variant: "contained",
+      style: {
+        color: "white",
+        backgroundColor: "#fe7a51",
+        borderRadius: "2px",
+        width: "80%",
+        height: "48px"
+      }
+    },
+    children: {
+      buttonLabel: getLabel({
+        labelName: "Download",
+        labelKey: "RP_COMMON_DOWNLOAD"
+      })
+    }
+  }
+}
+
 export const rentedPropertyApplication = getCommonCard({
   subParagraph: getCommonParagraph({
     labelName: "Please provide atleast one parameter to search Property",
@@ -584,6 +618,23 @@ export const accountStatementFilterForm = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: searchAccountStatement
+        }
+      }, lastCont: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        gridDefination: {
+          xs: 12,
+          sm: 4
+        }
+      }
+    })
+  }),
+  downloadPdfButton: getCommonContainer({
+    buttonContainer: getCommonContainer(
+      {...downloadPdfButton, pdfButton: {...downloadPdfButton.pdfButton, 
+        onClickDefination: {
+          action: "condition",
+          callBack: downloadAccountStatementPdf
         }
       }, lastCont: {
         uiFramework: "custom-atoms",
