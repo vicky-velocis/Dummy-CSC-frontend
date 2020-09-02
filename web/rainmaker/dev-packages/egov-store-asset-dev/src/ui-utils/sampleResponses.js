@@ -520,6 +520,22 @@ export const WorkFllowStatus = () => {
   }
 }
 
+export const UserRoles = () => {
+  return {
+    
+    UserRoles: [
+     "SACP",
+     "SAJE",
+     "SACT",
+     "MOH",
+     "SASP",
+     "SASO",
+     "SACSI"
+
+    ]
+  }
+}
+
 export const ReceiptType = () => {
   return {
     
