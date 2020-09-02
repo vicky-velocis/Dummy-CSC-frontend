@@ -118,7 +118,7 @@ export const searchApiCall = async (state, dispatch) => {
 
         return {
           [getTextToLocalMapping("MRN Number")]: get(item, "mrnNumber", "-") || "-",
-          [getTextToLocalMapping("Store Name")]: get(item, "receivingStore.code", "-") || "-", 
+          [getTextToLocalMapping("Store Name")]: get(item, "receivingStore.name", "-") || "-", 
           [getTextToLocalMapping("Financial Year")]: get(item, "financialYear", "-") || "-", 
          // [getTextToLocalMapping("Active")]: get(item, "status", "-") || "-",  
           id: item.id,       

@@ -18,6 +18,8 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
+import{UserRoles} from '../../../../ui-utils/sampleResponses'
+let roles = UserRoles().UserRoles;
 let applicationNumber = getQueryArg(window.location.href, "applicationNumbers");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
@@ -247,6 +249,10 @@ const screenConfig = {
                 action: "condition",
                 callBack: creatPOHandle,
               },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
+              }
             },
              //print function UI start SE0001
              printMenu: {
