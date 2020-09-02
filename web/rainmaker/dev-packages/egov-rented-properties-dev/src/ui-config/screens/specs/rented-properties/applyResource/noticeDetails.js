@@ -93,12 +93,12 @@ const ownerNameField = {
 
 const originalAllotteField = {
     label: {
-        labelName: "Allottee",
-        labelKey: "RP_ORIGINAL_ALLOTTEE_LABEL"
+        labelName: "Owner Name",
+        labelKey: "RP_OWNER_NAME_LABEL"
     },
     placeholder: {
-        labelName: "Enter Original Allottee Name",
-        labelKey: "RP_ORIGINAL_ALLOTTEE_PLACEHOLDER"
+        labelName: "Enter Owner Name",
+        labelKey: "RP_OWNER_NAME_PLACEHOLDER"
     },
     gridDefination: {
         xs: 12,
@@ -109,7 +109,7 @@ const originalAllotteField = {
     props: {
         disabled: true
       },
-    jsonPath: "Properties[0].owners[0].ownerDetails.originalAllottee"
+    jsonPath: "Properties[0].owners[0].ownerDetails.name"
 }
 
 const getDocumentField = {

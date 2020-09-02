@@ -6,7 +6,7 @@ import {
   
   import { changeStep, changePropertyStep } from "./footer";
   
-  export const getReviewDocuments = (isEditable = true, screenKey, sourceJsonPath = "PropertiesTemp[0].reviewDocData", isPropertyMaster = false ) => {
+  export const getReviewDocuments = (isEditable = true, screenKey, sourceJsonPath = "PropertiesTemp[0].reviewDocData", isPropertyMaster = false, downldtoggle = false ) => {
     return getCommonGrayCard({
       headerDiv: {
         uiFramework: "custom-atoms",
@@ -59,7 +59,8 @@ import {
             componentPath: "DownloadFileContainer",
             props: {
               sourceJsonPath,
-              className: "review-documents"
+              className: "review-documents",
+              downldtoggle
             }
           }
         }

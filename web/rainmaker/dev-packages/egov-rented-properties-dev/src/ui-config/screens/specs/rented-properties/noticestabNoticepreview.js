@@ -16,7 +16,7 @@ import { getNoticeReviewProperty, getNoticeViolationPreviewReviewRentDetails, ge
 const reviewNoticePropertyDetails = getNoticeReviewProperty(false);
 const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDetails(false);
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
-const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true);
+const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true,true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
 const header = getCommonContainer({
     header : getCommonHeader({
@@ -57,11 +57,13 @@ const getData = async(action, state, dispatch) => {
 
     const findOwner = propertyArr.owners.find(item => !!item.activeState)
     const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner)
-    if(!!orgOwner){
+    const currentownerId = propertyArr.propertyDetails.currentOwner
+    const findCurrentOwner = propertyArr.owners.find(item => item.id === currentownerId)
+    if(!!findCurrentOwner){
         dispatch(
             prepareFinalObject(
-                "SingleProperties[0].originalAllottee",
-                orgOwner.ownerDetails.name
+                "SingleProperties[0].OwnerName",
+                findCurrentOwner.ownerDetails.name
             )
             )
     }

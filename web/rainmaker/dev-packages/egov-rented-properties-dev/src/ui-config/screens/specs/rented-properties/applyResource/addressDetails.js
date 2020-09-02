@@ -29,14 +29,14 @@ const addressHeader = getCommonTitle(
   )
 
 export const areaField = {
-    label: {
-        labelName: "Area",
-        labelKey: "RP_AREA_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Area",
-        labelKey: "RP_AREA_PLACEHOLDER"
-    },
+  label: {
+    labelName: "Colony Name",
+    labelKey: "RP_COLONY_NAME_LABEL"
+},
+placeholder: {
+    labelName: "Enter Colony Name",
+    labelKey: "RP_COLONY_NAME_PLACEHOLDER"
+},
     gridDefination: {
         xs: 12,
         sm: 6
