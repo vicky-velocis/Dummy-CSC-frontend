@@ -344,7 +344,7 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                 { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
             ),
             colony: getLabelWithValue(
-                areaLabel,
+                colonyLabel,
                 { jsonPath: "DuplicateCopyApplications[0].property.colony" }
             ),
             pincode: getLabelWithValue(
