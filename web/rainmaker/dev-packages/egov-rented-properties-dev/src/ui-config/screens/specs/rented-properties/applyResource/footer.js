@@ -66,6 +66,7 @@ const callBackForNext = async(state, dispatch) => {
         "components.div.children.addPropertyStepper.props.activeStep",
         0
     );
+    let isDateValid=true;
     let isFormValid = true;
     let hasFieldToaster = true;
     if(activeStep === DETAILS_STEP) {
@@ -94,7 +95,12 @@ const callBackForNext = async(state, dispatch) => {
             state,
             dispatch
         )
-        if(!!isPropertyDetailsValid && !!isRentHolderValid && !!isRentValid && !!isPaymentValid && !!isAddressValid
+        const dateFrom = get(state.screenConfiguration.screenConfig["apply"],"components.div.children.formwizardFirstStep.children.rentHolderDetails.children.cardContent.children.detailsContainer.children.dateOfAllotment.props.value")
+        const dateTo = get(state.screenConfiguration.screenConfig["apply"],"components.div.children.formwizardFirstStep.children.rentHolderDetails.children.cardContent.children.detailsContainer.children.posessionDate.props.value")
+        if(convertDateToEpoch(dateTo) - convertDateToEpoch(dateFrom) < 0){
+          isDateValid = false
+        }
+        if(!!isPropertyDetailsValid && !!isRentHolderValid && !!isRentValid && !!isPaymentValid && !!isAddressValid && !!isDateValid
             ) {
               const res = await applyRentedProperties(state, dispatch, activeStep)
               if(!res) {
@@ -219,11 +225,19 @@ const callBackForNext = async(state, dispatch) => {
             };
             switch (activeStep) {
                 case DETAILS_STEP:
+                  if(!isDateValid){
+                    errorMessage = {
+                      labelName:
+                          "Date of allotment is greater than date of possession",
+                      labelKey: "ERR_DATE_ALLOTMENT_FIELDS"
+                  };
+                  }else{
                     errorMessage = {
                         labelName:
                             "Please fill all mandatory fields, then do next !",
                         labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
                     };
+                  }
                     break;
                 case DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
