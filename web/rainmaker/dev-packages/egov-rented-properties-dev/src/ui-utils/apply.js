@@ -576,6 +576,14 @@ export const getAccountStatementProperty = async (state, dispatch) => {
             findOwner.ownerDetails.name
           )
         )
+
+        dispatch(
+          prepareFinalObject(
+            "Properties",
+            Properties
+          )
+        )
+
         return Properties[0].propertyDetails.propertyId
       }
     }
