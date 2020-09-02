@@ -116,7 +116,7 @@ const getData = async(action, state, dispatch) => {
     dispatch(
       handleField(
         "noticestabNoticepreview",
-        "components.div.children.headerDiv.children.header.children.applicationNumber",
+        "components.div.children.headerDiv.children.header1.children.applicationNumber",
         "props.number",
         NoticeId
       )
