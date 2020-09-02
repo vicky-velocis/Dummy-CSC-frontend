@@ -276,6 +276,14 @@ export const searchAccountStatement = async (state, dispatch) => {
               data
             )
           );
+        dispatch(
+        handleField(
+          "search-account-statement",
+          "components.div.children.accountStatementFilterForm.children.cardContent.children.button.children.pdf.children.pdfButton",
+          "visible",
+          true
+      ),
+    );
         } catch (error) {
           dispatch(toggleSnackbar(true, error.message, "error"));
         }

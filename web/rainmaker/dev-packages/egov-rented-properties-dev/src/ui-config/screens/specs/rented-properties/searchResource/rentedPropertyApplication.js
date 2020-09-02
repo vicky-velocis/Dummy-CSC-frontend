@@ -391,7 +391,8 @@ const filterButtonItem = {
         backgroundColor: "#fe7a51",
         borderRadius: "2px",
         width: "80%",
-        height: "48px"
+        height: "48px",
+        margin: "0px 0px 20px 0px"      
       }
     },
     children: {
@@ -425,13 +426,13 @@ const downloadPdfButton = {
         backgroundColor: "#fe7a51",
         borderRadius: "2px",
         width: "80%",
-        height: "48px"
+        height: "48px",
       }
     },
     children: {
       buttonLabel: getLabel({
         labelName: "Download",
-        labelKey: "RP_COMMON_DOWNLOAD"
+        labelKey: "RP_COMMON_DOWNLOAD_PDF"
       })
     }
   }
@@ -627,21 +628,21 @@ export const accountStatementFilterForm = getCommonCard({
           sm: 4
         }
       }
-    })
-  }),
-  downloadPdfButton: getCommonContainer({
-    buttonContainer: getCommonContainer(
+    }),
+    pdf: getCommonContainer(
       {...downloadPdfButton, pdfButton: {...downloadPdfButton.pdfButton, 
         onClickDefination: {
           action: "condition",
           callBack: downloadAccountStatementPdf
-        }
+        },
+        visible:false
       }, lastCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 4,
+          mt:2
         }
       }
     })
