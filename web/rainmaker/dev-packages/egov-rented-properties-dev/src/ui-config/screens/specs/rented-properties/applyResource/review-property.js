@@ -19,7 +19,7 @@ export const pincodeLabel = {
     labelKey: "RP_PINCODE_LABEL"
 }
 
-const colonyLabel = {
+export const colonyLabel = {
     labelName: "Colony",
     labelKey: "RP_COLONY_LABEL"
 }
