@@ -8,7 +8,7 @@ import { LabelContainer } from "egov-ui-framework/ui-containers";
 const styles = {
   color: "rgba(0, 0, 0, 0.87)",
   marginLeft: "3%",
-  marginTop: "8%",
+  marginTop: "6%",
   lineHeight: "35px",
   fontSize: "16px"
 };
@@ -26,8 +26,7 @@ handleClick = (url) => {
     onsetRoute(url);
 }
 render() {
-
-  const { url } = props; 
+  const { url,localizationLabels } = this.props; 
   let translatedLabel = getLocaleLabels(
     "WS_APPLY_CLICK_HERE",
     "WS_APPLY_CLICK_HERE",
@@ -35,13 +34,17 @@ render() {
   );
   return (   
     <div style={styles}>
-       <Button  onClick = {()=> this.handleClick(url)}>{translatedLabel}</Button>
-     
-    </div>
+       <Button  style={clickHereStyles}  onClick = {()=> this.handleClick(url)}>{translatedLabel}</Button>   
+       </div>
   );
 
 }
 }
+const mapStateToProps = (state, ownprops) => {
+  const { app } = state;
+  const { localizationLabels } = app;
+  return { localizationLabels };
+};
 const mapDispatchToProps = (dispatch) => {
   return {
     onsetRoute: (url) => {
