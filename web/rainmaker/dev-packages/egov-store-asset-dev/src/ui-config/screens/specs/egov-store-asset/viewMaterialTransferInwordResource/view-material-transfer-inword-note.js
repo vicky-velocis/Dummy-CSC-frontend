@@ -129,7 +129,18 @@ export const getMaterialTransferInwordNoteListDetailsView = (isReview = true) =>
       //   {labelName: "Purpose of Indent", labelKey: "STORE_MATERIAL_TRANSFER_PURPOSE_OF_INDENT" },
       //   { jsonPath: "transferInwards[0].indent.indentPurpose", }
       // ),
-
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "transferInwards[0].createdByName",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "transferInwards[0].designation",
+        }
+      ),
       Remark: getLabelWithValue(
         {  labelName: "Remark",
         labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK" },

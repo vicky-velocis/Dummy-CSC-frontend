@@ -19,7 +19,7 @@ import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
 let IsEdit = true;
-let applicationNumber = getQueryArg(window.location.href, "issueNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 ConfigStatus = ConfigStatus.filter(x=>x.code === status)
@@ -67,8 +67,14 @@ export const header = getCommonContainer({
 });
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
-  const IndentId = getQueryArg(window.location.href, "IndentId");
-  let issueNumber = getQueryArg(window.location.href, "issueNumber");
+//  const IndentId = getQueryArg(window.location.href, "IndentId");
+  let issueNumber = getQueryArg(window.location.href, "applicationNumber");
+  let indents = get(
+    state.screenConfiguration.preparedFinalObject,
+    `materialIssues`,
+    []
+  );
+  let IndentId = indents[0].indent.id;
   dispatch(setRoute(`/egov-store-asset/createMaterialIndentNote?issueNumber=${issueNumber}&&IndentId=${IndentId}`));
 };
 const creatPOHandle = async (state, dispatch) => {
@@ -149,8 +155,9 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "view-indent-note",
   beforeInitScreen: (action, state, dispatch) => {
-    let issueNumber = getQueryArg(window.location.href, "issueNumber");
+    //let issueNumber = getQueryArg(window.location.href, "issueNumber");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    let issueNumber = getQueryArg(window.location.href, "applicationNumber");
     getMdmsData(action, state, dispatch, tenantId);
     getMaterialIndentData(state, dispatch, issueNumber, tenantId);
    // showHideAdhocPopup(state, dispatch);
@@ -293,8 +300,20 @@ const screenConfig = {
             //print function UI End SE0001
           }
         },
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "materialIssues",
+            updateUrl: "/store-asset-services/materialissues/_updateStatus"
+
+          }
+        },
         masterView,
-        footer: IsEdit? masterViewFooter():{},
+        //footer: IsEdit? masterViewFooter():{},
       }
     },
    

@@ -267,6 +267,7 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
             }
       }
       else{
+        dispatch(prepareFinalObject("purchaseOrders[0].purchaseType", "Non Indent"));   
 
       }
       return action;

@@ -118,6 +118,18 @@ export const getIndentNoteListDetailsView = (isReview = true) => {
           jsonPath: "materialIssues[0].description",
         }
       ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "materialIssues[0].createdByName",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "materialIssues[0].designation",
+        }
+      ),
       // IssueBy: getLabelWithValue(
       //   { labelName: "Issue By",
       //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_BY" },

@@ -15,7 +15,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getstoreTenantId } from "../../../../ui-utils/storecommonsapi";
 import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
-let applicationNumber = getQueryArg(window.location.href, "issueNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
@@ -68,7 +68,13 @@ export const header = getCommonContainer({
 
 const createMatrialIndentNoteHandle = async (state, dispatch) => {
 
-  let id = getQueryArg(window.location.href, "id");
+//  let id = getQueryArg(window.location.href, "id");
+  let materialIssues = get(
+    state.screenConfiguration.preparedFinalObject,
+    `materialIssues`,
+    []
+  );
+  let id = materialIssues[0].id;
   dispatch(setRoute(`/egov-store-asset/create-material-transfer-indent?id=${id}`));
 };
 const createMatrialIndentOutwordHandle=async (state, dispatch) => {
@@ -151,10 +157,11 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-   
+    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+
    // showHideAdhocPopup(state, dispatch);
     getMdmsData(action, state, dispatch, tenantId);
-    getIndentOutwordData(state, dispatch, id, tenantId);
+    getIndentOutwordData(state, dispatch, id, tenantId,applicationNumber);
     return action;
   },
   components: {
@@ -292,8 +299,20 @@ const screenConfig = {
                         //print function UI End SE0001
           }
         },
-        masterView,
-        footer: IsEdit? poViewFooter():{},
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "materialIssues",
+            updateUrl: "/store-asset-services/materialissues-to/_updateStatus"
+
+          }
+        },
+        masterView
+        //footer: IsEdit? poViewFooter():{},
       }
     },
    

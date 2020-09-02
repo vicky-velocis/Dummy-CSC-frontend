@@ -21,7 +21,7 @@ const onRowClickServiceRequestsSearch = rowData => {
 export const searchResultsServiceRequest ={
   uiFramework: "custom-molecules",
   componentPath: "Table",
-  visible: true,
+  visible: false,
   props: {
     data:[],
     columns: [

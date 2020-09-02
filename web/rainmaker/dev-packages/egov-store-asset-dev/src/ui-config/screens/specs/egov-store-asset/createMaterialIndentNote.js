@@ -18,17 +18,18 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
-  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+  import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import {
     IndentConfiguration
   } from "../../../../ui-utils/sampleResponses";
+import Iframe from "egov-ui-framework/ui-atoms/HtmlElements/Iframe";
   export const stepsData = [
     { labelName: "Indent Material Issue", labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE" },
     {
       labelName: "Indent Material Issue Details",
       labelKey: "STORE_MATERIAL_INDENT_NOTE_INDENT_MATERIAL_ISSUE_DETAILS"
     },
-    { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
+    // { labelName: "Approval Informtion", labelKey: "STORE_MATERIAL_INDENT_NOTE_APPROVAL_INFORMTION" },
     
   ];
   export const stepper = getStepperObject(
@@ -261,6 +262,32 @@ export const header = getCommonContainer({
       if(response)
       dispatch(prepareFinalObject("indents", response));
       }
+        // fetching employee designation
+    const userInfo = JSON.parse(getUserInfo());
+    if(userInfo){
+      dispatch(prepareFinalObject("materialIssues[0].createdByName", userInfo.name));
+      const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+      try { 
+        const payload = await httpRequest(
+          "post",
+          "/egov-hrms/employees/_search",
+          "_search",
+          queryParams
+        );
+        if(payload){
+          const {designationsById} = state.common;
+          const empdesignation = payload.Employees[0].assignments[0].designation;
+          if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+         
+          dispatch(prepareFinalObject("materialIssues[0].designation", desgnName[0].name));
+          }
+        }
+        
+      } catch (e) {
+        console.log(e);
+      }
+    }
     } catch (e) {
       console.log(e);
     }
@@ -354,6 +381,14 @@ export const header = getCommonContainer({
     //designation
     dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
     //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
+    if(indents && indents[0])
+    {
+      indents = indents;
+    }
+    else
+    {
+      indents = indents.indents;
+    }
     if(indents && indents[0] )
     { 
       if(indents[0].indentStore.code !== undefined)
