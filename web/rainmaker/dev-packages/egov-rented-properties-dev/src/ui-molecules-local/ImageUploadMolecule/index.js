@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ImageUpload from "egov-ui-kit/common/common/ImageUpload";
+import ImageUpload from "../ImageUpload";
 import { rest } from "lodash";
 
 

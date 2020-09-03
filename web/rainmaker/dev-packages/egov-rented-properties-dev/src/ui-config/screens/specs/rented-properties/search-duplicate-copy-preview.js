@@ -80,7 +80,8 @@ const duplicateReviewDetails = getCommonCard({
           "DuplicateTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          BILLING_BUSINESS_SERVICE_DC
+          BILLING_BUSINESS_SERVICE_DC,
+          WORKFLOW_BUSINESS_SERVICE_DC
         );
      
         const printCont = downloadPrintContainer(
