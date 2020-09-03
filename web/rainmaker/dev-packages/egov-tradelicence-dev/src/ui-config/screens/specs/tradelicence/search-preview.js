@@ -363,6 +363,9 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         visible: licenseNumber? true : false,
         props: {
           number: licenseNumber,
+          style: {
+            "margin-top": "5px"
+           }
         }
       }
     })

@@ -60,7 +60,7 @@ class SingleApplication extends React.Component {
       switch (item.status) {
         case "INITIATED":
         case "MODIFIED":
-        case "PENDINGCLARIFICATION":
+        // case "PENDINGCLARIFICATION":
           setRoute(`/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`);
           break
         default:
@@ -152,9 +152,9 @@ class SingleApplication extends React.Component {
     } else if (moduleName === "EGOV-ECHALLAN") {
       switch (item.status) {
         case "INITIATED":
-          setRoute(`/egov-echallan/apply?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
+          setRoute(`/egov-echallan/apply?applicationNumber=${item.challanId}&tenantId=${item.tenantId}`);
         default:
-          setRoute(`/egov-echallan/search-preview?challanNumber=${item.challanId}&tenantId=${item.tenantId}`);
+          setRoute(`/egov-echallan/search-preview?applicationNumber=${item.challanId}&tenantId=${item.tenantId}`);
       }
     }
   };

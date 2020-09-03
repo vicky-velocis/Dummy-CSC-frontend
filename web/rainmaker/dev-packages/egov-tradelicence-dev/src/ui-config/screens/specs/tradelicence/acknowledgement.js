@@ -294,7 +294,79 @@ const getAcknowledgementCard = (
         tenant
       )
     };
-  } else if (purpose === "resubmit" && status === "success") {
+  }
+  else if (purpose === "renewApply" && status === "success") {
+    return {
+      header: getCommonHeader({
+        labelName: `Application for Renew Trade License (${financialYearText})`,
+        labelKey: "TL_COMMON_APPLICATION_RENEW_LICENSE",
+        dynamicArray: [financialYearText]
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        props: {
+          // style: {
+          //   position: "absolute",
+          //   width: "95%"
+          // }
+        },
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application Submitted Successfully",
+              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_MAIN"
+            },
+            body: {
+              labelName:
+                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+            },
+            tailText: {
+              labelName: "Application No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+            },
+            number: applicationNumber
+          })
+        },
+        iframeForPdf: {
+          uiFramework: "custom-atoms",
+          componentPath: "Div"
+        },
+        applicationSuccessFooter: applicationSuccessFooter(
+          state,
+          dispatch,
+          applicationNumber,
+          tenant
+        )
+      },
+      abc: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+        },
+        props: {
+          style: {
+            display: "flex",
+
+          }
+        },
+      },
+      iframeForPdf: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div"
+      },
+      applicationSuccessFooter: applicationSuccessFooter(
+        state,
+        dispatch,
+        applicationNumber,
+        tenant
+      )
+    };
+  }
+  else if (purpose === "resubmit" && status === "success") {
     return {
       header: getCommonHeader({
         labelName: `Application for New Trade License (${financialYearText})`,
@@ -486,6 +558,11 @@ const getAcknowledgementCard = (
               labelName: "Application is sent back Successfully",
               labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_HEAD"
             },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            },
             tailText: {
               labelName: "Application No.",
               labelKey: "TL_HOME_SEARCH_RESULTS_APP_NO_LABEL"
@@ -566,11 +643,11 @@ const getAcknowledgementCard = (
               labelName: "Application is sent back to Citizen Successfully",
               labelKey: "TL_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
             },
-            // body: {
-            //   labelName:
-            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
-            // },
+            body: {
+              labelName:
+                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+              labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            },
             tailText: {
               labelName: "Trade License No.",
               labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
