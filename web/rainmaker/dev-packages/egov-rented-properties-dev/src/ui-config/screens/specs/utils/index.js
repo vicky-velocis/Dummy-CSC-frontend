@@ -49,7 +49,7 @@ import {
   getOwnershipSearchResults,
   getDuplicateCopySearchResults
 } from "../../../../ui-utils/commons";
-import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT } from "../../../../ui-constants";
+import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1798,9 +1798,10 @@ export const createEstimateData = async (
   jsonPath,
   dispatch,
   href = {},
-  _businessService
+  _businessService,
+  _workflow
 ) => {
-  const workflowCode = get(data, "workflowCode") ? get(data, "workflowCode") : _businessService
+  const workflowCode = get(data, "workflowCode") ? get(data, "workflowCode") : _workflow
   const applicationNo = getQueryArg(href, "applicationNumber") || getQueryArg(href, "consumerCode");
   const tenantId =
     get(data, "tenantId") || getQueryArg(href, "tenantId");
@@ -2063,7 +2064,8 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
           "OwnersTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          businessService
+          businessService,
+          WORKFLOW_BUSINESS_SERVICE_OT
         ));
       //set in redux to be used for adhoc
       response &&
@@ -2079,7 +2081,8 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
           "DuplicateTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          businessService
+          businessService,
+          WORKFLOW_BUSINESS_SERVICE_DC
         )
       )
       response &&
