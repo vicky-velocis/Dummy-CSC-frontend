@@ -16,9 +16,9 @@ import {
   } from "../../utils";
   import get from "lodash/get";
   
-  export const courtCaseHeader = getCommonTitle({
-    labelName: "Court Case Details",
-    labelKey: "EST_COURT_CASE_DETAILS_HEADER"
+  export const auctionDetailsHeader = getCommonTitle({
+    labelName: "Auction Details",
+    labelKey: "EST_AUCTION_DETAILS_HEADER"
   }, {
     style: {
       marginBottom: 18,
@@ -95,7 +95,7 @@ import {
   }
   
   
-  const commonCourtCaseInformation = () => {
+  const commonAuctionInformation = () => {
     return getCommonGrayCard({
       header: getCommonTitle({
         labelName: "Auction Details",
@@ -114,8 +114,8 @@ import {
     });
   };
   
-  export const courtCaseDetails = getCommonCard({
-    header: courtCaseHeader,
+  export const auctionDetails = getCommonCard({
+    header: auctionDetailsHeader,
     detailsContainer: getCommonContainer({
       multipleApplicantContainer: {
         uiFramework: "custom-atoms",
@@ -130,7 +130,7 @@ import {
             uiFramework: "custom-containers",
             componentPath: "MultiItem",
             props: {
-              scheama: commonCourtCaseInformation(),
+              scheama: commonAuctionInformation(),
               items: [],
             //   addItemLabel: {
             //     labelName: "Add Court Case",

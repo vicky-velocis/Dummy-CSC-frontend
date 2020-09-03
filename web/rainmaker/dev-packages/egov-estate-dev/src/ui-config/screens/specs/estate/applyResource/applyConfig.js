@@ -36,6 +36,7 @@ import {
   licenseFeeDetails,
   otherPaymentDetails
 } from './paymentDetailsAllotment';
+import {auctionDetails} from './auction-details'
 
 const documentCardConfig = {
   header: getCommonTitle({
@@ -268,6 +269,7 @@ export const formwizardSecondStepAllotment = {
     id: "apply_form2"
   },
   children: {
+    auctionDetails
   },
   visible: false
 };
