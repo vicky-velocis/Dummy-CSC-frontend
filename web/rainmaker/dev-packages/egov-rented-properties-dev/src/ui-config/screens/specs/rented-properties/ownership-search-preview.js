@@ -17,20 +17,30 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT } from "../../../../ui-constants";
 import {applicationNumber} from './apply'
 import { setApplicationNumberBox } from "../../../../ui-utils/apply";
-
+let NoticedetailsId
 const headerrow = getCommonContainer({
     header: getCommonHeader({
       labelName: "Ownership Transfer Application",
       labelKey: "OWNER_SHIP_TRANSFER_APPLICATION_HEADER"
     }),
-    applicationNumber
+    applicationNumber,
+    allotmentNumber: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-rented-properties",
+      componentPath: "ApplicationNoContainer",
+      props: {
+        number: NoticedetailsId,
+        notice:"ALLOTMENT"
+      },
+      visible:false
+    }
   });
 
 const reviewApplicantDetails = getReviewApplicantDetails(false);
 const reviewPropertyAddressDetails = getreviewPropertyAddressDetails(false)
 const reviewFreshLicenceDocuments = getReviewDocuments(false, "ownership-apply", "OwnersTemp[0].reviewDocData")
 const getreviewCharges=getreviewChargesDetails(false)
-const reviewPropertyDetailsWithoutAllotmentNumber = getReviewPropertyDetailsWithoutAllotmentNumber(false)
+//const reviewPropertyDetailsWithoutAllotmentNumber = getReviewPropertyDetailsWithoutAllotmentNumber(false)
 
 const estimate = getCommonGrayCard({
   estimateSection: getFeesEstimateCard({
@@ -41,7 +51,7 @@ const estimate = getCommonGrayCard({
 const transferReviewDetails = getCommonCard({
     estimate,
     reviewPropertyAddressDetails,
-    reviewPropertyDetailsWithoutAllotmentNumber,
+    //reviewPropertyDetailsWithoutAllotmentNumber,
     reviewApplicantDetails,
     getreviewCharges,
     reviewFreshLicenceDocuments
@@ -59,6 +69,7 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
     setApplicationNumberBox(state, dispatch, applicationNumber, "ownership-search-preview")
     if (response && response.Owners) {
     let {Owners} = response
+    let allotmentnumber=Owners[0].allotmenNumber
     let ownershipTransferDocuments = Owners[0].ownerDetails.ownershipTransferDocuments || [];
     const removedDocs = ownershipTransferDocuments.filter(item => !item.active)
     ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item.active)
@@ -94,39 +105,49 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       tenantId,"ownership-transfer","OT"
     );
     if(status == 'OT_APPROVED'){
-      dispatch(
-        handleField(
-          "ownership-search-preview",
-          "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyAddressDetails",
-          "visible",
-          true
-      ),
-    );
+    //   dispatch(
+    //     handleField(
+    //       "ownership-search-preview",
+    //       "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyAddressDetails",
+    //       "visible",
+    //       true
+    //   ),
+    // );
+    // dispatch(
+    //   handleField(
+    //     "ownership-search-preview",
+    //     "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyDetailsWithoutAllotmentNumber",
+    //     "visible",
+    //     false
+    // ),)
     dispatch(
       handleField(
         "ownership-search-preview",
-        "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyDetailsWithoutAllotmentNumber",
+        "components.div.children.headerDiv.children.header.children.allotmentNumber",
+        "props.number",
+        allotmentnumber
+      )
+    );  
+    dispatch(
+      handleField(
+        "ownership-search-preview",
+        "components.div.children.headerDiv.children.header.children.allotmentNumber",
         "visible",
-        false
-    ),)
+        true
+      )
+    );  
     }
-    else{
-      dispatch(
-        handleField(
-          "ownership-search-preview",
-          "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyAddressDetails",
-          "visible",
-          false
-      ),
-    );
-      dispatch(
-        handleField(
-          "ownership-search-preview",
-          "components.div.children.transferReviewDetails.children.cardContent.children.reviewPropertyDetailsWithoutAllotmentNumber",
-          "visible",
-          true
-      ),)
-    }
+    // else{
+    //   dispatch(
+    //     handleField(
+    //       "ownership-search-preview",
+    //       "components.div.children.headerDiv.children.header.children.allotmentNumber",
+    //       "props.visible",
+    //       false
+    //     )
+    //   );  
+    // }
+    
     set(
       action,
       "screenConfig.components.div.children.headerDiv.children.helpSection.children",
