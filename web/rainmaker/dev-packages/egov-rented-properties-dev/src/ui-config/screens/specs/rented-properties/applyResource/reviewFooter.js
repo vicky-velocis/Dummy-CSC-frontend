@@ -144,7 +144,8 @@ import {
                     showOrHidePopup(state, dispatch);
                   }  
                 },
-                visible: process.env.REACT_APP_NAME != "Citizen" &&  !!findItem && getButtonVisibility(state, "APPROVED") ? true : false
+               // visible: process.env.REACT_APP_NAME != "Citizen" &&  !!findItem && getButtonVisibility(state, "APPROVED") ? true : false
+             visible:true
               }
             },
             gridDefination: {
