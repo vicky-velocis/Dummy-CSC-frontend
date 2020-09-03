@@ -40,7 +40,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].purchaseType",
        // sourceJsonPath: "searchMaster.storeNames",
         props: {
-          disabled : indentNumber ? true : false,
+          disabled : indentNumber ? true : true,
           className: "hr-generic-selectfield",
           optionValue: "value",
           optionLabel: "label",

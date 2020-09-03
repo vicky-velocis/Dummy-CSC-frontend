@@ -234,11 +234,11 @@ const RegisterReviewResult = {
               labelName: "Select Store Name",
               labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
             },
-            required: false,
+            required: true,
             jsonPath: "searchScreen.storecode",
             sourceJsonPath: "searchMaster.storeNames",
             props: {
-              disabled : true,
+              disabled : false,
               className: "hr-generic-selectfield",
               optionValue: "code",
               optionLabel: "name"

@@ -75,51 +75,56 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(isFormValid)
     {
-          //validate duplicate card
-  let cardJsonPath =
-  "components.div.children.formwizardSecondStep.children.MaterialIndentMapDetails.children.cardContent.children.MaterialIndentDetailsCard.props.items";
-  let pagename = "creatindent";
-  let jasonpath =  "indents[0].indentDetails";
-  let value = "material.code";
-  let DuplicatItem = ValidateCard(state,dispatch,cardJsonPath,pagename,jasonpath,value)
-  if(DuplicatItem && DuplicatItem[0])
-  {
-    const LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")
-    if(!DuplicatItem[0].IsDuplicatItem)
-            {
+      if(activeStep===1)
+      {
+      //validate duplicate card
+      let cardJsonPath =
+      "components.div.children.formwizardSecondStep.children.MaterialIndentMapDetails.children.cardContent.children.MaterialIndentDetailsCard.props.items";
+      let pagename = "creatindent";
+      let jasonpath =  "indents[0].indentDetails";
+      let value = "material.code";
+      let DuplicatItem = ValidateCard(state,dispatch,cardJsonPath,pagename,jasonpath,value)
+      if(DuplicatItem && DuplicatItem[0])
+      {
+        const LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")
+        if(!DuplicatItem[0].IsDuplicatItem)
+                {
 
-              // refresh card item
-              var storeMappingTemp = [];
-          let  storeMapping =  get(
-            state.screenConfiguration.preparedFinalObject,
-            `indents[0].indentDetails`,
-            []
-          );
-          for(var i = 0; i < storeMapping.length; i++){
-              if(storeMappingTemp.indexOf(storeMapping[i]) == -1){
-                storeMappingTemp.push(storeMapping[i]);
+                  // refresh card item
+                  var storeMappingTemp = [];
+              let  storeMapping =  get(
+                state.screenConfiguration.preparedFinalObject,
+                `indents[0].indentDetails`,
+                []
+              );
+              for(var i = 0; i < storeMapping.length; i++){
+                  if(storeMappingTemp.indexOf(storeMapping[i]) == -1){
+                    storeMappingTemp.push(storeMapping[i]);
+                  }
               }
-          }
-          storeMappingTemp = storeMappingTemp.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
-          if(storeMappingTemp.length>0)
-          {
-            dispatch(prepareFinalObject("indents[0].indentDetails",storeMappingTemp)
-          );
-            }
-            moveToReview(dispatch);
-          }
-          else{
-            const errorMessage = {
-              labelName: "Duplicate Material Added",
-              //labelKey:   `STORE_MATERIAL_DUPLICATE_VALIDATION ${DuplicatItem[0].duplicates}`
-              labelKey:   LocalizationCodeValue+' '+DuplicatItem[0].duplicates
-            };
-            dispatch(toggleSnackbar(true, errorMessage, "warning"));
-          }
-  }
-  else{
-      moveToReview(dispatch);
-  }
+              storeMappingTemp = storeMappingTemp.filter((item) => item.isDeleted === undefined || item.isDeleted !== false);
+              if(storeMappingTemp.length>0)
+              {
+                dispatch(prepareFinalObject("indents[0].indentDetails",storeMappingTemp)
+              );
+                }
+                moveToReview(dispatch);
+              }
+              else{
+                const errorMessage = {
+                  labelName: "Duplicate Material Added",
+                  //labelKey:   `STORE_MATERIAL_DUPLICATE_VALIDATION ${DuplicatItem[0].duplicates}`
+                  labelKey:   LocalizationCodeValue+' '+DuplicatItem[0].duplicates
+                };
+                dispatch(toggleSnackbar(true, errorMessage, "warning"));
+              }
+      }
+      else{
+          moveToReview(dispatch);
+      }
+    }
+    else
+    changeStep(state, dispatch);
   }
     else{
 

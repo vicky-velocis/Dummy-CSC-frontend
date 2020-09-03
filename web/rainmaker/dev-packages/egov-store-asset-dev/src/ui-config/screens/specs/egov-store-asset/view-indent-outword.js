@@ -21,6 +21,9 @@ import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
+let enableButton = true;
+if(status ===WorkFllowStatus().WorkFllowRejected)
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
 ConfigStatus = ConfigStatus.filter(x=>x.code === status)
@@ -282,7 +285,7 @@ const screenConfig = {
                             lg:3,
                             align: "right",
                           },  
-                          visible: true,// enableButton,
+                          visible:  true,
                           props: {
                             data: {
                               label: {

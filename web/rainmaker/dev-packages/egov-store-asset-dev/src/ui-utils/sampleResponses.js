@@ -501,7 +501,7 @@ export const NonIndentConfiguration =()=>{
 
 export const WorkFllowStatus = () => {
   return {
-    
+    WorkFllowRejected:'REJECTED',
     WorkFllowStatus: [
       {
         code:"CREATED",
@@ -515,6 +515,22 @@ export const WorkFllowStatus = () => {
         code:"APPROVED",
         value:"APPROVED",
       }
+
+    ]
+  }
+}
+
+export const UserRoles = () => {
+  return {
+    
+    UserRoles: [
+     "SACP",
+     "SAJE",
+     "SACT",
+     "MOH",
+     "SASP",
+     "SASO",
+     "SACSI"
 
     ]
   }

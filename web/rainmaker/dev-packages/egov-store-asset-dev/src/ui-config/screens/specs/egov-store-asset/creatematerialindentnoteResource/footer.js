@@ -140,6 +140,8 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
       else{
+        if(activeStep===1)
+        {
           let cardJsonPath =
           "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
           let pagename = "createMaterialIndentNote";
@@ -208,6 +210,9 @@ export const callBackForNext = async (state, dispatch) => {
 
             }
           }
+        }
+        else
+            changeStep(state, dispatch);  
 
       }
      

@@ -121,8 +121,8 @@ import {
                                         if(viewScreenMdmsData && viewScreenMdmsData.NULM && viewScreenMdmsData.NULM.SEPDocuments){
 
                                           const {SEPDocuments} = viewScreenMdmsData.NULM;
-
-                                          const indexOfDoc = SEPDocuments.findIndex(doc =>  doc.documentType === docInfo.documentType )
+                                          const documentsDes = ["Bpl Yellow Card","voter card","Aadhar card","Pan Card","Photo copy of Applicant"]
+                                          const indexOfDoc = documentsDes.findIndex(doc =>  doc === docInfo.documentType )
 
                                             documentsUploadRedux[indexOfDoc] = {                          
                                             "documents":[
@@ -168,6 +168,21 @@ const getSEPDetails = async(state, dispatch) =>{
   if(response){ 
     getFileUrlDetails(state,dispatch,tenantId,response);
     dispatch(prepareFinalObject("NULMSEPRequest", response.ResponseBody[0]));
+
+    if(response.ResponseBody){
+      const NULMSEPRequest  = { ...response.ResponseBody[0]};
+      const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
+    
+      radioButtonValue.forEach(value => {
+        if(NULMSEPRequest[value] && NULMSEPRequest[value]=== true ){
+          dispatch(prepareFinalObject(`NULMSEPRequest[${value}]`, "YES" ));
+        }else{
+          dispatch(prepareFinalObject(`NULMSEPRequest[${value}]`, "NO" ));
+        }
+      })
+
+      dispatch(prepareFinalObject(`NULMSEPRequest.dob`, NULMSEPRequest.dob.split(" ")[0] ));
+    }
   }
 }
 
