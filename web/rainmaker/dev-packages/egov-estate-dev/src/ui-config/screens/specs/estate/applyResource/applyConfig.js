@@ -29,7 +29,13 @@ import {
 } from './reviewDetails';
 import {
   documentList
-} from './documentList'
+} from './documentList';
+import {
+  premiumAmountDetails,
+  groundRentDetails,
+  licenseFeeDetails,
+  otherPaymentDetails
+} from './paymentDetailsAllotment';
 
 const documentCardConfig = {
   header: getCommonTitle({
@@ -297,6 +303,10 @@ export const formwizardFifthStepAllotment = {
     id: "apply_form5"
   },
   children: {
+    premiumAmountDetails,
+    groundRentDetails,
+    licenseFeeDetails,
+    otherPaymentDetails
   },
   visible: false
 };
