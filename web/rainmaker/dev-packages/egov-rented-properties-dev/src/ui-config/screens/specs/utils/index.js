@@ -1304,7 +1304,7 @@ export const downloadCertificateForm = (Owners, data, applicationType,tenantId, 
         },
         {
           key: "tenantId",
-          value: tenantId.split('.')[0]
+          value: "ch"
         }
       ]
       break;
@@ -1316,7 +1316,7 @@ export const downloadCertificateForm = (Owners, data, applicationType,tenantId, 
         },
         {
           key: "tenantId",
-          value: tenantId.split('.')[0]
+          value: "ch"
         }
       ]
       break;
