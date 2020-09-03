@@ -6,7 +6,7 @@ import { getQueryArg} from "egov-ui-framework/ui-utils/commons";
 import { get } from "lodash";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getImages } from "./property-transitImages";
-import { getReviewDocuments } from "./applyResource/review-documents";
+import { getReviewDocuments,getReviewDocumentsNoticePreview } from "./applyResource/review-documents";
 import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { set } from "lodash";
 import {downloadNoticeContainer} from "./applyResource/footer"
@@ -16,7 +16,7 @@ import { getNoticeReviewProperty, getNoticeViolationPreviewReviewRentDetails, ge
 const reviewNoticePropertyDetails = getNoticeReviewProperty(false);
 const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDetails(false);
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
-const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true);
+const reviewNoticeDocuments = getReviewDocumentsNoticePreview(false,"apply","SingleProperties[0].applicationDocuments",true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
 const header = getCommonContainer({
     header : getCommonHeader({
@@ -57,11 +57,13 @@ const getData = async(action, state, dispatch) => {
 
     const findOwner = propertyArr.owners.find(item => !!item.activeState)
     const orgOwner = propertyArr.owners.find(item => !!item.isPrimaryOwner)
-    if(!!orgOwner){
+    const currentownerId = propertyArr.propertyDetails.currentOwner
+    const findCurrentOwner = propertyArr.owners.find(item => item.id === currentownerId)
+    if(!!findCurrentOwner){
         dispatch(
             prepareFinalObject(
-                "SingleProperties[0].originalAllottee",
-                orgOwner.ownerDetails.name
+                "SingleProperties[0].OwnerName",
+                findCurrentOwner.ownerDetails.name
             )
             )
     }
@@ -80,6 +82,19 @@ const getData = async(action, state, dispatch) => {
             )
       
     }
+    const printCont = downloadNoticeContainer(
+      action,
+      state,
+      dispatch,
+      status,
+    );
+
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
+
 
     if(singleNoticeDetails[0].noticeType === "Violation"){
         let path = "components.div.children.formwizardFirstStep.children.cardContent.children.reviewNoticeRecoveryRentDetails"
@@ -121,19 +136,6 @@ const getData = async(action, state, dispatch) => {
         NoticeId
       )
     );   
-    
-    const printCont = downloadNoticeContainer(
-      action,
-      state,
-      dispatch,
-      status,
-    );
-
-    set(
-      action,
-      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-      printCont
-    );
 
     
 }

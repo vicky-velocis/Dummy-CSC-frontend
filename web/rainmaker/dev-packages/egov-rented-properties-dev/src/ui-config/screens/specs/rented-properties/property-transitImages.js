@@ -141,7 +141,7 @@ import { setApplicationNumberBox } from "../../../../ui-utils/apply";
                   contents: [
                     {
                       label: "RP_NOTICE_ID",
-                      jsonPath: "transitNotices",
+                      jsonPath: "notices",
                       url:`/rented-properties/notices?tenantId=${getTenantId()}` 
                     },
                     {

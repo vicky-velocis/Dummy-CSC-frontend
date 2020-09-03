@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import classNames from "classnames";
 import Button from "@material-ui/core/Button";
-import { LabelContainer } from "../../ui-containers";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 import "./index.css";
 
 const styles = {
@@ -37,7 +37,7 @@ const documentTitle = {
 };
 
 function MultiCardDownloadGrid(props) {
-  const { classes, data, ...rest } = props;
+  const { classes, noticeflag ,data, ...rest } = props;
   return (
     <Grid container {...rest}>
       {data && data.length && data.map((item, key) => {
@@ -72,8 +72,8 @@ function MultiCardDownloadGrid(props) {
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
               <Grid xs={6} align="right">
-                <Button href={item.link} color="primary">
-                  {item.linkText}
+                <Button href={item.url} color="primary">
+                  Download
                 </Button>
               </Grid>
             </Grid>

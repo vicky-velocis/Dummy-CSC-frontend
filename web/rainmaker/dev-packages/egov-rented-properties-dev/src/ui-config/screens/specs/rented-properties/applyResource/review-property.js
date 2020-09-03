@@ -10,8 +10,8 @@ import { convertEpochToDate, } from "../../utils";
 import { changeStep, changePropertyStep } from "./footer";
 
 export const areaLabel = {
-    labelName: "Area",
-    labelKey: "RP_AREA_LABEL"
+    labelName: "Locality",
+    labelKey: "RP_LOCALITY_LABEL"
 }
 
 export const pincodeLabel = {
@@ -422,10 +422,10 @@ export const getNoticeViolationPreviewReviewRentDetails = (isEditable = true) =>
                 ),
                 originalAllotte: getLabelWithValue(
                     {
-                        labelName: "Allottee",
-                        labelKey: "RP_ORIGINAL_ALLOTTEE_LABEL"
+                        labelName: "Owner Name",
+                        labelKey: "RP_OWNER_NAME_LABEL"
                     },
-                    { jsonPath: "SingleProperties[0].originalAllottee" }
+                    { jsonPath: "SingleProperties[0].OwnerName" }
                 ),
                 violations: getLabelWithValue(
                     {
@@ -502,10 +502,10 @@ export const getNoticeRecoveryPreviewReviewRentDetails = (isEditable = true) => 
                 ),
                 originalAllotte: getLabelWithValue(
                     {
-                        labelName: "Allottee",
-                        labelKey: "RP_ORIGINAL_ALLOTTEE_LABEL"
+                        labelName: "Owner Name",
+                        labelKey: "RP_OWNER_NAME_LABEL"
                     },
-                    { jsonPath: "SingleProperties[0].originalAllottee" }
+                    { jsonPath: "SingleProperties[0].OwnerName" }
                 ),
                 // violations: getLabelWithValue(
                 //     {
