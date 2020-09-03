@@ -31,15 +31,15 @@ import {
             { jsonPath: "materialIssues[0].materialIssueDetails[0].material.name",          
           }
           ),
-          // TotalIndentQty: getLabelWithValue(
-          //   {
-          //     labelName: "Total Indent Qty Required",
-          //         labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_INDENT_QTY_REQUIRED"
-          //   },
-          //   { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
+          TotalIndentQty: getLabelWithValue(
+            {
+              labelName: "Total Indent Qty Required",
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_INDENT_QTY_REQUIRED"
+            },
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
             
-          //  }
-          // ),
+           }
+          ),
           // BalanceQty: getLabelWithValue(
           //   {
           //     labelName: "Balance Qty",
@@ -82,14 +82,14 @@ import {
              
           //   }
           // ),
-          // TotalValue: getLabelWithValue(
-          //   { labelName: "Total Value",
-          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"},
-          //   {
-          //     jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue"
+           TotalValue: getLabelWithValue(
+            { labelName: "Total Value",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"},
+            {
+              jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue"
              
-          //   }
-          // ),
+            }
+          ),
           // AssestCode: getLabelWithValue(
           //   {   labelName: "Assest Code",
           //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE" },

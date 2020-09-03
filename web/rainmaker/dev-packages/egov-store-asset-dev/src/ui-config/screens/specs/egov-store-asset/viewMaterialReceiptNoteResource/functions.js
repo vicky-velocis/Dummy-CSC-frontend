@@ -11,7 +11,8 @@ import {
   getPriceListSearchResults,
   GetMdmsNameBycode,
   getCommonFileUrl,
-  updatereceiptnotes
+  updatereceiptnotes,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";  
 import {
@@ -107,7 +108,7 @@ const getFileUrl = async (dispatch,tenantId,fileStoreId)=>{
     FileURL = getCommonFileUrl(FileURL)
     let  documentsPreview= [
       {
-        title: "STORE_DOCUMENT_TYPE_RATE_CONTRACT_QUATION",
+        title: "STORE_DOCUMENT_TYPE_MATERIAL_RECEIPT_NOTE",
         linkText: "VIEW", 
         link:FileURL,//"https://chstage.blob.core.windows.net/fileshare/ch/undefined/July/15/1594826295177document.pdf?sig=R3nzPxT9MRMfROREe6LHEwuGfeVxB%2FKneAeWrDJZvOs%3D&st=2020-07-15T15%3A21%3A01Z&se=2020-07-16T15%3A21%3A01Z&sv=2016-05-31&sp=r&sr=b",
           
@@ -316,17 +317,19 @@ export const createUpdateMR = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatreceiptnotes(
         queryObject,        
         materialReceipt,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=create&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-material-receipt-note?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));}
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -339,8 +342,8 @@ export const createUpdateMR = async (state, dispatch, action) => {
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPT&mode=update&code=${mrnNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-material-receipt-note?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));}
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -352,12 +355,17 @@ export const getMaterialIndentData = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  mrnNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "mrnNumber",
+      value: mrnNumber
     },
     {
       key: "tenantId",
@@ -367,7 +375,8 @@ export const getMaterialIndentData = async (
 
  let response = await getreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
-response = response.MaterialReceipt.filter(x=>x.id===id)
+//response = response.MaterialReceipt.filter(x=>x.id===id)
+response = response.MaterialReceipt.filter(x => x.mrnNumber === mrnNumber)
 let totalvalue = 0
 let TotalQty = 0;
 

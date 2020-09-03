@@ -37,7 +37,7 @@ export const poCommonFooter = () => {
       children: {
         submitButtonLabel: getLabel({
           labelName: "SUBMIT",
-          labelKey: "HR_SUBMIT_LABEL"
+          labelKey: "STORE_SUBMIT_LABEL"
         })
       },
       onClickDefination: {
@@ -64,7 +64,7 @@ export const poViewFooter = () => {
       children: {
         editDetailsButtonLabel: getLabel({
           labelName: "EDIT DETAILS",
-          labelKey: "HR_EDIT_DETAILS_LABEL"
+          labelKey: "STORE_EDIT_DETAILS_LABEL"
         }),
         editDetailsButtonIcon: {
           uiFramework: "custom-atoms",

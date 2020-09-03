@@ -539,6 +539,38 @@ const getPropertyDetails = async ({state, dispatch, transitNumber, screenKey, co
   }
 }
 
+export const getRentPaymentPropertyDetails = async (state, dispatch) => {
+  try {
+    const transitNumber = get(state.screenConfiguration.preparedFinalObject, "property.transitNumber")
+    if(!!transitNumber) {
+      dispatch(toggleSpinner())
+      const payload = await getPropertyDetails({
+        state, dispatch, transitNumber, screenKey: "payment",
+        jsonPath: "Properties[0].transitNumber",
+        componentJsonPath: "components.div.children.detailsContainer.children.propertyDetails.children.cardContent.children.detailsContainer.children.transitNumber"
+      })
+      if(!!payload) {
+        let {Properties} = payload
+        Properties = Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
+          balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
+          balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
+        }}))
+        dispatch(prepareFinalObject("Properties", Properties))
+        dispatch(handleField(
+          "payment",
+          "components.div.children.detailsContainer.children.rentSummaryDetails",
+          "visible",
+          true
+        ))
+      }
+      dispatch(toggleSpinner())
+    }
+  } catch (error) {
+    dispatch(toggleSpinner())
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+  }
+}
+
 export const getAccountStatementProperty = async (state, dispatch) => {
   try {
     const transitNumber = get(state.screenConfiguration.preparedFinalObject, "searchScreen.transitNumber")
@@ -576,6 +608,14 @@ export const getAccountStatementProperty = async (state, dispatch) => {
             findOwner.ownerDetails.name
           )
         )
+
+        dispatch(
+          prepareFinalObject(
+            "Properties",
+            Properties
+          )
+        )
+
         return Properties[0].propertyDetails.propertyId
       }
     }

@@ -1,8 +1,9 @@
 import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTitle, getPattern, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
-import { getDetailsFromProperty ,getDuplicateDetailsFromProperty,getRecoveryValueProperty} from "../../../../../ui-utils/apply";
+import { getRecoveryValueProperty} from "../../../../../ui-utils/apply";
+import { transitNumberConfig } from "./propertyDetails";
+
 export const propertyHeader = getCommonTitle(
     {
         labelName: "Property Details",
@@ -71,26 +72,6 @@ const getEditorField = {
     jsonPath: "Properties[0].owners[0].ownerDetails.editor"
   }
 
-const ownerNameField = {
-    label: {
-        labelName: "Owner Name",
-        labelKey: "RP_OWNER_NAME_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Owner Name",
-        labelKey: "RP_OWNER_NAME_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 4,
-    maxLength: 40,
-    required: true,
-    jsonPath: "Properties[0].owners[0].ownerDetails.name",
-    errorMessage:"RP_ERR_OWNER_NAME_FIELD"
-  }
-
 const originalAllotteField = {
     label: {
         labelName: "Allottee",
@@ -150,25 +131,6 @@ const getViolationField = {
     visible:true,
       required:true,
     jsonPath: "SingleImage[0].description" 
-}
-
-export const transitNumberConfig = {
-    label: {
-        labelName: "Transit Site/Plot number",
-        labelKey: "RP_SITE_PLOT_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Transit Site/Plot number",
-        labelKey: "RP_SITE_PLOT_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    minLength: 4,
-    maxLength: 25,
-    required: true,
-    errorMessage:"RP_ERR_TRANSIT_FIELD"
 }
 
 const transitNumberField = {

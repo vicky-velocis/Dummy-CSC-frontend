@@ -241,13 +241,13 @@ export const prepareDocuments = (documents, jsonPath) => {
 
 export const setDocumentData = async(action, state, dispatch, {documentCode, jsonPath, screenKey, screenPath, tempJsonPath}) => {
     const documentTypePayload = [{
-        moduleName: "PropertyServices",
+        moduleName: "RentedProperties",
         masterDetails: [{name: "applications"}]
       }
     ]
     const documentRes = await getMdmsData(dispatch, documentTypePayload);
-    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-    const {applications = []} = PropertyServices || {}
+    const {RentedProperties} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
+    const {applications = []} = RentedProperties || {}
     const findFreshLicenceItem = applications.find(item => item.code === documentCode)
     const masterDocuments = !!findFreshLicenceItem ? findFreshLicenceItem.documentList : [];
     const freshLicenceDocuments = masterDocuments.map(item => ({

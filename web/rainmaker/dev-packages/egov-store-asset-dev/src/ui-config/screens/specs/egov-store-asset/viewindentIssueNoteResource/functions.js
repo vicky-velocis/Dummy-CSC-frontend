@@ -11,7 +11,8 @@ import {
   getMaterialIndentSearchResults,
   getPriceListSearchResults,
   GetMdmsNameBycode,
-  updatematerialissues
+  updatematerialissues,
+  getWFPayload
 } from "../../../../../ui-utils/storecommonsapi";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -277,17 +278,21 @@ export const createUpdateIndent = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
+
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatematerialissues(
         queryObject,        
         materialIssues,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let indentNumber = response.materialIssues[0].issueNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=create&code=${indentNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-indent-note?applicationNumber=${indentNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`)); 
+      }
     } catch (error) {
       //alert('123')
       furnishindentData(state, dispatch);
@@ -301,8 +306,9 @@ export const createUpdateIndent = async (state, dispatch, action) => {
       );
       if(response){
         let indentNumber = response.materialIssues[0].indentNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
-       }
+        //dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALINDENT&mode=update&code=${indentNumber}`));
+        dispatch(setRoute(`/egov-store-asset/view-indent-note?applicationNumber=${indentNumber}&tenantId=${response.materialIssues[0].tenantId}&Status=${response.materialIssues[0].materialIssueStatus}`)); 
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -341,8 +347,11 @@ if(response && response[0])
    let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code)  
    set(response[0], `materialIssueDetails[${index}].material.name`, matname);
    set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
+   if(Number(response[0].indent.indentDetails[index].indentQuantity))
+   set(response[0], `materialIssueDetails[${index}].indentDetail.indentQuantity`, Number(response[0].indent.indentDetails[index].indentQuantity) );
+   set(response[0], `materialIssueDetails[${index}].indentDetail.TotalValue`,  Number(element.value));
    totalvalue = totalvalue+ Number(element.value)
-   totalIndentQty = totalIndentQty+  Number(element.indentDetail.indentQuantity)
+   totalIndentQty = totalIndentQty+ Number(response[0].indent.indentDetails[index].indentQuantity)
    TotalQty = TotalQty + Number(element.quantityIssued)
   }
   set(response[0],`totalIndentQty`, totalIndentQty);

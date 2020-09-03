@@ -1,13 +1,12 @@
 import {
     getCommonHeader, getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {stepper, formwizardFirstStep, formwizardSecondStep, formwizardThirdStep,addPropertyStepper,formwizardFourthStep} from './applyResource/applyConfig'
+import { formwizardFirstStep, formwizardSecondStep, formwizardThirdStep,addPropertyStepper,formwizardFourthStep} from './applyResource/applyConfig'
 import { httpRequest } from "../../../../ui-utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import {footer} from './applyResource/footer';
-import { searchResults } from "./search-preview";
-import { getQueryArg, getFileUrlFromAPI, getFileUrl } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareDocumentTypeObj } from "../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { get } from "lodash";
@@ -98,13 +97,13 @@ export const getMdmsData = async (dispatch, body) => {
 
   const setDocumentData = async (action, state, dispatch) => {
     const documentTypePayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "applications"}]
     }
   ]
     const documentRes = await getMdmsData(dispatch, documentTypePayload);
-    const {PropertyServices} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
-    const {applications = []} = PropertyServices || {}
+    const {RentedProperties} = !!documentRes && !!documentRes.MdmsRes ? documentRes.MdmsRes : {}
+    const {applications = []} = RentedProperties || {}
     const findMasterItem = applications.find(item => item.code === "MasterRP")
     const masterDocuments = !!findMasterItem ? findMasterItem.documentList : [];
     console.log(masterDocuments)
@@ -163,13 +162,13 @@ export const getMdmsData = async (dispatch, body) => {
   
 export const getColonyTypes = async(action, state, dispatch) => {
     const colonyTypePayload = [{
-      moduleName: "PropertyServices",
+      moduleName: "RentedProperties",
       masterDetails: [{name: "colonies"}, {name: "applications"}]
     }
   ]
     const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-    const {PropertyServices} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-    const {colonies = []} = PropertyServices || {}
+    const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+    const {colonies = []} = RentedProperties || {}
       dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
       const propertyTypes = colonies.map(item => ({
         code: item.code,
@@ -193,7 +192,13 @@ const header = getCommonContainer({
     labelName: "Add Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES_ADD"
   }),
-  applicationNumber
+  applicationNumber : {
+    ...applicationNumber,
+    props: {
+      ...applicationNumber.props,
+      type: "RP_MASTER"
+    }
+  }
 });
 
 const getData = async(action, state, dispatch) => {

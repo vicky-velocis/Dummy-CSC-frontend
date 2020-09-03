@@ -65,6 +65,8 @@ import {
     beforeInitScreen: (action, state, dispatch) => {
             // fetching MDMS data
       getData(action, state, dispatch);
+      dispatch(prepareFinalObject("NULMSMIDRequest", {}));  
+      dispatch(prepareFinalObject("searchScreen", {}));
       return action;
     },
     components: {
@@ -95,7 +97,7 @@ import {
                   sm: 6,
                   align: "right",
                 },
-                visible: enableButton,
+                visible: process.env.REACT_APP_NAME === "Employee"? false : true,
                 props: {
                   variant: "contained",
                   color: "primary",

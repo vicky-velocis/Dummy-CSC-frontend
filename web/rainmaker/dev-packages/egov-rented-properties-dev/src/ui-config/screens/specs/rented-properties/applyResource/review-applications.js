@@ -5,7 +5,7 @@ import {
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { headerDiv, editSection, areaLabel, pincodeLabel } from "./review-property";
+import { headerDiv, editSection, areaLabel, pincodeLabel, colonyLabel } from "./review-property";
 
 const freshLicenseEditSection = isEditable => ({
     ...editSection,
@@ -132,8 +132,8 @@ export const getreviewPropertyAddressDetails = (isEditable = true) => {
                 {jsonPath: "Owners[0].allotmenNumber"}
             ),
             area: getLabelWithValue(
-                areaLabel,
-                { jsonPath: "Owners[0].property.area" }
+                colonyLabel,
+                { jsonPath: "Owners[0].property.colony" }
             ),
             pincode: getLabelWithValue(
                 pincodeLabel,
@@ -232,8 +232,8 @@ export const getReviewPropertyDetailsWithoutAllotmentNumber = (isEditable = true
                     { jsonPath: "Owners[0].property.transitNumber" }
                 ),
                 area: getLabelWithValue(
-                    areaLabel,
-                    { jsonPath: "Owners[0].property.area" }
+                    colonyLabel,
+                    { jsonPath: "Owners[0].property.colony" }
                 ),
                 pincode: getLabelWithValue(
                     pincodeLabel,
@@ -344,7 +344,7 @@ export const getDuplicateCopyReviewPropertyAddressDetails = (isEditable = true) 
                 { jsonPath: "DuplicateCopyApplications[0].property.transitNumber" }
             ),
             colony: getLabelWithValue(
-                areaLabel,
+                colonyLabel,
                 { jsonPath: "DuplicateCopyApplications[0].property.colony" }
             ),
             pincode: getLabelWithValue(
