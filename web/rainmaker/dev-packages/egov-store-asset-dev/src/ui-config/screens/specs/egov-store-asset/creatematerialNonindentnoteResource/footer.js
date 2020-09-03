@@ -139,6 +139,8 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
       else{
+        if(activeStep===1)
+        {
                 //card validation
                 let cardJsonPath =
                 "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
@@ -207,7 +209,9 @@ export const callBackForNext = async (state, dispatch) => {
         
                   }
                 }
-
+              }
+              else
+              changeStep(state, dispatch);
 
       }
      

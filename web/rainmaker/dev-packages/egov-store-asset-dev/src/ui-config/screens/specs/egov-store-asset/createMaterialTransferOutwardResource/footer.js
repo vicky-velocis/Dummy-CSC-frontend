@@ -77,6 +77,8 @@ export const callBackForNext = async (state, dispatch) => {
         moveToReview(dispatch);
       }
       else{
+        if(activeStep===1)
+        {
         let cardJsonPath =
           "components.div.children.formwizardSecondStep.children.MTONDetails.children.cardContent.children.MTONDetailsCard.props.items";
           let pagename = "create-material-transfer-outward";
@@ -153,6 +155,9 @@ export const callBackForNext = async (state, dispatch) => {
 
             }
           }
+        }
+        else
+            changeStep(state, dispatch);
       }
      
     } else {

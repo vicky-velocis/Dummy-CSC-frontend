@@ -242,9 +242,11 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(
         prepareFinalObject("documentsPreview", documentsPreview)
         );
+        if(activeStep===1)
+        {
         //card validation
         let cardJsonPath =
-        "components.div.children.formwizardSecondStep.children.MTONDetails.children.cardContent.children.MTONDetailsCard.props.items";
+        "components.div.children.formwizardSecondStep.children.materialReceiptDetail.children.cardContent.children.materialReceiptCard.props.items";
         let pagename = "createMaterialReceiptNote";
         let jasonpath =  "materialReceipt[0].receiptDetails";
         let value = "purchaseOrderDetail.purchaseOrderNumber";
@@ -320,6 +322,9 @@ export const callBackForNext = async (state, dispatch) => {
 
           }
         }
+      }
+      else
+      changeStep(state, dispatch);
         }
 
         else{

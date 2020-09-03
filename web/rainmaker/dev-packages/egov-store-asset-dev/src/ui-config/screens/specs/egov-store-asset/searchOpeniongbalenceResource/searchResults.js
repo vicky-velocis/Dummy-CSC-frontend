@@ -87,7 +87,7 @@ export const searchResults = {
 const onRowClick = (rowData) => {
   let tenantId = getTenantId();
  // window.location.href = `view-opening-balence?id=${rowData[3]}&tenantId=${tenantId}`;
-  window.location.href = `createopeningbalence?id=${rowData[3]}&tenantId=${tenantId}`;
+  window.location.href = `createopeningbalence?mrnNumber=${rowData[0]}&tenantId=${tenantId}`;
 };
 
 
