@@ -267,8 +267,6 @@ export const violationsDetails = getCommonCard({
         beforeFieldChange: (action, state, dispatch) => {
           try {
             if (action.value !== "") {
-
-
               let isEncroachmentchanged = false;
               dispatch(prepareFinalObject("articleSeizedDetails", []));
               let encroachmentType = get(state, 'screenConfiguration.preparedFinalObject.eChallan.encroachmentType', '');
@@ -497,7 +495,16 @@ export const violationsDetails = getCommonCard({
         sm: 6
       },
       afterFieldChange: (action, state, dispatch) => {
-        try {
+        try 
+        {
+          dispatch(
+            handleField(
+              "apply",
+              'components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.NumberOFviolations',
+              "props.value",0
+            )
+          );
+
           let vendorvalue = get(state, 'screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.vendorList', []);
           let __FOUND = vendorvalue.find(function (vendorRecord, index) {
             if (vendorRecord.code == action.value)
@@ -545,9 +552,9 @@ export const violationsDetails = getCommonCard({
           dispatch(
             handleField(
               "apply",
-              'components.div.children.formwizardFirstStep.children.violatorDetails.children.cardContent.children.violatorDetailsConatiner.children.NumberOFviolations',
+              'components.div.children.formwizardFirstStep.children.violationsDetails.children.cardContent.children.violationsDetailsContainer.children.NumberOFviolations',
               "props.value",
-              __FOUND !== undefined ? __FOUND.numberOfViolation : '1'
+              get(state, 'screenConfiguration.preparedFinalObject.eChallan.numberOfViolation', '1')
             )
           );
 
@@ -559,22 +566,66 @@ export const violationsDetails = getCommonCard({
       }
     },
     NumberOFviolations: {
-      ...getSelectField({
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-echallan",
+      componentPath: "AutosuggestContainer",
+      jsonPath: "eChallan.numberOfViolation",
+      errorMessage: "EC_ERR_DEFAULT_INPUT_VIOLATION_COUNT_FIELD_MSG",
+      required: false,
+      props: {
+        required: false,
+        style: {
+          width: "100%",
+          cursor: "pointer"
+        },
         label: {
           labelName: "Number of Violation(s)",
           labelKey: "EC_NUMBER_OF_VIOLATION_LABEL"
         },
-        optionLabel: "name",
         placeholder: {
           labelName: "Select Number of Violations",
           labelKey: "EC_NUMBER_OF_VIOLATION_PLACEHOLDER"
         },
-        sourceJsonPath: "applyScreenMdmsData.egec.Numberofvioalation-new",
-        jsonPath: "eChallan.numberOfViolation",
-        required: true,
         errorMessage: "EC_ERR_DEFAULT_INPUT_VIOLATION_COUNT_FIELD_MSG",
-      })
+        jsonPath: "eChallan.numberOfViolation",
+        sourceJsonPath: "applyScreenMdmsData.egec.Numberofvioalation-new",
+        labelsFromLocalisation: true,
+        setDataInField: true,
+        suggestions: [],
+        fullwidth: true,
+        required: true,
+        inputLabelProps: {
+          shrink: true
+        },
+        // localePrefix: {
+        //   moduleName: "ACCESSCONTROL_ROLES",
+        //   masterName: "ROLES"
+        // },
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 6
+      },
+      
     },
+    // NumberOFviolations: {
+    //   ...getSelectField({
+    //     label: {
+    //       labelName: "Number of Violation(s)",
+    //       labelKey: "EC_NUMBER_OF_VIOLATION_LABEL"
+    //     },
+    //     optionLabel: "name",
+    //     optionValue: "code",
+    //     placeholder: {
+    //       labelName: "Select Number of Violations",
+    //       labelKey: "EC_NUMBER_OF_VIOLATION_PLACEHOLDER"
+    //     },
+    //     sourceJsonPath: "applyScreenMdmsData.egec.Numberofvioalation-new",
+    //     jsonPath: "eChallan.numberOfViolation",
+    //     required: true,
+    //     errorMessage: "EC_ERR_DEFAULT_INPUT_VIOLATION_COUNT_FIELD_MSG",
+    //   })
+    // },
     sector: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-echallan",

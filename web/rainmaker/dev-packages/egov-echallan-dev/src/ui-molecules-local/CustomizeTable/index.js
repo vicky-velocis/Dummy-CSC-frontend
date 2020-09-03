@@ -19,6 +19,9 @@ const customStyles = {
   NameCell: {
     fontWeight: 900
   },
+  "MUIDataTable-responsiveScroll" : {
+    scrollMaxHeight:"auto"
+  },
 };
 
 class CustomizeTable extends React.Component {

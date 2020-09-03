@@ -12,7 +12,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
-  baseURL: window.location.origin,
+  baseURL: window.location.origin, 
   headers: {
     "Content-Type": "application/json"
   }
@@ -35,8 +35,8 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
 
   };
   let ExtraPayload = {
-    applicationType: getapplicationType(),
-    applicationStatus: getapplicationMode(),
+    applicationType: getapplicationType(),// 'PETNOC',
+    applicationStatus: getapplicationMode(),  //'INITIATED',
     applicationId: applicationnumber === 'null' ? '' : applicationnumber,
     tenantId: getTenantId(),
   }
@@ -71,6 +71,9 @@ export const httpRequest = async (
   headers = [],
   customRequestInfo = {}
 ) => {
+
+  console.log('requestBody', requestBody);
+  console.log('endPoint', endPoint);
 
   store.dispatch(toggleSpinner());
   let apiError = "Api Error";
