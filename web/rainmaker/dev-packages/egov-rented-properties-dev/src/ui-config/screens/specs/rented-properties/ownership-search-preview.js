@@ -82,7 +82,8 @@ const tenantId = getQueryArg(window.location.href, "tenantId")
       "OwnersTemp[0].estimateCardData",
       dispatch,
       window.location.href,
-      BILLING_BUSINESS_SERVICE_OT
+      BILLING_BUSINESS_SERVICE_OT,
+      WORKFLOW_BUSINESS_SERVICE_OT
     );
 
     const printCont = downloadPrintContainer(
