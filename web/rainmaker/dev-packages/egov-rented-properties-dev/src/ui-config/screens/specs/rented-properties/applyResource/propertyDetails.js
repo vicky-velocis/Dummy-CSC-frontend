@@ -113,8 +113,8 @@ export const pincodeField = {
         xs: 12,
         sm: 6
     },
-    minLength: 1,
-    maxLength: 5,
+    minLength: 6,
+    maxLength: 6,
     required: true,
     errorMessage: "RP_ERR_PINCODE_FIELD",
   }
