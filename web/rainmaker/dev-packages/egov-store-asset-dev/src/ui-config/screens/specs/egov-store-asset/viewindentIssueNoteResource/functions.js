@@ -363,22 +363,23 @@ if(response && response[0])
   // dispatch(prepareFinalObject(`materialIssues[0].indentQuantity`, totalIndentQty));
   // dispatch(prepareFinalObject(`materialIssues[0].totalQty`, TotalQty));
   // dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, totalvalue));
-  let IndentId = getQueryArg(window.location.href, "IndentId");
-  let queryObject_ = [
+  // let IndentId = getQueryArg(window.location.href, "IndentId");
+  // let queryObject_ = [
     
-    {
-      key: "ids",
-      value: IndentId
-    },
-    {
-      key: "tenantId",
-      value: tenantId
-    }
-  ];
+  //   {
+  //     key: "ids",
+  //     value: IndentId
+  //   },
+  //   {
+  //     key: "tenantId",
+  //     value: tenantId
+  //   }
+  // ];
+  
+}
+
+  dispatch(prepareFinalObject("materialIssues", response));
   let indentres = await getMaterialIndentSearchResults(queryObject, dispatch);
   dispatch(prepareFinalObject("indents", get(indentres, "indents")));
-}
-  dispatch(prepareFinalObject("materialIssues", response));
- 
   furnishindentData(state, dispatch);
 };

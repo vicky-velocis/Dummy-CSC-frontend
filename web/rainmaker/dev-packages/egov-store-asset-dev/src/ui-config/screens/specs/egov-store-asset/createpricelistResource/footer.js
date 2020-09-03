@@ -97,6 +97,8 @@ export const callBackForNext = async (state, dispatch) => {
   dispatch(
     prepareFinalObject("documentsPreview", documentsPreview)
   );
+  if(activeStep===1)
+  {
   //validate duplicate card
   let cardJsonPath =
   "components.div.children.formwizardSecondStep.children.MaterialPriceDetails.children.cardContent.children.MaterialDetailsCard.props.items";
@@ -142,6 +144,8 @@ export const callBackForNext = async (state, dispatch) => {
   else{
     moveToReview(dispatch);
   }
+}
+
       }
       else{
 

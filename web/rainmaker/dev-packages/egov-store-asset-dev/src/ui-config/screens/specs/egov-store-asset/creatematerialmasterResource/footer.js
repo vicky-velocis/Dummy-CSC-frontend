@@ -12,6 +12,7 @@ import {
   validateFields,
   getLocalizationCodeValue
 } from "../../utils";
+import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
 // import "./index.css";
@@ -117,6 +118,8 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
       let IsDuplicatItem = false
+      if(activeStep ===1)
+      {
       if(!IsDuplicatItem)
       {
         let  materials =  get(
@@ -172,6 +175,9 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
 
       }
+    }
+    else
+    moveToReview(dispatch);
    
     
   }
@@ -188,6 +194,7 @@ export const callBackForNext = async (state, dispatch) => {
   if (activeStep !== 2) {
     if (isFormValid) {
       let IsDuplicatItem = false
+      if (activeStep === 1) {
        // check duplicat Item 
        let cardJsonPath =
        "components.div.children.formwizardSecondStep.children.storeDetails.children.cardContent.children.storeDetailsCard.props.items";
@@ -205,7 +212,8 @@ export const callBackForNext = async (state, dispatch) => {
        if(CardItem[index].isDeleted === undefined ||
         CardItem[index].isDeleted !== false)
         {
-          let code = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'')        
+          let code = get(state.screenConfiguration.preparedFinalObject,`materials[0].storeMapping[${index}].store.code`,'') 
+          code = GetMdmsNameBycode(state, dispatch,"store.stores",code)       
           matcode.push(code)
         }
         else{
@@ -311,6 +319,11 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
 
       }
+    }
+    else{
+     
+      changeStep(state, dispatch);
+    }
     } 
     else {
       const errorMessage = {
