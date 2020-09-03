@@ -373,6 +373,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
         set(queryObject[0], "tenantId", tenantId);
         set(queryObject[0], "propertyDetails", "null");
         set(queryObject[0], "applicant[0].phone", userInfo.userName);
+        set(queryObject[0], "applicant[0].adhaarNumber", queryObject[0].applicant[0].adhaarNumber);
         if(!id) {
           set(queryObject[0], "state", "");
           set(queryObject[0], "action", "DRAFT");
@@ -444,6 +445,7 @@ export const applyDuplicateCopy = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tenantId", tenantId);
         set(queryObject[0], "propertyDetails", "null");
         set(queryObject[0], "applicant[0].phone", userInfo.userName);
+        set(queryObject[0], "applicant[0].adhaarNumber", queryObject[0].applicant[0].adhaarNumber);
         
         if(!id) {
           set(queryObject[0], "state", "");
@@ -755,7 +757,7 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
           )
           dispatch(
             prepareFinalObject(
-              "MortgageApplications[0].applicant[0].aadhaarNumber",
+              "MortgageApplications[0].applicant[0].adhaarNumber",
               findOwner.ownerDetails.aadhaarNumber
             )
           )
@@ -882,7 +884,7 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
           )
           dispatch(
             prepareFinalObject(
-              "DuplicateCopyApplications[0].applicant[0].aadhaarNumber",
+              "DuplicateCopyApplications[0].applicant[0].adhaarNumber",
               findOwner.ownerDetails.aadhaarNumber
             )
           )

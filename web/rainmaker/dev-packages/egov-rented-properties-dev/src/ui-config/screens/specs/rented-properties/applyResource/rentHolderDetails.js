@@ -637,7 +637,7 @@ const applicantAadharFieldduplicate = {
     props: {
         disabled: true
       },
-     jsonPath: "DuplicateCopyApplications[0].applicant[0].aadhaarNumber"
+     jsonPath: "DuplicateCopyApplications[0].applicant[0].adhaarNumber"
 }
 
 const applicantAadharFieldMortgage = {
@@ -645,7 +645,7 @@ const applicantAadharFieldMortgage = {
     props: {
         disabled: true
       },
-     jsonPath: "MortgageApplications[0].applicant[0].aadhaarNumber"
+     jsonPath: "MortgageApplications[0].applicant[0].adhaarNumber"
 }
 
 const applicantAddressField = {
