@@ -1073,7 +1073,8 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGCLAPPROVAL":   
     
           downloadMenu = [
-            applicationDownloadObjectForMG          ];
+            applicationDownloadObjectForMG          
+          ];
         
         break;    
       case "DC_PENDINGCLVERIFICATION":

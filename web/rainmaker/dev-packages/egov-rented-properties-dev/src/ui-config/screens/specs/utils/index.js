@@ -1323,15 +1323,6 @@ export const downloadCertificateForm = (Owners, data, applicationType, mode = 'd
       break;
     default:      
   }
-  // const queryStr = [{
-  //     key: "key",
-  //     value: `rp-${applicationType}-allotment-letter`
-  //   },
-  //   {
-  //     key: "tenantId",
-  //     value: "ch"
-  //   }
-  // ]
   let {
     documents
   } = Owners[0].additionalDetails;
