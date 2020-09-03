@@ -39,6 +39,7 @@ import {
 import {
   reviewAllotmentDetails
 } from './reviewAllotmentDetails'
+import {AllotmentAuctionDetails} from './auction-details'
 
 const documentCardConfig = {
   header: getCommonTitle({
@@ -68,22 +69,6 @@ export const ownerDocumentDetails_0 = getCommonCard({
     }
   }
 });
-
-// export const getOwnerDocumentDetails = (owner) => {
-//   return getCommonCard({
-//     ...documentCardConfig,
-//     documentList: {
-//       ...documentList,
-//       props: {
-//         ...documentList.props,
-//         documentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].ownerDocuments`,
-//         uploadedDocumentsJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].uploadedDocsInRedux`,
-//         tenantIdJsonPath: `Properties[0].tenantId`,
-//         removedJsonPath: `PropertiesTemp[0].ownerDetails[${owner}].removedDocs`
-//       }
-//     }
-//   });
-// }
 
 
 export const stepsData = [{
@@ -271,6 +256,7 @@ export const formwizardSecondStepAllotment = {
     id: "apply_form2"
   },
   children: {
+    AllotmentAuctionDetails
   },
   visible: false
 };
