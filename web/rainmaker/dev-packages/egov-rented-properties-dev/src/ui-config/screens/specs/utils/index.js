@@ -1296,7 +1296,6 @@ export const downloadAcknowledgementFormForCitizen = (Owners, feeEstimate, type,
 
 export const downloadCertificateForm = (Owners, data, applicationType,tenantId, mode = 'download') => {
   let queryStr = []
-debugger
   switch(applicationType){
     case 'mg':
         queryStr = [{
