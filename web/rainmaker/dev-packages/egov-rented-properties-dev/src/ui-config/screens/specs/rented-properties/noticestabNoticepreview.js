@@ -134,19 +134,6 @@ const getData = async(action, state, dispatch) => {
         NoticeId
       )
     );   
-    
-    // const printCont = downloadNoticeContainer(
-    //   action,
-    //   state,
-    //   dispatch,
-    //   status,
-    // );
-
-    // set(
-    //   action,
-    //   "screenConfig.components.div.children.headerDiv.children.helpSection.children",
-    //   printCont
-    // );
 
     
 }
