@@ -22,7 +22,7 @@ import {
   //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "poNumber");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 let IsEdit = true;
@@ -136,13 +136,17 @@ printMenu = [receiptPrintObject];
        let userQuantity = get(purchaseOrders[0], `purchaseOrderDetails[${index}].userQuantity`,0)
        let unitPrice = get(purchaseOrders[0], `purchaseOrderDetails[${index}].unitPrice`,0)
        let indentQuantity = get(purchaseOrders[0], `purchaseOrderDetails[${index}].purchaseIndentDetails[0].indentDetail.indentQuantity`,0)
-       let indentNumber = get(purchaseOrders[0], `purchaseOrderDetails[${index}].purchaseIndentDetails[0].indentDetail.indentNumber`,0)
+       let poOrderedQuantity = get(purchaseOrders[0], `purchaseOrderDetails[${index}].purchaseIndentDetails[0].indentDetail.poOrderedQuantity`,0)
+       let indentNumber = get(purchaseOrders[0], `purchaseOrderDetails[${index}].indentNumber`,'')
        let orderQuantity = get(purchaseOrders[0], `purchaseOrderDetails[${index}].orderQuantity`,0)
        set(purchaseOrders[0], `purchaseOrderDetails[${index}].indentNumber`,indentNumber);
        set(purchaseOrders[0], `purchaseOrderDetails[${index}].indentQuantity`,indentQuantity);
+       set(purchaseOrders[0], `purchaseOrderDetails[${index}].poOrderedQuantity`,poOrderedQuantity);
+      
        totalvalue = totalvalue+(unitPrice*userQuantity)
        totalIndentQty = totalIndentQty+ indentQuantity
        TotalQty = TotalQty+ orderQuantity
+       set(purchaseOrders[0], `purchaseOrderDetails[${index}].totalValue`,totalvalue);
      } 
      dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, totalIndentQty));
      dispatch(prepareFinalObject(`purchaseOrders[0].totalvalue`, totalvalue));
@@ -154,7 +158,9 @@ printMenu = [receiptPrintObject];
     uiFramework: "material-ui",
     name: "view-purchase-order",
     beforeInitScreen: (action, state, dispatch) => {
-      let poNumber = getQueryArg(window.location.href, "poNumber");
+      //let poNumber = getQueryArg(window.location.href, "poNumber");
+      let poNumber = getQueryArg(window.location.href, "applicationNumber");
+
       let tenantId = getQueryArg(window.location.href, "tenantId");
       const queryObject = [{ key: "tenantId", value: tenantId},{ key: "purchaseOrderNumber", value: poNumber}];
       getSearchResults(queryObject, dispatch,"purchaseOrder")
@@ -233,9 +239,20 @@ printMenu = [receiptPrintObject];
               //print function UI End SE0001
             }
           },
-          tradeView,
+          taskStatus: {
+            uiFramework: "custom-containers-local",
+            componentPath: "WorkFlowContainer",
+            moduleName: "egov-store-asset",
+            visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+            props: {
+              moduleName: "StoreManagement",
+              dataPath: "purchaseOrders",
+              updateUrl: "/store-asset-services/purchaseorders/_updateStatus"
+            }
+          },
+            tradeView
           //footer: poViewFooter()
-          footer: IsEdit? poViewFooter():{},
+          //footer: IsEdit? poViewFooter():{},
         }
       },
     }

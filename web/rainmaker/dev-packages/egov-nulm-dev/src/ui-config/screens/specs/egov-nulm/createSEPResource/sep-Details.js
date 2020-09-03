@@ -105,7 +105,7 @@ export const SepDetails = getCommonCard({
         jsonPath: "NULMSEPRequest.dob",
         props: {
           inputProps: {
-            max: getTodaysDateInYMD()
+            max:  new Date().toISOString().slice(0, 10),
           }
         }
       })
@@ -169,7 +169,7 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_OCCUPATION_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("Name") || null,
+        pattern: getPattern("Address") || null,
         jsonPath: "NULMSEPRequest.occupation"
       })
     },
@@ -178,7 +178,7 @@ export const SepDetails = getCommonCard({
       ...getTextField({
         label: {
           labelName: "Addrss",
-          labelKey: "NULM_SEP_ADDRESS"
+          labelKey: "NULM_SMID_ADDRESS"
         },
         placeholder: {
           labelName: "Enter Addrss",
@@ -201,7 +201,7 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_CONTACT_NUMBER_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("MobileNo") || null,
+        pattern: getPattern("numeric-only") || null,
         jsonPath: "NULMSEPRequest.contact"
       })
     },
@@ -233,7 +233,7 @@ export const SepDetails = getCommonCard({
           labelKey: "NULM_SEP_QUALIFACATION_PLACEHOLDER"
         },
         required: true,
-        pattern: getPattern("alpha-numeric-with-space") || null,
+        pattern: getPattern("Address") || null,
         jsonPath: "NULMSEPRequest.qualification"
       })
     },
@@ -311,11 +311,11 @@ export const SepDetails = getCommonCard({
       ...getTextField({
         label: {
           labelName: "BPL NULM_SEP_BPL_NUMBER",
-          labelKey: "NULM_SEP_BPL_NUMBER"
+          labelKey: "NULM_SMID_BPL_NUMBER"
         },
         placeholder: {
           labelName: "Enter NULM_SEP_BPL_NUMBER",
-          labelKey: "NULM_SEP_BPL_NUMBER_PLACEHOLDER"
+          labelKey: "NULM_SMID_BPL_NUMBER_PLACEHOLDER"
         },
         required: false,
         pattern: getPattern("alpha-numeric") || null,

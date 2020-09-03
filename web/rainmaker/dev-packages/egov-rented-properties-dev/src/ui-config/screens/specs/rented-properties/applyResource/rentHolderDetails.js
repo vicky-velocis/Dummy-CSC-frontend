@@ -145,7 +145,7 @@ const fatherOrHusbandsNameField = {
     errorMessage: "RP_ERR_FATHER_OR_HUSBAND_FIELD",
 }
 
-const ownerNameField = {
+export const ownerNameField = {
     label: {
         labelName: "Owner Name",
         labelKey: "RP_OWNER_NAME_LABEL"

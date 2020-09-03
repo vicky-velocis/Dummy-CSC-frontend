@@ -170,6 +170,9 @@ export const callBackForNext = async (state, dispatch) => {
             dispatch(prepareFinalObject("materialReceipt[0].receiptDetails",storeMappingTemp)
           );
             }
+            if(activeStep ===1)
+            moveToReview(dispatch)
+            else
             changeStep(state, dispatch);
           }
           else{

@@ -5,7 +5,7 @@ import {
     getLabelWithValue,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
-import { headerDiv, editSection, areaLabel, pincodeLabel } from "./review-property";
+import { headerDiv, editSection, areaLabel,colonyLabel, pincodeLabel } from "./review-property";
 import { convertEpochToDate, } from "../../utils";
 
 const mortgageEditSection = isEditable => ({
@@ -127,8 +127,8 @@ export const getreviewPropertyAddressDetailsMortgage = (isEditable = true) => {
             //     {jsonPath: "MortgageApplications[0].allotmentNumber"}
             // ),
             area: getLabelWithValue(
-                areaLabel,
-                { jsonPath: "MortgageApplications[0].property.area" }
+                colonyLabel,
+                { jsonPath: "MortgageApplications[0].property.colony" }
             ),
             pincode: getLabelWithValue(
                 pincodeLabel,

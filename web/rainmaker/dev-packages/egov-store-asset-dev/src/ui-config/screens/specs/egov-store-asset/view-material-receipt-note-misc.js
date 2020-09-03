@@ -18,7 +18,9 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "mrnNumber");
+import{UserRoles} from '../../../../ui-utils/sampleResponses'
+let roles = UserRoles().UserRoles;
+let applicationNumber = getQueryArg(window.location.href, "applicationNumbers");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
@@ -68,7 +70,14 @@ export const header = getCommonContainer({
 
 const createMatrialMiscReceiptHandle = async (state, dispatch) => {
 
-  let id = getQueryArg(window.location.href, "id");
+  //let id = getQueryArg(window.location.href, "id");
+  let materialReceipt = get(
+    state.screenConfiguration.preparedFinalObject,
+    `materialReceipt`,
+    []
+  );
+  let id = materialReceipt[0].id;
+
   dispatch(setRoute(`/egov-store-asset/createMaterialReceiptNoteMisc?id=${id}`));
 };
 const creatPOHandle = async (state, dispatch) => {
@@ -138,8 +147,9 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let id = getQueryArg(window.location.href, "id");
     let tenantId = getQueryArg(window.location.href, "tenantId");
+    let mrnNumber = getQueryArg(window.location.href, "applicationNumber");
     getMdmsData(action, state, dispatch, tenantId);
-    getmiscellaneousreceiptnotes(state, dispatch, id, tenantId);
+    getmiscellaneousreceiptnotes(state, dispatch, id, tenantId,mrnNumber);
    // showHideAdhocPopup(state, dispatch);
    
     return action;
@@ -239,6 +249,10 @@ const screenConfig = {
                 action: "condition",
                 callBack: creatPOHandle,
               },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
+              }
             },
              //print function UI start SE0001
              printMenu: {
@@ -269,8 +283,19 @@ const screenConfig = {
             //print function UI End SE0001
           }
         },
-        masterView,
-        footer: IsEdit? masterViewFooter():{},
+        taskStatus: {
+          uiFramework: "custom-containers-local",
+          componentPath: "WorkFlowContainer",
+          moduleName: "egov-store-asset",
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            moduleName: "StoreManagement",
+            dataPath: "materialReceipt",
+            updateUrl: "/store-asset-services/miscellaneousreceiptnotes/_updateStatus"
+          }
+        },
+        masterView
+        //footer: IsEdit? masterViewFooter():{},
       }
     },
    

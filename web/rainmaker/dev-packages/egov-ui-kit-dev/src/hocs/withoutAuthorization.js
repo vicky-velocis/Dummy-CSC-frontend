@@ -67,7 +67,12 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
 
     componentDidMount() {
       if (this.props.authenticated) {
-        this.props.history.push(redirectionUrl);
+        if(window.location.pathname ==="/user/otp" && window.location.search.includes("mobileno") && window.location.search.includes("ecno")){
+        }
+        else{
+          this.props.history.push(redirectionUrl);
+        }
+       
       }
     }
 
@@ -154,6 +159,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
   }
   const mapStateToProps = (state) => {
     const { authenticated } = state.auth;
+    const {previousRoute} = state.app;
     let { stateInfoById } = state.common || [];
     let hasLocalisation = false;
     let defaultUrl = process.env.REACT_APP_NAME === "Citizen" ? "/user/register" : "/user/login";
@@ -171,7 +177,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     }
     let languages = get(stateInfoById, "0.languages", []);
 
-    return { authenticated, hasLocalisation, defaultUrl, isOpenLink, ulbLogo, ulbName, defaultTitle, languages };
+    return { authenticated, hasLocalisation, defaultUrl, isOpenLink, ulbLogo, ulbName, defaultTitle, languages,previousRoute };
   };
   const mapDispatchToProps = (dispatch) => {
     return {

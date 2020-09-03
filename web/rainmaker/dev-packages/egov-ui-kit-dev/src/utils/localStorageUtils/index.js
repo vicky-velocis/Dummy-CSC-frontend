@@ -150,6 +150,12 @@ export const clearUserDetails = () => {
       window.localStorage.removeItem(key);
     }
   });
+
+  if(window.localStorage.getItem("module"))
+  window.localStorage.removeItem("module");
+
+  if(window.localStorage.getItem("ecno"))
+  window.localStorage.removeItem("ecno");
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {

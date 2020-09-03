@@ -16,15 +16,14 @@ const styles = {
     paddingRight: 0,
     paddingTop: 11,
     paddingBottom: 0,
-    marginRight: 16,
+    marginRight: 10,
     marginTop: 16
   },
   subtext: {
     paddingTop: 7
   },
   body2: {
-    wordWrap: "break-word",
-	wordBreak: "break-all"
+    wordWrap: "break-word"
   }
 };
 
@@ -34,12 +33,11 @@ const documentTitle = {
   fontSize: "16px",
   fontWeight: 400,
   letterSpacing: "0.67px",
-  lineHeight: "19px",
-  wordBreak: "break-all"
+  lineHeight: "19px"
 };
 
 function MultiCardDownloadGrid(props) {
-  const { classes,downldtoggle,data, ...rest } = props;
+  const { classes, data, ...rest } = props;
   return (
     <Grid container {...rest}>
       {data && data.length && data.map((item, key) => {
@@ -73,26 +71,11 @@ function MultiCardDownloadGrid(props) {
               <Grid xs={6} className={classes.subtext}>
                 <Typography className={classes.body2}>{item.name}</Typography>
               </Grid>
-              {
-                !!downldtoggle && (
-                    <Grid xs={6} align="right">
-                      <Button href={item.url} color="primary">
-                        Download
-                      </Button>
-                    </Grid>
-                )
-              }
-                  {
-                    !downldtoggle && (
-                      <Grid xs={6} align="right">
-                        <Button href={item.link} color="primary">
-                 
-				                 {/* {item.linkText} */}
-                             Download
-                        </Button>
-                      </Grid>
-                    )
-                  }
+              <Grid xs={6} align="right">
+                <Button href={item.link} color="primary">
+                  {item.linkText}
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         );

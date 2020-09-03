@@ -3,7 +3,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+import{GetMdmsNameBycode, getWFPayload} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -140,17 +140,20 @@ export const createUpdateMR = async (state, dispatch, action) => {
 
   if (action === "CREATE") {
     try {
+      let wfobject = getWFPayload(state, dispatch)
       console.log(queryObject)
       console.log("queryObject")
       let response = await creatmiscellaneousreceiptnotes(
         queryObject,        
         materialReceipt,
-        dispatch
+        dispatch,
+        wfobject
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=create&code=${mrnNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=create&code=${mrnNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-material-receipt-note-misc?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -163,8 +166,9 @@ export const createUpdateMR = async (state, dispatch, action) => {
       );
       if(response){
         let mrnNumber = response.MaterialReceipt[0].mrnNumber
-        dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=update&code=${mrnNumber}`));
-       }
+       // dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=MATERIALRECEIPTMISC&mode=update&code=${mrnNumber}`));
+       dispatch(setRoute(`/egov-store-asset/view-material-receipt-note-misc?applicationNumber=${mrnNumber}&tenantId=${response.MaterialReceipt[0].tenantId}&Status=${response.MaterialReceipt[0].mrnStatus}`));
+      }
     } catch (error) {
       furnishindentData(state, dispatch);
     }
@@ -176,12 +180,17 @@ export const getmiscellaneousreceiptnotes = async (
   state,
   dispatch,
   id,
-  tenantId
+  tenantId,
+  mrnNumber
 ) => {
   let queryObject = [
+    // {
+    //   key: "ids",
+    //   value: id
+    // },
     {
-      key: "ids",
-      value: id
+      key: "mrnNumber",
+      value: mrnNumber
     },
     {
       key: "tenantId",
@@ -191,7 +200,8 @@ export const getmiscellaneousreceiptnotes = async (
 
  let response = await getmiscellaneousreceiptnotesSearchResults(queryObject, dispatch);
 // let response = samplematerialsSearch();
- response = response.MaterialReceipt.filter(x=>x.id === id)
+ //response = response.MaterialReceipt.filter(x=>x.id === id)
+ response = response.MaterialReceipt.filter(x => x.mrnNumber === mrnNumber)
  let totalvalue = 0
  let TotalQty = 0;
 if(response && response[0])

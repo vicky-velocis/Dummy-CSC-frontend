@@ -30,7 +30,13 @@ export const headerrow = getCommonContainer({
     labelName: "Rented Properties",
     labelKey: "RP_COMMON_RENTED_PROPERTIES"
   }),
-  applicationNumber
+  applicationNumber : {
+    ...applicationNumber,
+    props: {
+      ...applicationNumber.props,
+      type: "RP_MASTER"
+    }
+  }
 });
 const reviewOwnerDetails = getReviewOwner(false);
 const reviewPropertyDetails = getReviewProperty(false);

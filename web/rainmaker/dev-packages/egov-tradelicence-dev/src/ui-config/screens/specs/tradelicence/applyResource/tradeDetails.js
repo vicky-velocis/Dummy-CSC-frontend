@@ -20,7 +20,8 @@ import {
   fillOldLicenseData,
   getTradeTypeDropdownData,
   getDetailsForOwner, 
-  calculateAge
+  calculateAge,
+  _getTodaysDateInYMD
 } from "../../utils";
 import {
   prepareFinalObject as pFO,
@@ -1269,7 +1270,7 @@ const businessStartDateField = {
     visible: false,
     props: {
         inputProps: {
-            max: getTodaysDateInYMD()
+            max: _getTodaysDateInYMD()
         }
     }
 }
