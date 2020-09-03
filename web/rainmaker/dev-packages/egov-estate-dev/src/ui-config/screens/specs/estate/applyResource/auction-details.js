@@ -27,6 +27,16 @@ export const auctionDetailsHeader = getCommonTitle({
   }
 })
 
+export const biddersListHeader = getCommonTitle({
+  labelName: "Bidders List Upload",
+  labelKey: "EST_BIDDERS_LIST_HEADER"
+}, {
+  style: {
+    marginBottom: 18,
+    marginTop: 18
+  }
+})
+
 const schemeName = {
   label: {
     labelName: "Scheme Name",
@@ -46,12 +56,12 @@ const schemeName = {
 
 const dateOfAuction = {
   label: {
-    labelName: "Commissioners Court",
-    labelKey: "EST_COMMISSIONERS_COURT_LABEL"
+    labelName: "Date Of Aunction",
+    labelKey: "EST_DATE_OF_AUCTION_LABEL"
   },
   placeholder: {
-    labelName: "Enter Commissioners Court",
-    labelKey: "EST_COMMISSIONERS_COURT_PLACEHOLDER"
+    labelName: "Enter Date Of Aunction",
+    labelKey: "EST_DATE_OF_AUCTION_PLACEHOLDER"
   },
   gridDefination: {
     xs: 12,
@@ -63,12 +73,12 @@ const dateOfAuction = {
 
 const modeOfAuction = {
   label: {
-    labelName: "Chief Administrators Court",
-    labelKey: "EST_CHIEF_ADMINISTRATORS_COURT_LABEL"
+    labelName: "Mode Of Auction",
+    labelKey: "EST_MODE_OF_AUCTION_LABEL"
   },
   placeholder: {
-    labelName: "Enter Chief Administrators Court",
-    labelKey: "EST_CHIEF_ADMINISTRATORS_COURT_PLACEHOLDER"
+    labelName: "Enter Mode Of Auction",
+    labelKey: "EST_MODE_OF_AUCTION_PLACEHOLDER"
   },
   gridDefination: {
     xs: 12,
@@ -80,12 +90,12 @@ const modeOfAuction = {
 
 const emdAmount = {
   label: {
-    labelName: "Advisor to Admin Court",
-    labelKey: "EST_ADVISOR_TO_ADMIN_COURT_LABEL"
+    labelName: "EMD Amount",
+    labelKey: "EST_EMD_AMOUNT_LABEL"
   },
   placeholder: {
-    labelName: "Enter Advisor to Admin Court",
-    labelKey: "EST_ADVISOR_TO_ADMIN_COURT_PLACEHOLDER"
+    labelName: "Enter EMD Amount",
+    labelKey: "EST_EMD_AMOUNT_PLACEHOLDER"
   },
   gridDefination: {
     xs: 12,
@@ -142,14 +152,15 @@ const commonAuctionInformation = () => {
     }),
     courtCaseCard: getCommonContainer({
       estateOfficerCourt: getTextField(schemeName),
-      commissionersCourt: getTextField(dateOfAuction),
+      commissionersCourt: getDateField(dateOfAuction),
       chiefAdministratorsCourt: getTextField(modeOfAuction),
       advisorToAdminCourt: getTextField(emdAmount)
     })
   });
 };
 
-const UploadButtonContainer = getCommonContainer({
+const UploadButtonContainer = getCommonGrayCard({
+  header: biddersListHeader,
   buttonContainer: getCommonContainer(
     {...buttonItem, searchButton: {...buttonItem.searchButton, 
       onClickDefination: {
@@ -165,7 +176,9 @@ const UploadButtonContainer = getCommonContainer({
       }
     }
   })
-})
+});
+
+
 
 export const AllotmentAuctionDetails = getCommonCard({
   header: auctionDetailsHeader,
