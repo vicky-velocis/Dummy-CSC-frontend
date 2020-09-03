@@ -10,16 +10,17 @@ import { localStorageGet,getTenantId } from "egov-ui-kit/utils/localStorageUtils
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getOwnershipSearchResults, getDuplicateCopySearchResults } from "../../../../ui-utils/commons"
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["ownership-apply"],
         "components.div.children.stepper.props.activeStep",
         0
     );
-    
+    let isDateValid= true;
     let isFormValid = true;
     let hasFieldToaster = true;
+   
     if(activeStep === DETAILS_STEP) {
       const transitNumber = get(
         state.screenConfiguration.preparedFinalObject, 
@@ -76,7 +77,12 @@ const callBackForNext = async(state, dispatch) => {
           dispatch,
           "ownership-apply"
         )
-        if(!!isOwnerDetailsValid && !!isAddressDetailsValid) {
+        const dateFrom = get(state.screenConfiguration.screenConfig["ownership-apply"],"components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer.children.deathOfAllotee.props.value")
+        const dateTo = get(state.screenConfiguration.screenConfig["ownership-apply"],"components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer.children.deathOfAllotee.props.inputProps.max")
+        if(convertDateToEpoch(dateTo) - convertDateToEpoch(dateFrom) < 0){
+          isDateValid = false
+          }
+        if(!!isOwnerDetailsValid && !!isAddressDetailsValid && !!isDateValid) {
           const propertyId = get(state.screenConfiguration.preparedFinalObject, "Owners[0].property.id");
           let res = true;
           if(!propertyId) {
@@ -93,6 +99,7 @@ const callBackForNext = async(state, dispatch) => {
         } else {
             isFormValid = false;
         }
+
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
       const uploadedDocData = get(
@@ -152,11 +159,21 @@ const callBackForNext = async(state, dispatch) => {
             };
             switch (activeStep) {
                 case DETAILS_STEP:
+                  if(!isDateValid){
+                    let errorMessage = {
+                      labelName:
+                          "Date of death of allote cannot be future date ",
+                      labelKey: "ERR_DATE_GREATER_THAN_TODAY_DATE"
+                  };
+                  
+                  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+                  }else{
                     errorMessage = {
                         labelName:
                             "Please fill all mandatory fields, then do next !",
                         labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
                     };
+                  }
                     break;
                 case DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
@@ -167,6 +184,16 @@ const callBackForNext = async(state, dispatch) => {
             }
             dispatch(toggleSnackbar(true, errorMessage, "warning"));
         }
+        // if (!isDateValid) {
+  
+        //   let errorMessage = {
+        //     labelName:
+        //         "date cannot be greater than Today!",
+        //     labelKey: "ERR_DATE_GREATER_THAN_TODAY_DATE"
+        // };
+        
+        // dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        // }   
     }
 }
 
