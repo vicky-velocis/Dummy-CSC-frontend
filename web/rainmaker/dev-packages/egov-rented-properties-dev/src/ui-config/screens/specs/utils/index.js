@@ -1295,15 +1295,43 @@ export const downloadAcknowledgementFormForCitizen = (Owners, feeEstimate, type,
 }
 
 export const downloadCertificateForm = (Owners, data, applicationType, mode = 'download') => {
-  const queryStr = [{
-      key: "key",
-      value: `rp-${applicationType}-allotment-letter`
-    },
-    {
-      key: "tenantId",
-      value: "ch"
-    }
-  ]
+  let queryStr = []
+
+  switch(applicationType){
+    case 'mg':
+        queryStr = [{
+          key: "key",
+          value: `rp-mortgage-letter`
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+      break;
+    case 'dc':
+    case 'ot':
+        queryStr = [{
+          key: "key",
+          value: `rp-${applicationType}-allotment-letter`
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+      break;
+    default:      
+  }
+  // const queryStr = [{
+  //     key: "key",
+  //     value: `rp-${applicationType}-allotment-letter`
+  //   },
+  //   {
+  //     key: "tenantId",
+  //     value: "ch"
+  //   }
+  // ]
   let {
     documents
   } = Owners[0].additionalDetails;
@@ -1367,6 +1395,25 @@ export const downloadCertificateForm = (Owners, data, applicationType, mode = 'd
       case 'original':
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
             Properties: [ownersData]
+          }, {
+            'Accept': 'application/json'
+          }, {
+            responseType: 'arraybuffer'
+          })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Acknowledgement form Download");
+            }
+          });
+        break;
+      case 'mg':
+          httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
+            MortgageApplications: [ownersData]
           }, {
             'Accept': 'application/json'
           }, {

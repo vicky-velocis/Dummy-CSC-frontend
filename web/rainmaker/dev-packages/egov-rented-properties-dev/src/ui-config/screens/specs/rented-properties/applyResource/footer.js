@@ -996,6 +996,18 @@ export const footer = getCommonApplyFooter({
       },
       leftIcon: "book"
     };
+
+    let certificateDownloadObjectMG = {
+      label: { labelName: "Mortgage Letter", labelKey: "RP_MORTGAGE_LETTER" },
+      link: () => {
+        const { MortgageApplications, MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = MortgageApplicationsTemp[0].reviewDocData;
+        set(MortgageApplications[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(MortgageApplications, data(),'mg');
+      },
+      leftIcon: "book"
+    };
+
     switch (status) {
       case "OT_APPROVED":
           if(process.env.REACT_APP_NAME === "Citizen"){
@@ -1043,6 +1055,12 @@ export const footer = getCommonApplyFooter({
           
         break;
       case 'MG_APPROVED':
+          downloadMenu = [
+            applicationDownloadObjectForMG,
+            certificateDownloadObjectMG
+          ];
+          break;
+
       case "MG_PENDINGCLVERIFICATION":
       case "MG_PENDINGJAVERIFICATION":
       case "MG_PENDINGSAVERIFICATION":
@@ -1055,8 +1073,7 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGCLAPPROVAL":   
     
           downloadMenu = [
-            applicationDownloadObjectForMG,
-          ];
+            applicationDownloadObjectForMG          ];
         
         break;    
       case "DC_PENDINGCLVERIFICATION":
