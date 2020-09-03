@@ -171,6 +171,7 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
 
  
     }
+    if(state == "PM_APPROVED" && !!findItem){
     const footer = editFooter(
       action,
       state,
@@ -183,7 +184,17 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
     process.env.REACT_APP_NAME != "Citizen"
         ? set(action, "screenConfig.components.div.children.footer", footer)
         : set(action, "screenConfig.components.div.children.footer", {});
+        dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.footer",
+            "visible",
+            true
+          )
+        );
+        
   }
+}
 }
 
 const beforeInitFn = async (action, state, dispatch, transitNumber) => {
