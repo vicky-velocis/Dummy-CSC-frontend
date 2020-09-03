@@ -44,16 +44,17 @@ const findItem = roles.find(item => item.code === "RP_CLERK");
       }
       dispatch(prepareFinalObject("Properties[0]", properties[0]));     
   }
+
   let properties = get(state.screenConfiguration.preparedFinalObject, "Properties[0]")
   let approvedflagdata = properties.masterDataState
-  if(findItem === null || findItem === undefined || approvedflagdata != "PM_APPROVED"){
-    let pathBtn = "components.div.children.rightdiv"
+  if(approvedflagdata === "PM_APPROVED"){
+    let pathtoggle = "components.div.children.rightdiv"
     dispatch(
       handleField(
         "notices",
-        pathBtn,
+        pathtoggle,
         "visible",
-        false
+        true
       )
     );
    }
@@ -192,7 +193,8 @@ const notices = {
               children: {
                 recoveryButton: buttonComponent("Create Recovery Notice", `/rented-properties/notice-recovry?tenantId=${getTenantId()}`),
                 violationButton: buttonComponent("Create Violation Notice", `/rented-properties/notice-violation?tenantId=${getTenantId()}`)
-              }
+              },
+              visible: false
             },
             viewFour: {
               uiFramework: "custom-containers-local",

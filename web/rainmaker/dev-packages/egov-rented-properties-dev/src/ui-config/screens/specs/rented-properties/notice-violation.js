@@ -160,8 +160,8 @@ const applyNoticeViolation = {
     uiFramework: "material-ui",
     name: "notice-violation",
     beforeInitScreen: (action, state, dispatch) => {
+      beforeInitFn(action, state, dispatch);
         getData(action, state, dispatch);
-        beforeInitFn(action, state, dispatch);
         return action;
       },
     components: {

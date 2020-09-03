@@ -11,6 +11,9 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getOwnershipSearchResults, getDuplicateCopySearchResults } from "../../../../ui-utils/commons"
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+
+
 const callBackForNext = async(state, dispatch) => {
     let activeStep = get(
         state.screenConfiguration.screenConfig["ownership-apply"],
@@ -20,7 +23,10 @@ const callBackForNext = async(state, dispatch) => {
     let isDateValid= true;
     let isFormValid = true;
     let hasFieldToaster = true;
-   
+    let isDateofDeathofAllotteeValid = true
+    let deathofallottee = get(state.screenConfiguration.screenConfig["ownership-apply"], "components.div.children.formwizardFirstStep.children.applicantDetails.children.cardContent.children.detailsContainer.children.deathOfAllotee.props.value")
+    let deathinEpoch = convertDateToEpoch(deathofallottee)
+    let deathAlotteeValidation = (Date.now() - deathinEpoch < 0) ? false : true 
     if(activeStep === DETAILS_STEP) {
       const transitNumber = get(
         state.screenConfiguration.preparedFinalObject, 
@@ -99,7 +105,10 @@ const callBackForNext = async(state, dispatch) => {
         } else {
             isFormValid = false;
         }
-
+      
+      if(!deathAlotteeValidation){
+        isDateofDeathofAllotteeValid = false
+      }
     }
     if(activeStep === DOCUMENT_UPLOAD_STEP) {
       const uploadedDocData = get(
@@ -149,9 +158,17 @@ const callBackForNext = async(state, dispatch) => {
       }
     }
     if(activeStep !== SUMMARY_STEP) {
-        if (isFormValid) {
+        if (isFormValid && isDateofDeathofAllotteeValid) {
             changeStep(state, dispatch, "ownership-apply");
-        } else if (hasFieldToaster) {
+        }  else if (!isDateofDeathofAllotteeValid && hasFieldToaster) {
+          let errorMsg = {
+            labelName:
+                "Date of death of allotee cant be a future date!",
+            labelKey: "ERR_DATE_OF_DEATH_FUTURE_DATE"
+        };
+          dispatch(toggleSnackbar(true, errorMsg, "warning"));
+      } 
+        else if (hasFieldToaster) {
             let errorMessage = {
                 labelName:
                     "Please fill all mandatory fields and upload the documents !",
