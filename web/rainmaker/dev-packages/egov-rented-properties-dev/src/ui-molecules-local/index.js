@@ -85,6 +85,10 @@ const MultipleDocuments = Loadable({
   loader: () => import("./MultipleDocuments"),
   loading: () => <Loading />
 })
+const MultiDownloadCardNoticePreview = Loadable({
+  loader: () => import("./MultiDownloadCardNoticePreview"),
+  loading: () => <Loading />
+})
 
 export {
   TestMolecules,
@@ -102,5 +106,6 @@ export {
   ImageUploadMolecule,
   MultipleOwners,
   MultipleDocuments,
+  MultiDownloadCardNoticePreview,
   RentSummaryCard
 }

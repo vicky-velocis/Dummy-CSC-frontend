@@ -6,7 +6,7 @@ import { getQueryArg} from "egov-ui-framework/ui-utils/commons";
 import { get } from "lodash";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getImages } from "./property-transitImages";
-import { getReviewDocuments } from "./applyResource/review-documents";
+import { getReviewDocuments,getReviewDocumentsNoticePreview } from "./applyResource/review-documents";
 import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { set } from "lodash";
 import {downloadNoticeContainer} from "./applyResource/footer"
@@ -16,7 +16,7 @@ import { getNoticeReviewProperty, getNoticeViolationPreviewReviewRentDetails, ge
 const reviewNoticePropertyDetails = getNoticeReviewProperty(false);
 const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDetails(false);
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
-const reviewNoticeDocuments = getReviewDocuments(false,"apply","SingleProperties[0].applicationDocuments",true,true);
+const reviewNoticeDocuments = getReviewDocumentsNoticePreview(false,"apply","SingleProperties[0].applicationDocuments",true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
 const header = getCommonContainer({
     header : getCommonHeader({
