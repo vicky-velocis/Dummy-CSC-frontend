@@ -5,7 +5,7 @@ import {
 import {noticePropertyDetails,ownerDetailsForNotice,ownerDetailsForViolationNotice,paymentDetailsNotice} from './noticeDetails'
 import {rentHolderDetails,applicantDetailsMortgage,applicantDetails,rentHolderDetailsForDuplicateProperties} from './rentHolderDetails';
 import {propertyDetails, transitSiteDetails} from './propertyDetails';
-import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,addressDetailsTransitsite,transitSitePropertyDetails,transitSiteComments} from './addressDetails';
+import {addressDetails, ownershipAddressDetails,ownershipAddressDetailsMortgage,transitSitePropertyDetails,transitSiteComments} from './addressDetails';
 import {uploadimage,imageUploadDetailsProperties} from './imageUploadDetails'
 import {rentDetails} from './rentDetails';
 import {paymentDetails} from './paymentDetails'

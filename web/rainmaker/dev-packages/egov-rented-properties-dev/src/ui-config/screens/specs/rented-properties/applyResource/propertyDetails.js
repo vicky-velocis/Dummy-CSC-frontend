@@ -2,7 +2,7 @@ import { getCommonCard, getSelectField, getTextField, getDateField, getCommonTit
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 import get from "lodash/get";
-import { getDetailsFromProperty ,getDuplicateDetailsFromProperty, getOfflineRentPaymentDetailsFromProperty} from "../../../../../ui-utils/apply";
+import {  getDuplicateDetailsFromProperty } from "../../../../../ui-utils/apply";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
 export const propertyHeader = getCommonTitle(
