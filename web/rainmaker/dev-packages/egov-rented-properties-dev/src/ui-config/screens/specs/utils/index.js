@@ -1310,6 +1310,7 @@ export const downloadCertificateForm = (Owners, data, applicationType,tenantId, 
       break;
     case 'dc':
     case 'ot':
+    case 'original':  
         queryStr = [{
           key: "key",
           value: `rp-${applicationType}-allotment-letter`
@@ -1319,7 +1320,7 @@ export const downloadCertificateForm = (Owners, data, applicationType,tenantId, 
           value: "ch"
         }
       ]
-      break;
+      break; 
     default:      
   }
   let {
