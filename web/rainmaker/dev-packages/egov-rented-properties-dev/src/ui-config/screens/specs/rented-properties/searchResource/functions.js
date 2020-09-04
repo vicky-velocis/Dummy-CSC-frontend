@@ -258,7 +258,7 @@ export const searchAccountStatement = async (state, dispatch) => {
             )
           );
           let data = response.RentAccountStatements.map(item => ({
-            [DATE]: moment(new Date(item.date)).format("DD/MM/YYYY") || "-",
+            [DATE]: moment(new Date(item.date)).format("DD-MMM-YYYY") || "-",
             [AMOUNT]: 'Rs ' + formatAmount(item.amount.toFixed(2)) || "-",
             [TYPE]: item.type || "-",
             [REMAINING_INTEREST]: 'Rs ' + formatAmount(item.remainingInterest.toFixed(2)),
