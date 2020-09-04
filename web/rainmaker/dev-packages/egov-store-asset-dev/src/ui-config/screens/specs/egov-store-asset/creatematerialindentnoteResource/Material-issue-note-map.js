@@ -13,6 +13,12 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
   import{getmaterialissuesSearchResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
+
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  let IsEdit = false;
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  if(applicationNumber)
+  IsEdit = true;
   const getBalanceQty = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
@@ -91,6 +97,7 @@ import {
                 //sourceJsonPath: "materials",
                 sourceJsonPath: "indentsmaterial",
                 props: {
+                  disabled:IsEdit,
                   optionValue: "receiptId",
                   optionLabel: "materialName",
                   // optionValue: "id",
@@ -417,6 +424,7 @@ import {
         )
       }),
       items: [],
+      hasAddItem:!IsEdit,
       onMultiItemDelete:(state, dispatch)=>{       
 
       },
