@@ -329,14 +329,39 @@ export const transitSiteHeader = getCommonTitle(
     jsonPath: "",
     errorMessage: "",
   }  
+  export const colonyFieldlabel = {
+    label: {
+      labelName: "Colony",
+      labelKey: "RP_COLONY_NAME_LABEL"
+  },
+  placeholder: {
+      labelName: "Enter Colony",
+      labelKey: "RP_COLONY_NAME_PLACEHOLDER"
+  },
+      gridDefination: {
+          xs: 12,
+          sm: 6
+      },
+      minLength: 3,
+      maxLength: 100,
+      required: true,
+      errorMessage: "RP_ERR_AREA_FIELD",
+    }
+    const colonyNameFielddata = {
+        ...colonyFieldlabel,
+        minLength: 1,
+        maxLength: 100,
+        required: true,
+        jsonPath: "Properties[0].propertyDetails.address.colony"
+      }
 
 const getTransitSiteDetails = () => {
     return {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(duplicateCopyTransitField),
-            colony:getSelectField(colonyFieldDup),
-            //colony: getTextField({...colonyFieldConfig,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyFieldConfig.props, disabled: true}}),
+            // colony:getSelectField(colonyFieldDup),
+            colony: getTextField({...colonyNameFielddata,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyNameFielddata.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }

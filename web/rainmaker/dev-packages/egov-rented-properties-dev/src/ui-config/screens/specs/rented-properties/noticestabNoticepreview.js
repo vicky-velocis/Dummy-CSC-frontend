@@ -18,21 +18,38 @@ const reviewNoticeViolationRentDetails = getNoticeViolationPreviewReviewRentDeta
 const reviewNoticeRecoveryRentDetails = getNoticeRecoveryPreviewReviewRentDetails(false);
 const reviewNoticeDocuments = getReviewDocumentsNoticePreview(false,"apply","SingleProperties[0].applicationDocuments",true);
 let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
-const header = getCommonContainer({
-    header : getCommonHeader({
-    labelName: "Notice Summary",
-    labelKey: "RP_NOTICE_PREVIEW_SUMMARY"
-  }),
-  applicationNumber: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-rented-properties",
-    componentPath: "ApplicationNoContainer",
-    props: {
-      number: NoticedetailsId,
-      notice:"Notice"
-    }
+
+const headerViolation = getCommonContainer({
+  header : getCommonHeader({
+    labelName: "Violation Notice",
+  labelKey: "RP_NOTICE_VIOLATION_HEADER"
+}),
+applicationNumber: {
+  uiFramework: "custom-atoms-local",
+  moduleName: "egov-rented-properties",
+  componentPath: "ApplicationNoContainer",
+  props: {
+    number: NoticedetailsId,
+    notice:"Notice"
   }
+}
 });
+const headerRecovery = getCommonContainer({
+  header : getCommonHeader({
+  labelName: "Recovery Notice",
+  labelKey: "RP_NOTICE_RECOVERY_HEADER"
+}),
+applicationNumber: {
+  uiFramework: "custom-atoms-local",
+  moduleName: "egov-rented-properties",
+  componentPath: "ApplicationNoContainer",
+  props: {
+    number: NoticedetailsId,
+    notice:"Notice"
+  }
+}
+});
+
 
 const getData = async(action, state, dispatch) => {
     let NoticedetailsId = getQueryArg(window.location.href, "NoticedetailsId");
@@ -98,6 +115,7 @@ const getData = async(action, state, dispatch) => {
 
     if(singleNoticeDetails[0].noticeType === "Violation"){
         let path = "components.div.children.formwizardFirstStep.children.cardContent.children.reviewNoticeRecoveryRentDetails"
+        let headerPathVio = "components.div.children.headerDiv.children.header1"
         dispatch(
           handleField(
             "noticestabNoticepreview",
@@ -106,10 +124,19 @@ const getData = async(action, state, dispatch) => {
             false
           )
         );
+        dispatch(
+          handleField(
+            "noticestabNoticepreview",
+            headerPathVio,
+            "visible",
+            true
+          )
+        );
        }
     else if(singleNoticeDetails[0].noticeType === "Recovery"){
         let path = "components.div.children.formwizardFirstStep.children.cardContent.children.reviewNoticeViolationRentDetails"
         let pathdoc = "components.div.children.formwizardFirstStep.children.cardContent.children.reviewNoticeDocuments"
+        let headerPathRec = "components.div.children.headerDiv.children.header2"
         dispatch(
           handleField(
             "noticestabNoticepreview",
@@ -126,7 +153,15 @@ const getData = async(action, state, dispatch) => {
               "visible",
               false
             )
-          );      
+          );    
+          dispatch(
+            handleField(
+              "noticestabNoticepreview",
+              headerPathRec,
+              "visible",
+              true
+            )
+          );    
     }
     dispatch(
       handleField(
@@ -136,6 +171,29 @@ const getData = async(action, state, dispatch) => {
         NoticeId
       )
     );   
+
+    dispatch(
+      handleField(
+        "noticestabNoticepreview",
+        "components.div.children.headerDiv.children.header2.children.applicationNumber",
+        "props.number",
+        NoticeId
+      )
+    ); 
+    
+    const printCont = downloadNoticeContainer(
+      action,
+      state,
+      dispatch,
+      status,
+    );
+
+    set(
+      action,
+      "screenConfig.components.div.children.headerDiv.children.helpSection.children",
+      printCont
+    );
+
 
     
 }
@@ -172,7 +230,16 @@ const NoticedetailsPreview = {
                               xs: 12,
                               sm: 8
                             },
-                            ...header
+                            ...headerViolation,
+                            visible: false
+                          },
+                          header2: {
+                            gridDefination: {
+                              xs: 12,
+                              sm: 8
+                            },
+                            ...headerRecovery,
+                            visible: false
                           },
                           helpSection: {
                             uiFramework: "custom-atoms",

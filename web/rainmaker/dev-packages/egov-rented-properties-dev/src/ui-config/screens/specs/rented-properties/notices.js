@@ -219,11 +219,11 @@ const notices = {
                     label: "RP_TRANSIT_SITE",
                     jsonPath: "property.transitNumber"
                   },
-                  {
-                    label: "RP_MEMO_DATE",
-                    jsonPath: "memoDate",
-                    type: "date"
-                  }
+                  // {
+                  //   label: "RP_MEMO_DATE",
+                  //   jsonPath: "memoDate",
+                  //   type: "date"
+                  // }
                 ]
               }
             },

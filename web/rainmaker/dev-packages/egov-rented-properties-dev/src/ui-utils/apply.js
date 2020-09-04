@@ -646,8 +646,8 @@ export const getDetailsFromProperty = async (state, dispatch) => {
           const findOwner = owners.find(item => !!item.activeState) || {}
           dispatch(
             prepareFinalObject(
-              "Owners[0].property.area",
-              Properties[0].propertyDetails.address.area
+              "Owners[0].property.colony",
+              Properties[0].propertyDetails.address.colony
             )
           )
           dispatch(
@@ -733,8 +733,8 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
           )
            dispatch(
             prepareFinalObject(
-              "MortgageApplications[0].property.area",
-              Properties[0].propertyDetails.address.area
+              "MortgageApplications[0].property.colony",
+              Properties[0].propertyDetails.address.colony
             )
           )
           dispatch(
@@ -810,8 +810,8 @@ export const getDetailsFromPropertyTransit = async (state, dispatch) => {
           )
            dispatch(
             prepareFinalObject(
-              "PropertyImagesApplications[0].property.area",
-              Properties[0].propertyDetails.address.area
+              "PropertyImagesApplications[0].property.colony",
+              Properties[0].propertyDetails.address.colony
             )
           )
           return true
