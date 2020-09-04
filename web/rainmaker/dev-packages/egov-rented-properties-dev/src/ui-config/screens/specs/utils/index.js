@@ -49,7 +49,7 @@ import {
   getOwnershipSearchResults,
   getDuplicateCopySearchResults
 } from "../../../../ui-utils/commons";
-import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
+import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_RENT } from "../../../../ui-constants";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -2125,6 +2125,17 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
       response &&
         response.DuplicateCopyApplications &&
         dispatch(prepareFinalObject("DuplicateCopyApplications[0]", response.DuplicateCopyApplications[0]));
+      break
+    }
+    case BILLING_BUSINESS_SERVICE_RENT: {
+      const response = get(state.screenConfiguration.preparedFinalObject, "Properties[0]")
+      payload = await createEstimateData(
+        response,
+        "PropertiesTemp[0].estimateCardData",
+        dispatch,
+        window.location.href,
+        businessService
+      )
       break
     }
   }
