@@ -7,9 +7,11 @@ import { applyRentedProperties,applynoticegeneration,applyrecoveryNotice } from 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { some } from "lodash";
 import { RP_MASTER_ENTRY, RECOVERY_NOTICE, VIOLATION_NOTICE, OWNERSHIPTRANSFERRP, DUPLICATECOPYOFALLOTMENTLETTERRP, PERMISSIONTOMORTGAGE, TRANSITSITEIMAGES, NOTICE_GENERATION } from "../../../../../ui-constants";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults, setXLSTableData } from "../../../../../ui-utils/commons";
 import { getQueryArg,setDocuments } from "egov-ui-framework/ui-utils/commons";
+
+let tenantId = getTenantId();
 
 const userInfo = JSON.parse(getUserInfo());
 export const DEFAULT_STEP = -1;
@@ -981,7 +983,7 @@ export const footer = getCommonApplyFooter({
         const { DuplicateCopyApplications, DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
         set(DuplicateCopyApplications[0],"additionalDetails.documents",documents)
-        downloadCertificateForm(DuplicateCopyApplications, data(),'dc');
+        downloadCertificateForm(DuplicateCopyApplications, data(),'dc',tenantId);
       },
       leftIcon: "book"
     };
@@ -992,12 +994,28 @@ export const footer = getCommonApplyFooter({
         const { Owners, OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
         set(Owners[0],"additionalDetails.documents",documents)
-        downloadCertificateForm(Owners, data(),'ot');
+        downloadCertificateForm(Owners, data(),'ot',tenantId);
       },
       leftIcon: "book"
     };
+
+    let certificateDownloadObjectMG = {
+      label: { labelName: "Mortgage Letter", labelKey: "RP_MORTGAGE_LETTER" },
+      link: () => {
+        const { MortgageApplications, MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
+        const documents = MortgageApplicationsTemp[0].reviewDocData;
+        set(MortgageApplications[0],"additionalDetails.documents",documents)
+        downloadCertificateForm(MortgageApplications, data(),'mg',tenantId);
+      },
+      leftIcon: "book"
+    };
+
     switch (status) {
       case "OT_APPROVED":
+      case "OT_PENDINGCLAPPROVAL": 
+      case "OT_PENDINGSAAPPROVAL" : 
+      case "OT_PENDINGCAAPPROVAL":
+    
           if(process.env.REACT_APP_NAME === "Citizen"){
             downloadMenu = [
               receiptDownloadObject,
@@ -1021,6 +1039,10 @@ export const footer = getCommonApplyFooter({
        
         break;
       case "DC_APPROVED":
+      case "DC_REJECTEDPAID": 
+      case "DC_PENDINGCLAPPROVAL":  
+      case "DC_PENDINGCAAPPROVAL":
+        
         if(process.env.REACT_APP_NAME === "Citizen"){
           downloadMenu = [
             receiptDownloadObjectForDC,
@@ -1042,7 +1064,13 @@ export const footer = getCommonApplyFooter({
          
           
         break;
-      case 'MG_APPROVED':
+      case 'MG_APPROVED':  
+          downloadMenu = [
+            applicationDownloadObjectForMG,
+            certificateDownloadObjectMG
+          ];
+          break;
+
       case "MG_PENDINGCLVERIFICATION":
       case "MG_PENDINGJAVERIFICATION":
       case "MG_PENDINGSAVERIFICATION":
@@ -1052,10 +1080,9 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGAPRO":
       case "MG_REJECTED":
       case "MG_PENDINGGRANTDETAIL": 
-      case "MG_PENDINGCLAPPROVAL":   
     
           downloadMenu = [
-            applicationDownloadObjectForMG,
+            applicationDownloadObjectForMG          
           ];
         
         break;    
@@ -1064,12 +1091,9 @@ export const footer = getCommonApplyFooter({
       case "DC_PENDINGSAVERIFICATION":
       case "DC_PENDINGCLARIFICATION":
       case "DC_PENDINGSIVERIFICATION":
-      case "DC_PENDINGCAAPPROVAL":
       case "DC_PENDINGAPRO":
       case "DC_REJECTED":
-      case "DC_PENDINGCLAPPROVAL":  
       case "DC_PENDINGPAYMENT":
-      case "DC_REJECTEDPAID":
 
 
           downloadMenu = [
@@ -1082,11 +1106,8 @@ export const footer = getCommonApplyFooter({
           case "OT_PENDINGSAVERIFICATION":
           case "OT_PENDINGCLARIFICATION":
           case "OT_PENDINGSIVERIFICATION":
-          case "OT_PENDINGCAAPPROVAL":
           case "OT_PENDINGAPRO":
           case "OT_REJECTED":
-          case "OT_PENDINGCLAPPROVAL": 
-          case "OT_PENDINGSAAPPROVAL" :
           case "OT_PENDINGPAYMENT":
           case "OT_REJECTEDPAID":
               downloadMenu = [

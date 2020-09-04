@@ -49,7 +49,7 @@ import {
   getOwnershipSearchResults,
   getDuplicateCopySearchResults
 } from "../../../../ui-utils/commons";
-import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT } from "../../../../ui-constants";
+import { BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_OT, WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -1294,16 +1294,34 @@ export const downloadAcknowledgementFormForCitizen = (Owners, feeEstimate, type,
   }
 }
 
-export const downloadCertificateForm = (Owners, data, applicationType, mode = 'download') => {
-  const queryStr = [{
-      key: "key",
-      value: `rp-${applicationType}-allotment-letter`
-    },
-    {
-      key: "tenantId",
-      value: "ch"
-    }
-  ]
+export const downloadCertificateForm = (Owners, data, applicationType,tenantId, mode = 'download') => {
+  let queryStr = []
+  switch(applicationType){
+    case 'mg':
+        queryStr = [{
+          key: "key",
+          value: `rp-mortgage-letter`
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+      break;
+    case 'dc':
+    case 'ot':
+        queryStr = [{
+          key: "key",
+          value: `rp-${applicationType}-allotment-letter`
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+      break;
+    default:      
+  }
   let {
     documents
   } = Owners[0].additionalDetails;
@@ -1367,6 +1385,25 @@ export const downloadCertificateForm = (Owners, data, applicationType, mode = 'd
       case 'original':
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
             Properties: [ownersData]
+          }, {
+            'Accept': 'application/json'
+          }, {
+            responseType: 'arraybuffer'
+          })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Acknowledgement form Download");
+            }
+          });
+        break;
+      case 'mg':
+          httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
+            MortgageApplications: [ownersData]
           }, {
             'Accept': 'application/json'
           }, {
@@ -1798,9 +1835,10 @@ export const createEstimateData = async (
   jsonPath,
   dispatch,
   href = {},
-  _businessService
+  _businessService,
+  _workflow
 ) => {
-  const workflowCode = get(data, "workflowCode") ? get(data, "workflowCode") : _businessService
+  const workflowCode = get(data, "workflowCode") ? get(data, "workflowCode") : _workflow
   const applicationNo = getQueryArg(href, "applicationNumber") || getQueryArg(href, "consumerCode");
   const tenantId =
     get(data, "tenantId") || getQueryArg(href, "tenantId");
@@ -2063,7 +2101,8 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
           "OwnersTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          businessService
+          businessService,
+          WORKFLOW_BUSINESS_SERVICE_OT
         ));
       //set in redux to be used for adhoc
       response &&
@@ -2079,7 +2118,8 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
           "DuplicateTemp[0].estimateCardData",
           dispatch,
           window.location.href,
-          businessService
+          businessService,
+          WORKFLOW_BUSINESS_SERVICE_DC
         )
       )
       response &&

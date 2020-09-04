@@ -45,7 +45,7 @@ import {applicationNumber} from '../rented-properties/apply'
       let applicationDocuments = response.MortgageApplications[0].applicationDocuments|| [];
       const removedDocs = applicationDocuments.filter(item => !item.active)
       applicationDocuments = applicationDocuments.filter(item => !!item.active)
-      MortgageApplications = [{...MortgageApplications[0], applicationDocuments}]
+      const MortgageApplications = [{...response.MortgageApplications[0], applicationDocuments}]
       dispatch(prepareFinalObject("MortgageApplications", MortgageApplications))
       dispatch(
         prepareFinalObject(

@@ -75,7 +75,10 @@ const ImageUploadMolecule = Loadable({
   loader: () => import("./ImageUploadMolecule"),
   loading: () => <Loading />
 });
-
+const ImageUpload = Loadable({
+  loader: () => import("./ImageUpload"),
+  loading: () => <Loading />
+});
 const MultipleOwners = Loadable({
   loader: () => import("./MultipleOwners"),
   loading: () => <Loading />
@@ -103,6 +106,7 @@ export {
   ActionDialog,
   Footer,
   LandingPage,
+  ImageUpload,
   ImageUploadMolecule,
   MultipleOwners,
   MultipleDocuments,
