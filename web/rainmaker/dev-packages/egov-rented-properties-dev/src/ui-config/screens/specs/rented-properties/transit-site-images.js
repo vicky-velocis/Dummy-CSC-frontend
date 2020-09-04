@@ -30,12 +30,28 @@ const getMdmsData = async (dispatch, body) => {
       console.log(e);
   }
 };
-
+export const getColonyTypes = async(action, state, dispatch) => {
+  const colonyTypePayload = [{
+    moduleName: "RentedProperties",
+    masterDetails: [{name: "colonies"}, {name: "applications"}]
+  }
+]
+  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
+  const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+  const {colonies = []} = RentedProperties || {}
+    dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
+    const propertyTypes = colonies.map(item => ({
+      code: item.code,
+      label: item.code
+    }))
+    dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
+}
 const header = getCommonHeader({
     labelName: "Upload Transit Site Images",
     labelKey: "RP_TRANSIT_SITE_IMAGES"
 });
 const beforeInitFn =async(action, state, dispatch)=>{
+  getColonyTypes(action, state, dispatch);
     set(state, 'form.newapplication.files.media', []);
     set(state,'screenConfiguration.preparedFinalObject.PropertyImagesApplications',[]);
     

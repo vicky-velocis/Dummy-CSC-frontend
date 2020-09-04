@@ -360,8 +360,8 @@ const getTransitSiteDetails = () => {
         header: transitSiteHeader,
         detailsContainer: getCommonContainer({
             transitNumber: getTextField(duplicateCopyTransitField),
-            // colony:getSelectField(colonyFieldDup),
-            colony: getTextField({...colonyNameFielddata,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyNameFielddata.props, disabled: true}}),
+            colony:getSelectField(colonyFieldDup),
+            //colony: getTextField({...colonyNameFielddata,jsonPath: "DuplicateCopyApplications[0].property.colony", required: false, props: {...colonyNameFielddata.props, disabled: true}}),
             pincode: getTextField({...pincodeField, jsonPath: "DuplicateCopyApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }

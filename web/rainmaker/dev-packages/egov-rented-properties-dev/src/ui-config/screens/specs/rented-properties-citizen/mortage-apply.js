@@ -21,7 +21,27 @@ import {applicationNumber} from '../rented-properties/apply'
       applicationNumber
   });
   
+  export const getColonyTypes = async(action, state, dispatch) => {
+    const colonyTypePayload = [{
+      moduleName: "RentedProperties",
+      masterDetails: [{name: "colonies"}, {name: "applications"}]
+    }
+  ]
+    const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
+    const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
+    const {colonies = []} = RentedProperties || {}
+      dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
+      const propertyTypes = colonies.map(item => ({
+        code: item.code,
+        label: item.code
+      }))
+      dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
+  }
+  
+
+
   const getData = async(action, state, dispatch) => {
+    getColonyTypes(action, state, dispatch);
     dispatch(
       prepareFinalObject(
         "MortgageApplications",

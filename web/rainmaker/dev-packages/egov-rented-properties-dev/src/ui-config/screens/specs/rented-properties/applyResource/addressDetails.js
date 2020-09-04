@@ -46,6 +46,85 @@ placeholder: {
     required: true,
     errorMessage: "RP_ERR_AREA_FIELD",
   }
+  export const colonyFieldConfig = {
+    label: {
+        labelName: "Colony",
+        labelKey: "RP_COLONY_LABEL"
+    },
+    placeholder: {
+        labelName: "Select Colony",
+        labelKey: "RP_SELECT_COLONY_PLACEHOLDER"
+    },
+    required: true,
+    jsonPath: "Properties[0].colony",
+    optionValue: "code",
+    optionLabel: "label",
+    sourceJsonPath: "applyScreenMdmsData.propertyTypes",
+    gridDefination: {
+        xs: 12,
+        sm: 6
+    },
+    errorMessage: "RP_ERR_COLONY_FIELD",
+}
+const colonyFieldOwnerShip = {
+  ...colonyFieldConfig,
+  required:false,
+  props: {
+    disabled: true
+  },
+  jsonPath: "Owners[0].property.colony",
+  beforeFieldChange: (action, state, dispatch) => {
+      const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+      const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+      const propertyAreas = !!findItem ? findItem.area.map(item => ({
+        code: item.code,
+        label: item.sqyd
+      })) : [];
+      const rentPerSqyd = !!findItem ? findItem.costPerSqyd : ""
+      dispatch(prepareFinalObject("applyScreenMdmsData.propertyAreas", propertyAreas))
+      dispatch(prepareFinalObject("Properties[0].propertyDetails.rentPerSqyd", rentPerSqyd))
+    }}
+
+
+    const colonyFieldMortagage = {
+      ...colonyFieldConfig,
+      required:false,
+      props: {
+        disabled: true
+      },
+      jsonPath: "MortgageApplications[0].property.colony",
+      beforeFieldChange: (action, state, dispatch) => {
+          const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+          const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+          const propertyAreas = !!findItem ? findItem.area.map(item => ({
+            code: item.code,
+            label: item.sqyd
+          })) : [];
+          const rentPerSqyd = !!findItem ? findItem.costPerSqyd : ""
+          dispatch(prepareFinalObject("applyScreenMdmsData.propertyAreas", propertyAreas))
+          dispatch(prepareFinalObject("Properties[0].propertyDetails.rentPerSqyd", rentPerSqyd))
+        }}
+
+
+        const colonyFieldImages = {
+          ...colonyFieldConfig,
+          required:false,
+          props: {
+            disabled: true
+          },
+          jsonPath: "PropertyImagesApplications[0].property.colony",
+          beforeFieldChange: (action, state, dispatch) => {
+              const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
+              const findItem = rentedPropertyColonies.find(item => item.code === action.value)
+              const propertyAreas = !!findItem ? findItem.area.map(item => ({
+                code: item.code,
+                label: item.sqyd
+              })) : [];
+              const rentPerSqyd = !!findItem ? findItem.costPerSqyd : ""
+              dispatch(prepareFinalObject("applyScreenMdmsData.propertyAreas", propertyAreas))
+              dispatch(prepareFinalObject("Properties[0].propertyDetails.rentPerSqyd", rentPerSqyd))
+            }}
+
 
   export const colonyField = {
     label: {
@@ -222,7 +301,8 @@ const getOwnershipAddressDetails = () => {
         header: propertyHeader,
         detailsContainer: getCommonContainer({
             ownershipTransitNumber: getTextField(ownershipTransitNumberField),
-            areaName: getTextField({...colonyNameField, jsonPath: "Owners[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
+            //areaName: getTextField({...colonyNameField, jsonPath: "Owners[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
+            colony:getSelectField(colonyFieldOwnerShip),
             pincode: getTextField({...pincodeField, jsonPath: "Owners[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
     }
@@ -233,8 +313,9 @@ const getOwnershipAddressDetailsMortgage = () => {
       header: propertyHeader,
       detailsContainer: getCommonContainer({
           ownershipTransitNumber: getTextField(mortgageTransitNumberField),
-          areaName: getTextField({...colonyNameField, jsonPath: "MortgageApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
-          pincode: getTextField({...pincodeField, jsonPath: "MortgageApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+         // areaName: getTextField({...colonyNameField, jsonPath: "MortgageApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
+         colony:getSelectField(colonyFieldMortagage),
+         pincode: getTextField({...pincodeField, jsonPath: "MortgageApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
       })
   }
 }
@@ -243,8 +324,9 @@ const getTransitSitePropertyDetails = () => {
       header: propertyHeader,
       detailsContainer: getCommonContainer({
           transitNumber: getTextField(TransitsiteTransitNumberField),
-          areaName: getTextField({...colonyNameField,jsonPath: "PropertyImagesApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
-          pincode: getTextField({...pincodeField, jsonPath: "PropertyImagesApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
+         // areaName: getTextField({...colonyNameField,jsonPath: "PropertyImagesApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
+         colony:getSelectField(colonyFieldImages),
+         pincode: getTextField({...pincodeField, jsonPath: "PropertyImagesApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
       })
   }
 }
