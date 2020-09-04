@@ -1080,6 +1080,7 @@ export const footer = getCommonApplyFooter({
       case "MG_PENDINGAPRO":
       case "MG_REJECTED":
       case "MG_PENDINGGRANTDETAIL": 
+      case "MG_PENDINGAPPROVAL":
     
           downloadMenu = [
             applicationDownloadObjectForMG          
