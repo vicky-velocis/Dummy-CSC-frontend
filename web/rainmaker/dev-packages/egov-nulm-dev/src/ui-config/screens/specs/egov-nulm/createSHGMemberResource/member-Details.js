@@ -333,14 +333,14 @@ export const SMIDDetails = getCommonCard({
         label: { name: "Gender", key: "NULM_SMID_GENDER" },
         buttons: [
           {
-            labelName: "FEMALE",
+            label: "MALE",
             labelKey: "COMMON_GENDER_MALE",
-            value:"FEMALE",           
+            value:"MALE",           
           },
           {
-            label: "MALE",
+            labelName: "FEMALE",
             labelKey: "COMMON_GENDER_FEMALE",
-            value:"MALE",           
+            value:"FEMALE",           
           },
           {
             label: "OTHERS",
