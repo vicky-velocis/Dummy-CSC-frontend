@@ -549,13 +549,13 @@ export const getNoticeRecoveryPreviewReviewRentDetails = (isEditable = true) => 
                     },
                     { jsonPath: "SingleProperties[0].amount" }
                 ),
-                noticeId: getLabelWithValue(
-                    {
-                        labelName: "Notice Id",
-                        labelKey: "RP_NOTICE_ID"
-                    },
-                    { jsonPath: "SingleProperties[0].memoNumber" }
-                ),
+                // noticeId: getLabelWithValue(
+                //     {
+                //         labelName: "Notice Id",
+                //         labelKey: "RP_NOTICE_ID"
+                //     },
+                //     { jsonPath: "SingleProperties[0].memoNumber" }
+                // ),
         })
     })
 }

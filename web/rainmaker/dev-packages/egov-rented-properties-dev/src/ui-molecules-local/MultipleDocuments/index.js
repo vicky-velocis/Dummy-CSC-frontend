@@ -177,7 +177,7 @@ class MultipleDocuments extends Component {
                               <Typography className={classes.body2}>{content.name}</Typography>
                             </Grid>
                             <Grid xs={6} align="right">
-                              <Button href={content.url} color="primary">
+                              <Button href={content.url.split(",")[0]} color="primary">
                               Download
                               </Button>
                             </Grid>
