@@ -580,20 +580,20 @@ const ownerShipRelationShipduplicate = {
     props: {
         ...getRelationshipRadioButton.props,
         label: {
-            name: "Relationship with deceased",
-            key: "RP_COMMON_RELATIONSHIP_WITH_DECEASED_LABEL"
+            name: "Relationship",
+            key: "TL_COMMON_RELATIONSHIP_LABEL"
           },
           buttons: [
             {
-              labelName: "Legal Heir",
-              labelKey: "COMMON_RELATION_LEGAL_HEIR",
-              value: "LEGAL_HEIR"
-            },
-            {
-              label: "Spouse",
-              labelKey: "COMMON_RELATION_SPOUSE",
-              value: "SPOUSE"
-            }
+                labelName: "Father",
+                labelKey: "COMMON_RELATION_FATHER",
+                value: "FATHER"
+              },
+              {
+                label: "Husband",
+                labelKey: "COMMON_RELATION_HUSBAND",
+                value: "HUSBAND"
+              }
           ],
         props: {
             disabled: true
