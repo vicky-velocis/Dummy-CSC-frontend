@@ -564,6 +564,8 @@ export const getRentPaymentPropertyDetails = async (state, dispatch) => {
           "visible",
           true
         ))
+        dispatch(toggleSpinner())
+        return payload.Properties[0].propertyDetails.propertyId
       }
       dispatch(toggleSpinner())
     }

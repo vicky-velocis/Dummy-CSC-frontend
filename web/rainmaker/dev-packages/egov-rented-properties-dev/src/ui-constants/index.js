@@ -19,3 +19,7 @@ export const BILLING_BUSINESS_SERVICE_DC = "RentedProperties.DuplicateAllotmentL
 
 export const WORKFLOW_BUSINESS_SERVICE_OT = "OwnershipTransferRP";
 export const WORKFLOW_BUSINESS_SERVICE_DC = "DuplicateCopyOfAllotmentLetterRP";
+
+export const BILLING_BUSINESS_SERVICE_RENT = "RentedProperties.Rent"
+export const OFFLINE = "OFFLINE";
+export const ONLINE = "ONLINE";

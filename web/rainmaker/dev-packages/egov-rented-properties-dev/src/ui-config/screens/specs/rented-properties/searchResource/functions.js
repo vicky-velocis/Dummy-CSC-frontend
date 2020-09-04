@@ -214,6 +214,12 @@ export const searchMortgage = async (state, dispatch, onInit, offset, limit , hi
   }
 }
 
+export const formatAmount = (x) => {
+  
+  return x.toString().split('.')[0].length > 3 ? x.toString().substring(0,x.toString().split('.')[0].length-3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length-3): x.toString();
+  
+}
+
 export const searchAccountStatement = async (state, dispatch) => {
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -253,12 +259,12 @@ export const searchAccountStatement = async (state, dispatch) => {
           );
           let data = response.RentAccountStatements.map(item => ({
             [DATE]: moment(new Date(item.date)).format("DD-MMM-YYYY") || "-",
-            [AMOUNT]: item.amount.toFixed(2) || "-",
+            [AMOUNT]: 'Rs ' + formatAmount(item.amount.toFixed(2)) || "-",
             [TYPE]: item.type || "-",
-            [REMAINING_INTEREST]: item.remainingInterest.toFixed(2),
-            [REMAINING_PRINCIPAL]: item.remainingPrincipal.toFixed(2),
-            [TOTAL_DUE]: item.dueAmount.toFixed(2),
-            [ACCOUNT_BALANCE]: item.remainingBalance.toFixed(2)
+            [REMAINING_INTEREST]: 'Rs ' + formatAmount(item.remainingInterest.toFixed(2)),
+            [REMAINING_PRINCIPAL]: 'Rs ' + formatAmount(item.remainingPrincipal.toFixed(2)),
+            [TOTAL_DUE]: 'Rs ' + formatAmount(item.dueAmount.toFixed(2)),
+            [ACCOUNT_BALANCE]: 'Rs ' + formatAmount(item.remainingBalance.toFixed(2))
           }));
           dispatch(
             handleField(
