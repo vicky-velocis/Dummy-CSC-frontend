@@ -67,7 +67,13 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-    // properties = properties[0].owners.filter(itemdat => itemdat.permanent === true)
+    let i;
+    for (i = 0; i < properties[0].owners.length; i++) {
+    if(properties[0].owners[i].isPrimaryOwner === false){
+    properties[0].owners[i].ownerDetails.posessionStartdate = parseInt(properties[0].owners[i].ownerDetails.allotmentStartdate)
+    }
+    }
+    // properties[0].owners = properties[0].owners.filter(item => item.isPrimaryOwner === false).map(e => ({...e, ownerDetails : {...e.ownerDetails, posessionStartdate: e.ownerDetails.allotmentStartdate}}))
     properties[0].owners = properties[0].owners.reverse()
     const grandDetails=properties[0].grantDetails
     let state = properties[0].masterDataState;
