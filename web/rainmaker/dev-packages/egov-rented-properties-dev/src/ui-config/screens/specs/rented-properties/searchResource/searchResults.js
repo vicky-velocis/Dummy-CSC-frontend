@@ -110,8 +110,8 @@ export const accountStatementResults = {
   props: {...searchResults.props, 
     columns: [
       DATE,
-      AMOUNT,
       TYPE,
+      AMOUNT, 
       REMAINING_INTEREST,
       REMAINING_PRINCIPAL,
       TOTAL_DUE,
