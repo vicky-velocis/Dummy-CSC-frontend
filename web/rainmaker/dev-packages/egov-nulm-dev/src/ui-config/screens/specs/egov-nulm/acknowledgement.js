@@ -20,6 +20,8 @@ let labelValue = "";
   switch(screenName){
     case "SEP":
     case "SMID" :
+    case "SUH":
+    case "SUHLOG":
        labelValue = {
       labelName: "SEP Program Submitted Successfully",
       labelKey: `NULM_APPLICATION_SUCCESS_${screenName}_${mode}`,
@@ -52,15 +54,22 @@ const getApplicationDisplayCode =() => {
     case "SEP":
     case "SMID" :
     case "SMIDORG":
+    case "SUH":
          labelValue = {
-      labelName: "Application Id",
-      labelKey: `NULM_SEP_APPLICATION_ID`,
-    }
-    break;
+          labelName: "Application Id",
+          labelKey: `NULM_SEP_APPLICATION_ID`,
+        }
+        break;
     case "REGORGANIZATION" :
       labelValue = {
         labelName: "Organization Name",
         labelKey: `NULM_NGO_REG_ORGANIZATION_NAME`,
+      }
+      break;
+    case "SUHLOG":
+      labelValue = {
+        labelName: "Name of shelter",
+        labelKey: `NULM_SUH_OF_SHELTER`,
       }
       break;
     default :  labelValue = {
