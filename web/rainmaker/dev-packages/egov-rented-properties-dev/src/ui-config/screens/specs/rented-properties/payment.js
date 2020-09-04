@@ -225,8 +225,7 @@ const goToPayment = async (state, dispatch, type) => {
     "payment"
   )
   if(!!isTransitValid && !!isPaymentInfoValid) {
-    const transitNumber =  get(state.screenConfiguration.preparedFinalObject,"property.transitNumber")
-    const paymentInfo = get(state.screenConfiguration.preparedFinalObject, "paymentInfo.amount")
+    const paymentInfo = get(state.screenConfiguration.preparedFinalObject, "paymentInfo")
     let propertyId = get(state.screenConfiguration.preparedFinalObject, "Properties[0].propertyDetails.propertyId")
     let id;
     if(!propertyId) {
@@ -235,7 +234,7 @@ const goToPayment = async (state, dispatch, type) => {
     if(!!propertyId || !!id) {
       const payload = {Properties: [{
         id: propertyId || id,
-        paymentAmount: paymentInfo.paymentAmount,
+        paymentAmount: paymentInfo.amount,
         transactionId: paymentInfo.transactionNumber,
         bankName: paymentInfo.bankName
       }]}

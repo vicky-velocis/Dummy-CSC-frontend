@@ -7,7 +7,8 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const userInfo = JSON.parse(getUserInfo());
 const {roles = []} = userInfo
-const findItem = roles.find(item => item.code === "RP_CLERK" || item.code === "RP_SURVEYOR");
+const isSurveyor = roles.find(item => item.code === "RP_SURVEYOR");
+const isClerk = roles.find(item => item.code === "RP_CLERK")
 
 const header = getCommonHeader(
     {
@@ -21,7 +22,7 @@ const header = getCommonHeader(
     }
   );
 
-  const cardItems = [{
+  let cardItems = [{
     label: {
         labelKey: "RP_PROPERTY_MASTER_HEADER",
         labelName: "Property Master"
@@ -60,28 +61,34 @@ const header = getCommonHeader(
     },
     icon: <FormIcon />,
     route: "search-account-statement"
-  },
-  {
-    label: {
-        labelKey: "RP_OFFLINE_RENT_AMOUNT_PAYMENT_HEADER",
-        labelName: "Offline rent amount"
-    },
-    icon: <FormIcon />,
-    route: "payment"
-  },
-  {
-    label: {
-        labelKey: "RP_CAPTURING_TRANSIT_SITE_IMAGE_HEADER",
-        labelName: "Capturing Transit Site Images"
-    },
-    icon: <FormIcon />,
-    route: "transit-site-images"
   }
 ]
 
-if(!findItem){
-  cardItems.pop();
-}
+
+cardItems = !!isSurveyor ? [...cardItems, {
+  label: {
+      labelKey: "RP_CAPTURING_TRANSIT_SITE_IMAGE_HEADER",
+      labelName: "Capturing Transit Site Images"
+  },
+  icon: <FormIcon />,
+  route: "transit-site-images"
+}] : !!isClerk ? [...cardItems, {
+  label: {
+      labelKey: "RP_OFFLINE_RENT_AMOUNT_PAYMENT_HEADER",
+      labelName: "Offline rent amount"
+  },
+  icon: <FormIcon />,
+  route: "payment"
+},
+{
+  label: {
+      labelKey: "RP_CAPTURING_TRANSIT_SITE_IMAGE_HEADER",
+      labelName: "Capturing Transit Site Images"
+  },
+  icon: <FormIcon />,
+  route: "transit-site-images"
+}] : cardItems
+
 
 const citizenCardItems = [{
   label: {
