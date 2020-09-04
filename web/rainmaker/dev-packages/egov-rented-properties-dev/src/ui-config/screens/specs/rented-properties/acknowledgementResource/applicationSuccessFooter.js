@@ -3,7 +3,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   ifUserRoleExists,download,
-  downloadAcknowledgementFormForCitizen
+  downloadAcknowledgementFormForCitizen,downloadOnlineOfflinePaymentReceipt
 } from "../../utils";
 import set from "lodash/set";
 import get from "lodash/get"
@@ -29,6 +29,7 @@ export const applicationSuccessFooter = (
   tenant,
   type
 ) => {
+  debugger
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   const redirectionURL = roleExists ? "/" : "/inbox";
@@ -76,6 +77,8 @@ export const applicationSuccessFooter = (
         onClickDefination: {
           action: "condition",
           callBack: () => {
+            debugger
+            console.log(state)
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
                 const {
@@ -111,7 +114,7 @@ export const applicationSuccessFooter = (
                     { key: "consumerCodes", value:consumerCodes},
                     { key: "tenantId", value: tenantId }
                   ]
-                  download(receiptQueryString, OwnersData,data, userInfo.name);                
+                  download(receiptQueryString, OwnersData,data, userInfo.name,'payment');                
                 break;
             }
           }
@@ -171,6 +174,38 @@ export const applicationSuccessFooter = (
           action: "page_change",
           path: redirectionURL
         },
+      },
+      downloadFormButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "180px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          downloadFormButtonLabel: getLabel({
+            labelName: "DOWNLOAD CONFIRMATION FORM",
+            labelKey: (type == "OWNERSHIPTRANSFERRP" || type == "DUPLICATECOPYOFALLOTMENTLETTERRP" || type == "PERMISSIONTOMORTGAGE") ? "TL_APPLICATION_BUTTON_DOWN_CONF" : "RP_DOWNLOAD_RECEIPT"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: () => {
+            const { Properties} = state.screenConfiguration.preparedFinalObject;
+            let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+            let tenantId = getQueryArg(window.location.href, "tenantId");
+              const receiptQueryString = [
+                { key: "consumerCodes", value:consumerCodes},
+                { key: "tenantId", value: tenantId }
+            ]
+              download(receiptQueryString, Properties,[], userInfo.name,'online-payment');   
+          }
+        },
+        visible: true
       },
     });
   }

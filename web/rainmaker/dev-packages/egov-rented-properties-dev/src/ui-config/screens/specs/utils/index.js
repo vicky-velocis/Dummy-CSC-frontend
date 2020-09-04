@@ -1294,6 +1294,71 @@ export const downloadAcknowledgementFormForCitizen = (Owners, feeEstimate, type,
   }
 }
 
+export const downloadOnlineOfflinePaymentReceipt = (Properties,mode = "download") => {
+  debugger
+  const queryStr = [{
+          key: "key",
+          value: "rp-online-payment-receipt"
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+
+  // let {
+  //   documents
+  // } = Owners[0].additionalDetails;
+  // const findIndex = documents.findIndex(item => item.title === "TL_OWNERPHOTO");
+  // const ownerDocument = findIndex !== -1 ? documents[findIndex] : {
+  //   link: `${process.env.REACT_APP_MEDIA_BASE_URL}/silhoutte-bust.png`
+  // };
+  // const length = documents.length % 4
+  // documents = !!length ? [...documents, ...new Array(4 - length).fill({
+  //   title: "",
+  //   name: ""
+  // })] : documents
+  // const myDocuments = documents.map((item) => ({
+  //   ...item,
+  //   title: getLocaleLabels(item.title, item.title)
+  // })).reduce((splits, i) => {
+  //   const length = splits.length
+  //   const rest = splits.slice(0, length - 1);
+  //   const lastArray = splits[length - 1] || [];
+  //   return lastArray.length < 4 ? [...rest, [...lastArray, i]] : [...splits, [i]]
+  // }, []);
+  // let ownerInfo = Owners[0];
+
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
+            Properties: Properties
+          }, {
+            'Accept': 'application/json'
+          }, {
+            responseType: 'arraybuffer'
+          })
+          .then(res => {
+            res.filestoreIds[0]
+            if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+              res.filestoreIds.map(fileStoreId => {
+                downloadReceiptFromFilestoreID(fileStoreId, mode)
+              })
+            } else {
+              console.log("Error In Acknowledgement form Download");
+            }
+          });
+ 
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
 export const downloadCertificateForm = (Owners, data, applicationType,tenantId, mode = 'download') => {
   let queryStr = []
   switch(applicationType){
@@ -1486,7 +1551,7 @@ try {
 }
 }
 
-export const download = (receiptQueryString, Owners, data, generateBy, mode = "download") => {
+export const download = (receiptQueryString, Properties, data, generateBy,type, mode = "download") => {
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -1501,15 +1566,25 @@ export const download = (receiptQueryString, Owners, data, generateBy, mode = "d
   };
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      // const queryStr = [{
+      //     key: "key",
+      //     value: "rp-payment-receipt"
+      //   },
+      //   {
+      //     key: "tenantId",
+      //     value: receiptQueryString[1].value.split('.')[0]
+      //   }
+      // ]
+
       const queryStr = [{
-          key: "key",
-          value: "rp-payment-receipt"
-        },
-        {
-          key: "tenantId",
-          value: receiptQueryString[1].value.split('.')[0]
-        }
-      ]
+        key: "key",
+        value: `rp-${type}-receipt`
+      },
+      {
+        key: "tenantId",
+        value: receiptQueryString[1].value.split('.')[0]
+      }
+    ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         return;
@@ -1542,6 +1617,7 @@ export const download = (receiptQueryString, Owners, data, generateBy, mode = "d
       }]
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
           Payments,
+          Properties,
           generateBy
         }, {
           'Accept': 'application/json'
