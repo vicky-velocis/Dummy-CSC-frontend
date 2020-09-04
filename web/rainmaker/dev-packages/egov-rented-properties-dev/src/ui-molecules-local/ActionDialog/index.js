@@ -293,6 +293,7 @@ return
       dataPath = `${dataPath}[0]`;
     }
 
+    const mastrerstate=(get(state.screenConfiguration.preparedFinalObject,dataPath)||[]).masterDataState
     const applicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).applicationState
     const duplicateCopyApplicationState = (get(state.screenConfiguration.preparedFinalObject, dataPath) || []).state
     return (
@@ -339,7 +340,9 @@ return
                   >
                     <CloseIcon />
                   </Grid>
-                  {showEmployeeList && !!dropDownData.length && (
+                  {/* {(moduleName==="MasterRP" && mastrerstate ==="PM_PENDINGJAVERIFICATION" && (buttonLabel==="REJECT"||buttonLabel==="FORWARD"))||(moduleName==="MasterRP" && (mastrerstate ==="PM_PENDINGSAVERIFICATION"||mastrerstate ==="PM_PENDINGSIVERIFICATION"))} */}
+                  {(moduleName==="MasterRP" && mastrerstate ==="PM_PENDINGJAVERIFICATION" && (buttonLabel==="SENDBACK"))?"":
+                  showEmployeeList && !!dropDownData.length && (
                     <Grid
                       item
                       sm="12"
@@ -367,6 +370,34 @@ return
                       />
                     </Grid>
                   )}
+                  {/* {showEmployeeList && !!dropDownData.length && (
+                    <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px", width: "90%" }}
+                        label={fieldConfig.approverName.label}
+                        placeholder={fieldConfig.approverName.placeholder}
+                        data={dropDownData}
+                        optionValue="value"
+                        optionLabel="label"
+                        hasLocalization={false}
+                        //onChange={e => this.onEmployeeClick(e)}
+                        onChange={e =>
+                          handleFieldChange(
+                            `${dataPath}.assignee`,
+                            [e.target.value]
+                          )
+                        }
+                        jsonPath={`${dataPath}.assignee[0]`}
+                      />
+                    </Grid>
+                  )} */}
                   <Grid item sm="12">
                     {/* <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
