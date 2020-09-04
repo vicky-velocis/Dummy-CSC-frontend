@@ -14,7 +14,6 @@ import {
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import { lSRemoveItem, lSRemoveItemlocal } from "egov-ui-kit/utils/localStorageUtils";
 import { getUserDetailsOnMobile, fetchMdmsData, sendPaymentReceiptOverMail, fetchSIName } from "../../../../ui-utils/commons";
@@ -1234,12 +1233,12 @@ export const getTextToLocalMappingVendorDetail = label => {
         'EC_MODE_OF_TRANSPORT',
         localisationLabels
       )
-      case "isActive":
-        return getLocaleLabels(
-          'Active',
-          'EC_IS_ACTIVE',
-          localisationLabels
-        )
+    case "isActive":
+      return getLocaleLabels(
+        'Active',
+        'EC_IS_ACTIVE',
+        localisationLabels
+      )
     case "remark":
       return getLocaleLabels(
         'Remark',
@@ -1961,11 +1960,12 @@ export const sendReceiptBymail = async (state, dispatch, ReceiptLink, violatorDe
     let payload = violatorDetails;
     if (isReceipt) {
       notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[1]", {});
-      body = notificationTemplate.body.replace('<violator>',payload.violatorName).replace('<ChallanId>', payload.challanId);
+      body = notificationTemplate.body.replace('<violator>', payload.violatorName).replace('<ChallanId>', payload.challanId);
       notificationTemplate.attachments[0].url = ReceiptLink;
     } else {
       notificationTemplate = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData.egec.NotificationTemplate[0]", {});
-      body = notificationTemplate.body.replace('<violator>',payload.violatorName).replace('<ChallanId>', payload.challanId).replace('<EnchroachmentType>', payload.encroachmentType).replace('<Date and Time>', payload.violationDate + " " + payload.violationTime).replace('<Link>', '<Link>');
+      let LinkwithMobileNumber = '<Link>' + '?mobileno=' + payload.contactNumber + '&ecno=' + payload.challanId + " ";
+      body = notificationTemplate.body.replace('<violator>', payload.violatorName).replace('<ChallanId>', payload.challanId).replace('<EnchroachmentType>', payload.encroachmentType).replace('<Date and Time>', payload.violationDate + " " + payload.violationTime).replace('<Link>', LinkwithMobileNumber);
       notificationTemplate.attachments[0].url = ReceiptLink
     }
 

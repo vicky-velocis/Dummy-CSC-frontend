@@ -966,7 +966,7 @@ export const createUpdateGenerateChallanApplication = async (state, dispatch, st
         return { status: "success", message: response.ResponseInfo, createDemand: responsecreateDemand };
       } else {
 
-        if (response.Errors[0].message.message === 'Fine Data does not exist') {
+        if (response.Errors[0].message.message === 'Fine data does not exist') {
           return { status: "fail", message: response.Errors[0].message.message, createDemand: responsecreateDemand };
         } else {
           return { status: "fail", message: response + "Submission Falied, Try Again later!", createDemand: responsecreateDemand };
