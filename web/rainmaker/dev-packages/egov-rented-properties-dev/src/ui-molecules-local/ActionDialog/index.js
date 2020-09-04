@@ -340,7 +340,6 @@ return
                   >
                     <CloseIcon />
                   </Grid>
-                  {/* {(moduleName==="MasterRP" && mastrerstate ==="PM_PENDINGJAVERIFICATION" && (buttonLabel==="REJECT"||buttonLabel==="FORWARD"))||(moduleName==="MasterRP" && (mastrerstate ==="PM_PENDINGSAVERIFICATION"||mastrerstate ==="PM_PENDINGSIVERIFICATION"))} */}
                   {(moduleName==="MasterRP" && mastrerstate ==="PM_PENDINGJAVERIFICATION" && (buttonLabel==="SENDBACK"))?"":
                   showEmployeeList && !!dropDownData.length && (
                     <Grid
