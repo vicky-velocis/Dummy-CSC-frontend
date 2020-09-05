@@ -9,7 +9,8 @@ import set from "lodash/set";
 import get from "lodash/get"
 import { getQueryArg, setDocuments } from "egov-ui-framework/ui-utils/commons";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
-
+import {getSearchResults} from '../../../../../ui-utils/commons'
+import { prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const userInfo = JSON.parse(getUserInfo());
 const getCommonApplyFooter = children => {
   return {
@@ -29,7 +30,6 @@ export const applicationSuccessFooter = (
   tenant,
   type
 ) => {
-  debugger
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   const redirectionURL = roleExists ? "/" : "/inbox";
@@ -76,7 +76,7 @@ export const applicationSuccessFooter = (
         },
         onClickDefination: {
           action: "condition",
-          callBack: () => {
+          callBack: async() => {
             console.log(state)
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
@@ -87,6 +87,7 @@ export const applicationSuccessFooter = (
                 set(Owners[0], "additionalDetails.documents", documentsOT)
                 downloadAcknowledgementFormForCitizen(Owners, OwnersTemp[0].estimateCardData, type, "ownership-transfer");
                 break;
+
               case "DUPLICATECOPYOFALLOTMENTLETTERRP":
                 const {
                   DuplicateCopyApplications, DuplicateTemp
@@ -95,6 +96,7 @@ export const applicationSuccessFooter = (
                 set(DuplicateCopyApplications[0], "additionalDetails.documents", documents)
                 downloadAcknowledgementFormForCitizen(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData, type, "duplicate-copy");
                 break;
+
               case "PERMISSIONTOMORTGAGE":
                 const {
                   MortgageApplications, MortgageApplicationsTemp
@@ -103,26 +105,43 @@ export const applicationSuccessFooter = (
                 set(MortgageApplications[0], "additionalDetails.documents", documentsMG)
                 downloadAcknowledgementFormForCitizen(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData, type, "mortgage");
                 break;
-              case null:
-                  let { Properties} = state.screenConfiguration.preparedFinalObject;
-                  let codes = getQueryArg(window.location.href, "applicationNumber");
-                  let id = getQueryArg(window.location.href, "tenantId");
-                    const receiptQuery = [
-                      { key: "consumerCodes", value:codes},
-                      { key: "tenantId", value: id }
-                  ]
-                    download(receiptQuery, Properties,[], userInfo.name,'online-payment');   
-                break;
+
               default:
-                const data = []
                 let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
-                let tenantId = getQueryArg(window.location.href, "tenantId");
-                  const OwnersData = [];
-                  const receiptQueryString = [
-                    { key: "consumerCodes", value:consumerCodes},
-                    { key: "tenantId", value: tenantId }
-                  ]
-                  download(receiptQueryString, OwnersData,data, userInfo.name,'payment');                
+                let transitNumber = consumerCodes.split('-')[1]
+                let queryObject = [
+                  { key: "transitNumber", value: transitNumber }
+                ];
+                let payload =  await getSearchResults(queryObject);
+                if(payload){
+                  let {Properties} = payload
+                  Properties = Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
+                    balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
+                    balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
+                  }}))
+                  dispatch(prepareFinalObject("Properties", Properties))
+                  if(consumerCodes.startsWith('SITE')){
+                    let { Properties} = state.screenConfiguration.preparedFinalObject;
+                    let codes = getQueryArg(window.location.href, "applicationNumber");
+                    let id = getQueryArg(window.location.href, "tenantId");
+                      const receiptQuery = [
+                        { key: "consumerCodes", value:codes},
+                        { key: "tenantId", value: id }
+                    ]
+                      download(receiptQuery, Properties,[], userInfo.name,'online-payment');
+                  }
+                  else{
+                    let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+                    let tenantId = getQueryArg(window.location.href, "tenantId");
+                    const OwnersData = [];
+                    const receiptQueryString = [
+                      { key: "consumerCodes", value:consumerCodes},
+                      { key: "tenantId", value: tenantId }
+                    ]
+                    download(receiptQueryString, OwnersData,[], userInfo.name,'payment');             
+                  }
+                }
+                
                 break;
             }
           }
