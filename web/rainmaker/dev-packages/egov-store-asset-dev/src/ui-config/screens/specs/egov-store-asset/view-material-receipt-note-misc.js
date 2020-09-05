@@ -20,11 +20,13 @@ import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
 import{UserRoles} from '../../../../ui-utils/sampleResponses'
 let roles = UserRoles().UserRoles;
-let applicationNumber = getQueryArg(window.location.href, "applicationNumbers");
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let enableButton = true;
 if(status ===WorkFllowStatus().WorkFllowRejected)
+enableButton = false
+else if(status !==WorkFllowStatus().WorkFllowApproved)
 enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);

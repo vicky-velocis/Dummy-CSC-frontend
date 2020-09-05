@@ -26,6 +26,8 @@ let IsEdit = true;
 let enableButton = true;
 if(status ===WorkFllowStatus().WorkFllowRejected)
 enableButton = false
+else if(status !==WorkFllowStatus().WorkFllowApproved)
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
 ConfigStatus = ConfigStatus.filter(x=>x.code === status)
@@ -229,7 +231,7 @@ const screenConfig = {
                 lg:3,
                 // align: "right",
               },  
-              visible: true,// enableButton,
+              visible:  enableButton,
               props: {
                 variant: "contained",
                 color: "primary",

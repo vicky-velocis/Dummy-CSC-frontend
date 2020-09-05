@@ -37,7 +37,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     `indents`,
     []
   );
-  indents = get(indents,'indents');
+  //indents = get(indents,'indents');
   if(indents && indents[0])
   {
   let indentDetails = get(

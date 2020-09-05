@@ -502,6 +502,7 @@ export const NonIndentConfiguration =()=>{
 export const WorkFllowStatus = () => {
   return {
     WorkFllowRejected:'REJECTED',
+    WorkFllowApproved:'APPROVED',
     WorkFllowStatus: [
       {
         code:"CREATED",

@@ -68,7 +68,19 @@ export const MTONHeader = getCommonCard({
           dispatch(prepareFinalObject("materialIssues[0].indent.indentType", indents[0].indentType));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentPurpose", indents[0].indentPurpose));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentCreatedBy", indents[0].indentCreatedBy));
-          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].inddesignationentNumberme));
+          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].designation));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee", indents[0].issueStore.storeInCharge.code));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", indents[0].issueStore.storeInCharge.code));
+          let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
+          let designation=action.value ;
+          emp = emp.filter(x=>x.code ===indents[0].issueStore.storeInCharge.code)
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", emp[0].name));
+          let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
+          const {designationsById} = state.common;
+          if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+            dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+            }
           storecode =indents[0].issueStore.code;
           let indentDetails = get(
             indents[0],
@@ -277,12 +289,17 @@ export const MTONHeader = getCommonCard({
         },
       }),
       beforeFieldChange: (action, state, dispatch) => {
+    
         let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
         let designation=action.value ;
         emp = emp.filter(x=>x.code ===action.value)
-        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation) 
+        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
         const {designationsById} = state.common;
-       // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+        if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+          }
+        
      
 
       }

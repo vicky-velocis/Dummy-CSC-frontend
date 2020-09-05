@@ -12,6 +12,7 @@ import {
     getmaterialissuesSearchResults
   } from "../../../../ui-utils/storecommonsapi";
   import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
+  import { getSearchResults } from "../../../../ui-utils/commons";
   import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialindentnoteResource/other-details";
   import {totalValue} from './creatematerialindentnoteResource/totalValue';
@@ -248,49 +249,49 @@ export const header = getCommonContainer({
       console.log(e);
     }
   };
-  const getIndentData = async (action, state, dispatch) => {
+  const getUserData = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     const issueNumber = getQueryArg(window.location.href, "applicationNumber");
-    let Indent=[];
-    let IndentId =''
-    if(issueNumber)
-    {
-      let queryObjectIndent = [
-        {
-          key: "tenantId",
-          value: tenantId
-        },
-        {
-          key: "issueNumber",
-          value: issueNumber
-        }
-      ];
-      let indentissuedata = await getmaterialissuesSearchResults(queryObjectIndent, dispatch);
-      indentissuedata = indentissuedata.materialIssues.filter(x=>x.issueNumber === issueNumber)
-      if(indentissuedata && indentissuedata[0])
-      {
-        IndentId = indentissuedata[0].indent.id;
-      }
-    }    
-    else   
-    IndentId = getQueryArg(window.location.href, "IndentId");
-    let queryObject = [
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      {
-        key: "ids",
-        value: IndentId
-      }
-    ];
+    // let Indent=[];
+    // let IndentId =''
+    // if(issueNumber)
+    // {
+    //   let queryObjectIndent = [
+    //     {
+    //       key: "tenantId",
+    //       value: tenantId
+    //     },
+    //     {
+    //       key: "issueNumber",
+    //       value: issueNumber
+    //     }
+    //   ];
+    //   let indentissuedata = await getmaterialissuesSearchResults(queryObjectIndent, dispatch);
+    //   indentissuedata = indentissuedata.materialIssues.filter(x=>x.issueNumber === issueNumber)
+    //   if(indentissuedata && indentissuedata[0])
+    //   {
+    //     IndentId = indentissuedata[0].indent.id;
+    //   }
+    // }    
+    // else   
+    // IndentId = getQueryArg(window.location.href, "IndentId");
+    // let queryObject = [
+    //   {
+    //     key: "tenantId",
+    //     value: tenantId
+    //   },
+    //   {
+    //     key: "ids",
+    //     value: IndentId
+    //   }
+    // ];
     try {
-      if(IndentId)
-      {
-      let response = await getMaterialIndentSearchResults(queryObject, dispatch);
-      if(response)
-      dispatch(prepareFinalObject("indents", response));
-      }
+      // if(IndentId)
+      // {
+      // let response = await getMaterialIndentSearchResults(queryObject, dispatch);
+      // if(response)
+      // dispatch(prepareFinalObject("indents", response));
+      // }
         // fetching employee designation
     const userInfo = JSON.parse(getUserInfo());
     if(userInfo){
@@ -307,8 +308,7 @@ export const header = getCommonContainer({
           const {designationsById} = state.common;
           const empdesignation = payload.Employees[0].assignments[0].designation;
           if(designationsById){
-          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
-         
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )         
           dispatch(prepareFinalObject("materialIssues[0].designation", desgnName[0].name));
           }
         }
@@ -381,10 +381,10 @@ export const header = getCommonContainer({
       const tenantId = getstoreTenantId();
       const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
       const storedata = getstoreData(action,state, dispatch);        
-      const Indentdata = getIndentData(action,state, dispatch);
+      const Indentdata = getUserData(action,state, dispatch);
       const step = getQueryArg(window.location.href, "step");
-      const issueNumber = getQueryArg(window.location.href, "issueNumber");
-      if(!step && !issueNumber){
+      const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+      if(!step && !applicationNumber){
         dispatch(prepareFinalObject("materialIssues[0]",null));
       }
      // SEt Default data
@@ -406,55 +406,127 @@ export const header = getCommonContainer({
       `indents`,
       []
     ); 
+   
     //indents = indents.filter(x=> x.id === IndentId)
     //designation
-    dispatch(prepareFinalObject("materialIssues[0].designation",get(state.screenConfiguration.preparedFinalObject,`indents[0].designation`,'')));
-    //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
-    if(indents && indents[0])
-    {
-      indents = indents;
-    }
-    else
-    {
-      indents = indents.indents;
-    }
-    if(indents && indents[0] )
-    { 
-      if(indents[0].indentStore.code !== undefined)
-      {    
-        dispatch(prepareFinalObject("materialIssues[0].toStore.code",indents[0].indentStore.code));
-        dispatch(prepareFinalObject("materialIssues[0].toStore.name",indents[0].indentStore.name));
-        dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
-        dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
-        dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
-        //get Material based on Indent
-        let material =[]
-        let indentDetails = get(
-          indents[0],
-          `indentDetails`,
-          []
-        );
-        for (let index = 0; index < indentDetails.length; index++) {
-          const element = indentDetails[index];
-          material.push( element.material)
-          
-        }
-        dispatch(prepareFinalObject("IndentMaterial",material));
-        const IndentId = getQueryArg(window.location.href, "IndentId");
-        if(IndentId)
-        {
-          let storecode = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].fromStore.code`,'')
-          getMaterialData(action,state, dispatch,storecode)
-        }
-       
-      }
     
-    else
-    dispatch(setRoute(`/egov-store-asset/search-indent`));
+    //let indents = get(state.screenConfiguration.preparedFinalObject,`indents`,[])
+    // if(indents && indents[0])
+    // {
+    //   indents = indents;
+    // }
+    // else
+    // {
+    //   indents = indents.indents;
+    // }
+    if(applicationNumber)
+    {
+      let tenantId = getTenantId();
+      const queryObject = [{ key: "tenantId", value: tenantId},{ key: "issueNoteNumber", value: applicationNumber}];
+      getSearchResults(queryObject, dispatch,"materialissues")
+      .then(response=>{
+        if(response){
+          
+          if(response.materialIssues && response.materialIssues[0].indent.id){
+            let indents =get(response.materialIssues[0],`indent`,[])                
+              // dispatch(prepareFinalObject("materialIssues[0].toStore.code",indents[0].indentStore.code));
+              // dispatch(prepareFinalObject("materialIssues[0].toStore.name",indents[0].indentStore.name));
+              // dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
+              // dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
+              // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+              //set receipt id
+              let totalIndentQty = 0;
+              let totalvalue = 0
+              let TotalQty = 0;
+              if(response && response.materialIssues[0])
+                {
+                  for (let index = 0; index < response.materialIssues[0].materialIssueDetails.length; index++) {
+                    const element = response.materialIssues[0].materialIssueDetails[index];
+                    set(response.materialIssues[0], `materialIssueDetails[${index}].receiptId`, element.materialIssuedFromReceipts[index].materialReceiptId);
+                    set(response.materialIssues[0], `materialIssueDetails[${index}].indentDetail.userQuantity`, Number(element.quantityIssued));
+                    if(Number(response.materialIssues[0].indent.indentDetails[index].indentQuantity))
+                    set(response.materialIssues[0], `materialIssueDetails[${index}].indentDetail.indentQuantity`, Number(response.materialIssues[0].indent.indentDetails[index].indentQuantity) );
+                    set(response.materialIssues[0], `materialIssueDetails[${index}].indentDetail.TotalValue`,  Number(element.value));
+                    let BalanceQtyAfterIssue = Number(response.materialIssues[0].indent.indentDetails[index].balanceQty) - Number(element.quantityIssued)
+                    set(response.materialIssues[0], `materialIssueDetails[${index}].indentDetail.BalanceQtyAfterIssue`,  BalanceQtyAfterIssue);
+                    totalvalue = totalvalue+ Number(element.value)
+                    totalIndentQty = totalIndentQty+ Number(response.materialIssues[0].indent.indentDetails[index].indentQuantity)
+                    TotalQty = TotalQty + Number(element.quantityIssued)
+
+                  }
+                  set(response.materialIssues[0],`totalIndentQty`, totalIndentQty);
+                  set(response.materialIssues[0],`totalQty`, TotalQty);
+                  set(response.materialIssues[0],`totalvalue`, totalvalue);
+                }
+                dispatch(prepareFinalObject("materialIssues", [...response.materialIssues]));
+              //get Material based on Indent
+              let material =[]
+              let indentDetails = get(
+                indents,
+                `indentDetails`,
+                []
+              );
+              for (let index = 0; index < indentDetails.length; index++) {
+                const element = indentDetails[index];
+                material.push( element.material.code)
+                
+              }
+              let matcodes= material.map(itm => {
+                            return `${itm}`;
+                          })
+                          .join() || "-"
+             // dispatch(prepareFinalObject("IndentMaterial",material));
+             const queryObject = [
+               { key: "tenantId", value: getTenantId()},
+               { key: "issueingStore", value: response.materialIssues[0].fromStore.code},
+               {key:"material",value:matcodes}
+              ];
+              getSearchResults(queryObject, dispatch,"materialBalanceAndName")
+              .then(response =>{
+                if(response)
+                {
+                  dispatch(prepareFinalObject("indentsmaterial", [...response.MaterialBalanceRate]));
+                }
+                
+              });
+            
+
+          }
+        }
+
+      });
+    // if(indents && indents[0] )
+    // { 
+      
+    // }
+  }
+  else{
+    const IndentId = getQueryArg(window.location.href, "IndentId");
+    if(IndentId)
+    {
+      let tenantId = getTenantId();
+      const queryObject = [{ key: "tenantId", value: tenantId},{ key: "ids", value: IndentId}];
+      getSearchResults(queryObject, dispatch,"indents")
+      .then(response=>{
+        if(response){
+          dispatch(prepareFinalObject("indents", [...response.indents]));
+          if(response.indents && response.indents[0]){
+           // let indents =get(response.materialIssues[0],`indents`,[])                
+              dispatch(prepareFinalObject("materialIssues[0].toStore.code",response.indents[0].indentStore.code));
+              dispatch(prepareFinalObject("materialIssues[0].toStore.name",response.indents[0].indentStore.name));
+              dispatch(prepareFinalObject("materialIssues[0].indent",response.indents[0]));       
+              dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
+              dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+              const userInfo = JSON.parse(getUserInfo());
+              if(userInfo){
+                dispatch(prepareFinalObject("materialIssues[0].createdByName", userInfo.name));
+              }
+          }
+        }
+      });
     }
-    else{
-      dispatch(setRoute(`/egov-store-asset/search-indent`));
-    }
+  }
+    
 
       return action;
     },

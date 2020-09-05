@@ -116,11 +116,10 @@ import {
                   `materialIssues[0].indent.indentDetails`,
                   []
                 ); 
-               
-                indentDetails = indentDetails.filter(x=> x.material.code === Material[0].materialCode)
-                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0]; 
                 if(Material && Material[0])
                 {
+                  indentDetails = indentDetails.filter(x=> x.material.code === Material[0].materialCode)
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.id",Material[0].id));
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.tenantId",getTenantId()));
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.name",Material[0].name));
