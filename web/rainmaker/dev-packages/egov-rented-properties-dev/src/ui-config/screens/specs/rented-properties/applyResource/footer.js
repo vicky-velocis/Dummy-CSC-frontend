@@ -1020,10 +1020,6 @@ export const footer = getCommonApplyFooter({
 
     switch (status) {
       case "OT_APPROVED":
-      case "OT_PENDINGCLAPPROVAL": 
-      case "OT_PENDINGSAAPPROVAL" : 
-      case "OT_PENDINGCAAPPROVAL":
-    
           if(process.env.REACT_APP_NAME === "Citizen"){
             downloadMenu = [
               receiptDownloadObject,
@@ -1043,52 +1039,67 @@ export const footer = getCommonApplyFooter({
               applicationPrintObject
             ];
           }
-     
+      break;    
+      case "OT_PENDINGCLAPPROVAL": 
+      case "OT_REJECTEDPAID":  
+          downloadMenu = [
+              receiptDownloadObject,
+              applicationDownloadObjectForOT              
+            ];
        
         break;
       case "DC_APPROVED":
+          if(process.env.REACT_APP_NAME === "Citizen"){
+            downloadMenu = [
+              receiptDownloadObjectForDC,
+              applicationDownloadObjectForDC,
+            ];
+            printMenu = [
+              applicationPrintObject
+            ];
+          }else{
+            printMenu = [
+              applicationPrintObject
+            ];
+            downloadMenu = [
+              receiptDownloadObjectForDC,
+              applicationDownloadObjectForDC,
+              certificateDownloadObjectDC
+            ];
+          }
+        break;
+
       case "DC_REJECTEDPAID": 
       case "DC_PENDINGCLAPPROVAL":  
-      case "DC_PENDINGCAAPPROVAL":
         
-        if(process.env.REACT_APP_NAME === "Citizen"){
           downloadMenu = [
             receiptDownloadObjectForDC,
             applicationDownloadObjectForDC,
           ];
           printMenu = [
             applicationPrintObject
-          ];
-        }else{
-          printMenu = [
-            applicationPrintObject
-          ];
-          downloadMenu = [
-            receiptDownloadObjectForDC,
-            applicationDownloadObjectForDC,
-            certificateDownloadObjectDC
-          ];
-        }
-         
-          
+          ];    
         break;
+
       case 'MG_APPROVED':  
-          downloadMenu = [
-            applicationDownloadObjectForMG,
-            certificateDownloadObjectMG
-          ];
-          break;
+       if(process.env.REACT_APP_NAME === 'Citizen'){
+        downloadMenu = [
+          applicationDownloadObjectForMG,
+        ];
+       }else{
+        downloadMenu = [
+          applicationDownloadObjectForMG,
+          certificateDownloadObjectMG
+        ];
+       }
+          break;  
 
       case "MG_PENDINGCLVERIFICATION":
-      case "MG_PENDINGJAVERIFICATION":
-      case "MG_PENDINGSAVERIFICATION":
-      case "MG_PENDINGCLARIFICATION":
       case "MG_PENDINGSIVERIFICATION":
-      case "MG_PENDINGCAAPPROVAL":
-      case "MG_PENDINGAPRO":
-      case "MG_REJECTED":
-      case "MG_PENDINGGRANTDETAIL": 
       case "MG_PENDINGAPPROVAL":
+      case "MG_PENDINGGRANTDETAIL": 
+      case "MG_PENDINGCLARIFICATION":
+      case "MG_REJECTED":
     
           downloadMenu = [
             applicationDownloadObjectForMG          
@@ -1103,7 +1114,8 @@ export const footer = getCommonApplyFooter({
       case "DC_PENDINGAPRO":
       case "DC_REJECTED":
       case "DC_PENDINGPAYMENT":
-
+      case "DC_PENDINGCAAPPROVAL":      
+      case "DC_PENDINGSAAPPROVAL":  
 
           downloadMenu = [
             applicationDownloadObjectForDC
@@ -1115,14 +1127,15 @@ export const footer = getCommonApplyFooter({
           case "OT_PENDINGSAVERIFICATION":
           case "OT_PENDINGCLARIFICATION":
           case "OT_PENDINGSIVERIFICATION":
+          case "OT_PENDINGCAAPPROVAL":  
           case "OT_PENDINGAPRO":
           case "OT_REJECTED":
           case "OT_PENDINGPAYMENT":
-          case "OT_REJECTEDPAID":
+          case "OT_PENDINGSAAPPROVAL": 
+
               downloadMenu = [
                 applicationDownloadObjectForOT
               ];
-             
       break; 
     default:
       break;    
