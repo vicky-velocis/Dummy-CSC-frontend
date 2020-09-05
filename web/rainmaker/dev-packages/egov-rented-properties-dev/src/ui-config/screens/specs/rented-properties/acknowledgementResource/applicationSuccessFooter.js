@@ -189,7 +189,7 @@ export const applicationSuccessFooter = (
             labelKey: (type == "NOTICE_GENERATION") ? "TL_APPLICATION_BUTTON_DOWN_CONF" : "RP_DOWNLOAD_RECEIPT"
           })
         },
-        visible : true
+        visible : (type == "NOTICE_GENERATION") ? true : false
       },
       printFormButton: {
         componentPath: "Button",
@@ -208,7 +208,7 @@ export const applicationSuccessFooter = (
             labelKey: (type == "NOTICE_GENERATION") ? "TL_APPLICATION_BUTTON_PRINT_CONF" : "RP_PRINT_RECEIPT"
           })
         },
-        visible: true
+        visible: (type == "NOTICE_GENERATION") ? true : false
       }
     });
   }
