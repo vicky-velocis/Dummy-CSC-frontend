@@ -70,8 +70,6 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
     let owners = properties[0].owners
     owners = owners.map(item => ({...item , ownerDetails: {...item.ownerDetails, posessionStartdate: !!item.isPrimaryOwner ? 
        item.ownerDetails.posessionStartdate : parseInt(item.ownerDetails.allotmentStartdate)}}))
-    // properties[0].owners = properties[0].owners.filter(item => item.isPrimaryOwner === false).map(e => ({...e, ownerDetails : {...e.ownerDetails, posessionStartdate: e.ownerDetails.allotmentStartdate}}))
-    properties[0].owners = properties[0].owners.reverse()
     const grandDetails=properties[0].grantDetails
     let state = properties[0].masterDataState;
     let applicationDocuments = properties[0].propertyDetails.applicationDocuments || [];
