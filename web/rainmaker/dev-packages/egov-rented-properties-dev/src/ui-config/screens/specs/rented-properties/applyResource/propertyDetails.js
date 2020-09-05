@@ -39,23 +39,6 @@ export const colonyFieldConfig = {
     errorMessage: "RP_ERR_COLONY_FIELD",
 }
 
-export const colonyFieldConfigTextbox = {
-    label: {
-        labelName: "Colony",
-        labelKey: "RP_COLONY_LABEL"
-    },
-    placeholder: {
-        labelName: "Enter Colony",
-        labelKey: "RP_COLONY_NAME_PLACEHOLDER"
-    },
-    gridDefination: {
-        xs: 12,
-        sm: 6
-    },
-    required: true,
-    errorMessage: "RP_ERR_COLONY_FIELD",
-  }
-
 export const colonyFieldDup = {
   ...colonyFieldConfig,
   required:false,
