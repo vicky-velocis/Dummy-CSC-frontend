@@ -115,6 +115,10 @@ const getTransferIndentData = async (action, state, dispatch) => {
         key: "indentType",
         value: IndentConfigType().IndntType.INDENT_TFR
       },
+      {
+        key: "indentStatus",
+        value: IndentConfigType().indentStatus
+      },
     ];
     try {
       let response = await getSearchResults(queryObject, dispatch,"indents");

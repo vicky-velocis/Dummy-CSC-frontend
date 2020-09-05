@@ -64,10 +64,10 @@ const createUpdateFineMasterDetails = async (state, dispatch, applnid) => {
           )
         );
         dispatch(prepareFinalObject("FineMaster", {}));
-        showHideAdhocPopup(state, dispatch, "search");
+      //  showHideAdhocPopup(state, dispatch, "search");
         searchResultApiResponse("", state, dispatch);
         //window.location.reload();
-        setTimeout(() => window.location.reload(), 5000);
+        setTimeout(() => window.location.reload(), 1000);
       }
       else if (responseStatus === "InValidStartDate") {
         dispatch(
@@ -641,7 +641,7 @@ export const adhocPopup = getCommonContainer({
           action: "condition",
           callBack: (state, dispatch) => {
             dispatch(prepareFinalObject("FineMaster", []));
-            showHideAdhocPopup(state, dispatch, "search");
+         //   showHideAdhocPopup(state, dispatch, "search");
             setTimeout(() => window.location.reload(), 1000);
             // const objectJsonPath = `components.adhocDialog.children.popup.children.addFineMasterCard.children`;
             // const children = get(

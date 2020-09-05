@@ -4,7 +4,13 @@ import {
     getCommonContainer
   } from "egov-ui-framework/ui-config/screens/specs/utils";  
   import { footer } from "./creatematerialindentnoteResource/footer";
-  import { getstoreTenantId,getStoresSearchResults, getMaterialIndentSearchResults,getMaterialBalanceRateResults} from "../../../../ui-utils/storecommonsapi";
+  import { 
+    getstoreTenantId,
+    getStoresSearchResults, 
+    getMaterialIndentSearchResults,
+    getMaterialBalanceRateResults,
+    getmaterialissuesSearchResults
+  } from "../../../../ui-utils/storecommonsapi";
   import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
   import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
   import { otherDetails } from "./creatematerialindentnoteResource/other-details";
@@ -142,7 +148,7 @@ export const header = getCommonContainer({
      if(payload){
        if (payload.Employees) {
          const {screenConfiguration} = state;
-          // const {stores} = screenConfiguration.preparedFinalObject;
+         const {designationsById} = state.common;
           const empdesignation = payload.Employees[0].assignments[0].designation;
          const empDetails =
          payload.Employees.filter((item, index) =>  stores[0].storeInCharge.code === item.code);
@@ -244,7 +250,30 @@ export const header = getCommonContainer({
   };
   const getIndentData = async (action, state, dispatch) => {
     const tenantId = getTenantId();
-    const IndentId = getQueryArg(window.location.href, "IndentId");
+    const issueNumber = getQueryArg(window.location.href, "applicationNumber");
+    let Indent=[];
+    let IndentId =''
+    if(issueNumber)
+    {
+      let queryObjectIndent = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "issueNumber",
+          value: issueNumber
+        }
+      ];
+      let indentissuedata = await getmaterialissuesSearchResults(queryObjectIndent, dispatch);
+      indentissuedata = indentissuedata.materialIssues.filter(x=>x.issueNumber === issueNumber)
+      if(indentissuedata && indentissuedata[0])
+      {
+        IndentId = indentissuedata[0].indent.id;
+      }
+    }    
+    else   
+    IndentId = getQueryArg(window.location.href, "IndentId");
     let queryObject = [
       {
         key: "tenantId",

@@ -171,7 +171,7 @@ import {
                 required: false,
                 visible:true,
                 pattern: getPattern("Name") || null,
-                jsonPath: "indents[0].indentDetails[0].project.code",
+                jsonPath: "indents[0].indentDetails[0].projectCode.code",
                 //sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
                 props: {
                   data: [

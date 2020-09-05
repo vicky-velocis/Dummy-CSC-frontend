@@ -155,7 +155,7 @@ export const header = getCommonContainer({
             // fetching employee designation
     const userInfo = JSON.parse(getUserInfo());
     if(userInfo){
-      dispatch(prepareFinalObject("indents[0].createdByName", userInfo.name));
+      dispatch(prepareFinalObject("indents[0].indentCreatedBy", userInfo.name));
       const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
       try { 
         const payload = await httpRequest(

@@ -77,6 +77,8 @@ export const callBackForNext = async (state, dispatch) => {
         moveToReview(dispatch);
       }
       else{
+        if(activeStep===1)
+        {
         let cardJsonPath =
           "components.div.children.formwizardSecondStep.children.MTONDetails.children.cardContent.children.MTONDetailsCard.props.items";
           let pagename = "create-material-transfer-outward";
@@ -153,6 +155,9 @@ export const callBackForNext = async (state, dispatch) => {
 
             }
           }
+        }
+        else
+            changeStep(state, dispatch);
       }
      
     } else {
@@ -329,7 +334,7 @@ export const footer = getCommonApplyFooter({
       },
       previousButtonLabel: getLabel({
         labelName: "Previous Step",
-        labelKey: "HR_COMMON_BUTTON_PREV_STEP"
+        labelKey: "STORE_COMMON_BUTTON_PREV_STEP"
       })
     },
     onClickDefination: {
@@ -352,7 +357,7 @@ export const footer = getCommonApplyFooter({
     children: {
       nextButtonLabel: getLabel({
         labelName: "Next Step",
-        labelKey: "HR_COMMON_BUTTON_NXT_STEP"
+        labelKey: "STORE_COMMON_BUTTON_NXT_STEP"
       }),
       nextButtonIcon: {
         uiFramework: "custom-atoms",
@@ -381,7 +386,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "HR_COMMON_BUTTON_SUBMIT"
+        labelKey: "STORE_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",

@@ -13,6 +13,10 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import{GetMdmsNameBycode,getMaterialBalanceRateResults} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
+import {
+  getLocalizationCodeValue,
+} from "../../utils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const MTONHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -73,6 +77,7 @@ export const MTONHeader = getCommonCard({
           );
           let material=[];
           let matcode =[];
+          let matname =[];
           for (let index = 0; index < indentDetails.length; index++) {
             const element = indentDetails[index];
 
@@ -81,11 +86,11 @@ export const MTONHeader = getCommonCard({
             dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].userQuantity`, element.userQuantity));
             dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].material.code`, element.material.code));
             //create material list for card item
-           
+           let materialName =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code)
             material.push(
               {
                 materialcode:element.material.code,
-                materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
+                materialName:materialName,
                 uomcode:element.uom.code,
                 uomname:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",element.uom.code),
                 id:element.id,
@@ -96,9 +101,14 @@ export const MTONHeader = getCommonCard({
                 //unitRate://to be deside
               });
               matcode.push( element.material.code)
+              matname.push( materialName)
           }  
           
           let matcodes_= matcode.map(itm => {
+            return `${itm}`;
+          })
+          .join() || "-"
+          let matname_= matname.map(itm => {
             return `${itm}`;
           })
           .join() || "-"
@@ -106,7 +116,20 @@ export const MTONHeader = getCommonCard({
           getMaterialBalanceRateResults(queryObject)
           .then(async response =>{
             if(response){
+              
               dispatch(prepareFinalObject("indentsOutmaterial", response.MaterialBalanceRate));
+              if(response.MaterialBalanceRate.length ===0)
+              {
+
+                let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_BALANCE_VALIDATION")
+                const errorMessage = {
+                      
+                  labelName: "No Balance or all QTY is used for",
+                  labelKey:   LocalizationCodeValue+' store  '+indents[0].issueStore.name +' and Material '+matname_
+                };
+                dispatch(toggleSnackbar(true, errorMessage, "warning"));
+                
+              }
               
             }
           }); 

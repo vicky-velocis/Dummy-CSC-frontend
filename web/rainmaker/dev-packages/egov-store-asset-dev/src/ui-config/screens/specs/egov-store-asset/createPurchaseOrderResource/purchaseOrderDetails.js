@@ -162,6 +162,24 @@ const purchaseOrderDetailsCard = {
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].issuedQuantity"
             })
           },
+          poOrderedQuantity: {
+            ...getTextField({
+              label: {
+                labelName: "PO Ordered Quantity(Issued)",
+                labelKey: "STORE_MATERIAL_PO_ISSUED"
+              },
+              placeholder: {
+                labelName: "PO Ordered Quantity(Issued)",
+                labelKey: "STORE_MATERIAL_PO_ISSUED"
+              },
+              required: false,
+              props: {
+                disabled:true,     
+              },
+              pattern: getPattern("numeric-only"),
+              jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].poOrderedQuantity"
+            })
+          },
           orderQuantity: {
             ...getTextField({
               label: {

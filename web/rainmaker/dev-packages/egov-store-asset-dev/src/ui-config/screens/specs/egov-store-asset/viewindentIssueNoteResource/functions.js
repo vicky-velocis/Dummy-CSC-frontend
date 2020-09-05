@@ -346,6 +346,9 @@ if(response && response[0])
    let Uomname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.common-masters.UOM",element.uom.code)  
    let matname = GetMdmsNameBycode(state, dispatch,"viewScreenMdmsData.store-asset.Material",element.material.code)  
    set(response[0], `materialIssueDetails[${index}].material.name`, matname);
+   set(response[0], `materialIssueDetails[${index}].receiptId`, element.materialIssuedFromReceipts[index].materialReceiptId);
+   //quantityIssued
+   set(response[0], `materialIssueDetails[${index}].indentDetail.userQuantity`, Number(element.quantityIssued));
    set(response[0], `materialIssueDetails[${index}].uom.name`, Uomname);
    if(Number(response[0].indent.indentDetails[index].indentQuantity))
    set(response[0], `materialIssueDetails[${index}].indentDetail.indentQuantity`, Number(response[0].indent.indentDetails[index].indentQuantity) );
@@ -363,22 +366,23 @@ if(response && response[0])
   // dispatch(prepareFinalObject(`materialIssues[0].indentQuantity`, totalIndentQty));
   // dispatch(prepareFinalObject(`materialIssues[0].totalQty`, TotalQty));
   // dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, totalvalue));
-  let IndentId = getQueryArg(window.location.href, "IndentId");
-  let queryObject_ = [
+  // let IndentId = getQueryArg(window.location.href, "IndentId");
+  // let queryObject_ = [
     
-    {
-      key: "ids",
-      value: IndentId
-    },
-    {
-      key: "tenantId",
-      value: tenantId
-    }
-  ];
-  let indentres = await getMaterialIndentSearchResults(queryObject, dispatch);
-  dispatch(prepareFinalObject("indents", get(indentres, "indents")));
+  //   {
+  //     key: "ids",
+  //     value: IndentId
+  //   },
+  //   {
+  //     key: "tenantId",
+  //     value: tenantId
+  //   }
+  // ];
+  
 }
+
   dispatch(prepareFinalObject("materialIssues", response));
- 
+  // let indentres = await getMaterialIndentSearchResults(queryObject, dispatch);
+  // dispatch(prepareFinalObject("indents", get(indentres, "indents")));
   furnishindentData(state, dispatch);
 };

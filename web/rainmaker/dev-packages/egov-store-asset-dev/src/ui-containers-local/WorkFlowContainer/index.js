@@ -274,9 +274,16 @@ class WorkFlowContainer extends React.Component {
         editUrl = `/egov-store-asset/create-material-transfer-outward?id=${id}&tenantId=${tenant}`;
       } else if (businessId.includes("MRIN")) {
         let indentissuedata = get(preparedFinalObject, dataPath, [])
-        indentissuedata = indentissuedata[0];
+        indentissuedata = indentissuedata[0];        
+        if(indentissuedata !== undefined)
+        {
         let issueIndentNumber = indentissuedata.indent.id
-        editUrl = `/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${issueIndentNumber}`;
+        editUrl = `/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${businessId}&IndentId=${issueIndentNumber}`;
+        }
+        else
+        {
+          editUrl = `/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${businessId}`;
+        }
       }
     }
     else if (dataPath === "purchaseOrders") {
