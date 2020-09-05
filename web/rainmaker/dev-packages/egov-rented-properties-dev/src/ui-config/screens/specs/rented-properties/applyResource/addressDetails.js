@@ -223,7 +223,6 @@ const getOwnershipAddressDetails = () => {
         header: propertyHeader,
         detailsContainer: getCommonContainer({
             ownershipTransitNumber: getTextField(ownershipTransitNumberField),
-            //areaName: getTextField({...colonyNameField, jsonPath: "Owners[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
             colony:getSelectField({...colonyFieldDup,jsonPath:"Owners[0].property.colony"}),
             pincode: getTextField({...pincodeField, jsonPath: "Owners[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
         })
@@ -235,7 +234,6 @@ const getOwnershipAddressDetailsMortgage = () => {
       header: propertyHeader,
       detailsContainer: getCommonContainer({
           ownershipTransitNumber: getTextField(mortgageTransitNumberField),
-         // areaName: getTextField({...colonyNameField, jsonPath: "MortgageApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
          colony:getSelectField({...colonyFieldDup,jsonPath:"MortgageApplications[0].property.colony"}),
          pincode: getTextField({...pincodeField, jsonPath: "MortgageApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
       })
@@ -246,7 +244,6 @@ const getTransitSitePropertyDetails = () => {
       header: propertyHeader,
       detailsContainer: getCommonContainer({
           transitNumber: getTextField(TransitsiteTransitNumberField),
-         // areaName: getTextField({...colonyNameField,jsonPath: "PropertyImagesApplications[0].property.colony", required: false, props: {...colonyNameField.props, disabled: true}}),
          colony:getSelectField({...colonyFieldDup,jsonPath:"PropertyImagesApplications[0].property.colony"}),
          pincode: getTextField({...pincodeField, jsonPath: "PropertyImagesApplications[0].property.pincode", required: false, props: {...pincodeField.props, disabled: true}}),
       })
