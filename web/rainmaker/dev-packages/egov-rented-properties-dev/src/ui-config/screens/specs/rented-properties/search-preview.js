@@ -285,7 +285,7 @@ const handleClose = (state,dispatch) => {
 const update = async (state, dispatch) => {
   const {Properties} = state.screenConfiguration.preparedFinalObject
   try {
-  await httpRequest(
+  const response = await httpRequest(
     "post",
     "/rp-services/property/_update",
     "",
@@ -298,8 +298,9 @@ const update = async (state, dispatch) => {
     "props.open",
     false
   ))
-
-  await searchResults(action, state, dispatch, transitNumber) 
+  if(!!response && !!response.Properties.length) {
+    dispatch(prepareFinalObject("Properties", response.Properties))
+  }
 } catch (error) {
   dispatch(
     toggleSnackbar(
