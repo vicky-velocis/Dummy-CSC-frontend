@@ -67,15 +67,9 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
   let payload = await getSearchResults(queryObject);
   if(payload) {
     let properties = payload.Properties;
-    // let i;
-    // for (i = 0; i < properties[0].owners.length; i++) {
-    // if(properties[0].owners[i].isPrimaryOwner === false){
-    // properties[0].owners[i].ownerDetails.posessionStartdate = parseInt(properties[0].owners[i].ownerDetails.allotmentStartdate)
-    // }
-    // }
-    properties[0].owners.map(item => (item.isPrimaryOwner === false) ? 
-                  item.ownerDetails.posessionStartdate = parseInt(item.ownerDetails.allotmentStartdate) 
-                      : item.ownerDetails.posessionStartdate = item.ownerDetails.posessionStartdate)
+    let owners = properties[0].owners
+    owners = owners.map(item => ({...item , ownerDetails: {...item.ownerDetails, posessionStartdate: !!item.isPrimaryOwner ? 
+       item.ownerDetails.posessionStartdate : parseInt(item.ownerDetails.allotmentStartdate)}}))
     // properties[0].owners = properties[0].owners.filter(item => item.isPrimaryOwner === false).map(e => ({...e, ownerDetails : {...e.ownerDetails, posessionStartdate: e.ownerDetails.allotmentStartdate}}))
     properties[0].owners = properties[0].owners.reverse()
     const grandDetails=properties[0].grantDetails
@@ -94,7 +88,7 @@ export const searchResults = async (action, state, dispatch, transitNumber) => {
     properties[0].propertyDetails.rentIncrementPercentage = (properties[0].propertyDetails.rentIncrementPercentage).toString()
     properties[0].propertyDetails.rentIncrementPeriod = (properties[0].propertyDetails.rentIncrementPeriod).toString()
 
-    properties = [{...properties[0], rentSummary, propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
+    properties = [{...properties[0], owners, rentSummary, propertyDetails: {...properties[0].propertyDetails, applicationDocuments}}]
     dispatch(prepareFinalObject("Properties[0]", properties[0]));
     dispatch(
       prepareFinalObject(
