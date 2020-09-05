@@ -369,34 +369,6 @@ return
                       />
                     </Grid>
                   )}
-                  {/* {showEmployeeList && !!dropDownData.length && (
-                    <Grid
-                      item
-                      sm="12"
-                      style={{
-                        marginTop: 16
-                      }}
-                    >
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "90%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={dropDownData}
-                        optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        onChange={e =>
-                          handleFieldChange(
-                            `${dataPath}.assignee`,
-                            [e.target.value]
-                          )
-                        }
-                        jsonPath={`${dataPath}.assignee[0]`}
-                      />
-                    </Grid>
-                  )} */}
                   <Grid item sm="12">
                     {/* <TextFieldContainer
                       InputLabelProps={{ shrink: true }}
