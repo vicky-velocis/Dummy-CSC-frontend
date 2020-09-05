@@ -679,7 +679,7 @@ const applicantAddressField = {
 
 const getApplicantDetails = () => {
     return {
-        header: rentHolderHeader,
+        header: applicantHeader,
         detailsContainer: getCommonContainer({
             ownerName: getTextField(applicantNameField),
             relationShip: ownerShipRelationShip,

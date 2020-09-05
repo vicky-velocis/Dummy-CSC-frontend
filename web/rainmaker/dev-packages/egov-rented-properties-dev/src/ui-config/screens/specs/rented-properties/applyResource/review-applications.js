@@ -86,6 +86,15 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                 {
                     jsonPath: "Owners[0].ownerDetails.aadhaarNumber" 
                 }
+            ),
+            deathofAllottee: getLabelWithValue(
+                {
+                    labelName: "Aadhar Number",
+                    labelKey: "RP_AADHAR_LABEL"
+                },
+                {
+                    jsonPath: "Owners[0].ownerDetails.dateOfDeathAllottee" 
+                }
             )
         })
     })
