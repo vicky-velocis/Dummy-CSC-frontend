@@ -1134,7 +1134,7 @@ export const footer = getCommonApplyFooter({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
-          style: { textAlign: "right", display: "flex" }
+          style: { textAlign: "right", display: "flex" },
         },
         children: {
           downloadMenu: {
@@ -1146,7 +1146,7 @@ export const footer = getCommonApplyFooter({
                 label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                  leftIcon: "cloud_download",
                 rightIcon: "arrow_drop_down",
-                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
+                props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",marginRight: "10px" }, className: "tl-download-button" },
                 menu: downloadMenu
               }
             }
