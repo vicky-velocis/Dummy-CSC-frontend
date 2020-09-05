@@ -14,7 +14,7 @@ import {
   import set from "lodash/set";
   import { getPaymentGateways } from "../../../../ui-utils/commons";
   import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { BILLING_BUSINESS_SERVICE_OT, BILLING_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
+import { BILLING_BUSINESS_SERVICE_OT, BILLING_BUSINESS_SERVICE_DC, BILLING_BUSINESS_SERVICE_RENT } from "../../../../ui-constants";
 
   const header = getCommonContainer({
     header: getCommonHeader({
@@ -63,6 +63,10 @@ import { BILLING_BUSINESS_SERVICE_OT, BILLING_BUSINESS_SERVICE_DC } from "../../
         }
         case BILLING_BUSINESS_SERVICE_DC: {
           sourceJsonPath = "DuplicateTemp[0].estimateCardData"
+          break
+        }
+        case BILLING_BUSINESS_SERVICE_RENT: {
+          sourceJsonPath = "PropertiesTemp[0].estimateCardData"
           break
         }
       }

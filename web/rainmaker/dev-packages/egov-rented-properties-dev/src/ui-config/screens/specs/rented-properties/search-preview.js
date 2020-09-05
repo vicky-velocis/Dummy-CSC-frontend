@@ -20,6 +20,7 @@ import set from "lodash/set"
 import {applicationNumber} from './apply'
 import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 const userInfo = JSON.parse(getUserInfo());
+const tenantId = getTenantId();
 const {roles = []} = userInfo
 const findItem = roles.find(item => item.code === "RP_CLERK");
 
@@ -261,10 +262,11 @@ const buttonComponent = (label) => ({
   onClickDefination: {
     action: "condition",
     callBack: (state, dispatch) => {
+      debugger
       const { Properties, PropertiesTemp } = state.screenConfiguration.preparedFinalObject;
       const documents = PropertiesTemp[0].reviewDocData;
       set(Properties[0],"additionalDetails.documents",documents)
-      downloadCertificateForm(Properties, [],'original');
+      downloadCertificateForm(Properties, [],'original',tenantId);
     }
   }
 })
