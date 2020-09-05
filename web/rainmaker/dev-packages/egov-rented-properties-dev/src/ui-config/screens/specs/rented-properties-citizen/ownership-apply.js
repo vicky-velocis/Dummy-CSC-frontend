@@ -11,7 +11,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getOwnershipSearchResults, setDocsForEditFlow, setDocumentData } from "../../../../ui-utils/commons";
 import {applicationNumber} from '../rented-properties/apply'
 import { setApplicationNumberBox } from "../../../../ui-utils/apply";
-
+import{getColonyTypes} from "../rented-properties-citizen/duplicate-copy-apply"
 const header = getCommonContainer({
   header: getCommonHeader({
     labelName: "Apply for Ownership Transfer",
@@ -20,22 +20,6 @@ const header = getCommonContainer({
 applicationNumber
 })
 
-export const getColonyTypes = async(action, state, dispatch) => {
-  const colonyTypePayload = [{
-    moduleName: "RentedProperties",
-    masterDetails: [{name: "colonies"}, {name: "applications"}]
-  }
-]
-  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-  const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-  const {colonies = []} = RentedProperties || {}
-    dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
-    const propertyTypes = colonies.map(item => ({
-      code: item.code,
-      label: item.code
-    }))
-    dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
-}
 const getData = async(action, state, dispatch) => {
   getColonyTypes(action, state, dispatch)
   dispatch(

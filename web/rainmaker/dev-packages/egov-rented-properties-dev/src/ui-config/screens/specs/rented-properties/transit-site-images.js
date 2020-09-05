@@ -9,7 +9,7 @@ import set from "lodash/set";
 import get from "lodash/get";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../ui-utils";
-
+import {getColonyTypes} from "../rented-properties/apply"
 const getMdmsData = async (dispatch, body) => {
   let mdmsBody = {
         MdmsCriteria: {
@@ -30,22 +30,7 @@ const getMdmsData = async (dispatch, body) => {
       console.log(e);
   }
 };
-export const getColonyTypes = async(action, state, dispatch) => {
-  const colonyTypePayload = [{
-    moduleName: "RentedProperties",
-    masterDetails: [{name: "colonies"}, {name: "applications"}]
-  }
-]
-  const colonyRes = await getMdmsData(dispatch, colonyTypePayload);
-  const {RentedProperties} = !!colonyRes && !!colonyRes.MdmsRes ? colonyRes.MdmsRes : {}
-  const {colonies = []} = RentedProperties || {}
-    dispatch(prepareFinalObject("applyScreenMdmsData.rentedPropertyColonies", colonies))
-    const propertyTypes = colonies.map(item => ({
-      code: item.code,
-      label: item.code
-    }))
-    dispatch(prepareFinalObject("applyScreenMdmsData.propertyTypes", propertyTypes))
-}
+
 const header = getCommonHeader({
     labelName: "Upload Transit Site Images",
     labelKey: "RP_TRANSIT_SITE_IMAGES"
