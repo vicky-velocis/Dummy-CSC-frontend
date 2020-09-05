@@ -80,7 +80,7 @@
     "egov-pms": "babel dev-packages/egov-pms-dev/src --out-dir packages/lib/egov-pms --copy-files",
     "egov-pr": "babel dev-packages/egov-pr-dev/src --out-dir packages/lib/egov-pr --copy-files",
     "egov-store-asset": "babel dev-packages/egov-store-asset-dev/src --out-dir packages/lib/egov-store-asset --copy-files",
-     "egov-nulm": "babel dev-packages/egov-nulm-dev/src --out-dir packages/lib/egov-nulm --copy-files",
+    "egov-nulm": "babel dev-packages/egov-nulm-dev/src --out-dir packages/lib/egov-nulm --copy-files",
     "egov-wns": "babel dev-packages/egov-wns-dev/src --out-dir packages/lib/egov-wns --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
     "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-framework-core --ignore egov-ui-kit-dev --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-dev --ignore egov-rented-properties-dev --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-abg-dev --ignore egov-noc-dev --ignore egov-opms-dev --ignore egov-hc-dev  --ignore egov-pms-dev --ignore egov-echallan-dev  --ignore egov-boilerplate-dev --ignore egov-common-dev --ignore egov-bpa-dev --ignore egov-wns-dev --ignore egov-store-asset-dev --ignore egov-nulm-dev",
@@ -89,14 +89,14 @@
     "build-css-common-rp": "run-p build-css-egov-ui-kit build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence build-css-egov-rented-properties",
     "transpile-common-modules-rp": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-rented-properties",
     "watch_rp": "babel dev-packages/egov-rented-properties-dev/src --out-dir packages/lib/egov-rented-properties --copy-files --watch"
-  },
+    },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "lerna": "^3.18.3",
+    "lerna": "^3.22.1",
     "run-p": "0.0.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1"
@@ -112,6 +112,7 @@
     "node-sass-chokidar": "^1.3.4",
     "npm-run-all": "^4.1.5",
     "react-quill": "^1.3.5",
-    "xlsx": "^0.16.0"
+    "xlsx": "^0.16.0",
+    "yarn": "^1.22.4"
   }
 }

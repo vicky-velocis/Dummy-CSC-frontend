@@ -214,6 +214,20 @@ export const searchMortgage = async (state, dispatch, onInit, offset, limit , hi
   }
 }
 
+export const formatAmount = (x) => {
+  
+  return x.toString().split('.')[0].length > 3 ? x.toString().substring(0,x.toString().split('.')[0].length-3).replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + x.toString().substring(x.toString().split('.')[0].length-3): x.toString();
+  
+}
+
+export const changeType = (type) => {
+    if(type === 'C'){
+      return "Payment"
+      }else
+      {
+        return "Rent"
+  }
+}
 export const searchAccountStatement = async (state, dispatch) => {
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
@@ -251,15 +265,17 @@ export const searchAccountStatement = async (state, dispatch) => {
               response.RentAccountStatements
             )
           );
+  
           let data = response.RentAccountStatements.map(item => ({
-            [DATE]: moment(new Date(item.date)).format("DD/MM/YYYY") || "-",
-            [AMOUNT]: item.amount.toFixed(2) || "-",
-            [TYPE]: item.type || "-",
-            [REMAINING_INTEREST]: item.remainingInterest.toFixed(2),
-            [REMAINING_PRINCIPAL]: item.remainingPrincipal.toFixed(2),
-            [TOTAL_DUE]: item.dueAmount.toFixed(2),
-            [ACCOUNT_BALANCE]: item.remainingBalance.toFixed(2)
+            [DATE]: moment(new Date(item.date)).format("DD-MMM-YYYY") || "-",
+            [AMOUNT]: 'Rs ' + formatAmount(item.amount.toFixed(2)) || "-",
+            [TYPE]: changeType(item.type) || "-",
+            [REMAINING_INTEREST]: 'Rs ' + formatAmount(item.remainingInterest.toFixed(2)),
+            [REMAINING_PRINCIPAL]: 'Rs ' + formatAmount(item.remainingPrincipal.toFixed(2)),
+            [TOTAL_DUE]: 'Rs ' + formatAmount(item.dueAmount.toFixed(2)),
+            [ACCOUNT_BALANCE]: 'Rs ' + formatAmount(item.remainingBalance.toFixed(2))
           }));
+         
           dispatch(
             handleField(
               "search-account-statement",
@@ -294,10 +310,18 @@ export const searchAccountStatement = async (state, dispatch) => {
 export const downloadAccountStatementPdf = async(state, dispatch) => {
   const { RentAccountStatements } = state.screenConfiguration.preparedFinalObject;
   const {Properties} = state.screenConfiguration.preparedFinalObject;
-  const data = RentAccountStatements.map(item =>{
-    item.date = moment(new Date(item.date)).format("DD/MM/YYYY") || "-"
-    return item
-  });
+  const data = RentAccountStatements.map(item =>
+    ({
+      ...item,
+      date: moment(new Date(item.date)).format("DD/MM/YYYY") || "-",
+      amount : item.amount.toFixed(2) || "-",
+      type : item.type || "-",
+      remainingInterest : item.remainingInterest.toFixed(2),
+      remainingPrincipal : item.remainingPrincipal.toFixed(2),
+      dueAmount : item.dueAmount.toFixed(2),
+      remainingBalance : item.remainingBalance.toFixed(2)
+    })
+  )
   const mode = "download"
   let   queryStr = [{
     key: "key",
