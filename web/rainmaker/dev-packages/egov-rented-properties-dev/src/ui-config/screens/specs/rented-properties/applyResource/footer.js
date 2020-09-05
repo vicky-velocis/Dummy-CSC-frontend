@@ -1065,10 +1065,16 @@ export const footer = getCommonApplyFooter({
           
         break;
       case 'MG_APPROVED':  
-          downloadMenu = [
-            applicationDownloadObjectForMG,
-            certificateDownloadObjectMG
-          ];
+       if(process.env.REACT_APP_NAME === 'Citizen'){
+        downloadMenu = [
+          applicationDownloadObjectForMG,
+        ];
+       }else{
+        downloadMenu = [
+          applicationDownloadObjectForMG,
+          certificateDownloadObjectMG
+        ];
+       }
           break;
 
       case "MG_PENDINGCLVERIFICATION":
