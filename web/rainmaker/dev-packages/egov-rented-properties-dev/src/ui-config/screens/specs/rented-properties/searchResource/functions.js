@@ -312,6 +312,12 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
   const {Properties} = state.screenConfiguration.preparedFinalObject;
   const data = RentAccountStatements.map(item =>{
     item.date = moment(new Date(item.date)).format("DD/MM/YYYY") || "-"
+    item.amount = item.amount.toFixed(2) || "-",
+    item.type = item.type || "-",
+    item.remainingInterest = item.remainingInterest.toFixed(2)
+    item.remainingPrincipal = item.remainingPrincipal.toFixed(2)
+    item.dueAmount = item.dueAmount.toFixed(2)
+    item.remainingBalance = item.remainingBalance.toFixed(2)
     return item
   });
   const mode = "download"
