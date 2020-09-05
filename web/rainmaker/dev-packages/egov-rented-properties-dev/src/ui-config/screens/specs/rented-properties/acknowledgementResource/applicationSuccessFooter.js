@@ -106,20 +106,18 @@ export const applicationSuccessFooter = (
                 break;
 
               default:
-                
-                let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
-                let transitNumber = consumerCodes.split('-')[1]
-                let queryObject = [
-                  { key: "transitNumber", value: transitNumber }
-                ];
-                let payload =  await getSearchResults(queryObject);
-                  let {Properties} = payload
-                  Properties = Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
-                    balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
-                    balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
-                  }}))
-                  dispatch(prepareFinalObject("Properties", Properties))
+                  let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
                   if(consumerCodes.startsWith('SITE')){
+                    let transitNumber = consumerCodes.split('-')[1]
+                    let queryObject = [
+                      { key: "transitNumber", value: transitNumber }
+                    ];
+                    let payload =  await getSearchResults(queryObject);
+                     let properties = payload.Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
+                        balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
+                        balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
+                      }}))
+                      dispatch(prepareFinalObject("Properties", properties))
                     let { Properties} = state.screenConfiguration.preparedFinalObject;
                     let codes = getQueryArg(window.location.href, "applicationNumber");
                     let id = getQueryArg(window.location.href, "tenantId");
@@ -196,20 +194,18 @@ export const applicationSuccessFooter = (
                 break;
 
               default:
-                let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
-                let transitNumber = consumerCodes.split('-')[1]
-                let queryObject = [
-                  { key: "transitNumber", value: transitNumber }
-                ];
-                let payload =  await getSearchResults(queryObject);
-                if(payload){
-                  let {Properties} = payload
-                  Properties = Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
-                    balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
-                    balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
-                  }}))
-                  dispatch(prepareFinalObject("Properties", Properties))
+                  let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
                   if(consumerCodes.startsWith('SITE')){
+                    let transitNumber = consumerCodes.split('-')[1]
+                    let queryObject = [
+                      { key: "transitNumber", value: transitNumber }
+                    ];
+                    let payload =  await getSearchResults(queryObject);
+                      let properties = payload.Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
+                        balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
+                        balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
+                      }}))
+                      dispatch(prepareFinalObject("Properties", properties))
                     let { Properties} = state.screenConfiguration.preparedFinalObject;
                     let codes = getQueryArg(window.location.href, "applicationNumber");
                     let id = getQueryArg(window.location.href, "tenantId");
@@ -229,7 +225,7 @@ export const applicationSuccessFooter = (
                     ]
                     download(receiptQueryString, OwnersData,[], userInfo.name,'payment','print');             
                   }
-                }
+              
                 
                 break;
             }
