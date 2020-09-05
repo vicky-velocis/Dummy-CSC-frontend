@@ -44,18 +44,8 @@ export const colonyFieldDup = {
   required:false,
   props: {
     disabled: true
-  },
-  beforeFieldChange: (action, state, dispatch) => {
-      const rentedPropertyColonies = get(state.screenConfiguration.preparedFinalObject, "applyScreenMdmsData.rentedPropertyColonies") || []
-      const findItem = rentedPropertyColonies.find(item => item.code === action.value)
-      const propertyAreas = !!findItem ? findItem.area.map(item => ({
-        code: item.code,
-        label: item.sqyd
-      })) : [];
-      const rentPerSqyd = !!findItem ? findItem.costPerSqyd : ""
-      dispatch(prepareFinalObject("applyScreenMdmsData.propertyAreas", propertyAreas))
-      dispatch(prepareFinalObject("Properties[0].propertyDetails.rentPerSqyd", rentPerSqyd))
-    }}
+  }}
+
 const colonyField = {
     ...colonyFieldConfig,
     beforeFieldChange: (action, state, dispatch) => {
