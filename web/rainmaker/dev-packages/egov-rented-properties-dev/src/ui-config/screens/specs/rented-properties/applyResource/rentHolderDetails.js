@@ -559,12 +559,14 @@ const ownerShipRelationShipduplicate = {
             {
                 labelName: "Father",
                 labelKey: "COMMON_RELATION_FATHER",
-                value: "FATHER"
+                value: "FATHER",
+                disabled:true
               },
               {
                 label: "Husband",
                 labelKey: "COMMON_RELATION_HUSBAND",
-                value: "HUSBAND"
+                value: "HUSBAND",
+                disabled:true
               }
           ],
           props: {
@@ -587,12 +589,14 @@ const ownerShipRelationShipduplicate = {
             {
                 labelName: "Father",
                 labelKey: "COMMON_RELATION_FATHER",
-                value: "FATHER"
+                value: "FATHER",
+                disabled: true
               },
               {
                 label: "Husband",
                 labelKey: "COMMON_RELATION_HUSBAND",
-                value: "HUSBAND"
+                value: "HUSBAND",
+                disabled: true
               }
           ],
         props: {
