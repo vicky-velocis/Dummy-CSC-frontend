@@ -77,7 +77,6 @@ export const applicationSuccessFooter = (
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            debugger
             console.log(state)
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
@@ -104,7 +103,16 @@ export const applicationSuccessFooter = (
                 set(MortgageApplications[0], "additionalDetails.documents", documentsMG)
                 downloadAcknowledgementFormForCitizen(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData, type, "mortgage");
                 break;
-
+              case null:
+                  let { Properties} = state.screenConfiguration.preparedFinalObject;
+                  let codes = getQueryArg(window.location.href, "applicationNumber");
+                  let id = getQueryArg(window.location.href, "tenantId");
+                    const receiptQuery = [
+                      { key: "consumerCodes", value:codes},
+                      { key: "tenantId", value: id }
+                  ]
+                    download(receiptQuery, Properties,[], userInfo.name,'online-payment');   
+                break;
               default:
                 const data = []
                 let consumerCodes = getQueryArg(window.location.href, "applicationNumber");

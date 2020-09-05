@@ -1551,7 +1551,8 @@ try {
 }
 }
 
-export const download = (receiptQueryString, Properties, data, generateBy,type, mode = "download") => {
+export const download = (receiptQueryString, Properties, data, generatedBy,type, mode = "download") => {
+ debugger
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -1618,7 +1619,7 @@ export const download = (receiptQueryString, Properties, data, generateBy,type, 
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
           Payments,
           Properties,
-          generateBy
+          generatedBy
         }, {
           'Accept': 'application/json'
         }, {
