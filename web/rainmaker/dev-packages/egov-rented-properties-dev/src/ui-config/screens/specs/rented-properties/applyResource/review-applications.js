@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
 import { headerDiv, editSection, areaLabel, pincodeLabel, colonyLabel } from "./review-property";
-
+import { convertEpochToDate, } from "../../utils";
 const freshLicenseEditSection = isEditable => ({
     ...editSection,
     visible: isEditable,
@@ -93,7 +93,7 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                     labelKey: "RP_DATE_DEATH_LABEL_ALLOTEE"
                 },
                 {
-                    jsonPath: "Owners[0].ownerDetails.dateOfDeathAllottee" 
+                    jsonPath: "Owners[0].ownerDetails.dateOfDeathAllottee" , callBack: convertEpochToDate
                 }
             )
         })
