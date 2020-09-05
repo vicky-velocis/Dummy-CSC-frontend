@@ -56,7 +56,7 @@ export const colonyFieldConfigTextbox = {
     errorMessage: "RP_ERR_COLONY_FIELD",
   }
 
-const colonyFieldDup = {
+export const colonyFieldDup = {
   ...colonyFieldConfig,
   required:false,
   props: {
