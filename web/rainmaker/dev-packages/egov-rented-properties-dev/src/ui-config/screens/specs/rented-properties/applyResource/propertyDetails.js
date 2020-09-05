@@ -38,6 +38,7 @@ export const colonyFieldConfig = {
     },
     errorMessage: "RP_ERR_COLONY_FIELD",
 }
+
 export const colonyFieldDup = {
   ...colonyFieldConfig,
   required:false,
