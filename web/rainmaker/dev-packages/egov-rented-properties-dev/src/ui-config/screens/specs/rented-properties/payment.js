@@ -47,7 +47,7 @@ const propertyDetails = getCommonCard({
   header: transitSiteHeader,
   detailsContainer: getCommonContainer({
     transitNumber: getTextField(transitNumberField),
-    colony: getTextField({
+    colony: getSelectField({
       ...colonyFieldConfig,
       props: {
         ...colonyFieldConfig.props,
