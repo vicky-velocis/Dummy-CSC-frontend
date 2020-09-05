@@ -1,7 +1,7 @@
 import { getRentSummaryCard, getCommonApplyFooter } from "../utils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 const { getCommonHeader, getCommonCard, getCommonContainer, getTextField, getSelectField, getCommonGrayCard, getCommonTitle, getLabel } = require("egov-ui-framework/ui-config/screens/specs/utils");
-const { transitSiteHeader, transitNumberLookUp, colonyFieldConfig, pincodeField } = require("./applyResource/propertyDetails");
+const { transitSiteHeader, transitNumberLookUp, colonyFieldConfigTextbox, colonyFieldConfig, pincodeField } = require("./applyResource/propertyDetails");
 const { getRentPaymentPropertyDetails } = require("../../../../ui-utils/apply");
 const { ownerNameField } = require("./applyResource/rentHolderDetails");
 
@@ -42,10 +42,10 @@ const propertyDetails = getCommonCard({
   header: transitSiteHeader,
   detailsContainer: getCommonContainer({
     transitNumber: getTextField(transitNumberField),
-    colony: getSelectField({
-      ...colonyFieldConfig,
+    colony: getTextField({
+      ...colonyFieldConfigTextbox,
       props: {
-        ...colonyFieldConfig.props,
+        ...colonyFieldConfigTextbox.props,
         disabled: true
       },
       jsonPath: "Properties[0].propertyDetails.address.colony"
