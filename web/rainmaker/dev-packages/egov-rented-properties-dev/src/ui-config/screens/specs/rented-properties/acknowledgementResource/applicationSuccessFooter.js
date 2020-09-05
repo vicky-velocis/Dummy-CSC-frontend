@@ -3,7 +3,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   ifUserRoleExists,download,
-  downloadAcknowledgementFormForCitizen,downloadOnlineOfflinePaymentReceipt
+  downloadAcknowledgementFormForCitizen
 } from "../../utils";
 import set from "lodash/set";
 import get from "lodash/get"
@@ -77,7 +77,6 @@ export const applicationSuccessFooter = (
         onClickDefination: {
           action: "condition",
           callBack: async() => {
-            console.log(state)
             switch (type) {
               case "OWNERSHIPTRANSFERRP":
                 const {
@@ -165,15 +164,77 @@ export const applicationSuccessFooter = (
             labelKey: (type == "OWNERSHIPTRANSFERRP" || type == "DUPLICATECOPYOFALLOTMENTLETTERRP" || type == "PERMISSIONTOMORTGAGE") ? "TL_APPLICATION_BUTTON_PRINT_CONF" : "RP_PRINT_RECEIPT"
           })
         },
-        // onClickDefination: {
-        //   action: "condition",
-        //   callBack: () => {
-        //   const { Licenses,LicensesTemp } = state.screenConfiguration.preparedFinalObject;
-        //   const documents = LicensesTemp[0].reviewDocData;
-        //   set(Licenses[0],"additionalDetails.documents",documents)
-        //   downloadAcknowledgementForm(Licenses, LicensesTemp[0].estimateCardData,'print');
-        //   }
-        // },
+        onClickDefination: {
+          action: "condition",
+          callBack: async() => {
+            switch (type) {
+              case "OWNERSHIPTRANSFERRP":
+                const {
+                  Owners, OwnersTemp
+                } = state.screenConfiguration.preparedFinalObject;
+                const documentsOT = OwnersTemp[0].reviewDocData;
+                set(Owners[0], "additionalDetails.documents", documentsOT)
+                downloadAcknowledgementFormForCitizen(Owners, OwnersTemp[0].estimateCardData, type, "ownership-transfer",'print');
+                break;
+
+              case "DUPLICATECOPYOFALLOTMENTLETTERRP":
+                const {
+                  DuplicateCopyApplications, DuplicateTemp
+                } = state.screenConfiguration.preparedFinalObject;
+                let documents = DuplicateTemp[0].reviewDocData;
+                set(DuplicateCopyApplications[0], "additionalDetails.documents", documents)
+                downloadAcknowledgementFormForCitizen(DuplicateCopyApplications, DuplicateTemp[0].estimateCardData, type, "duplicate-copy",'print');
+                break;
+
+              case "PERMISSIONTOMORTGAGE":
+                const {
+                  MortgageApplications, MortgageApplicationsTemp
+                } = state.screenConfiguration.preparedFinalObject;
+                let documentsMG = MortgageApplicationsTemp[0].reviewDocData;
+                set(MortgageApplications[0], "additionalDetails.documents", documentsMG)
+                downloadAcknowledgementFormForCitizen(MortgageApplications, MortgageApplicationsTemp[0].estimateCardData, type, "mortgage",'print');
+                break;
+
+              default:
+                let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+                let transitNumber = consumerCodes.split('-')[1]
+                let queryObject = [
+                  { key: "transitNumber", value: transitNumber }
+                ];
+                let payload =  await getSearchResults(queryObject);
+                if(payload){
+                  let {Properties} = payload
+                  Properties = Properties.map(item => ({...item, rentSummary: {balanceAmount: Number(item.rentSummary.balanceAmount.toFixed(2)),
+                    balanceInterest: Number(item.rentSummary.balanceInterest.toFixed(2)),
+                    balancePrincipal: Number(item.rentSummary.balancePrincipal.toFixed(2))
+                  }}))
+                  dispatch(prepareFinalObject("Properties", Properties))
+                  if(consumerCodes.startsWith('SITE')){
+                    let { Properties} = state.screenConfiguration.preparedFinalObject;
+                    let codes = getQueryArg(window.location.href, "applicationNumber");
+                    let id = getQueryArg(window.location.href, "tenantId");
+                      const receiptQuery = [
+                        { key: "consumerCodes", value:codes},
+                        { key: "tenantId", value: id }
+                    ]
+                      download(receiptQuery, Properties,[], userInfo.name,'online-payment','print');
+                  }
+                  else{
+                    let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+                    let tenantId = getQueryArg(window.location.href, "tenantId");
+                    const OwnersData = [];
+                    const receiptQueryString = [
+                      { key: "consumerCodes", value:consumerCodes},
+                      { key: "tenantId", value: tenantId }
+                    ]
+                    download(receiptQueryString, OwnersData,[], userInfo.name,'payment','print');             
+                  }
+                }
+                
+                break;
+            }
+          }
+        },
         visible: true
       }
 
@@ -234,6 +295,38 @@ export const applicationSuccessFooter = (
         },
         visible: true
       },
+      printFormButton: {
+        componentPath: "Button",
+        props: {
+          variant: "outlined",
+          color: "primary",
+          style: {
+            minWidth: "180px",
+            height: "48px",
+            marginRight: "16px"
+          }
+        },
+        children: {
+          printFormButtonLabel: getLabel({
+            labelName: "PRINT CONFIRMATION FORM",
+            labelKey: (type == "OWNERSHIPTRANSFERRP" || type == "DUPLICATECOPYOFALLOTMENTLETTERRP" || type == "PERMISSIONTOMORTGAGE") ? "TL_APPLICATION_BUTTON_PRINT_CONF" : "RP_PRINT_RECEIPT"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: () => {
+            const { Properties} = state.screenConfiguration.preparedFinalObject;
+            let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
+            let tenantId = getQueryArg(window.location.href, "tenantId");
+              const receiptQueryString = [
+                { key: "consumerCodes", value:consumerCodes},
+                { key: "tenantId", value: tenantId }
+            ]
+              download(receiptQueryString, Properties,[], userInfo.name,'online-payment','print');   
+          }
+        },
+        visible: true
+      }
     });
   }
 };
