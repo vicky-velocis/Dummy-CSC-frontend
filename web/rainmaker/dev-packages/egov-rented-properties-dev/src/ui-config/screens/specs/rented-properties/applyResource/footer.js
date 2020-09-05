@@ -68,6 +68,14 @@ const callBackForNext = async(state, dispatch) => {
         "components.div.children.addPropertyStepper.props.activeStep",
         0
     );
+    const value=get(
+      state.screenConfiguration.preparedFinalObject,
+      "Properties[0].propertyDetails.interestRate"
+    )
+    set(state,
+      'screenConfiguration.preparedFinalObject.Properties[0].propertyDetails.interestRate',
+      value.toString()
+    )
     let isDateValid=true;
     let isFormValid = true;
     let hasFieldToaster = true;
