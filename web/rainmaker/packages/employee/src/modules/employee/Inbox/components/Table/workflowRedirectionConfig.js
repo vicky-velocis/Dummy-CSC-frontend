@@ -191,6 +191,11 @@ else if (businessService == "Engineering" || businessService == "IT" || business
           INITIATED: "/fire-noc/apply",
           DEFAULT: "/fire-noc/search-preview",
         };
+        case "HORTICULTURE":
+          return {
+            INITIATED: "/egov-hc/search-preview",
+            DEFAULT: "/egov-hc/search-preview",
+          };
       case "BPA-SERVICES":
         return {
           INITIATED: "/egov-bpa/search-preview",
