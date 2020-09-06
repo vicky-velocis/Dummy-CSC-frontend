@@ -34,8 +34,9 @@ export const documentDetails = getCommonCard({
         labelKey: "STORE_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
       },
       description: "Only .jpg and .pdf files. 1MB max file size.",
+      // description: "Only .jpg and .pdf files. 6MB max file size.",
       inputProps: {
-        accept: ".pdf"
+        accept: "image/*, .pdf, .png, .jpeg"
       },
       maxFileSize: 1000
     },

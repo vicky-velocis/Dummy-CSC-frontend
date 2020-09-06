@@ -11,7 +11,7 @@ const viewErrorButton = getCommonContainer({
             variant: "contained",
             // color: "primary",
             style: {
-                minWidth: "200px",
+                // minWidth: "200px",
                 height: "48px",
                 // marginRight: "40px",
                 color: "#3366BB",

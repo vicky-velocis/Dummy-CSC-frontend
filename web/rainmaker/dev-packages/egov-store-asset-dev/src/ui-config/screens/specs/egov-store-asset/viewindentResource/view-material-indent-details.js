@@ -60,7 +60,7 @@ import {
             { labelName: "Project Code",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_PROJECT_CODE" },
             {
-              jsonPath: "indents[0].indentDetails[0].project.code",
+              jsonPath: "indents[0].indentDetails[0].projectCode.code",
               callBack: checkValueForNA
              
             }

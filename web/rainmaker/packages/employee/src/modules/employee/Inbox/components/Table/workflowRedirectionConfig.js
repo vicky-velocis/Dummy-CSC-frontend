@@ -1,7 +1,5 @@
-export const getWFConfig = (module,businessService,taskId) => {
-  console.log("module", module);
-  
-   if (businessService == "ADVERTISEMENTNOC" || businessService == "PETNOC" || businessService == "ROADCUTNOC" || businessService == "SELLMEATNOC") {
+export const getWFConfig = (module, businessService, taskId) => {
+  if (businessService == "ADVERTISEMENTNOC" || businessService == "PETNOC" || businessService == "ROADCUTNOC" || businessService == "SELLMEATNOC") {
     if (businessService == "ROADCUTNOC") {
       return {
         INITIATED: "/egov-opms/roadcutnoc-search-preview",
@@ -26,8 +24,7 @@ export const getWFConfig = (module,businessService,taskId) => {
     }
 
   }
- 
-else if (businessService == "Engineering" || businessService == "IT" || businessService == "Caretaker" || businessService == "MOH") {
+  else if (businessService == "Engineering" || businessService == "IT" || businessService == "Caretaker" || businessService == "MOH") {
     if (taskId.includes('MRNIN')) {
       return {
         INITIATED: "/egov-store-asset/view-non-indent-issue-note",
@@ -110,16 +107,15 @@ else if (businessService == "Engineering" || businessService == "IT" || business
       default:
         break;
     }
-  } 
-  else if(businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF OVERGROWN/GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES"){
+  }
+  else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF OVERGROWN/GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
     return {
       INITIATED: "/egov-hc/search-preview",
       DEFAULT: "/egov-hc/search-preview",
     };
   }
-   // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE" Chnage
-  else if (businessService == "RRP_SERVICE" || businessService == "DOE_SERVICE" || businessService == "DOP_SERVICE")
-  {
+  // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE" Chnage
+  else if (businessService == "RRP_SERVICE" || businessService == "DOE_SERVICE" || businessService == "DOP_SERVICE") {
     return {
       INITIATED: "/pms/pmsmap",
       DEFAULT: "/pms/pmsmap",
@@ -191,11 +187,11 @@ else if (businessService == "Engineering" || businessService == "IT" || business
           INITIATED: "/fire-noc/apply",
           DEFAULT: "/fire-noc/search-preview",
         };
-        case "HORTICULTURE":
-          return {
-            INITIATED: "/egov-hc/search-preview",
-            DEFAULT: "/egov-hc/search-preview",
-          };
+      case "HORTICULTURE":
+        return {
+          INITIATED: "/egov-hc/search-preview",
+          DEFAULT: "/egov-hc/search-preview",
+        };
       case "BPA-SERVICES":
         return {
           INITIATED: "/egov-bpa/search-preview",
@@ -224,5 +220,4 @@ else if (businessService == "Engineering" || businessService == "IT" || business
         }
     }
   }
-  
-  };
+};

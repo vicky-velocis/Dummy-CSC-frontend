@@ -75,12 +75,12 @@ import {
       console.log(e);
     }
   };
-  const getOpeningBalanceData = async (action, state, dispatch,id) => {
+  const getOpeningBalanceData = async (action, state, dispatch,mrnNumber) => {
     const tenantId = getTenantId();
     let queryObject = [
       {
-        key: "id",
-        value: id
+        key: "mrnNumber",
+        value: mrnNumber
       }];
       queryObject.push({
         key: "tenantId",
@@ -89,7 +89,7 @@ import {
     try {
       let response = await getOpeningBalanceSearchResults(queryObject, dispatch);        
      let  materialReceipt = response.materialReceipt
-     materialReceipt = materialReceipt.filter(x=>x.id === id)
+     materialReceipt = materialReceipt.filter(x=>x.mrnNumber === mrnNumber)
       dispatch(prepareFinalObject("materialReceipt", materialReceipt));
        
     } catch (e) {
@@ -100,13 +100,16 @@ import {
   const getData = async (action, state, dispatch) => {
     await getMDMSData(action, state, dispatch);
     await getstoreData(action,state, dispatch);
-    const id = getQueryArg(
+    const mrnNumber = getQueryArg(
       window.location.href,
-      "id"
+      "mrnNumber"
     );
-    if(id)
+    if(mrnNumber)
     {
-      await getOpeningBalanceData(action,state, dispatch,id);
+      await getOpeningBalanceData(action,state, dispatch,mrnNumber);
+    }
+    else{
+      dispatch(prepareFinalObject("materialReceipt", null));
     }
   };
   
