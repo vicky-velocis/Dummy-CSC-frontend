@@ -1488,7 +1488,6 @@ try {
 }
 
 export const download = (receiptQueryString, Properties, data, generatedBy,type, mode = "download") => {
-  debugger
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
