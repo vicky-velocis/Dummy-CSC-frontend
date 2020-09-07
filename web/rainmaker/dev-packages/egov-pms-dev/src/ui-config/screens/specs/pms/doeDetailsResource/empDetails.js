@@ -844,7 +844,7 @@ const dependentUnitcard = {
             pattern: getPMSPattern("Address"),
             jsonPath: "ProcessInstances[0].dependents[0].address"
           }),
-          bankAddress: getTextField({
+          bankAddress: getSelectField({
             label: {
               labelName: "Bank address",
               labelKey: "PENSION_EMPLOYEE_PENSION_BA"
@@ -858,10 +858,14 @@ const dependentUnitcard = {
             },
             required:false,
             props: {
-              disabled: data[0].employeeOtherDetailsUpdate,      
+              disabled: data[0].employeeOtherDetailsUpdate,
+              optionValue: "code",
+              optionLabel: "name"      
             },
             pattern: getPMSPattern("Address"),
-            jsonPath: "ProcessInstances[0].dependents[0].bankDetails"
+            jsonPath: "ProcessInstances[0].employeeOtherDetails.bankAddress",
+            sourceJsonPath:
+           "applyScreenMdmsData.pension.BankDetails",
           }),
           accountNumber: getTextField({
             label: {

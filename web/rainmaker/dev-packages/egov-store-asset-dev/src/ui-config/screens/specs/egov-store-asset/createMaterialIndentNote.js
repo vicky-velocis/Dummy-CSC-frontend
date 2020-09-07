@@ -11,6 +11,7 @@ import {
     getMaterialBalanceRateResults,
     getmaterialissuesSearchResults
   } from "../../../../ui-utils/storecommonsapi";
+  
   import { IndentMaterialIssueDetails } from "./creatematerialindentnoteResource/Material-indent-note"; 
   import { getSearchResults } from "../../../../ui-utils/commons";
   import { materialIssue } from "./creatematerialindentnoteResource/Material-issue-note-map"; 
@@ -21,7 +22,7 @@ import {
   import map from "lodash/map";
   import { httpRequest } from "../../../../ui-utils";
   import { commonTransform, objectArrayToDropdown } from "../utils";
-  import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   //import { getEmployeeData } from "./viewResource/functions";
@@ -434,6 +435,16 @@ export const header = getCommonContainer({
               // dispatch(prepareFinalObject("materialIssues[0].indent",indents[0]));       
               // dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
               // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
+               //set min Issue Date based on Indent Create date
+               dispatch(
+                handleField(
+                  "createMaterialIndentNote",
+                  "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.IssueDate",
+                  "props.inputProps",
+                  { min: new Date(response.materialIssues[0].indent.indentDate).toISOString().slice(0, 10),
+                    max: new Date().toISOString().slice(0, 10)}
+                )
+              );  
               //set receipt id
               let totalIndentQty = 0;
               let totalvalue = 0
@@ -514,7 +525,28 @@ export const header = getCommonContainer({
            // let indents =get(response.materialIssues[0],`indents`,[])                
               dispatch(prepareFinalObject("materialIssues[0].toStore.code",response.indents[0].indentStore.code));
               dispatch(prepareFinalObject("materialIssues[0].toStore.name",response.indents[0].indentStore.name));
-              dispatch(prepareFinalObject("materialIssues[0].indent",response.indents[0]));       
+              dispatch(prepareFinalObject("materialIssues[0].indent.indentNumber",response.indents[0].indentNumber));  
+              dispatch(prepareFinalObject("materialIssues[0].indent",response.indents[0]));  
+              dispatch(prepareFinalObject("materialIssues[0].indent.indentDate",response.indents[0].indentDate));   
+              //set min Issue Date based on Indent Create date
+              dispatch(
+                handleField(
+                  "createMaterialIndentNote",
+                  "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.IssueDate",
+                  "props.inputProps",
+                  { min: new Date(response.indents[0].indentDate).toISOString().slice(0, 10),
+                    max: new Date().toISOString().slice(0, 10)}
+                )
+              );  
+              dispatch(prepareFinalObject("materialIssues[0].issueDate",new Date().toISOString().substr(0,10)));  
+              // dispatch(
+              //   handleField(
+              //     "createMaterialIndentNote",
+              //     "components.div.children.formwizardFirstStep.children.IndentMaterialIssueDetails.children.cardContent.children.IndentMaterialIssueContainer.children.IssueDate",
+              //     "props.inputProps",
+              //     { max: new Date().toISOString().slice(0, 10)}
+              //   )
+              // );   
               dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee",null));
               dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation",null));
               const userInfo = JSON.parse(getUserInfo());

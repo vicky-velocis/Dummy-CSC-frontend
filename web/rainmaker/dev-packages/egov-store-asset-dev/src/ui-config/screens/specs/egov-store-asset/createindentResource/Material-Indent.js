@@ -10,7 +10,7 @@ import {
   import get from "lodash/get";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { convertDateToEpoch, convertDateToEpochIST } from "../../utils";
-  
+ import { getSTOREPattern} from "../../../../../ui-utils/commons";
   export const MaterialIndentDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -182,7 +182,7 @@ import {
             multiline: "multiline",
             rowsMax: 2,
           },
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "indents[0].narration"
         })
       },
@@ -200,7 +200,7 @@ import {
             disabled: true
           },
          // pattern: getPattern("Email"),
-          jsonPath: "indents[0].createdByName"
+          jsonPath: "indents[0].indentCreatedBy"
         })
       },
       designation: {

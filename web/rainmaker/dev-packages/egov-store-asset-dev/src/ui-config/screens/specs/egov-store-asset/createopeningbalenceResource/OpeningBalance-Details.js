@@ -167,7 +167,7 @@ import {
             jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].expiryDate",
             props: {
               inputProps: {
-                max: getTodaysDateInYMD()
+                min: new Date().toISOString().slice(0, 10),
               }
             }
           })
@@ -233,7 +233,7 @@ import {
           jsonPath: "materialReceipt[0].receiptDetails[0].receiptDetailsAddnInfo[0].receivedDate",
           props: {
             inputProps: {
-              max: getTodaysDateInYMD()
+              max: new Date().toISOString().slice(0, 10),
             }
           }
         })

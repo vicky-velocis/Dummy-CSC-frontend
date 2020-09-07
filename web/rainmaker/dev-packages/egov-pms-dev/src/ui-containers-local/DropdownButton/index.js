@@ -778,7 +778,7 @@ else{
     let TakenMonthlyPensionAndGratuity =  "NA";
     let TakenGratuityCommutationTerminalBenefit = "NA";
     let TakenCompensationPensionAndGratuity = "NA";
-    let bankAddress =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankAddress", 0 );
+    let bankAddress =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankName", 0 );
     let accountNumber =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.accountNumber", 0 );
     if(reasonForRetirement === "ABOLITION_OF_POST")
     {
