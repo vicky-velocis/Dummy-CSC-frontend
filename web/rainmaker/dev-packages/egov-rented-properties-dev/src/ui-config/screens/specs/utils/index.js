@@ -1001,7 +1001,7 @@ const getStatementForDocType = docType => {
   }
 };
 
-export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, payloadName, mode = "download") => {
+export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, mode = "download") => {
   let queryStr = []
   switch (applicationType) {
     case 'MG':
@@ -1488,6 +1488,7 @@ try {
 }
 
 export const download = (receiptQueryString, Properties, data, generatedBy,type, mode = "download") => {
+  debugger
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
