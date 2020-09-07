@@ -1322,8 +1322,21 @@ export const footer = getCommonApplyFooter({
       },
       leftIcon: "book"
     };
+
+    let noticePrintFormObject = {
+      label: { labelName: "Notice", labelKey: "RP_NOTICE" },
+      link: () => {
+        const { SingleProperties } = state.screenConfiguration.preparedFinalObject;
+        downloadNoticeForm(SingleProperties,'print');
+      },
+      leftIcon: "book"
+    };
+
       downloadMenu = [
         noticeFormObject,
+      ];
+      printMenu = [
+        noticePrintFormObject,
       ];
     return {
       rightdiv: {
