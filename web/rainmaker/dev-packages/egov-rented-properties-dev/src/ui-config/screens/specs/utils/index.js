@@ -1001,7 +1001,7 @@ const getStatementForDocType = docType => {
   }
 };
 
-export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, payloadName, mode = "download") => {
+export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, mode = "download") => {
   let queryStr = []
   switch (applicationType) {
     case 'MG':
@@ -1487,7 +1487,7 @@ try {
 }
 }
 
-export const download = (receiptQueryString, Owners, data, generateBy, mode = "download") => {
+export const download = (receiptQueryString, Properties, data, generatedBy,type, mode = "download") => {
   const FETCHRECEIPT = {
     GET: {
       URL: "/collection-services/payments/_search",
@@ -1502,15 +1502,25 @@ export const download = (receiptQueryString, Owners, data, generateBy, mode = "d
   };
   try {
     httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      // const queryStr = [{
+      //     key: "key",
+      //     value: "rp-payment-receipt"
+      //   },
+      //   {
+      //     key: "tenantId",
+      //     value: receiptQueryString[1].value.split('.')[0]
+      //   }
+      // ]
+
       const queryStr = [{
-          key: "key",
-          value: "rp-payment-receipt"
-        },
-        {
-          key: "tenantId",
-          value: receiptQueryString[1].value.split('.')[0]
-        }
-      ]
+        key: "key",
+        value: `rp-${type}-receipt`
+      },
+      {
+        key: "tenantId",
+        value: receiptQueryString[1].value.split('.')[0]
+      }
+    ]
       if (payloadReceiptDetails && payloadReceiptDetails.Payments && payloadReceiptDetails.Payments.length == 0) {
         console.log("Could not find any receipts");
         return;
@@ -1543,7 +1553,8 @@ export const download = (receiptQueryString, Owners, data, generateBy, mode = "d
       }]
       httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
           Payments,
-          generateBy
+          Properties,
+          generatedBy
         }, {
           'Accept': 'application/json'
         }, {
@@ -1870,7 +1881,7 @@ export const createEstimateData = async (
       value: businessService
     }
   ];
-  const currentStatus = data.applicationState || data.state;
+  const currentStatus = !!data && (data.applicationState || data.state);
   const isPAID = isApplicationPaid(currentStatus, workflowCode);
   const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID ?
@@ -2128,14 +2139,16 @@ export const fetchBill = async (action, state, dispatch, businessService) => {
         dispatch(prepareFinalObject("DuplicateCopyApplications[0]", response.DuplicateCopyApplications[0]));
       break
     }
-    case BILLING_BUSINESS_SERVICE_RENT: {
+    case BILLING_BUSINESS_SERVICE_RENT:
+    default:  
+    {
       const response = get(state.screenConfiguration.preparedFinalObject, "Properties[0]")
       payload = await createEstimateData(
         response,
         "PropertiesTemp[0].estimateCardData",
         dispatch,
         window.location.href,
-        businessService
+        BILLING_BUSINESS_SERVICE_RENT
       )
       break
     }

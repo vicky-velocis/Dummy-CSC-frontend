@@ -9,7 +9,7 @@ import { httpRequest } from "../../../../ui-utils";
 import { BILLING_BUSINESS_SERVICE_RENT, ONLINE, OFFLINE } from "../../../../ui-constants";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validateFields } from "egov-ui-framework/ui-utils/commons";
-
+import {getColonyTypes} from "../rented-properties/apply"
 const header = process.env.REACT_APP_NAME === "Citizen" ?
 getCommonHeader({
     labelName: "Online Rent Payment",
@@ -247,7 +247,8 @@ const goToPayment = async (state, dispatch, type) => {
             )
           ) : dispatch(
             setRoute(
-             `/rented-properties/acknowledgement?purpose=pay&applicationNumber=${rentPaymentConsumerCode}&status=success&tenantId=${tenantId}`
+            `/rented-properties/acknowledgement?purpose=pay&applicationNumber=${rentPaymentConsumerCode}&status=success&tenantId=${tenantId}&type=${BILLING_BUSINESS_SERVICE_RENT}`
+             
             )
           )
         dispatch(prepareFinalObject("Properties", response.Properties))
@@ -313,11 +314,14 @@ const paymentFooter = getCommonApplyFooter({
     visible: process.env.REACT_APP_NAME !== "Citizen"
   }
 })
-
+const beforeInitFn =async(action, state, dispatch)=>{
+  getColonyTypes(action, state, dispatch);
+}
 const payment = {
     uiFramework: "material-ui",
     name: "payment",
     beforeInitScreen: (action, state, dispatch) => {
+      beforeInitFn(action, state, dispatch);
       dispatch(prepareFinalObject("Properties", []));
       dispatch(prepareFinalObject("property", {}))
       dispatch(prepareFinalObject("paymentInfo", {}))
