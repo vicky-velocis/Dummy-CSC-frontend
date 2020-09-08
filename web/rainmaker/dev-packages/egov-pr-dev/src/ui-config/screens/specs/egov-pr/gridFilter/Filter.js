@@ -1140,7 +1140,9 @@ export const PressNoteFilter = getCommonCard({
       },
       required: false,
       pattern:  getPattern("fileNumber"),
-      errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
+    //  errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
+    errorMessage: "PR_TENDER_FILE_NUMBER_INVALID",
+
       jsonPath: "PublicRelation[0].filterpress.fileNumber"
     }),
     Subject: getTextField({
@@ -1158,7 +1160,9 @@ export const PressNoteFilter = getCommonCard({
       },
       required: false,
       //pattern: /^[a-zA-Z ]*$/i,
-      errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
+   //   errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
+   errorMessage: "PR_TENDER_SUBJECT_INVALID",
+
       jsonPath: "PublicRelation[0].filterpress.subject"
     }),
     fromDate: getDateField({

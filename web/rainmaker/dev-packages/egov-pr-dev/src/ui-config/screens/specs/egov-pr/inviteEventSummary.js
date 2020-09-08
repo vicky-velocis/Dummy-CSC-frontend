@@ -59,63 +59,8 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "inviteEventSummary",
   beforeInitScreen: (action, state, dispatch) => {
-    let applicationNumber =
-      getQueryArg(window.location.href, "applicationNumber") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "PublicRelations[0].PublicRelationDetails.applicationNumber"
-      );
-    let tenantId =
-      getQueryArg(window.location.href, "tenantId") ||
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "PublicRelations[0].tenantId"
-      );
-
-    let uomsObject = get(
-      state.screenConfiguration.preparedFinalObject,
-      "PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap"
-    );
-    if (uomsObject) {
-      for (const [key, value] of Object.entries(uomsObject)) {
-        let labelElement = getLabelWithValue(
-          {
-            labelName: key,
-            labelKey: `NOC_PROPERTY_DETAILS_${key}_LABEL`
-          },
-          {
-            jsonPath: `PublicRelations[0].PublicRelationDetails.buildings[0].uomsMap.${key}`
-          }
-        );
-        set(
-          action,
-          `screenConfig.components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children.${key}`,
-          labelElement
-        );
-      }
-    }
-
-    // Set Institution/Applicant info card visibility
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "PublicRelations[0].PublicRelationDetails.applicantDetails.ownerShipType",
-        ""
-      ).startsWith("INSTITUTION")
-    ) {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
-        false
-      );
-    } else {
-      set(
-        action,
-        "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
-        false
-      );
-    }
-
+   
+  
 	set(
         action,	"screenConfig.inviteEventSummary.components.div.children.body.children.cardContent.children.documentsSummary.children.cardContent.children.header.children.editSection.visible",
         false

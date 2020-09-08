@@ -6,7 +6,6 @@ import {
 
 import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResultsinvitesummary } from "./searchResource/searchResults";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -21,7 +20,6 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
-import { getGridData,getInviateGuestGridData } from "./searchResource/citizenSearchFunctions";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -43,7 +41,7 @@ const PRSearchAndResult = {
   uiFramework: "material-ui",
   name: "InviteGuestListSummary",
   beforeInitScreen: (action, state, dispatch) => {
-  getInviateGuestGridData(action, state, dispatch);
+ // getInviateGuestGridData(action, state, dispatch);
 
 
     const tenantId = getTenantId();

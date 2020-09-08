@@ -7,12 +7,8 @@ import {
   getLabel,
   getCommonCard 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCurrentFinancialYear } from "../utils";
 import { Invitefooter, takeactionfooter } from "./inviteResources/footer";
-import { eventDetails } from "./applyResource/eventDetails";
-import { eventDescription } from "./applyResource/eventDescription";
-import { propertyDetails } from "./applyResource/propertyDetails";
-import { propertyLocationDetails } from "./applyResource/propertyLocationDetails";
+
 import { applicantDetails, pressDetails , searchemployee, EmailSmsContent} from "./inviteResources/applicantDetails";
 import { documentDetails } from "./inviteResources/documentDetails";
 import { searchDepartmentEmployeesResults, searchInvitedEmployeesResults } from "./inviteResources/searchResults";
@@ -28,18 +24,10 @@ import "../../../../customstyle.css";
   import commonConfig from '../../../../config/common';
   import {  deleteguestbyid} from "./searchResource/citizenSearchFunctions"
 
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
 import set from "lodash/set";
 import get from "lodash/get";
 import {
   prepareDocumentsUploadData,
- 
-  furnishNocResponse,
-  setApplicationNumberBox,
   getsampleemailtemplate
 } from "../../../../ui-utils/commons";
 
@@ -145,24 +133,7 @@ const eventifforinvitatoin = getQueryArg(
   localStorageSet("templateType", "CREATE_EVENT");
   localStorageSet("templateModuleName", "EVENT");
 
-const applicationNumberContainer = () => {
-  const applicationNumber = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  if (applicationNumber)
-    return {
-      uiFramework: "custom-atoms-local",
-      moduleName: "egov-pr",
-      componentPath: "ApplicationNoContainer",
-      props: {
-        number: `${applicationNumber}`,
-        visibility: "hidden"
-      },
-      visible: true
-    };
-  else return {};
-};
+
 
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -371,34 +342,7 @@ const getFirstListFromDotSeparated = list => {
 };
 
 
-// export const prepareEditFlow = async (
-//   state,
-//   dispatch,
-//   applicationNumber,
-//   tenantId
-// ) => {
-//   const buildings = get(
-//     state,
-//     "screenConfiguration.preparedFinalObject.PublicRelations[0].PublicRelationDetails.buildings",
-//     []
-//   );
-//   if (applicationNumber && buildings.length == 0) {
-//     let response = await getSearchResults([
-//       {
-//         key: "tenantId",
-//         value: tenantId
-//       },
-//       { key: "applicationNumber", value: applicationNumber }
-//     ]);
-   
-//     response = furnishNocResponse(response);
 
-//     dispatch(prepareFinalObject("PublicRelations", get(response, "PublicRelations", [])));
-//     if (applicationNumber) {
-//       setApplicationNumberBox(state, dispatch, applicationNumber);
-//     }
-//   }
-// };
 
 const screenConfig = {
   uiFramework: "material-ui",

@@ -30,7 +30,6 @@ export const getTenderGridData = async () => {
     );
     return payload;
   } catch (error) {
-    //  store.dispatch(toggleSnackbar(true, error.message, "error"));
   }
 };
 
@@ -114,7 +113,7 @@ export const forwardTender = async data => {
   try {
     const response = await httpRequest(
       "post",
-      "http://192.168.12.132:8079/prscp-services/v1/tender/_forward",
+      "/prscp-services/v1/tender/_forward",
       "",
       [],
       data
@@ -139,7 +138,7 @@ export const publishTender = async data => {
   try {
     const response = await httpRequest(
       "post",
-      "http://192.168.12.132:8079/prscp-services/v1/tender/_publish",
+      "/prscp-services/v1/tender/_publish",
       "",
       [],
       data
@@ -164,7 +163,7 @@ export const getSearchResultsForTenderSummary = async data => {
     
     const response = await httpRequest(
       "post",
-      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
+      "/prscp-services/v1/tender/_get",
       "",
       [],
       data
@@ -191,7 +190,7 @@ export const getSearchResultsTender = async queryObject => {
     
     const response = await httpRequest(
       "post",
-      "http://192.168.12.132:8079/prscp-services/v1/tender/_get",
+      "/prscp-services/v1/tender/_get",
       "",
       [],
       data
