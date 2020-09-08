@@ -16,6 +16,7 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { epochToDate, navigateToApplication, getApplicationType } from "egov-ui-kit/utils/commons";
 import orderBy from "lodash/orderBy";
+import {setapplicationType} from "egov-ui-kit/utils/localStorageUtils";
 const styles = {
   card: {
     marginLeft: 8,
@@ -157,6 +158,88 @@ class SingleApplication extends React.Component {
           setRoute(`/egov-echallan/search-preview?applicationNumber=${item.challanId}&tenantId=${item.tenantId}`);
       }
     }
+    else if (moduleName === "MyBooking") {
+      if (item.businessService === "OSBM") {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/applyopenspace?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/booking-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      } else if (item.businessService === "GFCP") {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/checkavailability?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/commercialground-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      } else if (item.businessService === "OSUJM") {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/checkavailability_oswmcc?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/openspace-mcc-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      } else if (item.businessService === "NLUJM") {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/applyNewLocationUnderMCC?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/newlocation-mcc-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      } else if (item.businessService === "PACC") {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/checkavailability_pcc?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/pcc-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      } else {
+          setapplicationType(item.businessService);
+          if (item.bkApplicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/applywatertanker?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/waterbooking-search-preview?applicationNumber=${item.bkApplicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      }
+  } else if (moduleName === "MyNewLocationApplications") {
+      if (item.businessService === "NLUJM") {
+          setapplicationType(item.businessService);
+          if (item.applicationStatus === "INITIATED") {
+              setRoute(
+                  `/egov-services/applyNewLocationUnderMCC?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          } else {
+              setRoute(
+                  `/egov-services/newlocation-mcc-search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}&businessService=${item.businessService}`
+              );
+          }
+      }
+  }
   };
 
   onButtonCLick = () => {
@@ -264,7 +347,15 @@ class SingleApplication extends React.Component {
                       // setRoute(url);
                     }}>
                       <Label
-                        labelKey={moduleName === "EGOV-ECHALLAN" ? "EC_VIEW_DETAILS" : "TL_VIEW_DETAILS"}
+                        labelKey={
+                          moduleName === "EGOV-ECHALLAN"
+                            ? "EC_VIEW_DETAILS"
+                            : moduleName === "MyBooking"
+                            ? "BK_VIEW_DETAILS"
+                            : moduleName === "MyNewLocationApplications"
+                            ? "BK_VIEW_DETAILS"
+                            : "TL_VIEW_DETAILS"
+                        }
                         textTransform={"uppercase"}
                         style={{
                           color: "#fe7a51",
