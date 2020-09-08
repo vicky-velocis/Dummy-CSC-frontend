@@ -58,6 +58,10 @@ export const getSearchResults = async (queryObject=[],requestBody={},dispatch,sc
     break;
     case "suhLog":  url =  "/nulm-services/v1/suh/log/_get";
     break;
+    case "susv":  url =  "/nulm-services/v1/susv/_get";
+    break;
+    case "susvtransaction":  url =  "/nulm-services/v1/susv/transaction/_get";
+    break;
   }
   try {
     const response = await httpRequest("post", url, "", queryObject, requestBody );
