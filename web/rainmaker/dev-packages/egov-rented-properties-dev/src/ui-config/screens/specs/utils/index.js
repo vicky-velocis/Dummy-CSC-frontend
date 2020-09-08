@@ -1549,7 +1549,7 @@ export const download = (receiptQueryString, Properties, data, generatedBy,type,
         ...rest
       }) => ({
         ...rest,
-        taxHeadCode: taxHeadCode.includes("_DUE") ? "RP_DUE" : taxHeadCode.includes("_PENALTY") ? "RP_PENALTY" : taxHeadCode.includes("_TAX") ? "RP_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "RP_ROUNDOFF" : taxHeadCode.includes("_CHARGES") ? "RP_CHARGES" : taxHeadCode
+        taxHeadCode: taxHeadCode.includes("_APPLICATION_FEE") ? "RP_DUE" : taxHeadCode.includes("_PENALTY") ? "RP_PENALTY" : taxHeadCode.includes("_TAX") ? "RP_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "RP_ROUNDOFF" : taxHeadCode.includes("_PUBLICATION_FEE") ? "RP_CHARGES" : taxHeadCode
       }))
       Payments = [{
         ...Payments[0],
