@@ -1,6 +1,10 @@
 const remoteConfigPath = (path, screenKey) => {
   let config = {};
   switch (path) {
+    case "tradelicence":
+    case "tradelicense-citizen":
+      config = require(`egov-tradelicence/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "estate":
       config = require(`egov-estate/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
