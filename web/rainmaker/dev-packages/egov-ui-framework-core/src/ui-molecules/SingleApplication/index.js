@@ -132,9 +132,9 @@ class SingleApplication extends React.Component {
     } else if (moduleName === "HC") {
       switch (item.status) {
         case "INITIATED":
-          setRoute(`/egov-hc/search-preview?applicationNumber=${item.serviceRequestId}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+          setRoute(`/egov-hc/search-preview?applicationNumber=${item.serviceRequestId}&tenantId=${item.tenant_id}&serviceType=${item.service_type}`);
         default:
-          setRoute(`/egov-hc/search-preview?applicationNumber=${item.service_request_id}&tenantId=ch.chandigarh&serviceType=${item.service_type}`);
+          setRoute(`/egov-hc/search-preview?applicationNumber=${item.service_request_id}&tenantId=${item.tenant_id}&serviceType=${item.service_type}`);
       }
     } else if (moduleName === "ADVERTISEMENT-NOC") {
       switch (item.status) {

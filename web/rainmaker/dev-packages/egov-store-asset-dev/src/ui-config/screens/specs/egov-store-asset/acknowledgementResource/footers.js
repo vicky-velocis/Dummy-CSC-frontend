@@ -356,7 +356,7 @@ export const paymentSuccessFooter = () => {
       children: {
         goToHomeButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "NOC_COMMON_BUTTON_HOME",
+          labelKey: "STORE_COMMON_BUTTON_HOME",
         }),
       },
       onClickDefination: {

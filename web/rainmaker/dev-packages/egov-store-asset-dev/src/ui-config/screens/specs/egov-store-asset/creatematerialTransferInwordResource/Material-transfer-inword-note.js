@@ -242,6 +242,23 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           
         })
       },
+      createdBy: {
+        ...getTextField({
+          label: {
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+          },
+          placeholder: {
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "transferInwards[0].createdByName"
+        })
+      },
       degignation: {
         ...getTextField({
           label: { labelName: "degignation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
@@ -253,7 +270,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             disabled: true,       
           },
           required: false,
-          visible:false,
+          visible:true,
           jsonPath: "transferInwards[0].designation",
          
           

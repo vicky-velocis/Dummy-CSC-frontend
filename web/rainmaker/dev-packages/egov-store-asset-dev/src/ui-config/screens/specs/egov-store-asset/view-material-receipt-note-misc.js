@@ -18,9 +18,16 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "applicationNumbers");
+import{UserRoles} from '../../../../ui-utils/sampleResponses'
+let roles = UserRoles().UserRoles;
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
+let enableButton = true;
+if(status ===WorkFllowStatus().WorkFllowRejected)
+enableButton = false
+else if(status !==WorkFllowStatus().WorkFllowApproved)
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
 ConfigStatus = ConfigStatus.filter(x=>x.code === status)
@@ -214,7 +221,7 @@ const screenConfig = {
             },
             newPOButton: {
               componentPath: "Button",            
-              visible: true,// enableButton,
+              visible: enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -247,6 +254,10 @@ const screenConfig = {
                 action: "condition",
                 callBack: creatPOHandle,
               },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
+              }
             },
              //print function UI start SE0001
              printMenu: {

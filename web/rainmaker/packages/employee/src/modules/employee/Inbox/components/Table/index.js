@@ -366,7 +366,8 @@ export const Taskboard = ({ data }) => {
     </div>
   );
 };
-
+// this method not in use
 const onModuleCardClick = (route) => {
-  window.location.href = document.location.origin + route;
+
+ 
 };

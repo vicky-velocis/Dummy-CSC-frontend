@@ -51,12 +51,13 @@ import {
               
             }),
             beforeFieldChange: (action, state, dispatch) => {
+              let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
               let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
               store = store.filter(x=>x.code == action.value)//.materialType.code
               if(store[0].department)
-              dispatch(prepareFinalObject("materials[0].storeMapping[0].department.name",store[0].department.name));
+              dispatch(prepareFinalObject(`materials[0].storeMapping[${cardIndex}].department.name`,store[0].department.name));
               else
-              dispatch(prepareFinalObject("materials[0].storeMapping[0].department.name",""));
+              dispatch(prepareFinalObject(`materials[0].storeMapping[${cardIndex}].department.name`,""));
             }
           },
             DepartmentName: {

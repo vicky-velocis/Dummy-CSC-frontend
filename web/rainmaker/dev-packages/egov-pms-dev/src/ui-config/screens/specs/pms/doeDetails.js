@@ -307,6 +307,9 @@ export const getMdmsData = async (action, state, dispatch) => {
           {
             name:"employeeGroup"
           },
+          {
+            name:"BankDetails"
+          },
         ] }
       ]
     }

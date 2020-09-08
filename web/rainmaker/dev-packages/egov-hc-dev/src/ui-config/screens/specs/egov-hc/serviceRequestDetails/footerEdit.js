@@ -3,7 +3,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getapplicationNumber, getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { EditServiceRequest, furnishServiceRequestDetailResponseForEdit } from "../../../../../ui-utils/commons";
+import { EditServiceRequest, furnishServiceRequestDetailResponseForEdit, commonConfig } from "../../../../../ui-utils/commons";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";  
@@ -99,22 +99,22 @@ export const getRedirectionURL = () => {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_TREE_COUNT_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/.test(description))
+    else if(! /^[a-zA-Z0-9#$&?@~_|.,:\s,]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/.test(description))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_DESCRIPTION_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(houseNoAndStreetName))
+    else if(! /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(houseNoAndStreetName))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{0,256}$/.test(landmark) )
+    else if(! /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(landmark))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z\s\\/\-]{1,256}$/.test(ownerName))
+    else if(! /^[a-zA-Z\s]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/.test(ownerName))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_OWNER_NAME_ERROR" };
       flagValidField = false;
@@ -124,12 +124,13 @@ export const getRedirectionURL = () => {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_CONTACT_NUMBER_ERROR" };
       flagValidField = false;
     }
-    else if(! /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(email))
+    else if(! /(?=^.{1,256}$)(^\w+([\.]?\w+)*@\w+([\.]?\w+)*(\.\w{2,3})+$)/.test(email))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_EMAIL_ERROR" };
       flagValidField = false;
-    }
-  
+    }  
+
+    
     if(flagValidField === false)
     {
       dispatch(
@@ -142,15 +143,22 @@ export const getRedirectionURL = () => {
       
     }
     var workflowProcessInstanceArray = []
-      workflowProcessInstanceArray = get(state,"screenConfiguration.preparedFinalObject.workflow.ProcessInstances")
-      var processInstanceCurrentState = workflowProcessInstanceArray[workflowProcessInstanceArray.length - 1].state.state
+      workflowProcessInstanceArray = get(state,"screenConfiguration.preparedFinalObject.workflow[0]")
+      var processInstanceCurrentState = workflowProcessInstanceArray.state.state
 
       if (isFormValid && flagValidField) {
       
         if (typeOfService != undefined && locality != undefined )
     {if (activeStep === 1) { 
           let status = 'INITIATED'
-          serviceRequest['city']= JSON.parse(getUserInfo()).permanentCity,
+          var tenantIdCommonConfig
+          if (getTenantId() != commonConfig.tenantId){
+              tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+          }
+          else{
+            tenantIdCommonConfig = getTenantId()
+          }
+          serviceRequest['city']= tenantIdCommonConfig,
           serviceRequest['media'] = media,
           serviceRequest['currentState'] = processInstanceCurrentState,
           serviceRequest['isEditState'] = 1

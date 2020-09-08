@@ -122,6 +122,7 @@ const screenConfig = {
     if(state.screenConfiguration.preparedFinalObject && state.screenConfiguration.preparedFinalObject.NULMSEPRequest){
 
       const {NULMSEPRequest} = state.screenConfiguration.preparedFinalObject ;
+      if(NULMSEPRequest && NULMSEPRequest.applicationUuid){
       const radioButtonValue = ["isUrbanPoor","isMinority","isHandicapped","isRepaymentMade","isLoanFromBankinginstitute"];
     
       radioButtonValue.forEach(value => {
@@ -134,6 +135,7 @@ const screenConfig = {
 
       dispatch(prepareFinalObject(`NULMSEPRequest.dob`, NULMSEPRequest.dob.split(" ")[0] ));
     }
+  }
     return action;
   },
 

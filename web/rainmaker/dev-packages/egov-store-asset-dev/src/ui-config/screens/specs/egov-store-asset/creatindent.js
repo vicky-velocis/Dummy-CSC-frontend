@@ -81,6 +81,7 @@ export const header = getCommonContainer({
               { name: "Material" }, //filter: "[?(@.active == true)]" },
               { name: "InventoryType", filter: "[?(@.active == true)]" },
               { name: "IndentPurpose"},// filter: "[?(@.active == true)]" },
+              { name: "businessService" }, 
               
             ],
           },
@@ -149,13 +150,27 @@ export const header = getCommonContainer({
       }];
     try {
       let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+      const userInfo = JSON.parse(getUserInfo());
+      let businessService  = get(state, `screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.businessService`,[]) 
+      // filter store based on login user role and assign business service
+      let roles = userInfo.roles
+      for (let index = 0; index < roles.length; index++) {
+        const element = roles[index];
+        businessService = businessService.filter(x=>x.role === element.code)
+        if(businessService.length==1)
+        response = response.stores.filter(x=>x.department.deptCategory===businessService[0].name)
+        break;
+
+        
+      }
+
       dispatch(prepareFinalObject("store", response));
        response = await getSearchResults(queryObject, dispatch,"materials");
       dispatch(prepareFinalObject("materials", response));
             // fetching employee designation
-    const userInfo = JSON.parse(getUserInfo());
+   
     if(userInfo){
-      dispatch(prepareFinalObject("indents[0].createdByName", userInfo.name));
+      dispatch(prepareFinalObject("indents[0].indentCreatedBy", userInfo.name));
       const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
       try { 
         const payload = await httpRequest(
@@ -236,8 +251,18 @@ export const header = getCommonContainer({
       //   "Employee[0].tenantId"
       // );
       let tenantId = getstoreTenantId();
-      const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
-      const storedata = getstoreData(action,state, dispatch);
+     // const mdmsDataStatus = getMdmsData(state, dispatch, tenantId);
+
+     getMdmsData(state, dispatch, tenantId)
+     .then(response=>
+       {
+        if(response)
+        {
+          const storedata = getstoreData(action,state, dispatch);
+        }
+       }
+     )
+     
       const step = getQueryArg(window.location.href, "step");
        tenantId = getQueryArg(window.location.href, "tenantId");
       if(!step && !tenantId){

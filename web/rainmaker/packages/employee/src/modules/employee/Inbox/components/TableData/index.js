@@ -431,7 +431,63 @@ class TableData extends Component {
       );
     }
   };
+  getHorticultureRoleBasedServiceRequestData =  (responseData) => {
+    
+    var userRolesForHC = []
+    var userRolesCodesForHC = []
+    var responseDataHorticulture = []
+    userRolesForHC = get(this.props, "userInfo.roles");
+    userRolesCodesForHC = userRolesForHC.map((item) => { return item.code})
+    
+    var horticultureBusinessServices =
+    ["PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS",
+      "PRUNING OF TREES GIRTH GREATER THAN 90 CMS",
+      "REMOVAL OF GREEN TREES",
+      "REMOVAL OF DEAD/DANGEROUS/DRY TREES" ]
+    
+    responseDataHorticulture = orderBy(
+      filter(responseData.ProcessInstances, (item) =>{
+        if(horticultureBusinessServices.includes(get(item,'businessService'))){
+         
+          if (get(item,'additionalDetails') != null && (get(item,'state.state') != 'REJECTED' || get(item,'state.state') != 'COMPLETED')  )
+         {
+          
+          let currentAssignedRole = get(item,'additionalDetails.role')
+          currentAssignedRole = currentAssignedRole.split(",")
+          
+          if(userRolesCodesForHC.some(element => currentAssignedRole.includes(element)) )
+          {return item}
+        }
+          
+        }
+        
+    }),
+      ["businesssServiceSla"]
+    );
 
+    return responseDataHorticulture
+  };
+  getOtherApplicationsData =  (responseData) => {
+ 
+    var horticultureBusinessServices =
+     ["PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS",
+      "PRUNING OF TREES GIRTH GREATER THAN 90 CMS",
+      "REMOVAL OF GREEN TREES",
+      "REMOVAL OF DEAD/DANGEROUS/DRY TREES" ]
+      var responseDataNonHorticulture = []
+    responseDataNonHorticulture = orderBy(
+      filter(responseData.ProcessInstances, (item) =>{
+        if(!horticultureBusinessServices.includes(get(item,'businessService')))
+        {
+         return item
+        }
+        
+    }),
+      ["businesssServiceSla"]
+    );
+  
+  return responseDataNonHorticulture
+  };
   componentDidMount = async () => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
@@ -444,6 +500,19 @@ class TableData extends Component {
       await this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
+
+
+       //Horticulture code changes starts here
+       var AssignedToAlldataForHorticulture = []
+       var AssignedToAlldataForOtherModules = []
+        AssignedToAlldataForHorticulture = this.getHorticultureRoleBasedServiceRequestData(responseData)
+        AssignedToAlldataForOtherModules = this.getOtherApplicationsData(responseData)
+ 
+       var finalDataAssignedToAll = []
+       finalDataAssignedToAll.ProcessInstances = [...AssignedToAlldataForHorticulture, ...AssignedToAlldataForOtherModules]
+       
+       //horticulture code changes ends here
+
       const assignedData = orderBy(
         filter(responseData.ProcessInstances, (item) =>{
           let assignes=get(item,'assignee');
@@ -451,7 +520,7 @@ class TableData extends Component {
       }),
         ["businesssServiceSla"]
       );
-      const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
+      const allData = orderBy(get(finalDataAssignedToAll, "ProcessInstances", []), ["businesssServiceSla"]);
 
 
       // const assignedDataRows = []

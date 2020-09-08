@@ -26,7 +26,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
           md: 4
         },
         
-        pattern: getPattern("BuildingStreet"),
+        pattern: getPattern("HCServiceRequestId"),
         errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
         jsonPath: "serviceRequests.servicerequestid"
       })
@@ -46,8 +46,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
           sm: 6,
           md: 4
         },
-        // maxLength: 10,
-        // maxValue : 9999999999,
+       type:"number",
         pattern: getPattern("HCMobileNoSearch"),
         errorMessage: "ERR_INVALID_CONTACT_NO_FIELD_MSG",
         jsonPath: "serviceRequests.contactNumber"

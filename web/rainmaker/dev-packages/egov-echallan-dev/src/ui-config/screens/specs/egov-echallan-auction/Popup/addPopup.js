@@ -59,11 +59,37 @@ export const adhocPopup = getCommonContainer({
   GridDetails: getCommonContainer(
     {
       AuctionGridHistoryDetails
-    },
-    {
-      style: {
-        marginTop: "24px"
-      }
-    }
+    }, 
   ),
+  cancelApplicationButton: {
+    componentPath: "Button",
+    visible: true,
+    props: {
+      variant: "outlined",
+      color: "primary",
+      style: {
+        borderRadius: "2px",
+        minWidth: "180px",
+        height: "48px",
+        marginRight: "16px",
+        marginBottom: "8px",
+        marginTop: "25px"
+      }
+    },
+
+    children: {
+      buttonLabel: getLabel({
+        labelName: "CANCEL",
+        labelKey: "EC_POPUP_SEARCH_RESULTS_CANCEL_APP_BUTTON"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: (state, dispatch) => {
+        dispatch(
+          handleField("search-preview", "components.adhocDialog", "props.open", false)
+        );
+      }
+    },
+  },
 });
