@@ -48,7 +48,7 @@ const storeCard = {
         //   }
         // ),
         Active: getLabelWithValue(
-          { labelName: "Active", labelKey: "MATERIAL_TYPE_ACTIVE" },
+          { labelName: "Active", labelKey: "STORE_MATERIAL_TYPE_ACTIVE" },
           {
             jsonPath: "materials[0].storeMapping[0].active",
           }

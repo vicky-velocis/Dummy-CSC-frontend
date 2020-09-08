@@ -119,7 +119,7 @@ export const getDisposalScrapMaterialDetailsView = (isReview = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "HR_SUMMARY_EDIT"
+              labelKey: "STORE_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

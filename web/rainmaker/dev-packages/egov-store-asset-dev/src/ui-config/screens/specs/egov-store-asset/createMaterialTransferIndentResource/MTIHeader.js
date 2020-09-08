@@ -138,7 +138,7 @@ export const MTIHeader = getCommonCard({
           disabled: true
         },
        // pattern: getPattern("Email"),
-        jsonPath: "indents[0].createdBy"
+        jsonPath: "indents[0].indentCreatedBy"
       })
     },
     designation: {

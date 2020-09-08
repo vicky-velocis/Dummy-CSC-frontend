@@ -53,7 +53,7 @@ export const getMTIHeaderView = (isReview = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "HR_SUMMARY_EDIT"
+              labelKey: "STORE_SUMMARY_EDIT"
             })
           },
           onClickDefination: {
@@ -95,18 +95,18 @@ export const getMTIHeaderView = (isReview = true) => {
           jsonPath: "indents[0].narration",
         }
       ),
-      // createdBy: getLabelWithValue(
-      //   { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
-      //   {
-      //     jsonPath: "purchaseOrders[0].advancePercentage"
-      //   }
-      // ),
-      // designation: getLabelWithValue(
-      //   { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
-      //   {
-      //     jsonPath: "purchaseOrders[0].designation",
-      //   }
-      // ),
+      createdBy: getLabelWithValue(
+        { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
+        {
+          jsonPath: "indents[0].indentCreatedBy",
+        }
+      ),
+      designation: getLabelWithValue(
+        { labelName: "Designation", labelKey: "STORE_PURCHASE_ORDER_DSGNTN" },
+        {
+          jsonPath: "indents[0].designation",
+        }
+      ),
     }),
   });
 };

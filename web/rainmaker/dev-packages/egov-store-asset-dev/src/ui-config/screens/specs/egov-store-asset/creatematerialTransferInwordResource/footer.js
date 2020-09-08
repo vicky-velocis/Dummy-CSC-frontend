@@ -130,6 +130,8 @@ export const callBackForNext = async (state, dispatch) => {
     }
     if(IsValidDate)
     {
+      if(activeStep===1)
+      {
       let cardJsonPath =
       "components.div.children.formwizardSecondStep.children.MaterialTransferInwordDetail.children.cardContent.children.MaterialTransferInwordCard.props.items";
       let pagename = "createMaterialTransferInword";
@@ -168,7 +170,10 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(prepareFinalObject("transferInwards[0].receiptDetails",storeMappingTemp)
       );
         }
-          changeStep(state, dispatch);
+        if(activeStep ===1)
+        moveToReview(dispatch)
+        else
+        changeStep(state, dispatch);
         }
         else{
           if(DuplicatItem[0].IsDuplicatItem)
@@ -194,6 +199,9 @@ export const callBackForNext = async (state, dispatch) => {
 
         }
       }
+    }
+    else
+            changeStep(state, dispatch);
 
       }
       else{

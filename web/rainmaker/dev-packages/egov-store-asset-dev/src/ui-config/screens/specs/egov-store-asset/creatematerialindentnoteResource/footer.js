@@ -1,4 +1,5 @@
 import get from "lodash/get";
+import set from "lodash/set";
 import {
   dispatchMultipleFieldChangeAction,
   getLabel
@@ -12,18 +13,43 @@ import {
   ifUserRoleExists,
   epochToYmd,
   validateFields,
+  epochToYmdDate,
   getLocalizationCodeValue
 } from "../../utils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 // import "./index.css";
+const setDateInYmdFormat = (obj, values) => {
+  values.forEach(element => {
+    set(obj, element, epochToYmdDate(get(obj, element)));
+  });
+};
+const moveToReview = (state,dispatch) => {
 
-const moveToReview = dispatch => {
+  let materialIssues = get(
+    state.screenConfiguration.preparedFinalObject,
+    "materialIssues",
+    []
+  );
+   setDateInYmdFormat(materialIssues[0], ["issueDate", ]);
+   dispatch(prepareFinalObject("materialIssues", materialIssues));
   const IndentId = getQueryArg(window.location.href, "IndentId");
+  const applicationNumber =getQueryArg(window.location.href, "applicationNumber");
+  if(IndentId)
+  {
   const reviewUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`
       : `/egov-store-asset/reviewindentnote?step=0&IndentId=${IndentId}`;
   dispatch(setRoute(reviewUrl));
+  }
+  if(applicationNumber)
+  {
+  const reviewUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/egov-store-asset/reviewindentnote?step=0&applicationNumber=${applicationNumber}`
+      : `/egov-store-asset/reviewindentnote?step=0&applicationNumber=${applicationNumber}`;
+  dispatch(setRoute(reviewUrl));
+  }
 };
 
 export const callBackForNext = async (state, dispatch) => {
@@ -92,7 +118,7 @@ export const callBackForNext = async (state, dispatch) => {
     // MaxQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].maxQuantity"))
     // MinQty = Number( get(state.screenConfiguration.preparedFinalObject, "materials[0].minQuantity"))
    // if(true)
-    moveToReview(dispatch);
+    moveToReview(state,dispatch);
     // else{
     
 
@@ -140,6 +166,8 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
       else{
+        if(activeStep===1)
+        {
           let cardJsonPath =
           "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
           let pagename = "createMaterialIndentNote";
@@ -178,7 +206,11 @@ export const callBackForNext = async (state, dispatch) => {
             dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails",storeMappingTemp)
           );
             }
-              changeStep(state, dispatch);
+            if(activeStep ===1)
+            moveToReview(state,dispatch)
+            else
+            changeStep(state, dispatch);            
+              
             }
             else{
               if(DuplicatItem[0].IsDuplicatItem)
@@ -204,6 +236,9 @@ export const callBackForNext = async (state, dispatch) => {
 
             }
           }
+        }
+        else
+            changeStep(state, dispatch);  
 
       }
      

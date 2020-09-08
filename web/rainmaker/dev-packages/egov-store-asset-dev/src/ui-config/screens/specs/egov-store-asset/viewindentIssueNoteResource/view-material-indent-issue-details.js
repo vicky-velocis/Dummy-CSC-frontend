@@ -9,11 +9,23 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   const gotoCreatePage = (state, dispatch) => {
     const IndentId = getQueryArg(window.location.href, "IndentId");
+    const applicationNumber =getQueryArg(window.location.href, "applicationNumber");
+  if(IndentId)
+  {
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
     ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`
     : `/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`;
     dispatch(setRoute(createUrl));
+  }
+  if(applicationNumber)
+  {
+    const createUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+    ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${applicationNumber}`
+    : `/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${applicationNumber}`;
+    dispatch(setRoute(createUrl));
+  }
   };
   
   const MaterialIssueCard = {
@@ -31,15 +43,15 @@ import {
             { jsonPath: "materialIssues[0].materialIssueDetails[0].material.name",          
           }
           ),
-          // TotalIndentQty: getLabelWithValue(
-          //   {
-          //     labelName: "Total Indent Qty Required",
-          //         labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_INDENT_QTY_REQUIRED"
-          //   },
-          //   { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
+          TotalIndentQty: getLabelWithValue(
+            {
+              labelName: "Total Indent Qty Required",
+                  labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_INDENT_QTY_REQUIRED"
+            },
+            { jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
             
-          //  }
-          // ),
+           }
+          ),
           // BalanceQty: getLabelWithValue(
           //   {
           //     labelName: "Balance Qty",
@@ -82,14 +94,14 @@ import {
              
           //   }
           // ),
-          // TotalValue: getLabelWithValue(
-          //   { labelName: "Total Value",
-          //   labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"},
-          //   {
-          //     jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue"
+           TotalValue: getLabelWithValue(
+            { labelName: "Total Value",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_TOTAL_VALUE"},
+            {
+              jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.TotalValue"
              
-          //   }
-          // ),
+            }
+          ),
           // AssestCode: getLabelWithValue(
           //   {   labelName: "Assest Code",
           //   labelKey: "STORE_MATERIAL_INDENT_NOTE_ASSEST_CODE" },

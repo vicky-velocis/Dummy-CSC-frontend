@@ -96,10 +96,12 @@ const createUpdateItemMasterDetails = async (state, dispatch, applnid) => {
           )
         );
         dispatch(prepareFinalObject("ItemMaster", []));
-        showHideAdhocPopup(state, dispatch, "search");
-        searchResultApiResponse("", state, dispatch);
+       // showHideAdhocPopup(state, dispatch, "search");
 
-        setTimeout(() => window.location.reload(), 5000);
+        searchResultApiResponse("", state, dispatch);
+        setTimeout(() => window.location.reload(), 1000);
+
+        //setTimeout(() => window.location.reload(), 5000);
       } else {
 
         dispatch(

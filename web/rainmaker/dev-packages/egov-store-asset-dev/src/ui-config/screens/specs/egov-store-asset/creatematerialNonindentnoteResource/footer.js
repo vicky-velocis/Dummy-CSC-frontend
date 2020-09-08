@@ -139,6 +139,8 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, errorMessage, "warning"));
       }
       else{
+        if(activeStep===1)
+        {
                 //card validation
                 let cardJsonPath =
                 "components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items";
@@ -179,7 +181,10 @@ export const callBackForNext = async (state, dispatch) => {
                   dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails",storeMappingTemp)
                 );
                   }
-                    changeStep(state, dispatch);
+                  if(activeStep ===1)
+                  moveToReview(dispatch)
+                  else
+                  changeStep(state, dispatch);
                   }
                   else{
                     if(DuplicatItem[0].IsDuplicatItem)
@@ -204,7 +209,9 @@ export const callBackForNext = async (state, dispatch) => {
         
                   }
                 }
-
+              }
+              else
+              changeStep(state, dispatch);
 
       }
      

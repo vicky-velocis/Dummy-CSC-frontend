@@ -37,7 +37,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     `indents`,
     []
   );
-  indents = get(indents,'indents');
+  //indents = get(indents,'indents');
   if(indents && indents[0])
   {
   let indentDetails = get(
@@ -117,6 +117,42 @@ console.log(matcodes)
       }
     ),
     IndentMaterialIssueContainer: getCommonContainer({
+      indentNumber: {
+        ...getTextField({
+          label: {
+            labelName: "Indent No.",
+            labelKey: "STORE_PURCHASE_ORDER_INDENT_NO"
+          },
+          placeholder: {
+            labelName: "Enter Indent No.",
+            labelKey: "STORE_PURCHASE_ORDER_INDENT_NO_PLACEHOLDER"
+          },
+          props: {
+            disabled: true,       
+          },
+          jsonPath: "materialIssues[0].indent.indentNumber"
+        })
+      },
+      indentDate: {
+        ...getDateField({
+          label: {
+            labelName: "Indent Date",
+            labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+          },
+          placeholder: {
+            labelName: "Indent Date",
+            labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+          },
+          pattern: getPattern("Date"),
+          jsonPath: "materialIssues[0].indent.indentDate",
+          props: {
+            disabled:true,
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
+        }),
+      }, 
       IssueStoreName: {
         ...getSelectField({
           label: {
@@ -141,8 +177,8 @@ console.log(matcodes)
           let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
           let fromstore = store.filter(x=> x.code === action.value)
           let toStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].toStore.code",'') 
-          if(action.value !== toStore)
-          {
+          // if(action.value !== toStore)
+          // {
             if(fromstore&&fromstore[0])
             {
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));
@@ -156,12 +192,12 @@ console.log(matcodes)
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.deliveryAddress",fromstore[0].deliveryAddress));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.storeInCharge.code",fromstore[0].storeInCharge.code));
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));         
-                getMaterialData(action,state,dispatch)
+                getMaterialData(action,state,dispatch)               
             }
-          }
-          else{
+          // }
+          // else{
            
-          }
+          // }
           
         }
       },
@@ -229,45 +265,79 @@ console.log(matcodes)
           required: true,
           pattern: getPattern("Date") ,
           jsonPath: "materialIssues[0].issueDate",
-          props: {           
-            inputProps: {
-              max: new Date().toISOString().slice(0, 10),
-            }
-          }
+          // props: {           
+          //   inputProps: {
+          //     max: new Date().toISOString().slice(0, 10),
+          //   }
+          // }
         })
       },
-      IssueToEmployee: {
+      createdBy: {
         ...getTextField({
           label: {
-            labelName: "Issue To Employee",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
           },
           placeholder: {
-            labelName: "Select Issue To Employee",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
-          },         
-          required: false,
-          jsonPath: "materialIssues[0].issuedToEmployee",         
-          props: {
-            disabled: true,       
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
           },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialIssues[0].createdByName"
         })
       },
-      issuedToDesignation: {
+      designation: {
         ...getTextField({
-          label: { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
           placeholder: {
             labelName: "Enter Designation",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION_PLACEHOLDER"
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
           },
-          required: false,
-          jsonPath: "materialIssues[0].issuedToDesignation",
-          
           props: {
-            disabled: true,       
+            disabled: true
           },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialIssues[0].designation"
         })
       },
+      // IssueToEmployee: {
+      //   ...getTextField({
+      //     label: {
+      //       labelName: "Issue To Employee",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+      //     },
+      //     placeholder: {
+      //       labelName: "Select Issue To Employee",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_TO_EMPLOYEE"
+      //     },         
+      //     required: false,
+      //     jsonPath: "materialIssues[0].issuedToEmployee",         
+      //     props: {
+      //       disabled: true,       
+      //     },
+      //   })
+      // },
+      // issuedToDesignation: {
+      //   ...getTextField({
+      //     label: { labelName: "Designation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+      //     placeholder: {
+      //       labelName: "Enter Designation",
+      //       labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION_PLACEHOLDER"
+      //     },
+      //     required: false,
+      //     jsonPath: "materialIssues[0].issuedToDesignation",
+          
+      //     props: {
+      //       disabled: true,       
+      //     },
+      //   })
+      // },
       Remark: {
         ...getTextField({
           label: {

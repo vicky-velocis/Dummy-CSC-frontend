@@ -228,11 +228,11 @@ const getAcknowledgementCard = (state, dispatch, applicationNumber) => {
           icon: "done",
           backgroundColor: "#39CB74",
           header: getLabelForStoreAsset(),
-          body: {
-            labelName:
-              "A notification regarding Application Submission has been sent to the applicant",
-            labelKey: "PET_NOC_APPLICATION_SUCCESS_MESSAGE_SUB",
-          },
+          // body: {
+          //   labelName:
+          //     "A notification regarding Application Submission has been sent to the applicant",
+          //   labelKey: "PET_NOC_APPLICATION_SUCCESS_MESSAGE_SUB",
+          // },
           tailText: getApplicationDisplayCode(),
           number: applicationNumber,
         }),

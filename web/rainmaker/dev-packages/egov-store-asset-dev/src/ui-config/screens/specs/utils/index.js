@@ -24,14 +24,20 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-
+import {
+  getTenantId
+} from "egov-ui-kit/utils/localStorageUtils";
 
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer",
+      style:{
+        width:"100%",
+       
+     }
     },
     children
   };
@@ -1253,8 +1259,42 @@ export const downloadReceiptFromFilestoreID=(fileStoreId,mode,tenantId)=>{
   });
   
 }
+export const downloadInventoryPdf = async ( searchScreenObject, Reportname,mode="download") => {
+  let tenantId =  getTenantId()
+  let Url =``;
+  if(Reportname ==="OB")
+  Url =`/store-asset-services/openingbalance/_report`
+  else if(Reportname==='INV')
+  Url =`/store-asset-services/receiptnotes/_inventoryreport`
+  let queryObject = [
+    {
+      key: "tenantId",
+      value: tenantId
+    }
+  ]
+     for (var key in searchScreenObject) {  
+  
+              queryObject.push({ key: key, value: (searchScreenObject[key]) });
+            }
+    try { 
+        queryObject.push({
+              key: "isprint",
+              value: true
+            });   
+      const response = await getprintpdf(queryObject,Url);
+      if(response)
+      {
+        let filestoreId = response.filestoreIds[0]
+        downloadReceiptFromFilestoreID(filestoreId,mode,tenantId)
+      }
+     
+    } catch (exception) {
+      alert('Some Error Occured while downloading Acknowledgement form!');
+    }
+  
+  }
 export const downloadAcknowledgementForm = async ( pagename,mode="download") => {
-  let tenantId = getQueryArg(window.location.href, "tenantId");
+  let tenantId =  getQueryArg(window.location.href, "tenantId");
   let APIUrl =`store-asset-services/indents/_print`
   let ApplicationNo ='';
   let queryObject = [
@@ -1356,6 +1396,30 @@ switch(pagename)
           });
           APIUrl = `store-asset-services/materialissues/_print`
           break;
+          // case "Inventry":
+          //   // let searchScreenObject = get(
+          //   //   state.screenConfiguration.preparedFinalObject,
+          //   //   "searchScreen",
+          //   //   {}
+          //   // );
+          //   let queryObject = [
+          //     {
+          //       key: "tenantId",
+          //       value: getTenantId()
+          //     }
+             
+          //   ];
+          //   for (var key in searchScreenObject) {  
+  
+          //     queryObject.push({ key: key, value: (searchScreenObject[key]) });
+          //   }
+           
+          //   queryObject.push({
+          //     key: "isprint",
+          //     value: true
+          //   });
+          //   APIUrl = `/store-asset-services/receiptnotes/_inventoryreport`
+          //   break;
     
   
 

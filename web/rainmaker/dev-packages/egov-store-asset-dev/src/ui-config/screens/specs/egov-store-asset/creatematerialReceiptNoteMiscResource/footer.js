@@ -133,6 +133,8 @@ export const callBackForNext = async (state, dispatch) => {
     }
       if(IsValidDate)
       {
+        if(activeStep===1)
+        {
         // validate duplicate card
         let cardJsonPath =
         "components.div.children.formwizardSecondStep.children.materialReceiptMiscDetail.children.cardContent.children.materialReceiptCard.props.items";
@@ -170,6 +172,9 @@ export const callBackForNext = async (state, dispatch) => {
             dispatch(prepareFinalObject("materialReceipt[0].receiptDetails",storeMappingTemp)
           );
             }
+            if(activeStep ===1)
+            moveToReview(dispatch)
+            else
             changeStep(state, dispatch);
           }
           else{
@@ -207,6 +212,10 @@ export const callBackForNext = async (state, dispatch) => {
         else{
           changeStep(state, dispatch);
         }
+      }
+      else{
+        changeStep(state, dispatch);
+      }
 
       
 
@@ -488,35 +497,49 @@ export const footer = getCommonApplyFooter({
             );
            
       }
-      else{
-        let material=[];
-       // GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material","MAT02")
-        let materialList = response.materialIssues[0].materialIssueDetails;
-        for (let index = 0; index < materialList.length; index++) {
-          const element = materialList[index];
-          material.push(
-            {
-              materialcode:element.material.code,
-              //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.name",GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode)));
-              materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
-              uom:element.uom,
-              id:element.id,
-              quantityIssued:element.quantityIssued,
-              orderNumber:element.orderNumber,
-              issuedToEmployee:response.materialIssues[0].issuedToEmployee,
-              issuedToDesignation:response.materialIssues[0].issuedToDesignation,
-              //unitRate://to be deside
-            }
-            
-          )
+      else if(response.materialIssues.length>0)
+      {
+
+        if(response.materialIssues[0].issueType==='INDENTISSUE' && response.materialIssues[0].materialIssueStatus==='APPROVED')
+        {
+          let material=[];
+          // GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material","MAT02")
+           let materialList = response.materialIssues[0].materialIssueDetails;
+           for (let index = 0; index < materialList.length; index++) {
+             const element = materialList[index];
+             material.push(
+               {
+                 materialcode:element.material.code,
+                 //dispatch(prepareFinalObject("materialIssues[0].materialIssueDetails[0].material.name",GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material",Material[0].materialCode)));
+                 materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
+                 uom:element.uom,
+                 id:element.id,
+                 quantityIssued:element.quantityIssued,
+                 orderNumber:element.orderNumber,
+                 issuedToEmployee:response.materialIssues[0].issuedToEmployee,
+                 issuedToDesignation:response.materialIssues[0].issuedToDesignation,
+                 //unitRate://to be deside
+               }
+               
+             )
+           }
+           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.code", response.materialIssues[0].toStore.code));
+           dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name", response.materialIssues[0].toStore.name));
+           dispatch(prepareFinalObject("MiscMaterilList", material));
         }
-        dispatch(prepareFinalObject("materialReceipt[0].receivingStore.code", response.materialIssues[0].toStore.code));
-        dispatch(prepareFinalObject("materialReceipt[0].receivingStore.name", response.materialIssues[0].toStore.name));
-        dispatch(prepareFinalObject("MiscMaterilList", material));
+        else{
+          dispatch(
+            toggleSnackbar(
+              true,
+              { labelName: "Please Enter Approved Material Indent Issue Number.", labelKey: "STORE_MISC_CREATION_VALIDATION" },
+              "warning"
+            )
+          );
+          
+          }
 
-
+      }
      
-        }
     } catch (error) {
       dispatch(
         toggleSnackbar(

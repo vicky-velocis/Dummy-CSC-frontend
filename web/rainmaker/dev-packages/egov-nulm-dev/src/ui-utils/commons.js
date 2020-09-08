@@ -50,6 +50,14 @@ export const getSearchResults = async (queryObject=[],requestBody={},dispatch,sc
     break;
     case "organization": url = "/nulm-services/v1/organization/_get";
     break;
+    case "smid-org" : url = "/nulm-services/v1/smid/shg/_get";
+    break;
+    case "shgMember": url = "/nulm-services/v1/smid/shg/member/_get";
+    break;
+    case "suh": url =  "/nulm-services/v1/suh/_get";
+    break;
+    case "suhLog":  url =  "/nulm-services/v1/suh/log/_get";
+    break;
   }
   try {
     const response = await httpRequest("post", url, "", queryObject, requestBody );

@@ -779,6 +779,12 @@ else{
     let TakenGratuityCommutationTerminalBenefit = "NA";
     let TakenCompensationPensionAndGratuity = "NA";
     let bankAddress =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankAddress", 0 );
+    let Obj  = get(state, `screenConfiguration.preparedFinalObject.applyScreenMdmsData.pension.BankDetails`,[]) 
+    let Name = bankAddress
+    Obj = Obj.filter(x=>x.code === bankAddress)
+    if(Obj &&Obj[0])
+    Name = Obj[0].name
+     bankAddress = Name;
     let accountNumber =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.accountNumber", 0 );
     if(reasonForRetirement === "ABOLITION_OF_POST")
     {
