@@ -198,7 +198,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].purchaseOrderDate",
         props: {
           inputProps: {
-            max: new Date().toISOString().slice(0, 10),
+           max: new Date().toISOString().slice(0, 10),
           }
         }
       }),

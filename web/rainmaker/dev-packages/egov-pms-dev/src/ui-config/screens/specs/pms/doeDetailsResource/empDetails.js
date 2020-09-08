@@ -863,7 +863,8 @@ const dependentUnitcard = {
               optionLabel: "name"      
             },
             pattern: getPMSPattern("Address"),
-            jsonPath: "ProcessInstances[0].employeeOtherDetails.bankAddress",
+            jsonPath: "ProcessInstances[0].dependents[0].bankDetails",
+            //jsonPath: "ProcessInstances[0].employeeOtherDetails.bankAddress",
             sourceJsonPath:
            "applyScreenMdmsData.pension.BankDetails",
           }),

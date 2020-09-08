@@ -803,6 +803,12 @@ else{
         if(dependents[index].isEligibleForPension && dependents[index].isEligibleForGratuity)
         {         
           bankAddress= dependents[index].bankDetails;
+          let Obj  = get(state, `screenConfiguration.preparedFinalObject.applyScreenMdmsData.pension.BankDetails`,[]) 
+          let Name = bankAddress
+          Obj = Obj.filter(x=>x.code === bankAddress)
+          if(Obj &&Obj[0])
+          Name = Obj[0].name
+           bankAddress = Name;
           accountNumber= dependents[index].bankAccountNumber;
         }
       }
