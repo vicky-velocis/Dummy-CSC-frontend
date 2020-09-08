@@ -65,7 +65,7 @@ const getMDMSPropertyData = async (dispatch) => {
   try {
     let payload=null;
      payload = await httpRequest("post","/egov-mdms-service/v1/_search","_search",[],mdmsBody);
-  let PropertyType=[]; let UsageType=[];
+  let PropertyType=[]; let UsageType=[];let subUsageType=[];
   payload.MdmsRes.PropertyTax.PropertyType.filter(item=>{
     if(item.name!="Built Up"){
       PropertyType.push({
@@ -78,8 +78,39 @@ const getMDMSPropertyData = async (dispatch) => {
   })
 payload.MdmsRes.PropertyTax.PropertyType=PropertyType;
 
+// payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
+//   if(item.code.split(".").length<=2 && item.code!="NONRESIDENTIAL"){
+//       UsageType.push({
+//         active:item.active,
+//         name:item.name,
+//         code:item.code,
+//         fromFY:item.fromFY
+//       })
+//     }
+// })
+// payload.MdmsRes.PropertyTax.UsageType=UsageType;
+// let array1 = [];
+// let array2 = [];
+// payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
+//  let itemCode = item.code.split(".");
+//  const codeLength = itemCode.length;
+//     if(codeLength>3){
+//       array1.push(item);
+//     }else if(codeLength===3){
+//       array2.push(item);
+//     }
+// })
+// array1.forEach(item=>{
+// array2 = array2.filter(item1=>{
+//   return (!(item.code.includes(item1.code)));
+// })
+// });
+// array1 = array2.concat(array1);
+//payload.MdmsRes.PropertyTax.subUsageType=array1;
+
+//code for chandigarh as per requirement
 payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
-  if(item.code.split(".").length<=2 && item.code!="NONRESIDENTIAL"){
+  if(item.code.split(".").length<=1){
       UsageType.push({
         active:item.active,
         name:item.name,
@@ -87,28 +118,20 @@ payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
         fromFY:item.fromFY
       })
     }
-})
-payload.MdmsRes.PropertyTax.UsageType=UsageType;
-let array1 = [];
-let array2 = [];
-payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
- let itemCode = item.code.split(".");
- const codeLength = itemCode.length;
-    if(codeLength>3){
-      array1.push(item);
-    }else if(codeLength===3){
-      array2.push(item);
-    }
-})
-array1.forEach(item=>{
-array2 = array2.filter(item1=>{
-  return (!(item.code.includes(item1.code)));
-})
 });
-array1 = array2.concat(array1);
+ payload.MdmsRes.PropertyTax.UsageType=UsageType;
 
-payload.MdmsRes.PropertyTax.subUsageType=array1;
-
+ payload.MdmsRes.PropertyTax.UsageCategory.forEach(item=>{
+  if(item.code.split(".").length==2){
+    subUsageType.push({
+        active:item.active,
+        name:item.name,
+        code:item.code,
+        fromFY:item.fromFY
+      })
+    }
+});
+payload.MdmsRes.PropertyTax.subUsageType=subUsageType;
   dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
