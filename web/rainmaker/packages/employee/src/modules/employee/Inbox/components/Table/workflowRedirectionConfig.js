@@ -108,7 +108,7 @@ export const getWFConfig = (module, businessService, taskId) => {
         break;
     }
   }
-  else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF OVERGROWN/GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
+  else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
     return {
       INITIATED: "/egov-hc/search-preview",
       DEFAULT: "/egov-hc/search-preview",

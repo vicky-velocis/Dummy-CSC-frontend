@@ -624,20 +624,22 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9 -]{1,10}$/i;
 
       //validation patterns for HC....don't use
-    case "NoOfTree":
-      return /^(0?[1-9]|[1-9][0-9])$/i;
-    case "serviceRequestDescription":
-      return  /^[a-zA-Z0-9#$%&?@/!\\n~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/;
-    case "location":
-      return /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/;
-    case "HCMobileNo":
-    return /^[0-9]{10}$/i
-    case "HCEmail":
-    return /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
-    case "HCOwnerName":
-      return /^[a-zA-Z\s\\/\-]{1,256}$/i;
-    case "HCMobileNoSearch":
-        return /^[0-9]{0,10}$/i;
+      case "NoOfTree":
+        return /^(0?[1-9]|[1-9][0-9])$/i;
+      case "location":
+        return /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>*;={}`%+^!])/;
+      case "HCServiceRequestId":
+          return /^[a-zA-Z0-9#$&?@~_|,-.,:\s,\n]{1,256}$(?!.*[<>()'"/\*;={}`%+^!])/;
+      case "HCMobileNo":
+      return /^[0-9]{10}$/i
+      case "HCEmail":
+      return /(?=^.{1,256}$)(^\w+([\.]?\w+)*@\w+([\.]?\w+)*(\.\w{2,3})+$)/;
+      case "HCOwnerName":
+        return /^[a-zA-Z\s]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/i;
+      case "HCMobileNoSearch":
+          return /^[0-9]{0,10}$/i;
+      case "serviceRequestDescription":
+          return  /^[a-zA-Z0-9#$&?@~_|.,:\s,]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/;
      case "aadhar":
       return  /^[0-9]{4}$/i;
      case "aadharAcknowledgementNo":

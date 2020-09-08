@@ -421,7 +421,7 @@ class WorkFlowContainer extends React.Component {
     }
     else if (moduleName.toUpperCase().trim() === "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS"
     || moduleName.toUpperCase().trim() === "PRUNING OF TREES GIRTH GREATER THAN 90 CMS"
-    || moduleName.toUpperCase().trim() === "REMOVAL OF OVERGROWN/GREEN TREES" 
+    || moduleName.toUpperCase().trim() === "REMOVAL OF GREEN TREES" 
     || moduleName.toUpperCase().trim() === "REMOVAL OF DEAD/DANGEROUS/DRY TREES"){
       // alert("inside edit")
       baseUrl = "egov-hc"
