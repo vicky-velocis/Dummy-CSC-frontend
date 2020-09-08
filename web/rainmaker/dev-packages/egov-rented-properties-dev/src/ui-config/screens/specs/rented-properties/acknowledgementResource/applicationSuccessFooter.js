@@ -236,8 +236,6 @@ export const applicationSuccessFooter = (
 
     });
   } else {
-    debugger
-    console.log(state)
     return getCommonApplyFooter({
       gotoHome: {
         componentPath: "Button",
