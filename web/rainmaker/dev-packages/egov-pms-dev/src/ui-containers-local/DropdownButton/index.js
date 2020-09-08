@@ -794,7 +794,9 @@ else{
     }
     if(businessService === WFConfig().businessServiceRRP)
     reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
-
+    let serviceTo = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceTo", 0 )
+    if(serviceTo !== null)
+    serviceTo = convertEpochToDate(serviceTo,'dob')
     if(businessService === WFConfig().businessServiceDOE || businessService === WFConfig().businessServiceDOP)
     {
       let dependents =
@@ -836,7 +838,7 @@ else{
       permanentPinCode:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.user.permanentPinCode", '' ),
       serviceStatus:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceStatus", '' ),
       serviceFrom:convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceFrom", 0 ),'dob'),
-      serviceTo:convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceTo", 0 ),'dob'),
+      serviceTo:serviceTo,
       // other details
   
       reasonForRetirement:reasonForRetirement,
