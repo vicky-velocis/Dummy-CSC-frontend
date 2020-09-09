@@ -1001,7 +1001,7 @@ const getStatementForDocType = docType => {
   }
 };
 
-export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, payloadName, mode = "download") => {
+export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey, applicationType, mode = "download") => {
   let queryStr = []
   switch (applicationType) {
     case 'MG':
@@ -1017,16 +1017,29 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey,
       break;
     case 'DC':
     case 'OT':
-      queryStr = [{
+      if(process.env.REACT_APP_NAME === "Citizen"){
+        queryStr = [{
           key: "key",
-          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` ||
-            status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid` : `rp-${pdfkey}-fresh`
+          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ||
+            status == `${applicationType}_PENDINGCLAPPROVAL` || status == `${applicationType}_PENDINGSAREJECTION` ? `rp-${pdfkey}-paid` : `rp-${pdfkey}-fresh`
         },
         {
           key: "tenantId",
           value: "ch"
         }
       ]
+      }else{
+        queryStr = [{
+          key: "key",
+          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` || status == `${applicationType}_PENDINGSAREJECTION` ||
+            status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid` : (status == `${applicationType}_PENDINGSIVERIFICATION` || status == `${applicationType}_PENDINGCAAPPROVAL` || status == `${applicationType}_PENDINGAPRO`) ? `rp-${pdfkey}-charges` : `rp-${pdfkey}-fresh`
+        },
+        {
+          key: "tenantId",
+          value: "ch"
+        }
+      ]
+      }
       break;
   }
 
@@ -1536,7 +1549,7 @@ export const download = (receiptQueryString, Properties, data, generatedBy,type,
         ...rest
       }) => ({
         ...rest,
-        taxHeadCode: taxHeadCode.includes("_DUE") ? "RP_DUE" : taxHeadCode.includes("_PENALTY") ? "RP_PENALTY" : taxHeadCode.includes("_TAX") ? "RP_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "RP_ROUNDOFF" : taxHeadCode.includes("_CHARGES") ? "RP_CHARGES" : taxHeadCode
+        taxHeadCode: taxHeadCode.includes("_APPLICATION_FEE") ? "RP_DUE" : taxHeadCode.includes("_PENALTY") ? "RP_PENALTY" : taxHeadCode.includes("_TAX") ? "RP_TAX" : taxHeadCode.includes("_ROUNDOFF") ? "RP_ROUNDOFF" : taxHeadCode.includes("_PUBLICATION_FEE") ? "RP_CHARGES" : taxHeadCode
       }))
       Payments = [{
         ...Payments[0],
