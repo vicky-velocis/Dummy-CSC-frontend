@@ -95,6 +95,15 @@ export const getReviewApplicantDetails = (isEditable = true) => {
                 {
                     jsonPath: "Owners[0].ownerDetails.dateOfDeathAllottee" , callBack: convertEpochToDate
                 }
+            ),
+            dueAmount: getLabelWithValue(
+                {
+                    labelName: "Due Amount",
+                    labelKey: "RP_DUE_AMOUNT_LABEL_ALLOTEE"
+                },
+                {
+                    jsonPath: "Owners[0].ownerDetails.dueAmount"
+                }
             )
         })
     })
@@ -319,6 +328,15 @@ export const getDuplicateCopyPreviewApplicantDetails = (isEditable = true) => {
                 },
                 {
                     jsonPath: "DuplicateCopyApplications[0].applicant[0].adhaarNumber" 
+                }
+            ),
+            dueAmount: getLabelWithValue(
+                {
+                    labelName: "Due Amount",
+                    labelKey: "RP_DUE_AMOUNT_LABEL_ALLOTEE"
+                },
+                {
+                    jsonPath: "DuplicateCopyApplications[0].applicant[0].feeAmount" 
                 }
             )
         })
