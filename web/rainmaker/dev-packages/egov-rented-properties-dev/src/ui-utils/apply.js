@@ -373,7 +373,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
         let response;
         set(queryObject[0], "tenantId", tenantId);
         set(queryObject[0], "propertyDetails", "null");
-        set(queryObject[0], "applicant[0].phone", userInfo.userName);
+        set(queryObject[0], "applicant[0].phone",queryObject[0].applicant[0].phone);
         set(queryObject[0], "applicant[0].adhaarNumber", queryObject[0].applicant[0].adhaarNumber);
         if(!id) {
           set(queryObject[0], "state", "");
@@ -445,7 +445,7 @@ export const applyDuplicateCopy = async (state, dispatch, activeIndex) => {
         let response;
         set(queryObject[0], "tenantId", tenantId);
         set(queryObject[0], "propertyDetails", "null");
-        set(queryObject[0], "applicant[0].phone", userInfo.userName);
+        set(queryObject[0], "applicant[0].phone", queryObject[0].applicant[0].phone);
         set(queryObject[0], "applicant[0].adhaarNumber", queryObject[0].applicant[0].adhaarNumber);
         
         if(!id) {
@@ -752,12 +752,31 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
               findOwner.ownerDetails.fatherOrHusband
             )
           )
-          dispatch(
-            prepareFinalObject(
-              "MortgageApplications[0].applicant[0].relationship",
-              findOwner.ownerDetails.relation
+
+          if(!!findOwner.ownerDetails.relationWithDeceasedAllottee && findOwner.ownerDetails.relationWithDeceasedAllottee === "LEGAL_HEIR"){
+            dispatch(
+              prepareFinalObject(
+                "MortgageApplications[0].applicant[0].relationship",
+                "FATHER"
+              )
             )
-          )
+          }
+          else if(!!findOwner.ownerDetails.relationWithDeceasedAllottee && findOwner.ownerDetails.relationWithDeceasedAllottee === "SPOUSE"){
+            dispatch(
+              prepareFinalObject(
+                "MortgageApplications[0].applicant[0].relationship",
+                "HUSBAND"
+              )
+            )
+          }
+          else{
+            dispatch(
+              prepareFinalObject(
+                "MortgageApplications[0].applicant[0].relationship",
+                findOwner.ownerDetails.relation
+              )
+            )
+          }
           dispatch(
             prepareFinalObject(
               "MortgageApplications[0].applicant[0].adhaarNumber",
@@ -879,12 +898,31 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
               findOwner.ownerDetails.fatherOrHusband
             )
           )
-          dispatch(
-            prepareFinalObject(
-              "DuplicateCopyApplications[0].applicant[0].relationship",
-              findOwner.ownerDetails.relation
+          if(!!findOwner.ownerDetails.relationWithDeceasedAllottee && findOwner.ownerDetails.relationWithDeceasedAllottee === "LEGAL_HEIR"){
+            dispatch(
+              prepareFinalObject(
+                "DuplicateCopyApplications[0].applicant[0].relationship",
+                "FATHER"
+              )
             )
-          )
+          }
+          else if(!!findOwner.ownerDetails.relationWithDeceasedAllottee && findOwner.ownerDetails.relationWithDeceasedAllottee === "SPOUSE"){
+            dispatch(
+              prepareFinalObject(
+                "DuplicateCopyApplications[0].applicant[0].relationship",
+                "HUSBAND"
+              )
+            )
+          }
+          else{
+            dispatch(
+              prepareFinalObject(
+                "DuplicateCopyApplications[0].applicant[0].relationship",
+                findOwner.ownerDetails.relation
+              )
+            )
+          }
+         
           dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].applicant[0].adhaarNumber",
@@ -895,6 +933,12 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
             prepareFinalObject(
               "DuplicateCopyApplications[0].applicant[0].email",
               findOwner.ownerDetails.email
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "DuplicateCopyApplications[0].applicant[0].phone",
+              findOwner.ownerDetails.phone
             )
           )
           return true
