@@ -10,8 +10,8 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { UploadSingleFile } from "../../ui-molecules-local";
-import { handleFileUpload } from "../../ui-utils/commons"
+import { UploadSingleFile, SimpleModal } from "../../ui-molecules-local";
+import { handleFileUpload, getFileSize } from "../../ui-utils/commons"
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import get from "lodash/get";
 import isUndefined from "lodash/isUndefined";
@@ -65,6 +65,8 @@ const documentTitle = {
   letterSpacing: "0.67px",
   lineHeight: "19px"
 };
+
+let simpleModalOpen = false;
 
 class DocumentList extends Component {
   state = {
@@ -153,7 +155,18 @@ class DocumentList extends Component {
   };
 
   changeFile = (key) => async (e) => {
-    this.setState({showLoader: true})
+    this.setState({showLoader: true});
+    const input = e.target;
+    if (input.files && input.files.length > 0) {
+      const files = input.files;
+      Object.keys(files).forEach(async (key, index) => {
+        const file = files[key];
+        const isSizeValid = getFileSize(file) <= maxFileSize;
+        if (!isSizeValid) {
+          simpleModalOpen = true;
+        }
+      })
+    }
     await handleFileUpload(e, this.handleDocument, 
       this.props.inputProps[key], this.stopLoading)
   }
@@ -285,6 +298,7 @@ class DocumentList extends Component {
           })}
       </div>
       {!!showLoader && <LoadingIndicator status={"loading"} />}
+      <SimpleModal open={ simpleModalOpen }/>
       </div>
     );
   }
