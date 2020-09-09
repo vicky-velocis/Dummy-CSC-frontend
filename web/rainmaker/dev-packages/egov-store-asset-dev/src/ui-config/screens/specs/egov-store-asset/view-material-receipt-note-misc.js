@@ -24,13 +24,13 @@ let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let enableButton = true;
-if(status ===WorkFllowStatus().WorkFllowRejected)
+if(status.toUpperCase() ===WorkFllowStatus().WorkFllowRejected)
 enableButton = false
-else if(status !==WorkFllowStatus().WorkFllowApproved)
+else if(status.toUpperCase() !==WorkFllowStatus().WorkFllowApproved)
 enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {
@@ -266,9 +266,9 @@ const screenConfig = {
               componentPath: "MenuButton",
               gridDefination: {
                 xs: 12,
-                sm: 4,
-                md:3,
-                lg:3,
+                sm: 12,
+                // md:3,
+                // lg:3,
                 align: "right",
               },  
               visible: true,// enableButton,
