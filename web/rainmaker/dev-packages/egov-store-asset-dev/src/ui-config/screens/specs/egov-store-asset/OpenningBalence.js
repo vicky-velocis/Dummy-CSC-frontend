@@ -184,7 +184,7 @@ const RegisterReviewResult = {
   beforeInitScreen: (action, state, dispatch) => {
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();   
-    
+    dispatch(prepareFinalObject("searchScreen",{}));
     getData(action, state, dispatch).then(responseAction => {
     
     }); 

@@ -429,6 +429,12 @@ if (activeStep === 2) {
       isFormValid=false
       hasFieldToaster = true;
     }
+    //let GenPressdoc =get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux[0].documents")
+// if(GenPressdoc===undefined)
+// {
+//   isFormValid=false
+//   hasFieldToaster = true;
+// }
     
 		let data1= localStorageGet("PressNoteList") === null ? JSON.parse( localStorageGet("PressNoteListAll")) : JSON.parse( localStorageGet("PressNoteList"))
 		if(localStorageGet("PressNoteList")!=="[]")
@@ -439,6 +445,9 @@ if (activeStep === 2) {
     let documentsPreview = [];
     
     let doc =get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux[0].documents")
+  if(doc!==undefined)
+ {
+
     let doctitle = [];
     if(doc.length>0)
     {
@@ -520,7 +529,18 @@ if (activeStep === 2) {
       ));
 	
   
-	changeStep(state, dispatch, 'next', activeStep);
+  changeStep(state, dispatch, 'next', activeStep);
+      }
+      else{
+        dispatch(
+          toggleSnackbar(
+            true,
+            {   labelName: "Please fill all mandatory fields and select atleast one Press!",
+    labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST" },
+            "warning"
+          )
+        );
+      }
 	}
 	else
 	{
@@ -561,6 +581,9 @@ labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST" },
     )
   );
 }
+
+
+
  }
 
 

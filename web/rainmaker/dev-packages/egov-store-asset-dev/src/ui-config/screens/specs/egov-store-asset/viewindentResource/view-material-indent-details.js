@@ -30,15 +30,15 @@ import {
             { jsonPath: "indents[0].indentDetails[0].material.name",          
           }
           ),
-          // MaterialDescription: getLabelWithValue(
-          //   {
-          //     labelName: "Material Description",
-          //         labelKey: "STORE_MATERIAL_DESCRIPTION"
-          //   },
-          //   { jsonPath: "indents[0].storeMapping[0].MaterialDescription"
+          MaterialDescription: getLabelWithValue(
+            {
+              labelName: "Material Description",
+                  labelKey: "STORE_MATERIAL_DESCRIPTION"
+            },
+            { jsonPath: "indents[0].indentDetails[0].material.description"
             
-          //  }
-          // ),
+           }
+          ),
           UOMName: getLabelWithValue(
             { labelName: "UOM Name",
             labelKey: "STORE_MATERIAL_INDENT_NOTE_UOM_NAME"},
@@ -77,7 +77,7 @@ import {
             {   labelName: "QuantityRequired",
             labelKey: "STORE_MATERIAL_INDENT_QUANTITY_REQUIRED" },
             {
-              jsonPath: "indents[0].indentDetails[0].userQuantity",
+              jsonPath: "indents[0].indentDetails[0].indentQuantity",
              
             }
           )

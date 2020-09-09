@@ -304,7 +304,7 @@ export const MTONHeader = getCommonCard({
 
       }
     },
-    designation: {
+    issuedToDesignation: {
       ...getTextField({
         label: {
           labelName: "Designation",
@@ -319,6 +319,40 @@ export const MTONHeader = getCommonCard({
         },
        // pattern: getPattern("Email"),
         jsonPath: "materialIssues[0].issuedToDesignation"
+      })
+    },
+    createdBy: {
+      ...getTextField({
+        label: {
+          labelName: "Created by",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+        },
+        placeholder: {
+          labelName: "Enter Created By",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+        },
+        props: {
+          disabled: true
+        },
+       // pattern: getPattern("Email"),
+        jsonPath: "materialIssues[0].createdByName"
+      })
+    },
+    degignation: {
+      ...getTextField({
+        label: { labelName: "degignation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+        placeholder: {
+          labelName: "degignation",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION"
+        },
+        props: {
+          disabled: true,       
+        },
+        required: false,
+        visible:true,
+        jsonPath: "materialIssues[0].designation",
+       
+        
       })
     },
     remarks: getTextField({

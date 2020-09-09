@@ -20,6 +20,7 @@ import Notifications from "modules/employee/Notifications";
 import pgrRoutes from "pgr-employee/Routes/pgr-routes";
 import ptRoutes from "pt-employee/Routes/pt-routes";
 import frameworkScreens from "./frameworkScreens";
+//import bookingRoutes from "egov-services-emp/Routes/pgr-routes";
 import externalRoutes from "./exterenalURL";
 
 // import PTHome from "modules/employee/PropertyTax/PTHome";
@@ -172,6 +173,7 @@ const routes = [
   ...ptRoutes,
   ...frameworkScreens,
   ...externalRoutes,
+  //...bookingRoutes,
 ];
 
 export default routes;

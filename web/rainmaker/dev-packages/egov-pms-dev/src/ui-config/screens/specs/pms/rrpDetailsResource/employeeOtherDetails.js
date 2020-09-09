@@ -818,7 +818,7 @@ return getCommonCard({
         pattern: getPMSPattern("Amount"),
         jsonPath: "ProcessInstances[0].employeeOtherDetails.ltc"
       }),
-      bankAddress: getTextField({
+      bankAddress: getSelectField({
         label: {
           labelName: "Bank address",
           labelKey: "PENSION_EMPLOYEE_PENSION_BA"
@@ -832,10 +832,14 @@ return getCommonCard({
         },
         required:false,
         props: {
-          disabled: data[0].employeeOtherDetailsUpdate,      
+          disabled: data[0].employeeOtherDetailsUpdate,
+          optionValue: "code",
+          optionLabel: "name"      
         },
         pattern: getPMSPattern("Address"),
-        jsonPath: "ProcessInstances[0].employeeOtherDetails.bankAddress"
+        jsonPath: "ProcessInstances[0].employeeOtherDetails.bankAddress",
+        sourceJsonPath:
+       "applyScreenMdmsData.pension.BankDetails",
       }),
       noDuesForAvailGovtAccomodation: {
         uiFramework: "custom-containers-local",

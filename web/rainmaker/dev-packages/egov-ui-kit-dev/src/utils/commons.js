@@ -852,6 +852,7 @@ export const getModuleName = () => {
     else if (pathName.indexOf("egov-nulm") > -1) { return "rainmaker-nulm"; }
     else if (pathName.indexOf("egov-pr") > -1) { return "rainmaker-pr"; }
     else if (pathName.indexOf("uc") > -1) { return "rainmaker-uc"; }
+    else if (pathName.indexOf("egov-services") > -1) { return "rainmaker-services"; }
   else {
     return "rainmaker-common";
   }

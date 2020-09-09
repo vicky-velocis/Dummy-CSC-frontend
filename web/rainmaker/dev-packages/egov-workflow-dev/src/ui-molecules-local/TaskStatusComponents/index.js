@@ -36,7 +36,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
   }
 
   if (currentObj.moduleName === 'HORTICULTURE'){
-    debugger
+    
     var role_name = ""
     
     

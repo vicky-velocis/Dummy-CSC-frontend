@@ -48,7 +48,7 @@ export const FieldsForFilterForm = getCommonCard({
         },
 
         //  required:true,
-        pattern: getPattern("BuildingStreet"),
+        pattern: getPattern("HCServiceRequestId"),
         errorMessage: "ERR_INVALID_SERVICE_REQUEST_ID_FIELD_MSG",
         jsonPath: "myServiceRequests[0].servicerequestid"
       })

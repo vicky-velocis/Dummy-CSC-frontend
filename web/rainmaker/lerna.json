@@ -1,6 +1,7 @@
 {
   "npmClient": "yarn",
   "packages": [
+    "dev-packages/egov-booking-employee-dev",
     "dev-packages/pgr-citizen-dev",
     "dev-packages/pgr-employee-dev",
     "dev-packages/pt-citizen-dev",
