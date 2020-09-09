@@ -1020,7 +1020,7 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey,
       if(process.env.REACT_APP_NAME === "Citizen"){
         queryStr = [{
           key: "key",
-          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` ||
+          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ||
             status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid` : `rp-${pdfkey}-fresh`
         },
         {
