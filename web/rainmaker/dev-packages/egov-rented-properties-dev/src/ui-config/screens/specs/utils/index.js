@@ -1021,7 +1021,7 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey,
         queryStr = [{
           key: "key",
           value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` ||
-            status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid` : `rp-${pdfkey}-fresh`
+            status == `${applicationType}_PENDINGCLAPPROVAL` || status == `${applicationType}_PENDINGSAREJECTION` ? `rp-${pdfkey}-paid` : `rp-${pdfkey}-fresh`
         },
         {
           key: "tenantId",
@@ -1031,7 +1031,7 @@ export const downloadAcknowledgementForm = (Owners, feeEstimate, status, pdfkey,
       }else{
         queryStr = [{
           key: "key",
-          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` ||
+          value: status == `${applicationType}_PENDINGPAYMENT` || status == `${applicationType}_APPROVED` || status == `${applicationType}_REJECTEDPAID` || status == `${applicationType}_PENDINGSAAPPROVAL` || status == `${applicationType}_PENDINGSAREJECTION` ||
             status == `${applicationType}_PENDINGCLAPPROVAL` ? `rp-${pdfkey}-paid` : (status == `${applicationType}_PENDINGSIVERIFICATION` || status == `${applicationType}_PENDINGCAAPPROVAL` || status == `${applicationType}_PENDINGAPRO`) ? `rp-${pdfkey}-charges` : `rp-${pdfkey}-fresh`
         },
         {
