@@ -644,6 +644,10 @@ export const getPattern = type => {
       return  /^[0-9]{4}$/i;
      case "aadharAcknowledgementNo":
       return  /^[0-9]{14}$/i;  
+      case "typeOfRequest":
+        return /^[^\$\"'<>?\\\\~`!@$%^+={}\[\]*.:;“”‘’]{1,500}$/i;
+        case "areaRequired":
+        return /^(0)*[1-9][0-9]{0,2}$/i;
   }
 };
 
