@@ -123,6 +123,16 @@ export const accountStatementResults = {
       // AMOUNT,
       TYPE, 
       {
+        name: REMAINING_PRINCIPAL,
+        options: {
+          customBodyRender: value => (
+            <span style={{ display: 'flex', justifyContent: 'right', flexDirection: 'row-reverse',marginBottom:'none'}}>
+          {value}
+        </span> 
+          )
+        }
+      },
+      {
         name: REMAINING_INTEREST,
         options: {
           customBodyRender: value => (
@@ -133,15 +143,6 @@ export const accountStatementResults = {
         }
       }, 
       {
-        name: REMAINING_PRINCIPAL,
-        options: {
-          customBodyRender: value => (
-            <span style={{ display: 'flex', justifyContent: 'right', flexDirection: 'row-reverse',marginBottom:'none'}}>
-          {value}
-        </span> 
-          )
-        }
-      }, {
         name: TOTAL_DUE,
         options: {
           customBodyRender: value => (
@@ -160,11 +161,7 @@ export const accountStatementResults = {
         </span> 
           )
         }
-      },
-      // REMAINING_INTEREST,
-      // REMAINING_PRINCIPAL,
-      // TOTAL_DUE,
-      // ACCOUNT_BALANCE 
+      }
     ],
     options: {...searchResults.props.options,
       onRowClick: () => {},
