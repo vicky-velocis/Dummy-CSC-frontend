@@ -5,7 +5,6 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-  import { pendingApprovals } from "./searchResource/pendingApprovals";
   import { committeeMasterGrid } from "./searchResource/committeeMasterGrid";
   import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
   import {

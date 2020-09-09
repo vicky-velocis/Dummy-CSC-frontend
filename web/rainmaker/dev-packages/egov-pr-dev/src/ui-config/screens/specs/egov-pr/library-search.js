@@ -6,9 +6,7 @@ import {
 
 import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { searchResultsLibrary } from "./searchResource/searchResults";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {
   getTenantId,
   localStorageGet

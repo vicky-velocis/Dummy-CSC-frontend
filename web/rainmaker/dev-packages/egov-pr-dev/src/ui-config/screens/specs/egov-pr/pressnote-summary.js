@@ -3,6 +3,7 @@ import {
   getCommonContainer,
   getCommonHeader,
   getLabelWithValue,
+  getCommonSubHeader
 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -141,16 +142,41 @@ set(
         pressnoteSummary: pressnoteSummary,
         documentsSummary: documentsPressNoteSummary,
          resendbody: getCommonCard({
-		 resendheader: getCommonHeader({
-				labelName: "Invited Press List",
-				labelKey: "PR_INVITED_PRESS_LIST"
-      },
-      {
-        style: {
-          marginBottom: 18,
+		//  resendheader: getCommonHeader({
+		// 		labelName: "Invited Press List",
+		// 		labelKey: "PR_INVITED_PRESS_LIST"
+    //   },
+    //   {
+    //     style: {
+    //       marginBottom: 18,
+    //     }
+    //   }
+    //   ),
+      header: {
+        uiFramework: "custom-atoms",
+        componentPath: "Container",
+        props: {
+          style: { marginBottom: "10px" }
+        },
+        children: {
+          header: {
+            // gridDefination: {
+            //   xs: 8
+            // },
+            ...getCommonSubHeader({
+                    labelName: "Invited Press List",
+                    labelKey: "PR_INVITED_PRESS_LIST"
+                },  
+                    {
+                  style: {
+                    marginBottom: 18,
+                  }
+                }),
+            visible:true
+          },
+        
         }
-      }
-      ),
+      }, 
 			guestlist : ResendPressInviteGrid
 		}),	
     

@@ -3,16 +3,15 @@ import {
   getCommonHeader,
   getStepperObject
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getCurrentFinancialYear } from "../utils";
 import { EventFooter } from "./applyResource/footer";
 import { eventDetails } from "./applyResource/eventDetails";
 import { eventDescription } from "./applyResource/eventDescription";
 import jp from "jsonpath";
 
 import { EventFirstStepperTimeDetail } from "./applyResource/EventFirstStepperTimeDetail";
-import { EventFirstStepperDetail,EventFirstStepperDetailSCP} from "./applyResource/EventFirstStepperDetail";
+import { EventFirstStepperDetail} from "./applyResource/EventFirstStepperDetail";
 
-import { documentDetails, MultipleDocumentDetails } from "./applyResource/documentDetails";
+import {  MultipleDocumentDetails } from "./applyResource/documentDetails";
 import { getQueryArg ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
 import {
   prepareFinalObject,
@@ -27,7 +26,6 @@ import {
   prepareDocumentsUploadData,
   
   furnishResponse,
-  setApplicationNumberBox,
   getSearchResultsViewEvent
 } from "../../../../ui-utils/commons";
 import {setCommittiee} from "../egov-pr/searchResource/citizenSearchFunctions"
@@ -225,10 +223,18 @@ export const prepareEditFlow = async (
        queryStr,
        {}
      );
+   
+
+
      for(let i=0;i<payload1.Employees.length;i++)
      {
        if(payload1.Employees[i].user!==null)
        {
+         
+        payload1.Employees[i].user.userName=toTitleCase(payload1.Employees[i].user.userName)
+        payload1.Employees[i].user.name=toTitleCase(payload1.Employees[i].user.name)
+      //  payload1.Employees[i].user.code=toTitleCase(payload1.Employees[i].user.name)
+
          user.push(payload1.Employees[i].user) 
          
        }
@@ -316,7 +322,7 @@ export const prepareEditFlow = async (
             {
       if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-masters"].Department[i].code)
       {
-        response.ResponseBody[j]['EmpName']=payload.MdmsRes["common-masters"].Department[i].name
+        response.ResponseBody[j]['EmpName']=toTitleCase(payload.MdmsRes["common-masters"].Department[i].name)
       }
             }
       
