@@ -114,10 +114,10 @@ import {
                                         }
 
                                         //for populating in update mode
-                                        const {viewScreenMdmsData} = state.screenConfiguration.preparedFinalObject;
+                                   //     const {viewScreenMdmsData} = state.screenConfiguration.preparedFinalObject;
                                     //    if(viewScreenMdmsData && viewScreenMdmsData.NULM && viewScreenMdmsData.NULM.SusvDocuments){
 
-                                          const {SusvDocuments} = viewScreenMdmsData.NULM;
+                                 //         const {SusvDocuments} = viewScreenMdmsData.NULM;
                                           const documentsDes = ["Identity Proof","Address Proof","Disability Proof"];
                                        //  const documentsDes = ["NULM_IDENTITY_PROOF","NULM_ADDRESS_PRROF","NULM_DISABILITY_PROOF"];
                                          
@@ -178,9 +178,11 @@ import {
           }else{
             dispatch(prepareFinalObject(`NulmSusvRequest[${value}]`, "NO" ));
           }
-        })
+        });
+
+        NulmSusvRequest.date = NulmSusvRequest.date.split(" ")[0];
   
-        dispatch(prepareFinalObject("NulmSusvRequest", response.ResponseBody[0]));
+        dispatch(prepareFinalObject("NulmSusvRequest", NulmSusvRequest));
       }
     }
   }
