@@ -301,7 +301,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
       const amount = get(state.screenConfiguration.preparedFinalObject, "Properties[0].owners[0].ownerDetails.payment[0].amountPaid")
       const allotmentNumber = get(state.screenConfiguration.preparedFinalObject, "Properties[0].notices[0].allotmentNumber")
       const colony = get(state.screenConfiguration.preparedFinalObject, "Properties[0].colony")
-
+      const ownername = get(state.screenConfiguration.preparedFinalObject, " Properties[0].owners[0].ownerDetails.name")
       const noticeType = str
       const propertyImageId = (noticeType === "Violation" && !!propertyIdTransitNumber) ? filedata[0].id : null
       console.log(propertyImageId)
@@ -323,6 +323,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
       );
       
       const NoticeApplications = [{
+        "ownerName":ownername,
         "tenantId": tenantId,
         "allotmentNumber":allotmentNumber,
         "memoDate" : convertDateToEpoch(memoDate),
@@ -356,7 +357,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
         { NoticeApplications }
       );
       dispatch(
-        prepareFinalObject("notices", NoticeApplications)
+        prepareFinalObject("notices", response.NoticeApplications)
       );
       return response;
   } catch (error) {
