@@ -190,7 +190,7 @@ export const setApplicationNumberBox = (state, dispatch, applicationNumber, scre
             set(queryObject[0], "applicationAction", "SUBMIT")
           }
           let ownershipTransferDocuments = get(queryObject[0], "ownerDetails.ownershipTransferDocuments") || [];
-          ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item && !!item.fileStoreId).map(item => ({...item, active: true}))
+          ownershipTransferDocuments = ownershipTransferDocuments.filter(item => !!item && !!item.fileStoreId).filter((item, index, arr) => (arr.findIndex((arrItem) => arrItem.fileStoreId === item.fileStoreId)) === index).map(item => ({...item, active: true}))
           const removedDocs = get(state.screenConfiguration.preparedFinalObject, "OwnersTemp[0].removedDocs") || [];
           ownershipTransferDocuments = [...ownershipTransferDocuments, ...removedDocs]
           set(queryObject[0], "ownerDetails.ownershipTransferDocuments", ownershipTransferDocuments)
