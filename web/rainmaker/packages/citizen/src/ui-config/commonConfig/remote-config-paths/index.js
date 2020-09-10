@@ -25,6 +25,10 @@ const remoteConfigPath = (path, screenKey) => {
     case "abg":
       config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "rented-properties": 
+    case "rented-properties-citizen":
+      config = require(`egov-rented-properties/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
     case "egov-common":
       config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
@@ -41,16 +45,16 @@ const remoteConfigPath = (path, screenKey) => {
     case "wns-citizen":
       config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-	case "egov-opms":
-      config = require(`egov-opms/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
+    case "egov-opms":
+        config = require(`egov-opms/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
     case "egov-hc":
       config = require(`egov-hc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "egov-echallan":
       config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;   
-      case "egov-nulm":
+    case "egov-nulm":
       config = require(`egov-nulm/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     default:
