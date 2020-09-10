@@ -106,7 +106,7 @@ export const searchApiCall = async (state, dispatch) => {
           [getTextToLocalMapping("Store Name")]:
           get(item, "storeMapping", [])
             .map(store => {
-              return ` ${store.store.code}`;
+              return ` ${store.store.name}`;
             })
             .join() || "-", 
          // [getTextToLocalMapping("Store Name")]: get(item, "StoreName", "-") || "-", 

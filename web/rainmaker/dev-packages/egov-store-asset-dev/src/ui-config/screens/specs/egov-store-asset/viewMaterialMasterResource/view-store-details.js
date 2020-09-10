@@ -27,7 +27,7 @@ const storeCard = {
             labelName: "Store Name",
             labelKey: "STORE_COMMON_TABLE_COL_STORE_NAME"
           },
-          { jsonPath: "materials[0].storeMapping[0].store.code",
+          { jsonPath: "materials[0].storeMapping[0].store.name",
           
         }
         ),

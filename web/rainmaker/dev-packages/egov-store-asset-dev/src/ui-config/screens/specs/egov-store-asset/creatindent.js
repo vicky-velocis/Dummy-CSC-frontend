@@ -149,22 +149,19 @@ export const header = getCommonContainer({
         value: tenantId
       }];
     try {
-      let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+       let response = await getSearchResults(queryObject, dispatch,"storeMaster");
       const userInfo = JSON.parse(getUserInfo());
-      let businessService  = get(state, `screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.businessService`,[]) 
-      // filter store based on login user role and assign business service
-      let roles = userInfo.roles
-      for (let index = 0; index < roles.length; index++) {
-        const element = roles[index];
-        businessService = businessService.filter(x=>x.role === element.code)
-        if(businessService.length==1)
-        response = response.stores.filter(x=>x.department.deptCategory===businessService[0].name)
-        break;
-
-        
-      }
-
-      dispatch(prepareFinalObject("store", response));
+      // let businessService  = get(state, `screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.businessService`,[]) 
+      // // filter store based on login user role and assign business service
+      // let roles = userInfo.roles
+      // for (let index = 0; index < roles.length; index++) {
+      //   const element = roles[index];
+      //   businessService = businessService.filter(x=>x.role === element.code)
+      //   if(businessService.length==1)
+      //   response = response.stores.filter(x=>x.department.deptCategory===businessService[0].name)
+      //   break;        
+      // }
+       dispatch(prepareFinalObject("store", response));
        response = await getSearchResults(queryObject, dispatch,"materials");
       dispatch(prepareFinalObject("materials", response));
             // fetching employee designation
@@ -186,6 +183,7 @@ export const header = getCommonContainer({
           const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
          
           dispatch(prepareFinalObject("indents[0].designation", desgnName[0].name));
+         
           }
         }
         
@@ -258,11 +256,63 @@ export const header = getCommonContainer({
        {
         if(response)
         {
-          const storedata = getstoreData(action,state, dispatch);
+          //
+          // getstoreData(action,state, dispatch)
+          // .then(response=>{
+            // if(response)
+            // {
+              const queryObject = [{ key: "tenantId", value: getTenantId()}];
+          getSearchResults(queryObject, dispatch,"storeMaster")
+          .then(response =>{
+          // let response = await getSearchResults(queryObject, dispatch,"storeMaster");
+          if(response)
+          {
+          const userInfo = JSON.parse(getUserInfo());
+          let businessService  = get(state, `screenConfiguration.preparedFinalObject.createScreenMdmsData.store-asset.businessService`,[]) 
+          // filter store based on login user role and assign business service
+          let roles = userInfo.roles
+          for (let index = 0; index < roles.length; index++) {
+          const element = roles[index];
+          businessService = businessService.filter(x=>x.role === element.code)
+          if(businessService.length==1)
+          response = response.stores.filter(x=>x.department.deptCategory===businessService[0].name)
+          break;        
+          }
+          dispatch(prepareFinalObject("store.stores", response));
+           }
+          });
+          // if(userInfo){
+          //   dispatch(prepareFinalObject("indents[0].indentCreatedBy", userInfo.name));
+          //   const queryParams = [{ key: "codes", value: userInfo.userName },{ key: "tenantId", value:  getTenantId() }];
+          //   try { 
+          //     const payload = await httpRequest(
+          //       "post",
+          //       "/egov-hrms/employees/_search",
+          //       "_search",
+          //       queryParams
+          //     );
+          //     if(payload){
+          //       const {designationsById} = state.common;
+          //       const empdesignation = payload.Employees[0].assignments[0].designation;
+          //       if(designationsById){
+          //       const desgnName = Object.values(designationsById).filter(item =>  item.code === empdesignation )
+               
+          //       dispatch(prepareFinalObject("indents[0].designation", desgnName[0].name));
+          //       alert('123')
+          //       }
+          //     }
+              
+          //   } catch (e) {
+          //     console.log(e);
+          //   }
+          // }
+           // }            
+         // });         
+       
         }
        }
      )
-     
+     const storedata = getstoreData(action,state, dispatch);
       const step = getQueryArg(window.location.href, "step");
        tenantId = getQueryArg(window.location.href, "tenantId");
       if(!step && !tenantId){
