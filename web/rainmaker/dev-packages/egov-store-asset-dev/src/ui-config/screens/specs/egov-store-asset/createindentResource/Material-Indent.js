@@ -36,7 +36,7 @@ import {
           },
           required: true,
           jsonPath: "indents[0].indentStore.code",         
-          sourceJsonPath: "store",
+          sourceJsonPath: "store.stores",
           props: {
             optionValue: "code",
             optionLabel: "name",
@@ -45,7 +45,7 @@ import {
         beforeFieldChange: (action, state, dispatch) => {
           let store = get(
             state.screenConfiguration.preparedFinalObject,
-            `store`,
+            `store.stores`,
             []
           ); 
           store =  store.filter(x=> x.code === action.value) 

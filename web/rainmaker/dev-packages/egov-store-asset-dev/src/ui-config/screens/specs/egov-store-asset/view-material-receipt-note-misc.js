@@ -259,35 +259,36 @@ const screenConfig = {
                 roles: roles
               }
             },
-             //print function UI start SE0001
-             printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              gridDefination: {
-                xs: 12,
-                sm: 12,
-                // md:3,
-                // lg:3,
-                align: "right",
-              },  
-              visible: true,// enableButton,
-              props: {
-                data: {
-                  label: {
-                    labelName:"PRINT",
-                    labelKey:"STORE_PRINT"
-                  },
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
-              }
-            }
-            //print function UI End SE0001
+            
           }
         },
+         //print function UI start SE0001
+         printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            // md:3,
+            // lg:3,
+            align: "right",
+          },  
+          visible: true,// enableButton,
+          props: {
+            data: {
+              label: {
+                labelName:"PRINT",
+                labelKey:"STORE_PRINT"
+              },
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { marginLeft: 10, align: "right", } },
+              menu: printMenu
+            }
+          }
+        },
+        //print function UI End SE0001
         taskStatus: {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
