@@ -105,7 +105,7 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   };
   if (flag_api_call === true)
   {
-  dispatch(toggleSpinner()); 
+  
   const response = await getSearchResultsForFilters(filterdata);
   // console.log("^^^^^^^",response.services.length)
   // alert(JSON.stringify(response.services[0].createdtime));

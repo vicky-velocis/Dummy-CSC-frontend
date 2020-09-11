@@ -526,41 +526,41 @@ export const getPressGridDataforview = async (action, state, dispatch) => {
     console.log(error);
   }
 };
-export const getInviateGuestGridData = async (action, state, dispatch) => {
-  const response = await getInviteGuestGridData();
-  try {
-    if (response && response.nocApplicationDetail && response.nocApplicationDetail.length > 0) {
+// export const getInviateGuestGridData = async (action, state, dispatch) => {
+//   const response = await getInviteGuestGridData();
+//   try {
+//     if (response && response.nocApplicationDetail && response.nocApplicationDetail.length > 0) {
      
 
-    let data = response.nocApplicationDetail.map(item => ({
-       [getTextToLocalMapping("Event Id")]:
-         item.applicationId || "-",
-       [getTextToLocalMapping("Date & Time")]:item.applicationStatus || "-",
-       [getTextToLocalMapping("Commitiee")]:
-         item.applicantName || "-",
+//     let data = response.nocApplicationDetail.map(item => ({
+//        [getTextToLocalMapping("Event Id")]:
+//          item.applicationId || "-",
+//        [getTextToLocalMapping("Date & Time")]:item.applicationStatus || "-",
+//        [getTextToLocalMapping("Commitiee")]:
+//          item.applicantName || "-",
        
-         [getTextToLocalMapping("Budjet")]:
-         item.applicantName || "-",[getTextToLocalMapping("Status")]:
-         item.applicantName || "-",
-     }));
+//          [getTextToLocalMapping("Budjet")]:
+//          item.applicantName || "-",[getTextToLocalMapping("Status")]:
+//          item.applicantName || "-",
+//      }));
     
-     dispatch(
-       handleField(
-         "searchInviteGuest",
-         "components.div.children.searchInviteGuestResults",
-         "props.data",
-         data
-       )
-     );
+//      dispatch(
+//        handleField(
+//          "searchInviteGuest",
+//          "components.div.children.searchInviteGuestResults",
+//          "props.data",
+//          data
+//        )
+//      );
     
   
 
 
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 export const getGridDataTender = async (action, state, dispatch) => {
   const response = await getTenderGridData();
@@ -858,7 +858,7 @@ console.log(preSelectedRows)
     let data = response.map(item => ({
       [getTextToLocalMapping("Department")]:
          item.assignments[0].DeptName || "-",
-       [getTextToLocalMapping("Employee Name")]: (item.user !== null ? item.user.userName : "-") || "-",
+       [getTextToLocalMapping("Employee Name")]: (item.user !== null ? item.user.name : "-") || "-",
        [getTextToLocalMapping("Mobile No")]: (item.user !== null ? item.user.mobileNumber : "-") || "-",
        [getTextToLocalMapping("Email ID")]: (item.user !== null ? item.user.emailId : "-") || "-",
        [getTextToLocalMapping("Employee ID")]: (item.user !== null ? item.user.uuid : "-") || "-",
@@ -973,9 +973,15 @@ export const showinvitelist = async (state, dispatch) => {
 	
 let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("InvitelistAll") :  localStorageGet("Invitelist") ;
    //let selectedrows =[]
+   if(localStorageGet("Invitelist") ==="[]" ||localStorageGet("InvitelistAll")==="[]")
+   {
+    var msg=`Select at least one Employee`
+    dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+   }
+   else{
    if(localStorageGet("Invitelist") === null  && localStorageGet("InvitelistAll")===null )
    {
-    // alert('Select at least one Employee ')
+   
      var msg=`Select at least one Employee`
      dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
     
@@ -1067,7 +1073,7 @@ let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("Inv
   lSRemoveItemlocal("InvitelistAll");
   dispatch(prepareFinalObject("CreateInvite", {}));
          }
-
+        }
 }	
 
 export const SearchEmployees = async (state, dispatch) => {

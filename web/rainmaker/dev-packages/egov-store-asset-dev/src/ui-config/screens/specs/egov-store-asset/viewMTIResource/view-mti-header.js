@@ -53,7 +53,7 @@ export const getMTIHeaderView = (isReview = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "HR_SUMMARY_EDIT"
+              labelKey: "STORE_SUMMARY_EDIT"
             })
           },
           onClickDefination: {
@@ -98,7 +98,7 @@ export const getMTIHeaderView = (isReview = true) => {
       createdBy: getLabelWithValue(
         { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
         {
-          jsonPath: "indents[0].createdByName",
+          jsonPath: "indents[0].indentCreatedBy",
         }
       ),
       designation: getLabelWithValue(

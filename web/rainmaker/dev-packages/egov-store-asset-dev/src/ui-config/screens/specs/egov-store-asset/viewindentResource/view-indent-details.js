@@ -134,7 +134,7 @@ export const getIndentListDetailsView = (isReview = true) => {
       createdBy: getLabelWithValue(
         { labelName: "Created by", labelKey: "STORE_PURCHASE_ORDER_CREATEBY" },
         {
-          jsonPath: "indents[0].createdByName",
+          jsonPath: "indents[0].indentCreatedBy",
         }
       ),
       designation: getLabelWithValue(

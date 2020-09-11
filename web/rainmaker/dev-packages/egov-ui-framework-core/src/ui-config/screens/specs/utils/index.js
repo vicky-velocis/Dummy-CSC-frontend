@@ -563,6 +563,8 @@ export const getPattern = type => {
       return /^[a-zA-Z ]{1,180}$/;
     case "AlphaNumValidation":
       return /^[a-zA-Z0-9 ]{1,180}$/i;
+    case "TransitNumberValidation":
+        return /^([1-9]|[1-8][0-9]|9[0-9]|[1-8][0-9]{2}|9[0-8][0-9]|99[0-9]|[1-8][0-9]{3}|9[0-8][0-9]{2}|99[0-8][0-9]|999[0-9]|10000)$/i;
     case "EventDescription":
       return /^[a-zA-Z0-9-!%:;“”‘’*=@\n\r#?\\\\~`$&^<>?{}[\]|()\\-`.+,/\"' ]{1,500}$/i;
     case "EventTitle":
@@ -624,22 +626,24 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9 -]{1,10}$/i;
 
       //validation patterns for HC....don't use
-    case "NoOfTree":
-      return /^(0?[1-9]|[1-9][0-9])$/i;
-    case "serviceRequestDescription":
-      return  /^[a-zA-Z0-9#$%&?@/!\\n~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/;
-    case "location":
-      return /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/;
-    case "HCMobileNo":
-    return /^[0-9]{10}$/i
-    case "HCEmail":
-    return /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
-    case "HCOwnerName":
-      return /^[a-zA-Z\s\\/\-]{1,256}$/i;
-    case "HCMobileNoSearch":
-        return /^[0-9]{0,10}$/i;
+      case "NoOfTree":
+        return /^(0?[1-9]|[1-9][0-9])$/i;
+      case "location":
+        return /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>*;={}`%+^!])/;
+      case "HCServiceRequestId":
+          return /^[a-zA-Z0-9#$&?@~_|,-.,:\s,\n]{1,256}$(?!.*[<>()'"/\*;={}`%+^!])/;
+      case "HCMobileNo":
+      return /^[0-9]{10}$/i
+      case "HCEmail":
+      return /(?=^.{1,256}$)(^\w+([\.]?\w+)*@\w+([\.]?\w+)*(\.\w{2,3})+$)/;
+      case "HCOwnerName":
+        return /^[a-zA-Z\s]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/i;
+      case "HCMobileNoSearch":
+          return /^[0-9]{0,10}$/i;
+      case "serviceRequestDescription":
+          return  /^[a-zA-Z0-9#$&?@~_|.,:\s,]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/;
      case "aadhar":
-      return  /^[0-9]{12}$/i;
+      return  /^[0-9]{4}$/i;
      case "aadharAcknowledgementNo":
       return  /^[0-9]{14}$/i;  
       case "typeOfRequest":

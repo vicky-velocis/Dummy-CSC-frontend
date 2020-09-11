@@ -210,6 +210,9 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
           {
             storecode = indents[0].indentStore.code;
             dispatch(prepareFinalObject("purchaseOrders[0].store.code", storecode)); 
+             //set min Issue Date based on Indent Create date
+            // alert(indents[0].indentDate);
+             
           }          
          // storecode = getQueryArg(window.location.href, "indentNumber");
           if(storecode){
@@ -250,6 +253,27 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
                             return materialNames.findIndex(mat => mat.code === ele.code) !== -1;
                         })
                   }
+                  else{
+                    dispatch(
+                      handleField(`create-purchase-order`,
+                   // state.screenConfiguration.screenConfig["create-purchase-order"],
+                        "components.div.children.formwizardFirstStep.children.purchaseOrderHeader.children.cardContent.children.purchaseOrderHeaderContainer.children.purchaseOrderDate",
+                        "props.inputProps",
+                        { max: new Date().toISOString().slice(0, 10)}
+                      )
+                    ); 
+
+                  }
+                  dispatch(
+                    handleField(`create-purchase-order`,
+                 // state.screenConfiguration.screenConfig["create-purchase-order"],
+                      "components.div.children.formwizardFirstStep.children.purchaseOrderHeader.children.cardContent.children.purchaseOrderHeaderContainer.children.purchaseOrderDate",
+                      "props.inputProps",
+                      { min: new Date(indents[0].indentDate).toISOString().slice(0, 10),
+                        max: new Date().toISOString().slice(0, 10)}
+                    )
+                  ); 
+                  dispatch(prepareFinalObject("purchaseOrders[0].purchaseOrderDate",new Date().toISOString().substr(0,10)));  
                 dispatch(prepareFinalObject("searchMaster.materialNames", materialNames));  
                 if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.storeNames){
                   const {storeNames} = state.screenConfiguration.preparedFinalObject.searchMaster;
@@ -267,6 +291,15 @@ import { getMaterialIndentSearchResults } from "../../../../ui-utils/storecommon
             }
       }
       else{
+        dispatch(prepareFinalObject("purchaseOrders[0].purchaseType", "Non Indent"));  
+        dispatch(
+          handleField(`create-purchase-order`,
+       // state.screenConfiguration.screenConfig["create-purchase-order"],
+            "components.div.children.formwizardFirstStep.children.purchaseOrderHeader.children.cardContent.children.purchaseOrderHeaderContainer.children.purchaseOrderDate",
+            "props.inputProps",
+            { max: new Date().toISOString().slice(0, 10)}
+          )
+        );  
 
       }
       return action;

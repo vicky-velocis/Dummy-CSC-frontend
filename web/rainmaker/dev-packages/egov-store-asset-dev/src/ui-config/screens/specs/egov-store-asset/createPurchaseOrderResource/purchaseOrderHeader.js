@@ -8,7 +8,7 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getSearchResults ,getSTOREPattern} from "../../../../../ui-utils/commons";
 import { getMaterialIndentSearchResults } from "../../../../../ui-utils/storecommonsapi";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as  handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -40,7 +40,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].purchaseType",
        // sourceJsonPath: "searchMaster.storeNames",
         props: {
-          disabled : indentNumber ? true : false,
+          disabled : indentNumber ? true : true,
           className: "hr-generic-selectfield",
           optionValue: "value",
           optionLabel: "label",
@@ -163,6 +163,26 @@ export const purchaseOrderHeader = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "purchaseOrders[0].store.department.name",
     }),
+    indentDate: {
+      ...getDateField({
+        label: {
+          labelName: "Indent Date",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+        },
+        placeholder: {
+          labelName: "Indent Date",
+          labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+        },
+        pattern: getPattern("Date"),
+        jsonPath: "indents[0].indentDate",
+        props: {
+          disabled:true,
+          inputProps: {
+            max: new Date().toISOString().slice(0, 10),
+          }
+        }
+      }),
+    }, 
     purchaseOrderDate: {
       ...getDateField({
         label: {
@@ -178,7 +198,7 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].purchaseOrderDate",
         props: {
           inputProps: {
-            max: new Date().toISOString().slice(0, 10),
+           max: new Date().toISOString().slice(0, 10),
           }
         }
       }),
@@ -264,7 +284,7 @@ export const purchaseOrderHeader = getCommonCard({
             }
            
             dispatch(prepareFinalObject("searchMaster.priceList", response.priceLists));  
-                dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));    
+            dispatch(prepareFinalObject("purchaseOrders[0].priceList", priceList));    
                
            }  
            if(state.screenConfiguration.preparedFinalObject.searchMaster && state.screenConfiguration.preparedFinalObject.searchMaster.supplierName){
@@ -341,7 +361,7 @@ export const purchaseOrderHeader = getCommonCard({
         labelKey: "STORE_PURCHASE_ORDER_DLVRY_TERM_PLCEHLDER",
       },
       required: true,
-      pattern: getPattern("alpha-numeric-with-space-and-newline"),
+      pattern: getSTOREPattern("Comment"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "purchaseOrders[0].deliveryTerms",
     }),
@@ -359,28 +379,11 @@ export const purchaseOrderHeader = getCommonCard({
         labelName: "Enter Payment Terms",
         labelKey: "STORE_PURCHASE_ORDER_PYMNT_TERM_PLCEHLDER",
       },
-      pattern: getPattern("alpha-numeric-with-space-and-newline"),
+      pattern: getSTOREPattern("Comment"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "purchaseOrders[0].paymentTerms",
     }),
-    remarks: getTextField({
-      label: {
-        labelName: "Remarks",
-        labelKey: "STORE_PURCHASE_ORDER_REMARK",
-      },
-      props: {
-        className: "applicant-details-error",
-        multiline: "multiline",
-        rowsMax: 2,
-      },
-      placeholder: {
-        labelName: "Enter Remarks",
-        labelKey: "STORE_PURCHASE_ORDER_REMARK_PLCEHLDER",
-      },
-      pattern: getPattern("alpha-numeric-with-space-and-newline"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "purchaseOrders[0].remarks",
-    }),
+
     // status: {
     //   ...getTextField({
     //     label: {
@@ -432,6 +435,24 @@ export const purchaseOrderHeader = getCommonCard({
         jsonPath: "purchaseOrders[0].designation"
       })
     },
+    remarks: getTextField({
+      label: {
+        labelName: "Remarks",
+        labelKey: "STORE_PURCHASE_ORDER_REMARK",
+      },
+      props: {
+        className: "applicant-details-error",
+        multiline: "multiline",
+        rowsMax: 2,
+      },
+      placeholder: {
+        labelName: "Enter Remarks",
+        labelKey: "STORE_PURCHASE_ORDER_REMARK_PLCEHLDER",
+      },
+      pattern: getSTOREPattern("Comment"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      jsonPath: "purchaseOrders[0].remarks",
+    }),
   })
 });
 

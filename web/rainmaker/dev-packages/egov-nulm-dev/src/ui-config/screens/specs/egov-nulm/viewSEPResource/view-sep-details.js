@@ -131,7 +131,7 @@ export const getSEPDetailsView = (isReview = true) => {
       address: getLabelWithValue(
         {
           labelName: "Addrss",
-          labelKey: "NULM_SEP_ADDRESS"
+          labelKey: "NULM_SMID_ADDRESS"
         },
         { jsonPath: "NULMSEPRequest.address" }
       ),
@@ -177,7 +177,7 @@ export const getSEPDetailsView = (isReview = true) => {
       bplNo: getLabelWithValue(
         {
           labelName: "BPL NULM_SEP_BPL_NUMBER",
-          labelKey: "NULM_SEP_BPL_NUMBER"
+          labelKey: "NULM_SMID_BPL_NUMBER"
         },
         { jsonPath: "NULMSEPRequest.bplNo" }
       ),

@@ -360,7 +360,7 @@ const StatusContent = ({
           return (
             <div className="complaint-timeline-content-section">
               <Label labelClassName="rainmaker-small-font complaint-timeline-date" label={getDateFromEpoch(date)} />
-              <Label
+              {groName && <Label
                 labelClassName="dark-color complaint-timeline-status"
                 containerStyle={statusContainerStyle}
                 label={`${
@@ -376,8 +376,54 @@ const StatusContent = ({
                     ? getEscalatingStatus(timeLine, status)
                     : "ES_COMPLAINT_REASSIGNED_HEADER"
                 }`}
-              />
+              />}
               {groName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${groName}`} />}
+              {" "}
+              {role.toLowerCase() !== "eo" ? employeeName && <Label
+                labelClassName="dark-color complaint-timeline-status"
+                containerStyle={statusContainerStyle}
+                label={`${
+                  action == "assign"
+                    ? employeeName
+                      ? groName 
+                           ? "CS_COMMON_ASSIGNED_ONLY_TO"
+                           : "CS_COMMON_ASSIGNED_TO"
+                      : "ES_COMPLAINT_ASSIGNED_HEADER"
+                    : employeeName
+                    ? groName 
+                       ? "CS_COMMON_REASSIGNED_ONLY_TO"
+                       : "CS_COMMON_REASSIGNED_TO"
+                    : status === "escalatedlevel1pending"
+                    ? getEscalatingStatus(timeLine, status)
+                    : status === "escalatedlevel2pending"
+                    ? getEscalatingStatus(timeLine, status)
+                    : "ES_COMPLAINT_REASSIGNED_HEADER"
+                }`}
+              /> :
+              <Label
+              labelClassName="dark-color complaint-timeline-status"
+              containerStyle={statusContainerStyle}
+              label={`${
+                action == "assign"
+                ? employeeName
+                ? groName 
+                     ? "CS_COMMON_ASSIGNED_ONLY_TO"
+                     : "CS_COMMON_ASSIGNED_TO"
+                : "ES_COMPLAINT_ASSIGNED_HEADER"
+              : employeeName
+              ? groName 
+                 ? "CS_COMMON_REASSIGNED_ONLY_TO"
+                 : "CS_COMMON_REASSIGNED_TO"
+                  : status === "escalatedlevel1pending"
+                  ? getEscalatingStatus(timeLine, status)
+                  : status === "escalatedlevel2pending"
+                  ? getEscalatingStatus(timeLine, status)
+                  : "ES_COMPLAINT_REASSIGNED_HEADER"
+              }`}
+            />
+              }
+              {employeeName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />}
+          
               {/* {assigneeStatusCount === 1 &&
                 groName &&
                 groMobileNumber && (
@@ -457,9 +503,9 @@ const StatusContent = ({
               <Label
                 labelClassName="dark-color complaint-timeline-status"
                 containerStyle={statusContainerStyle}
-                label={`${"CS_COMMON_RE-ASSIGN REQUESTED"}`}
+                label={`${employeeName ?"CS_COMMON_REASSIGN_REQUESTED_BY":"CS_COMMON_RE-ASSIGN REQUESTED"}`}
               />
-
+               {employeeName && <Label labelClassName="dark-color" containerStyle={nameContainerStyle} label={`${employeeName}`} />}
               <Label
                 labelClassName="rainmaker-small-font complaint-timeline-comments"
                 containerStyle={{ width: "192px" }}

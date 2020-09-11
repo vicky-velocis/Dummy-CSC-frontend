@@ -294,14 +294,7 @@ const screenConfig = {
 
     let EventId=getQueryArg(window.location.href, "eventId")
     localStorageSet("EventId",EventId)
-//  dispatch(
-//   handleField(
-//     "summary",
-//     "components.div.children.headerDiv.children.header.children.eventId",
-// "props.number",
-// EventId
-//   )
-// );
+
 
     let eventstatus=getQueryArg(window.location.href, "status")
     if(eventstatus!=="null")

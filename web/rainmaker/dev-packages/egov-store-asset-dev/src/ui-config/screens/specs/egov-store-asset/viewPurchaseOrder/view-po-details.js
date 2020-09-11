@@ -56,12 +56,12 @@ const assignmentCard = {
             callBack: checkValueForNA
           }
         ),
-        // userQuantity: getLabelWithValue(
-        //   { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
-        //   {
-        //     jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].userQuantity",
-        //   }
-        // ),
+        poOrderedQuantity: getLabelWithValue(
+          { labelName: "Balance Quantity", labelKey: "STORE_PURCHASE_ORDER_BLNC_QLTY" },
+          {
+            jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].poOrderedQuantity",
+          }
+        ),
         orderQuantity: getLabelWithValue(
           { labelName: "Order Quantity", labelKey: "STORE_PURCHASE_ORDER_ORDR_QLTY" },
           {
@@ -157,7 +157,7 @@ export const getPODetailsView = (isReview = true) => {
             },
             buttonLabel: getLabel({
               labelName: "Edit",
-              labelKey: "HR_SUMMARY_EDIT"
+              labelKey: "STORE_SUMMARY_EDIT"
             })
           },
           onClickDefination: {

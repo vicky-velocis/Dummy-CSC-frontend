@@ -299,8 +299,7 @@ class UploadExcelFile extends React.Component {
     return (
       <form onSubmit={this.onFormSubmit}>
         <div>
-          <div
-            className="col-md-6"></div>
+
           <div
             className="col-md-4 col-sm-10 col-xs-12">
             <input
@@ -332,7 +331,7 @@ class UploadExcelFile extends React.Component {
                 borderRadius: "2px",
                 minWidth: "200px",
                 height: "48px",
-                float: "right"
+                // float: "right"
               }}
             >
               UPLOAD

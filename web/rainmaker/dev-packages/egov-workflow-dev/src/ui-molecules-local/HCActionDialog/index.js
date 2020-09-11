@@ -7,10 +7,14 @@ import { UploadMultipleFiles } from "egov-ui-framework/ui-molecules";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import ImageUpload from "egov-ui-kit/common/common/ImageUpload";
-import { getTenantId ,getHCRoles } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId ,getHCRoles, getUserInfo, getapplicationNumber } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import React from "react";
 import store from "../../ui-redux/store";
+
+// import Autocomplete from '@material-ui/lab';
+// import TextField from '@material-ui/core';
+
 import "./index.css";
 
 const styles = theme => ({
@@ -19,7 +23,10 @@ const styles = theme => ({
     width: "100%"
   }
 });
-
+export const commonConfigHcActionDialog = {
+  
+  tenantId: "ch.chandigarh"
+};
 const fieldConfig = {
   approverName: {
     label: {
@@ -67,6 +74,7 @@ class HCActionDialog extends React.Component {
     allRoleListOfSDO:[],
     allEmployeeListOfCompletedStage:[],
     allRoleListOfApproveStage:[],
+    allRoleListrequestClarification:[],
 
     
     handleChange: this.props.handleFieldChange,
@@ -76,14 +84,22 @@ class HCActionDialog extends React.Component {
   };
     
   componentDidMount(){
+    
+    
+  
   var businessServiceData = JSON.parse(localStorage.getItem("businessServiceData"))
-
+   this.getProcessInstanceDataForServiceRequest()
+ 
+  // var finalRequestClarificationRoles = this.getCommonValuesFromHCRoles(requestClarificationRoleArrayFromProcessInstance, HCRoles)
+  
   var HCRoles = [JSON.parse(getHCRoles())]
   this.setAllRoleListAsPerAction(businessServiceData,['VERIFIED AND FORWARDED TO SDO', 'EDITED AT VERIFIED AND FORWARDED TO SDO'], 'FORWARD FOR INSPECTION', HCRoles)
   this.setAllRoleListAsPerAction(businessServiceData, ['INSPECTION', 'EDITED AT INSPECTION'], 'INSPECT', HCRoles)
   this.setAllRoleListAsPerAction(businessServiceData, ['APPROVED'], 'COMPLETE', HCRoles)
 }
 
+
+  
 
   getButtonLabelName = label => {
     
@@ -109,37 +125,150 @@ class HCActionDialog extends React.Component {
         return label;
     }
   };
-  getCommonValuesFromHCRoles = (roleArray, HCRoles)=> {
+ 
+  getProcessInstanceDataForServiceRequest = async ()=>  {
 
-    var commonRoles = HCRoles[0].filter(function (element) {
-      if (roleArray.includes(element.code))
-      return element 
-  });
+    var tenantIdCommonConfig
+    
+      if (getTenantId() != commonConfigHcActionDialog.tenantId){
+          tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+      }
+      else{
+        tenantIdCommonConfig = getTenantId()
+      }
+    const queryObj = [
+      {
+        key: "businessIds",
+        value: getapplicationNumber()
+      },
+      {
+        key: "tenantId",
+        value: tenantIdCommonConfig
+      },
+      {
+        key: "history",
+        value: true
+      },
+    ];
+    var payload = await httpRequest(
+      "post",
+      "/egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObj
+    );
+      //sorting process instance data by time
+    var SortedProcessInstanceBylastModifiedTimeOfEachObject = []
+    var RoleListProcessInstance = []
+    SortedProcessInstanceBylastModifiedTimeOfEachObject=
+      payload &&
+      payload.ProcessInstances.sort(function(a, b) {
+        var valueA, valueB;        
+
+        valueA = a.auditDetails.lastModifiedTime; 
+        valueB = b.auditDetails.lastModifiedTime;
+        if (valueA < valueB) {
+            return -1;
+        }
+        else if (valueA > valueB) {
+            return 1;
+        }
+        return 0;
+    })
+      
+    RoleListProcessInstance = SortedProcessInstanceBylastModifiedTimeOfEachObject.map(item => item.assigner.roles)
+    var RoleListSingleArray = []
+    RoleListProcessInstance.forEach(RoleObject => {
+      if(RoleObject.length>1){
+        RoleObject.forEach(insideRoleObject => {
+          RoleListSingleArray.push(insideRoleObject.code)
+        });
+      }
+      else if(RoleObject.length===1){
+        RoleListSingleArray.push(RoleObject[0].code)
+      }
+    });
+    // console.log("###@$$#@#$@#$@#$23", RoleListSingleArray)
+    // var finalRoleListSingleArray = RoleListSingleArray.map(role => role.code);
+    var HCRoles = [JSON.parse(getHCRoles())]
+    var finalRequestClarificationRoles = this.getCommonValuesFromHCRoles(RoleListSingleArray, HCRoles)
+    var reversedfinalRequestClarificationRoles = finalRequestClarificationRoles.reverse()
+    var finalMappedValues = reversedfinalRequestClarificationRoles.map((item, index) => {
+      // const name = get(item, "user.name")     
+      return {
+      value: item.code,
+      label: item.name
+    };
+    });
+    this.setState({allRoleListrequestClarification:finalMappedValues})
+    // return finalRoleListSingleArray
+    
+  }
+  
+  getCommonValuesFromHCRoles = (roleArray, HCRoles)=> {
+    var commonRoles =[]
+    roleArray.map(function (element) {
+       HCRoles[0].map(function (elementHCRole) {
+        if(elementHCRole.code === element)
+
+        {
+          if (!commonRoles.includes(elementHCRole))
+         { 
+           commonRoles.push(elementHCRole)
+         }
+       }
+       })
+      });
+
+  //   roleArray.forEach(element => {
+  //     HCRoles[0].forEach(elementHCRole => {
+  //      if(elementHCRole.code === element)
+
+  //      {
+  //        if (!commonRoles.includes(elementHCRole))
+  //       { commonRoles.push(elementHCRole)
+  //       }
+  //     }
+  //    });
+  //  });
+  //   var commonRoles = HCRoles[0].filter(function (element) {
+  //     if (roleArray.includes(element.code))
+  //     return element 
+  // });
   return commonRoles
   }
   parseJSONBasedOnActionToReturnRoleList =  (businessServiceData, applicationStatusArray, actionToBeChecked)=>  {
     
-    console.log(businessServiceData)
+    // console.log(businessServiceData)
       var inspectionStates = businessServiceData[0].states.filter(function (state) {
         if (applicationStatusArray.includes(state.applicationStatus) )
         return state 
     });
     var allRoleListInspection = []
     var allActionsListInspection = []
-    inspectionStates.forEach(element => {
-      allActionsListInspection.push(element.actions)
-   });
+    
+    allActionsListInspection = inspectionStates.map(element => element.actions )
+  //   inspectionStates.forEach(element => {
+  //     allActionsListInspection.push(element.actions)
+  //  });
    var roleList = []
-   for (var actions = 0; actions< allActionsListInspection.length; actions++ ) //it will give length 2
-   {
-     for (var singleAction = 0; singleAction< allActionsListInspection[actions].length; singleAction++ ){ //it will give length 3
-       if (allActionsListInspection[actions][singleAction].action == actionToBeChecked){
-          roleList = allActionsListInspection[actions][singleAction].roles
-          allRoleListInspection.push(...roleList)
-          roleList = []
-       }
-     }
-   }
+   allActionsListInspection.map(function (ActionsElement) {
+    ActionsElement.map(function (eachActionsElement) {
+      if (eachActionsElement.action == actionToBeChecked){
+        roleList = eachActionsElement.roles
+        allRoleListInspection.push(...roleList)
+      }
+     })
+    });
+  //  for (var actions = 0; actions< allActionsListInspection.length; actions++ ) //it will give length 2
+  //  {
+  //    for (var singleAction = 0; singleAction< allActionsListInspection[actions].length; singleAction++ ){ //it will give length 3
+  //      if (allActionsListInspection[actions][singleAction].action == actionToBeChecked){
+  //         roleList = allActionsListInspection[actions][singleAction].roles
+  //         allRoleListInspection.push(...roleList)
+  //         roleList = []
+  //      }
+  //    }
+  //  }
 
     var uniqueRoleList =  allRoleListInspection.filter((a, b) => allRoleListInspection.indexOf(a) === b)
    return uniqueRoleList
@@ -181,7 +310,7 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });
@@ -224,7 +353,7 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });
@@ -253,6 +382,12 @@ class HCActionDialog extends React.Component {
       
       // dispatch
     } = dialogData;
+
+    
+    const defaultProps = {
+      options: this.state.allEmployeeListOfSDO,
+      getOptionLabel: (option) => option.label,
+    };
     const { getButtonLabelName } = this;
     
     let{state} = this.props
@@ -267,7 +402,7 @@ class HCActionDialog extends React.Component {
     try{
     let servicerequestmedia = get(state, "form.workflow.files.wfDocuments");
     let media = []
-  
+      
 
     servicerequestmedia.map((item, index) => {
       media.push({fileName: item.file.name || "document",
@@ -276,8 +411,7 @@ class HCActionDialog extends React.Component {
       })
   
     });
-
-
+    
     store.dispatch(prepareFinalObject("services[0].wfDocuments",media ));
     }
     catch(e){
@@ -338,7 +472,34 @@ class HCActionDialog extends React.Component {
                   </Grid>
                     
                       {/* mandatory role  list*/}
-                  { ( buttonLabel==="REQUEST CLARIFICATION" || buttonLabel==="VERIFY AND FORWARD"  ) &&  showEmployeeList && (
+                      { ( buttonLabel==="REQUEST CLARIFICATION") &&  showEmployeeList && (
+                    <Grid
+                      item
+                      sm="12"
+                      style={{
+                        marginTop: 16
+                      }}
+                    >
+                      
+                      <TextFieldContainer
+                        select={true}
+                        style={{ marginRight: "15px", width: "100%" }}
+                        label={fieldConfig.roleName.label}
+                        placeholder={fieldConfig.roleName.placeholder}
+                        data={this.state.allRoleListrequestClarification}
+                        
+                        optionValue="value"
+                        optionLabel="label"
+                        // value = {this.state.allRoleListrequestClarification[0].value}
+                        hasLocalization={false}
+                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); handleFieldChange(`${dataPath}.assignee`,[]);this.getEmployeeList(e.target.value) }}
+                      
+                      // onChange={this.props.onChange; this.handleChange}
+                        jsonPath={`${dataPath}.roleList[0]`}
+                      />
+                    </Grid>
+                  )}
+                  { ( buttonLabel==="VERIFY AND FORWARD"  ) &&  showEmployeeList && (
                     <Grid
                       item
                       sm="12"
@@ -503,6 +664,14 @@ class HCActionDialog extends React.Component {
                         marginTop: 16
                       }}
                     >
+                      {/* <div style={{ width: 300 }}>
+                     <Autocomplete
+                                {...defaultProps}
+                                id="select-on-focus"
+                                selectOnFocus
+                                renderInput={(params) => <TextField {...params} label="selectOnFocus" margin="normal" />}
+                        />
+                      </div> */}
                       <TextFieldContainer
                         select={true}
                         style={{ marginRight: "15px", width: "100%" }}
@@ -530,8 +699,8 @@ class HCActionDialog extends React.Component {
                       jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
                     /> */}
-                    <label className="commentsLabel">{fieldConfig.comments.label.labelName} *</label>
-                    <textarea className="form-control comments" rows="5" placeholder={fieldConfig.comments.placeholder.labelName} onChange={e => handleFieldChange(`${dataPath}.comment`, e.target.value)}/>
+                       <label className="commentsLabel">{fieldConfig.comments.label.labelName} *</label>
+                    <textarea className="form-control comments" rows="5" placeholder={fieldConfig.comments.placeholder.labelName} onChange={e => handleFieldChange(`${dataPath}.comment`, e.target.value)}  maxLength = {250}/>
                   </Grid>
                     
                   {/*button and image code starts */}
@@ -589,7 +758,8 @@ class HCActionDialog extends React.Component {
                         color={"primary"}
                         style={{
                           minWidth: "200px",
-                          height: "48px"
+                          height: "48px",
+                          marginBottom: "8px",
                         }}
                         className="bottom-button"
                         onClick={() =>
@@ -651,7 +821,8 @@ class HCActionDialog extends React.Component {
                         color={"primary"}
                         style={{
                           minWidth: "200px",
-                          height: "48px"
+                          height: "48px",
+                          marginBottom: "8px",
                         }}
                         className="bottom-button"
                         onClick={() =>

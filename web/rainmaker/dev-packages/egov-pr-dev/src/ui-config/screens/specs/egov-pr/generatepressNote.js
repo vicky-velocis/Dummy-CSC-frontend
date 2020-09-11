@@ -25,11 +25,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  sampleSearch,
-  sampleSingleSearch,
-  sampleDocUpload
-} from "../../../../ui-utils/sampleResponses";
+
 import set from "lodash/set";
 import get from "lodash/get";
 import {

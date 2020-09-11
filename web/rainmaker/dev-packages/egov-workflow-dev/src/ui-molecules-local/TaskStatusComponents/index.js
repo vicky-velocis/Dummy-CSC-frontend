@@ -27,9 +27,19 @@ export const getCurrentStatus = status => {
 };
 
 const TaskStatusComponents = ({ currentObj, index }) => {
-  if (currentObj.moduleName === 'HORTICULTURE'){
-    var role_name = ""
+  
+   var docs=currentObj.documents
+  if( Array.isArray(docs)){
+  docs.map(item=>{
+    item.linkText="Download"
+  })
+  }
 
+  if (currentObj.moduleName === 'HORTICULTURE'){
+    
+    var role_name = ""
+    
+    
     var current_assigner_roles = get(currentObj, "assigner")
     for (var i = 0; i < current_assigner_roles.roles.length; i++) {
       
@@ -38,7 +48,19 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       else{
         role_name += current_assigner_roles.roles[i].name 
       }}}
-      
+      var allDocumentsDownloadButton = []
+      var allDocuments = []
+      if(get(currentObj, "documents") != null)
+     { allDocuments = get(currentObj, "documents")
+      allDocuments.map((item) => {
+        allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+          documentType:item.documentType,
+          fileStoreId: item.fileStoreId, 
+          id: item.id,
+          link: item.link,
+          linkText: "Download", 
+          name: item.name, tenantId: item.tenantId,title: "Document" })
+      });}
     return (
     <Grid
       container={true}
@@ -165,7 +187,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       {get(currentObj, "documents") && (     
 
         <DownloadFileContainer
-          data={get(currentObj, "documents")}
+          data={allDocumentsDownloadButton}
           className="review-documents"
           backgroundGrey={true}
         />
@@ -177,7 +199,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
     <Grid
       container={true}
       spacing={12}
-      style={{ paddingLeft: 10, paddingBottom: 20 }}
+      style={{ paddingLeft: 10, paddingBottom: 20 ,wordBreak: "break-word"}}
     >
       <Grid
         item

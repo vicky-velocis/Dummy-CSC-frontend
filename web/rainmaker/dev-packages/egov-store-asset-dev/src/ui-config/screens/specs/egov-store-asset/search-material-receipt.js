@@ -13,6 +13,8 @@ import {
   import { getTenantId , getOPMSTenantId} from "egov-ui-kit/utils/localStorageUtils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import { getSearchResults } from "../../../../ui-utils/commons";
+  import{UserRoles} from '../../../../ui-utils/sampleResponses'
+  let roles = UserRoles().UserRoles;
   const hasButton = getQueryArg(window.location.href, "hasButton");
   let enableButton = true;
   //enableButton = hasButton && hasButton === "false" ? false : true;
@@ -164,6 +166,10 @@ dispatch(prepareFinalObject("searchScreen",{}));
                   action: "condition",
                   callBack: createMaterialMasterHandle,
                 },
+                roleDefination: {
+                  rolePath: "user-info.roles",
+                  roles: roles
+                }
               },
             },
           },

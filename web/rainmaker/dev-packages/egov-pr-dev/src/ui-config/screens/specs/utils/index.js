@@ -14,17 +14,12 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { httpRequest } from "../../../../ui-utils/api";
 import isUndefined from "lodash/isUndefined";
 import store from "../../../../ui-redux/store";
-
-
-
 import {
   getCommonCard,
   getCommonValue,
   getCommonCaption,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-//import RichTextEditor from 'react-rte';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -93,6 +88,7 @@ export const validateFields = (
   dispatch,
   screen = "apply"
 ) => {
+  
   
   const fields = get(
     state.screenConfiguration.screenConfig[screen],
@@ -341,13 +337,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
     ? `/egov-ui-framework/egov-pr/apply?step=${step}${applicationNumberQueryString}`
     :
       `/egov-pr/apply?step=${step}${applicationNumberQueryString}${tetantQueryString}` 
-    //   applicationTpye === `SELLMEATNOC` ?
-    //     `/egov-pr/applysellmeat?step=${step}${applicationNumberQueryString}${tetantQueryString}` :
-    //     applicationTpye === `ROADCUTNOC` ?
-    //       `/egov-pr/applyroadcuts?step=${step}${applicationNumberQueryString}${tetantQueryString}` :
-    //       applicationTpye === `ADVERTISEMENTNOC` ?
-    //         `/egov-pr/advertisementApply?step=${step}${applicationNumberQueryString}${tetantQueryString}` : ``
-    // ;
+  
 
 
 
@@ -369,14 +359,7 @@ export const gotoApplyWithStepPressNote = (state, dispatch, step) => {
     ? `/egov-ui-framework/egov-pr/apply?step=${step}${applicationNumberQueryString}`
     :
       `/egov-pr/generatepressNote?step=${step}${applicationNumberQueryString}${tetantQueryString}` 
-    //   applicationTpye === `SELLMEATNOC` ?
-    //     `/egov-pr/applysellmeat?step=${step}${applicationNumberQueryString}${tetantQueryString}` :
-    //     applicationTpye === `ROADCUTNOC` ?
-    //       `/egov-pr/applyroadcuts?step=${step}${applicationNumberQueryString}${tetantQueryString}` :
-    //       applicationTpye === `ADVERTISEMENTNOC` ?
-    //         `/egov-pr/advertisementApply?step=${step}${applicationNumberQueryString}${tetantQueryString}` : ``
-    // ;
-
+    
 
 
   dispatch(setRoute(applyUrl));
@@ -418,14 +401,7 @@ export const showHideAdhocPopup = (state, dispatch, screenKey) => {
 export const showHideAdhocPopupopms = (state, dispatch, screenKey, type) => {
 
   localStorage.setItem('updateNocType', type)
-  // //alert(  localStorage.getItem('updateNocType')+type)
-  // set(
-  //   state,
-  //   "screenConfig.components.adhocDialog.children.popup",
-  //   adhocPopup2
-  // );
-  ////alert(JSON.stringify( state.screenConfiguration.screenConfig[screenKey]))
-
+ 
   setTimeout(function () {
     let toggle = get(
       state.screenConfiguration.screenConfig[screenKey],

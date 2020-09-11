@@ -18,12 +18,19 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
+import{UserRoles} from '../../../../ui-utils/sampleResponses'
+let roles = UserRoles().UserRoles;
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
+let enableButton = true;
+if(status.toUpperCase() ===WorkFllowStatus().WorkFllowRejected)
+enableButton = false
+else if(status.toUpperCase() !==WorkFllowStatus().WorkFllowApproved)
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code.toUpperCase() === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {
@@ -182,7 +189,7 @@ const screenConfig = {
                 lg:3,
                 // align: "right",
               },
-              visible: true,// enableButton,
+              visible:  enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -215,6 +222,10 @@ const screenConfig = {
                 action: "condition",
                 callBack: createMatrialIndentNoteHandle,
               },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
+              }
             },
             newPOButton: {
               componentPath: "Button", 
@@ -225,7 +236,7 @@ const screenConfig = {
                 lg:3,
                 // align: "right",
               },             
-              visible: true,// enableButton,
+              visible: enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -258,6 +269,10 @@ const screenConfig = {
                 action: "condition",
                 callBack: creatPOHandle,
               },
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
+              }
             },
              //print function UI start SE0001
              printMenu: {
