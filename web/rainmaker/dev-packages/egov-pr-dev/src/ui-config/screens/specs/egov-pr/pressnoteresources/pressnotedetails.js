@@ -73,7 +73,8 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
                 labelKey: "PR_PRESS_NOTE_FILE_NUMBER_PLACEHOLDER"
               },
               pattern:getPattern("fileNumber"),
-              errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
+             // errorMessage: "PR_PRESS_NOTE_FILE_NUMBER_INVALID",
+             errorMessage: "PR_TENDER_FILE_NUMBER_INVALID",
               required: true,
               jsonPath: "pressnote.fileNumber"
             })
@@ -96,7 +97,9 @@ import {localStorageGet, localStorageSet} from "egov-ui-kit/utils/localStorageUt
             labelKey: "PR_PRESS_NOTE_SUBJECT_PLACEHOLDER"
           },
           pattern:getPattern("subjectvalidation"),
-          errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
+          //errorMessage: "PR_PRESS_NOTE_SUBJECT_INVALID",
+          errorMessage: "PR_TENDER_SUBJECT_INVALID",
+
           required: true,
           jsonPath: "pressnote.pressSubject",
           gridDefination: {
@@ -220,7 +223,9 @@ export const EmailSmsContent = getCommonCard({
         labelKey: "PR_EMAIL_Subject_PLACEHOLDER"
       },
      pattern:getPattern("subjectvalidation"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    //  errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      errorMessage: "PR_TENDER_SUBJECT_INVALID",
+   
       required: true,
       jsonPath: "pressnote.subjectemail",
 	   gridDefination: {

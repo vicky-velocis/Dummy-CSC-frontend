@@ -6,7 +6,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import "../../../../customstyle.css";
-import { getSearchResultsView, getCurrentAssigneeUserNameAndRole } from "../../../../ui-utils/commons";
+import { getSearchResultsView, getCurrentAssigneeUserNameAndRole, commonConfig } from "../../../../ui-utils/commons";
 import { downloadPrintContainerScreenDownload, downloadPrintContainer } from "./applyResourceSearchPreview/footer";
 import { documentsSummary } from "./myRequestSearchPreview/documentsSummary";
 import { ownerDetails } from "./myRequestSearchPreview/ownerDetails";
@@ -32,11 +32,7 @@ const titlebar = getCommonContainer({
     moduleName: "egov-hc",
     componentPath: "SLADays",
   },
-  Status: {
-    uiFramework: "custom-atoms-local",
-    moduleName: "egov-hc",
-    componentPath: "Status",
-  },
+  
   CurrentAssignee: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-hc",
@@ -68,9 +64,9 @@ const prepareDocumentsView = async (state, dispatch) => {
     let cnt = 1;
     hcUploadedDocs.forEach(element => {
         documentsPreview.push({
-          title: "Uploaded Image "+cnt,
+          title: "Uploaded Document "+cnt,
           fileStoreId: element.media,
-          linkText: "View"
+          linkText: "DOWNLOAD"
         
       })
       cnt = cnt +1;
@@ -239,7 +235,7 @@ const getMdmsData = async (dispatch) => {
       [],
       mdmsBody
     );
-    debugger
+    // debugger
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
 
     //setting horticulture roles into mdms
@@ -257,7 +253,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    debugger
+    // debugger
     getMdmsData(dispatch).then(response => {  
     }) 
     const serviceRequestId = getQueryArg(window.location.href, "applicationNumber");

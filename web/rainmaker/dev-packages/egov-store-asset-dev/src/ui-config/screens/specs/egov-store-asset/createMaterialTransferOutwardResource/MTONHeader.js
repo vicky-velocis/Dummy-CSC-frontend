@@ -13,6 +13,10 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import{GetMdmsNameBycode,getMaterialBalanceRateResults} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
+import {
+  getLocalizationCodeValue,
+} from "../../utils";
+import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const MTONHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -64,7 +68,19 @@ export const MTONHeader = getCommonCard({
           dispatch(prepareFinalObject("materialIssues[0].indent.indentType", indents[0].indentType));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentPurpose", indents[0].indentPurpose));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentCreatedBy", indents[0].indentCreatedBy));
-          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].inddesignationentNumberme));
+          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].designation));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee", indents[0].issueStore.storeInCharge.code));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", indents[0].issueStore.storeInCharge.code));
+          let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
+          let designation=action.value ;
+          emp = emp.filter(x=>x.code ===indents[0].issueStore.storeInCharge.code)
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", emp[0].name));
+          let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
+          const {designationsById} = state.common;
+          if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+            dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+            }
           storecode =indents[0].issueStore.code;
           let indentDetails = get(
             indents[0],
@@ -73,6 +89,7 @@ export const MTONHeader = getCommonCard({
           );
           let material=[];
           let matcode =[];
+          let matname =[];
           for (let index = 0; index < indentDetails.length; index++) {
             const element = indentDetails[index];
 
@@ -81,11 +98,11 @@ export const MTONHeader = getCommonCard({
             dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].userQuantity`, element.userQuantity));
             dispatch(prepareFinalObject(`materialIssues[0].indent.indentDetails[${index}].material.code`, element.material.code));
             //create material list for card item
-           
+           let materialName =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code)
             material.push(
               {
                 materialcode:element.material.code,
-                materialName:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.store-asset.Material",element.material.code),
+                materialName:materialName,
                 uomcode:element.uom.code,
                 uomname:GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",element.uom.code),
                 id:element.id,
@@ -96,9 +113,14 @@ export const MTONHeader = getCommonCard({
                 //unitRate://to be deside
               });
               matcode.push( element.material.code)
+              matname.push( materialName)
           }  
           
           let matcodes_= matcode.map(itm => {
+            return `${itm}`;
+          })
+          .join() || "-"
+          let matname_= matname.map(itm => {
             return `${itm}`;
           })
           .join() || "-"
@@ -106,7 +128,20 @@ export const MTONHeader = getCommonCard({
           getMaterialBalanceRateResults(queryObject)
           .then(async response =>{
             if(response){
+              
               dispatch(prepareFinalObject("indentsOutmaterial", response.MaterialBalanceRate));
+              if(response.MaterialBalanceRate.length ===0)
+              {
+
+                let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_BALANCE_VALIDATION")
+                const errorMessage = {
+                      
+                  labelName: "No Balance or all QTY is used for",
+                  labelKey:   LocalizationCodeValue+' store  '+indents[0].issueStore.name +' and Material '+matname_
+                };
+                dispatch(toggleSnackbar(true, errorMessage, "warning"));
+                
+              }
               
             }
           }); 
@@ -254,17 +289,22 @@ export const MTONHeader = getCommonCard({
         },
       }),
       beforeFieldChange: (action, state, dispatch) => {
+    
         let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
         let designation=action.value ;
         emp = emp.filter(x=>x.code ===action.value)
-        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation) 
+        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
         const {designationsById} = state.common;
-       // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+        if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+          }
+        
      
 
       }
     },
-    designation: {
+    issuedToDesignation: {
       ...getTextField({
         label: {
           labelName: "Designation",
@@ -279,6 +319,40 @@ export const MTONHeader = getCommonCard({
         },
        // pattern: getPattern("Email"),
         jsonPath: "materialIssues[0].issuedToDesignation"
+      })
+    },
+    createdBy: {
+      ...getTextField({
+        label: {
+          labelName: "Created by",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+        },
+        placeholder: {
+          labelName: "Enter Created By",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+        },
+        props: {
+          disabled: true
+        },
+       // pattern: getPattern("Email"),
+        jsonPath: "materialIssues[0].createdByName"
+      })
+    },
+    degignation: {
+      ...getTextField({
+        label: { labelName: "degignation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+        placeholder: {
+          labelName: "degignation",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION"
+        },
+        props: {
+          disabled: true,       
+        },
+        required: false,
+        visible:true,
+        jsonPath: "materialIssues[0].designation",
+       
+        
       })
     },
     remarks: getTextField({

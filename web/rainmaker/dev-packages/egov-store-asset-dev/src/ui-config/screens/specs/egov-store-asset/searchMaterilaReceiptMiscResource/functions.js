@@ -128,7 +128,7 @@ export const searchApiCall = async (state, dispatch) => {
 
         return {
           [getTextToLocalMapping("Material Receipt Number")]: get(item, "mrnNumber", "-") || "-",
-          [getTextToLocalMapping("Store Name")]:  get(item, "receivingStore.code", "-") || "-", 
+          [getTextToLocalMapping("Store Name")]:  get(item, "receivingStore.name", "-") || "-", 
          [getTextToLocalMapping("Receipt Type")]: get(item, "receiptType", "-") || "-", 
         //  [getTextToLocalMapping("Indent Purpose")]: get(item, "indentPurpose", "-") || "-",  
           [getTextToLocalMapping("Status")]: get(item, "mrnStatus", "-") || "-",  

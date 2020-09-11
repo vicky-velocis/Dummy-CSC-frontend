@@ -136,6 +136,16 @@ export const handleCreateUpdatePO = (state, dispatch) => {
   }
 };
 
+export const furnishindentData = (state, dispatch) => {
+  let purchaseOrders = get(
+    state.screenConfiguration.preparedFinalObject,
+    "purchaseOrders",
+    []
+  );
+  setDateInYmdFormat(purchaseOrders[0], ["purchaseOrderDate","expectedDeliveryDate" ]);
+  setDateInYmdFormat(purchaseOrders[0], ["priceList[0].rateContractDate","priceList[0].agreementDate" ,"priceList[0].agreementStartDate","priceList[0].agreementEndDate"]);
+  dispatch(prepareFinalObject("purchaseOrders", purchaseOrders));
+}
 export const createUpdatePO = async (state, dispatch, action) => {
 
   let purchaseOrders = get(
@@ -264,6 +274,26 @@ export const createUpdatePO = async (state, dispatch, action) => {
     "agreementEndDate",
     convertDateToEpoch(get(purchaseOrders[0], "agreementEndDate"), "dayStart")
   );
+  set(
+    purchaseOrders[0],
+    "priceList[0].rateContractDate",
+    convertDateToEpoch(get(purchaseOrders[0], "priceList[0].rateContractDate"), "dayStart")
+  );
+  set(
+    purchaseOrders[0],
+    "priceList[0].agreementDate",
+    convertDateToEpoch(get(purchaseOrders[0], "priceList[0].agreementDate"), "dayStart")
+  );
+  set(
+    purchaseOrders[0],
+    "priceList[0].agreementStartDate",
+    convertDateToEpoch(get(purchaseOrders[0], "priceList[0].agreementStartDate"), "dayStart")
+  );
+  set(
+    purchaseOrders[0],
+    "priceList[0].agreementEndDate",
+    convertDateToEpoch(get(purchaseOrders[0], "priceList[0].agreementEndDate"), "dayStart")
+  );
 
   const requestBody = {purchaseOrders};
   console.log("requestbody", requestBody);
@@ -285,6 +315,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
   
     } catch (error) {
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
+      furnishindentData(state, dispatch);
     }
   } else if (action === "UPDATE") {
     try {
@@ -301,6 +332,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
 }
   
     } catch (error) {
+      furnishindentData(state, dispatch);
       dispatch(toggleSnackbar(true, { labelName: error.message, labelCode: error.message }, "error" ) );
     }
   } 

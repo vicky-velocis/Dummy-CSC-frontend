@@ -57,7 +57,7 @@ import { documentsSummary } from "../summaryResource/tenderDocumentsSummary";
                 labelKey: "PR_TENDER_SIZE_OF_PUBLICATION_PLACEHOLDER"
               },
               pattern: getPattern("fileNumber"),
-              errorMessage: "PR_TENDER_SIZE_OF_PUBLICATION_INVALID",
+              errorMessage: "PR_TENDER_FILE_NUMBER_INVALID",
               required: false,
               jsonPath: "tender.publicationsize"
             })
@@ -554,7 +554,7 @@ export const ResendTenderInviteGrid = {
   uiFramework: "custom-molecules",
   
   componentPath: "Table",
-  visible: true,
+  visible: false,
   props: {
    data: [],
     columns: [
@@ -572,6 +572,8 @@ export const ResendTenderInviteGrid = {
        }
       }
     ],
+   
+
     options: {
       filter: false,
       download: false,
@@ -579,7 +581,7 @@ export const ResendTenderInviteGrid = {
       selectableRows: true,
       hover: true,
        selectableRowsHeader : true,
-       
+      // title:"Invited Press List",
 	// disableToolbarSelect : true,
 	 selectableRowsOnClick : false,
       rowsPerPageOptions: [5, 10, 15],

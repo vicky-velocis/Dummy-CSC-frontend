@@ -27,50 +27,54 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "abg":
       config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break
+    case "rented-properties":
+    case "rented-properties-citizen":
+      config = require(`egov-rented-properties/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "egov-common":
       config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
-    case "egov-boilerplate":
-      config = require(`egov-boilerplate/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "wns":
-    case "wns-citizen":
-      config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-	case "egov-opms":
-      config = require(`egov-opms/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "egov-hc":
-      config = require(`egov-hc/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "egov-pr":
-      config = require(`egov-pr/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break; 
-    case "pms":
-      config = require(`egov-pms/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;  
-      case "egov-store-asset":
-        config = require(`egov-store-asset/ui-config/screens/specs/${path}/${screenKey}`).default;
+      case "egov-boilerplate":
+        config = require(`egov-boilerplate/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+      case "wns":
+      case "wns-citizen":
+        config = require(`egov-wns/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+    case "egov-opms":
+        config = require(`egov-opms/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+      case "egov-hc":
+        config = require(`egov-hc/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+      case "egov-pr":
+        config = require(`egov-pr/ui-config/screens/specs/${path}/${screenKey}`).default;
         break; 
-    case "egov-echallan":
-      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-	case "egov-echallan-auction":
-      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
-	 break;
-    case "egov-echallan-item-master":
-      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "egov-echallan-fine-master":
-      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-    case "egov-echallan-vendor-master":
-      config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;
-        case "egov-nulm":
-          config = require(`egov-nulm/ui-config/screens/specs/${path}/${screenKey}`).default;
-          break;
+      case "pms":
+        config = require(`egov-pms/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;  
+        case "egov-store-asset":
+          config = require(`egov-store-asset/ui-config/screens/specs/${path}/${screenKey}`).default;
+          break; 
+      case "egov-echallan":
+        config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+    case "egov-echallan-auction":
+        config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+     break;
+      case "egov-echallan-item-master":
+        config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+      case "egov-echallan-fine-master":
+        config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+      case "egov-echallan-vendor-master":
+        config = require(`egov-echallan/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+          case "egov-nulm":
+            config = require(`egov-nulm/ui-config/screens/specs/${path}/${screenKey}`).default;
+            break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

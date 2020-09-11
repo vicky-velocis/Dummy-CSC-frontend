@@ -21,12 +21,13 @@
     "egov-opms": "0.0.1",
 	  "egov-hc": "0.0.1",
     "egov-echallan": "0.0.1",
-	  "egov-tradelicence": "0.0.1",
     "egov-pt": "0.0.1",
     "egov-boilerplate": "0.0.1",
     "egov-common": "0.0.1",
     "egov-wns": "1.1.0",
     "egov-abg": "0.0.1",
+    "egov-rented-properties": "^0.0.1",
+    "egov-tradelicence": "0.0.1",
     "egov-ui-framework": "0.1.41",
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
@@ -92,7 +93,7 @@
     "egov-ui-kit-components": "babel src/components --out-dir src/egov-ui-kit/components --copy-files",
     "egov-ui-kit-redux": "babel src/redux --out-dir src/egov-ui-kit/redux --copy-files",
     "egov-ui-kit-utils": "babel src/utils --out-dir src/egov-ui-kit/utils --copy-files"
-   },
+  },
   "devDependencies": {
     "@storybook/addon-knobs": "^3.4.11",
     "@storybook/react": "^3.4.11",

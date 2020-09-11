@@ -163,11 +163,11 @@ const createOfflinePaymentObj = async (state, dispatch) => {
     receiptNumber: generateReceiptNumber(eChallanDetail.challanId),
     receiptDate: null,
     receiptType: null,
-    businessService: null,
+    businessService: billDetails.businessService, //null
     billId: billDetails.billDetails[0].billId,
-    bill: null,
-    additionalDetails: null,
-    auditDetails: null
+    bill: billDetails.billDetails[0], //null,
+    additionalDetails: billDetails.additionalDetails, //null,
+    auditDetails: billDetails.auditDetails //null
   };
 
   let payment = {

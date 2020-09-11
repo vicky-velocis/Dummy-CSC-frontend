@@ -221,7 +221,7 @@ const MTONDetailsCard = {
                 labelKey: "STORE_MATERIAL_INDENT_NOTE_QTY_BALANCE_QTY_AFTER_ISSUE"
               },
               pattern: getPattern("numeric-only"),
-              jsonPath: "materialIssues[0].materialIssueDetails[0].balAfterIssue",
+              jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.balAfterIssue",
               props: {
                 disabled:true,
               }

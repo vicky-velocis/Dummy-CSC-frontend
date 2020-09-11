@@ -177,51 +177,8 @@ if(dept!=undefined )
     
     
     TimeseriesReportContainer: getCommonContainer({
-      // Year: getSelectField({
-      //   label: {
-      //     labelName: "Year",
-      //     labelKey: "PR_REPORT_YEAR_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Select Year",
-      //     labelKey: "PR_REPORT_YEAR_PLACEHOLDER"
-      //   },
-  
-       
-      //   jsonPath: "TimeseriesReport.Year",
-      //   sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventReportYear",
-      //   required: true,
-      //   optionValue:"code",
-      //   optionLabel:"name",
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 4
-      //   }
-      
-      // }),
-  
-      // Month: getSelectField({
-      //   label: {
-      //     labelName: "Month",
-      //     labelKey: "PR_REPORT_MONTH_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Select Month",
-      //     labelKey: "PR_REPORT_MONTH_PLACEHOLDER"
-      //   },
-  
+     
         
-      //   jsonPath: "TimeseriesReport.Month",
-      //   sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].eventReportMonth",
-      //   optionValue:"code",
-      //   optionLabel:"name",
-      //   required: false,
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 4
-      //   }
-      
-      // }),
       Year: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-pr",
@@ -459,27 +416,7 @@ if(dept!=undefined )
     
     
     EventReportContainer: getCommonContainer({
-      // DepartmentName: getSelectField({
-      //   label: {
-      //     labelName: "Department Name",
-      //     labelKey: "PR_REPORT_DEPARTMENTNAME_LABEL"
-      //   },
-      //   placeholder: {
-      //     labelName: "Select Department Name",
-      //     labelKey: "PR_REPORT_DEPARTMENTNAME_PLACEHOLDER"
-      //   },
-      //   optionValue:"code",
-      //   optionLabel:"name",
-  
-      //   sourceJsonPath: "applyScreenMdmsData['common-masters'].Department",
-      //   jsonPath: "eventReport.dept",
-      //   required: true,
-      //   gridDefination: {
-      //     xs: 12,
-      //     sm: 4
-      //   }
-      
-      // }),
+     
   
       DepartmentName: {
         uiFramework: "custom-containers-local",
@@ -620,7 +557,7 @@ if(dept!=undefined )
           sm: 4
         },
         pattern: getPattern("Date"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "PR_PRESS_NOTE_DATE_INVALID",
         required: true,
         afterFieldChange: (action, state, dispatch) => {
               dispatch(
@@ -652,30 +589,10 @@ if(dept!=undefined )
           sm: 4
         },
         pattern: getPattern("Date"),
-        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        errorMessage: "PR_PRESS_NOTE_DATE_INVALID",
         required: true
       }),
-  //     LocalityName: getSelectField({
-  //       label: {
-  //         labelName: "Locality Name",
-  //         labelKey: "PR_REPORT_LOCALITYNAME_LABEL"
-  //       },
-  //       placeholder: {
-  //         labelName: "Select Locality Name",
-  //         labelKey: "PR_REPORT_LOCALITYNAME_LABEL_PLACEHOLDER"
-  //       },
-  // optionLabel:"name",
-  // optionValue:"name",
-  
-  //       jsonPath: "LocalityReport.localityname",
-  //    sourceJsonPath: "applyScreenMdmsData['RAINMAKER-PR'].localityAreaName",
-  //       required: true,
-  //       gridDefination: {
-  //         xs: 12,
-  //         sm: 4
-  //       }
-      
-  //     }),
+ 
 
       LocalityName: {
         uiFramework: "custom-containers-local",

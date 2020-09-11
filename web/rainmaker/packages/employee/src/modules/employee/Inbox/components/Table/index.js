@@ -125,6 +125,8 @@ class InboxData extends React.Component {
     }
     else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
+    } else if(row[0].subtext === "MasterRP") {
+      queryParams = `transitNumber=${taskId}&tenantId=${tenantId}`
     }
     else if (row[0].subtext === "NewWS1") {
       queryParams += '&history=true&service=WATER';
@@ -366,7 +368,8 @@ export const Taskboard = ({ data }) => {
     </div>
   );
 };
-
+// this method not in use
 const onModuleCardClick = (route) => {
-  window.location.href = document.location.origin + route;
+
+ 
 };

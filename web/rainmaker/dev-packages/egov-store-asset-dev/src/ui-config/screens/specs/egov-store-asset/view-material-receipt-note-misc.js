@@ -18,12 +18,19 @@ import{WorkFllowStatus} from '../../../../ui-utils/sampleResponses'
 //print function UI start SE0001
 import { downloadAcknowledgementForm} from '../utils'
 //print function UI end SE0001
-let applicationNumber = getQueryArg(window.location.href, "applicationNumbers");
+import{UserRoles} from '../../../../ui-utils/sampleResponses'
+let roles = UserRoles().UserRoles;
+let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
+let enableButton = true;
+if(status.toUpperCase() ===WorkFllowStatus().WorkFllowRejected)
+enableButton = false
+else if(status.toUpperCase() !==WorkFllowStatus().WorkFllowApproved)
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {
@@ -214,7 +221,7 @@ const screenConfig = {
             },
             newPOButton: {
               componentPath: "Button",            
-              visible: true,// enableButton,
+              visible: enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -247,36 +254,41 @@ const screenConfig = {
                 action: "condition",
                 callBack: creatPOHandle,
               },
-            },
-             //print function UI start SE0001
-             printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              gridDefination: {
-                xs: 12,
-                sm: 4,
-                md:3,
-                lg:3,
-                align: "right",
-              },  
-              visible: true,// enableButton,
-              props: {
-                data: {
-                  label: {
-                    labelName:"PRINT",
-                    labelKey:"STORE_PRINT"
-                  },
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
+              roleDefination: {
+                rolePath: "user-info.roles",
+                roles: roles
               }
-            }
-            //print function UI End SE0001
+            },
+            
           }
         },
+         //print function UI start SE0001
+         printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          gridDefination: {
+            xs: 12,
+            sm: 12,
+            // md:3,
+            // lg:3,
+            align: "right",
+          },  
+          visible: true,// enableButton,
+          props: {
+            data: {
+              label: {
+                labelName:"PRINT",
+                labelKey:"STORE_PRINT"
+              },
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { marginLeft: 10, align: "right", } },
+              menu: printMenu
+            }
+          }
+        },
+        //print function UI End SE0001
         taskStatus: {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",

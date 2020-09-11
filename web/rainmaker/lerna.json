@@ -1,5 +1,4 @@
 {
-  "lerna": "2.11.0",
   "npmClient": "yarn",
   "packages": [
     "dev-packages/pgr-citizen-dev",
@@ -25,6 +24,7 @@
     "dev-packages/egov-pr-dev",
     "dev-packages/egov-boilerplate-dev",
     "dev-packages/egov-common-dev",
+    "dev-packages/egov-rented-properties-dev",
     "packages/citizen",
     "packages/employee",
     "packages/lib/*"

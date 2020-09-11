@@ -501,7 +501,8 @@ export const NonIndentConfiguration =()=>{
 
 export const WorkFllowStatus = () => {
   return {
-    
+    WorkFllowRejected:'REJECTED',
+    WorkFllowApproved:'APPROVED',
     WorkFllowStatus: [
       {
         code:"CREATED",
@@ -515,6 +516,22 @@ export const WorkFllowStatus = () => {
         code:"APPROVED",
         value:"APPROVED",
       }
+
+    ]
+  }
+}
+
+export const UserRoles = () => {
+  return {
+    
+    UserRoles: [
+     "SACP",
+     "SAJE",
+     "SACT",
+     "MOH",
+     "SASP",
+     "SASO",
+     "SACSI"
 
     ]
   }
@@ -542,6 +559,7 @@ export const IndentConfigType = () => {
         INDENT_TFR:"Transfer Indent",
         
       },
+      indentStatus:"APPROVED"
   }
 }
 
@@ -570,27 +588,23 @@ export const InventoryData = () => {
         StoreName:
         {
           key:"STORE_DETAILS_STORE_NAME",
-          value:"Store Name",
+          value:"Store 01",
         },
         DepartmentName:
         {
           key:"STORE_DETAILS_DEPARTMENT_NAME",
-          value:"Department Name",
+          value:"Department 01",
         },
         MaterialName:
         {
           key:"STORE_MATERIAL_NAME",
-          value:"Material  Name",
+          value:"Cemment",
         },
         Rowdata:[
           {
             key:"STORE_COL_SL_NUMBER",
             value:"Sr No.",
-            data:[
-              {
-
-              }
-            ],
+           
           },
           {
             key:"STORE_COL_OPENNING_BALENCE",
@@ -703,7 +717,52 @@ export const InventoryData = () => {
      
     ],
     InventoryRowdata: [
-     
+      {
+        srNo:"1",
+     openingQty:"500.00",
+     openingUom:"NOS",
+     openingRate:"35.00",   
+     receiptDate:"01-01-1970",
+     receiptNo:"R1",
+     receiptDepartment:"DEP_03",
+     receiptPurchaseQty:"0",
+     receiptPurchaseUom:"",
+     receiptPurchaseUnitRate:"0",
+     receiptTotalValue:"0",
+     issuedDate:"25-08-2020",
+     issuedNo:"MRIN-2020-106",
+     issuedToDepartment:"DEP_03",
+     issuedQty:"5.00",
+     issuedUom:"TON",
+     issuedUnitRate:"35.00",
+     issuedTotalValue:"175.0000",
+     balanceQty:"495.00",
+     balanceUom:"NOS",
+     balanceTotalValue:"17325.0000"
+    },
+    {
+      srNo:"2",
+      openingQty:"500.00",
+      openingUom:"NOS",
+      openingRate:"35.00",   
+      receiptDate:"01-01-1970",
+      receiptNo:"R2",
+      receiptDepartment:"DEP_03",
+      receiptPurchaseQty:"0",
+      receiptPurchaseUom:"",
+      receiptPurchaseUnitRate:"0",
+      receiptTotalValue:"0",
+      issuedDate:"25-08-2020",
+      issuedNo:"MRIN-2020-106",
+      issuedToDepartment:"DEP_03",
+      issuedQty:"5.00",
+      issuedUom:"TON",
+      issuedUnitRate:"35.00",
+      issuedTotalValue:"175.0000",
+      balanceQty:"495.00",
+      balanceUom:"NOS",
+      balanceTotalValue:"17325.0000"
+    }
     ]
   };
   return Inventory;
