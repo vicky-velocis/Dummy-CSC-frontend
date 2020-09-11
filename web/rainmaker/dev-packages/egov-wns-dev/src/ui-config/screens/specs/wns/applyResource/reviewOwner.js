@@ -35,6 +35,9 @@ const connectionChargeDetailsHeader = getHeader({
 const roadCuttingChargesHeader = getHeader({
   labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
 });
+const otherChargesDetailsHeader =  getHeader({
+  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+});
 
 const activationDetailsHeader = getHeader({
   labelKey: "WS_ACTIVATION_DETAILS"
@@ -178,6 +181,16 @@ export const reviewArea = getLabelWithValue(
     callBack: handleNA
   }
 );
+export const reviewSecurityCharge = getLabelWithValue(
+  {
+    labelName: "Security Charges",
+    labelKey: "WS_ADDN_DETAILS_SECURITY_CHARGES_LABEL"
+  },
+  {
+    jsonPath: "applyScreen.securityCharge",
+    callBack: handleNA
+  }
+);
 export const reviewConnectionExecutionDate = getLabelWithValue(
   {
     labelName: "Connection Execution Date",
@@ -277,8 +290,10 @@ export const reviewOwner = (isEditable = true) => {
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
     viewTen: roadCuttingCharges,
-    viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewEleven: otherChargesDetailsHeader ,
+    viewTwelve: otherChargesDetails,
+    viewThirteen :activationDetailsHeader ,
+    viewFourteen: activationDetails,
   })
 };
 
@@ -303,6 +318,9 @@ const connectionChargeDetails = getCommonContainer({
 const roadCuttingCharges = getCommonContainer({
   reviewRoadType,
   reviewArea
+});
+const otherChargesDetails =  getCommonContainer({
+  reviewSecurityCharge
 });
 
 const activationDetails = getCommonContainer({

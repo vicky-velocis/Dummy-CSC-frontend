@@ -4,10 +4,11 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import get from "lodash/get";
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import get from "lodash/get";
+import set from 'lodash/set';
 import { httpRequest } from "../../../../../ui-utils";
 import {
   prepareDocumentsUploadData,
@@ -20,9 +21,12 @@ import {
   validateFeildsForWater,
   validateFeildsForSewerage,
   validateConnHolderDetails,
+  isActiveProperty,
+  showHideFieldsFirstStep,
+  isModifyMode,
+  isModifyModeAction
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import set from 'lodash/set';
 import { getTenantIdCommon } from "egov-ui-kit/utils/localStorageUtils";
 
 const setReviewPageRoute = (state, dispatch) => {
@@ -185,6 +189,12 @@ const callBackForNext = async (state, dispatch) => {
         applyScreenObject.connectionHolders = arrayHolderData;
       }
       if (searchPropertyId !== undefined && searchPropertyId !== "") {
+        if(!isActiveProperty(applyScreenObject.property)){
+          dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObject.property.status}`, labelName: `Property Status is ${applyScreenObject.property.status}` }, "warning"));     
+          showHideFieldsFirstStep(dispatch,"",false);
+          return false;
+        }
+        // TODO else part update propertyId.
         if (validateConnHolderDetails(applyScreenObject)) {
                    isFormValid = true;
                    hasFieldToaster = false;
@@ -666,6 +676,7 @@ export const renderSteps = (activeStep, dispatch) => {
         ),
         dispatch
       );
+
   }
 };
 
