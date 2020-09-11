@@ -59,6 +59,31 @@ export const OwnerInfoCard = getCommonCard({
       gridDefination: { xs: 12, sm: 6 },
       jsonPath: "applyScreen.proposedPipeSize"
     }),
+    waterApplicationType : getSelectField({
+      label: { labelKey: "WATER_APPLICATION_TYPE" },
+      sourceJsonPath: "applyScreenMdmsData.ws-services-masters.WaterApplicationType",
+      placeholder: { labelKey: "WATER_APPLICATION_TYPE_PLACEHOLDER" },
+      required: true,
+      gridDefination: { xs: 12, sm: 6 },
+      jsonPath: "applyScreen.waterApplicationType",
+      props: {
+        optionValue: "code",
+        optionLabel: "name",
+      // data:
+      // [
+      //   {
+      //     "id": 1,
+      //     "code": "TEMPORARY",
+      //     "name": "Temporary"
+      //   },
+      //   {
+      //     "id": 2,
+      //     "code": "REGULAR",
+      //     "name": "Regular"
+      //   }
+      // ]
+    },
+    }),
 
     numberOfWaterClosets: getTextField({
       label: { labelKey: "WS_CONN_DETAIL_NO_OF_WATER_CLOSETS" },

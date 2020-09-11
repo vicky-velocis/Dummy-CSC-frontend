@@ -259,6 +259,29 @@ export const additionDetails = getCommonCard({
       })
     }),
   }),
+  OtherChargeContainer: getCommonGrayCard({
+    subHeader: getCommonTitle({
+      labelKey: "WS_OTHER_CHARGE_DETAILS"
+    }),
+    chargesDetails: getCommonContainer({
+      enterArea: getTextField({
+        label: {
+          labelKey: "WS_ADDN_DETAILS_SECURITY_CHARGES_LABEL"
+        },
+        placeholder: {
+          labelKey: "WS_ADDN_DETAILS_SECURITY_CHARGES_PLACEHOLDER"
+        },
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        },
+        required: false,
+        pattern: getPattern("Amount"),
+        errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+        jsonPath: "applyScreen.securityCharge"
+      })
+    }),
+  }),
   activationDetailsContainer: getCommonGrayCard({
     subHeader: getCommonTitle({
       labelKey: "WS_ACTIVATION_DETAILS"

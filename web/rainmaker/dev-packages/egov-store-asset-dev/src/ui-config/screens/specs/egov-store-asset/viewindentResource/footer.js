@@ -38,8 +38,7 @@ export const masterCommonFooter = () => {
         color: "primary",
         style: {
           minWidth: "200px",
-          height: "48px",
-          width:"100%",
+          height: "48px",         
           marginRight: "45px"
         }
       },
