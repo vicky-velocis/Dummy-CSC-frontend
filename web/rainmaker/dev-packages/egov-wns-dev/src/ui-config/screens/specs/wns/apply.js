@@ -33,6 +33,7 @@ import { reviewOwner } from "./applyResource/reviewOwner";
 import { reviewConnectionDetails } from "./applyResource/reviewConnectionDetails";
 import { togglePropertyFeilds, toggleSewerageFeilds, toggleWaterFeilds } from '../../../../ui-containers-local/CheckboxContainer/toggleFeilds';
 
+import cloneDeep from "lodash/cloneDeep";
 export const stepperData = () => {
   if (process.env.REACT_APP_NAME === "Citizen") {
     return [{ labelKey: "WS_COMMON_CONNECTION_DETAILS" }, { labelKey: "WS_COMMON_DOCS" }, { labelKey: "WS_COMMON_SUMMARY" }];
@@ -127,7 +128,8 @@ export const getMdmsData = async dispatch => {
             { name: "Documents" },
             { name: "waterSource" },
             { name: "connectionType" },
-            { name: "PropertySearch" }
+            { name: "PropertySearch" },
+            {name : "WaterApplicationType"}
           ]
         }
       ]
