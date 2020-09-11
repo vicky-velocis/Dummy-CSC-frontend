@@ -39,6 +39,7 @@ import { getRelationshipRadioButton } from "./tradeOwnerDetails";
 
 const tradeLicenseType = getQueryArg(window.location.href, "tlType");
 const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+const FIELD_MAXLENGTH = 100;
 
 let userInfo = JSON.parse(getUserInfo());
 
@@ -788,12 +789,12 @@ const applicantNameField = {
       sm: 6
   },
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   required: true,
   errorMessage: "TL_ERR_APPLICANT_NAME",
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
             "apply",
@@ -909,13 +910,13 @@ const oldLicenseNumberField = {
       sm: 6
   },
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   required: true,
   errorMessage: "TL_ERR_OLD_LICENSE_NUMBER",
   visible: false,
   jsonPath: "Licenses[0].oldLicenseNumber",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
               "apply",
@@ -989,12 +990,12 @@ const fatherOrHusbandsNameField = {
       sm: 6
   },
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   required: true,
   errorMessage: "TL_ERR_FATHER_OR_HUSBAND",
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
               "apply",
@@ -1047,13 +1048,13 @@ const occupationField = {
       sm: 6
   },
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   visible: false,
   required: true,
   errorMessage: "TL_ERR_OCCUPATION",
   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.occupation",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
               "apply",
@@ -1102,7 +1103,7 @@ const fullAddressField = {
       labelKey: "TL_FULL_ADDRESS_PLACEHOLDER"
   },
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   props:{
         multiline: true,
         rows: "2"
@@ -1112,7 +1113,7 @@ const fullAddressField = {
   errorMessage:"TL_ERR_FULL_ADDRESS",
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
               "apply",
@@ -1343,14 +1344,14 @@ const particularsOfAreaField = {
   required: true,
   visible: false,
   minLength: 1,
-  maxLength: 100,
+  maxLength: FIELD_MAXLENGTH,
   props:{
     multiline: true,
     rows: "2"
   },
   jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.particularsOfArea",
   afterFieldChange: (action, state, dispatch) => {
-    if (action.value.length > 100) {
+    if (action.value.length > FIELD_MAXLENGTH) {
         dispatch(
             handleField(
               "apply",
@@ -1399,13 +1400,13 @@ const tradeField = {
         labelKey: "TL_TRADE_PLACEHOLDER"
     },
     minLength: 1,
-    maxLength: 100,
+    maxLength: FIELD_MAXLENGTH,
     visible: false,
     errorMessage: "TL_ERR_TRADE",
     required: true,
     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.tradeValue",
     afterFieldChange: (action, state, dispatch) => {
-      if (action.value.length > 100) {
+      if (action.value.length > FIELD_MAXLENGTH) {
           dispatch(
               handleField(
                 "apply",
@@ -1455,7 +1456,7 @@ const completeResidentialAddressField = {
     },
     visible: false,
     minLength: 1,
-    maxLength: 100,
+    maxLength: FIELD_MAXLENGTH,
     errorMessage: "TL_ERR_COMPLETE_ADDRESS",
     required: true,
     props:{
@@ -1464,7 +1465,7 @@ const completeResidentialAddressField = {
     },
     jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1",
     afterFieldChange: (action, state, dispatch) => {
-      if (action.value.length > 100) {
+      if (action.value.length > FIELD_MAXLENGTH) {
           dispatch(
               handleField(
                 "apply",
@@ -1514,7 +1515,7 @@ const permanentAddressField = {
     },
     visible: false,
     minLength: 1,
-    maxLength: 100,
+    maxLength: FIELD_MAXLENGTH,
     required: true,
     errorMessage: "TL_ERR_PERMANENT_ADDRESS",
     props:{
@@ -1523,7 +1524,7 @@ const permanentAddressField = {
     },
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
     afterFieldChange: (action, state, dispatch) => {
-        if (action.value.length > 100) {
+        if (action.value.length > FIELD_MAXLENGTH) {
             dispatch(
                 handleField(
                   "apply",
@@ -1574,12 +1575,12 @@ const platformNumberField = {
     pattern: getPattern("familyMonthlyIncome"),
     visible: false,
     minLength: 1,
-    maxLength: 100,
+    maxLength: FIELD_MAXLENGTH,
     required: true,
     errorMessage: "TL_ERR_PLATFORM_NUMBER",
     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.platformNumber",
     afterFieldChange: (action, state, dispatch) => {
-      if (action.value.length > 100) {
+      if (action.value.length > FIELD_MAXLENGTH) {
           dispatch(
               handleField(
                 "apply",
@@ -1629,12 +1630,12 @@ const placeOfWorkField = {
     },
     visible: false,
     minLength: 1,
-    maxLength: 100,
+    maxLength: FIELD_MAXLENGTH,
     required: true,
     errorMessage: "TL_ERR_PLACE_OF_WORK",
     jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.placeOfWork",
     afterFieldChange: (action, state, dispatch) => {
-      if (action.value.length > 100) {
+      if (action.value.length > FIELD_MAXLENGTH) {
           dispatch(
               handleField(
                 "apply",
