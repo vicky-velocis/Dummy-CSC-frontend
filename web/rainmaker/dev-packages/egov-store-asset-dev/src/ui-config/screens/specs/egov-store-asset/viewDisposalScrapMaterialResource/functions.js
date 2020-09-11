@@ -144,7 +144,7 @@ export const createUpdatePO = async (state, dispatch, action) => {
   
   const tenantId =  getTenantId();
   disposals[0].tenantId = tenantId;
-  disposals[0].disposalStatus = "APPROVED"
+  disposals[0].disposalStatus = "Approved"
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
 
