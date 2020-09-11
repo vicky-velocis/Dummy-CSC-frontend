@@ -791,7 +791,45 @@ const applicantNameField = {
   maxLength: 100,
   required: true,
   errorMessage: "TL_ERR_APPLICANT_NAME",
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+            "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_APPLICANT_NAME_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+            "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_APPLICANT_NAME_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+               "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_APPLICANT_NAME"
+            )
+        )
+        dispatch(
+            handleField(
+            "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_APPLICANT_NAME"
+            )
+        )
+    }
+  }
 }
 
 const applicationTypeField = {
@@ -875,7 +913,45 @@ const oldLicenseNumberField = {
   required: true,
   errorMessage: "TL_ERR_OLD_LICENSE_NUMBER",
   visible: false,
-  jsonPath: "Licenses[0].oldLicenseNumber"
+  jsonPath: "Licenses[0].oldLicenseNumber",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_OLD_LICENSE_NUMBER_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_OLD_LICENSE_NUMBER_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_OLD_LICENSE_NUMBER"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_OLD_LICENSE_NUMBER"
+            )
+        )
+    }
+  }
 }
 
 const oldLicenseValidToField = {
@@ -916,7 +992,45 @@ const fatherOrHusbandsNameField = {
   maxLength: 100,
   required: true,
   errorMessage: "TL_ERR_FATHER_OR_HUSBAND",
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_FATHER_OR_HUSBAND_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_FATHER_OR_HUSBAND_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_FATHER_OR_HUSBAND"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_FATHER_OR_HUSBAND"
+            )
+        )
+    }
+  }
 }
 
 const occupationField = {
@@ -937,7 +1051,45 @@ const occupationField = {
   visible: false,
   required: true,
   errorMessage: "TL_ERR_OCCUPATION",
-  jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.occupation"
+  jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.occupation",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_OCCUPATION_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_OCCUPATION_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_OCCUPATION"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_OCCUPATION"
+            )
+        )
+    }
+  }
 }
 
 const fullAddressField = {
@@ -958,7 +1110,45 @@ const fullAddressField = {
   required: true,
   visible: false,
   errorMessage:"TL_ERR_FULL_ADDRESS",
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_FULL_ADDRESS_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_FULL_ADDRESS_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_FULL_ADDRESS"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_FULL_ADDRESS"
+            )
+        )
+    }
+  }
 }
 
 const dateOfBirthField = {
@@ -1158,7 +1348,45 @@ const particularsOfAreaField = {
     multiline: true,
     rows: "2"
   },
-  jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.particularsOfArea"
+  jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.particularsOfArea",
+  afterFieldChange: (action, state, dispatch) => {
+    if (action.value.length > 100) {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_PARTICULARS_OF_AREA_MAXLENGTH"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_PARTICULARS_OF_AREA_MAXLENGTH"
+            )
+        )
+    }
+    else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_PARTICULARS_OF_AREA"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_PARTICULARS_OF_AREA"
+            )
+        )
+    }
+  }
 }
 
 const tradeField = {
@@ -1170,11 +1398,50 @@ const tradeField = {
         labelName: "Enter Trade",
         labelKey: "TL_TRADE_PLACEHOLDER"
     },
+    minLength: 1,
     maxLength: 100,
     visible: false,
     errorMessage: "TL_ERR_TRADE",
     required: true,
-    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.tradeValue"
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.tradeValue",
+    afterFieldChange: (action, state, dispatch) => {
+      if (action.value.length > 100) {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_TRADE_MAXLENGTH"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_TRADE_MAXLENGTH"
+              )
+          )
+      }
+      else {
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "errorMessage",
+              "TL_ERR_TRADE"
+            )
+        )
+        dispatch(
+            handleField(
+              "apply",
+              action.componentJsonpath,
+              "props.errorMessage",
+              "TL_ERR_TRADE"
+            )
+        )
+      }
+    }
 }
 
 const completeResidentialAddressField = {
@@ -1195,7 +1462,45 @@ const completeResidentialAddressField = {
         multiline: true,
         rows: "2"
     },
-    jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1"
+    jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1",
+    afterFieldChange: (action, state, dispatch) => {
+      if (action.value.length > 100) {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_COMPLETE_ADDRESS_MAXLENGTH"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_COMPLETE_ADDRESS_MAXLENGTH"
+              )
+          )
+      }
+      else {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_COMPLETE_ADDRESS"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_COMPLETE_ADDRESS"
+              )
+          )
+      }
+    }
 }
 
 const permanentAddressField = {
@@ -1216,7 +1521,45 @@ const permanentAddressField = {
         multiline: true,
         rows: "2"
     },
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+    afterFieldChange: (action, state, dispatch) => {
+        if (action.value.length > 100) {
+            dispatch(
+                handleField(
+                  "apply",
+                  action.componentJsonpath,
+                  "errorMessage",
+                  "TL_ERR_PERMANENT_ADDRESS_MAXLENGTH"
+                )
+            )
+            dispatch(
+                handleField(
+                  "apply",
+                  action.componentJsonpath,
+                  "props.errorMessage",
+                  "TL_ERR_PERMANENT_ADDRESS_MAXLENGTH"
+                )
+            )
+        }
+        else {
+            dispatch(
+                handleField(
+                  "apply",
+                  action.componentJsonpath,
+                  "errorMessage",
+                  "TL_ERR_PERMANENT_ADDRESS"
+                )
+            )
+            dispatch(
+                handleField(
+                  "apply",
+                  action.componentJsonpath,
+                  "props.errorMessage",
+                  "TL_ERR_PERMANENT_ADDRESS"
+                )
+            )
+        }
+    }
 }
 
 const platformNumberField = {
@@ -1234,7 +1577,45 @@ const platformNumberField = {
     maxLength: 100,
     required: true,
     errorMessage: "TL_ERR_PLATFORM_NUMBER",
-    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.platformNumber"
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.platformNumber",
+    afterFieldChange: (action, state, dispatch) => {
+      if (action.value.length > 100) {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_PLATFORM_NUMBER_MAXLENGTH"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_PLATFORM_NUMBER_MAXLENGTH"
+              )
+          )
+      }
+      else {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_PLATFORM_NUMBER"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_PLATFORM_NUMBER"
+              )
+          )
+      }
+    }
 }
 
 const placeOfWorkField = {
@@ -1251,7 +1632,45 @@ const placeOfWorkField = {
     maxLength: 100,
     required: true,
     errorMessage: "TL_ERR_PLACE_OF_WORK",
-    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.placeOfWork"
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.placeOfWork",
+    afterFieldChange: (action, state, dispatch) => {
+      if (action.value.length > 100) {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_PLACE_OF_WORK_MAXLENGTH"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_PLACE_OF_WORK_MAXLENGTH"
+              )
+          )
+      }
+      else {
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "errorMessage",
+                "TL_ERR_PLACE_OF_WORK"
+              )
+          )
+          dispatch(
+              handleField(
+                "apply",
+                action.componentJsonpath,
+                "props.errorMessage",
+                "TL_ERR_PLACE_OF_WORK"
+              )
+          )
+      }
+    }
 }
 
 const businessStartDateField = {
