@@ -1,4 +1,4 @@
-import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getCommonCard, getCommonContainer, getCommonHeader ,getCommonSubHeader} from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getFileUrlFromAPI,
   getQueryArg,
@@ -16,12 +16,13 @@ import {
 import set from "lodash/set";
 import "../../../../customstyle.css";
 import "./publishtender.css";
-import { checkForRole,checkTenderVisibility } from "../../../../ui-utils/commons";
+import { checkForRole,checkTenderVisibility, getTenderGridData } from "../../../../ui-utils/commons";
 import { httpRequest } from "../../../../ui-utils";
 import commonConfig from '../../../../config/common';
 import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "ui-redux/store";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -40,6 +41,44 @@ const titlebar = getCommonContainer({
 
   
 });
+const getTenderData = async (action, state, dispatch) => {
+  await getMdmsData(action, state, dispatch).then(response => {
+    let mdmsresponse=  get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData",
+      {}
+    );
+    checkTenderVisibility(action, state, dispatch,mdmsresponse,getQueryArg(window.location.href, "Status"),JSON.parse(getUserInfo()).roles)
+ 
+
+
+localStorageSet("resendmodule", "TENDER");
+localStorageSet("eventifforinvitatoin",getQueryArg(window.location.href, "tenderuuId"));
+localStorageSet("ResendInvitelist", []);	
+localStorageSet("ResendInvitelistAll", []);	
+
+    
+let payload = {
+    "RequestBody": {
+      "tenantId": getTenantId(),
+      "moduleCode": localStorageGet("modulecode"),
+     
+      "tenderNoticeUuid": getQueryArg(window.location.href, "tenderuuId"),
+      "tenderNoticeId": getQueryArg(window.location.href, "tenderId"),
+      "fileNumber":"",
+      "tenderSubject":"",
+      "tenderNoticeStatus":"",
+      "fromDate":"",
+      "toDate":"",
+       "defaultGrid":false
+      
+    }
+  }
+  getSearchResultsforTenderView(state, dispatch, payload)
+
+
+})
+}
 const getMdmsData = async (action, state, dispatch) => {
 
   let mdmsBody = {
@@ -81,45 +120,15 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     set(
       action,
+      "screenConfig.components.div.children.Resendbody.children.cardContent.children.headerresend.props.visible",
+    false
+    );
+    set(
+      action,
       "screenConfig.components.div.children.body.children.cardContent.children.tenderPublishSummary.children.cardContent.children.header.children.editSection.visible",
       false
     );
-    getMdmsData(action, state, dispatch).then(response => {
-      let mdmsresponse=  get(
-        state,
-        "screenConfiguration.preparedFinalObject.applyScreenMdmsData",
-        {}
-      );
-      checkTenderVisibility(action, state, dispatch,mdmsresponse,getQueryArg(window.location.href, "Status"),JSON.parse(getUserInfo()).roles)
-    })
-
-
-	localStorageSet("resendmodule", "TENDER");
-  localStorageSet("eventifforinvitatoin",getQueryArg(window.location.href, "tenderuuId"));
-  localStorageSet("ResendInvitelist", []);	
-  localStorageSet("ResendInvitelistAll", []);	
-
-			
-	let payload = {
-      "RequestBody": {
-        "tenantId": getTenantId(),
-        "moduleCode": localStorageGet("modulecode"),
-       
-        "tenderNoticeUuid": getQueryArg(window.location.href, "tenderuuId"),
-        "tenderNoticeId": getQueryArg(window.location.href, "tenderId"),
-        "fileNumber":"",
-        "tenderSubject":"",
-        "tenderNoticeStatus":"",
-        "fromDate":"",
-        "toDate":"",
-         "defaultGrid":false
-        
-      }
-    }
-    getSearchResultsforTenderView(state, dispatch, payload)
-
-
-    
+    getTenderData(action, state, dispatch)
     
 
     return action;
@@ -149,15 +158,46 @@ const screenConfig = {
           tenderPublishSummary: tenderPublishSummary,
           documentsSummary: documentsSummary,
         }),
-    Resendbody:
-    // checkForRole(JSON.parse(getUserInfo()).roles, 'DEPARTMENTUSER')
-    //  || getQueryArg(window.location.href, "Status")=="CREATED" ?{}: 
-     getCommonCard({
-		   headerresend: {},	
-       
-        ResendTenderInviteGrid:{}
+    Resendbody:  getCommonCard({
+  // headerresend: getCommonHeader({
+  //       labelName: "Invited Press List",
+  //       labelKey: "PR_INVITED_PRESS_LIST"
+  //   },  
+  //       {
+  //     style: {
+  //       marginBottom: 18,
+  //     }
+  //   }
+  //   ),	  
+  header: {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    props: {
+      style: { marginBottom: "10px" }
+    },
+    children: {
+      header: {
+        // gridDefination: {
+        //   xs: 8
+        // },
+        ...getCommonSubHeader({
+                labelName: "Invited Press List",
+                labelKey: "PR_INVITED_PRESS_LIST"
+            },  
+                {
+              style: {
+                marginBottom: 18,
+              }
+            }),
+        visible:false
+      },
+    
+    }
+  },   
+        ResendTenderInviteGrid:ResendTenderInviteGrid
 
         }),
+   
         
        tenderSummaryfooter:tenderSummaryfooter
       }

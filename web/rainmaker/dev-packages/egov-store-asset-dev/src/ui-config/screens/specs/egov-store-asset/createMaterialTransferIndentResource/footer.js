@@ -84,7 +84,8 @@ export const callBackForNext = async (state, dispatch) => {
         if(indentStore !== issueStore)
         {
           
-          
+          if(activeStep===1)
+          {
           let cardJsonPath =
           "components.div.children.formwizardSecondStep.children.MTIDetails.children.cardContent.children.MTIDetailsCard.props.items";
           let pagename = "create-material-transfer-indent";
@@ -132,6 +133,9 @@ export const callBackForNext = async (state, dispatch) => {
 
             }
           }
+        }
+        else
+            changeStep(state, dispatch);
           
         }
         

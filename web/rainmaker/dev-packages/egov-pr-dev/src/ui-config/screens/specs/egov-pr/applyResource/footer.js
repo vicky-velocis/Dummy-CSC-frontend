@@ -227,10 +227,6 @@ let typeofevent=get(
   
 );
 
-  // let validatestepformflag = validatestepform(activeStep + 1,area,dept,typeofevent)
-  
-  //   isFormValid = validatestepformflag[0];
-  //   hasFieldToaster = validatestepformflag[1];
   if (activeStep === 0) {
 
     let startdate = get(	state,"screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.startDate1",
@@ -345,6 +341,7 @@ else{
           
        setReviewPageRoute(state, dispatch,responseMessage);
         }
+        
       }
       responseStatus === "success" && changeStep(state, dispatch);
     } else if (hasFieldToaster) {

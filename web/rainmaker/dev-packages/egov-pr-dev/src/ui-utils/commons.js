@@ -1,12 +1,12 @@
 
 import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getMultiUnits, getQueryArg, getTransformedLocale, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { getapplicationNumber, seteventid, seteventuuid, getapplicationType, getTenantId, getUserInfo, setapplicationNumber, lSRemoveItemlocal, lSRemoveItem, localStorageGet, setapplicationMode, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
+import { getapplicationType, getTenantId, getUserInfo, setapplicationNumber, lSRemoveItemlocal, lSRemoveItem, localStorageGet, setapplicationMode, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "redux/store";
-import { convertDateToEpoch, getCheckBoxJsonpath, getCurrentFinancialYear, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTradeTypeDropdownData, getTranslatedLabel, ifUserRoleExists, setFilteredTradeTypes, updateDropDowns, searchBill, createDemandForAdvNOC } from "../ui-config/screens/specs/utils";
+import {  getTranslatedLabel } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
 
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
@@ -210,14 +210,16 @@ export const prepareDocumentsUploadData = (state, dispatch, type) => {
 
 export const createUpdateEvent = async (state, dispatch, status) => {
   dispatch(toggleSpinner());
+ //debugger
   let response = '';
   let response_updatestatus = '';
   let uuId = getQueryArg(window.location.href, "eventuuId") === 'null' ? '' : getQueryArg(window.location.href, "eventuuId") // get(state, "screenConfiguration.preparedFinalObject.PRSCP.applicationId");
+  let payload = get(state.screenConfiguration.preparedFinalObject, "PublicRelation[0].CreateEventDetails", []);
 
   let method = "CREATE";
   try {
+    dispatch(toggleSpinner());
     let data = []
-    let payload = get(state.screenConfiguration.preparedFinalObject, "PublicRelation[0].CreateEventDetails", []);
 
     let reduxDocuments = get(state, "screenConfiguration.preparedFinalObject.EventDocuments", {});
 
@@ -267,8 +269,11 @@ export const createUpdateEvent = async (state, dispatch, status) => {
 
     set(payload, "eventType", typeofevent.label);
     set(payload, "organizerDepartmentName", organizerDepartmentName.value);
+    set(payload, "organizerDepartmentCode", organizerDepartmentName.label);
+
     set(payload, "organizerUsernName", organizerUsernName === undefined ? "" : organizerUsernName.label === "Select Organizer Employee" ? "" : organizerUsernName.label);
     payload.hasOwnProperty("committeeUuid") === false ? '' :set(payload, "committeeUuid", committeeUuid === undefined ? "" : committeeUuid.value === "Select Organizer Employee" ? "" : committeeUuid.value);
+    payload.hasOwnProperty("committeeUuid") === false ? '' :set(payload, "committeeName", committeeUuid === undefined ? "" : committeeUuid.value === "Select Organizer Employee" ? "" : committeeUuid.label);
 
     jp.query(reduxDocuments, "$.*").forEach(doc => {
       if (doc.documents && doc.documents.length > 0) {
@@ -310,95 +315,120 @@ export const createUpdateEvent = async (state, dispatch, status) => {
 
       if (response.ResponseBody.eventDetailUuid !== 'null' || response.ResponseBody.eventDetailUuid !== '') {
         dispatch(prepareFinalObject("EVENT", response));
-        dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
-        dispatch(prepareFinalObject("EventDocuments", []));
-
+       
+      //  dispatch(toggleSpinner());
         setApplicationNumberBox(state, dispatch);
         if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
-          dispatch(toggleSpinner());
+          dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
+          dispatch(prepareFinalObject("EventDocuments", []));
+         
           return { status: "success", message: "Event created successfully" };
         }
+        else {
+          //  dispatch(toggleSpinner());
+           return { status: "fail", message: response };
+
+ 
+ 
+
+          }
       } else {
-        dispatch(toggleSpinner());
+      //  dispatch(toggleSpinner());
         return { status: "fail", message: response };
       }
     } else {
 
       set(payload, "eventDetailUuid", uuId);
       response = await httpRequest("post", "/prscp-services/v1/event/_update", "", [], { requestBody: payload });
+   //   dispatch(toggleSpinner());
+
+     
+      if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
+      //  dispatch(toggleSpinner());
       dispatch(prepareFinalObject("EVENT", response));
       dispatch(prepareFinalObject("EventDocuments", []));
       dispatch(prepareFinalObject("PublicRelation[0].CreateEventDetails", {}));
-      if (response.ResponseInfo.status == "success" || response.ResponseInfo.status == "Success") {
-        dispatch(toggleSpinner());
         return { status: "success", message: "Event updated successfully" };
       }
       else {
-        dispatch(toggleSpinner());
-        return { status: "fail", message: response };
+    
+      return { status: "fail", message: 'fail'};
+      
+
       }
-      //   }
-      //  return { status: "success", message: response };
+     
     }
 
   } catch (error) {
-    dispatch(toggleSpinner());
-    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+ 
 
-    // Revert the changed pfo in case of request failure
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+  
     let PublicRelationData = get(
       state,
       "screenConfiguration.preparedFinalObject.PRSCP",
       []
     );
     dispatch(prepareFinalObject("PRSCP", PublicRelationData));
+  // if (uuId !== '' || uuId !== null) {
+      
 
-    return { status: "failure", message: error };
+    let area = get(state, "screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.area")
+    let sector = get(state, "screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.sector")
+    let typeofevent = get(state, "screenConfiguration.preparedFinalObject.PublicRelation[0].CreateEventDetails.eventType")
+    let organizerDepartmentName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PublicRelation[0].CreateEventDetails.organizerDepartmentName",
+
+    );
+    let organizerDepartmentCode = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PublicRelation[0].CreateEventDetails.organizerDepartmentCode",
+
+    );
+    let organizerUsernName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PublicRelation[0].CreateEventDetails.organizerUsernName",
+
+    );
+    // let organizerUsernName = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "PublicRelation[0].CreateEventDetails.organizerUsernName",
+
+    // );
+    let committeeUuid = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PublicRelation[0].CreateEventDetails.committeeUuid",
+
+    );
+    let committeeName = get(
+      state.screenConfiguration.preparedFinalObject,
+      "PublicRelation[0].CreateEventDetails.committeeName",
+
+    );
+    set(payload, "area", { value: "", label: area });
+    set(payload, "sector",   { value: "", label: sector });
+ 
+    set(payload, "eventType",  { value: "", label: typeofevent }
+    );
+ 
+   set(payload, "organizerDepartmentName",    { value: organizerDepartmentName, label: organizerDepartmentCode });
+
+  set(payload, "organizerUsernName", organizerUsernName === undefined ? "" : organizerUsernName === "Select Organizer Employee" ? "" :  { value: "", label: organizerUsernName });
+  payload.hasOwnProperty("committeeUuid") === false ? '' :set(payload, "committeeUuid", committeeUuid === undefined ? "" : committeeUuid === "Select Organizer Employee" ? "" :   { value: committeeUuid, label: committeeName }  );
+
+  
+    dispatch(prepareFinalObject("PRSCP", PublicRelationData));
+
+
+
+    
+//}
+return { status: "failure", message: error };
   }
 };
 
 
-// export const setDocsForEditFlow = async (state, dispatch) => {
-
-//   const applicationDocuments = get(
-//     state.screenConfiguration.preparedFinalObject,
-//     "SELLMEATNOC.uploadDocuments",
-//     []
-//   );
-//   let uploadedDocuments = {};
-//   let fileStoreIds =
-//     applicationDocuments &&
-//     applicationDocuments.map(item => item.fileStoreId).join(",");
-//   const fileUrlPayload =
-//     fileStoreIds && (await getFileUrlFromAPI(fileStoreIds));
-//   applicationDocuments &&
-//     applicationDocuments.forEach((item, index) => {
-//       uploadedDocuments[index] = [
-//         {
-//           fileName:
-//             (fileUrlPayload &&
-//               fileUrlPayload[item.fileStoreId] &&
-//               decodeURIComponent(
-//                 fileUrlPayload[item.fileStoreId]
-//                   .split(",")[0]
-//                   .split("?")[0]
-//                   .split("/")
-//                   .pop()
-//                   .slice(13)
-//               )) ||
-//             `Document - ${index + 1}`,
-//           fileStoreId: item.fileStoreId,
-//           fileUrl: Object.values(fileUrlPayload)[index],
-//           documentType: item.documentType,
-//           tenantId: item.tenantId,
-//           id: item.id
-//         }
-//       ];
-//     });
-//   dispatch(
-//     prepareFinalObject("SELLMEAT.uploadedDocsInRedux", uploadedDocuments)
-//   );
-// };
 
 
 
@@ -459,6 +489,7 @@ export const furnishResponse = response => {
 
 
   if (response.ResponseBody[0] !== null && response.ResponseBody[0] !== '') {
+    
     let startdate = response.ResponseBody[0].startDate
     startdate = startdate.split(' ');
     let enddate = response.ResponseBody[0].endDate
@@ -650,37 +681,37 @@ export const getPressNoteGridData = async () => {
   }
 
 };
-export const getInviteGuestGridData = async () => {
+// export const getInviteGuestGridData = async () => {
 
-  let queryObject = [];
-  var requestBody = {
-    "tenantId": `${getTenantId()}`,
-    "applicationType": 'PRSCP',
+//   let queryObject = [];
+//   var requestBody = {
+//     "tenantId": `${getTenantId()}`,
+//     "applicationType": 'PRSCP',
 
-    "dataPayload": {
-      "applicationType": 'PRSCP',
-      "applicationStatus": JSON.parse(getUserInfo()).roles[0].code == 'SI' ? 'INITIATED,REASSIGNTOSI,PAID,RESENT' : JSON.parse(getUserInfo()).roles[0].code == "MOH" ? 'FORWARD' : ''
+//     "dataPayload": {
+//       "applicationType": 'PRSCP',
+//       "applicationStatus":''
 
-    }
+//     }
 
-  }
+//   }
 
-  try {
-    const payload = await httpRequest(
-      "post",
-      "/pm-services/noc/_get",
-      "",
-      queryObject,
-      requestBody
-    );
-    return payload;
-  } catch (error) {
-  }
-
-
+//   try {
+//     const payload = await httpRequest(
+//       "post",
+//       "/pm-services/noc/_get",
+//       "",
+//       queryObject,
+//       requestBody
+//     );
+//     return payload;
+//   } catch (error) {
+//   }
 
 
-};
+
+
+// };
 
 export const getTenderGridData = async () => {
 
@@ -769,10 +800,19 @@ export const UpdateMasterTender = async (dispatch, data) => {
       [],
       data
     );
-
+    if (response.ResponseInfo.status === "Success") {
+      dispatch( toggleSnackbar(
+        true,
+        { labelName: 'Tender updated successfully', labelCode: 'PR_UPDATE_TENDER_MSG' },
+        "success"
+      ))
+      const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet('modulecode')
+       
+      dispatch(setRoute(acknowledgementUrl));
+    }
     dispatch(prepareFinalObject("tenderNotice", {}));
     dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
-
+    
     return response;
 
   } catch (error) {
@@ -800,7 +840,17 @@ export const createMasterTender = async (dispatch, data) => {
     //alert(JSON.stringify(response));
     dispatch(prepareFinalObject("tenderNotice", {}));
     dispatch(prepareFinalObject("documentsUploadRedux[0]", {}));
+    if (response.ResponseInfo.status === "Success") {
 
+      dispatch(toggleSpinner());
+    dispatch(  toggleSnackbar(
+        true,
+        { labelName: 'Tender created suceessfully', labelCode: 'PR_CREATE_TENDER_MSG' },
+        "success"
+      ))
+      const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
+      dispatch(setRoute(acknowledgementUrl));
+    }
     return response;
 
   } catch (error) {
@@ -1117,13 +1167,20 @@ export const invitationtoguests = async (state, dispatch) => {
 
 
           dispatch(setRoute("/egov-pr/eventList"));
-          //window.location = "/egov-pr/eventList"; 
+          
         }, 700);
       }
 
       return payload;
     } catch (error) {
-      //  store.dispatch(toggleSnackbar(true, error.message, "error"));
+  store.dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: error.message, labelCode: error.message },
+      "error"
+    )
+  );
+
     }
   } else {
     dispatch(
@@ -1321,6 +1378,8 @@ export const updatePressNote = async (dispatch, data) => {
 
 
 export const updatePressmaster = async (dispatch, data) => {
+  
+  let data1=data
   try {
 
     const response = await httpRequest(
@@ -1523,7 +1582,7 @@ export const furnishResponseTender = response => {
     let startdate = response.ResponseBody[0].tenderDate
     startdate = startdate.split(' ');
 
-    set(refurnishresponse, "tenderDate", startdate);
+    set(refurnishresponse, "tenderDate", startdate[0]);
     set(refurnishresponse, "fileNumber", response.ResponseBody[0].fileNumber);
 
     set(refurnishresponse, "tenderSubject", response.ResponseBody[0].tenderSubject);
@@ -2074,7 +2133,8 @@ export const checkTenderVisibility=(action, state, dispatch,response,status,role
   
   response["RAINMAKER-PR"].TenderStatusCheck.map(res => {
     role.map(roleName=>{
-      if( roleName.code === res.isRole   && status===res.Status )
+      if (res.isRole.includes(roleName.code) && status===res.Status )
+    //  if( roleName.code === res.isRole   && status===res.Status )
       {
         
           res.btnName && res.btnName.map(btn=>{
@@ -2097,37 +2157,26 @@ export const checkTenderVisibility=(action, state, dispatch,response,status,role
       }
       if(res.isResendGrid)
       {
-        let header= getCommonHeader({
-					labelName: "Invited Press List",
-					labelKey: "PR_INVITED_PRESS_LIST"
-      },
-      {
-        style: {
-          marginBottom: 18,
-        }
-      }
-      )
-      dispatch(
-        handleField(
-          "tender-Summary-Publish",
-          "components.div.children.Resendbody.children.cardContent.children",
-     "headerresend",
-     header
-        )
-      );
+        dispatch(toggleSpinner());
 
+   
+   set(
+    action,
+    "screenConfig.components.div.children.Resendbody.children.cardContent.children.header.children.header.visible",
+  true
+  );
         dispatch(
           handleField(
             "tender-Summary-Publish",
-            "components.div.children.Resendbody.children.cardContent.children",
-       "ResendTenderInviteGrid",
-            ResendTenderInviteGrid
+            "components.div.children.Resendbody.children.cardContent.children.ResendTenderInviteGrid",
+       "visible",
+            true
           )
         );
 
+        dispatch(toggleSpinner());
 
     
-      //  screenConfiguration.screenConfig["tender-Summary-Publish"].
       }
 
 
@@ -2143,10 +2192,11 @@ export const checkTenderVisibility=(action, state, dispatch,response,status,role
 
 export const checkLibraryVisibility=(action, state, dispatch,response,role)=>{
   //MdmsRes["RAINMAKER-PR"].TenderStatusCheck
-  
+ 
   response["RAINMAKER-PR"].LibraryRoleCheck.map(res => {
     role.map(roleName=>{
-      if( roleName.code === res.isRole)
+   //   if( roleName.code === res.isRole)
+   if(res.isRole.includes(roleName.code))
       {
         
           res.btnName && res.btnName.map(btn=>{

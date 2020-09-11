@@ -20,8 +20,10 @@ export const searchResultApiResponse = async (action, state, dispatch) => {
       Item_Master.map(function (item, index) {
         let temp = [];
         temp[0] = item['itemUuid'] +"~"+item['itemName']+"~"+item['description'];
-        temp[1] = truncData(item['itemName'], 25);
-        temp[2] = truncData(item['description'], 25);
+       // temp[1] = truncData(item['itemName'], 25);
+        //temp[2] = truncData(item['description'], 25);
+		  temp[1] = item['itemName'];
+        temp[2] = item['description'];
         temp[3] = item['approvalStatus'];
         temp[4] = "";
         temp[5] = "";

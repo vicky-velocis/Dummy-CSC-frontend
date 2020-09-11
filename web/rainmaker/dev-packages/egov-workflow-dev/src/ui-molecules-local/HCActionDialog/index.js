@@ -310,7 +310,7 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });
@@ -353,7 +353,7 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });

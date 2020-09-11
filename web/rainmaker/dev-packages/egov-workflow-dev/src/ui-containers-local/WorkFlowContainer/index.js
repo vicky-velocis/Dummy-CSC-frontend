@@ -443,6 +443,7 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
+    const {preparedFinalObject} = this.props;
     let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
@@ -469,6 +470,18 @@ class WorkFlowContainer extends React.Component {
       };
     });
     actions = actions.filter(item => item.buttonLabel !== 'INITIATE');
+    //workflow change for water connection 
+    if(businessService=='NewWS1' && applicationStatus == 'PENDING_FOR_SDE_APPROVAL'){
+      const {WaterConnection} = preparedFinalObject;
+      let pipeSize = 0 ;
+      pipeSize = WaterConnection && WaterConnection[0].proposedPipeSize;
+      if(  pipeSize == '15'){
+        actions = actions.filter(item => item.buttonLabel !== 'FORWARD');
+      }
+      else{
+        actions = actions.filter(item => item.buttonLabel !== 'APPROVE');
+      }
+    }
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,

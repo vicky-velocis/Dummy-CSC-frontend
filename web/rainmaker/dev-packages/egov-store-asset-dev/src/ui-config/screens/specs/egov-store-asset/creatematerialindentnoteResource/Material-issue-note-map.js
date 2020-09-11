@@ -13,6 +13,12 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
   import{getmaterialissuesSearchResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
+
+  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+  let IsEdit = false;
+  let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+  if(applicationNumber)
+  IsEdit = true;
   const getBalanceQty = async (action, state, dispatch) => {
     const tenantId = getTenantId();
     const storecode = get(state.screenConfiguration.preparedFinalObject,"materialIssues[0].fromStore.code", '' )
@@ -91,6 +97,7 @@ import {
                 //sourceJsonPath: "materials",
                 sourceJsonPath: "indentsmaterial",
                 props: {
+                  disabled:IsEdit,
                   optionValue: "receiptId",
                   optionLabel: "materialName",
                   // optionValue: "id",
@@ -109,11 +116,10 @@ import {
                   `materialIssues[0].indent.indentDetails`,
                   []
                 ); 
-               
-                indentDetails = indentDetails.filter(x=> x.material.code === Material[0].materialCode)
-                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
+                let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0]; 
                 if(Material && Material[0])
                 {
+                  indentDetails = indentDetails.filter(x=> x.material.code === Material[0].materialCode)
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.id",Material[0].id));
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.tenantId",getTenantId()));
                 // dispatch(prepareFinalObject("materialIssues[0].indent.indentDetails[0].materialIssueDetails[0].material.name",Material[0].name));
@@ -417,6 +423,7 @@ import {
         )
       }),
       items: [],
+      hasAddItem:!IsEdit,
       onMultiItemDelete:(state, dispatch)=>{       
 
       },

@@ -23,9 +23,14 @@ let roles = UserRoles().UserRoles;
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
+let enableButton = true;
+if(status.toUpperCase() ===WorkFllowStatus().WorkFllowRejected.toUpperCase())
+enableButton = false
+else if(status.toUpperCase() !==WorkFllowStatus().WorkFllowApproved.toUpperCase())
+enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code.toUpperCase() === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {
@@ -226,7 +231,7 @@ const screenConfig = {
                 lg:3,
                 // align: "right",
               },  
-              visible: true,// enableButton,
+              visible:  enableButton,
               props: {
                 variant: "contained",
                 color: "primary",
@@ -276,7 +281,7 @@ const screenConfig = {
                             lg:3,
                             align: "right",
                           },  
-                          visible: true,// enableButton,
+                          visible:  enableButton,
                           props: {
                             data: {
                               label: {

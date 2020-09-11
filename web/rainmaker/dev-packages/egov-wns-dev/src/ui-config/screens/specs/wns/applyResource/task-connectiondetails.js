@@ -47,7 +47,12 @@ export const taskPipeSizeProposed = getLabelWithValue(
         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
     },
     { jsonPath: "WaterConnection[0].proposedPipeSize" })
-
+ export const taskWaterApplicationType = getLabelWithValue(
+        {
+          labelKey: "WATER_APPLICATION_TYPE"
+        },
+        {  jsonPath: "WaterConnection[0].waterApplicationType" },
+      )
 export const taskNoOfClosets = getLabelWithValue(
     {
         labelKey: "WS_TASK_DETAILS_CONN_DETAIL_NO_OF_CLOSETS_PROPOSED"
@@ -87,7 +92,7 @@ export const getConnectionDetails = () => {
 
 export const renderService = () => {
     if (service === "WATER") {
-        return getCommonContainer({ taskApplicationType, taskNumberOfTapsPropsed, taskPipeSizeProposed });
+        return getCommonContainer({ taskApplicationType, taskNumberOfTapsPropsed, taskPipeSizeProposed,taskWaterApplicationType });
     } else if (service === "SEWERAGE") {
         return getCommonContainer({ taskApplicationType, taskNoOfClosets, taskNoOfToilets })
     }
