@@ -3,7 +3,7 @@ import { Button, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import CommonSuccessMessage from "../../modules/CommonSuccessMessage";
 import { connect } from "react-redux";
-import "./index.css";
+
 
 class DeliveredBWTApplicationSuccess extends Component {
   continueComplaintSubmit = () => {
