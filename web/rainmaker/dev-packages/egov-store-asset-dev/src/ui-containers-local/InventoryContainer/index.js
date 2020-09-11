@@ -9,7 +9,7 @@ import set from "lodash/set";
 import Label from "egov-ui-kit/utils/translationNode";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+// import "./index.css";
 class InventoryContainer extends Component {
 
   state = {
