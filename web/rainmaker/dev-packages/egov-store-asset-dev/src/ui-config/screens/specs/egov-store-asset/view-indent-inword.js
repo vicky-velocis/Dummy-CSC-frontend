@@ -23,7 +23,7 @@ let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code.toUpperCase() === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {
