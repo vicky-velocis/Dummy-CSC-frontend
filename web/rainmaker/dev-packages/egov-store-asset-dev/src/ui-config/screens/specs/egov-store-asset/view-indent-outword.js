@@ -22,13 +22,13 @@ import { downloadAcknowledgementForm} from '../utils'
 let status = getQueryArg(window.location.href, "Status");
 let IsEdit = true;
 let enableButton = true;
-if(status ===WorkFllowStatus().WorkFllowRejected)
+if(status.toUpperCase() ===WorkFllowStatus().WorkFllowRejected.toUpperCase())
 enableButton = false
-else if(status !==WorkFllowStatus().WorkFllowApproved)
+else if(status.toUpperCase() !==WorkFllowStatus().WorkFllowApproved.toUpperCase())
 enableButton = false
 let ConfigStatus = WorkFllowStatus().WorkFllowStatus;
 console.log(ConfigStatus);
-ConfigStatus = ConfigStatus.filter(x=>x.code === status)
+ConfigStatus = ConfigStatus.filter(x=>x.code === status.toUpperCase())
 if(ConfigStatus.length >0)
 IsEdit = false;
 const applicationNumberContainer = () => {

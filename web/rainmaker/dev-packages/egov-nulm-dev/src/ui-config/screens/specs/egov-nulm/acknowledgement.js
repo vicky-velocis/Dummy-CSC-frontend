@@ -22,6 +22,8 @@ let labelValue = "";
     case "SMID" :
     case "SUH":
     case "SUHLOG":
+    case "SUSV":
+    case "SUSVTRANSACTION":
        labelValue = {
       labelName: "SEP Program Submitted Successfully",
       labelKey: `NULM_APPLICATION_SUCCESS_${screenName}_${mode}`,
@@ -55,6 +57,8 @@ const getApplicationDisplayCode =() => {
     case "SMID" :
     case "SMIDORG":
     case "SUH":
+    case "SUSV":
+    case "SUSVTRANSACTION":
          labelValue = {
           labelName: "Application Id",
           labelKey: `NULM_SEP_APPLICATION_ID`,

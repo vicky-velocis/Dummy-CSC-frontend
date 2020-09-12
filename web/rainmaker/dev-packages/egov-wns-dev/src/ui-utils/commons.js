@@ -737,6 +737,9 @@ const parserFunction = (state) => {
         noOfWaterClosets: parseInt(queryObject.noOfWaterClosets),
         noOfToilets: parseInt(queryObject.noOfToilets),
         proposedTaps: parseInt(queryObject.proposedTaps),
+        waterApplicationType: (queryObject.waterApplicationType === null || queryObject.waterApplicationType === "NA") ? "" : queryObject.waterApplicationType,
+        securityCharge:(queryObject.securityCharge === null || queryObject.securityCharge === "NA") ? "" : parseFloat(queryObject.securityCharge),
+        
         propertyId: (queryObject.property)?queryObject.property.id:null,
         additionalDetails: {
             initialMeterReading: (
@@ -2012,4 +2015,73 @@ export const validateConnHolderDetails = (holderData) => {
         }
         if (valid.includes(0)) { return false; } else { return true; }
     }
+}
+
+export const getDomainLink = () =>{
+    let link = "";
+    if(process.env.NODE_ENV !== "development"){
+       link += "/"+process.env.REACT_APP_NAME.toLowerCase()
+    }
+    return link
+}
+
+export const isActiveProperty = (propertyObj) =>{
+    // if(propertyObj.status === 'INACTIVE' || propertyObj.status === 'INWORKFLOW' ){      
+    //   return false;
+    // }
+    return true;
+}
+
+export const isModifyMode = () =>{
+    let isMode = getQueryArg(window.location.href, "mode");
+    return (isMode && isMode.toUpperCase() === 'MODIFY');
+}
+
+export const isModifyModeAction = () =>{
+    let isMode = getQueryArg(window.location.href, "modeaction");
+    return (isMode && isMode.toUpperCase() === 'EDIT');
+}
+export const showHideFieldsFirstStep = (dispatch, propertyId, value) => {
+    if(propertyId){
+      dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyID.children.propertyID",
+          "props.value",
+          propertyId
+        )
+      );
+    }
+    dispatch(
+        handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.IDDetails.children.cardContent.children.propertyIDDetails",
+        "visible",
+        value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.Details",
+          "visible",
+          value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.ownerDetails",
+          "visible",
+          value
+        )
+    );
+    dispatch(
+        handleField(
+          "apply",
+          "components.div.children.formwizardFirstStep.children.connectionHolderDetails",
+          "visible",
+          value
+        )
+    );
 }

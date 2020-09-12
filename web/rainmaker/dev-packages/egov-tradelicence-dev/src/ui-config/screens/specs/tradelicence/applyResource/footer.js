@@ -51,8 +51,13 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
   const tenantId = get(LicenseData, "tenantId");
   const financialYear = get(LicenseData, "financialYear");
-  const purpose = "apply";
+  let purpose = "apply";
   const status = "success";
+  const oldLicenseNo = get(LicenseData, "oldLicenseNumber")
+
+  if (!!oldLicenseNo) {
+    purpose = "renewApply"
+  }
   dispatch(
     setRoute(
       `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`

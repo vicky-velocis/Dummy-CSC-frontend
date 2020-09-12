@@ -138,7 +138,7 @@ export const header = getCommonContainer({
       },
       // {
       //   key: "materialIssueStatus",
-      //   value: "APPROVED"
+      //   value: "Approved"
       // }
     
     ];
@@ -146,7 +146,7 @@ export const header = getCommonContainer({
  //
     if(!id)
     {
-      queryObject.push({ key: "materialIssueStatus", value: "APPROVED" })
+      queryObject.push({ key: "materialIssueStatus", value: "Approved" })
     }
     try {
       let response = await getmaterialOutwordSearchResults(queryObject, dispatch);

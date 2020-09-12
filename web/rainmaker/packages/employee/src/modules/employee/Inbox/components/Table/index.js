@@ -110,6 +110,11 @@ class InboxData extends React.Component {
     // }
     let contextPath = status === "Initiated" ? getWFConfig(row[0].hiddenText,row[0].subtext,taskId).INITIATED : getWFConfig(row[0].hiddenText,row[0].subtext,taskId).DEFAULT;
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
+    
+    if(contextPath=='/egov-services/application-details'||contextPath=='/egov-services/bwt-application-details'){
+      queryParams = `${taskId}`;
+    }
+
     //for only pension module
     if(row[0].subtext.toUpperCase()==='RRP_SERVICE' ||row[0].subtext.toUpperCase()=='DOE_SERVICE'||row[0].subtext.toUpperCase()=='DOP_SERVICE')
     {
@@ -120,6 +125,8 @@ class InboxData extends React.Component {
     }
     else  if(row[0].subtext=="ASMT"){
       queryParams+='&type=assessment';
+    } else if(row[0].subtext === "MasterRP") {
+      queryParams = `transitNumber=${taskId}&tenantId=${tenantId}`
     }
     else if (row[0].subtext === "NewWS1") {
       queryParams += '&history=true&service=WATER';

@@ -15,7 +15,11 @@ const getCommonCreateFooter = children => {
     uiFramework: "custom-atoms",
     componentPath: "Div",
     props: {
-      className: "apply-wizard-footer"
+      className: "apply-wizard-footer",
+      style:{
+        width:"100%",
+       
+     }
     },
     children
   };
