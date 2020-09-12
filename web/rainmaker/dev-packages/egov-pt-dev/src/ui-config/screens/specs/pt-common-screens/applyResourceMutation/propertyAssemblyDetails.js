@@ -58,6 +58,20 @@ const rendersubUsageType = (usageType, propType, dispatch, state) => {
 
 }
 
+
+const displaysubUsageType = (usageType, propType, dispatch, state) => {
+
+    let subTypeValues = get(
+            state.screenConfiguration.preparedFinalObject,
+            "searchScreenMdmsData.PropertyTax.subUsageType"
+          );
+
+        let subUsage=[];
+        subUsage = subTypeValues.filter(cur => {
+                    return (cur.code.startsWith(usageType))
+                  });
+            dispatch(prepareFinalObject("propsubusagetypeForSelectedusageCategory",subUsage));
+}
 export const propertyAssemblyDetails = getCommonCard({
   header: getCommonTitle(
     {
@@ -98,7 +112,7 @@ export const propertyAssemblyDetails = getCommonCard({
           "Property.usageCategory"
         );
         // if (usageType) {
-          rendersubUsageType(usageType, action.value, dispatch, state)
+       //   rendersubUsageType(usageType, action.value, dispatch, state)
         // }
       }
     }),
@@ -160,7 +174,8 @@ export const propertyAssemblyDetails = getCommonCard({
           state.screenConfiguration.preparedFinalObject,
           "Property.propertyType"
         );
-        rendersubUsageType(action.value, propType, dispatch, state)
+        rendersubUsageType(action.value, propType, dispatch, state);
+        displaysubUsageType(action.value, propType, dispatch, state);
       }
     }),
     subUsageType: getSelectField({

@@ -49,7 +49,7 @@ const ActionCalculate = async (state, dispatch) => {
     ProcessInstances: [
       {
         tenantId: tenantId,
-        businessService: response.businessServiceRRP,
+        businessService: response.businessServiceDOP,
         businessId: applicationNumber
       }       
   ]

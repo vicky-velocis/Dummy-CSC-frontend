@@ -62,6 +62,8 @@ import {
           
           payload.Employees[i].user.userName=toTitleCase(payload.Employees[i].user.userName)
           payload.Employees[i].user.name=toTitleCase(payload.Employees[i].user.name)
+          payload.Employees[i].user.code=toTitleCase(payload.Employees[i].user.name)
+
           user.push(payload.Employees[i].user) 
           
         }

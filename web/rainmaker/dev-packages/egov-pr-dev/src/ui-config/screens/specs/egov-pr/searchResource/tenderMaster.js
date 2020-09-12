@@ -28,18 +28,23 @@ export const tenderMasterCreate = getCommonCard({
         labelName: "DD/MM/YYYY",
         labelKey: "PR_TENDER_DETAILS_DATE_PLACEHOLDER"
       },
+     
       required: true,
       pattern: getPattern("Date"),
-      errorMessage: "PR_TENDER_DATE_INVALID",
+      errorMessage: "PR_PRESS_NOTE_DATE_INVALID",
       jsonPath: "tenderNotice.tenderDate",
-      gridDefination: {
+        gridDefination: {
         xs: 12,
         sm: 12,
         md: 6
       },
       props: {
-        className: "applicant-details-error"
-      }
+        inputProps: {
+          min: ''
+        }
+      },
+
+   
     }),
     fileNumber: {
       ...getTextField({
@@ -89,11 +94,7 @@ export const tenderMSWordTemplate = getCommonCard({
     TenderDetails: {
       
     },
-    // subHeader: getCommonParagraph({
-    //   labelName: "Note",
-    //   labelKey: "PR_TENDER_NOTICE_NOTE"
-    // }),
-
+    
     
 }),	
 

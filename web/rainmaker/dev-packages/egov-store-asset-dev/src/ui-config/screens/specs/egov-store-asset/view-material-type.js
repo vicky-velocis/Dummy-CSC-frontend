@@ -85,14 +85,15 @@ const tenantId = getQueryArg(window.location.href, "tenantId");
         { labelKey: "STORE_MATERIAL_TYPE_NAME" },
         { jsonPath: "materialTypes[0].name" }
       ),
-        code: getLabelWithValue(
-        { labelKey: "STORE_MATERIAL_TYPE_CODE" },
-        { jsonPath: "materialTypes[0].code" }
-      ),
       description: getLabelWithValue(
         { labelKey: "STORE_MATERIAL_TYPE_DESCRIPTION" },
         { jsonPath: "materialTypes[0].description" }
       ),
+        code: getLabelWithValue(
+        { labelKey: "STORE_MATERIAL_TYPE_CODE" },
+        { jsonPath: "materialTypes[0].code" }
+      ),
+      
       active: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-store-asset",

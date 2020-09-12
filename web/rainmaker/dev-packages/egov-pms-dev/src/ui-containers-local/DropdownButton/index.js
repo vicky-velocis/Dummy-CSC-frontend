@@ -779,6 +779,12 @@ else{
     let TakenGratuityCommutationTerminalBenefit = "NA";
     let TakenCompensationPensionAndGratuity = "NA";
     let bankAddress =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.bankAddress", 0 );
+    let Obj  = get(state, `screenConfiguration.preparedFinalObject.applyScreenMdmsData.pension.BankDetails`,[]) 
+    let Name = bankAddress
+    Obj = Obj.filter(x=>x.code === bankAddress)
+    if(Obj &&Obj[0])
+    Name = Obj[0].name
+     bankAddress = Name;
     let accountNumber =get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employeeOtherDetails.accountNumber", 0 );
     if(reasonForRetirement === "ABOLITION_OF_POST")
     {
@@ -788,7 +794,9 @@ else{
     }
     if(businessService === WFConfig().businessServiceRRP)
     reasonForRetirement = getLocalizationCodeValue(`EGOV_PENSION_REASONFORRETIREMENT_${reasonForRetirement}`)
-
+    let serviceTo = get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceTo", 0 )
+    if(serviceTo !== null)
+    serviceTo = convertEpochToDate(serviceTo,'dob')
     if(businessService === WFConfig().businessServiceDOE || businessService === WFConfig().businessServiceDOP)
     {
       let dependents =
@@ -797,6 +805,12 @@ else{
         if(dependents[index].isEligibleForPension && dependents[index].isEligibleForGratuity)
         {         
           bankAddress= dependents[index].bankDetails;
+          let Obj  = get(state, `screenConfiguration.preparedFinalObject.applyScreenMdmsData.pension.BankDetails`,[]) 
+          let Name = bankAddress
+          Obj = Obj.filter(x=>x.code === bankAddress)
+          if(Obj &&Obj[0])
+          Name = Obj[0].name
+           bankAddress = Name;
           accountNumber= dependents[index].bankAccountNumber;
         }
       }
@@ -824,7 +838,7 @@ else{
       permanentPinCode:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.user.permanentPinCode", '' ),
       serviceStatus:get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceStatus", '' ),
       serviceFrom:convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceFrom", 0 ),'dob'),
-      serviceTo:convertEpochToDate(get(state.screenConfiguration.preparedFinalObject,"ProcessInstances[0].employee.serviceHistory[0].serviceTo", 0 ),'dob'),
+      serviceTo:serviceTo,
       // other details
   
       reasonForRetirement:reasonForRetirement,

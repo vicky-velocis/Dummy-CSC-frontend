@@ -61,6 +61,7 @@ import {
                 dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].uom.code`,MaterialType[0].baseUom.code));
                 let uomname = GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.UOM",MaterialType[0].baseUom.code) 
                 dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].uom.name`,uomname));
+                dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].material.description`,MaterialType[0].description));
               }
               }
             },
@@ -79,7 +80,7 @@ import {
                 },
                 required: false,
                 pattern: getPattern("Name") || null,
-                jsonPath: "indents[0].storeMapping[0].MaterialDescription"
+                jsonPath: "indents[0].indentDetails[0].material.description"
               })
             },
             UOMName: {
@@ -225,6 +226,7 @@ import {
               beforeFieldChange: (action, state, dispatch) => {
                 let cardIndex = action.componentJsonpath.split("items[")[1].split("]")[0];
                 dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].userQuantity`,Number(action.value)));
+                dispatch(prepareFinalObject(`indents[0].indentDetails[${cardIndex}].indentQuantity`,Number(action.value)));
                  //set total value on Qty Change
                  let cardJsonPath =
                  "components.div.children.formwizardSecondStep.children.MaterialIndentMapDetails.children.cardContent.children.MaterialIndentDetailsCard.props.items";

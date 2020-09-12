@@ -3,6 +3,7 @@ import {
   getCommonContainer,
   getCommonHeader,
   getLabelWithValue,
+  getCommonSubHeader,
   getLabel 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
@@ -394,11 +395,33 @@ const screenConfig = {
         }),
 		
 		 resendbody: getCommonCard({
-		 resendheader: getCommonHeader({
-				labelName: "Invited Guest List",
-				labelKey: "PR_INVITED_GUEST_LIST"
-			}),
-			guestlist : ResendInvitedEmployeesResults
+		
+    header: {
+      uiFramework: "custom-atoms",
+      componentPath: "Container",
+      props: {
+        style: { marginBottom: "10px" }
+      },
+      children: {
+        header: {
+          // gridDefination: {
+          //   xs: 8
+          // },
+          ...getCommonSubHeader({
+                 		labelName: "Invited Guest List",
+				            labelKey: "PR_INVITED_GUEST_LIST"
+              },  
+                  {
+                style: {
+                  marginBottom: 18,
+                }
+              }),
+          visible:true
+        },
+      
+      }
+    },  
+    guestlist : ResendInvitedEmployeesResults
     }),	
     footer,
     

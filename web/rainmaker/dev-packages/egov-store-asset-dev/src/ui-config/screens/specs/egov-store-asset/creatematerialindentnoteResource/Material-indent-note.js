@@ -37,7 +37,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
     `indents`,
     []
   );
-  indents = get(indents,'indents');
+  //indents = get(indents,'indents');
   if(indents && indents[0])
   {
   let indentDetails = get(
@@ -117,6 +117,42 @@ console.log(matcodes)
       }
     ),
     IndentMaterialIssueContainer: getCommonContainer({
+      indentNumber: {
+        ...getTextField({
+          label: {
+            labelName: "Indent No.",
+            labelKey: "STORE_PURCHASE_ORDER_INDENT_NO"
+          },
+          placeholder: {
+            labelName: "Enter Indent No.",
+            labelKey: "STORE_PURCHASE_ORDER_INDENT_NO_PLACEHOLDER"
+          },
+          props: {
+            disabled: true,       
+          },
+          jsonPath: "materialIssues[0].indent.indentNumber"
+        })
+      },
+      indentDate: {
+        ...getDateField({
+          label: {
+            labelName: "Indent Date",
+            labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+          },
+          placeholder: {
+            labelName: "Indent Date",
+            labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
+          },
+          pattern: getPattern("Date"),
+          jsonPath: "materialIssues[0].indent.indentDate",
+          props: {
+            disabled:true,
+            inputProps: {
+              max: new Date().toISOString().slice(0, 10),
+            }
+          }
+        }),
+      }, 
       IssueStoreName: {
         ...getSelectField({
           label: {
@@ -141,8 +177,8 @@ console.log(matcodes)
           let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
           let fromstore = store.filter(x=> x.code === action.value)
           let toStore = get(state, "screenConfiguration.preparedFinalObject.materialIssues[0].toStore.code",'') 
-          if(action.value !== toStore)
-          {
+          // if(action.value !== toStore)
+          // {
             if(fromstore&&fromstore[0])
             {
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.id",fromstore[0].id));
@@ -158,10 +194,10 @@ console.log(matcodes)
                 dispatch(prepareFinalObject("materialIssues[0].fromStore.tenantId",getTenantId()));         
                 getMaterialData(action,state,dispatch)               
             }
-          }
-          else{
+          // }
+          // else{
            
-          }
+          // }
           
         }
       },
@@ -229,11 +265,11 @@ console.log(matcodes)
           required: true,
           pattern: getPattern("Date") ,
           jsonPath: "materialIssues[0].issueDate",
-          props: {           
-            inputProps: {
-              max: new Date().toISOString().slice(0, 10),
-            }
-          }
+          // props: {           
+          //   inputProps: {
+          //     max: new Date().toISOString().slice(0, 10),
+          //   }
+          // }
         })
       },
       createdBy: {

@@ -500,7 +500,7 @@ export const footer = getCommonApplyFooter({
       else if(response.materialIssues.length>0)
       {
 
-        if(response.materialIssues[0].issueType==='INDENTISSUE' && response.materialIssues[0].materialIssueStatus==='APPROVED')
+        if(response.materialIssues[0].issueType==='INDENTISSUE' && response.materialIssues[0].materialIssueStatus==='Approved')
         {
           let material=[];
           // GetMdmsNameBycode(action,state, dispatch,"createScreenMdmsData.store-asset.Material","MAT02")

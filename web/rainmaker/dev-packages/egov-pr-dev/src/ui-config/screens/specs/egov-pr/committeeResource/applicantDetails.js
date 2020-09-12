@@ -123,58 +123,8 @@ export const pressDetails = getCommonCard({
   break: getBreak(),
   pressContainer: getCommonContainer({
    
-      // selectpress: {
-        // ...getSelectField({
-          // label: {
-            // labelName: "Select Press",
-            // labelKey: "PR_Select_Press_LABEL"
-          // },
-          // placeholder: {
-             // labelName: "Select Press",
-            // labelKey: "PR_Select_Press_LABEL"
-          // },
-          // jsonPath:
-            // "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipMajorType",
+     
         
-          // // data: [
-          // //   {
-          // //     code: "Individual"
-          // //   },
-          // //   {
-          // //     code: "Multiple"
-          // //   },
-          // //   {
-          // //     code: "Institutional-Private"
-          // //   }
-          // // ],
-          // required: true,
-          // sourceJsonPath: "applyScreenMdmsData.DropdownsData.OwnershipCategory",
-          // gridDefination: {
-            // xs: 12,
-            // sm: 12,
-            // md: 8
-          // },
-          // props:{
-            // className:"applicant-details-error",
-			// multiselect:"multiselect"
-          // }
-        // }),
-        // beforeFieldChange: (action, state, dispatch) => {
-          // let path = action.componentJsonpath.replace(
-            // /.applicantType$/,
-            // ".applicantSubType"
-          // );
-          // let applicantType = get(
-            // state,
-            // "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
-            // []
-          // );
-          // let applicantSubType = applicantType.filter(item => {
-            // return item.active && item.code.startsWith(action.value);
-          // });
-         // // dispatch(handleField("apply", path, "props.data", applicantSubType));
-        // }
-      // },
 	  break : getBreak(),
 	  selectmultipress : {
           uiFramework: "custom-molecules-local",

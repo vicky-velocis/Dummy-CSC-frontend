@@ -205,6 +205,8 @@ export const searchForm = getCommonCard({
             borderRadius: "2px",
             width: "220px",
             height: "48px",
+            float: "center",
+            textalign:"center",
           },
         },
         children: {

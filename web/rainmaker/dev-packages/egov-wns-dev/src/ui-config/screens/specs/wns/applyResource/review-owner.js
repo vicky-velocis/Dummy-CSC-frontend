@@ -34,7 +34,11 @@ const connectionChargeDetailsHeader = getHeader({
 });
 
 const roadCuttingChargesHeader = getHeader({
-  labelKey: "WS_ROAD_CUTTING_CHARGE_DETAILS"
+  labelKey:  "WS_ROAD_CUTTING_CHARGE_DETAILS"
+});
+
+const otherChargesDetailsHeader =  getHeader({
+  labelKey: "WS_OTHER_CHARGE_DETAILS" 
 });
 
 const activationDetailsHeader = getHeader({
@@ -162,6 +166,16 @@ export const reviewRoadType = getLabelWithValue(
   }
 );
 
+export const reviewSecurityCharge = getLabelWithValue(
+  {
+    labelName: "Security Charges",
+    labelKey: "WS_ADDN_DETAILS_SECURITY_CHARGES_LABEL"
+  },
+  {
+    jsonPath: "WaterConnection[0].securityCharge",
+    callBack: handleNA
+  }
+);
 export const reviewArea = getLabelWithValue(
   {
     labelName: "Area (in sq ft)",
@@ -271,9 +285,11 @@ export const getReviewOwner = (isEditable = true) => {
     viewSeven: connectionChargeDetailsHeader,
     viewEight: connectionChargeDetails,
     viewNine: roadCuttingChargesHeader,
-    viewTen: roadCuttingCharges,
-    viewEleven: activationDetailsHeader,
-    viewTwelve: activationDetails
+    viewTen: roadCuttingCharges,  
+    viewEleven: otherChargesDetailsHeader ,
+    viewTwelve: otherChargesDetails,
+    viewThirteen :activationDetailsHeader ,
+    viewFourteen: activationDetails,
   })
 };
 
@@ -289,6 +305,9 @@ const roadCuttingCharges = getCommonContainer({
   reviewArea
 });
 
+const otherChargesDetails =  getCommonContainer({
+  reviewSecurityCharge
+});
 const activationDetails = getCommonContainer({
   reviewConnectionExecutionDate,
   reviewMeterId,

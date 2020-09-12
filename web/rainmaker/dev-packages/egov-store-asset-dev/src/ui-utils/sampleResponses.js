@@ -502,6 +502,7 @@ export const NonIndentConfiguration =()=>{
 export const WorkFllowStatus = () => {
   return {
     WorkFllowRejected:'REJECTED',
+    WorkFllowApproved:'Approved',
     WorkFllowStatus: [
       {
         code:"CREATED",
@@ -512,8 +513,8 @@ export const WorkFllowStatus = () => {
       //   value:"REJECTED",
       // },
       {
-        code:"APPROVED",
-        value:"APPROVED",
+        code:"Approved",
+        value:"Approved",
       }
 
     ]
@@ -558,7 +559,7 @@ export const IndentConfigType = () => {
         INDENT_TFR:"Transfer Indent",
         
       },
-      indentStatus:"APPROVED"
+      indentStatus:"Approved"
   }
 }
 

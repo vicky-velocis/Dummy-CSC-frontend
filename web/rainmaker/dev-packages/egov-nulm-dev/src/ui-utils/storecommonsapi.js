@@ -43,6 +43,13 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
       []
     );
   }
+  else if(type === "SUSVApplication"){
+    documents = get(
+      state,
+      "screenConfiguration.preparedFinalObject.applyScreenMdmsData.NULM.SusvDocuments",
+      []
+    );
+  }
 
   documents = documents.filter(item => {
     return item.active;

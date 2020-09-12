@@ -388,5 +388,39 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           jsonPath: "materialReceipt[0].inspectionRemarks"
         })
       },
+      createdBy: {
+        ...getTextField({
+          label: {
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+          },
+          placeholder: {
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialReceipt[0].createdByName"
+        })
+      },
+      designation: {
+        ...getTextField({
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
+          placeholder: {
+            labelName: "Enter Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialReceipt[0].designation"
+        })
+      },
     })
   });

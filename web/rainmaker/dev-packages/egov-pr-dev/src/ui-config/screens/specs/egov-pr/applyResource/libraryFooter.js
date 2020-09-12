@@ -232,7 +232,6 @@ if(flag){
       "screenConfiguration.preparedFinalObject.PRSCP",
       []
     );
-    // PublicRelationData = furnishNocResponse({ PublicRelations: PublicRelationData });
     dispatch(prepareFinalObject("PRSCP", PublicRelationData));
 
     return { status: "failure", message: error };

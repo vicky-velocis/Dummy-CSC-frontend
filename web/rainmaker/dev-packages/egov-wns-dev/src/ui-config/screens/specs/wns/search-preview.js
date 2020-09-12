@@ -628,6 +628,7 @@ const parserFunction = (obj) => {
     proposedWaterClosets: parseInt(obj.proposedWaterClosets),
     proposedToilets: parseInt(obj.proposedToilets),
     roadCuttingArea: parseInt(obj.roadCuttingArea),
+    securityCharge:(obj.securityCharge === null || obj.securityCharge === "NA") ? "" : parseFloat(obj.securityCharge),
     additionalDetails: {
       initialMeterReading: (
         obj.additionalDetails !== undefined &&
@@ -641,6 +642,7 @@ const parserFunction = (obj) => {
     },
     noOfTaps: parseInt(obj.noOfTaps),
     proposedTaps: parseInt(obj.proposedTaps),
+    waterApplicationType: (obj.waterApplicationType === null || obj.waterApplicationType === "NA") ? "" : obj.waterApplicationType,
     plumberInfo: (obj.plumberInfo === null || obj.plumberInfo === "NA") ? [] : obj.plumberInfo
   }
   obj = { ...obj, ...parsedObject }

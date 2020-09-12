@@ -149,27 +149,24 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           }
         })
       },
-
-      Remark: {
+      createdBy: {
         ...getTextField({
           label: {
-            labelName: "Remark",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
           },
           placeholder: {
-            labelName: "Enter Remark",
-            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
           },
           props: {
-            className: "applicant-details-error",
-            multiline: "multiline",
-            rowsMax: 2,
+            disabled: true
           },
-          required: false,
-          pattern: getPattern("eventDescription") || null,
-          jsonPath: "materialIssues[0].description"
+         // pattern: getPattern("Email"),
+          jsonPath: "materialIssues[0].createdByName"
         })
       },
+
       IssueBy: {
         ...getTextField({
           label: {
@@ -222,21 +219,24 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
           jsonPath: "materialIssues[0].materialIssueStatus"
         })
       },
-      createdBy: {
+      Remark: {
         ...getTextField({
           label: {
-            labelName: "Created by",
-            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+            labelName: "Remark",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK"
           },
           placeholder: {
-            labelName: "Enter Created By",
-            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+            labelName: "Enter Remark",
+            labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
           },
           props: {
-            disabled: true
+            className: "applicant-details-error",
+            multiline: "multiline",
+            rowsMax: 2,
           },
-         // pattern: getPattern("Email"),
-          jsonPath: "indents[0].createdByName"
+          required: false,
+          pattern: getPattern("eventDescription") || null,
+          jsonPath: "materialIssues[0].description"
         })
       },
       designation: {
@@ -253,7 +253,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             disabled: true
           },
          // pattern: getPattern("Email"),
-          jsonPath: "indents[0].designation"
+          jsonPath: "materialIssues[0].designation"
         })
       },
       PurposeofIssue: {
