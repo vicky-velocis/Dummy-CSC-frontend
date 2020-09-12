@@ -189,7 +189,7 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       { key: "serviceRequestId", value: applicationNumber }
     ]);
     
-    let Refurbishresponse = furnishServiceRequestDetailResponse(response);
+    let Refurbishresponse = furnishServiceRequestDetailResponse(state,response, dispatch);
     // let RefurbishresponseOnFail = furnishServiceRequestDetailResponse(response);
     dispatch(prepareFinalObject("SERVICEREQUEST", Refurbishresponse));
     // dispatch(prepareFinalObject("SERVICEREQUESTONFAIL", RefurbishresponseOnFail));
@@ -206,15 +206,15 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-
-    
+    set(state, "form.newapplication.files.media", []);
+    getMdmsData(state, dispatch)
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     !applicationNumber ? clearlocalstorageAppDetails(state) : '';
     setapplicationType('HORTICULTURE');
     const tenantId = getQueryArg(window.location.href, "tenantId");
     set(state, "screenConfiguration.moduleName", "hc");
     getProcessInstanceDataForServiceRequest(applicationNumber, state, dispatch)
-    getMdmsData(state, dispatch)
+    
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
     
     return action;

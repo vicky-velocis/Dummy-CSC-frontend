@@ -12,7 +12,7 @@ import {
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { toggleSnackbar, toggleSpinner  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import get from "lodash/get";
 import set from "lodash/set";
@@ -24,7 +24,6 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import orderBy from "lodash/orderBy";
 import { getSearchResultsView } from "../../ui-utils/commons";
-const tenant = getQueryArg(window.location.href, "tenantId");
 
 class WorkFlowContainer extends React.Component {
   constructor(props){
@@ -150,7 +149,8 @@ class WorkFlowContainer extends React.Component {
       preparedFinalObject,
       dataPath,
       moduleName,
-      updateUrl
+      updateUrl,
+      toggleSpinner
     } = this.props;
     const tenant = getQueryArg(window.location.href, "tenantId");
     let data = get(preparedFinalObject, dataPath, []);
@@ -220,6 +220,7 @@ class WorkFlowContainer extends React.Component {
     }
 
     try {
+      toggleSpinner()
       const payload = await httpRequest("post", updateUrl, "", [], {
         [dataPath]: data
       });
@@ -230,7 +231,7 @@ class WorkFlowContainer extends React.Component {
 
       if (payload) {
         let path = "";
-
+        toggleSpinner()
         if (moduleName == "PT.CREATE" || moduleName == "ASMT") {
           this.props.setRoute(`/pt-mutation/acknowledgement?${this.getPurposeString(
             label
@@ -252,6 +253,7 @@ class WorkFlowContainer extends React.Component {
 
       }
     } catch (e) {
+      toggleSpinner()
       if (moduleName === "BPA") {
         toggleSnackbar(
           true,
@@ -751,6 +753,8 @@ const mapDispacthToProps = dispatch => {
       dispatch(prepareFinalObject(path, value)),
     toggleSnackbar: (open, message, variant) =>
       dispatch(toggleSnackbar(open, message, variant)),
+      toggleSpinner: () =>
+      dispatch(toggleSpinner()), 
     setRoute: route => dispatch(setRoute(route))
   };
 };
