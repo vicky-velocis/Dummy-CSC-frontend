@@ -2,6 +2,7 @@ import { getBreak, getCommonCard, getCommonContainer, getCommonTitle, getPattern
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import "./index.css";
+import  {TypeOfServiceRequest, NumberOfTreesInPruning} from "../../../../../ui-utils/commons"
 
 const getMapLocatorEdit = textSchema => {
   return {
@@ -26,7 +27,87 @@ export const showHideMapPopupEdit = (state, dispatch) => {
     )
   );
 };
+const setRadioButtonFeatures = (currentSelectedServiceType, state, dispatch) => {
+  if(currentSelectedServiceType.value ===TypeOfServiceRequest.REMOVALOFDEADDRY )
+        {
+          dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[0].disabled",
+          false
+        )
+      );
+      dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[1].disabled",
+          false
+        )
+      );
+      dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[2].disabled",
+          false
+        )
+      );
+     
+    }
+    else
+        {
+          dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[0].disabled",
+          true
+        )
+      );
+      dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[1].disabled",
+          true
+        )
+      );
+      dispatch(handleField("apply",
+          "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+          "props.buttons[2].disabled",
+          true
+        )
+      );
+      dispatch(handleField("apply",
+      "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+      "props.value",
+      undefined
+    )
+  );
+    
+    
+    
+    }
+      }
 
+const setNumberOfTreesForPruning = (currentSelectedServiceType, state, dispatch) => {
+  if(currentSelectedServiceType.value ===TypeOfServiceRequest.PRUNLESSTHAN90 || currentSelectedServiceType.value ===TypeOfServiceRequest.PRUNMORETHAN90 ){
+        dispatch(handleField("apply",
+        "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+        "props.value",
+        NumberOfTreesInPruning.DefaultTrees
+      ))
+      dispatch(handleField("apply",
+      "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+      "props.disabled",
+      true
+    ))
+  }
+  else{
+    dispatch(handleField("apply",
+        "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+        "props.value",
+        NumberOfTreesInPruning.DefaultTrees
+      ))
+  dispatch(handleField("apply",
+  "components.div.children.formwizardFirstStep.children.servicerequestdetailsEdit.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+  "props.disabled",
+  false
+))
+  }
+};
 export const servicerequestdetailsEdit = getCommonCard({
   header: getCommonTitle(
     {
@@ -43,36 +124,7 @@ export const servicerequestdetailsEdit = getCommonCard({
 
   break: getBreak(),
   servicerequestdetailsContainer: getCommonContainer({
-    // typeofrequest: {
-    //   ...getSelectField({
-    //     label: {
-    //       labelName: "Type of Service Request",
-    //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
-    //     },
-    //     optionLabel: "name",
-    //     optionValue: "name",
-    //     placeholder: {
-    //       labelName: "Type of Service Request",
-    //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_PLACEHOLDER"
-    //     },
-    //     gridDefination: {
-    //       xs: 12,
-    //       sm: 12,
-    //       md: 12,
-    //       lg: 12
-    //     },
-    //     sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-    //     jsonPath: "SERVICEREQUEST.serviceType",
-    //     errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-    //     required: true,
-
-
-
-
-
-
-    //   })
-    // },
+   
     typeofrequest: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hc",
@@ -111,6 +163,58 @@ export const servicerequestdetailsEdit = getCommonCard({
     labelName: "name",
     valueName: "name"
     },
+    afterFieldChange: (action, state, dispatch) => {
+      var currentSelectedServiceType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType")
+      if (currentSelectedServiceType.value != undefined)
+      {
+        setRadioButtonFeatures(currentSelectedServiceType, state, dispatch)
+        setNumberOfTreesForPruning(currentSelectedServiceType, state, dispatch)
+        
+    }
+    }
+  },
+  serviceRequestSubtype: {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "SERVICEREQUEST.subType",
+     
+    props: {
+      label: {
+        name: "Subtype",
+        key: "HC_SERVICE_REQUEST_SUBTYPE"
+      },
+      buttons: [
+       
+        {
+          labelName: "DEAD",
+          labelKey: "HC_COMMON_SUBTYPE_DEAD",
+          disabled: true,
+          value: "DEAD"
+        },
+        {
+          labelName: "DANGEROUS",
+          labelKey: "HC_COMMON_SUBTYPE_DANGEROUS",
+          disabled: true,
+          value: "DANGEROUS"
+        },
+        {
+          labelName: "DRY",
+          labelKey: "HC_COMMON_SUBTYPE_DRY",
+          disabled: true,
+          value: "DRY"
+        }
+      ],
+      jsonPath:"SERVICEREQUEST.subType",
+      required: false
+    },
+    required: false,
+    type: "array",
+    
   },
     nooftrees: {
       ...getTextField({

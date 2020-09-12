@@ -1,9 +1,10 @@
 import { prepareFinalObject, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import { getSearchResults, getSearchResultsForFilters } from "../../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForFilters,  returnNameFromCodeMdmsorViceVersa} from "../../../../../ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { findItemInArrayOfObject } from "egov-ui-framework/ui-utils/commons";
 
 
 //useful
@@ -11,11 +12,35 @@ export const fetchData = async (action, state, dispatch) => {
   dispatch(toggleSpinner());
   const response = await getSearchResults();
   try {
+    var serviceRequestType = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData['eg-horticulture'].ServiceType")
+
     if (response.services.length > 0) {
-      dispatch(prepareFinalObject("searchResults", response.services));
-      dispatch(prepareFinalObject("myServiceRequestsCount", response.services.length)
-      );
-    }
+        var finalResponse = []
+      response.services.map((item,index) => {
+        finalResponse.push({createdtime : item.createdtime,
+          current_assignee:item.current_assignee,
+          lastmodifiedtime: item.lastmodifiedtime, 
+          owner_name:item.owner_name,
+          offset_: item.offset_,
+          service_request_id: item.service_request_id,
+          service_request_status: item.service_request_status,
+          service_type: returnNameFromCodeMdmsorViceVersa(serviceRequestType,item.service_type, 1 ) || "-",
+          servicerequestsubtype: item.servicerequestsubtype,
+          tenant_id: item.tenant_id, 
+            })
+          
+        });
+        dispatch(prepareFinalObject("searchResults", finalResponse));
+        dispatch(prepareFinalObject("myServiceRequestsCount", finalResponse.length)
+        );
+      }
+      else  {
+        var finalResponse = []
+      
+        dispatch(prepareFinalObject("searchResults", finalResponse));
+        dispatch(prepareFinalObject("myServiceRequestsCount", finalResponse.length)
+        );
+      }
   } catch (error) {
     console.log(error);
   }
@@ -25,8 +50,9 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
   let flag_api_call = true;
   let fromdate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].FromDate")
   let Todate= get(state.screenConfiguration.preparedFinalObject,"myServiceRequests[0].ToDate")
-  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype.label") 
+  let serviceRequestType = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicetype.value") 
   let serviceRequestId = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].servicerequestid")
+  let serviceRequestSubtype = get(state.screenConfiguration.preparedFinalObject, "myServiceRequests[0].serviceRequestSubtype")
         
   var date1 = new Date(fromdate);
   var date2 = new Date(Todate);
@@ -88,37 +114,51 @@ export const fetchDataForFilterFields = async (state, dispatch) => {
 
   var oneDayDifference = 60 * 60 * 24 * 1000;
   toDateInTime = toDateInTime + oneDayDifference
-  // var fromDateInTime = date1.getTime();
-  // var toDateInTime = date2.getTime();
-  // if(parseInt(fromDateInTime) === parseInt(toDateInTime))
-  //   {
-  //     toDateInTime = toDateInTime + oneDayDifference
-  //   }
+ 
 
   let filterdata = 
   {
       "fromDate":fromDateInTime,
       "toDate":toDateInTime,
       "serviceType": serviceRequestType,
-      "service_request_id":serviceRequestId
+      "service_request_id":serviceRequestId,
+      "serviceRequestSubtype":serviceRequestSubtype
 
   };
   if (flag_api_call === true)
   {
-  
+
   const response = await getSearchResultsForFilters(filterdata);
-  // console.log("^^^^^^^",response.services.length)
-  // alert(JSON.stringify(response.services[0].createdtime));
-  
-  // let servicerequestDate = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST", []);
-  // alert("EPOCH Date :: " + servicerequestDate);
-  // var myDate = new Date( your epoch date *1000);
-  // document.write(myDate.toGMTString()+"<br>"+myDate.toLocaleString());
+  var serviceRequestTypeToBeSent = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData['eg-horticulture'].ServiceType")
+
   
   try {
-    if (response.services.length >= 0) {
-      dispatch(prepareFinalObject("searchResults", response.services));
-      dispatch(prepareFinalObject("myServiceRequestsCount", response.services.length)
+    
+    if (response.services.length > 0) {
+      var finalResponse = []
+    response.services.map((item,index) => {
+      finalResponse.push({createdtime : item.createdtime,
+        current_assignee:item.current_assignee,
+        lastmodifiedtime: item.lastmodifiedtime, 
+        owner_name:item.owner_name,
+        offset_: item.offset_,
+        service_request_id: item.service_request_id,
+        service_request_status: item.service_request_status,
+        service_type: returnNameFromCodeMdmsorViceVersa(serviceRequestTypeToBeSent,item.service_type, 1 ) || "-",
+        servicerequestsubtype: item.servicerequestsubtype,
+        tenant_id: item.tenant_id, 
+          })
+        
+      });
+      dispatch(prepareFinalObject("searchResults", finalResponse));
+      dispatch(prepareFinalObject("myServiceRequestsCount", finalResponse.length)
+      );
+    }
+    else  {
+      var finalResponse = []
+    
+      dispatch(prepareFinalObject("searchResults", finalResponse));
+      dispatch(prepareFinalObject("myServiceRequestsCount", finalResponse.length)
       );
     }
   } catch (error) {
@@ -188,6 +228,31 @@ catch(e){
     )
   );
 }
+
+dispatch(handleField("myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+      "props.value",
+      undefined
+    )
+  );
+  dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          true
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          true
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          true
+        )
+      );
 set(state, "screenConfiguration.preparedFinalObject.myServiceRequests", {});
   
 };
@@ -260,7 +325,30 @@ catch(e)
   );}
 
 
-
+      // resetting service request subtype
+      dispatch(handleField("employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+      "props.value",
+      undefined
+    ));
+    dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          true
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          true
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          true
+        )
+      );
     //resetting from date
   dispatch(
     handleField(

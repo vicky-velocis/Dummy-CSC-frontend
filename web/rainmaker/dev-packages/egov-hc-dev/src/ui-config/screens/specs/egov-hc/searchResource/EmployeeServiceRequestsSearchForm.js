@@ -2,7 +2,8 @@ import { getCommonCard, getCommonContainer, getDateField, getLabel, getPattern, 
 import { searchApiCallForEmployeeFilter } from "./functions";
 import { resetFieldsForEmployeeFilter } from "./citizenSearchFunctions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import  {TypeOfServiceRequest} from "../../../../../ui-utils/commons"
+import get from "lodash/get";
 
 
 export const ServiceRequestFilterFormForEmployee = getCommonCard({
@@ -52,25 +53,7 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
         jsonPath: "serviceRequests.contactNumber"
       })
     },
-    // ServiceRequestType: getSelectField({
-    //   label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE" },
-    //   optionLabel: "name",
-    //   optionValue: "name",
-    //   placeholder: {
-    //     labelName: "TYPE_OF_SERVICE_REQUEST",
-    //     labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
-    //   },
-      
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6,
-    //     md: 4
-    //   },
-
-    //   jsonPath: "serviceRequests.servicetype",
-    //   sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-    //   required: false
-    // }),
+   
     ServiceRequestType: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hc",
@@ -108,10 +91,111 @@ export const ServiceRequestFilterFormForEmployee = getCommonCard({
     labelName: "name",
     valueName: "name"
     },
+    afterFieldChange: (action, state, dispatch) => {
+      var currentSelectedServiceType = get(state, "screenConfiguration.preparedFinalObject.serviceRequests.servicetype")
+      if (currentSelectedServiceType.value != undefined)
+      {
+        if(currentSelectedServiceType.value ===TypeOfServiceRequest.REMOVALOFDEADDRY )
+        {
+          dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          false
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          false
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          false
+        )
+      );
+     
+    }
+    else
+        {
+          dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          true
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          true
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+          "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          true
+        )
+      );
+      dispatch(handleField("employeeServiceRequestsFilter",
+      "components.div.children.ServiceRequestFilterFormForEmployee.children.cardContent.children.StatusLocalityAndFromToDateContainer.children.ServiceRequestSubtype",
+      "props.value",
+      undefined
+    )
+  );
+    
+    
+    
+    }
+    }
+    }
   },
+  
   }),
   StatusLocalityAndFromToDateContainer: getCommonContainer({
-
+    ServiceRequestSubtype: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 12,
+        sm: 6,
+        md: 4
+      },
+      jsonPath: "serviceRequests.serviceRequestSubtype",
+       
+      props: {
+        label: {
+          name: "Subtype",
+          key: "HC_SERVICE_REQUEST_SUBTYPE"
+        },
+        buttons: [
+       
+          {
+            labelName: "DEAD",
+            labelKey: "HC_COMMON_SUBTYPE_DEAD",
+            disabled: true,
+            value: "DEAD"
+          },
+          {
+            labelName: "DANGEROUS",
+            labelKey: "HC_COMMON_SUBTYPE_DANGEROUS",
+            disabled: true,
+            value: "DANGEROUS"
+          },
+          {
+            labelName: "DRY",
+            labelKey: "HC_COMMON_SUBTYPE_DRY",
+            disabled: true,
+            value: "DRY"
+          }
+        ],
+        jsonPath:"serviceRequests.serviceRequestSubtype",
+        required: false
+      },
+      required: false,
+      type: "array",
+      
+    },
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "HC_FROM_DATE_LABEL" },
       placeholder: {

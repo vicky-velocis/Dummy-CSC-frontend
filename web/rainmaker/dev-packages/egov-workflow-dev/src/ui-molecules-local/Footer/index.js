@@ -19,6 +19,7 @@ class Footer extends React.Component {
     open: false,
     data: {},
     employeeList: [],
+    allEmployeeList:[]
     //responseLength: 0
   };
 
@@ -58,6 +59,7 @@ class Footer extends React.Component {
 
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
+    
     let employeeList = [];
 
     if (dataPath === "BPA") {
@@ -66,7 +68,7 @@ class Footer extends React.Component {
     }
     if(dataPath==="services"){
       var { state  } = this.props;
-      
+      this.setState({ allEmployeeList : 0 });
       const applicationNumberHC = get(
         state.screenConfiguration.preparedFinalObject.workflow,
         `ProcessInstances[0].businessId`);
@@ -199,6 +201,7 @@ class Footer extends React.Component {
     this.setState({
       open: false
     });
+    this.setState({ allEmployeeList : 1 });
     set(state, "form.workflow.files.wfDocuments", "")
   };
 
@@ -350,6 +353,7 @@ class Footer extends React.Component {
             onButtonClick={onDialogButtonClick}
             dataPath={dataPath}
             state = {state}
+            currentState = {this.state.allEmployeeList}
           />
   
   

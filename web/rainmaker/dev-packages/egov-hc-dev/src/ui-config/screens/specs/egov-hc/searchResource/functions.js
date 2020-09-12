@@ -1,7 +1,7 @@
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getSearchResultsEmployeeRequestFilter } from "../../../../../ui-utils/commons";
+import { getSearchResultsEmployeeRequestFilter , returnNameFromCodeMdmsorViceVersa} from "../../../../../ui-utils/commons";
 import { getTextToLocalMapping, validateFields } from "../../utils";
 
 
@@ -17,6 +17,9 @@ dispatch(
   )
 );
 };
+
+
+
 
 export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
   var flag_for_api_call = true
@@ -138,9 +141,10 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
     let fromDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.fromDate")
     let toDate= get(state.screenConfiguration.preparedFinalObject,"serviceRequests.toDate")
     let servicerequestid = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicerequestid")
-    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype.label")
-    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus.label")
-    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla.label")
+    let servicetype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicetype.value")
+    let serviceRequestSubtype = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.serviceRequestSubtype")
+    let servicestatus = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.servicestatus.value")
+    let mohalla = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.mohalla.value")
     let contactNumber = get(state.screenConfiguration.preparedFinalObject, "serviceRequests.contactNumber")
     var dateFromObject = new Date(fromDate);
     var dateToObject = new Date(toDate);
@@ -156,6 +160,7 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
         "toDate": toDateNumeric,
         "service_request_id":servicerequestid,
         "serviceType":servicetype,
+        "serviceRequestSubtype":serviceRequestSubtype, 
         "serviceRequestStatus":servicestatus,
         "houseNoAndStreetName":mohalla,
         "ownerContactNumber":contactNumber}
@@ -174,11 +179,13 @@ export const searchApiCallForEmployeeFilter = async (state, dispatch) =>{
 
     try {
       if (response.services.length >0 ){
+        var serviceRequestType = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData['eg-horticulture'].ServiceType")
+        
       let data_response = response.services.map(item => ({
         [getTextToLocalMapping("Service Request Id")]:
           item.service_request_id || "-",
         [getTextToLocalMapping("Service Request Date")]: item.createdtime || "-",
-        [getTextToLocalMapping("Type Of Service Request")]: item.service_type || "-",
+        [getTextToLocalMapping("Type Of Service Request")]: returnNameFromCodeMdmsorViceVersa(serviceRequestType,item.service_type, 1 ) || "-",
         [getTextToLocalMapping("Name Of Owner")]:item.owner_name || "-",
         [getTextToLocalMapping("Service Request Status")]: item.service_request_status || "-",       
       }));

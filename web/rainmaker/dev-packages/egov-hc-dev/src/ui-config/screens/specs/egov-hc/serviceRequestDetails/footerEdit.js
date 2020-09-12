@@ -8,7 +8,10 @@ import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";  
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  
+import  {TypeOfServiceRequest} from "../../../../../ui-utils/commons"
+
+
+
 export const getRedirectionURL = () => {
   const redirectionURL = `/egov-hc/search-preview?applicationNumber=${getapplicationNumber()}&tenantId=${getTenantId()}`;
   return redirectionURL;
@@ -16,7 +19,6 @@ export const getRedirectionURL = () => {
 
   const callBackForNext = async (state, dispatch) => {
    
-  let servicerequestmedia = get(state, "form.newapplication.files.media", []);
   
   let activeStep = 1;
   let isFormValid = false;
@@ -44,7 +46,7 @@ export const getRedirectionURL = () => {
 
 
   if (typeOfService== ""){
-    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.value")
   } 
    
 
@@ -80,12 +82,21 @@ export const getRedirectionURL = () => {
     let email = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.email");
     let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla");
     let serviceType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType");
+    let subType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.subType");
+
    
     let validationErrorMsg = ""
     let flagValidField = true;
 
-    if (locality == undefined){
-      
+    if (serviceType != undefined  ){
+      if (serviceType.value != undefined  ){
+        if (serviceType.value == TypeOfServiceRequest.REMOVALOFDEADDRY){
+          if (subType === undefined ||  subType === ""){
+            validationErrorMsg = { labelName: "ERROR", labelKey: "HC_SERVICE_REQUEST_SUBTYPE_ERROR" };
+            flagValidField = false;
+          }
+        }
+      }
     }
     
 
@@ -109,7 +120,7 @@ export const getRedirectionURL = () => {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(landmark))
+    else if(! /^$|^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(landmark))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
       flagValidField = false;
@@ -163,14 +174,14 @@ export const getRedirectionURL = () => {
           serviceRequest['currentState'] = processInstanceCurrentState,
           serviceRequest['isEditState'] = 1
           try
-          { serviceRequest['mohalla'] = serviceRequest.mohalla["label"]
+          { serviceRequest['mohalla'] = serviceRequest.mohalla["value"]
          }
          catch (e){
            serviceRequest['mohalla'] = serviceRequest.mohalla
          }
          try
            {
-             serviceRequest['serviceType'] = serviceRequest.serviceType["label"]
+             serviceRequest['serviceType'] = serviceRequest.serviceType["value"]
             }
    
            catch(e){
@@ -202,7 +213,7 @@ export const getRedirectionURL = () => {
           // get(state, "")
           var serviceRequestStatePayload = []
           serviceRequestStatePayload = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST");
-          var RefurbishresponseOnFailedEdit = furnishServiceRequestDetailResponseForEdit(serviceRequestStatePayload);
+          var RefurbishresponseOnFailedEdit = furnishServiceRequestDetailResponseForEdit(serviceRequestStatePayload,state, dispatch);
           if (responseStatus == "successful" || responseStatus == "SUCCESSFUL") {
 
           dispatch(
@@ -360,13 +371,13 @@ export const getRedirectionURL = () => {
   
     let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
     if (typeOfService== ""){
-      typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+      typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.value")
     } 
     let noOfTrees = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount", "");  
     let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description", "");
     let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla", "");
     if (locality== ""){
-      locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
+      locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.value")
     }
     let address = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.address", "");
     
