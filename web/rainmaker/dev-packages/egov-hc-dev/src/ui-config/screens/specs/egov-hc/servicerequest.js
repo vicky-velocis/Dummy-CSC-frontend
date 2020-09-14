@@ -1,19 +1,17 @@
 import { getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getFileUrlFromAPI, getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo, setapplicationNumber, setapplicationType } from "egov-ui-kit/utils/localStorageUtils";
-import jp from "jsonpath";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId, setapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { getSearchResultsView, setApplicationNumberBox } from "../../../../ui-utils/commons";
+import { prepareDocumentsUploadData } from "../../../../ui-utils/commons";
 import { clearlocalstorageAppDetails } from "../utils";
-import { addressdetails } from './serviceRequestDetails/addressdetails';
 import { footer } from "./serviceRequestDetails/footer";
+import { idProofDocumentDetails } from './serviceRequestDetails/idProofDocumentDetails';
 import { ownerdetails } from './serviceRequestDetails/ownerdetails';
 import { servicerequestdetails } from './serviceRequestDetails/servicerequestdetails';
 import { uploadimage } from './serviceRequestDetails/uploadimage';
-
 
 
 
@@ -46,7 +44,16 @@ export const formwizardImageStep = {
     uploadimage
   }
 };
-
+export const formwizardIDProofStep = {
+  uiFramework: "custom-atoms",
+  componentPath: "Form",
+  props: {
+    id: "apply_form4"
+  },
+  children: {
+    idProofDocumentDetails
+  }
+};
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
   componentPath: "Form",
@@ -69,115 +76,10 @@ export const formwizardSecondStep = {
   }
 };
 
-export const formwizardThirdStep = {
-  uiFramework: "custom-atoms",
-  componentPath: "Form",
-  props: {
-    id: "apply_form4"
-  },
-  children: {
-    addressdetails
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const getMdmsData = async (action, state, dispatch) => {
-  
-  
-  
-  
-  
+
   let tenantId = getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
@@ -196,7 +98,8 @@ const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             {
               name: "ServiceType"
-            }
+            },
+            { name: "IDProofDocument" }
           ]
         },
         {
@@ -207,6 +110,7 @@ const getMdmsData = async (action, state, dispatch) => {
             }
           ]
         }
+        
       ]
     }
   };
@@ -227,82 +131,33 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 
-const getFirstListFromDotSeparated = list => {
-  list = list.map(item => {
-    if (item.active) {
-      return item.code.split(".")[0];
-    }
-  });
-  list = [...new Set(list)].map(item => {
-    return { code: item };
-  });
-  return list;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "servicerequest",
   beforeInitScreen: (action, state, dispatch) => {
- 
+   
     let media = [];
-        let servicerequestmedia = get(state, "form.newapplication.files.media", []);
-        servicerequestmedia.map((item, index) => {
-          media.push(item.fileStoreId)
-        });
+    
+    let servicerequestmedia = get(state, "form.newapplication.files.media", []);
+    servicerequestmedia.map((item, index) => {
+      media.push(item.fileStoreId)
+    });
         
     
-        set(state, "form.newapplication.files.media", []);
+    set(state, "form.newapplication.files.media", []);
         
-        
+     
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     !applicationNumber ? clearlocalstorageAppDetails(state) : '';
     setapplicationType('HORTICULTURE');
-    const tenantId = getQueryArg(window.location.href, "tenantId");
-
-    // const userInfo = JSON.parse(getUserInfo());
-
+ 
     set(state, "screenConfiguration.moduleName", "hc");
-
-    
+ 
     getMdmsData(action, state, dispatch).then(response => {
-
-      
-      // prepareDocumentsUploadData(state, dispatch, 'apply_sellmeat');
+      prepareDocumentsUploadData(state, dispatch, 'serviceRequestIDProof');
     });
-
-    
-    // prepareEditFlow(state, dispatch, applicationNumber, tenantId);
-
-
+ 
     return action;
   },
   components: {
@@ -328,9 +183,9 @@ const screenConfig = {
         },
         
         formwizardImageStep,
+        formwizardIDProofStep,
         formwizardFirstStep,
-        formwizardSecondStep,
-        
+        formwizardSecondStep,       
         footer
       }
     }

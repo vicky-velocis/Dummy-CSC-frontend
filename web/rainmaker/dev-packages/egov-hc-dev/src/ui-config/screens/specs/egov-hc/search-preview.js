@@ -1,18 +1,18 @@
 import { getCommonCard, getCommonContainer, getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getFileUrlFromAPI, getQueryArg, setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
-import { getTenantId, getUserInfo, setapplicationNumber, setapplicationType, setServiceRequestStatus, setSLADays, setCurrentAssignee, setHCRoles } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId, getUserInfo, setapplicationNumber, setapplicationType, setCurrentAssignee, setHCRoles, setServiceRequestStatus, setSLADays } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import "../../../../customstyle.css";
-import { getSearchResultsView, getCurrentAssigneeUserNameAndRole, commonConfig } from "../../../../ui-utils/commons";
-import { downloadPrintContainerScreenDownload, downloadPrintContainer } from "./applyResourceSearchPreview/footer";
+import { httpRequest } from "../../../../ui-utils";
+import { getCurrentAssigneeUserNameAndRole, getSearchResultsView } from "../../../../ui-utils/commons";
+import { downloadPrintContainer } from "./applyResourceSearchPreview/footer";
 import { documentsSummary } from "./myRequestSearchPreview/documentsSummary";
 import { ownerDetails } from "./myRequestSearchPreview/ownerDetails";
 import { requestDetails } from "./myRequestSearchPreview/requestDetails";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { httpRequest } from "../../../../ui-utils";
 // import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 let role_name = JSON.parse(getUserInfo()).roles[0].code
@@ -61,17 +61,30 @@ const prepareDocumentsView = async (state, dispatch) => {
 
       
   if (hcUploadedDocs.length > 0) {
-    let cnt = 1;
-    hcUploadedDocs.forEach(element => {
-        documentsPreview.push({
-          title: "Uploaded Document "+cnt,
-          fileStoreId: element.media,
-          linkText: "DOWNLOAD"
-        
+    
+   let cnt  = 0
+   hcUploadedDocs.forEach(element => {
+     if (cnt == 0)
+    {
+    documentsPreview.push({
+    title: "ID Proof",
+    fileStoreId: element.media,
+    linkText: "DOWNLOAD"
+    
+    })
+    cnt = cnt +1;
+  }
+    else{documentsPreview.push({
+      title: "Uploaded Document "+cnt,
+      fileStoreId: element.media,
+      linkText: "DOWNLOAD"
+      
       })
-      cnt = cnt +1;
+      cnt = cnt +1;}
     }
-       )}
+    )
+  
+    }
 
 
        let fileStoreIds = jp.query(documentsPreview, "$.*.fileStoreId");
@@ -116,7 +129,36 @@ const setSearchResponse = async (state, dispatch, action, serviceRequestId) => {
     dispatch(setRoute(`/egov-hc/acknowledgementInvalidServiceRequest`));
   }
   else{
+    if(response.ResponseBody[0].servicerequestsubtype != null && response.ResponseBody[0].servicerequestsubtype != undefined && response.ResponseBody[0].servicerequestsubtype != ""  ){
+      var serviceRequestSubtype =  response.ResponseBody[0].servicerequestsubtype
+      serviceRequestSubtype = JSON.parse(serviceRequestSubtype)
+      response.ResponseBody[0].servicerequestsubtype = serviceRequestSubtype.subservicetype
+    }
+
+    var serviceRequestType = []
+    var sectorData = []
+    
+    
+    serviceRequestType = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData['eg-horticulture'].ServiceType")
+    sectorData = get(state, "screenConfiguration.preparedFinalObject.applyScreenMdmsData['RAINMAKER-PGR'].Sector")
   
+    //setting service request type data
+    var serviceRequestTypeFromResponse = serviceRequestType.filter(function (state) {
+      if (response.ResponseBody[0].service_type === state.code )
+      return state 
+    });
+    var serviceRequestTypeFromResponse = serviceRequestTypeFromResponse.map(element => element.name )
+    var serviceRequestTypeNameFromResponse = serviceRequestTypeFromResponse.join(",")
+  
+    // setting sector data 
+    var sectorDataFromResponse = sectorData.filter(function (state) {
+      if (response.ResponseBody[0].locality === state.code )
+      return state 
+    });
+    var sectorDataNameFromResponse = sectorDataFromResponse.map(element => element.name )
+     sectorDataNameFromResponse = sectorDataNameFromResponse.join(",") 
+     response.ResponseBody[0].sectorName = sectorDataNameFromResponse
+     response.ResponseBody[0].serviceRequestTypeName = serviceRequestTypeNameFromResponse
   dispatch(prepareFinalObject("myRequestDetails", response.ResponseBody[0], {}));
 
   prepareDocumentsView(state, dispatch);
@@ -197,6 +239,8 @@ const setSearchResponse = async (state, dispatch, action, serviceRequestId) => {
         //     );
   }
 };
+
+
 const getMdmsData = async (dispatch) => {
   
   let tenantId = getTenantId().split(".")[0];
@@ -215,13 +259,22 @@ const getMdmsData = async (dispatch) => {
         {
           moduleName: "eg-horticulture",
           masterDetails: [
-           
+            {
+              name: "ServiceType"
+            },
             {
               name: "roles"
             }
           ]
         },
-        
+        {
+          moduleName: "RAINMAKER-PGR",
+          masterDetails: [
+            {
+              name: "Sector"
+            }
+          ]
+        }
         
       ]
     }
@@ -328,6 +381,7 @@ const screenConfig = {
             requestDetails: requestDetails,
             ownerDetails: ownerDetails,
             documentsSummary: documentsSummary
+            
           }),
       }
     }

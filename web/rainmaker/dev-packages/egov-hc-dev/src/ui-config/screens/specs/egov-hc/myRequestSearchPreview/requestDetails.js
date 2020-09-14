@@ -17,39 +17,7 @@ export const requestDetails = getCommonGrayCard({
           labelKey: "HC_SERVICE_REQUEST_DETAILS_HEADER"
         })
       },
-      // editSection: {
-      //   componentPath: "Button",
-      //   props: {
-      //     color: "primary",
-      //     style: {
-      //       marginTop: "-10px",
-      //       marginRight: "-18px"
-      //     }
-      //   },
-      //   gridDefination: {
-      //     xs: 4,
-      //     align: "right"
-      //   },
-      //   children: {
-      //     editIcon: {
-      //       uiFramework: "custom-atoms",
-      //       componentPath: "Icon",
-      //       props: {
-      //         iconName: "edit"
-      //       }
-      //     },
-      //     buttonLabel: getLabel({
-      //       labelName: "Edit",
-      //       labelKey: "NOC_SUMMARY_EDIT"
-      //     })
-      //   },
-      //   onClickDefination: {
-      //     action: "condition",
-      //     callBack: (state, dispatch) => {
-      //       gotoApplyWithStep(state, dispatch, 0);
-      //     }
-      //   }
-      // }
+ 
     }
   },
    scheama: getCommonGrayCard({
@@ -61,8 +29,18 @@ export const requestDetails = getCommonGrayCard({
       },
       {
 
-        jsonPath: "myRequestDetails.service_type",
+        jsonPath: "myRequestDetails.serviceRequestTypeName",
         
+      }
+    ),
+    serviceRequestSubtype: getLabelWithValue(
+      {
+        labelName: "Service Request Subtype",
+        labelKey: "HC_SERVICE_REQUEST_SUBTYPE_LABEL"
+      },
+      {
+
+        jsonPath: "myRequestDetails.servicerequestsubtype"
       }
     ),
     noOfTrees: getLabelWithValue(
@@ -71,12 +49,7 @@ export const requestDetails = getCommonGrayCard({
         labelKey: "HC_NUMBER_OF_TREES_FOR_CUTTING_PRUNING_REMOVAL_LABEL"
       },
       {
-        // optionLabel: "name",
-        // placeholder: {
-        //   labelName: "Select Age",
-        //   labelKey: "DOG_AGE_LABEL"
-        // },
-        // sourceJsonPath: "applyScreenMdmsData.egpm.age",
+
         jsonPath: "myRequestDetails.tree_count",
         required: true,
       }
@@ -120,13 +93,7 @@ export const requestDetails = getCommonGrayCard({
         labelKey: "HC_LOCATION_LABEL"
       },
       {
-        // optionLabel: "name",
-        //   placeholder: {
-        //     labelName: "Select COLOR",
-        //     labelKey: "DOG_COLOR_LABEL"
-        //   },
-        //   sourceJsonPath: "applyScreenMdmsData.egpm.color",
-        // sourceJsonPath: "applyScreenMdmsData.tenant.tenants",
+ 
         jsonPath: "myRequestDetails.location",
         required: true
       }
@@ -143,7 +110,7 @@ export const requestDetails = getCommonGrayCard({
         // },
         // pattern: getPattern("Name"),
         // errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-        jsonPath: "myRequestDetails.locality",
+        jsonPath: "myRequestDetails.sectorName",
       }
     ),
     houseNumber: getLabelWithValue(
@@ -167,15 +134,12 @@ export const requestDetails = getCommonGrayCard({
         labelKey: "HC_LANDMARK_LABEL"
       },
       {
-        // placeholder: {
-        //   labelName: "Identification Mark",
-        //   labelKey: "IDENTIFICATION_MARK_LABEL"
-        // },
-        // pattern: getPattern("Name"),
-        // errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+
         jsonPath: "myRequestDetails.landmark"
       }
-    )
+    ),
+    
+    
   })
   })
   

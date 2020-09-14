@@ -52,14 +52,22 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       var allDocuments = []
       if(get(currentObj, "documents") != null)
      { allDocuments = get(currentObj, "documents")
-      allDocuments.map((item) => {
-        allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+      allDocuments.map((item,index) => {
+        if(index===0 && currentObj.action === 'INITIATE')
+        {allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
           documentType:item.documentType,
           fileStoreId: item.fileStoreId, 
           id: item.id,
           link: item.link,
           linkText: "Download", 
-          name: item.name, tenantId: item.tenantId,title: "Document" })
+          name: item.name, tenantId: item.tenantId,title: "ID Proof" })}
+        else{{allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+          documentType:item.documentType,
+          fileStoreId: item.fileStoreId, 
+          id: item.id,
+          link: item.link,
+          linkText: "Download", 
+          name: item.name, tenantId: item.tenantId,title: "Document" })}}
       });}
     return (
     <Grid

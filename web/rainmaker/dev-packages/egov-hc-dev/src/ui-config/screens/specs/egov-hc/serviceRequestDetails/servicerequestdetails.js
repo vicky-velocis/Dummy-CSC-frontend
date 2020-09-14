@@ -1,7 +1,9 @@
-import { getBreak, getCommonCard, getCommonContainer, getCommonTitle, getPattern, getSelectField, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getBreak, getCommonCard, getCommonContainer, getCommonTitle, getPattern, getTextField } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import { NumberOfTreesInPruning, TypeOfServiceRequest } from "../../../../../ui-utils/commons";
 import "./index.css";
+
 
 const getMapLocator = textSchema => {
   return {
@@ -11,7 +13,6 @@ const getMapLocator = textSchema => {
     props: {}
   };
 };
-
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["servicerequest"],
@@ -26,6 +27,85 @@ const showHideMapPopup = (state, dispatch) => {
       !toggle
     )
   );
+};
+const setRadioButtonFeatures = (currentSelectedServiceType, state, dispatch) => {
+  if(currentSelectedServiceType.value ===TypeOfServiceRequest.REMOVALOFDEADDRY )
+  {
+              dispatch(handleField("servicerequest",
+              "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+              "props.buttons[0].disabled",
+              false
+            )
+          );
+          dispatch(handleField("servicerequest",
+              "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+              "props.buttons[1].disabled",
+              false
+            )
+          );
+          dispatch(handleField("servicerequest",
+              "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+              "props.buttons[2].disabled",
+              false
+            )
+          );
+
+    }
+        else
+          {
+            dispatch(handleField("servicerequest",
+            "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+            "props.buttons[0].disabled",
+            true
+          )
+        );
+        dispatch(handleField("servicerequest",
+            "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+            "props.buttons[1].disabled",
+            true
+          )
+        );
+        dispatch(handleField("servicerequest",
+            "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+            "props.buttons[2].disabled",
+            true
+          )
+        );
+        dispatch(handleField("servicerequest",
+        "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.serviceRequestSubtype",
+        "props.value",
+        undefined
+        )
+        );
+        };
+      }
+
+const setNumberOfTreesForPruning = (currentSelectedServiceType, state, dispatch) => {
+  if(currentSelectedServiceType.value ===TypeOfServiceRequest.PRUNLESSTHAN90 || currentSelectedServiceType.value ===TypeOfServiceRequest.PRUNMORETHAN90 ){
+        dispatch(handleField("servicerequest",
+        "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+        "props.value",
+        NumberOfTreesInPruning.DefaultTrees
+      ))
+      dispatch(handleField("servicerequest",
+      "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+      "props.disabled",
+      true
+    ))
+  }
+  else{
+    dispatch(handleField("servicerequest",
+    "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+    "props.disabled",
+    false
+  ))
+    
+  dispatch(handleField("servicerequest",
+        "components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.nooftrees",
+        "props.value",
+        NumberOfTreesInPruning.DefaultTrees
+      ))
+  }
 };
 export const servicerequestdetails = getCommonCard({
   header: getCommonTitle(
@@ -43,7 +123,7 @@ export const servicerequestdetails = getCommonCard({
 
   break: getBreak(),
   servicerequestdetailsContainer: getCommonContainer({
-    typeofrequest: {
+  typeofrequest: {
       uiFramework: "custom-containers-local",
       moduleName: "egov-hc",
       componentPath: "AutosuggestContainer",
@@ -81,36 +161,61 @@ export const servicerequestdetails = getCommonCard({
     labelName: "name",
     valueName: "name"
     },
+    
+    afterFieldChange: (action, state, dispatch) => {
+      var currentSelectedServiceType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType")
+    
+      if (currentSelectedServiceType.value != undefined)
+      {
+        setRadioButtonFeatures(currentSelectedServiceType, state, dispatch)
+        setNumberOfTreesForPruning(currentSelectedServiceType, state, dispatch)
+      }
+    }
+    
   },
-  //   typeofrequest: {
-  //   ...getSelectField({
-  //     label: {
-  //       labelName: "Type of Service Request",
-  //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_LABEL"
-  //     },     
-  //     optionLabel: "name",
-  //     optionValue: "name",
-  //     placeholder: {
-  //       labelName: "Select Type of Service Request",
-  //       labelKey: "HC_TYPE_OF_SERVICE_REQUEST_PLACEHOLDER"
-  //     },
-  //     gridDefination: {
-  //       xs: 12,
-  //       sm: 12,
-  //       md: 12,
-  //       lg:12
-  //     },
-  //     required: false,
-  //     sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-  //     jsonPath: "SERVICEREQUEST.serviceType",
-  //     errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
-  //     required: false,
-  //     props: {
-  //       className: "MuiSelect-root-224 MuiInput-error-853",
-  //       required: true
-  //     },   
-  //   })
-  // },
+  serviceRequestSubtype: {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "SERVICEREQUEST.subType",
+     
+    props: {
+      label: {
+        name: "Subtype",
+        key: "HC_SERVICE_REQUEST_SUBTYPE"
+      },
+      buttons: [
+       
+        {
+          labelName: "DEAD",
+          labelKey: "HC_COMMON_SUBTYPE_DEAD",
+          disabled: true,
+          value: "DEAD"
+        },
+        {
+          labelName: "DANGEROUS",
+          labelKey: "HC_COMMON_SUBTYPE_DANGEROUS",
+          disabled: true,
+          value: "DANGEROUS"
+        },
+        {
+          labelName: "DRY",
+          labelKey: "HC_COMMON_SUBTYPE_DRY",
+          disabled: true,
+          value: "DRY"
+        }
+      ],
+      jsonPath:"SERVICEREQUEST.subType",
+      required: false
+    },
+    required: false,
+    type: "array",
+    
+  },
   nooftrees:{
     ...getTextField({
        label:{
@@ -233,32 +338,7 @@ export const servicerequestdetails = getCommonCard({
     }
 
   },
-  // locality: {
-  //   ...getSelectField({
-  //     label: {
-  //       labelName: "Locality/Mohalla",
-  //       labelKey: "HC_LOCALITY_MOHALLA_LABEL"
-  //     },     
-  //     optionLabel: "name",
-  //     optionValue: "name",
-  //     placeholder: {
-  //       labelName: "Select Locality/Mohalla",
-  //       labelKey: "HC_LOCALITY_MOHALLA_LABEL_PLACEHOLDER"
-  //     },
-  //     gridDefination: {
-  //       xs: 12,
-  //       sm: 12,
-  //       md: 12,
-  //       lg:12
-  //     },
-  //      required:true,
-  //     sourceJsonPath: "applyScreenMdmsData.RAINMAKER-PGR.Sector",
-  //     jsonPath: "SERVICEREQUEST.mohalla",
-  //     errorMessage:"ERR_DEFAULT_INPUT_FIELD_MSG",
-  //     required: true,
-
-  //   })
-  // },
+ 
   
   locality: {
     uiFramework: "custom-containers-local",

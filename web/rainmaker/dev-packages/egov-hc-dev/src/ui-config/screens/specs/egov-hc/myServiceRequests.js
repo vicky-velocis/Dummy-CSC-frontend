@@ -3,6 +3,8 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "../../../../ui-utils";
 import "./index.css";
+import get from "lodash/get";
+import { TypeOfServiceRequest } from "../../../../ui-utils/commons";
 import { fetchData, fetchDataForFilterFields, resetFields } from "./searchResource/citizenSearchFunctions";
 
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -107,25 +109,7 @@ export const FieldsForFilterForm = getCommonCard({
 
 
     }),
-    // ServiceRequestType: getSelectField({
-    //   label: { labelName: "Service Request Type", labelKey: "HC_SERVICE_REQUEST_TYPE_LABEL" },
-    //   optionLabel: "name",
-    //   optionValue: "name",
-    //   placeholder: {
-    //     labelName: "Select Service Request Type",
-    //     labelKey: "HC_SERVICE_REQUEST_TYPE_PLACEHOLDER"
-    //   },
-    //   //    jsonPath: "searchScreen.toDate",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 4,
-    //     md: 4
-    //   },
-
-    //   jsonPath: "myServiceRequests[0].servicetype",
-    //   sourceJsonPath: "applyScreenMdmsData.eg-horticulture.ServiceType",
-    //   required: false
-    // }),
+    
     ServiceRequestType:{
       uiFramework: "custom-containers-local",
       moduleName: "egov-hc",
@@ -165,6 +149,107 @@ export const FieldsForFilterForm = getCommonCard({
     labelName: "name",
     valueName: "name"
     },
+    afterFieldChange: (action, state, dispatch) => {
+      var currentSelectedServiceType = get(state, "screenConfiguration.preparedFinalObject.myServiceRequests[0].servicetype")
+      if (currentSelectedServiceType.value != undefined)
+      {
+        if(currentSelectedServiceType.value ===TypeOfServiceRequest.REMOVALOFDEADDRY )
+        {
+          dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          false
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          false
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          false
+        )
+      );
+     
+    }
+    else
+        {
+          dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[0].disabled",
+          true
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[1].disabled",
+          true
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+          "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+          "props.buttons[2].disabled",
+          true
+        )
+      );
+      dispatch(handleField("myServiceRequests",
+      "components.div.children.form.children.cardContent.children.masterContainer.children.ServiceRequestSubtype",
+      "props.value",
+      undefined
+    )
+  );
+    
+    
+    
+    }
+    }
+    }
+  },
+  ServiceRequestSubtype: {
+    uiFramework: "custom-containers",
+    componentPath: "RadioGroupContainer",
+    gridDefination: {
+      xs: 12,
+      sm: 12,
+      md: 6
+    },
+    jsonPath: "myServiceRequests[0].serviceRequestSubtype",
+     
+    props: {
+      label: {
+        name: "Subtype",
+        key: "HC_SERVICE_REQUEST_SUBTYPE"
+      },
+      buttons: [
+       
+        {
+          labelName: "DEAD",
+          labelKey: "HC_COMMON_SUBTYPE_DEAD",
+          disabled: true,
+          value: "DEAD"
+        },
+        {
+          labelName: "DANGEROUS",
+          labelKey: "HC_COMMON_SUBTYPE_DANGEROUS",
+          disabled: true,
+          value: "DANGEROUS"
+        },
+        {
+          labelName: "DRY",
+          labelKey: "HC_COMMON_SUBTYPE_DRY",
+          disabled: true,
+          value: "DRY"
+        }
+      ],
+      jsonPath:"myServiceRequests[0].serviceRequestSubtype",
+      required: false
+    },
+    required: false,
+    type: "array",
+    
   },
   }),
 
