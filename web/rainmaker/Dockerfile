@@ -6,13 +6,13 @@ ENV NODE_OPTIONS "--max-old-space-size=8192"
 
 # copy the project files
 COPY ${WORK_DIR} .
-RUN yarn run prod:citizen
+RUN yarn run prod:employee
 
 # Create runtime image
 FROM nginx:mainline-alpine 
-ENV WEB_DIR=/var/web/citizen
+ENV WEB_DIR=/var/web/employee
 
 RUN mkdir -p ${WEB_DIR}
 
-COPY --from=build /app/packages/citizen/build ${WEB_DIR}/
-COPY --from=build /app/docker/citizen/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/packages/employee/build ${WEB_DIR}/
+COPY --from=build /app/docker/employee/nginx.conf /etc/nginx/conf.d/default.conf

@@ -1,5 +1,5 @@
 import React from "react";
-import DayPicker, { DateUtils } from "react-day-picker";
+import DayPicker, { DateUtils } from "../../contributed-modules/react-day-picker";
 import {
     prepareFinalObject,
     toggleSnackbar,
@@ -8,7 +8,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import "react-day-picker/lib/style.css";
+import "../../contributed-modules/react-day-picker/lib/style.css";
 import "./index.css";
 
 class BookingCalendar extends React.Component {

@@ -116,6 +116,7 @@ class ShowField extends Component {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "mChandigarh Application\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
+          doc.content[1].margin = [ 80, 0, 80, 0 ]
         },
         className: "report-pdf-button",
       },
@@ -123,7 +124,7 @@ class ShowField extends Component {
         extend: "excel",
         text: "XLS",
         filename: _this.state.reportName,
-        title: reportTitle,
+        title: Array.isArray(reportTitle) ? reportTitle.join("") : reportTitle,
         messageTop: tabLabel,
         footer: true,
         className: "report-excel-button",

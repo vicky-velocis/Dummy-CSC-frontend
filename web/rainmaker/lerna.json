@@ -2,7 +2,6 @@
   "lerna": "2.11.0",
   "npmClient": "yarn",
   "packages": [
-    "dev-packages/egov-booking-employee-dev",
     "dev-packages/pgr-citizen-dev",
     "dev-packages/pgr-employee-dev",
     "dev-packages/pt-citizen-dev",
@@ -15,6 +14,8 @@
     "dev-packages/egov-abg-dev",
     "dev-packages/egov-noc-dev",
     "dev-packages/egov-opms-dev",
+    "dev-packages/egov-services-dev",
+    "dev-packages/egov-services-emp-dev",
     "dev-packages/egov-hc-dev",
     "dev-packages/egov-pms-dev",
     "dev-packages/egov-store-asset-dev",
