@@ -84,13 +84,17 @@ export const MTONHeader = getCommonCard({
           let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
           let designation=action.value ;
           emp = emp.filter(x=>x.code ===indents[0].issueStore.storeInCharge.code)
+          if(emp&& emp[0])
+          {
           dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", emp[0].name));
           let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
+         
           const {designationsById} = state.common;
           if(designationsById){
             const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
             dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
             }
+          }
           storecode =indents[0].issueStore.code;
           let indentDetails = get(
             indents[0],
