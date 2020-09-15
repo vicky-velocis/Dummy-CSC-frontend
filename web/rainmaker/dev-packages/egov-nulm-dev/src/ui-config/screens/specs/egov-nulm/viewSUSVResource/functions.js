@@ -159,9 +159,7 @@ export const createUpdatePO = async (state, dispatch, action ,status) => {
   NulmSusvRequest.tenantId = tenantId;
   let queryObject = [{ key: "tenantId", value: tenantId }];
  
-   NulmSusvRequest.applicationStatus = status;
-
-
+  //NulmSusvRequest.applicationStatus = status;
   const radioButtonValue = ["isDisability"];
     
   radioButtonValue.forEach(value => {
@@ -175,9 +173,13 @@ export const createUpdatePO = async (state, dispatch, action ,status) => {
 
   const requestBody = {NulmSusvRequest};
   console.log("requestbody", requestBody);
-
   if (action === "CREATE") {
     try {
+      if (status == "DRAFTED") {
+        requestBody.NulmSusvRequest.action = "Drafted";
+      } else if (status == "CREATED") { 
+        requestBody.NulmSusvRequest.action = "Created";
+      }
       const response = await httpRequest(
         "post",
         "/nulm-services/v1/susv/_create",
@@ -194,6 +196,13 @@ export const createUpdatePO = async (state, dispatch, action ,status) => {
     }
   } else if (action === "UPDATE") {
     try {
+      if (status == "DRAFTED") {
+        requestBody.NulmSusvRequest.action = "Drafted";
+      } else if (requestBody.NulmSusvRequest.applicationStatus=="Drafted" && status == "CREATED") { 
+        requestBody.NulmSusvRequest.action = "Created";
+      }else if (requestBody.NulmSusvRequest.applicationStatus == "Reassign To Citizen") {
+        requestBody.NulmSusvRequest.action = 'Forward To JA';
+      } 
       const response = await httpRequest(
         "post",
         "/nulm-services/v1/susv/_update",

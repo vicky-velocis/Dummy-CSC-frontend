@@ -33,4 +33,10 @@ const StoreAssetActionDialog = Loadable({
   loading: () => <Loading />
 });
 
-export { Footer, ActionDialog, TaskDialog, TaskStatusComponents, HCActionDialog,StoreAssetActionDialog };
+const NulmActionDialog = Loadable({
+  loader: () => import("./NulmActionDialog"),
+  loading: () => <Loading />
+});
+
+
+export { Footer, ActionDialog, TaskDialog, TaskStatusComponents, HCActionDialog,StoreAssetActionDialog,NulmActionDialog };
