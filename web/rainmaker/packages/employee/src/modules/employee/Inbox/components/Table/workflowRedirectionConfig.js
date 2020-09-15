@@ -80,7 +80,12 @@ export const getWFConfig = (module, businessService, taskId) => {
       };
 
     }
-
+	 else if (businessService == "NULM") {
+		  return {
+			INITIATED: "/egov-nulm/view-susv",
+			DEFAULT: "/egov-nulm/view-susv",
+		  };
+	 }
     else if (businessService == "PAYMENT WORKFLOW" || businessService == "FINE MASTER APPROVAL" || businessService == "CHALLAN WORKFLOW" || businessService == "AUCTION WORKFLOW") {
       switch (businessService) {
         case "CHALLAN WORKFLOW":

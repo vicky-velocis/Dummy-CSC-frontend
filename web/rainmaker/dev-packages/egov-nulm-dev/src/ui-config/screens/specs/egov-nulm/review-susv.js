@@ -5,7 +5,8 @@ import {
   } from "egov-ui-framework/ui-config/screens/specs/utils";
 
   import { SUSVReviewDetails } from "./viewSUSVResource/susv-review";
-  
+  import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import get from "lodash/get";  
   
   export const header = getCommonContainer({
     header: getCommonHeader({
@@ -28,7 +29,7 @@ import {
     uiFramework: "material-ui",
     name: "review-susv",
     beforeInitScreen: (action, state, dispatch) => {
-     
+  
       return action;
     },
     components: {

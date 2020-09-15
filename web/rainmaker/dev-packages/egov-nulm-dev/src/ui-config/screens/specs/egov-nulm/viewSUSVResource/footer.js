@@ -2,6 +2,9 @@ import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {  handleSubmitSMID,handleRejectSMID,handlesaveSMID,handleApproveSMID } from "./functions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";  
+import store from "ui-redux/store";
 
 const gotoCreateFlow = (state, dispatch) => {
   const createUrl = `/egov-nulm/create-susv`;
@@ -91,7 +94,7 @@ export const buttonController = () => {
           action: "condition",
           callBack: handlesaveSMID,
         },
-        visible: true,
+        visible: get(store.getState().screenConfiguration.preparedFinalObject, "NulmSusvRequest.applicationStatus", null) == "Reassign To Citizen" ? false : true,
       },
       submitButton: {
         componentPath: "Button",

@@ -137,7 +137,10 @@ class InboxData extends React.Component {
     else if (row[0].subtext == "Engineering" || row[0].subtext == "IT" || row[0].subtext == "Caretaker" || row[0].subtext == "MOH") {
       queryParams += `&Status=${wfStatus}`;
     }
-	
+	else if (row[0].subtext == "NULM") {
+      queryParams += `&status=${wfStatus}`;
+    }
+
     this.props.setRoute(`${contextPath}?${queryParams}`);
   };
 

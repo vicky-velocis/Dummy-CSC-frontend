@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { ActionDialog, HCActionDialog,StoreAssetActionDialog } from "../";
+import { ActionDialog, HCActionDialog,StoreAssetActionDialog,NulmActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -149,7 +149,17 @@ class Footer extends React.Component {
 
 
     }
-	
+	if (dataPath === "NulmSusvRequest" ) {
+      var { state } = this.props;
+      const applicationNumberNULM = get(
+        state.screenConfiguration.preparedFinalObject.workflow,
+        `ProcessInstances[0].businessId`);
+
+      handleFieldChange(`${dataPath}.action`, item.buttonLabel);
+      handleFieldChange(`${dataPath}.remark`, "");
+      handleFieldChange(`${dataPath}.applicationId`, applicationNumberNULM);
+      handleFieldChange(`${dataPath}.wfDocuments`, []);
+    }
     else {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].assignee`, []);
@@ -384,6 +394,29 @@ class Footer extends React.Component {
 
 
 
+        </div>
+      );
+    }
+	else if (dataPath === "NulmSusvRequest"  && data.length != 0) {
+      return (
+        <div className="apply-wizard-footer" id="custom-atoms-footer">
+          {!isEmpty(downloadMenu) && (
+            <Container>
+              <Item xs={12} sm={12} className="wf-footer-container">
+                <MenuButton data={buttonItems} />
+              </Item>
+            </Container>
+          )}
+          <NulmActionDialog
+            open={open}
+            onClose={this.onClose}
+            dialogData={data}
+            dropDownData={employeeList}
+            handleFieldChange={handleFieldChange}
+            onButtonClick={onDialogButtonClick}
+            dataPath={dataPath}
+            state={state}
+          />
         </div>
       );
     }

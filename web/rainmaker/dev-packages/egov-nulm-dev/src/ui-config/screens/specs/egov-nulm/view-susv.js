@@ -188,10 +188,10 @@ import {
   }
   const roleBasedValidationForFooter = () => {
     if(process.env.REACT_APP_NAME === "Employee"){
-        return poViewFooter();
+      return {};//poViewFooter();
     }
     else{
-      if(status==="DRAFTED")
+      if(status==="Drafted" || status==="Reassign To Citizen")
           return poViewFooter() 
       else
         return{};
@@ -237,8 +237,19 @@ import {
               }
             }
           },
+          taskStatus: {
+            uiFramework: "custom-containers-local",
+            componentPath: "WorkFlowContainer",
+            moduleName: "egov-nulm",
+            visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+            props: {
+              dataPath: "NulmSusvRequest",
+              moduleName: "NULM",
+              updateUrl: "/nulm-services/v1/susv/_updateAppStatus"
+            }
+          },
           tradeView,
-          footer:  roleBasedValidationForFooter(),
+          footer: roleBasedValidationForFooter(),
         }
       },
     }
