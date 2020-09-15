@@ -7,9 +7,9 @@ import { createServiceRequest, commonConfig } from "../../../../../ui-utils/comm
 import { getCommonApplyFooter } from "../../utils";
 import "./index.css";
 import {  handleScreenConfigurationFieldChange as handleField} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { string } from "prop-types";
+import  {TypeOfServiceRequest} from "../../../../../ui-utils/commons"
 
-let role_name = JSON.parse(getUserInfo()).roles[0].code
+
 
 
 const callBackForNext = async (state, dispatch) => {
@@ -30,17 +30,17 @@ const callBackForNext = async (state, dispatch) => {
 
   
 
-  let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
+  
 
   let validatestepformflag;
   let validationPaused;
 
-  // debugger;
+  let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
   if (typeOfService== ""){
-    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.value")
   } 
-   
-
+  var idProofDocument = get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux[0].documents[0].fileStoreId")
+  
   if(media.length === 0)
   {
     dispatch(
@@ -50,7 +50,17 @@ const callBackForNext = async (state, dispatch) => {
         "warning"
       )
     );
-  }else if(!typeOfService){
+  }
+  else if(idProofDocument == undefined){
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: "ERROR", labelKey: "HC_UPLOAD_ID_PROOF_ERROR" },
+        "warning"
+      )
+    );
+  }
+  else if(!typeOfService){
     dispatch(
       toggleSnackbar(
         true,
@@ -79,12 +89,24 @@ const callBackForNext = async (state, dispatch) => {
     let ownerName = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.ownerName");
     let contactNumber = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.contactNumber");
     let email = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.email");
-    let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla.label");
    
+    let serviceType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType");
+    let subType = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.subType");
+
     let validationErrorMsg = ""
     let flagValidField = true;
 
-   
+    if (serviceType != undefined  ){
+      if (serviceType.value != undefined  ){
+        if (serviceType.value == TypeOfServiceRequest.REMOVALOFDEADDRY){
+          if (subType === undefined){
+            validationErrorMsg = { labelName: "ERROR", labelKey: "HC_SERVICE_REQUEST_SUBTYPE_ERROR" };
+            flagValidField = false;
+          }
+        }
+      }
+    }
+    
     // ^(0?[1-9]|[1-9][0-9])$
     // ^(\d?[1-9]|[1-9]0)$
     if(! /^(0?[1-9]|[1-9][0-9])$/.test(treeCount))
@@ -97,22 +119,22 @@ const callBackForNext = async (state, dispatch) => {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_TREE_COUNT_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&?@/!~^*()_+`=|{}<>.[\\\],''"":;\s,'-]{1,256}$/.test(description))
+    else if(! /^[a-zA-Z0-9#$&?@~_|.,:\s,]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/.test(description))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_DESCRIPTION_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(houseNoAndStreetName))
+    else if(! /^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(houseNoAndStreetName))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_HOUSE_NO_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z0-9#$%&@/.,''"":;\s,'-]{1,256}$/.test(landmark))
+    else if(! /^$|^[a-zA-Z0-9#$&?@~_|(),/,[\\\],-.,:\s,\n]{1,256}$(?!.*[<>'"*;={}`%+^!])/.test(landmark))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_LANDMARK_ERROR" };
       flagValidField = false;
     }
-    else if(! /^[a-zA-Z\s\\/\-]{1,256}$/.test(ownerName))
+    else if(! /^[a-zA-Z\s]{1,256}$(?!.*[<>()'"/\*;={}`%+^!–])/.test(ownerName))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_OWNER_NAME_ERROR" };
       flagValidField = false;
@@ -122,7 +144,7 @@ const callBackForNext = async (state, dispatch) => {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_CONTACT_NUMBER_ERROR" };
       flagValidField = false;
     }
-    else if(! /^(?=^.{1,256}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/.test(email))
+    else if(! /(?=^.{1,256}$)(^\w+([\.]?\w+)*@\w+([\.]?\w+)*(\.\w{2,3})+$)/.test(email))
     {
       validationErrorMsg = { labelName: "ERROR", labelKey: "HC_FIELD_EMAIL_ERROR" };
       flagValidField = false;
@@ -141,13 +163,14 @@ const callBackForNext = async (state, dispatch) => {
       
     }
     
-  
-    
+  var idProofMedia = []
+  idProofMedia[0] = idProofDocument.toString()
+  var final_media = idProofMedia.concat(media) 
     
   // API 
   if (isFormValid && flagValidField) {
-    let locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
-    let typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label");
+    let locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.value")
+    let typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.value");
 
       if (typeOfService != undefined && locality != undefined )
     {if (activeStep === 1) { 
@@ -161,7 +184,7 @@ const callBackForNext = async (state, dispatch) => {
       let status = 'INITIATED'
       serviceRequest['city']= tenantIdCommonConfig,
       serviceRequest['tenantId']= tenantIdCommonConfig,
-      serviceRequest['media'] = media,
+      serviceRequest['media'] = final_media,
       // serviceRequest['address'] = 'hardcoded value',
       serviceRequest['isEditState'] = 0
       serviceRequest['mohalla'] =locality
@@ -301,13 +324,13 @@ export const validatestepform = (state, dispatch, isFormValid, hasFieldToaster) 
 
   let typeOfService = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.serviceType", "");
   if (typeOfService== ""){
-    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.label")
+    typeOfService = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.typeofrequest.props.value.value")
   } 
   let noOfTrees = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.treeCount", "");  
   let description = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.description", "");
   let locality = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.mohalla", "");
   if (locality== ""){
-    locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.label")
+    locality = get(state, "screenConfiguration.screenConfig.servicerequest.components.div.children.formwizardFirstStep.children.servicerequestdetails.children.cardContent.children.servicerequestdetailsContainer.children.locality.props.value.value")
   }
   let address = get(state, "screenConfiguration.preparedFinalObject.SERVICEREQUEST.address", "");
   

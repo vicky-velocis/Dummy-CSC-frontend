@@ -258,7 +258,33 @@ export const callBackForNext = async (state, dispatch) => {
     if(IsValidDate)
     {
       if(IsValidStartDate)
-      changeStep(state, dispatch);
+      {
+        if(AgreementDate_ >= agreementStartDate_ && AgreementDate_ <= agreementEndDate_ )
+        {
+          if(rateContractDate_<AgreementDate_)
+          {
+            changeStep(state, dispatch);
+          }
+          else{
+            const errorMessage = {
+              labelName: "Rate contract date should be less than Agreement date",
+              labelKey: "STORE_MATERIAL_MASTER_RATE_CONTRACT_DATE_VALIDATION"
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          }
+
+        }
+        else
+        {
+          const errorMessage = {
+            labelName: "Agreement date should be in between Start date and End date",
+            labelKey: "STORE_MATERIAL_MASTER_AGREMENT_DATE_VALIDATION"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        }
+        
+      }
+     
       else
       {
         const errorMessage = {

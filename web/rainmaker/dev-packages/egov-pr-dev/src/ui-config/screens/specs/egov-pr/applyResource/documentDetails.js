@@ -94,7 +94,7 @@ export const tenderDocumentDetails = getCommonCard({
   subText: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT"
+    labelKey: "PR_EMAILDOCUMENT_DETAILS_SUBTEXT"
   }),
   break: getBreak(),
   documentList: {
@@ -105,7 +105,7 @@ export const tenderDocumentDetails = getCommonCard({
     props: {      
       buttonLabel: {
         labelName: "UPLOAD FILE",
-        labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+        labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
       },
       description: "Only .jpg and .pdf files. 1MB max file size.",
       inputProps: {
@@ -133,7 +133,7 @@ export const documentBillingDetails = getCommonCard({
   subText: getCommonParagraph({
     labelName:
       "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "NOC_DOCUMENT_DETAILS_SUBTEXT"
+    labelKey: "PR_EMAILDOCUMENT_DETAILS_SUBTEXT"
   }),
   break: getBreak(),
   documentList: {
@@ -144,7 +144,7 @@ export const documentBillingDetails = getCommonCard({
     props: {      
       buttonLabel: {
         labelName: "UPLOAD FILE",
-        labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+        labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
       },
       description: "Only .jpg and .pdf files. 1MB max file size.",
       inputProps: {

@@ -9,11 +9,23 @@ import {
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   const gotoCreatePage = (state, dispatch) => {
     const IndentId = getQueryArg(window.location.href, "IndentId");
+    const applicationNumber =getQueryArg(window.location.href, "applicationNumber");
+  if(IndentId)
+  {
     const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
     ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`
     : `/egov-store-asset/createMaterialIndentNote?step=0&IndentId=${IndentId}`;
     dispatch(setRoute(createUrl));
+  }
+  if(applicationNumber)
+  {
+    const createUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+    ? `/egov-ui-framework/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${applicationNumber}`
+    : `/egov-store-asset/createMaterialIndentNote?step=0&applicationNumber=${applicationNumber}`;
+    dispatch(setRoute(createUrl));
+  }
   };
   
   const MaterialIssueCard = {

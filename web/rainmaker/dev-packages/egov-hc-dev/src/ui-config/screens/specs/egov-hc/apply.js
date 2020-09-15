@@ -4,7 +4,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId, setapplicationNumber, setapplicationType } from "egov-ui-kit/utils/localStorageUtils";
 import set from "lodash/set";
 import { httpRequest } from "../../../../ui-utils";
-import { furnishServiceRequestDetailResponse, getSearchResultsView, setApplicationNumberBox } from "../../../../ui-utils/commons";
+import { furnishServiceRequestDetailResponse, getSearchResultsView, setApplicationNumberBox, commonConfig } from "../../../../ui-utils/commons";
 import { clearlocalstorageAppDetails } from "../utils";
 import { addressdetails } from './serviceRequestDetails/addressdetails';
 import { footerEdit } from "./serviceRequestDetails/footerEdit";
@@ -75,6 +75,59 @@ export const formwizardThirdStep = {
   }
 };
 
+
+ const getProcessInstanceDataForServiceRequest = async (applicationNumber, state, dispatch)=>  {
+
+    var tenantIdCommonConfig
+    
+      if (getTenantId() != commonConfig.tenantId){
+          tenantIdCommonConfig = JSON.parse(getUserInfo()).permanentCity
+      }
+      else{
+        tenantIdCommonConfig = getTenantId()
+      }
+    const queryObj = [
+      {
+        key: "businessIds",
+        value: applicationNumber
+      },
+      {
+        key: "tenantId",
+        value: tenantIdCommonConfig
+      },
+      {
+        key: "history",
+        value: true
+      },
+    ];
+    var payload = await httpRequest(
+      "post",
+      "/egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObj
+    );
+      //sorting process instance data by time
+    var SortedProcessInstanceBylastModifiedTimeOfEachObject = []
+    
+    SortedProcessInstanceBylastModifiedTimeOfEachObject=
+      payload &&
+      payload.ProcessInstances.sort(function(a, b) {
+        var valueA, valueB;        
+
+        valueA = a.auditDetails.lastModifiedTime; 
+        valueB = b.auditDetails.lastModifiedTime;
+        if (valueA < valueB) {
+            return -1;
+        }
+        else if (valueA > valueB) {
+            return 1;
+        }
+        return 0;
+    })
+    SortedProcessInstanceBylastModifiedTimeOfEachObject = SortedProcessInstanceBylastModifiedTimeOfEachObject.reverse()
+    dispatch(prepareFinalObject("workflow", SortedProcessInstanceBylastModifiedTimeOfEachObject));
+  //  return SortedProcessInstanceBylastModifiedTimeOfEachObject
+  }
 const getMdmsData = async ( state, dispatch) => {
 
   let tenantId = getTenantId().split(".")[0];
@@ -136,7 +189,7 @@ export const prepareEditFlow = async (state, dispatch, applicationNumber, tenant
       { key: "serviceRequestId", value: applicationNumber }
     ]);
     
-    let Refurbishresponse = furnishServiceRequestDetailResponse(response);
+    let Refurbishresponse = furnishServiceRequestDetailResponse(state,response, dispatch);
     // let RefurbishresponseOnFail = furnishServiceRequestDetailResponse(response);
     dispatch(prepareFinalObject("SERVICEREQUEST", Refurbishresponse));
     // dispatch(prepareFinalObject("SERVICEREQUESTONFAIL", RefurbishresponseOnFail));
@@ -153,14 +206,15 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-
-    
+    set(state, "form.newapplication.files.media", []);
+    getMdmsData(state, dispatch)
     const applicationNumber = getQueryArg(window.location.href, "applicationNumber");
     !applicationNumber ? clearlocalstorageAppDetails(state) : '';
     setapplicationType('HORTICULTURE');
     const tenantId = getQueryArg(window.location.href, "tenantId");
     set(state, "screenConfiguration.moduleName", "hc");
-    getMdmsData(state, dispatch)
+    getProcessInstanceDataForServiceRequest(applicationNumber, state, dispatch)
+    
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
     
     return action;

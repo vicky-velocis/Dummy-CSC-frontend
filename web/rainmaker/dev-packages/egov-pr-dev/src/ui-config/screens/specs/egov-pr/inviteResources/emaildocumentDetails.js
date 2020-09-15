@@ -32,7 +32,7 @@ export const documentDetails = getCommonCard({
     props: {      
       buttonLabel: {
         labelName: "UPLOAD FILE",
-        labelKey: "NOC_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
+        labelKey: "PR_DOCUMENT_DETAILS_BUTTON_UPLOAD_FILE"
       },
       description: "Only .jpg and .pdf files. 1MB max file size.",
       inputProps: {

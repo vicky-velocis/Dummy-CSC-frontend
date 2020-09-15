@@ -16,6 +16,12 @@ export const toggleWater = (onFieldChange, value) => {
   );
   onFieldChange(
     "apply",
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.waterApplicationType",
+    "visible",
+    value
+  );
+  onFieldChange(
+    "apply",
     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.connectionType",
     "visible",
     value
@@ -41,6 +47,12 @@ export const toggleWater = (onFieldChange, value) => {
   onFieldChange(
     "apply",
     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize",
+    "visible",
+    value
+  );  
+  onFieldChange(
+    "apply",
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterApplicationType",
     "visible",
     value
   );
@@ -333,7 +345,12 @@ export const toggleWaterFeilds = (action, value) => {
     action.screenConfig,
     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.pipeSize.visible",
     value
-  );
+  );  
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.connectiondetailscontainer.children.cardContent.children.connectionDetails.children.waterApplicationType.visible",
+    value
+  ); 
   set(
     action.screenConfig,
     "components.div.children.formwizardThirdStep.children.additionDetails.children.cardContent.children.activationDetailsContainer.children.cardContent.children.activeDetails.children.meterID.visible",
@@ -353,7 +370,12 @@ export const toggleWaterFeilds = (action, value) => {
     action.screenConfig,
     "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.pipeSize.visible",
     value
-  );
+  );  
+  set(
+    action.screenConfig,
+    "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.waterApplicationType.visible",
+    value
+  ); 
   set(
     action.screenConfig,
     "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.numberOfTaps.visible",

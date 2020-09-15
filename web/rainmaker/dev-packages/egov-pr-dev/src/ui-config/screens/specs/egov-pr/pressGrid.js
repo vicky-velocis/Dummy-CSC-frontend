@@ -6,7 +6,6 @@ import {
 
 import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
 import { pressGrid } from "./searchResource/pressGrid";
 import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
 import {

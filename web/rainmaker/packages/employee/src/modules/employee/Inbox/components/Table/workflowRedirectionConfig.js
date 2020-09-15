@@ -81,6 +81,45 @@ export const getWFConfig = (module, businessService, taskId) => {
 
     }
 
+    else if (businessService == "PAYMENT WORKFLOW" || businessService == "FINE MASTER APPROVAL" || businessService == "CHALLAN WORKFLOW" || businessService == "AUCTION WORKFLOW") {
+      switch (businessService) {
+        case "CHALLAN WORKFLOW":
+          return {
+            INITIATED: "/egov-echallan/search-preview",
+            DEFAULT: "/egov-echallan/search-preview",
+          };
+        case "AUCTION WORKFLOW":
+          return {
+            INITIATED: "/egov-echallan-auction/search-preview",
+            DEFAULT: "/egov-echallan-auction/search-preview",
+          };
+        case "FINE MASTER APPROVAL":
+          return {
+            INITIATED: "/egov-echallan-fine-master/search",
+            DEFAULT: "/egov-echallan-fine-master/search",
+          };
+        case "PAYMENT WORKFLOW":
+          return {
+            INITIATED: "/egov-echallan/search-preview",
+            DEFAULT: "/egov-echallan/search-preview",
+          };
+        default:
+          break;
+      }
+    }
+    else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
+      return {
+        INITIATED: "/egov-hc/search-preview",
+        DEFAULT: "/egov-hc/search-preview",
+      };
+    }
+    // new module rediraection for case "RRP_SERVICE ,DOE_SERVICE, DOP_SERVICE" Chnage
+    else if (businessService == "RRP_SERVICE" || businessService == "DOE_SERVICE" || businessService == "DOP_SERVICE") {
+      return {
+        INITIATED: "/pms/pmsmap",
+        DEFAULT: "/pms/pmsmap",
+      };
+    }
   }
   else if (businessService == "PAYMENT WORKFLOW" || businessService == "FINE MASTER APPROVAL" || businessService == "CHALLAN WORKFLOW" || businessService == "AUCTION WORKFLOW") {
     switch (businessService) {
@@ -108,7 +147,7 @@ export const getWFConfig = (module, businessService, taskId) => {
         break;
     }
   }
-  else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF OVERGROWN/GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
+  else if (businessService == "PRUNING OF TREES GIRTH LESS THAN OR EQUAL TO 90 CMS" || businessService == "PRUNING OF TREES GIRTH GREATER THAN 90 CMS" || businessService == "REMOVAL OF GREEN TREES" || businessService == "REMOVAL OF DEAD/DANGEROUS/DRY TREES") {
     return {
       INITIATED: "/egov-hc/search-preview",
       DEFAULT: "/egov-hc/search-preview",
@@ -124,30 +163,84 @@ export const getWFConfig = (module, businessService, taskId) => {
   else {
     switch (module.toUpperCase()) {
       case "TL-SERVICES":
+      if(businessService === "MasterRP") {
+        return {
+          INITIATED: "/rented-properties/apply",
+          DEFAULT: "/rented-properties/search-preview",
+        };
+      } else if(businessService === "OwnershipTransferRP") {
+        return {
+          INITIATED: "/rented-properties/ownership-search-preview",
+          DEFAULT: "/rented-properties/ownership-search-preview",
+        };
+      } else if(businessService === "DuplicateCopyOfAllotmentLetterRP") {
+        return {
+          INITIATED: "/rented-properties/search-duplicate-copy-preview",
+          DEFAULT: "/rented-properties/search-duplicate-copy-preview",
+        };
+      } else if(businessService === "PermissionToMortgage") {
+        return {
+          INITIATED: "/rented-properties/mortgage-search-preview",
+          DEFAULT: "/rented-properties/mortgage-search-preview",
+        };
+      } else {
         return {
           INITIATED: "/tradelicence/apply",
           DEFAULT: "/tradelicence/search-preview",
         };
-      case "WS-SERVICES":
-        return {
-          INITIATED: "/wns/search-preview",
-          DEFAULT: "/wns/search-preview",
-        };
-      case "SW-SERVICES":
-        return {
-          INITIATED: "/wns/search-preview",
-          DEFAULT: "/wns/search-preview",
-        };
+      }
+    case "RENTEDPROPERTIES": 
+      if(businessService === "MasterRP") {
+      return {
+        INITIATED: "/rented-properties/apply",
+        DEFAULT: "/rented-properties/search-preview",
+      };
+    } else if(businessService === "OwnershipTransferRP") {
+      return {
+        INITIATED: "/rented-properties/ownership-search-preview",
+        DEFAULT: "/rented-properties/ownership-search-preview",
+      };
+    } else if(businessService === "DuplicateCopyOfAllotmentLetterRP") {
+      return {
+        INITIATED: "/rented-properties/search-duplicate-copy-preview",
+        DEFAULT: "/rented-properties/search-duplicate-copy-preview",
+      };
+    } else if(businessService === "PermissionToMortgage") {
+      return {
+        INITIATED: "/rented-properties/mortgage-search-preview",
+        DEFAULT: "/rented-properties/mortgage-search-preview",
+      };
+    }
+     case "WS-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
+    case "SW-SERVICES":
+      return {
+        INITIATED: "/wns/search-preview",
+        DEFAULT: "/wns/search-preview",
+      };
       case "FIRENOC":
         return {
           INITIATED: "/fire-noc/apply",
           DEFAULT: "/fire-noc/search-preview",
         };
-      case "HORTICULTURE":
-        return {
-          INITIATED: "/egov-hc/search-preview",
-          DEFAULT: "/egov-hc/search-preview",
-        };
+        case "BOOKING-SERVICES":
+          return {
+            DEFAULT: "/egov-services/application-details",
+          }
+    
+        case "WATER-TANKER-SERVICES":
+          return {
+            DEFAULT: "/egov-services/bwt-application-details",
+          }
+        case "HORTICULTURE":
+          return {
+            INITIATED: "/egov-hc/search-preview",
+            DEFAULT: "/egov-hc/search-preview",
+          };
+        
       case "BPA-SERVICES":
         return {
           INITIATED: "/egov-bpa/search-preview",
@@ -176,5 +269,4 @@ export const getWFConfig = (module, businessService, taskId) => {
         }
     }
   }
-
 };

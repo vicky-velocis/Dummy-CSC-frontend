@@ -7,9 +7,7 @@ import { httpRequest } from "../../../../ui-utils";
 
 import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { pendingApprovals } from "./searchResource/pendingApprovals";
-import { searchResults } from "./searchResource/searchResults";
-import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
+
 import {
   getTenantId,
   localStorageGet

@@ -434,7 +434,7 @@ export const getPressGridDataforview = async (action, state, dispatch) => {
 
     let selectedrows = []
     let allrows = response.ResponseBody[0].publicationList;
-    console.log(allrows)
+ 
     if(allrows!==null)
     {
     localStorageSet("gridobjlength", allrows.length)
@@ -526,41 +526,41 @@ export const getPressGridDataforview = async (action, state, dispatch) => {
     console.log(error);
   }
 };
-export const getInviateGuestGridData = async (action, state, dispatch) => {
-  const response = await getInviteGuestGridData();
-  try {
-    if (response && response.nocApplicationDetail && response.nocApplicationDetail.length > 0) {
+// export const getInviateGuestGridData = async (action, state, dispatch) => {
+//   const response = await getInviteGuestGridData();
+//   try {
+//     if (response && response.nocApplicationDetail && response.nocApplicationDetail.length > 0) {
      
 
-    let data = response.nocApplicationDetail.map(item => ({
-       [getTextToLocalMapping("Event Id")]:
-         item.applicationId || "-",
-       [getTextToLocalMapping("Date & Time")]:item.applicationStatus || "-",
-       [getTextToLocalMapping("Commitiee")]:
-         item.applicantName || "-",
+//     let data = response.nocApplicationDetail.map(item => ({
+//        [getTextToLocalMapping("Event Id")]:
+//          item.applicationId || "-",
+//        [getTextToLocalMapping("Date & Time")]:item.applicationStatus || "-",
+//        [getTextToLocalMapping("Commitiee")]:
+//          item.applicantName || "-",
        
-         [getTextToLocalMapping("Budjet")]:
-         item.applicantName || "-",[getTextToLocalMapping("Status")]:
-         item.applicantName || "-",
-     }));
+//          [getTextToLocalMapping("Budjet")]:
+//          item.applicantName || "-",[getTextToLocalMapping("Status")]:
+//          item.applicantName || "-",
+//      }));
     
-     dispatch(
-       handleField(
-         "searchInviteGuest",
-         "components.div.children.searchInviteGuestResults",
-         "props.data",
-         data
-       )
-     );
+//      dispatch(
+//        handleField(
+//          "searchInviteGuest",
+//          "components.div.children.searchInviteGuestResults",
+//          "props.data",
+//          data
+//        )
+//      );
     
   
 
 
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 export const getGridDataTender = async (action, state, dispatch) => {
   const response = await getTenderGridData();
@@ -661,7 +661,7 @@ export const GetEmployees = async (state, dispatch) => {
  
   let tenantId = getTenantId();
   
-   	console.log(typeof empname)
+   
    let departments = [];
    let departments_query = [];
    
@@ -828,11 +828,25 @@ export const GetEmployees = async (state, dispatch) => {
   
   let selectedrows = []
   let selectedIndexRows=[]
-	let allrows = response;
+  let allrows = response;
+  let empAllData=[]
 	localStorageSet("gridobjlength", allrows.length)
-	allrows.map(item => {
+
+
+  allrows.map(item => {
     delete item.user.roles
-			selectedrows.push(JSON.stringify(item))
+    item.assignments.map(audit=>{
+      delete audit.auditDetails
+
+    })
+
+     let obj={}
+    
+    obj['assignments'] = []
+    obj['assignments'].push(item.assignments[0])
+    obj['user']=item.user
+     
+     selectedrows.push(JSON.stringify(obj))
   })
   
 	localStorageSet("gridobj",selectedrows);
@@ -841,24 +855,15 @@ export const GetEmployees = async (state, dispatch) => {
 
   if(preSelectedRows!==null)
   {
-  console.log('departments_query')
-
-  console.log(departments_query)
-	
-//   preSelectedRows = preSelectedRows.filter((el) => {
-//      return departments_query.includes(el.DepartmentName)
-
  
-// });	
-  
-console.log('preSelectedRows')
-console.log(preSelectedRows)
+	
+	
   }
 	
     let data = response.map(item => ({
       [getTextToLocalMapping("Department")]:
          item.assignments[0].DeptName || "-",
-       [getTextToLocalMapping("Employee Name")]: (item.user !== null ? item.user.userName : "-") || "-",
+       [getTextToLocalMapping("Employee Name")]: (item.user !== null ? item.user.name : "-") || "-",
        [getTextToLocalMapping("Mobile No")]: (item.user !== null ? item.user.mobileNumber : "-") || "-",
        [getTextToLocalMapping("Email ID")]: (item.user !== null ? item.user.emailId : "-") || "-",
        [getTextToLocalMapping("Employee ID")]: (item.user !== null ? item.user.uuid : "-") || "-",
@@ -866,7 +871,7 @@ console.log(preSelectedRows)
      }));
      if(preSelectedRows!==null){
     
-      console.log(typeof(preSelectedRows))
+     
       response.map(function (item, index) {
         if(item.user!=null && item.user.uuid){
       
@@ -888,7 +893,6 @@ console.log(preSelectedRows)
     }
     if(preSelectedRowsAll!==null){
     
-      console.log(typeof(preSelectedRowsAll))
       response.map(function (item, index) {
         if(item.user!=null && item.user.uuid){
       
@@ -973,9 +977,15 @@ export const showinvitelist = async (state, dispatch) => {
 	
 let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("InvitelistAll") :  localStorageGet("Invitelist") ;
    //let selectedrows =[]
+   if(localStorageGet("Invitelist") ==="[]" ||localStorageGet("InvitelistAll")==="[]")
+   {
+    var msg=`Select at least one Employee`
+    dispatch(toggleSnackbar(true, { labelName:msg}, "warning"));
+   }
+   else{
    if(localStorageGet("Invitelist") === null  && localStorageGet("InvitelistAll")===null )
    {
-    // alert('Select at least one Employee ')
+   
      var msg=`Select at least one Employee`
      dispatch(toggleSnackbar(true, { labelName:msg}, "warning")); 
     
@@ -1006,8 +1016,6 @@ let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("Inv
      }
 	 );
 	
-	console.log("invitedGuestlistTTTTTTTTTTTTTT");
-	 console.log(invitedGuestlist)
 	let mdmsBody = {
 				"tenantId":tenantId,
 				"eventDetailUuid": localStorageGet("eventifforinvitatoin"),
@@ -1015,7 +1023,6 @@ let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("Inv
 				"inviteGuest": invitedGuestlist
 	};
 	
-	 console.log(mdmsBody)
 	try {
     let payload = null;
 	
@@ -1067,7 +1074,7 @@ let selectedrows = localStorageGet("Invitelist") === null ? localStorageGet("Inv
   lSRemoveItemlocal("InvitelistAll");
   dispatch(prepareFinalObject("CreateInvite", {}));
          }
-
+        }
 }	
 
 export const SearchEmployees = async (state, dispatch) => {
@@ -1213,8 +1220,6 @@ dispatch(prepareFinalObject("eventDetails", response.ResponseBody));
 
         documentsPreview = documentsPreview.map(function (doc, index) {
   
-              console.log("mappppppppppp");
-              console.log(doc)
       doc["link"] = fileUrls && fileUrls[doc.fileStoreId] && fileUrls[doc.fileStoreId].split(",")[0] || "";
       
           return doc;
@@ -1375,7 +1380,6 @@ dispatch(prepareFinalObject("ResponseBody", response.ResponseBody));
  // let doc=JSON.parse(PublicRelation.eventString)
   
   let doc=PublicRelation.documentAttachment
-console.log(doc.length)
 
 let doctitle = [];
 if(doc.length>0)
@@ -1479,14 +1483,12 @@ export const deleteguestbyid = async ( state, dispatch) => {
 								   ],
 		};
 		
-		 console.log(mdmsBody)
+	
 		try {
 		let payload = null;
 		
 		payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_delete", "_delete", [], { RequestBody: mdmsBody });
     
-		console.log("Payloadddddddddddddddd");
-		console.log(payload);
 		
 		if(payload.ResponseInfo.status === "Success")
 		{
@@ -1519,7 +1521,7 @@ export const deleteguestbyid = async ( state, dispatch) => {
 export const InvitePress = async (state, dispatch) => {
   
 let selectedrows = localStorageGet("selectedPressList");
-console.log(selectedrows)
+
 if(selectedrows!=="[]")
 {
 if(selectedrows!==null)
@@ -1553,7 +1555,6 @@ if(selectedrows!==null)
 				"inviteGuest": invitedGuestlist
 	};
 	
-	 console.log(mdmsBody)
 	try {
     let payload = null;
 	
@@ -1686,7 +1687,7 @@ if(response.ResponseBody[j].organizerDepartmentName===payload.MdmsRes["common-ma
       }
 }
 	 
-	 	console.log(response);
+	 
 	const eventarray = response.ResponseBody.filter((el) => {
 			return (el.status !== "EXPIRED" && el.eventStatus !== "CANCELLED");
 	});	
@@ -1869,7 +1870,7 @@ export const getSearchResultsforTenderView= async (state, dispatch,data) => {
     
     let selectedrows = []
     let allrows = response.ResponseBody[0].publicationList;
-    console.log(allrows)
+   
     if(allrows!==null)
     {
     localStorageSet("gridobjlength", allrows.length)
@@ -2091,7 +2092,7 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
  
   let tenantId = getTenantId();
   
-   	console.log(typeof empname)
+  
    let departments = [];
    let departments_query = [];
    
@@ -2225,21 +2226,34 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
     let selectedrows = []
     let selectedIndexRows=[]
 	let allrows = response;
-	localStorageSet("gridobjlength", allrows.length)
+  localStorageSet("gridobjlength", allrows.length)
+  
+
+ 
 	allrows.map(item => {
     delete item.user.roles
+    item.assignments.map(audit=>{
+      delete audit.auditDetails
+
+    })
+
+     let obj={}
     
-		selectedrows.push(JSON.stringify(item))
-	})
+    obj['assignments'] = []
+    obj['assignments'].push(item.assignments[0])
+    obj['user']=item.user
+     
+     selectedrows.push(JSON.stringify(obj))
+  })
+  
+  
 	localStorageSet("gridobj",selectedrows);
   let preSelectedRows = 	JSON.parse(localStorageGet("committeelist"));
   let preSelectedRowsAll= 	JSON.parse(localStorageGet("committeelistAll"));
 
   if(preSelectedRows!==null)
   {
-  console.log('departments_query')
 
-  console.log(departments_query)
 	
   preSelectedRows = preSelectedRows.filter((el) => {
      return departments_query.includes(el.DepartmentName)
@@ -2247,8 +2261,7 @@ export const GetCommiteeEmployees = async (state, dispatch,value,id) => {
  
 });	
   
-console.log('preSelectedRows')
-console.log(preSelectedRows)
+
   }
 
 	  
@@ -2268,7 +2281,7 @@ console.log(preSelectedRows)
      }));
      if(preSelectedRows!==null){
     
-      console.log(typeof(preSelectedRows))
+    
       response.map(function (item, index) {
         if(item.user!=null && item.user.uuid){
       
@@ -2291,7 +2304,7 @@ console.log(preSelectedRows)
 
     if(preSelectedRowsAll!==null){
     
-      console.log(typeof(preSelectedRowsAll))
+    
       response.map(function (item, index) {
         if(item.user!=null && item.user.uuid){
       
@@ -2372,8 +2385,7 @@ export const GetCommiteeEmployeebyName = async (state, dispatch,empname) => {
       queryStr,
       {}
     );
-	console.log("payloaddddddddddddd");
-	console.log(payload)
+
    let response = payload.Employees;
 	
     if (response) {
@@ -2630,7 +2642,7 @@ export const InviteExternalEmployees = async (state, dispatch, excelid) => {
 				
 	};
 
-	 console.log(mdmsBody)
+
 	try {
     let payload = null;
 	payload = await httpRequest("post", "/prscp-services/v1/invitation/guest/_upload", "_add", [], { RequestBody: mdmsBody });
@@ -2751,8 +2763,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
  }
 	 selectedrows = JSON.parse(selectedrows);
 	 
-	 console.log("selectedrowwwwwwwwwwwwwwwwwwww");
-	 console.log(selectedrows)
+
 	let tenantId = getTenantId();
 	let invitedGuestlist = [];
 	var data_result="";
@@ -2787,8 +2798,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
 	 else
 	 {
 
-    console.log('selectedrows')
-    console.log(selectedrows)
+   
     
 		let invitedGuest = selectedrows.map((item , index)=>{
 		   invitedGuestlist[index] = {
@@ -2813,7 +2823,7 @@ export const resendinvitation = async (state, dispatch, type="event") => {
 				"contactDetails":invitedGuestlist
   
 	};
-		 console.log(mdmsBody)
+		
 	try {
     let payload = null;
 	payload = await httpRequest("post", "/prscp-services/v1/template/_resend", "_add", [], { RequestBody: mdmsBody });

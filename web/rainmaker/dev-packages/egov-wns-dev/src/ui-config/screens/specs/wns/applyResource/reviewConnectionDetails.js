@@ -562,6 +562,22 @@ export const taskNumberOfTapsPropsed = getLabelWithValueForModifiedLabel(
     callBack: handleNA
   },
 )
+export const taskWaterApplicationType = getLabelWithValueForModifiedLabel(
+  {
+    labelKey: "WATER_APPLICATION_TYPE"
+  },
+  {
+    jsonPath: "applyScreen.waterApplicationType",
+    callBack: handleNA
+  },
+  {
+    labelKey: "WS_OLD_LABEL_NAME"
+  },
+  {
+    jsonPath: "applyScreenOld.waterApplicationType",
+    callBack: handleNA
+  },
+)
 export const taskPipeSizeProposed = getLabelWithValueForModifiedLabel(
   {
     labelKey: "WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"
@@ -608,6 +624,7 @@ export const renderService = () => {
     taskApplicationType,
     taskNumberOfTapsPropsed,
     taskPipeSizeProposed,
+    taskWaterApplicationType,
     taskNoOfClosets,
     taskNoOfToilets
   });

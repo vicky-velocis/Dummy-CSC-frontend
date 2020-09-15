@@ -17,10 +17,11 @@ import {
 import { prepareFinalObject,  handleScreenConfigurationFieldChange as handleField  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "../../../../../../../../packages/lib/egov-ui-kit/utils/localStorageUtils/index";
 import { localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
-import store from "../../../../../ui-redux/store";
+//import store from "../../../../../ui-redux/store";
 import commonConfig from '../../../../../config/common';
 import { getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
+import store from "ui-redux/store";
 
 const state = store.getState();
 
@@ -429,6 +430,12 @@ if (activeStep === 2) {
       isFormValid=false
       hasFieldToaster = true;
     }
+    //let GenPressdoc =get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux[0].documents")
+// if(GenPressdoc===undefined)
+// {
+//   isFormValid=false
+//   hasFieldToaster = true;
+// }
     
 		let data1= localStorageGet("PressNoteList") === null ? JSON.parse( localStorageGet("PressNoteListAll")) : JSON.parse( localStorageGet("PressNoteList"))
 		if(localStorageGet("PressNoteList")!=="[]")
@@ -439,6 +446,9 @@ if (activeStep === 2) {
     let documentsPreview = [];
     
     let doc =get(state.screenConfiguration.preparedFinalObject, "documentsUploadRedux[0].documents")
+  if(doc!==undefined)
+ {
+
     let doctitle = [];
     if(doc.length>0)
     {
@@ -520,7 +530,18 @@ if (activeStep === 2) {
       ));
 	
   
-	changeStep(state, dispatch, 'next', activeStep);
+  changeStep(state, dispatch, 'next', activeStep);
+      }
+      else{
+        dispatch(
+          toggleSnackbar(
+            true,
+            {   labelName: "Please fill all mandatory fields and select atleast one Press!",
+    labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST" },
+            "warning"
+          )
+        );
+      }
 	}
 	else
 	{
@@ -561,6 +582,9 @@ labelKey: "PR_ERR_FILL_ALL_PRESS_MANDATORY_FIELDS_TOAST" },
     )
   );
 }
+
+
+
  }
 
 
@@ -758,6 +782,45 @@ export const redirectfunction = async (state, dispatch) => {
 
 export const callBackForPrevious = (state, dispatch) => {
   toggleactionmenu(state, dispatch)
+  // if(localStorageGet("AllIndex"))
+  // {
+  //   store.dispatch(
+  //     handleField(
+  //       "generatepressNote",
+  //       "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+  //       "props.options.rowsSelected",
+  //       JSON.parse(localStorageGet("AllIndex"))
+  //     )
+  //   );
+  //   }
+  let tempAll = JSON.parse(localStorageGet("PressNoteListAll"));
+      
+ 
+
+if(tempAll)
+{
+
+  let selIndex= JSON.parse(localStorageGet("PressNoteListAll"));
+
+ let selIndex1=[]
+      selIndex.map((item,index)=>{
+      
+         selIndex1.push(item['index'])	
+      
+       })
+      
+   
+   dispatch(
+    handleField(
+      "generatepressNote",
+      "components.div.children.formwizardFirstStep.children.searchResultsPressMasterList",
+      "props.options.rowsSelected",
+      selIndex1
+    )
+  );
+
+    }
+   
   changeStep(state, dispatch, "previous");
 };
 
@@ -905,56 +968,6 @@ visible:false
 
 
 
-export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
-  let allAreFilled = true;
-
-  document.getElementById("apply_form" + activeStep).querySelectorAll("[required]").forEach(function (i) {
-    if (!i.value) {
-      i.focus();
-      allAreFilled = false;
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-    }
-    if (i.getAttribute("aria-invalid") === 'true' && allAreFilled) {
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  });
-
-  document.getElementById("apply_form" + activeStep).querySelectorAll("input[type='hidden']").forEach(function (i) {
-    if (i.value == i.placeholder) {
-      i.focus();
-      allAreFilled = false;
-      i.parentNode.classList.add("MuiInput-error-853");
-      i.parentNode.parentNode.parentNode.classList.add("MuiFormLabel-error-844");
-      allAreFilled = false;
-      isFormValid = false;
-      hasFieldToaster = true;
-    }
-  });
-  // 
-  
-  if(localStorageGet("PressNoteList")===null && localStorageGet("PressNoteListAll")===null)
-	{    allAreFilled = false;
-		allAreFilled = false;  
-		isFormValid = false;
-		hasFieldToaster = true;
-	}
-	
-	
-  if (allAreFilled == false) {
-    isFormValid = false;
-    hasFieldToaster = true;
-  }
-  else {
-    isFormValid = true;
-    hasFieldToaster = false;
-  }
-  return [isFormValid, hasFieldToaster]
-}; 
 
 export const takeactionfooter = getCommonApplyFooter({
   actionbutton: {

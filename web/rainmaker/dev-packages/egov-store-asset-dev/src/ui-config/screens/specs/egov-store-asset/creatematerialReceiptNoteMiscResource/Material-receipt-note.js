@@ -225,6 +225,41 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
           
         })
       },
+ 
+      createdBy: {
+        ...getTextField({
+          label: {
+            labelName: "Created by",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+          },
+          placeholder: {
+            labelName: "Enter Created By",
+            labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialReceipt[0].createdByName"
+        })
+      },
+      designation: {
+        ...getTextField({
+          label: {
+            labelName: "Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN"
+          },
+          placeholder: {
+            labelName: "Enter Designation",
+            labelKey: "STORE_PURCHASE_ORDER_DSGNTN_PLCEHLDER"
+          },
+          props: {
+            disabled: true
+          },
+         // pattern: getPattern("Email"),
+          jsonPath: "materialReceipt[0].designation"
+        })
+      }, 
       Remark: {
         ...getTextField({
           label: {
@@ -244,7 +279,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
           pattern: getPattern("eventDescription") || null,
           jsonPath: "materialReceipt[0].description"
         })
-      },     
+      },   
     })
   });
   export const MaterialSearch = getCommonCard({

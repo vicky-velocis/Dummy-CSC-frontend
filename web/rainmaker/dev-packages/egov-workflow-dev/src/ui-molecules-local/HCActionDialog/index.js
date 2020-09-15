@@ -12,8 +12,9 @@ import get from "lodash/get";
 import React from "react";
 import store from "../../ui-redux/store";
 
-// import Autocomplete from '@material-ui/lab';
-// import TextField from '@material-ui/core';
+import AutoSuggestDropdown from "egov-ui-kit/components/AutoSuggestDropdown";
+
+
 
 import "./index.css";
 
@@ -82,11 +83,18 @@ class HCActionDialog extends React.Component {
     
     
   };
+  componentDidUpdate(){
+    let{currentState} = this.props
     
+    let{state} = this.props
+    if (parseInt(currentState) && this.state.allEmployeeList.length>0)
+    {
+      this.setState({allEmployeeList :[] })
+      currentState = parseInt(currentState) -1
+    }
+  }
   componentDidMount(){
-    
-    
-  
+ 
   var businessServiceData = JSON.parse(localStorage.getItem("businessServiceData"))
    this.getProcessInstanceDataForServiceRequest()
  
@@ -310,13 +318,14 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });
 
       if (roleAction === 'FORWARD FOR INSPECTION')
      { this.setState({ allEmployeeListOfSDO :dropdownEmployeeList  });
+     
     }
     if (roleAction === 'COMPLETE')
     { this.setState({ allEmployeeListOfCompletedStage :dropdownEmployeeList  });
@@ -353,7 +362,7 @@ class HCActionDialog extends React.Component {
       payload.Employees.map((item, index) => {
         const name = get(item, "user.name")     
         return {
-        value: item.id,
+        value: item.id+"#"+item.uuid,
         label: name
       };
       });
@@ -361,6 +370,7 @@ class HCActionDialog extends React.Component {
       // console.log("RRRRRrr",employeeListData)
        
   } 
+  
   render() {
     
     let {
@@ -384,13 +394,10 @@ class HCActionDialog extends React.Component {
     } = dialogData;
 
     
-    const defaultProps = {
-      options: this.state.allEmployeeListOfSDO,
-      getOptionLabel: (option) => option.label,
-    };
-    const { getButtonLabelName } = this;
     
+    const { getButtonLabelName } = this;
     let{state} = this.props
+    
     var allRoleListApproval = []
     
     this.state.allRoleListOfApproveStage.map((item) => {
@@ -415,8 +422,7 @@ class HCActionDialog extends React.Component {
     store.dispatch(prepareFinalObject("services[0].wfDocuments",media ));
     }
     catch(e){
-      // alert("$$$$$")
-      // console.log("error initially")
+   
     }
     let fullscreen = false;
     if (window.innerWidth <= 768) {
@@ -424,6 +430,7 @@ class HCActionDialog extends React.Component {
     }   
     dataPath = `${dataPath}[0]`;    
     return (
+      
       <Dialog
         fullScreen={fullscreen}
         open={open}
@@ -466,12 +473,13 @@ class HCActionDialog extends React.Component {
                       right: "16px",
                       top: "16px"
                     }}
-                    onClick={onClose}
+                    onClick={onClose
+                    }
                   >
                     <CloseIcon />
                   </Grid>
                     
-                      {/* mandatory role  list*/}
+                      {/* mandatory role  list of REQUEST CLARIFICATION*/}
                       { ( buttonLabel==="REQUEST CLARIFICATION") &&  showEmployeeList && (
                     <Grid
                       item
@@ -499,6 +507,7 @@ class HCActionDialog extends React.Component {
                       />
                     </Grid>
                   )}
+                  {/* mandatory role  list verify forward*/}
                   { ( buttonLabel==="VERIFY AND FORWARD"  ) &&  showEmployeeList && (
                     <Grid
                       item
@@ -516,16 +525,15 @@ class HCActionDialog extends React.Component {
                         optionValue="value"
                         optionLabel="label"
                         hasLocalization={false}
-                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); handleFieldChange(`${dataPath}.assignee`,[]);this.getEmployeeList(e.target.value) }}
-                      
-                      // onChange={this.props.onChange; this.handleChange}
+                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); 
+                        this.getEmployeeList(e.target.value) }}
                         jsonPath={`${dataPath}.roleList[0]`}
                       />
                     </Grid>
                   )}
 
 
-                  {/* non mandatory assignee*/}
+                  {/* non mandatory assignee for REQUEST CLARIFICATION, verify forward */}
                   {(buttonLabel==="REQUEST CLARIFICATION" || buttonLabel==="VERIFY AND FORWARD") &&  showEmployeeList && (
                     <Grid
                       item
@@ -534,26 +542,38 @@ class HCActionDialog extends React.Component {
                         marginTop: 16
                       }}
                     >
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "100%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={this.state.allEmployeeList}
-                        optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        onChange={e =>handleFieldChange(`${dataPath}.assignee`,[e.target.value])}
-                        jsonPath={`${dataPath}.assignee[0]`}
-                        // jsonPath={`${dataPath}.isRoleSpecific`}
+                  
+                    <div
+                      style={{
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px"
+                      }}
+                    >
+                      
+                      <LabelContainer
+                        labelName= "Assignee Name"
+                        labelKey="WF_ASSIGNEE_NAME_LABEL"
                       />
+                    </div>
+                      <AutoSuggestDropdown
+                      style={{ marginRight: "15px", width: "100%" }}
+                      label={"WF_ASSIGNEE_NAME_LABEL"}
+                      placeholder={"Assignee Name"}
+                    className="fix-for-layout-break"
+                    fullWidth={true}
+                    dataSource={this.state && this.state.allEmployeeList}
+                    onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.value])}}
+                              {...this.state.allEmployeeList}
+                            />
                     </Grid>
                   
                   )}
 
 
-                   {/* non mandatory role list */}
+                   {/* non mandatory role list for approve*/}
 
                   { ( buttonLabel==="APPROVE"  ) &&  showEmployeeList && (
                     <Grid
@@ -582,35 +602,50 @@ class HCActionDialog extends React.Component {
 
                   {/* non mandatory assignee*/}
                   {(buttonLabel==="APPROVE") &&  showEmployeeList && (
+                    
                     <Grid
-                      item
-                      sm="12"
-                      style={{
-                        marginTop: 16
-                      }}
-                    >
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "100%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={this.state.allEmployeeList}
-                        optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        //onChange={e => this.onEmployeeClick(e)}
-                        onChange={e =>handleFieldChange(`${dataPath}.assignee`,[e.target.value])}
-                        jsonPath={`${dataPath}.assignee[0]`}
-                        // jsonPath={`${dataPath}.isRoleSpecific`}
-                      />
-                    </Grid>
+                    item
+                    sm="12"
+                    style={{
+                      marginTop: 16
+                    }}
+                  >
+                
+                  <div
+                    style={{
+                      color: "rgba(0, 0, 0, 0.60)",
+                      fontFamily: "Roboto",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      lineHeight: "20px"
+                    }}
+                  >
+                    
+                    <LabelContainer
+                      labelName= "Assignee Name"
+                      labelKey="WF_ASSIGNEE_NAME_LABEL"
+                    />
+                  </div>
+                    <AutoSuggestDropdown
+                    style={{ marginRight: "15px", width: "100%" }}
+                    label={"WF_ASSIGNEE_NAME_LABEL"}
+                    placeholder={"Assignee Name"}
+                  className="fix-for-layout-break"
+                  fullWidth={true}
+                  dataSource={this.state && this.state.allEmployeeList}
+                  onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.value])}}
+                            {...this.state.allEmployeeList}
+                          />
+                  </Grid>
+                
                   
                   )}
 
 
-                {/* non mandatory assignee list */}
+                {/* non mandatory assignee list of JE */}
 
                 {(buttonLabel==="FORWARD FOR INSPECTION") &&  showEmployeeList && (
+                   
                     <Grid
                       item
                       sm="12"
@@ -618,42 +653,38 @@ class HCActionDialog extends React.Component {
                         marginTop: 16
                       }}
                     >
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "100%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={this.state.allEmployeeListOfJE}
-                         optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.target.value])}}
-                        jsonPath={`${dataPath}.assignee[0]`}
-                      />
-                    </Grid>)}
-                  
-
-                  {/* non mandatory role list of SDO
-                    {(buttonLabel==="VERIFY AND FORWARD TO SDO") &&  showEmployeeList && (
-                    <Grid item
-                      sm="12"
+                      <div
                       style={{
-                        marginTop: 16
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px"
                       }}
                     >
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "100%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={this.state.allRoleListOfJE}
-                         optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        onChange={e => { handleFieldChange(`${dataPath}.roleList`,[e.target.value]); handleFieldChange(`${dataPath}.assignee`,[]);this.getEmployeeList(e.target.value) }}
-                        jsonPath={`${dataPath}.roleList[0]`}
+                      
+                      <LabelContainer
+                        labelName= "Assignee Name"
+                        labelKey="WF_ASSIGNEE_NAME_LABEL"
                       />
-                    </Grid>)} */}
+                    </div>
+                      <AutoSuggestDropdown
+                      style={{ marginRight: "15px", width: "100%" }}
+                      label={"Assignee Name"}
+                      placeholder={"Assignee Name"}
+                    className="fix-for-layout-break"
+                    fullWidth={true}
+                    dataSource={this.state.allEmployeeListOfJE}
+                    onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.value])}}
+                             
+                              {...this.state.allEmployeeListOfJE}
+                            />
+                      
+                    </Grid>)}
+                
+                    
+                  
+
                     
                   {/* non mandatory assignee list of SDO*/}
                   {(buttonLabel==="VERIFY AND FORWARD TO SDO") &&  showEmployeeList && (
@@ -664,41 +695,39 @@ class HCActionDialog extends React.Component {
                         marginTop: 16
                       }}
                     >
-                      {/* <div style={{ width: 300 }}>
-                     <Autocomplete
-                                {...defaultProps}
-                                id="select-on-focus"
-                                selectOnFocus
-                                renderInput={(params) => <TextField {...params} label="selectOnFocus" margin="normal" />}
-                        />
-                      </div> */}
-                      <TextFieldContainer
-                        select={true}
-                        style={{ marginRight: "15px", width: "100%" }}
-                        label={fieldConfig.approverName.label}
-                        placeholder={fieldConfig.approverName.placeholder}
-                        data={this.state.allEmployeeListOfSDO}
-                         optionValue="value"
-                        optionLabel="label"
-                        hasLocalization={false}
-                        onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.target.value])}}
-                        jsonPath={`${dataPath}.assignee[0]`}
+                      <div
+                      style={{
+                        color: "rgba(0, 0, 0, 0.60)",
+                        fontFamily: "Roboto",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        lineHeight: "20px"
+                      }}
+                    >
+                      
+                      <LabelContainer
+                        labelName= "Assignee Name"
+                        labelKey="WF_ASSIGNEE_NAME_LABEL"
                       />
+                    </div>
+                      <AutoSuggestDropdown
+                      style={{ marginRight: "15px", width: "100%" }}
+                      label={"Assignee Name"}
+                      placeholder={"Assignee Name"}
+                    className="fix-for-layout-break"
+                    fullWidth={true}
+                    dataSource={this.state.allEmployeeListOfSDO}
+                    onChange={e =>{handleFieldChange(`${dataPath}.assignee`,[e.value])}}
+                             
+                              {...this.state.allEmployeeListOfSDO}
+                            />
+                      
                     </Grid>)}
                 
                 
                 {/* code for comments is just here not anywhere else, after this, button code starts */}
                     <Grid item sm="12">
-                    {/* <TextFieldContainer
-                    style={{ marginRight: "15px", width: "100%" }}
-                      InputLabelProps={{ shrink: true }}
-                      label={fieldConfig.comments.label}
-                      onChange={e =>
-                        handleFieldChange(`${dataPath}.comment`, e.target.value)
-                      }
-                      jsonPath={`${dataPath}.comment`}
-                      placeholder={fieldConfig.comments.placeholder}
-                    /> */}
+                   
                        <label className="commentsLabel">{fieldConfig.comments.label.labelName} *</label>
                     <textarea className="form-control comments" rows="5" placeholder={fieldConfig.comments.placeholder.labelName} onChange={e => handleFieldChange(`${dataPath}.comment`, e.target.value)}  maxLength = {250}/>
                   </Grid>

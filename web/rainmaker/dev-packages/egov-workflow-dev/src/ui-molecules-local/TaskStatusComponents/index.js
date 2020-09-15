@@ -27,8 +27,16 @@ export const getCurrentStatus = status => {
 };
 
 const TaskStatusComponents = ({ currentObj, index }) => {
+  
+   var docs=currentObj.documents
+  if( Array.isArray(docs)){
+  docs.map(item=>{
+    item.linkText="Download"
+  })
+  }
+
   if (currentObj.moduleName === 'HORTICULTURE'){
-    debugger
+    
     var role_name = ""
     
     
@@ -44,14 +52,22 @@ const TaskStatusComponents = ({ currentObj, index }) => {
       var allDocuments = []
       if(get(currentObj, "documents") != null)
      { allDocuments = get(currentObj, "documents")
-      allDocuments.map((item) => {
-        allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+      allDocuments.map((item,index) => {
+        if(index===0 && currentObj.action === 'INITIATE')
+        {allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
           documentType:item.documentType,
           fileStoreId: item.fileStoreId, 
           id: item.id,
           link: item.link,
           linkText: "Download", 
-          name: item.name, tenantId: item.tenantId,title: "Document" })
+          name: item.name, tenantId: item.tenantId,title: "ID Proof" })}
+        else{{allDocumentsDownloadButton.push({auditDetails : item.fileStoreId,
+          documentType:item.documentType,
+          fileStoreId: item.fileStoreId, 
+          id: item.id,
+          link: item.link,
+          linkText: "Download", 
+          name: item.name, tenantId: item.tenantId,title: "Document" })}}
       });}
     return (
     <Grid
@@ -191,7 +207,7 @@ const TaskStatusComponents = ({ currentObj, index }) => {
     <Grid
       container={true}
       spacing={12}
-      style={{ paddingLeft: 10, paddingBottom: 20 }}
+      style={{ paddingLeft: 10, paddingBottom: 20 ,wordBreak: "break-word"}}
     >
       <Grid
         item

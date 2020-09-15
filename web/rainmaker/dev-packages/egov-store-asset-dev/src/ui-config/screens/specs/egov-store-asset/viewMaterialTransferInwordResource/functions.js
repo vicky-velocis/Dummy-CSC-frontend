@@ -218,7 +218,7 @@ let queryObject = [
   },
   {
     key: "materialIssueStatus",
-    value: "APPROVED"
+    value: "Approved"
   }
 
 ];

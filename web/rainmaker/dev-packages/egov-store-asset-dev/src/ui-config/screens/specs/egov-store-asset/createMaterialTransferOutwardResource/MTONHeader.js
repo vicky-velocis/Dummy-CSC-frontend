@@ -9,7 +9,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField,  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import{GetMdmsNameBycode,getMaterialBalanceRateResults} from '../../../../../ui-utils/storecommonsapi'
 import get from "lodash/get";
@@ -68,7 +68,33 @@ export const MTONHeader = getCommonCard({
           dispatch(prepareFinalObject("materialIssues[0].indent.indentType", indents[0].indentType));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentPurpose", indents[0].indentPurpose));
           dispatch(prepareFinalObject("materialIssues[0].indent.indentCreatedBy", indents[0].indentCreatedBy));
-          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].inddesignationentNumberme));
+          dispatch(prepareFinalObject("materialIssues[0].indent.designation", indents[0].designation));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployee", indents[0].issueStore.storeInCharge.code));
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", indents[0].issueStore.storeInCharge.code));
+          dispatch(
+            handleField(
+              "create-material-transfer-outward",
+              "components.div.children.formwizardFirstStep.children.MTONHeader.children.cardContent.children.MTONHeaderContainer.children.issueDate",
+              "props.inputProps",
+              { min: new Date(indents[0].indentDate).toISOString().slice(0, 10),
+                max: new Date().toISOString().slice(0, 10)}
+            )
+          ); 
+          dispatch(prepareFinalObject("materialIssues[0].issueDate",new Date().toISOString().substr(0,10)));  
+          let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
+          let designation=action.value ;
+          emp = emp.filter(x=>x.code ===indents[0].issueStore.storeInCharge.code)
+          if(emp&& emp[0])
+          {
+          dispatch(prepareFinalObject("materialIssues[0].issuedToEmployeename", emp[0].name));
+          let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
+         
+          const {designationsById} = state.common;
+          if(designationsById){
+            const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+            dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+            }
+          }
           storecode =indents[0].issueStore.code;
           let indentDetails = get(
             indents[0],
@@ -149,11 +175,11 @@ export const MTONHeader = getCommonCard({
         required: true,
         pattern: getPattern("Date"),
         jsonPath: "materialIssues[0].issueDate",
-        props: {
-          inputProps: {
-            max: new Date().toISOString().slice(0, 10),
-          }
-        }
+        // props: {
+        //   inputProps: {
+        //     max: new Date().toISOString().slice(0, 10),
+        //   }
+        // }
       }),
     },  
     issuingStoreName: {
@@ -277,17 +303,22 @@ export const MTONHeader = getCommonCard({
         },
       }),
       beforeFieldChange: (action, state, dispatch) => {
+    
         let emp = get(state, "screenConfiguration.preparedFinalObject.createScreenMdmsData.employee",[]) 
         let designation=action.value ;
         emp = emp.filter(x=>x.code ===action.value)
-        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",designation) 
+        let issuedToDesignation =GetMdmsNameBycode(state, dispatch,"createScreenMdmsData.common-masters.Designation",emp[0].designation) 
         const {designationsById} = state.common;
-       // dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+        if(designationsById){
+          const desgnName = Object.values(designationsById).filter(item =>  item.code === emp[0].designation )
+          dispatch(prepareFinalObject("materialIssues[0].issuedToDesignation", issuedToDesignation));
+          }
+        
      
 
       }
     },
-    designation: {
+    issuedToDesignation: {
       ...getTextField({
         label: {
           labelName: "Designation",
@@ -302,6 +333,40 @@ export const MTONHeader = getCommonCard({
         },
        // pattern: getPattern("Email"),
         jsonPath: "materialIssues[0].issuedToDesignation"
+      })
+    },
+    createdBy: {
+      ...getTextField({
+        label: {
+          labelName: "Created by",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY"
+        },
+        placeholder: {
+          labelName: "Enter Created By",
+          labelKey: "STORE_PURCHASE_ORDER_CREATEBY_PLCEHLDER"
+        },
+        props: {
+          disabled: true
+        },
+       // pattern: getPattern("Email"),
+        jsonPath: "materialIssues[0].createdByName"
+      })
+    },
+    degignation: {
+      ...getTextField({
+        label: { labelName: "degignation", labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION" },
+        placeholder: {
+          labelName: "degignation",
+          labelKey: "STORE_MATERIAL_INDENT_NOTE_DESIGNATION"
+        },
+        props: {
+          disabled: true,       
+        },
+        required: false,
+        visible:true,
+        jsonPath: "materialIssues[0].designation",
+       
+        
       })
     },
     remarks: getTextField({

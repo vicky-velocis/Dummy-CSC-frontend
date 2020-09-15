@@ -71,6 +71,15 @@ const TlHowItWorks = Loadable({
   loading: () => <Loading />
 })
 
+const MultiDownloadCard = Loadable({
+  loader: () => import("./MultiDownloadCard"),
+  loading: () => <Loading />
+});
+const SimpleModal = Loadable({
+  loader: () => import("./SimpleModal"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -84,5 +93,7 @@ export {
   ActionDialog,
   Footer,
   TaskDialog,
-  TlHowItWorks
+  TlHowItWorks,
+  MultiDownloadCard, 
+  SimpleModal
 };

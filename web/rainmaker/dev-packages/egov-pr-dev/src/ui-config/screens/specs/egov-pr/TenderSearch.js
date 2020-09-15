@@ -1,19 +1,15 @@
 import {
     getCommonHeader,
-    getLabel,
     getBreak
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   
-  import { showHideAdhocPopup, resetFields, getRequiredDocData } from "../utils";
+  import { getRequiredDocData } from "../utils";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-  import { pendingApprovals } from "./searchResource/pendingApprovals";
   import { publishTenderSearchResults } from "./searchResource/searchResults";
-  import { setBusinessServiceDataToLocalStorage } from "egov-ui-framework/ui-utils/commons";
   import {
     getTenantId,
-    localStorageGet
+    
   } from "egov-ui-kit/utils/localStorageUtils";
-  import find from "lodash/find";
   import set from "lodash/set";
   import get from "lodash/get";
   import {
@@ -37,12 +33,7 @@ import commonConfig from '../../../../config/common';
     labelKey: "PR_TENDER_NOTICE_DETAILS"
   });
   
-  const pageResetAndChange = (state, dispatch) => {
-    dispatch(
-      prepareFinalObject("PublicRelations", [{ "PublicRelationDetails.PublicRelationType": "NEW" }])
-    );
-    
-  };
+
   const getMdmsData = async (action, state, dispatch) => {
 
     let mdmsBody = {
@@ -108,7 +99,7 @@ import commonConfig from '../../../../config/common';
             }})})
      
 
-       // checkTenderVisibility(action, state, dispatch,mdmsresponse,getQueryArg(window.location.href, "Status"),JSON.parse(getUserInfo()).roles)
+       //checkTenderVisibility(action, state, dispatch,mdmsresponse,getQueryArg(window.location.href, "Status"),JSON.parse(getUserInfo()).roles)
       })
       
   

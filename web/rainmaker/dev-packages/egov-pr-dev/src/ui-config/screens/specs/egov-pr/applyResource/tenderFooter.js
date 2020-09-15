@@ -12,6 +12,8 @@ import {
   getUserInfo,
   
 } from "egov-ui-kit/utils/localStorageUtils";
+import { validateFields } from "../../utils";
+
 import {  getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 import {resendinvitationtender} from "../../egov-pr/searchResource/citizenSearchFunctions"
@@ -23,12 +25,28 @@ const RouteToPage = async (state, dispatch) => {
    const acknowledgementUrl =`/egov-pr/publishTender?tenderId=${getQueryArg(window.location.href, "tenderId")}&tenderuuId=${getQueryArg(window.location.href, "tenderuuId")}&tenantId=${getTenantId()}`;
   
   dispatch(setRoute(acknowledgementUrl));
-// window.location.href = `/egov-pr/publishTender?tenderId=${getQueryArg(window.location.href, "tenderId")}&tenderuuId=${getQueryArg(window.location.href, "tenderuuId")}&tenantId=${getTenantId()}`;
-    //}
+
   };
 export const callBackForCreateTender = async (state, dispatch) => {
-//alert(localStorageGet("tendernote"))
   
+
+  let TenderFirstCard = validateFields(
+    "components.div.children.tenderMasterCreate.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    state,
+    dispatch,
+    "tenderMaster"
+  );
+
+
+  let TenderSecondCard = validateFields(
+    "components.div.children.tenderMSWordTemplate.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    state,
+    dispatch,
+    "tenderMaster"
+  );
+
+  if(TenderFirstCard && TenderSecondCard)
+{
   let tenderNoticeUuid=getQueryArg(window.location.href, "tenderUuId")
   let tenderNoticeId=getQueryArg(window.location.href, "tenderId")
 let date=get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderDate", "")
@@ -61,7 +79,7 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
     
         "moduleCode": localStorageGet("modulecode"),
         "tenderSubject": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.tenderSubject", ""),
-        "tenderDate":date[0],
+        "tenderDate":date,
         "fileNumber": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.fileNumber"),
         
        // "noteContent": get(state, "screenConfiguration.preparedFinalObject.tenderNotice.noteContent", ""),
@@ -83,16 +101,16 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
     }
    
     let response = await UpdateMasterTender(dispatch,data);
-    if (get(response.ResponseInfo, "status", "") === "Success") {
-      dispatch( toggleSnackbar(
-        true,
-        { labelName: 'Tender updated successfully', labelCode: 'PR_UPDATE_TENDER_MSG' },
-        "success"
-      ))
-      const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet('modulecode')
+    // if (get(response.ResponseInfo, "status", "") === "Success") {
+    //   dispatch( toggleSnackbar(
+    //     true,
+    //     { labelName: 'Tender updated successfully', labelCode: 'PR_UPDATE_TENDER_MSG' },
+    //     "success"
+    //   ))
+    //   const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet('modulecode')
        
-      dispatch(setRoute(acknowledgementUrl));
-    }
+    //   dispatch(setRoute(acknowledgementUrl));
+    // }
   }
   }
 
@@ -136,24 +154,33 @@ get(state, "screenConfiguration.preparedFinalObject.documentsUploadRedux.0.docum
   }
  
   let response = await createMasterTender(dispatch,data);
-  if (get(response.ResponseInfo, "status", "") === "Success") {
+  // if (response.ResponseInfo && get(response.ResponseInfo, "status", "") === "Success") {
 
-    dispatch(toggleSpinner());
-  dispatch(  toggleSnackbar(
-      true,
-      { labelName: 'Tender created suceessfully', labelCode: 'PR_CREATE_TENDER_MSG' },
-      "success"
-    ))
-    const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
-    dispatch(setRoute(acknowledgementUrl));
-  }
-  else{
-    dispatch(toggleSpinner());
-  }
+  //   dispatch(toggleSpinner());
+  // dispatch(  toggleSnackbar(
+  //     true,
+  //     { labelName: 'Tender created suceessfully', labelCode: 'PR_CREATE_TENDER_MSG' },
+  //     "success"
+  //   ))
+  //   const acknowledgementUrl ='dashboardHome?modulecode='+localStorageGet("modulecode")
+  //   dispatch(setRoute(acknowledgementUrl));
+  // }
+  // else{
+  //   dispatch(toggleSpinner());
+  // }
 }
 };
 }
-
+else{
+  dispatch(
+    toggleSnackbar(
+      true,
+      { labelName: "Please fill all mandatory fields!", labelKey: "" },
+      "warning"
+    )
+  );
+}
+}
 
 
 const gotoHome = async (state, dispatch) => {
