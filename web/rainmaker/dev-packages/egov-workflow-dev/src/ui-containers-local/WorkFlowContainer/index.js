@@ -343,6 +343,8 @@ class WorkFlowContainer extends React.Component {
     }
     const payUrl = `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
     switch (action) {
+      case "PAY_FOR_TEMPORARY_CONNECTION":
+      case "PAY_FOR_REGULAR_CONNECTION":
       case "PAY": return bservice ? `${payUrl}&businessService=${bservice}` : payUrl;
       case "EDIT": return isAlreadyEdited
         ? `/${baseUrl}/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -443,7 +445,7 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
-    const {preparedFinalObject} = this.props;
+    const {preparedFinalObject , prepareFinalObject} = this.props;
     let businessService = moduleName === data[0].businessService ? moduleName : data[0].businessService;
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = [];
@@ -461,7 +463,7 @@ class WorkFlowContainer extends React.Component {
       return {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
-        isLast: item.action === "PAY" ? true : false,
+        isLast: item.action === "PAY"||  item.action ===  "PAY_FOR_TEMPORARY_CONNECTION"||item.action === "PAY_FOR_REGULAR_CONNECTION" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
         showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
@@ -479,9 +481,27 @@ class WorkFlowContainer extends React.Component {
         actions = actions.filter(item => item.buttonLabel !== 'FORWARD');
       }
       else{
-        actions = actions.filter(item => item.buttonLabel !== 'APPROVE');
+        actions = actions.filter(item => item.buttonLabel !== 'APPROVE_FOR_CONNECTION');
       }
     }
+    if(businessService=='NewWS1' && applicationStatus == 'PENDING_FOR_PAYMENT'){
+      const {WaterConnection} = preparedFinalObject;
+      let connectionType = "" ;
+      connectionType = WaterConnection && WaterConnection[0].waterApplicationType;
+      if(  connectionType == 'REGULAR'){
+        actions = actions.filter(item => item.buttonLabel !== 'PAY_FOR_TEMPORARY_CONNECTION'); 
+      }
+      else{
+        actions = actions.filter(item => item.buttonLabel !== 'PAY_FOR_REGULAR_CONNECTION');
+      }
+    }
+    if(businessService=='NewWS1' && applicationStatus == 'PENDING_FOR_TEMPORARY_TO_REGULAR_CONNECTION_APPROVAL'){
+         actions.forEach(item => {
+          if(item.buttonLabel === 'APPROVE_FOR_CONNECTION_CONVERSION')
+           prepareFinalObject("WaterConnection[0].waterApplicationType","REGULAR")
+      });
+    }
+
     let editAction = getActionIfEditable(
       applicationStatus,
       businessId,
