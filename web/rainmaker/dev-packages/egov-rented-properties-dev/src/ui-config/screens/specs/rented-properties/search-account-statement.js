@@ -120,37 +120,6 @@ import {getColonyTypes} from "../rented-properties/apply"
               }
             }
           }
-          // searchButton: {
-          //   componentPath: "Button",
-          //    visible: false,
-          //   gridDefination: {
-          //      xs: 12,
-          //      sm: 12,
-          //     align: "right",
-          //   },
-          //   props: {
-          //     variant: "contained",
-          //     style: {
-          //       color: "white",
-          //       backgroundColor: "#fe7a51",
-          //       borderColor:"#fe7a51",
-          //       borderRadius: "2px",
-          //       width: "25%",
-          //       height: "48px",
-          //       margin:"10px"
-          //     }
-          //   },
-          //   children: {
-          //     buttonLabel: getLabel({
-          //       labelName: "Download",
-          //       labelKey: "RP_COMMON_DOWNLOAD_PDF"
-          //     })
-          //   },
-          //   onClickDefination: {
-          //     action: "condition",
-          //     callBack: downloadAccountStatementPdf
-          //   },
-          // }
         },
       }
     }
