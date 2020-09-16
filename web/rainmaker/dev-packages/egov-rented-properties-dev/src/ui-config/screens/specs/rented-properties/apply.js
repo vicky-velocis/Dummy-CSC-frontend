@@ -220,7 +220,20 @@ const getData = async(action, state, dispatch) => {
     await updatePFOforSearchResults(action, state, dispatch, transitNumber, "owner")
   }
   setDocumentData(action, state, dispatch)
+  const id=get(state.screenConfiguration.preparedFinalObject,"Properties[0].id")
+  console.log(id)
+  if(id!=null){
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.propertyDetails.children.cardContent.children.detailsContainer.children.transitNumber",
+        "props.disabled",
+        true
+      )
+    )
+  }
 }
+
 
 const applyRentedProperties = {
     uiFramework: "material-ui",
