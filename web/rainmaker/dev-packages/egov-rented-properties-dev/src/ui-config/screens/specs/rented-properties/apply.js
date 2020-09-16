@@ -221,7 +221,6 @@ const getData = async(action, state, dispatch) => {
   }
   setDocumentData(action, state, dispatch)
   const id=get(state.screenConfiguration.preparedFinalObject,"Properties[0].id")
-  console.log(id)
   if(id!=null){
     dispatch(
       handleField(
