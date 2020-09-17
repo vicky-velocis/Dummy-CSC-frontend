@@ -348,13 +348,13 @@ const pincodeField = {
 
 const areaField = {
   label: {
-    labelName: "Area",
-    labelKey: "RP_COMMON_AREA_LABEL"
-  },
-  placeholder: {
-    labelName: "Enter Area",
-    labelKey: "RP_COMMON_AREA_LABEL_PLACEHOLDER"
-  },
+    labelName: "Locality",
+    labelKey: "RP_LOCALITY_LABEL"
+},
+placeholder: {
+    labelName: "Enter Locality",
+    labelKey: "RP_LOCALITY_PLACEHOLDER"
+},
   gridDefination: {
     xs: 12,
     sm: 12
