@@ -102,20 +102,20 @@ const callBackForNextMortgage = async(state, dispatch) => {
           let errorMessage = {
               labelName:
                   "Please fill all mandatory fields and upload the documents !",
-              labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+              labelKey: "RP_ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
           };
           switch (activeStep) {
               case DETAILS_STEP:
                   errorMessage = {
                       labelName:
                           "Please fill all mandatory fields, then do next !",
-                      labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+                      labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
                   };
                   break;
               case DOCUMENT_UPLOAD_STEP:
                   errorMessage = {
                       labelName: "Please upload all the required documents !",
-                      labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                      labelKey: "RP_ERR_UPLOAD_REQUIRED_DOCUMENTS"
                   };
                   break;
           }

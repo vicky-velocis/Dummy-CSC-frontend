@@ -231,7 +231,7 @@ const callBackForNext = async(state, dispatch) => {
             let errorMessage = {
                 labelName:
                     "Please fill all mandatory fields and upload the documents !",
-                labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+                labelKey: "RP_ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
             };
             switch (activeStep) {
                 case DETAILS_STEP:
@@ -239,26 +239,26 @@ const callBackForNext = async(state, dispatch) => {
                     errorMessage = {
                       labelName:
                           "Date of allotment is greater than date of possession",
-                      labelKey: "ERR_DATE_ALLOTMENT_FIELDS"
+                      labelKey: "RP_ERR_DATE_ALLOTMENT_FIELDS"
                   };
                   }else{
                     errorMessage = {
                         labelName:
                             "Please fill all mandatory fields, then do next !",
-                        labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+                        labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
                     };
                   }
                     break;
                 case DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
                         labelName: "Please upload all the required documents !",
-                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                        labelKey: "RP_ERR_UPLOAD_REQUIRED_DOCUMENTS"
                     };
                     break;
                     case PAYMENT_DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
                         labelName: "Please upload all the required documents !",
-                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                        labelKey: "RP_ERR_UPLOAD_REQUIRED_DOCUMENTS"
                     };
                     break;
             }
@@ -329,7 +329,7 @@ if (!isFormValid) {
   let errorMessage = {
     labelName:
         "Please fill all mandatory fields, then do next !",
-    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+    labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -339,7 +339,7 @@ if (!isDateValid) {
   let errorMessage = {
     labelName:
         "From date cannot be greater than To date!",
-    labelKey: "ERR_FROM_DATE_GREATER_THAN_TO_DATE"
+    labelKey: "RP_ERR_FROM_DATE_GREATER_THAN_TO_DATE"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -349,7 +349,7 @@ if (!isPaymentAmountValid) {
   let errorMessage = {
     labelName:
         "Due Amount Cannot be 0 or empty!",
-    labelKey: "ERR_DUE_AMOUNT_0_OR_EMPTY"
+    labelKey: "RP_ERR_DUE_AMOUNT_0_OR_EMPTY"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -359,7 +359,7 @@ if (!isAmountValid) {
   let errorMessage = {
     labelName:
         "Please enter Amount between 1 and 8 digits!",
-    labelKey: "ERR_AMOUNT_BETWEEN_1_AND_8_DIGITS"
+    labelKey: "RP_ERR_AMOUNT_BETWEEN_1_AND_8_DIGITS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -408,7 +408,7 @@ if (!isFormValid) {
   let errorMessage = {
     labelName:
         "Please fill all mandatory fields, then do next !",
-    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
+    labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -714,7 +714,7 @@ export const previousButton = {
         },
         previousButtonLabel: getLabel({
           labelName: "Previous Step",
-          labelKey: "TL_COMMON_BUTTON_PREV_STEP"
+          labelKey: "RP_COMMON_BUTTON_PREV_STEP"
         })
       },
       visible: false
@@ -735,7 +735,7 @@ export const nextButton = {
   children: {
     nextButtonLabel: getLabel({
       labelName: "Next Step",
-      labelKey: "TL_COMMON_BUTTON_NXT_STEP"
+      labelKey: "RP_COMMON_BUTTON_NXT_STEP"
     }),
     nextButtonIcon: {
       uiFramework: "custom-atoms",
@@ -762,7 +762,7 @@ export const submitButton = {
       children: {
         submitButtonLabel: getLabel({
           labelName: "Submit",
-          labelKey: "TL_COMMON_BUTTON_SUBMIT"
+          labelKey: "RP_COMMON_BUTTON_SUBMIT"
         }),
         submitButtonIcon: {
           uiFramework: "custom-atoms",
@@ -916,7 +916,7 @@ export const footer = getCommonApplyFooter({
     }
 
     let applicationPrintObjectForOT = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
@@ -927,7 +927,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let applicationDownloadObjectForOT = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { Owners,OwnersTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = OwnersTemp[0].reviewDocData;
@@ -938,7 +938,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let applicationDownloadObjectForMG = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = MortgageApplicationsTemp[0].reviewDocData;
@@ -949,7 +949,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let applicationPrintObjectForMG = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { MortgageApplications,MortgageApplicationsTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = MortgageApplicationsTemp[0].reviewDocData;
@@ -960,7 +960,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let applicationDownloadObjectForDC = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { DuplicateCopyApplications,DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
@@ -971,7 +971,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let applicationPrintObjectForDC = {
-      label: { labelName: "Application", labelKey: "TL_APPLICATION" },
+      label: { labelName: "Application", labelKey: "RP_APPLICATION" },
       link: () => {
         const { DuplicateCopyApplications,DuplicateTemp } = state.screenConfiguration.preparedFinalObject;
         const documents = DuplicateTemp[0].reviewDocData;
@@ -982,7 +982,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let receiptDownloadObjectForOT = {
-      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      label: { labelName: "Receipt", labelKey: "RP_RECEIPT" },
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
@@ -996,7 +996,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let receiptPrintObjectForOT = {
-      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      label: { labelName: "Receipt", labelKey: "RP_RECEIPT" },
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "Owners", []);
@@ -1010,7 +1010,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let receiptDownloadObjectForDC = {
-      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      label: { labelName: "Receipt", labelKey: "RP_RECEIPT" },
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
@@ -1024,7 +1024,7 @@ export const footer = getCommonApplyFooter({
     };
 
     let receiptPrintObjectForDC = {
-      label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+      label: { labelName: "Receipt", labelKey: "RP_RECEIPT" },
       link: () => {
 
         const Owners = get(state.screenConfiguration.preparedFinalObject, "DuplicateCopyApplications", []);
@@ -1274,7 +1274,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+                label: {labelName : "DOWNLOAD" , labelKey :"RP_DOWNLOAD"},
                  leftIcon: "cloud_download",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",marginRight: "10px" }, className: "tl-download-button" },
@@ -1288,7 +1288,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+                label: {labelName : "PRINT" , labelKey :"RP_PRINT"},
                 leftIcon: "print",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
@@ -1354,7 +1354,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+                label: {labelName : "DOWNLOAD" , labelKey :"RP_DOWNLOAD"},
                  leftIcon: "cloud_download",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-download-button" },
@@ -1368,7 +1368,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+                label: {labelName : "PRINT" , labelKey :"RP_PRINT"},
                 leftIcon: "print",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },

@@ -391,7 +391,7 @@ export const editPopup = getCommonContainer({
           div: getCommonHeader(
             {
               labelName: "Edit Fine Master",
-              labelKey: "TL_FINE_MASTER_EDIT_HEADER"
+              labelKey: "RP_FINE_MASTER_EDIT_HEADER"
             },
             {
               style: {
@@ -478,7 +478,7 @@ export const editPopup = getCommonContainer({
           children: {
             previousButtonLabel: getLabel({
               labelName: "UPDATE",
-              labelKey: "TL_COMMON_UPDATE_BUTTON"
+              labelKey: "RP_COMMON_UPDATE_BUTTON"
             })
           },
           onClickDefination: {

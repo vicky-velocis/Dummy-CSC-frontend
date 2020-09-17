@@ -273,7 +273,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Transaction numbers don't match !",
-            labelKey: "ERR_TRASACTION_NUMBERS_DONT_MATCH"
+            labelKey: "RP_ERR_TRASACTION_NUMBERS_DONT_MATCH"
           },
           "error"
         )
@@ -322,7 +322,7 @@ const callBackForPay = async (state, dispatch) => {
         {
           labelName:
             "Please fill all mandatory fields and upload the documents !",
-          labelKey: "ERR_FILL_MANDATORY_FIELDS"
+          labelKey: "RP_ERR_FILL_MANDATORY_FIELDS"
         },
         "warning"
       )
@@ -357,7 +357,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "Submit",
-        labelKey: "TL_COMMON_BUTTON_SUBMIT"
+        labelKey: "RP_COMMON_BUTTON_SUBMIT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",
@@ -384,7 +384,7 @@ export const footer = getCommonApplyFooter({
     componentPath: "MenuButton",
     props: {
       data: {
-        label: {labelName : "MAKE PAYMENT" , labelKey :"COMMON_MAKE_PAYMENT"},
+        label: {labelName : "MAKE PAYMENT" , labelKey :"RP_COMMON_MAKE_PAYMENT"},
         rightIcon: "arrow_drop_down",
         props: { variant: "outlined", 
         style: { marginLeft: 5, marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "250px" } },
