@@ -584,21 +584,21 @@ export const getReviewPaymentDetails = (isEditable = true) => {
                         labelName: "Balance Principal",
                         labelKey: "RP_BALANCE_PRINCIPAL_LABEL"
                     },
-                    { jsonPath: "Properties[0].rentSummary.balancePrincipal" }
+                    { jsonPath: "Properties[0].formatrentSummary.balancePrincipal" }
                 ),
                 paymentDate: getLabelWithValue(
                     {
                         labelName: "Date of Payment",
                         labelKey: "RP_BALANCE_INTEREST_LABEL"
                     },
-                    { jsonPath: "Properties[0].rentSummary.balanceInterest" }
+                    { jsonPath: "Properties[0].formatrentSummary.balanceInterest" }
                 ),
                 paymentMode: getLabelWithValue(
                     {
                         labelName: "Payment Mode",
                         labelKey: "RP_BALANCE_AMOUNT_LABEL"
                     },
-                    { jsonPath: "Properties[0].rentSummary.balanceAmount" }
+                    { jsonPath: "Properties[0].formatrentSummary.balanceAmount" }
                 ),
         })
     })
