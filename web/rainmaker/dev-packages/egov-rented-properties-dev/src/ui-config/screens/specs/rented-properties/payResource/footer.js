@@ -273,7 +273,7 @@ const callBackForPay = async (state, dispatch) => {
           true,
           {
             labelName: "Transaction numbers don't match !",
-            labelKey: "RP_ERR_TRASACTION_NUMBERS_DONT_MATCH"
+            labelKey: "ERR_TRASACTION_NUMBERS_DONT_MATCH"
           },
           "error"
         )
@@ -322,7 +322,7 @@ const callBackForPay = async (state, dispatch) => {
         {
           labelName:
             "Please fill all mandatory fields and upload the documents !",
-          labelKey: "RP_ERR_FILL_MANDATORY_FIELDS"
+          labelKey: "ERR_FILL_MANDATORY_FIELDS"
         },
         "warning"
       )

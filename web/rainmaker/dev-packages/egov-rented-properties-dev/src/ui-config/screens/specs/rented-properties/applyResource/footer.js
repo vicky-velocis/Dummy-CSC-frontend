@@ -231,7 +231,7 @@ const callBackForNext = async(state, dispatch) => {
             let errorMessage = {
                 labelName:
                     "Please fill all mandatory fields and upload the documents !",
-                labelKey: "RP_ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
+                labelKey: "ERR_FILL_MANDATORY_FIELDS_UPLOAD_DOCS"
             };
             switch (activeStep) {
                 case DETAILS_STEP:
@@ -239,26 +239,26 @@ const callBackForNext = async(state, dispatch) => {
                     errorMessage = {
                       labelName:
                           "Date of allotment is greater than date of possession",
-                      labelKey: "RP_ERR_DATE_ALLOTMENT_FIELDS"
+                      labelKey: "ERR_DATE_ALLOTMENT_FIELDS"
                   };
                   }else{
                     errorMessage = {
                         labelName:
                             "Please fill all mandatory fields, then do next !",
-                        labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
+                        labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
                     };
                   }
                     break;
                 case DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
                         labelName: "Please upload all the required documents !",
-                        labelKey: "RP_ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
                     };
                     break;
                     case PAYMENT_DOCUMENT_UPLOAD_STEP:
                     errorMessage = {
                         labelName: "Please upload all the required documents !",
-                        labelKey: "RP_ERR_UPLOAD_REQUIRED_DOCUMENTS"
+                        labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
                     };
                     break;
             }
@@ -329,7 +329,7 @@ if (!isFormValid) {
   let errorMessage = {
     labelName:
         "Please fill all mandatory fields, then do next !",
-    labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
+    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -339,7 +339,7 @@ if (!isDateValid) {
   let errorMessage = {
     labelName:
         "From date cannot be greater than To date!",
-    labelKey: "RP_ERR_FROM_DATE_GREATER_THAN_TO_DATE"
+    labelKey: "ERR_FROM_DATE_GREATER_THAN_TO_DATE"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -349,7 +349,7 @@ if (!isPaymentAmountValid) {
   let errorMessage = {
     labelName:
         "Due Amount Cannot be 0 or empty!",
-    labelKey: "RP_ERR_DUE_AMOUNT_0_OR_EMPTY"
+    labelKey: "ERR_DUE_AMOUNT_0_OR_EMPTY"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -359,7 +359,7 @@ if (!isAmountValid) {
   let errorMessage = {
     labelName:
         "Please enter Amount between 1 and 8 digits!",
-    labelKey: "RP_ERR_AMOUNT_BETWEEN_1_AND_8_DIGITS"
+    labelKey: "ERR_AMOUNT_BETWEEN_1_AND_8_DIGITS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
@@ -408,7 +408,7 @@ if (!isFormValid) {
   let errorMessage = {
     labelName:
         "Please fill all mandatory fields, then do next !",
-    labelKey: "RP_ERR_FILL_RENTED_MANDATORY_FIELDS"
+    labelKey: "ERR_FILL_RENTED_MANDATORY_FIELDS"
 };
 
 dispatch(toggleSnackbar(true, errorMessage, "warning"));
