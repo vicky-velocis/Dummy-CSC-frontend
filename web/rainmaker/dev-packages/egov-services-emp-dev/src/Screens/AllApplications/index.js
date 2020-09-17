@@ -40,7 +40,7 @@ class AllRequests extends Component {
     sortPopOpen: false,
     errorText: "",
     currency: '',
-    open: false, setOpen: false
+    open: false, setOpen: false,applicationList:[],
   };
   style = {
     iconStyle: {
@@ -64,74 +64,29 @@ class AllRequests extends Component {
     let {
       role,
       userInfo,
-      numCSRComplaint,
-      numEmpComplaint,
-      renderCustomTitle,
-      prepareFinalObject
     } = this.props;
     fetchApplicationType();
     let rawRole =
       userInfo && userInfo.roles && userInfo.roles[0].code.toUpperCase();
-    //const numberOfComplaints = role === "employee" ? numEmpComplaint : role === "csr" ? numCSRComplaint : 0;
-    if (rawRole === "PGR-ADMIN") {
-      this.props.history.push("/report/rainmaker-pgr/DepartmentWiseReport");
-    } else {
       let { fetchApplications } = this.props;
-      
-      if (role === "ao") {
-        fetchApplications(
-          [
-            {
-              key: "status",
-              value: "assigned,escalatedlevel1pending,escalatedlevel2pending"
-            }
-          ],
-          true,
-          false
-        );
-        fetchApplications(
-          [
-            {
-              key: "status",
-              value: "open,reassignrequested"
-            }
-          ],
-          true,
-          false
-        );
-      } else if (role === "eo") {
-        fetchApplications(
-          [
-            {
-              key: "status",
-              value: "escalatedlevel1pending,escalatedlevel2pending"
-            }
-          ],
-          true,
-          true
-        );
-      }
-      else {
         fetchApplications(
           {
             "uuid": userInfo.uuid, "applicationNumber": "",
             "applicationStatus": "",
-            "mobileNumber": "", "bookingType": ""
+            "mobileNumber": "", "bookingType": "",
+            "tenantId":userInfo.tenantId
           },
-
           true,
           true
         );
-      }
-    }
-    let inputType = document.getElementsByTagName("input");
-    for (let input in inputType) {
-      if (inputType[input].type === "number") {
-        inputType[input].addEventListener("mousewheel", function () {
-          this.blur();
-        });
-      }
-    }
+
+        // let appListFromAPI = await httpRequest(
+        //   "egov-workflow-v2/egov-wf/process/_search?",
+        //   "_search", [],
+        //   []
+        // );
+        // this.setState({applicationList:appListFromAPI&&appListFromAPI.ProcessInstances})
+        // console.log('appListFromAPI',appListFromAPI)
   };
 
   componentWillReceiveProps = nextProps => {
@@ -172,11 +127,11 @@ class AllRequests extends Component {
 
 
   onComplaintClick = (complaintNo, bookingType) => {
-
-    if (bookingType && bookingType == "WATER_TANKERS") {
+console.log('complaintNo in alllllll applicationssss',complaintNo,'bookingType',bookingType)
+    if (bookingType && bookingType == "WATER_TANKERS"||bookingType == "Water Tankers") {
       this.props.history.push(`/egov-services/bwt-application-details/${complaintNo}`);
     }
-    if (bookingType && bookingType == "OSBM") {
+    if (bookingType && bookingType == "OSBM"||bookingType=="Open Space to Store Building Material") {
       this.props.history.push(`/egov-services/application-details/${complaintNo}`);
     }
     if (bookingType && bookingType == "GROUND_FOR_COMMERCIAL_PURPOSE") {
@@ -236,17 +191,19 @@ class AllRequests extends Component {
   };
 
   onSearch = () => {
-    
+    console.log('search 1')
     const { complaintNo, mobileNo, bookingType, applicationStatus, fromDate, toDate } = this.state;
     const { fetchApplications, searchForm, userInfo, toggleSnackbarAndSetText } = this.props;
     let queryObj = {};
     queryObj.uuid = userInfo.uuid;
 
     if (complaintNo) {
+      console.log('complaintNo in search',complaintNo)
       queryObj.applicationNumber = complaintNo;
       queryObj.applicationStatus = "";
       queryObj.mobileNumber = "";
-      queryObj.bookingType = "";
+      queryObj.bookingType = "";      
+      queryObj.tenantId=userInfo.tenantId;
 
     }
 
@@ -254,7 +211,8 @@ class AllRequests extends Component {
       queryObj.applicationStatus = applicationStatus
       queryObj.applicationNumber = '';
       queryObj.mobileNumber = "";
-      queryObj.bookingType = "";
+      queryObj.bookingType = "";      
+      queryObj.tenantId=userInfo.tenantId;
 
     }
 
@@ -263,6 +221,7 @@ class AllRequests extends Component {
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
       queryObj.bookingType = "";
+      queryObj.tenantId=userInfo.tenantId;
 
     }
     if (bookingType) {
@@ -270,6 +229,7 @@ class AllRequests extends Component {
       queryObj.mobileNumber = "";
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
+      queryObj.tenantId=userInfo.tenantId;
 
 
       
@@ -281,6 +241,7 @@ class AllRequests extends Component {
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
       queryObj.fromDate = fromDate;
+      queryObj.tenantId=userInfo.tenantId;
 
       
     }
@@ -290,6 +251,7 @@ class AllRequests extends Component {
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
       queryObj.toDate = toDate;
+      queryObj.tenantId=userInfo.tenantId;
 
       
     }
@@ -303,6 +265,7 @@ class AllRequests extends Component {
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
       queryObj.bookingType = "";
+      queryObj.tenantId=userInfo.tenantId;
 
     }
 
@@ -312,6 +275,7 @@ class AllRequests extends Component {
       queryObj.applicationNumber = "";
       queryObj.applicationStatus = "";
       queryObj.bookingType = "";
+      queryObj.tenantId=userInfo.tenantId;
 
     }
 
@@ -320,6 +284,7 @@ class AllRequests extends Component {
     // }
 
     if (complaintNo) {
+      console.log('complaintNo in search api call',complaintNo)
       if (complaintNo.length >= 23) {
         fetchApplications(queryObj, true, true);
       } else {
@@ -513,7 +478,8 @@ class AllRequests extends Component {
       {
         "uuid": userInfo.uuid, "applicationNumber": "",
         "applicationStatus": "",
-        "mobileNumber": "", "bookingType": ""
+        "mobileNumber": "", "bookingType": "",
+        "tenantId":userInfo.tenantId
       },
     );
     this.setState({ mobileNo: "", complaintNo: "", bookingType: "", applicationStatus: "", fromDate: "", toDate: "", search: false });
@@ -1202,22 +1168,9 @@ const roleFromUserInfo = (roles = [], role) => {
 
 const mapStateToProps = state => {
   console.log('state in all app',state)
-  const { complaints, common, screenConfiguration = {} } = state || {};
-  const { categoriesById, byId, order } = complaints;
-  const { fetchSuccess, applicationData } = complaints;
-  const { preparedFinalObject = {} } = screenConfiguration;
-  const { pgrComplaintCount = {} } = preparedFinalObject;
-  const {
-    assignedTotalComplaints = 0,
-    unassignedTotalComplaints = 0,
-    employeeTotalComplaints = 0
-  } = pgrComplaintCount;
-  const loading = !isEmpty(categoriesById)
-    ? fetchSuccess
-      ? false
-      : true
-    : true;
-  const { citizenById, employeeById } = common || {};
+  const { bookings, common, screenConfiguration = {} } = state || {};
+  const { fetchSuccess, applicationData } = bookings;
+   const loading = false;
   const { userInfo } = state.auth;
   const role =
     roleFromUserInfo(userInfo.roles, "GRO") ||

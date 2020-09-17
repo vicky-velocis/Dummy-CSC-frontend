@@ -37,7 +37,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     authToken: getAccessToken(),
     //requesterId: "",
     correlationId: "",
-    userInfo: JSON.parse(getUserInfo()), // For live purpose
+    // userInfo: JSON.parse(getUserInfo()), // For live purpose
 
   };
   let ExtraPayload = {
