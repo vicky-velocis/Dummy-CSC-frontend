@@ -117,6 +117,10 @@ class App extends Component {
 
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
       if(nextProps.hasLocalisation){
+        if(window.location.search.includes("mobileno") && window.location.search.includes("ecno"))
+        {       
+             setDefaultLocale("en_IN");
+        }
         if(getDefaultLocale()== "null")
           this.props.history.replace("/language-selection");
       }
