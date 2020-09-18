@@ -162,7 +162,7 @@ const mapStateToProps = (state, ownProps) => {
   }
  if(window.location.pathname.includes("/") || window.location.pathname.includes("/user/login") ||  window.location.pathname.includes("/user/register")){
   
-    defaultUrl = "/user/login";
+    defaultUrl = "/citizen/user/login";
    
  }
  if(window.location.pathname.includes("/user/login")){
@@ -170,11 +170,11 @@ const mapStateToProps = (state, ownProps) => {
  if(window.location.search){
   var queryString = QueryStringToJSON();
   if(queryString.mobileno){
-    defaultUrl = "/user/otp"
-    window.location.href=`/user/otp${window.location.search}`
+    defaultUrl = "/citizen/user/otp"
+    window.location.href=`/citizen/user/otp${window.location.search}`
   }
   else{
-    defaultUrl = "/user/login";
+    defaultUrl = "/citizen/user/login";
   }
  }
 } 
