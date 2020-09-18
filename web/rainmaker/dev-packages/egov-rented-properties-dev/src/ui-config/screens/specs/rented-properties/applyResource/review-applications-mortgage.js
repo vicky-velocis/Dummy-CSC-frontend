@@ -48,7 +48,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
             relationship: getLabelWithValue(
                 {
                     labelName: "Relationship",
-                    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+                    labelKey: "RP_COMMON_RELATIONSHIP_LABEL"
                 },
                 { jsonPath: "MortgageApplications[0].applicant[0].relationship" }
             ),
@@ -64,7 +64,7 @@ export const getReviewApplicantDetailsMortgage = (isEditable = true) => {
             guardian: getLabelWithValue(
                 {
                     labelName: "Father/ Husband's Name",
-                    labelKey: "TL_FATHER_OR_HUSBANDS_NAME_LABEL"
+                    labelKey: "RP_FATHER_OR_HUSBANDS_NAME_LABEL"
                 },
                 {
                     jsonPath: "MortgageApplications[0].applicant[0].guardian" 

@@ -573,7 +573,7 @@ return
                       <div className="rainmaker-displayInline">
                         <LabelContainer
                           labelName="Supporting Documents"
-                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
+                          labelKey="RP_WF_APPROVAL_UPLOAD_HEAD"
                         />
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
@@ -591,7 +591,7 @@ return
                     >
                       <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
-                        labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
+                        labelKey="RP_WF_APPROVAL_UPLOAD_SUBHEAD"
                       />
                     </div>
                     <UploadMultipleFiles

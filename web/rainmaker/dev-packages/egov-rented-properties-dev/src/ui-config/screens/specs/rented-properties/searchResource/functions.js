@@ -13,7 +13,7 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { setBusinessServiceDataToLocalStorage, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import commonConfig from "config/common.js";
 import { httpRequest } from "../../../../../ui-utils"
-import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS, LAST_MODIFIED_ON, DATE, AMOUNT, TYPE, REMAINING_INTEREST, REMAINING_PRINCIPAL, TOTAL_DUE, ACCOUNT_BALANCE } from "./searchResults";
+import { APPLICATION_NO, PROPERTY_ID, OWNER_NAME, STATUS, LAST_MODIFIED_ON, DATE, AMOUNT, TYPE,TYPES, REMAINING_INTEREST, REMAINING_PRINCIPAL, TOTAL_DUE, ACCOUNT_BALANCE } from "./searchResults";
 import { getAccountStatementProperty } from "../../../../../ui-utils/apply";
 import moment from "moment";
 import {
@@ -225,8 +225,16 @@ export const changeType = (type) => {
       return "Payment"
       }else
       {
-        return "Rent"
+        return "-"
   }
+}
+export const changePType=(type)=>{
+  if(type==='D'){
+    return "Rent"
+  }else
+  {
+    return "-"
+}
 }
 export const searchAccountStatement = async (state, dispatch) => {
   let searchScreenObject = get(
@@ -269,6 +277,7 @@ export const searchAccountStatement = async (state, dispatch) => {
             [DATE]: moment(new Date(item.date)).format("DD-MMM-YYYY") || "-",
             [AMOUNT]:  formatAmount(item.amount.toFixed(2)) || "-",
             [TYPE]: changeType(item.type) || "-",
+            [TYPES]: changePType(item.type) || "-",
             [REMAINING_INTEREST]:  formatAmount(item.remainingInterest.toFixed(2)),
             [REMAINING_PRINCIPAL]: formatAmount(item.remainingPrincipal.toFixed(2)),
             [TOTAL_DUE]: formatAmount(item.dueAmount.toFixed(2)),
@@ -297,7 +306,7 @@ export const searchAccountStatement = async (state, dispatch) => {
         dispatch(
         handleField(
           "search-account-statement",
-          "components.div.children.searchButton",
+          "components.div.children.downloadButton",
           "visible",
           true
       ),
@@ -371,6 +380,103 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
     alert('Some Error Occured while downloading Acknowledgement form!');
   }
 }
+
+export const getFileUrlAPI = async (fileStoreId,tenantId) => {
+  const queryObject = [
+  	//{ key: "tenantId", value: tenantId||commonConfig.tenantId },
+    { key: "tenantId", value: tenantId },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "get",
+      "/filestore/v1/files/url",
+      "",
+      queryObject
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const downloadCSVFromFilestoreID=(fileStoreId,mode,tenantId)=>{
+  getFileUrlAPI(fileStoreId,tenantId).then(async(fileRes) => {
+    if (mode === 'download') {
+      var win = window.open(fileRes[fileStoreId], '_blank');
+      if(win){
+        win.focus();
+      }
+    }
+    else {
+     // printJS(fileRes[fileStoreId])
+      var response =await axios.get(fileRes[fileStoreId], {
+        //responseType: "blob",
+        responseType: "arraybuffer",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/pdf"
+        }
+      });
+      console.log("responseData---",response);
+      const file = new Blob([response.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(file);
+      var myWindow = window.open(fileURL);
+      if (myWindow != undefined) {
+        myWindow.addEventListener("load", event => {
+          myWindow.focus();
+          myWindow.print();
+        });
+      }
+
+    }
+  });
+}
+
+export const downloadAccountStatementXLS = async (state, dispatch) => {
+  let searchScreenObject = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen",
+    {}
+  );
+
+  const isSearchBoxFirstRowValid = validateFields(
+    "components.div.children.accountStatementFilterForm.children.cardContent.children.applicationNoContainer.children",
+    state,
+    dispatch,
+    "search-account-statement"
+  );
+
+  if(!!isSearchBoxFirstRowValid) {
+    let Criteria = {
+      fromDate: !!searchScreenObject.fromDate ? convertDateToEpoch(searchScreenObject.fromDate) : "",
+      toDate: !!searchScreenObject.toDate ? convertDateToEpoch(searchScreenObject.toDate) : ""
+    }
+    const propertyId = !!searchScreenObject.propertyId ? searchScreenObject.propertyId : await getAccountStatementProperty(state, dispatch)
+      if(!!propertyId) {
+        Criteria = {...Criteria, propertyid: propertyId}
+        const res = await httpRequest(
+          "post",
+          '/rp-services/property/_accountstatementxlsx',
+          "",
+          [],
+          {Criteria}
+        )
+
+        try {
+          if (res && res[0].fileStoreId) {
+            console.log(res[0].fileStoreId)
+            console.log(res[0].tenantId)
+
+            downloadCSVFromFilestoreID(res[0].fileStoreId, 'download' ,res[0].tenantId)
+          }
+        } catch (error) {
+          dispatch(toggleSnackbar(true, error.message, "error"));
+        }
+    }
+  }
+}
+
 
 export const searchDuplicateCopy = async (state, dispatch, onInit, offset, limit , hideTable = true) => {
   !!hideTable && showHideTable(false, dispatch, "search-duplicate-copy");
