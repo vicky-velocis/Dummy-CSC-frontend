@@ -1,3 +1,13 @@
-const citizenReducer = {}
 
-export default citizenReducer
+
+import complaintss from "../bookings/reducer";
+
+
+const rootReducer = {
+
+    complaintss
+
+};
+
+export default rootReducer;
+

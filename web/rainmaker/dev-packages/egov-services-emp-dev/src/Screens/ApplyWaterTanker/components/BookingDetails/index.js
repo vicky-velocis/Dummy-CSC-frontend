@@ -59,8 +59,10 @@ class BookingsDetails extends Component {
   };
   render() {
     const { jobTitle, jobCompany, jobLocation,complaintSector, handleChange,approverName,comment, houseNo, address, locality, residenials } = this.props;
+  
     let sectorData=[];
     sectorData.push(complaintSector);
+   
 
     let arrayData=[];
    
@@ -71,7 +73,7 @@ class BookingsDetails extends Component {
       })
     })
 
-
+    console.log('arrayData',arrayData);
     
     
     const hintTextStyle = {
@@ -161,9 +163,9 @@ class BookingsDetails extends Component {
             displayEmpty
             onChange={handleChange('locality')}
           >
-             {arrayData.map((child, index) => (
+             {/* {arrayData.map((child, index) => (
             <MenuItem value={child.name}>{child.name}</MenuItem>
-            ))}
+            ))}  */}
            
           </Select>
         </FormControl>
@@ -280,13 +282,11 @@ class BookingsDetails extends Component {
   }
 }
 const mapStateToProps = state => {
-
+  const { bookings, common, auth, form } = state;
+  console.log('state in bookdetails==',state)
   
-  const { complaints, common, auth, form } = state;
-  const { complaintSector } = complaints;
+  const { complaintSector,applicationSector } = bookings;
   
-  
-
   return {
     complaintSector
   }
@@ -295,7 +295,7 @@ const mapDispatchToProps = dispatch => {
   return {
       toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
-      fetchApplicaionSector: criteria => dispatch(fetchApplicaionSector(criteria)),
+      fetchApplicaionSector: () => dispatch(fetchApplicaionSector()),
   }
 }
 
