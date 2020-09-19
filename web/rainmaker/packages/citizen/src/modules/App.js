@@ -117,6 +117,10 @@ class App extends Component {
 
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect && !isPrivacyPolicy) {
       if(nextProps.hasLocalisation){
+        if(window.location.search.includes("mobileno") && window.location.search.includes("ecno"))
+        {       
+             setDefaultLocale("en_IN");
+        }
         if(getDefaultLocale()== "null")
           this.props.history.replace("/language-selection");
       }
@@ -162,7 +166,7 @@ const mapStateToProps = (state, ownProps) => {
   }
  if(window.location.pathname.includes("/") || window.location.pathname.includes("/user/login") ||  window.location.pathname.includes("/user/register")){
   
-    defaultUrl = "/user/login";
+    defaultUrl = "/citizen/user/login";
    
  }
  if(window.location.pathname.includes("/user/login")){
@@ -170,11 +174,11 @@ const mapStateToProps = (state, ownProps) => {
  if(window.location.search){
   var queryString = QueryStringToJSON();
   if(queryString.mobileno){
-    defaultUrl = "/user/otp"
-    window.location.href=`/user/otp${window.location.search}`
+    defaultUrl = "/citizen/user/otp"
+    window.location.href=`/citizen/user/otp${window.location.search}`
   }
   else{
-    defaultUrl = "/user/login";
+    defaultUrl = "/citizen/user/login";
   }
  }
 } 
