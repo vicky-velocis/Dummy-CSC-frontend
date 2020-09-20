@@ -1,11 +1,11 @@
 
 
-import complaintss from "../bookings/reducer";
+import bookings from "../bookings/reducer";
 
 
 const rootReducer = {
 
-    complaintss
+    bookings
 
 };
 

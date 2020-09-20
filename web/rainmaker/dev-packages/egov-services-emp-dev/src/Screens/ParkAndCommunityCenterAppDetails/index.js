@@ -36,7 +36,7 @@ import {
 	fetchApplications, fetchPayment, fetchHistory, fetchDataAfterPayment, downloadReceiptForPCC, downloadAppForPCC,
 	sendMessage,downloadPLForPCC,
 	sendMessageMedia
-} from "../../redux/bookings/actions";
+} from "egov-ui-kit/redux/bookings/actions";
 import { connect } from "react-redux";
 import DialogContainer from '../../modules/DialogContainer';
 import Footer from "../../modules/footer"
