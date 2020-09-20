@@ -46,6 +46,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
   if (activeStep === 1) {
+    
     let storeDetailsCardPath =
       "components.div.children.formwizardSecondStep.children.MaterialTransferInwordDetail.children.cardContent.children.MaterialTransferInwordCard.props.items";
     let storeDetailsItems = get(

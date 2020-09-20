@@ -9,7 +9,7 @@ import {
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
   import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
- 
+  import { getSTOREPattern} from "../../../../../ui-utils/commons";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   export const otherDetails = getCommonCard({
     header: getCommonTitle(
@@ -278,7 +278,7 @@ import {
             },
             required: true,
             pattern: getPattern("Name") || null,
-            jsonPath: "materials[0].manufracturerPartNo"
+            jsonPath: "materials[0].manufacturePartNo"
           })
         },
   
@@ -298,8 +298,8 @@ import {
               multiline: "multiline",
               rowsMax: 2,
             },
-            pattern: getPattern("eventDescription") || null,
-            jsonPath: "materials[0].technicalSpecifications"
+            pattern: getSTOREPattern("Comment"),
+            jsonPath: "materials[0].techincalSpecs"
           })
         },
         TermsOfDelivery: {
@@ -318,7 +318,7 @@ import {
               multiline: "multiline",
               rowsMax: 2,
             },
-            pattern: getPattern("eventDescription") || null,
+            pattern: getSTOREPattern("Comment"),
             jsonPath: "materials[0].termsOfDelivery"
           })
         },

@@ -13,7 +13,7 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import{getOpeningBalanceSearchResults} from '../../../../../ui-utils/storecommonsapi'
   import{getmaterialissuesSearchResults,GetMdmsNameBycode,GetTotalQtyValue} from '../../../../../ui-utils/storecommonsapi'
-
+  import { getSTOREPattern} from "../../../../../ui-utils/commons";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   let IsEdit = false;
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -183,12 +183,10 @@ import {
               let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
               if(Qty && Qty[0])
               {
-              dispatch(prepareFinalObject(`materialIssues[0].totalIndentQty`, Qty[0].InputQtyValue));
+              dispatch(prepareFinalObject(`materialIssues[0].totalIndentQty`, indentDetails[0].indentQuantity));
               dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, Qty[0].TotalValue));
               dispatch(prepareFinalObject(`materialIssues[0].totalQty`, Qty[0].TotalQty));
-
-              }
-                
+              }                
               }
 
               }
@@ -282,7 +280,7 @@ import {
                let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue_,TotalQty)
                if(Qty && Qty[0])
                {
-                dispatch(prepareFinalObject(`materialIssues[0].totalIndentQty`, Qty[0].InputQtyValue));
+               // dispatch(prepareFinalObject(`materialIssues[0].totalIndentQty`, Qty[0].InputQtyValue));
                 dispatch(prepareFinalObject(`materialIssues[0].totalvalue`, Qty[0].TotalValue));
                 dispatch(prepareFinalObject(`materialIssues[0].totalQty`, Qty[0].TotalQty));
 
@@ -408,7 +406,7 @@ import {
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
                 },
                 required: true,
-                pattern: getPattern("Name") || null,
+                pattern: getSTOREPattern("Comment"),
                 jsonPath: "materialIssues[0].materialIssueDetails[0].description"
               })
             },
@@ -438,7 +436,7 @@ import {
       sourceJsonPath: "materialIssues[0].materialIssueDetails",
        //Update Total value when delete any card configuration settings     
        cardtotalpropes:{
-        totalIndentQty:false,
+        totalIndentQty:true,
         pagename:`createMaterialIndentNote`,
         cardJsonPath:"components.div.children.formwizardSecondStep.children.materialIssue.children.cardContent.children.materialIssueCard.props.items",
         jasonpath:"materialIssues[0].materialIssueDetails",

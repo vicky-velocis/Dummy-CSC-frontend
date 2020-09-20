@@ -1024,6 +1024,20 @@ export const GetTotalQtyValue = (state,cardJsonPath,pagename,jasonpath,InputQtyV
     TotalQty_ = TotalQty_ + Number( get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].${TotalQty}`,0))
     }
   }
+  //Material Indent Issue Note: For engineering Dept. 3% amount should be deducted from Total amount
+  if(pagename ==='createMaterialIndentNote')
+  {
+    // if deptCategory is "Engineering"
+    let store = get(state, "screenConfiguration.preparedFinalObject.store.stores",[]) 
+    let storecode = get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].fromStore.code`,'')
+    let fromstore = store.filter(x=> x.code === storecode)
+    if(fromstore[0].department.deptCategory.toUpperCase() ==='ENGINEERING')
+    {
+      let deduction = TotalValue_ - (TotalValue_*3)/100;
+      TotalValue_ = deduction 
+    }
+    
+  }
   CardTotalQty.push(
     {
       InputQtyValue: InputQtyValue_,

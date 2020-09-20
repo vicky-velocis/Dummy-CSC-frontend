@@ -31,7 +31,7 @@ import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const materialTypeCode = getQueryArg(window.location.href, "code");
 const tenantId = getQueryArg(window.location.href, "tenantId");
-const isEditMode = getQueryArg(window.location.href, "edited");
+let isEditMode = getQueryArg(window.location.href, "edited");
 const MaterialTypeRelationDetailsCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -634,7 +634,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     // fetching store name for populating dropdown
     const queryObject = [{ key: "tenantId", value: getTenantId() }];
-
+    isEditMode = getQueryArg(window.location.href, "edited");
     getSearchResults(queryObject, dispatch,"storeMaster")
       .then(response => {
         const storeName = response.stores.map((store, index) => {
@@ -664,6 +664,7 @@ const screenConfig = {
       });
     }
     else {
+      dispatch(prepareFinalObject("materialTypes[0]", null));
       dispatch(prepareFinalObject("materialTypes[0].active", true));
       dispatch(prepareFinalObject("materialTypes[0].storeMapping[0].active", true));
     }

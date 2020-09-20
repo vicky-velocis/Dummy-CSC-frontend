@@ -12,6 +12,7 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
+import { getSTOREPattern} from "../../../../../ui-utils/commons";
 export const MTIHeader = getCommonCard({
   header: getCommonTitle(
     {
@@ -120,7 +121,7 @@ export const MTIHeader = getCommonCard({
         labelName: "Enter Remarks",
         labelKey: "STORE_PURCHASE_ORDER_REMARK_PLCEHLDER",
       },
-      pattern: getPattern("alpha-numeric-with-space-and-newline"),
+      pattern: getSTOREPattern("Comment"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "indents[0].narration",
     }),

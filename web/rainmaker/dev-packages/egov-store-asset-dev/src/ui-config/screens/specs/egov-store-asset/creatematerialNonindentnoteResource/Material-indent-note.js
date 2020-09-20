@@ -10,6 +10,7 @@ import {
  // import { getTodaysDateInYMD } from "../../utils";
  import set from "lodash/set";
  import get from "lodash/get";
+ import { getSTOREPattern} from "../../../../../ui-utils/commons";
  import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import{getMaterialBalanceRateResults, getStoresSearchResults} from '../../../../../ui-utils/storecommonsapi'
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -235,7 +236,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             rowsMax: 2,
           },
           required: false,
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "materialIssues[0].description"
         })
       },

@@ -15,7 +15,7 @@ import{getMaterialMasterSearchResults} from '../../../../../ui-utils/storecommon
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
  import { httpRequest } from "../../../../../ui-utils/api";
- 
+ import { getSTOREPattern} from "../../../../../ui-utils/commons";
  const getMaterialData = async (action, state, dispatch) => {
   const tenantId = getTenantId();
   let queryObject = [
@@ -316,7 +316,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             rowsMax: 2,
           },
           required: true,
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "materialReceipt[0].description"
         })
       },
@@ -384,7 +384,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
             rowsMax: 2,
           },
           required: false,
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "materialReceipt[0].inspectionRemarks"
         })
       },

@@ -60,6 +60,7 @@ const purchaseOrderDetailsCard = {
                   }      
                   
                   dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].indentQuantity`, matObj[0].indentQuantity));
+                  dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, matObj[0].indentQuantity));
                   dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].issuedQuantity`, matObj[0].indentIssuedQuantity));
                   dispatch(prepareFinalObject(`purchaseOrders[0].purchaseOrderDetails[${itemIndex}].poOrderedQuantity`, matObj[0].poOrderedQuantity));
                  
@@ -215,7 +216,7 @@ const purchaseOrderDetailsCard = {
                  let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty)
                  if(Qty && Qty[0])
                  {
-                  dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
+                 // dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
                   dispatch(prepareFinalObject(`purchaseOrders[0].totalvalue`, Qty[0].TotalValue));
                   dispatch(prepareFinalObject(`purchaseOrders[0].totalQty`, Qty[0].TotalQty));
 
@@ -257,7 +258,7 @@ const purchaseOrderDetailsCard = {
                   let Qty = GetTotalQtyValue(state,cardJsonPath,pagename,jasonpath,InputQtyValue,TotalValue,TotalQty)
                   if(Qty && Qty[0])
                   {
-                   dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
+                   //dispatch(prepareFinalObject(`purchaseOrders[0].totalIndentQty`, Qty[0].InputQtyValue));
                    dispatch(prepareFinalObject(`purchaseOrders[0].totalvalue`, Qty[0].TotalValue));
                    dispatch(prepareFinalObject(`purchaseOrders[0].totalQty`, Qty[0].TotalQty));
  

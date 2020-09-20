@@ -191,8 +191,8 @@ export const callBackForNext = async (state, dispatch) => {
             else if (InvaldQtyCard[0].IsInvalidQty)
             {
               let indentNumber="";
-              indentNumber = getQueryArg(window.location.href, "indentNumber");
-              if(indentNumber){
+              // indentNumber = getQueryArg(window.location.href, "indentNumber");
+              // if(indentNumber){
               const errorMessage = {
               
                 labelName: "Ordered Qty less then Indent Qty for",
@@ -201,20 +201,30 @@ export const callBackForNext = async (state, dispatch) => {
                 labelKey:   LocalizationCodeValueQty+' '+InvaldQtyCard[0].duplicates
               };
               dispatch(toggleSnackbar(true, errorMessage, "warning"));
+           // }
+            
+      
             }
             else{
-              changeStep(state, dispatch);
-            }
-      
+              if(activeStep ===1)
+              moveToReview(dispatch)
+              else
+              changeStep(state, dispatch);              
             }
           }
         }
         else{
-          changeStep(state, dispatch);
+          if(activeStep ===1)
+          moveToReview(dispatch)
+          else
+          changeStep(state, dispatch);  
         }
       }
       else{
-        changeStep(state, dispatch);
+        if(activeStep ===1)
+              moveToReview(dispatch)
+              else
+              changeStep(state, dispatch);  
       }
 
       
@@ -469,7 +479,7 @@ export const footer = getCommonApplyFooter({
   
   let issueNumber = get(
     state.screenConfiguration.preparedFinalObject,
-    `materialReceiptSearch[0].issueNumber`,
+    `materialReceipt[0].issueNumber`,
     ''
   ); 
   if(issueNumber)

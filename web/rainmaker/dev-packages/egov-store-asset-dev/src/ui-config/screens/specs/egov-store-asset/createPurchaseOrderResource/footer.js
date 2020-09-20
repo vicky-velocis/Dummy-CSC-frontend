@@ -137,7 +137,20 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch(prepareFinalObject("purchaseOrders[0].purchaseOrderDetails",storeMappingTemp)
     );
       }
-      moveToReview(dispatch);
+        let totalIndentQty =  get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].totalIndentQty`,0)
+        let totalQty =  get(state.screenConfiguration.preparedFinalObject,`materialIssues[0].totalQty`,0)
+        if(totalQty>totalIndentQty)
+        {
+          const errorMessage = {
+          
+            labelName: "Total issued quantity can not be greater than Indent quantity",
+            labelKey:   "STORE_TOTAL_QUANTITY_ISSUED_VALIDATION"
+          };
+          dispatch(toggleSnackbar(true, errorMessage, "warning"));
+        }
+        else
+        moveToReview(state,dispatch)
+     // moveToReview(dispatch);
     }
     else{
       if(DuplicatItem[0].IsDuplicatItem)

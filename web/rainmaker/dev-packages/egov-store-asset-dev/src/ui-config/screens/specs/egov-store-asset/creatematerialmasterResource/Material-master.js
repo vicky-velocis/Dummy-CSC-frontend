@@ -12,7 +12,7 @@ import {
 import { filter } from "lodash";
 import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
  // import { getTodaysDateInYMD } from "../../utils";
-  
+ import { getSTOREPattern} from "../../../../../ui-utils/commons";
   export const MaterialMasterDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -137,7 +137,7 @@ import{GetMdmsNameBycode} from '../../../../../ui-utils/storecommonsapi'
             rowsMax: 4,
           },
           required: true,
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "materials[0].description"
         })
       },

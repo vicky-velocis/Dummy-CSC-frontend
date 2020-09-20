@@ -15,6 +15,7 @@ import {
     getLocalizationCodeValue,
   
   } from "../../utils";
+  import { getSTOREPattern} from "../../../../../ui-utils/commons";
   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -478,7 +479,7 @@ import {
                   rowsMax: 2,
                 },
                 required: false,
-                pattern: getPattern("eventDescription") || null,
+                pattern: getSTOREPattern("Comment"),
                 jsonPath: "materialReceipt[0].receiptDetails[0].rejectionRemark"
               })
             },

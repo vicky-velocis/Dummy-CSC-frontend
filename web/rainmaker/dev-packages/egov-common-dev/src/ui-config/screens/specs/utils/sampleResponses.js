@@ -19,7 +19,7 @@ export const DashbordData = () => {
             value:10,
           },
           {
-            key:"Closed",
+            key:"assign complain",
             value:40,
           },
           {
@@ -27,9 +27,17 @@ export const DashbordData = () => {
             value:20,
           },
           {
-            key:"reassignrequested",
+            key:"reassign requested",
             value:5,
-          } 
+          },
+          {
+            key:"rejected",
+            value:8,
+          } ,
+          {
+            key:"escalated complain",
+            value:12,
+          }  
         ]
       },
       {
@@ -40,11 +48,11 @@ export const DashbordData = () => {
             value:40,
           },
           {
-            key:"whatsup",
+            key:"mobile",
             value:15,
           },
           {
-            key:"apps",
+            key:"helpdesk",
             value:10,
           },
         ]

@@ -9,7 +9,7 @@ import {
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  import { getTodaysDateInYMD } from "../../utils";
-  
+ import { getSTOREPattern} from "../../../../../ui-utils/commons";
   export const OpeningBalanceDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -202,7 +202,6 @@ import {
             jsonPath: "materialReceipt[0].receiptDetails[0].unitRate"
           })
         },
-
         receiptNumber: {
           ...getTextField({
             label: {
@@ -254,7 +253,7 @@ import {
             multiline: "multiline",
             rowsMax: 2,
           },
-          pattern: getPattern("eventDescription") || null,
+          pattern: getSTOREPattern("Comment"),
           jsonPath: "materialReceipt[0].receiptDetails[0].remarks"
         })
       }, 

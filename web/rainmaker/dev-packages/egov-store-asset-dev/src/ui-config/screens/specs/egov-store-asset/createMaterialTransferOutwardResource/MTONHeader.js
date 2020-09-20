@@ -7,6 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getSTOREPattern} from "../../../../../ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { prepareFinalObject,handleScreenConfigurationFieldChange as handleField,  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -383,7 +384,7 @@ export const MTONHeader = getCommonCard({
         labelName: "Enter Remarks",
         labelKey: "STORE_PURCHASE_ORDER_REMARK_PLCEHLDER",
       },
-      pattern: getPattern("alpha-numeric-with-space-and-newline"),
+      pattern: getSTOREPattern("Comment"),
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "materialIssues[0].description",
     }),

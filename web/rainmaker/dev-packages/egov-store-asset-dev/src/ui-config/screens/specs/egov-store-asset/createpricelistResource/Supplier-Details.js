@@ -8,7 +8,15 @@ import {
     getPattern
   } from "egov-ui-framework/ui-config/screens/specs/utils";
  import { getTodaysDateInYMD } from "../../utils";
+ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
  import {  handleScreenConfigurationFieldChange as handleField, prepareFinalObject  } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+let disabled =false;
+const step = getQueryArg(window.location.href, "step");
+const id = getQueryArg(window.location.href, "id");
+ if(!step && !id){
+  disabled = true;
+
+}
   export const SupplierDetails = getCommonCard({
     header: getCommonTitle(
       {
@@ -211,7 +219,8 @@ import {
   
         props: {
           content: "STORE_PRICE_ACTIVE",
-          jsonPath: "searchScreen.active",
+          disabled:disabled,
+          jsonPath: "priceLists[0].active",
           screenName: "createpricelist",
           checkBoxPath:
             "components.div.children.searchForm.children.cardContent.children.searchFormContainer.children.active",
