@@ -3,7 +3,7 @@ import { Button, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import SuccessMessage from "../../modules/SuccessMessage";
 import { connect } from "react-redux";
-import { createWaterTankerApplication, downloadBWTApplication } from "../../redux/bookings/actions";
+import { createWaterTankerApplication, downloadBWTApplication } from "egov-ui-kit/redux/bookings/actions";
 import jp from "jsonpath";
 import {
 	getQueryArg,
@@ -148,7 +148,7 @@ class CreateWBTApplicationSuccess extends Component {
           <Button
             id="resolve-success-continue"
             primary={true}
-            label={<Label buttonLabel={true} label="CORE_COMMON_GOTOHOME" />}
+            label={<Label buttonLabel={true} label="BK_CORE_COMMON_GOTOHOME" />}
             fullWidth={true}
             onClick={this.continueComplaintSubmit}
             className="responsive-action-button"

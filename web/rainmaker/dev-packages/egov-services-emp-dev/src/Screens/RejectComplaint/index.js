@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import formHOC from "egov-ui-kit/hocs/form";
 import { Screen } from "modules/common";
 import RejectApplicationForm from "./components/RejectApplicationForm";
-import { fetchApplications } from "../../redux/bookings/actions";
+import { fetchApplications } from "egov-ui-kit/redux/bookings/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";

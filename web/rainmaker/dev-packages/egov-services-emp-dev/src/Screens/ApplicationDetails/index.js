@@ -35,7 +35,7 @@ import {
 	fetchApplications, fetchPayment, fetchHistory, fetchDataAfterPayment, downloadPaymentReceipt, downloadApplication,
 	sendMessage,downloadPermissionLetter,
 	sendMessageMedia
-} from "../../redux/bookings/actions";
+} from "egov-ui-kit/redux/bookings/actions";
 import { connect } from "react-redux";
 import DialogContainer from '../../modules/DialogContainer';
 import Footer from "../../modules/footer"
