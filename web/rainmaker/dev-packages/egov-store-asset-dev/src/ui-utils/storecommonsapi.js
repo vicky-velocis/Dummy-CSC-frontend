@@ -961,7 +961,7 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
         } 
 
       }
-      else if(pagename ==='creatindent')
+      else if(pagename ==='creatindent' || pagename ==='create-material-transfer-indent')
       {
         if(InputQtyValue_ === 0 )       
         matcode.push(
@@ -1028,7 +1028,7 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
     DuplicatItem.push(
       {
         duplicates: duplicates,
-        IsInvalidQty:true,
+        IsInvalidQty:false,
         IsZeroQty:true
       }      
     )
@@ -1162,7 +1162,8 @@ export const ValidateCardQty = (state,dispatch,cardJsonPath,pagename,jasonpath,v
   .map((name) => {
     return {
       count: 1,
-      name: name
+      name: name.code,
+      Qty: name.InputQtyValue
     }
   })
   .reduce((a, b) => {
@@ -1184,7 +1185,7 @@ export const ValidateCardQty = (state,dispatch,cardJsonPath,pagename,jasonpath,v
     DuplicatItem.push(
       {
         duplicates: duplicates,
-        IsInvalidQty:true,
+        IsInvalidQty:false,
         IsZeroQty:true
       }      
     )

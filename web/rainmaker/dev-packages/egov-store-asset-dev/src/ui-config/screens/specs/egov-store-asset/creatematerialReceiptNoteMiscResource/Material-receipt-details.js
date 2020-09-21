@@ -89,7 +89,8 @@ import {
                   labelName: "Select Material Name",
                   labelKey: "STORE_MATERIAL_NAME_SELECT"
                 },
-                required: true,               
+                required: true,  
+                errorMessage:"STORE_VALIDATION_MATERIAL_NAME_SELECT",             
                 jsonPath: "materialReceipt[0].receiptDetails[0].material.code",
                 sourceJsonPath: "MiscMaterilList",
                 props: {
@@ -187,6 +188,7 @@ import {
                   disabled:false
                 },
                 required: true,
+                errorMessage:"STORE_VALIDATION_RECEIVED_QUANTITY",
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialReceipt[0].receiptDetails[0].receivedQty"
               }),
@@ -261,6 +263,7 @@ import {
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
                 },
                 required: true,
+                errorMessage:"STORE_VALIDATION_REMARK",
                 pattern: getSTOREPattern("Comment"),
                 jsonPath: "materialReceipt[0].receiptDetails[0].rejectionRemark"
               })

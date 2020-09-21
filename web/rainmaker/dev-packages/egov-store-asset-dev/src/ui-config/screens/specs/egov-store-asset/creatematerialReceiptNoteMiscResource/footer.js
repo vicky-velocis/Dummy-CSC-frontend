@@ -151,7 +151,7 @@ export const callBackForNext = async (state, dispatch) => {
         {
           let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")
           let LocalizationCodeValueQty = getLocalizationCodeValue("STORE_MATERIAL_INVALID_MISC_RECEIPT_QTY_VALIDATION")
-          if(!DuplicatItem[0].IsDuplicatItem && !InvaldQtyCard[0].IsInvalidQty )
+          if((!DuplicatItem[0].IsDuplicatItem && !InvaldQtyCard[0].IsInvalidQty) &&  !InvaldQtyCard[0].IsZeroQty)
             {
       
               // refresh card item
@@ -204,6 +204,15 @@ export const callBackForNext = async (state, dispatch) => {
            // }
             
       
+            }
+            else if (InvaldQtyCard[0].IsZeroQty)
+            {
+              const LocalizationCodeValueZeroQty = getLocalizationCodeValue("STORE_MATERIAL_INVALLID_QTY_VALIDATION")
+              const errorMessage = {              
+                labelName: "Quantity can not be Zero for",
+                labelKey:   LocalizationCodeValueZeroQty+' '+InvaldQtyCard[0].duplicates
+              };
+              dispatch(toggleSnackbar(true, errorMessage, "warning")); 
             }
             else{
               if(activeStep ===1)

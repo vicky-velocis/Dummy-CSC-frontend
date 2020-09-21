@@ -118,7 +118,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
             labelKey: "STORE_DETAILS_STORE_NAME_SELECT"
           },
           required: true,
-         
+          errorMessage:"STORE_VALIDATION_STORE_NAME_SELECT",
           jsonPath: "materialReceipt[0].receivingStore.code",
           sourceJsonPath: "store.stores",
             props: {
@@ -160,6 +160,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
             labelKey: "STORE_MATERIAL_RECEIPT_RECEIPT_DATE_PLACEHOLDER"
           },
           required: true,
+          errorMessage:"STORE_VALIDATION_RECEIPT_DATE_SELECT",
           pattern: getPattern("Date") || null,
           jsonPath: "materialReceipt[0].receiptDate",
           props: {
@@ -286,6 +287,7 @@ const getmrnNumber = async (  action, state,dispatch,storecode)=>{
             rowsMax: 2,
           },
           required: true,
+          errorMessage:"STORE_VALIDATION_REMARK",
           pattern: getSTOREPattern("Comment"),
           jsonPath: "materialReceipt[0].description"
         })

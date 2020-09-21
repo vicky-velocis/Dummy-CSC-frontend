@@ -37,6 +37,7 @@ import {
                 labelKey: "STORE_DETAILS_STORE_NAME_SELECT",
               },
               required: true,
+              errorMessage:"STORE_VALIDATION_STORE_NAME_SELECT",
               jsonPath: "materials[0].storeMapping[0].store.code",
               gridDefination: {
                 xs: 12,

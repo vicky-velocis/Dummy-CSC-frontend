@@ -34,6 +34,7 @@ const purchaseOrderDetailsCard = {
                 labelKey: "STORE_MATERIAL_NAME_SELECT"
               },
               required: true,
+            errorMessage:"STORE_VALIDATION_MATERIAL_NAME_SELECT",
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].material.code",
               sourceJsonPath: "searchMaster.materialNames",
               props: {
@@ -105,6 +106,7 @@ const purchaseOrderDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_UOM"
               },
               required: true,
+            errorMessage:"STORE_VALIDATION_UOM_NAME",
               jsonPath: "purchaseOrders[0].purchaseOrderDetails[0].uom.code",
               sourceJsonPath: "createScreenMdmsData.common-masters.UOM",
               props: {
@@ -233,6 +235,7 @@ const purchaseOrderDetailsCard = {
                 labelKey: "STORE_PURCHASE_ORDER_UNIT_PRC"
               },
               required: true,
+            errorMessage:"STORE_VALIDATION_UNIT_RATE",
               placeholder: {
                 labelName: "Enter Unit Price",
                 labelKey: "STORE_PURCHASE_ORDER_UNIT_PRC_PLACEHOLDER"

@@ -41,6 +41,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_SUPPLIER_MASTER_NAME_SELECT"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_SUPPLIER_NAME_SELECT",
           jsonPath: "priceLists[0].supplier.code",
            sourceJsonPath: "supplier.suppliers",
            props: {
@@ -68,6 +69,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_RATE_TYPE_SELECT"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_RATE_TYPE_SELECT",
           jsonPath: "priceLists[0].rateType",
           sourceJsonPath: "createScreenMdmsData.store-asset.RateType",
         props: {
@@ -94,6 +96,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_RATE_CONTRACT_TENDER_QUATATION_NO"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_RATE_CONTRATC_NUMBER",
           pattern: getPattern("Name") || null,
           jsonPath: "priceLists[0].rateContractNumber"
         })
@@ -109,6 +112,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_RATE_CONTRACT_TENDER_QUATATION_DATE"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_RATE_CONTRATC_DATE_SELECT",
           pattern: getPattern("Date") || null,
           jsonPath: "priceLists[0].rateContractDate",
           props: {
@@ -129,6 +133,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_AGREMENT_NO"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_AGREEMENT_NUMBER",
           pattern: getPattern("Name") || null,
           jsonPath: "priceLists[0].agreementNumber"
         })
@@ -144,6 +149,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_AGREMENT_DATE"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_AGREEMENT_DATE",
           pattern: getPattern("Date") || null,
           jsonPath: "priceLists[0].agreementDate",
           props: {
@@ -164,6 +170,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_AGREMENT_START_DATE"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_AGREEMENT_START_DATE_SELECT",
           pattern: getPattern("Date") || null,
           jsonPath: "priceLists[0].agreementStartDate",
           props: {
@@ -197,6 +204,7 @@ const id = getQueryArg(window.location.href, "id");
             labelKey: "STORE_PRICE_AGREMENT_END_DATE"
           },
           required: true,
+            errorMessage:"STORE_VALIDATION_AGREEMENT_END_DATE_SELECT",
           pattern: getPattern("Date") || null,
           jsonPath: "priceLists[0].agreementEndDate",
           props: {

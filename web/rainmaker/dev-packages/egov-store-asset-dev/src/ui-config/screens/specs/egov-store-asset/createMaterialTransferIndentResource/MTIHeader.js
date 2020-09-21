@@ -35,6 +35,7 @@ export const MTIHeader = getCommonCard({
         },
        
         required: true,
+        errorMessage:"STORE_VALIDATION_INDENTING_STORE_SELECT",
         jsonPath: "indents[0].indentStore.code",
         sourceJsonPath: "store.stores",
         props: {
@@ -60,6 +61,7 @@ export const MTIHeader = getCommonCard({
           labelKey: "STORE_MATERIAL_INDENT_INDENT_DATE",
         },
         required: true,
+        errorMessage:"STORE_VALIDATION_INDENT_DATE",
         pattern: getPattern("Date"),
         jsonPath: "indents[0].indentDate",
         props: {
@@ -77,6 +79,7 @@ export const MTIHeader = getCommonCard({
           labelKey: "STORE_MATERIAL_INDENT_INDENT_PURPOSE_SELECT"
         },
         required: true,
+        errorMessage:"STORE_VALIDATION_INDENT_PURPOSE",
         jsonPath: "indents[0].indentPurpose",
         sourceJsonPath: "createScreenMdmsData.store-asset.IndentPurpose",
         props: {

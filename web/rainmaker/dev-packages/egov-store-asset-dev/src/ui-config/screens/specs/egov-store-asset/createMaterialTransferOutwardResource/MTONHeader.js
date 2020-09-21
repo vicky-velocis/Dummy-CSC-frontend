@@ -41,6 +41,7 @@ export const MTONHeader = getCommonCard({
         },
         jsonPath: "materialIssues[0].indent.id",
         required: true,
+        errorMessage:"STORE_VALIDATION_TRANSFER_INDENT_NUMBER",
        sourceJsonPath: "TransferIndent.indents",
         props: {
           className: "hr-generic-selectfield",
@@ -174,6 +175,7 @@ export const MTONHeader = getCommonCard({
           labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER",
         },
         required: true,
+        errorMessage:"STORE_VALIDATION_ISSUE_DATE_SELECT",
         pattern: getPattern("Date"),
         jsonPath: "materialIssues[0].issueDate",
         // props: {

@@ -262,6 +262,8 @@ import {
               labelKey: "STORE_MATERIAL_MODEL"
             },
             required: true,
+            errorMessage:"STORE_VALIDATION_MODEL",
+
             pattern: getPattern("Name") || null,
             jsonPath: "materials[0].model"
           })
@@ -277,6 +279,7 @@ import {
               labelKey: "STORE_MATERIAL_MANUFRACTURER_PART_NO"
             },
             required: true,
+            errorMessage:"STORE_VALIDATION_MANUFRACTURERE_NUMBER",
             pattern: getPattern("Name") || null,
             jsonPath: "materials[0].manufacturePartNo"
           })
@@ -293,6 +296,7 @@ import {
               labelKey: "STORE_MATERIAL_TECHNICAL_SPECIFICATIONS"
             },
             required: true,
+            errorMessage:"STORE_VALIDATION_TECHNICAL_SPECIFICATIONS",
             props: {
               className: "applicant-details-error",
               multiline: "multiline",
@@ -313,6 +317,7 @@ import {
               labelKey: "STORE_MATERIAL_TERMS_OF_DELIVERY"
             },
             required: true,
+            errorMessage:"STORE_VALIDATION_TERMS_OF_DELIVERY",
             props: {
               className: "applicant-details-error",
               multiline: "multiline",

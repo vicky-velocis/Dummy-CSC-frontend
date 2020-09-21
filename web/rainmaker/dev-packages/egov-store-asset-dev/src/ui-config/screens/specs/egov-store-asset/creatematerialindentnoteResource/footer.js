@@ -186,7 +186,7 @@ export const callBackForNext = async (state, dispatch) => {
             let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")
             const LocalizationCodeValueZeroQty = getLocalizationCodeValue("STORE_MATERIAL_INVALLID_QTY_VALIDATION")
             let LocalizationCodeValueQty = getLocalizationCodeValue("STORE_MATERIAL_INVALID_INDENT_NOTE_QTY_VALIDATION")
-            if(!DuplicatItem[0].IsDuplicatItem && !InvaldQtyCard[0].IsInvalidQty )
+            if((!DuplicatItem[0].IsDuplicatItem && !InvaldQtyCard[0].IsInvalidQty ) && !InvaldQtyCard[0].IsZeroQty )
       {
 
               // refresh card item

@@ -164,7 +164,7 @@ console.log(matcodes)
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUING_STORE_NAME_SELECT"
           },
           required: true,
-         
+          errorMessage: "STORE_VALIDATION_ISSUE_STORE_NAME_SELECT",
           jsonPath: "materialIssues[0].fromStore.code",
           sourceJsonPath: "store.stores",
             props: {
@@ -263,6 +263,7 @@ console.log(matcodes)
             labelKey: "STORE_MATERIAL_INDENT_NOTE_ISSUE_DATE_PLACEHOLDER"
           },
           required: true,
+          errorMessage: "STORE_VALIDATION_ISSUE_DATE_SELECT",
           pattern: getPattern("Date") ,
           jsonPath: "materialIssues[0].issueDate",
           // props: {           
@@ -354,6 +355,7 @@ console.log(matcodes)
             rowsMax: 2,
           },
           required: true,
+          errorMessage: "STORE_VALIDATION_REMARK",
           pattern: getSTOREPattern("Comment"),
           jsonPath: "materialIssues[0].description"
         })

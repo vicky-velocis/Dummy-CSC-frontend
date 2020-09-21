@@ -92,7 +92,8 @@ import {
                   labelName: "Select Material Name",
                   labelKey: "STORE_MATERIAL_NAME_SELECT"
                 },
-                required: true,               
+                required: true,  
+                errorMessage: "STORE_VALIDATION_MATERIAL_NAME_SELECT",             
                 jsonPath: "materialIssues[0].materialIssueDetails[0].receiptId",
                 //sourceJsonPath: "materials",
                 sourceJsonPath: "indentsmaterial",
@@ -243,6 +244,7 @@ import {
                   nin:1,
                 },
                 required: true,
+                errorMessage: "STORE_VALIDATION_QUANTITY_ISSUED",
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.userQuantity"
               }),
@@ -406,6 +408,7 @@ import {
                   labelKey: "STORE_MATERIAL_INDENT_NOTE_REMARK_PLACEHOLDER"
                 },
                 required: true,
+                errorMessage: "STORE_VALIDATION_REMARK",
                 pattern: getSTOREPattern("Comment"),
                 jsonPath: "materialIssues[0].materialIssueDetails[0].description"
               })
