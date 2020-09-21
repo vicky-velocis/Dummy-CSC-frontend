@@ -220,6 +220,7 @@ import {
                   disabled:false
                 },
                 required: true,
+                minValue:1,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "indents[0].indentDetails[0].userQuantity"
               }),

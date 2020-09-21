@@ -184,6 +184,7 @@ export const callBackForNext = async (state, dispatch) => {
           if((DuplicatItem && DuplicatItem[0])||(InvaldQtyCard &&InvaldQtyCard[0]))
           {
             let LocalizationCodeValue = getLocalizationCodeValue("STORE_MATERIAL_DUPLICATE_VALIDATION")
+            const LocalizationCodeValueZeroQty = getLocalizationCodeValue("STORE_MATERIAL_INVALLID_QTY_VALIDATION")
             let LocalizationCodeValueQty = getLocalizationCodeValue("STORE_MATERIAL_INVALID_INDENT_NOTE_QTY_VALIDATION")
             if(!DuplicatItem[0].IsDuplicatItem && !InvaldQtyCard[0].IsInvalidQty )
       {
@@ -239,18 +240,23 @@ export const callBackForNext = async (state, dispatch) => {
                 };
                 dispatch(toggleSnackbar(true, errorMessage, "warning"));
               }
-              else if (InvaldQtyCard[0].IsInvalidQty)
+              else if (InvaldQtyCard[0].IsZeroQty)
               {
                 
-                const errorMessage = {
-                
+                  const errorMessage = {                
+                    labelName: "Quantity can not be Zero for",
+                    labelKey:   LocalizationCodeValueZeroQty+' '+InvaldQtyCard[0].duplicates
+                  };
+                  dispatch(toggleSnackbar(true, errorMessage, "warning"));
+               
+              }
+              else  if(InvaldQtyCard[0].IsInvalidQty){
+                const errorMessage = {                
                   labelName: "Ordered Qty less then Indent Qty for",
                   labelKey:   LocalizationCodeValueQty+' '+InvaldQtyCard[0].duplicates
                 };
                 dispatch(toggleSnackbar(true, errorMessage, "warning"));
-             
-        
-              }
+              } 
 
             }
           }
