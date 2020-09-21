@@ -78,6 +78,17 @@ const getData = async(action, state, dispatch) => {
     setDocsForEditFlow(state, dispatch, "DuplicateCopyApplications[0].applicationDocuments", "DuplicateTemp[0].uploadedDocsInRedux");
   }
   setDocumentData(action, state, dispatch, {documentCode: WORKFLOW_BUSINESS_SERVICE_DC, jsonPath: "DuplicateCopyApplications[0].applicationDocuments", screenKey: "duplicate-copy-apply", screenPath: "components.div.children.formwizardSecondStep.children.ownershipTransferDuplicateDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"DuplicateTemp[0].ownershipTransferDocuments"})
+  const id=get(state.screenConfiguration.preparedFinalObject,"DuplicateCopyApplications[0].id")
+  if(id!=null){
+    dispatch(
+      handleField(
+        "duplicate-copy-apply",
+        "components.div.children.formwizardFirstStep.children.transitSiteDetails.children.cardContent.children.detailsContainer.children.transitNumber",
+        "props.disabled",
+        true
+      )
+    )
+  }
 }
 
 

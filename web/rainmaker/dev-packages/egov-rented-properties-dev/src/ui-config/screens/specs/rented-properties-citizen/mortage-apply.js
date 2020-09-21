@@ -58,6 +58,17 @@ import{getColonyTypes} from "../rented-properties-citizen/duplicate-copy-apply"
       setDocsForEditFlow(state, dispatch, "MortgageApplications[0].applicationDocuments", "MortgageApplicationsTemp[0].uploadedDocsInRedux");
     }
     setDocumentData(action, state, dispatch, {documentCode: "MortgageRP", jsonPath: "MortgageApplications[0].applicationDocuments", screenKey: "mortage-apply", screenPath: "components.div.children.formwizardSecondStep.children.mortgageDocumentsDetails.children.cardContent.children.documentList", tempJsonPath:"MortgageApplicationsTemp[0].applicationDocuments"})
+    const id=get(state.screenConfiguration.preparedFinalObject,"MortgageApplications[0].id")
+    if(id!=null){
+      dispatch(
+        handleField(
+          "mortage-apply",
+          "components.div.children.formwizardFirstStep.children.ownershipAddressDetailsMortgage.children.cardContent.children.detailsContainer.children.ownershipTransitNumber",
+          "props.disabled",
+          true
+        )
+      )
+    }
   }
 
 const applyLicense = {
