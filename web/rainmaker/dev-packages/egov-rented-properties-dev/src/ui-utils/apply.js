@@ -800,18 +800,18 @@ export const getDetailsFromPropertyMortgage = async (state, dispatch) => {
               findOwner.ownerDetails.aadhaarNumber
             )
           )
-          dispatch(
-            prepareFinalObject(
-              "MortgageApplications[0].applicant[0].email",
-              findOwner.ownerDetails.email
-            )
-          )
-          dispatch(
-            prepareFinalObject(
-              "MortgageApplications[0].applicant[0].phone",
-              findOwner.ownerDetails.phone
-            )
-          )
+          // dispatch(
+          //   prepareFinalObject(
+          //     "MortgageApplications[0].applicant[0].email",
+          //     findOwner.ownerDetails.email
+          //   )
+          // )
+          // dispatch(
+          //   prepareFinalObject(
+          //     "MortgageApplications[0].applicant[0].phone",
+          //     findOwner.ownerDetails.phone
+          //   )
+          // )
           return true
         }
     }
@@ -946,18 +946,18 @@ export const getDuplicateDetailsFromProperty = async (state, dispatch) => {
               findOwner.ownerDetails.aadhaarNumber
             )
           )
-          dispatch(
-            prepareFinalObject(
-              "DuplicateCopyApplications[0].applicant[0].email",
-              findOwner.ownerDetails.email
-            )
-          )
-          dispatch(
-            prepareFinalObject(
-              "DuplicateCopyApplications[0].applicant[0].phone",
-              findOwner.ownerDetails.phone
-            )
-          )
+          // dispatch(
+          //   prepareFinalObject(
+          //     "DuplicateCopyApplications[0].applicant[0].email",
+          //     findOwner.ownerDetails.email
+          //   )
+          // )
+          // dispatch(
+          //   prepareFinalObject(
+          //     "DuplicateCopyApplications[0].applicant[0].phone",
+          //     findOwner.ownerDetails.phone
+          //   )
+          // )
           return true
         }
     }

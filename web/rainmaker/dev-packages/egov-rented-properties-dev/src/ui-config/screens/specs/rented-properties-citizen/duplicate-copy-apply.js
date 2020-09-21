@@ -13,7 +13,9 @@ import { getMdmsData } from "../rented-properties/apply";
 import { WORKFLOW_BUSINESS_SERVICE_DC } from "../../../../ui-constants";
 import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 import {applicationNumber} from '../rented-properties/apply'
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+let userInfo = JSON.parse(getUserInfo());
 const header = getCommonContainer({
     header: getCommonHeader({
       labelName: "Apply Duplicate Copy Of Allotment",
@@ -47,6 +49,18 @@ const getData = async(action, state, dispatch) => {
       []
       )
       )
+  dispatch(
+            prepareFinalObject(
+              "DuplicateCopyApplications[0].applicant[0].email",
+              userInfo.emailId
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "DuplicateCopyApplications[0].applicant[0].phone",
+              userInfo.mobileNumber
+            )
+          )    
   dispatch(
     prepareFinalObject(
       "DuplicateTemp",

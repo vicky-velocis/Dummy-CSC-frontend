@@ -13,6 +13,9 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { setApplicationNumberBox } from "../../../../ui-utils/apply";
 import {applicationNumber} from '../rented-properties/apply'
 import{getColonyTypes} from "../rented-properties-citizen/duplicate-copy-apply"
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+
+let userInfo = JSON.parse(getUserInfo());
   const header = getCommonContainer({
         header: getCommonHeader({
           labelName: "Apply Mortage License",
@@ -29,6 +32,18 @@ import{getColonyTypes} from "../rented-properties-citizen/duplicate-copy-apply"
         []
         )
         )
+    dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].applicant[0].email",
+              userInfo.emailId
+            )
+          )
+          dispatch(
+            prepareFinalObject(
+              "MortgageApplications[0].applicant[0].phone",
+              userInfo.mobileNumber
+            )
+          )    
     dispatch(
       prepareFinalObject(
         "MortgageApplicationsTemp",
