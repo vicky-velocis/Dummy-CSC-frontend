@@ -240,7 +240,7 @@ export const callBackForNext = async (state, dispatch) => {
                 };
                 dispatch(toggleSnackbar(true, errorMessage, "warning"));
               }
-              else if (InvaldQtyCard[0].IsZeroQty)
+              else if (InvaldQtyCard[0].IsZeroQty)// zero qty valudation
               {
                 
                   const errorMessage = {                
