@@ -58,7 +58,7 @@ const getData = async(action, state, dispatch) => {
           dispatch(
             prepareFinalObject(
               "DuplicateCopyApplications[0].applicant[0].phone",
-              userInfo.mobileNumber
+              userInfo.userName
             )
           )    
   dispatch(

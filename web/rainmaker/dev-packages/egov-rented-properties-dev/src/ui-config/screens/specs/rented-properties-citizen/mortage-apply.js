@@ -41,7 +41,7 @@ let userInfo = JSON.parse(getUserInfo());
           dispatch(
             prepareFinalObject(
               "MortgageApplications[0].applicant[0].phone",
-              userInfo.mobileNumber
+              userInfo.userName
             )
           )    
     dispatch(

@@ -38,12 +38,6 @@ const getData = async(action, state, dispatch) => {
       userInfo.emailId
       )
     )
-    dispatch(
-      prepareFinalObject(
-        "Owners[0].ownerDetails.phone",
-        userInfo.mobileNumber
-        )
-      )
      
   dispatch(
     prepareFinalObject(
