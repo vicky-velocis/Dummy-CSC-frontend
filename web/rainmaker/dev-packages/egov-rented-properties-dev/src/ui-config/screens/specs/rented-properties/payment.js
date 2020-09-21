@@ -289,7 +289,7 @@ const paymentFooter = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "MAKE PAYMENT",
-        labelKey: "RP_COMMON_MAKE_PAYMENT"
+        labelKey: "COMMON_MAKE_PAYMENT"
       })
     },
     onClickDefination: {
