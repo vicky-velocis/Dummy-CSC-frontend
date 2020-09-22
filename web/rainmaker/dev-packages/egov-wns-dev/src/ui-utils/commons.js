@@ -739,6 +739,7 @@ const parserFunction = (state) => {
         proposedTaps: parseInt(queryObject.proposedTaps),
         waterApplicationType: (queryObject.waterApplicationType === null || queryObject.waterApplicationType === "NA") ? "" : queryObject.waterApplicationType,
         waterProperty :{
+        id : get(state.screenConfiguration.preparedFinalObject, "WaterConnection[0].waterProperty.id", null),
         usageCategory: (queryObject.waterProperty.usageCategory === null || queryObject.waterProperty.usageCategory === "NA") ? "" : queryObject.waterProperty.usageCategory,
         usageSubCategory: (queryObject.waterProperty.usageSubCategory === null || queryObject.waterProperty.usageSubCategory === "NA") ? "" : queryObject.waterProperty.usageSubCategory
         },
@@ -1018,15 +1019,31 @@ export const applyForWater = async (state, dispatch) => {
                 state.screenConfiguration.preparedFinalObject,
                 "WaterConnection[0].additionalDetails.appCreatedDate"
             )
-            // need to add status from the localstorage here for the status and remove the local storage
-                if(localStorage.getItem("WNS_STATUS")){
-                    window.localStorage.removeItem("WNS_STATUS");
-                }
-                       
+
             let queryObjectForUpdate = get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0]");
+                                  
             set(queryObjectForUpdate, "tenantId", tenantId);
             queryObjectForUpdate = { ...queryObjectForUpdate, ...queryObject }
             set(queryObjectForUpdate, "processInstance.action", "SUBMIT_APPLICATION");
+            // need to add status from the localstorage here for the status and remove the local storage
+            const wnsStatus =  window.localStorage.getItem("WNS_STATUS"); 
+            if(wnsStatus){
+              switch(wnsStatus){
+                case "UPDATE_CONNECTION_HOLDER_INFO" :   dispatch(prepareFinalObject("WaterConnection[0].activityType", "UPDATE_CONNECTION_HOLDER_INFO")); break;
+                case "REACTIVATE_CONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "REACTIVATE_CONNECTION")); break;
+                case "TEMPORARY_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "TEMPORARY_DISCONNECTION")); break;
+                case "APPLY_FOR_REGULAR_INFO":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "APPLY_FOR_REGULAR_INFO")); break;
+                case "PERMANENT_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "PERMANENT_DISCONNECTION")); break;
+                case "CONNECTION_CONVERSION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "CONNECTION_CONVERSION")); break;
+              }
+              set(queryObjectForUpdate, "processInstance.action", "INITIATE");
+              set(queryObjectForUpdate, "waterApplication", null);
+              set(queryObjectForUpdate, "activityType", wnsStatus);
+            }
+                if(localStorage.getItem("WNS_STATUS")){
+                    window.localStorage.removeItem("WNS_STATUS");
+                }
+           
             set(queryObjectForUpdate, "waterSource", (queryObjectForUpdate.waterSource + "." + queryObjectForUpdate.waterSubSource));
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
@@ -1036,6 +1053,7 @@ export const applyForWater = async (state, dispatch) => {
         } else {
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
+            queryObject.activityType = "NEW_WS_CONNECTION"
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             setApplicationNumberBox(state, dispatch);

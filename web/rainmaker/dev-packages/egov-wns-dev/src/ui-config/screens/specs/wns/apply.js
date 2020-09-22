@@ -389,11 +389,12 @@ const getApplyScreenChildren = () => {
     case "UPDATE_CONNECTION_HOLDER_INFO" : return {connectionHolderDetails }; 
     case "REACTIVATE_CONNECTION":
     case "TEMPORARY_DISCONNECTION":
-    case "APPLY_FOR_REGULAR_INFO":
     case "PERMANENT_DISCONNECTION":
        return {commentSectionDetails };  
     case "CONNECTION_CONVERSION":
     return {connConversionDetails};
+    case "APPLY_FOR_REGULAR_INFO":
+      return { IDDetails, Details, ownerDetails,propertyUsageDetails, connectionHolderDetails, OwnerInfoCard };
     default :    return { IDDetails, Details, ownerDetails,propertyUsageDetails, connectionHolderDetails, OwnerInfoCard };
   }
  }

@@ -137,6 +137,7 @@ const callBackForNext = async (state, dispatch) => {
   let activeStep = get(state.screenConfiguration.screenConfig["apply"], "components.div.children.stepper.props.activeStep", 0);
   let isFormValid = true;
   let hasFieldToaster = false;
+  //window.localStorage.setItem("ActivityStatusFlag","false");
   if (activeStep === 0) {
     // if (validatePropertyLocationDetails && validatePropertyDetails && validateForm) {
     //   isFormValid = await appl;
@@ -165,6 +166,12 @@ if(wnsStatus && wnsStatus === "CONNECTION_CONVERSION"){
     return;
   }
   removingDocumentsWorkFlow(state, dispatch) ;
+  try{
+    let abc = await applyForWater(state, dispatch);
+    window.localStorage.setItem("ActivityStatusFlag","true");
+  }catch (err){
+    console.log("errrr")
+  }
 }
 else if(wnsStatus && wnsStatus === "UPDATE_CONNECTION_HOLDER_INFO"){
   const iswaterConnFomValid = validateFields(
@@ -187,8 +194,15 @@ else if(wnsStatus && wnsStatus === "UPDATE_CONNECTION_HOLDER_INFO"){
     return;
   }
   removingDocumentsWorkFlow(state, dispatch) ;
+  try{
+    let abc = await applyForWater(state, dispatch);
+    window.localStorage.setItem("ActivityStatusFlag","true");
+ 
+  }catch (err){
+    console.log("errrr")
+  }
 } 
-else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMPORARY_DISCONNECTION"||wnsStatus === "APPLY_FOR_REGULAR_INFO"||wnsStatus === "PERMANENT_DISCONNECTION")){
+else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMPORARY_DISCONNECTION"||wnsStatus === "PERMANENT_DISCONNECTION")){
   const iswaterConnFomValid = validateFields(
     "components.div.children.formwizardFirstStep.children.commentSectionDetails.children.cardContent.children.commentDetails.children.CommentDetails.children",
     state,
@@ -209,6 +223,13 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
     return;
   }
   removingDocumentsWorkFlow(state, dispatch) ;
+  try{
+    let abc = await applyForWater(state, dispatch);
+    window.localStorage.setItem("ActivityStatusFlag","true");
+  }catch (err){
+    console.log("errrr")
+  }
+ 
 }
 
 
@@ -459,17 +480,20 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
       await pushTheDocsUploadedToRedux(state, dispatch);
       isFormValid = true; hasFieldToaster = false;
       const wnsStatus =  window.localStorage.getItem("WNS_STATUS"); 
-      if(wnsStatus){
-        switch(wnsStatus){
-          case "UPDATE_CONNECTION_HOLDER_INFO" :   dispatch(prepareFinalObject("WaterConnection[0].activityType", "Update_Connection_Holder_Info")); break;
-          case "REACTIVATE_CONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "Reactivate_Connection")); break;
-          case "TEMPORARY_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "Temporary_Disconnection")); break;
-          case "APPLY_FOR_REGULAR_INFO":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "Apply_For_Regular_Info")); break;
-          case "PERMANENT_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "Permanent_Disconnection")); break;
-          case "CONNECTION_CONVERSION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "Connection_Conversion")); break;
-        }
+      // if(wnsStatus){
+      //   switch(wnsStatus){
+      //     case "UPDATE_CONNECTION_HOLDER_INFO" :   dispatch(prepareFinalObject("WaterConnection[0].activityType", "UPDATE_CONNECTION_HOLDER_INFO")); break;
+      //     case "REACTIVATE_CONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "REACTIVATE_CONNECTION")); break;
+      //     case "TEMPORARY_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "TEMPORARY_DISCONNECTION")); break;
+      //     case "APPLY_FOR_REGULAR_INFO":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "APPLY_FOR_REGULAR_INFO")); break;
+      //     case "PERMANENT_DISCONNECTION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "PERMANENT_DISCONNECTION")); break;
+      //     case "CONNECTION_CONVERSION":  dispatch(prepareFinalObject("WaterConnection[0].activityType", "CONNECTION_CONVERSION")); break;
+      //   }
+      // }
+      if(process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit"&& window.localStorage.getItem("ActivityStatusFlag")=== "true"){
+        window.localStorage.removeItem("ActivityStatusFlag");
       }
-      else if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {  
+     else if (process.env.REACT_APP_NAME === "Citizen" && getQueryArg(window.location.href, "action") === "edit") {  
         setReviewPageRoute(state, dispatch);
       }
     }
