@@ -44,7 +44,7 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     applicationType: getapplicationType(),// 'OSBM',
     applicationStatus: getapplicationMode(),  //'INITIATED',
     applicationId: applicationnumber === 'null' ? '' : applicationnumber,
-    tenantId: getTenantId().split(".")[0],
+    tenantId : process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId(),
 
     auditDetails: {
       createdBy: JSON.parse(getUserInfo()).id,
