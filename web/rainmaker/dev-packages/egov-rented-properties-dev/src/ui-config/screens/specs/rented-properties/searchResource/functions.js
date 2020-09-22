@@ -326,7 +326,8 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
       ...item,
       date: moment(new Date(item.date)).format("DD-MMM-YYYY") || "-",
       amount : formatAmount(item.amount.toFixed(2)) || "-",
-      type : changeType(item.type || "-"),
+      typeP: changeType(item.type || "-"),
+      typeR:changePType(item.type) || "-",
       remainingInterest : formatAmount(item.remainingInterest.toFixed(2)),
       remainingPrincipal :formatAmount(item.remainingPrincipal.toFixed(2)),
       dueAmount :formatAmount(item.dueAmount.toFixed(2)),
@@ -339,7 +340,6 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
   lastElement.type = '-'
   lastElement.amount = '-'
   data.push(lastElement)
-  
   const mode = "download"
   let   queryStr = [{
     key: "key",
