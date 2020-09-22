@@ -171,7 +171,7 @@ import {
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.unitRate`,indentsmaterial[0].unitRate));
                 //set indent qty indentDetails
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.indentQuantity`,indentDetails[0].indentQuantity));
-                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.issuedQuantity`,indentDetails[0].issuedQuantity));
+                dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.issuedQuantity`,indentDetails[0].indentIssuedQuantity));
                 dispatch(prepareFinalObject(`materialIssues[0].materialIssueDetails[${cardIndex}].indentDetail.poOrderedQuantity`,indentDetails[0].poOrderedQuantity));
               //set total value on Qty Change
               let cardJsonPath =
@@ -209,6 +209,42 @@ import {
                 required: false,
                 pattern: getPattern("Amount") || null,
                 jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.indentQuantity"
+              })
+            },
+            indentIssuedQuantity: {
+              ...getTextField({
+                label: {
+                  labelName: "Indent Issued Quantity",
+                  labelKey: "STORE_MATERIAL_INDENT_ISSUED_QTY_READONLY"
+                },
+                placeholder: {
+                  labelName: "Total Indent Qty Required",
+                  labelKey: "STORE_MATERIAL_INDENT_ISSUED_QTY_READONLY"
+                },
+                props:{
+                  disabled:true
+                },
+                required: false,
+                pattern: getPattern("Amount") || null,
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.issuedQuantity"
+              })
+            },
+            poOrderedQuantity: {
+              ...getTextField({
+                label: {
+                  labelName: "Total Indent Qty Required",
+                  labelKey: "STORE_MATERIAL_INDENT_PO_ISSUED_QTY_READONLY"
+                },
+                placeholder: {
+                  labelName: "Total Indent Qty Required",
+                  labelKey: "STORE_MATERIAL_INDENT_PO_ISSUED_QTY_READONLY"
+                },
+                props:{
+                  disabled:true
+                },
+                required: false,
+                pattern: getPattern("Amount") || null,
+                jsonPath: "materialIssues[0].materialIssueDetails[0].indentDetail.poOrderedQuantity"
               })
             },
             balanceQty: {

@@ -961,6 +961,37 @@ export const ValidateCardUserQty = (state,dispatch,cardJsonPath,pagename,jasonpa
         } 
 
       }
+     else if(pagename ==='createMaterialIndentNote')
+      {
+        let IssueQty = Number(get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].indentDetail.issuedQuantity`,0))
+        let poOrderedQuantity = Number(get(state.screenConfiguration.preparedFinalObject,`${jasonpath}[${index}].indentDetail.poOrderedQuantity`,0))
+        
+        CompareQtyValue_ = CompareQtyValue_ - (IssueQty+poOrderedQuantity);
+        if(InputQtyValue_>CompareQtyValue_ || InputQtyValue_ === 0)  
+
+        {
+          if(InputQtyValue_ === 0)
+          {
+            matcode.push(
+              {
+                code:code,
+                InputQtyValue:0
+              }
+            )
+          }
+          else
+          {
+            matcode.push(
+              {
+                code:code,
+                InputQtyValue:1
+              }
+            )
+          }
+
+        } 
+
+      }
       else if(pagename ==='creatindent' || pagename ==='create-material-transfer-indent')
       {
         if(InputQtyValue_ === 0 )       
