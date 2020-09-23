@@ -1281,7 +1281,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "DOWNLOAD" , labelKey :"RP_DOWNLOAD"},
+                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                  leftIcon: "cloud_download",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51",marginRight: "10px" }, className: "tl-download-button" },
@@ -1295,7 +1295,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "PRINT" , labelKey :"RP_PRINT"},
+                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
                 leftIcon: "print",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
@@ -1361,7 +1361,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "DOWNLOAD" , labelKey :"RP_DOWNLOAD"},
+                label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
                  leftIcon: "cloud_download",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" ,marginRight: "10px"}, className: "tl-download-button" },
@@ -1375,7 +1375,7 @@ export const footer = getCommonApplyFooter({
             componentPath: "MenuButton",
             props: {
               data: {
-                label: {labelName : "PRINT" , labelKey :"RP_PRINT"},
+                label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
                 leftIcon: "print",
                 rightIcon: "arrow_drop_down",
                 props: { variant: "outlined", style: { height: "60px", color : "#FE7A51" }, className: "tl-print-button" },
