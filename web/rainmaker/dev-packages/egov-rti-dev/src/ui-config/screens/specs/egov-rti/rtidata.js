@@ -63,7 +63,7 @@ let searchScreenObject = get(
   "searchScreen",
   {}
 );
-if( Object.keys(searchScreenObject).length <= 2 )
+if( Object.keys(searchScreenObject).length <= 1 )
 {
   dispatch(
     toggleSnackbar(
