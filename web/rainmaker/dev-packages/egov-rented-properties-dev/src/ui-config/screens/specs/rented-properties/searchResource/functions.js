@@ -322,6 +322,8 @@ export const searchAccountStatement = async (state, dispatch) => {
 export const downloadAccountStatementPdf = async(state, dispatch) => {
   const { RentAccountStatements } = state.screenConfiguration.preparedFinalObject;
   const {Properties} = state.screenConfiguration.preparedFinalObject;
+  let properties = Properties
+  properties[0].demands[0].remainingPrincipal = properties[0].demands[0].remainingPrincipal.toFixed(2)
   const data = RentAccountStatements.map(item =>
     ({
       ...item,
@@ -329,6 +331,7 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
       amount : formatAmount(item.amount.toFixed(2)) || "-",
       typeP: changeType(item.type || "-"),
       typeR:changePType(item.type) || "-",
+      receiptNo: item.receiptNo || "-",
       remainingInterest : formatAmount(item.remainingInterest.toFixed(2)),
       remainingPrincipal :formatAmount(item.remainingPrincipal.toFixed(2)),
       dueAmount :formatAmount(item.dueAmount.toFixed(2)),
@@ -360,7 +363,7 @@ export const downloadAccountStatementPdf = async(state, dispatch) => {
   };
   try {
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, {
-          Properties : Properties,RentAccountStatements: data 
+          Properties : properties,RentAccountStatements: data 
           }, {
             'Accept': 'application/json'
           }, {
