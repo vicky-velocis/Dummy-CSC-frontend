@@ -384,13 +384,17 @@ const isRentHolderValid = validateFields(
   dispatch,
   "notice-violation"
 )
-const images=get(
-  state, 'form.newapplication.files.media', []
-)
-console.log(images)
-if(images.length===0){
-  imageupload=false
+const isImageupload=get(state.screenConfiguration.screenConfig["notice-violation"],'components.div.children.imageUploadDetailsProperties.visible')
+if(isImageupload===true){
+  const images=get(
+    state, 'form.newapplication.files.media', []
+  )
+  console.log(images)
+  if(images.length===0){
+    imageupload=false
+  }
 }
+
 let res = [];
 if(isOwnerDetailsValid && isRentHolderValid && !!imageupload) {
   res = await applynoticegeneration(state, dispatch, "Violation",propertyIdTransit)
