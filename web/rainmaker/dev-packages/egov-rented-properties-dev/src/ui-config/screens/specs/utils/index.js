@@ -3072,7 +3072,7 @@ export const getTextToLocalMapping = label => {
     case "Status":
       return getLocaleLabels(
         "Status",
-        "TL_COMMON_TABLE_COL_STATUS",
+        "RP_COMMON_TABLE_COL_STATUS",
         localisationLabels
       );
     case "INITIATED":
