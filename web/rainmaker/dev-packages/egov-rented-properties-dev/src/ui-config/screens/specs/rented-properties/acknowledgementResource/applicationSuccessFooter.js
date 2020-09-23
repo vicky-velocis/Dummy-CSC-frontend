@@ -125,7 +125,7 @@ export const applicationSuccessFooter = (
                         { key: "consumerCodes", value:codes},
                         { key: "tenantId", value: id }
                     ]
-                      download(receiptQuery, Properties,[], userInfo.name,'online-payment');
+                      download(receiptQuery, Properties,[], userInfo.name,'rent-payment');
                   }
                   else{
                     let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
@@ -213,7 +213,7 @@ export const applicationSuccessFooter = (
                         { key: "consumerCodes", value:codes},
                         { key: "tenantId", value: id }
                     ]
-                      download(receiptQuery, Properties,[], userInfo.name,'online-payment','print');
+                      download(receiptQuery, Properties,[], userInfo.name,'rent-payment','print');
                   }
                   else{
                     let consumerCodes = getQueryArg(window.location.href, "applicationNumber");
@@ -298,7 +298,7 @@ export const applicationSuccessFooter = (
                 { key: "consumerCodes", value:consumerCodes},
                 { key: "tenantId", value: tenantId }
             ]
-              download(receiptQueryString, Properties,[], userInfo.name,'online-payment');
+              download(receiptQueryString, Properties,[], userInfo.name,'rent-payment');
             break
             case 'NOTICE_GENERATION':
                 const { notices } = state.screenConfiguration.preparedFinalObject;
@@ -349,7 +349,7 @@ export const applicationSuccessFooter = (
                 { key: "consumerCodes", value:consumerCodes},
                 { key: "tenantId", value: tenantId }
             ]
-              download(receiptQueryString, Properties,[], userInfo.name,'online-payment','print');
+              download(receiptQueryString, Properties,[], userInfo.name,'rent-payment','print');
             break
         case 'NOTICE_GENERATION':
             const { notices } = state.screenConfiguration.preparedFinalObject;
