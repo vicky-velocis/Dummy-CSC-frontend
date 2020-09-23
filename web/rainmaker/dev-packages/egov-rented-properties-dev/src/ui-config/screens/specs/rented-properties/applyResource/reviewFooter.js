@@ -4,7 +4,7 @@ import {
   import {
     getButtonVisibility,
     getCommonApplyFooter,
-    downloadAcknowledgementForm,downloadAcknowledgementFormForMortagage
+    downloadAcknowledgementFormForMortagage
   } from "../../utils";
   import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
   import "./index.css";
