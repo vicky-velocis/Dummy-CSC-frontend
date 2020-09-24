@@ -31,6 +31,7 @@
     "egov-store-asset":"0.0.1",
     "egov-nulm":"0.0.1",
     "egov-rti":"0.0.1",
+    "egov-integration":"0.0.1",
     "egov-pt": "0.0.1",
     "egov-rented-properties": "0.0.1",
     "egov-tradelicence": "0.0.1",
