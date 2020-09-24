@@ -26,11 +26,12 @@ const styles = theme => ({
 });
 
 const CustomBarChart = (props) => {
-  const { classes, data } = props;
+  const { classes, data,heading } = props;
   return (
-    <Card raised className={classes.card}>
+    
+    <Card raised className={"classes.card"}>
       <CardContent>
-        <Typography className={"classes.pos"}>{"props.heading"}</Typography>
+        <Typography className={"classes.pos"}>{heading}</Typography>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart isAnimationActive layout="vertical" data={data}>
             <XAxis type="number" />

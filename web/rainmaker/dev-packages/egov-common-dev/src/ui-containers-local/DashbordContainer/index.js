@@ -253,15 +253,50 @@ class DashbordContainer extends Component {
                                           }
                                         />
                                       </Grid>
+                                      
                                         )
                             
                             })
                            )
                         }
+                        
+                       
 
                     </div>
                 )
             }
+           
+        </div>
+        <div>
+            {
+                APIData &&(
+                    <div style={{display:"flex",paddingLeft:"10px"}}>
+                        {
+                            APIData.length==0?(
+                                <div></div>
+                            ):(
+                                APIData.complaintSources.map((item,i)=>{
+                                    return(
+                                    
+                                      <Grid item lg={4} sm={12} xs={12}>
+                                      <CustomBarChart
+                                        data={formatChartData(item.aggregations)}
+                                        heading={item.heading}
+                                      />
+                                    </Grid>
+                                      
+                                        )
+                            
+                            })
+                           )
+                        }
+                        
+                       
+
+                    </div>
+                )
+            }
+           
         </div>
 
             </div>

@@ -76,13 +76,52 @@ class InventoryContainer extends Component {
           APIData, 
           pageName,        
           moduleName } = this.props;
-console.log(APIData)
-console.log("APIData")
-          if(pageName ==="RTI_PT")
+          let ministryname='';
+          let cpioRequestReceived=0;
+          let cpioRequestPending=0;
+          let appellateRequestReceived=0;
+          let appellateRequestPending=0;
+          let nodalRequestReceived=0;
+          let nodalRequestPending=0;
+          console.log(APIData)
+          console.log("APIData")
+          if(APIData!== null)
+          {
+          if(APIData.cpio !== null){
+            APIData.cpio.records.map((item,i)=>{
+              ministryname =item.minDeptDesc;
+              cpioRequestPending=cpioRequestPending + item.totalRequestPending;
+              cpioRequestReceived=cpioRequestReceived + item.totalRequestReceived;                          
+            })
+          }else{
+            cpioRequestPending=0;
+            cpioRequestReceived=0;
+          }
+          if(APIData.appellate !== null){
+            APIData.appellate.records.map((item,i)=>{
+              appellateRequestPending=appellateRequestPending + item.totalRequestPending;
+              appellateRequestReceived=appellateRequestReceived + item.totalRequestReceived;
+            })
+          }else{
+            appellateRequestPending=0;
+            appellateRequestReceived=0;  
+          }
+          if(APIData.nodal !== null){
+            APIData.nodal.records.map((item,i)=>{
+              nodalRequestPending=nodalRequestPending + item.totalRequestPending;
+              nodalRequestReceived=nodalRequestReceived + item.totalRequestReceived;                         
+            })
+          }else{
+            nodalRequestPending=0;
+            nodalRequestReceived=0;
+          }
+        }
+          if(pageName ==="INTIGRATION_PT")
           {
             return  ( <div>
               {
-                 APIData.length>0?(              
+                 APIData&&(
+                  APIData.length>0?(              
                   <div>               
                 
                <table 
@@ -92,19 +131,9 @@ console.log("APIData")
                <tr><td  style={{
                   textAlign: "left",
                   width:"15%"
-                }}><Label labelClassName="" label="RTI_PAYABLE_AMOUNT" /></td>
-                <td><Label labelClassName="" label="0.0" /></td>
-                {/* <td style={{
-                  textAlign: "right",
-                 
-                }}> 
-    
-                <Button  color="primary" onClick={() => this.onPrintClick('OB')}  style={{ alignItems: "right"}}>
-                                         <LabelContainer
-                                                 labelName="PRINT"
-                                                 labelKey="STORE_PRINT"
-                                                 color="#FE7A51"/> </Button>
-                </td> */}
+                }}><Label labelClassName="" label="INTIGRATION_PAYABLE_AMOUNT" /></td>
+                <td><Label labelClassName="" label={APIData[0].PayableAmount}/></td>
+               
                 </tr>             
                      
               </table>
@@ -114,18 +143,12 @@ console.log("APIData")
                   <div>
 
                   </div>
-                  // <div style={{
-                  //   textAlign: "right",}}>
-                  //    <Button  color="primary" onClick={() => this.onPrintClick('OB')}  style={{ alignItems: "right"}}>
-                  //                        <LabelContainer
-                  //                                labelName="PRINT"
-                  //                                labelKey="STORE_PRINT"
-                  //                                color="#FE7A51"/> </Button>
-                  // </div>
+                 
                 )
+                 )
               }         
              {
-              //  APIData&&APIData[0]&&( 
+               // APIData&&APIData[0]( 
                <div style={{ overscrollBehaviorX:"overlay",overflow:"overlay"}}>
                  
                   <table  id="reportTable"
@@ -140,42 +163,42 @@ console.log("APIData")
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_FINANCIAL_YEAR"
+                    label="INTIGRATION_FINANCIAL_YEAR"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="1">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_DUE_AMOUNT"
+                    label="INTIGRATION_DUE_AMOUNT"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="1">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_DISCOUNT"
+                    label="INTIGRATION_DISCOUNT"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="1">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_DEPOSIT_AMOUNT"
+                    label="INTIGRATION_DEPOSIT_AMOUNT"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="1">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_AMOUNT_OF_INTEREST"
+                    label="INTIGRATION_AMOUNT_OF_INTEREST"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="1">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_BALANCE_AMOUNT"
+                    label="INTIGRATION_BALANCE_AMOUNT"
                   />
                   </th>                  
                  </tr>
@@ -208,18 +231,19 @@ console.log("APIData")
                              </tr>
                             
                            ):(
-                            APIData.OpeningBalanceReport[0].balanceDetails.map((item,i)=>{
+
+                            APIData[0].PropertyTaxCalculation.map((item,i)=>{
                               return(
                                 <tr>
-                                  <th>{item.srNo}</th>
-                                  <th>{item.materialCode}</th>
-                                  <th>{item.materialName}</th>
-                                  <th>{item.materialType}</th>
-                                  <th>{item.uomName}</th>
-                                  <th>{item.quantity}</th>
-                                  <th>{item.unitRate}</th>
-                                  <th>{item.totalAmount}</th>
-                                  <th>{item.remarks}</th>
+                                  {/* <th>{item.srNo}</th> */}
+                                  <th>{item.Session}</th>
+                                  <th>{item.AmountDue}</th>
+                                  <th>{item.Discount}</th>
+                                  <th>{item.DepositAmount}</th>
+                                  <th>{item.AmtOfInt}</th>
+                                  <th>{item.BalanceAmount}</th>
+                                  {/* <th>{item.totalAmount}</th>
+                                  <th>{item.remarks}</th> */}
                                  
                                 </tr>
                               )
@@ -240,7 +264,7 @@ console.log("APIData")
                </div>);
 
           }
-          else if(pageName ==="RTI_NODAL")
+          else if(pageName ==="INTIGRATION_NODAL")
           {
             return  ( <div>
                     
@@ -260,14 +284,14 @@ console.log("APIData")
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_MINISTRY_NAME"
+                    label="INTIGRATION_MINISTRY_NAME"
                   />
                   </th>
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="2">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_APPELLATE_AUTHORITY"
+                    label="INTIGRATION_APPELLATE_AUTHORITY"
                   />
                   </th>
                  
@@ -275,14 +299,14 @@ console.log("APIData")
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_NODAL_OFFICER"
+                    label="INTIGRATION_NODAL_OFFICER"
                   />
                   </th>             
                   <th  style={{ verticalAlign:"middle", textAlign: "center"}} colSpan="2">
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_CPIO"
+                    label="INTIGRATION_CPIO"
                   />
                   </th>             
                            
@@ -293,42 +317,42 @@ console.log("APIData")
                   <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_RECEIVED"
+                    label="INTIGRATION_TOTAL_REQUEST_RECEIVED"
                   />
                  </th>
                  <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"1"}}>
                  <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_PENDING"
+                    label="INTIGRATION_TOTAL_REQUEST_PENDING"
                   />
                  </th>
                  <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"1"}}>
                  <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_RECEIVED"
+                    label="INTIGRATION_TOTAL_REQUEST_RECEIVED"
                   />
                  </th>
                  <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"1"}}>
                  <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_PENDING"
+                    label="INTIGRATION_TOTAL_REQUEST_PENDING"
                   />
                  </th>
                  <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"1"}}>
                  <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_RECEIVED"
+                    label="INTIGRATION_TOTAL_REQUEST_RECEIVED"
                   />
                  </th>
                  <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"1"}}>
                  <Label
                     className="report-header-row-label"
                     labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold", }}
-                    label="RTI_TOTAL_REQUEST_PENDING"
+                    label="INTIGRATION_TOTAL_REQUEST_PENDING"
                   />
                  </th>
                  
@@ -360,26 +384,18 @@ console.log("APIData")
                                <th  style={{ verticalAlign:"middle", textAlign: "center",columnSpan:"21"}} ><Label labelClassName="" label="COMMON_INBOX_NO_DATA" /></th>
                              </tr>
                             
-                           ):(
-                           
-                            APIData[0].invetoryDetails.map((item,i)=>{
-                              return(
-                                <tr>
-                                  <th>{item.srNo}</th>
-                                  <th>{item.openingQty}</th>
-                                  <th>{item.openingUom}</th>
-                                  <th>{item.openingRate}</th>
-                                  <th>{item.receiptDate}</th>
-                                  <th>{item.receiptNo}</th>
-                                  <th>{item.receiptDepartment}</th>
-                                 
-                                </tr>
-                              )                            
-                            })
-                           )
-                          
-                         }
-    
+                           ):(                           
+                            <tr>
+                              <td>{ministryname}</td>
+                              <td>{appellateRequestReceived}</td>
+                              <td>{appellateRequestPending}</td>                           
+                              <td>{nodalRequestReceived}</td>
+                              <td>{nodalRequestPending}</td>
+                              <td>{cpioRequestReceived}</td>
+                              <td>{cpioRequestPending}</td>
+                            </tr>                              
+                           )                          
+                         }    
                     </tbody>
                     )                
                   }

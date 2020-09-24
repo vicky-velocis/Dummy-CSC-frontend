@@ -63,7 +63,7 @@ let searchScreenObject = get(
   "searchScreen",
   {}
 );
-if( Object.keys(searchScreenObject).length == 0 )
+if( Object.keys(searchScreenObject).length <= 1 )
 {
   dispatch(
     toggleSnackbar(
@@ -78,46 +78,62 @@ if( Object.keys(searchScreenObject).length == 0 )
 }
 else
 {
-
+let minDeptCode='';
+let fromdate =''
 for (var key in searchScreenObject) {  
   
   queryObject.push({ key: key, value: (searchScreenObject[key]) });
+  if(key ==='minDeptCode')
+  minDeptCode=searchScreenObject[key]
+  else  if(key ==='fromdate')
+  fromdate=searchScreenObject[key]
 }
 
 queryObject.push({
   key: "isprint",
   value: false
 });
-
+dispatch(toggleSpinner())
 try {
   let payload =[];
 
- let Responce = await httpRequest(
+  let Responce = await httpRequest(
     "post",
-    "store-asset-services/openingbalance/_report",
-    "_report",    
-    queryObject
+    "integration-services/rti/v1/_get",
+    "_get",    
+    [],
+      {
+        tenantId: getTenantId(),
+        RtiRequest: {
+          minDeptCode:minDeptCode,
+          fromdate:fromdate
+        }
+      }
   );
 
 // payload = InventoryData()
 // dispatch(prepareFinalObject("InventoryData", payload));
-if(get(Responce,"records",[]))
-dispatch(prepareFinalObject("APIData", get(Responce,"records",[])));
+if(get(Responce,"ResponseBody",[]))
+{
+  dispatch(prepareFinalObject("APIData", get(Responce,"ResponseBody",[])));
+  dispatch(toggleSpinner())
+}
+
 else
 {
- let  APIData =[] 
+ let  APIData =null; 
+ dispatch(toggleSpinner())
  dispatch(prepareFinalObject("APIData",APIData));
 }
   console.log(payload)
-
-
-  
-
 
 return payload
 
 } catch (e) {
   console.log(e);
+  let  APIData =null; 
+  dispatch(toggleSpinner())
+  dispatch(prepareFinalObject("APIData",APIData));
 }
 }
 
@@ -126,23 +142,25 @@ return payload
 
 export const getData = async (action, state, dispatch) => {
  
-  await getMdmsData(state, dispatch);
+ // await getMdmsData(state, dispatch);
   
-   //fetching store name
-   const queryObject = [{ key: "tenantId", value: getTenantId()  }];
-   getSearchResults(queryObject, dispatch,"storeMaster")
-   .then(response =>{
-     if(response){
-       const storeNames = response.stores.map(item => {
-         let code = item.code;
-         let name = item.name;
-         let department = item.department.name;
-         let divisionName = item.divisionName;
-         return{code,name,department,divisionName}
-       } )
-       dispatch(prepareFinalObject("searchMaster.storeNames", storeNames));
-     }
-   });
+   //fetching department
+   let payload = await httpRequest(
+    "post",
+    "/integration-services/rti/v1/_getDepartment",
+    "_getDepartment",
+    [],
+    {
+      tenantId: getTenantId(),
+      userName: `2003010003Q`
+    }
+  );
+  if (payload && payload.ResponseBody) {
+    if (payload.ResponseBody.length>0) {
+      dispatch(prepareFinalObject("searchMaster.department", payload.ResponseBody));
+
+    }
+  }
 };
 const getMdmsData = async (state, dispatch) => {
   const tenantId =  getstoreTenantId();
@@ -176,7 +194,7 @@ const getMdmsData = async (state, dispatch) => {
 
 const header = getCommonHeader({
   labelName: "RTI Data",
-  labelKey: "RTI_DATA_HEADER"
+  labelKey: "INTIGRATION_DATA_HEADER"
 });
 const RegisterReviewResult = {
   uiFramework: "material-ui",
@@ -185,15 +203,15 @@ const RegisterReviewResult = {
   //  resetFields(state, dispatch);
     const tenantId = getTenantId();   
     dispatch(prepareFinalObject("searchScreen",{}));
-    // getData(action, state, dispatch).then(responseAction => {
+    getData(action, state, dispatch).then(responseAction => {
     
-    // }); 
+    }); 
        //get Eployee details data       
 // prepareEditFlow(state, dispatch,  tenantId).then(res=>
 //   {
 //   }
 // );
-let  APIData =[] 
+let  APIData =null; 
 dispatch(prepareFinalObject("APIData",APIData)); 
         return action;
   },
@@ -227,33 +245,38 @@ dispatch(prepareFinalObject("APIData",APIData));
       appPRSearchContainer: getCommonContainer({
         minDeptCode: {
           ...getSelectField({
-            label: { labelName: "Ministry Name", labelKey: "RTI_MINISTRY_NAME" },
+            label: { labelName: "Ministry Name", labelKey: "INTIGRATION_MINISTRY_NAME" },
             placeholder: {
               labelName: "Select Ministry Name",
-              labelKey: "RTI_MINISTRY_NAME_SELECT"
+              labelKey: "INTIGRATION_MINISTRY_NAME_SELECT"
             },
             required: true,
             jsonPath: "searchScreen.minDeptCode",
-            sourceJsonPath: "searchMaster.minDeptCode",
+            sourceJsonPath: "searchMaster.department",
             props: {
               disabled : false,
               className: "hr-generic-selectfield",
-              optionValue: "minDeptCode",
-              optionLabel: "name"
+              optionValue: "ministryCode",
+              optionLabel: "ministryName"
             }
           }),
 
         },
         receiptDate: {
           ...getDateField({
-            label: { labelName: " Receipt Date", labelKey: "RTI_RECEIPT_RECEIPT_DATE " },
+            label: { labelName: " Receipt Date", labelKey: "INTIGRATION_RECEIPT_RECEIPT_DATE" },
             placeholder: {
               labelName: "Enter Receipt Date",
-              labelKey: "RTI_RECEIPT_RECEIPT_DATE"
+              labelKey: "INTIGRATION_RECEIPT_RECEIPT_DATE"
             },
-            required: false,
-            jsonPath: "searchScreen.receiptDate",
+            required: true,
+            jsonPath: "searchScreen.fromdate",
             pattern: getPattern("Date"),
+            props: {
+              inputProps: {
+                max: new Date().toISOString().slice(0, 10),
+              }
+            },
             gridDefination: {
               xs: 12,
               sm: 4,
@@ -336,7 +359,7 @@ dispatch(prepareFinalObject("APIData",APIData));
             props: {
               dataPath: "records",
               moduleName: "RTI",
-              pageName:"RTI_NODAL",
+              pageName:"INTIGRATION_NODAL",
 
             }
         },
