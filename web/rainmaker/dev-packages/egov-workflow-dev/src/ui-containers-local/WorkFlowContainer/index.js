@@ -121,7 +121,9 @@ class WorkFlowContainer extends React.Component {
       case "ACTIVATE_CONNECTION":
         return "purpose=activate&status=success";
       case "REVOCATE":
-        return "purpose=application&status=revocated"
+        return "purpose=application&status=revocated";
+      default :
+        return "purpose=forward&status=success";
     }
   };
 
@@ -536,7 +538,7 @@ class WorkFlowContainer extends React.Component {
     if(businessService=='NewWS1' && applicationStatus == 'PENDING_FOR_TEMPORARY_TO_REGULAR_CONNECTION_APPROVAL'){
          actions.forEach(item => {
           if(item.buttonLabel === 'APPROVE_FOR_CONNECTION_CONVERSION')
-           prepareFinalObject("WaterConnection[0].waterApplicationType","REGULAR")
+          // prepareFinalObject("WaterConnection[0].waterApplicationType","REGULAR")
       });
     }
 
