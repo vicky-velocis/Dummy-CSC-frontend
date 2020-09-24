@@ -536,10 +536,10 @@ class WorkFlowContainer extends React.Component {
       }
     }
     if(businessService=='NewWS1' && applicationStatus == 'PENDING_FOR_TEMPORARY_TO_REGULAR_CONNECTION_APPROVAL'){
-         actions.forEach(item => {
-          if(item.buttonLabel === 'APPROVE_FOR_CONNECTION_CONVERSION')
-          // prepareFinalObject("WaterConnection[0].waterApplicationType","REGULAR")
-      });
+      //    actions.forEach(item => {
+      //     if(item.buttonLabel === 'APPROVE_FOR_CONNECTION_CONVERSION')
+      //      prepareFinalObject("WaterConnection[0].waterApplicationType","REGULAR")
+      // });
     }
 
     if(businessService=='NewWS1'){
