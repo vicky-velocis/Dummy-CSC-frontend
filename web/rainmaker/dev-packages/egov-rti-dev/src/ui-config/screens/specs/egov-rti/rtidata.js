@@ -264,7 +264,7 @@ dispatch(prepareFinalObject("APIData",APIData));
         },
         receiptDate: {
           ...getDateField({
-            label: { labelName: " Receipt Date", labelKey: "INTIGRATION_RECEIPT_RECEIPT_DATE " },
+            label: { labelName: " Receipt Date", labelKey: "INTIGRATION_RECEIPT_RECEIPT_DATE" },
             placeholder: {
               labelName: "Enter Receipt Date",
               labelKey: "INTIGRATION_RECEIPT_RECEIPT_DATE"
