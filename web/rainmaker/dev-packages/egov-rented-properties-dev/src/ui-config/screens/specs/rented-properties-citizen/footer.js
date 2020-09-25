@@ -198,7 +198,6 @@ const callBackForNext = async(state, dispatch) => {
 
 
 const callBackForNextTransitImages = async(state, dispatch) => {
-        let imageupload=true
         let uploadFlag = false;
         let activeStep = 1;
         let isFormValid = true;
@@ -219,14 +218,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         dispatch,
         "transit-site-images"
       )
-      const images=get(
-        state, 'form.newapplication.files.media', []
-      )
-      console.log(images)
-      if(images.length===0){
-        imageupload=false
-      }
-      if(!!isOwnerDetailsValid  && !!isDetailsValid && !!imageupload) {
+      if(!!isOwnerDetailsValid  && !!isDetailsValid) {
         const propertyId = get(state.screenConfiguration.preparedFinalObject, "PropertyImagesApplications[0].property.id");
         let res = true;
         if(!propertyId) {
@@ -258,7 +250,7 @@ const callBackForNextTransitImages = async(state, dispatch) => {
         
         let errorMessage = {
           labelName:
-              "Please fill all mandatory fields and upload at least one the images !",
+              "Please fill all mandatory fields and upload at least two the images !",
           labelKey: "ERR_FILL_MANDATORY_FIELDS_AND_UPLOAD_IMG"
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
