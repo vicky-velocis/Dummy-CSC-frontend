@@ -105,7 +105,7 @@ const getAcknowledgementCard = (
         labelKey: "RP_APPROVAL_REJ_MESSAGE_HEAD"
       } : purpose === "approve" ? {
         labelName: "Rented Property Master Entry is Approved Successfully",
-        labelKey: "RP_APPROVAL_SUCCESS_MESSAGE_HEAD"
+        labelKey: "RP_MASTER_ENTRY_APPROVAL_SUCCESS_MESSAGE_HEAD"
       } : purpose === "submit" ? {
         labelName: "Rented Property Master Entry is Submitted Successfully",
         labelKey: "RP_SUBMISSION_SUCCESS_MESSAGE_HEAD"
@@ -163,6 +163,9 @@ const getAcknowledgementCard = (
               } : type===TRANSITSITEIMAGES?{
                 labelName:"",
                 labelKey: ""
+              }: type===RP_MASTER_ENTRY?{
+                labelName:"",
+                labelKey: ""
               }
                : {
                 labelName:
@@ -204,11 +207,14 @@ const getAcknowledgementCard = (
                   "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
                 labelKey: "RP_APPLICATION_SUCCESS_MESSAGE_SUB"
               },
-              tailText: {
+              tailText: !!transitNumber?{
+                labelName: "Transit Number",
+                labelKey: "RP_SITE_PLOT_LABEL"
+              }:{
                 labelName: "Application Number",
                 labelKey: "RP_APPLICATION_NUMBER_LABEL"
               },
-              number: applicationNumber
+              number: transitNumber||applicationNumber
             })
           }
         },
