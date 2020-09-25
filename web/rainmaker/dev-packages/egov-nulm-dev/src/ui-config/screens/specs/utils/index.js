@@ -75,6 +75,8 @@ export const validateFields = (
     {}
   );
   let isFormValid = true;
+
+  
   for (var variable in fields) {
     if (fields.hasOwnProperty(variable)) {
       if (
@@ -95,6 +97,7 @@ export const validateFields = (
           true
         )
       ) {
+      
         isFormValid = false;
       }
     }
@@ -1170,4 +1173,7 @@ export const getTodaysDateInYMD = () => {
   let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   date = `${date.getFullYear()}-${month}-${day}`;
   return date;
+};
+export const checkValueForNA = value => {
+  return value ? value : "NA";
 };
