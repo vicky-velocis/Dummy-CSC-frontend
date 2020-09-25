@@ -9,7 +9,7 @@ import {
   import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-  import { getSearchResults } from "../../../../ui-utils/commons";
+  import { getSearchResults ,SANCTION_BY_BANK,REJECTED_BY_TASK_FORCE_COMMITTEE } from "../../../../ui-utils/commons";
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let status = getQueryArg(window.location.href, "status");
 
@@ -182,12 +182,22 @@ const getSEPDetails = async(state, dispatch) =>{
       })
 
       dispatch(prepareFinalObject(`NULMSEPRequest.dob`, NULMSEPRequest.dob.split(" ")[0] ));
+
+      if(NULMSEPRequest.taskCommitteeActionDate){
+        dispatch(prepareFinalObject(`NULMSEPRequest.taskCommitteeActionDate`, NULMSEPRequest.taskCommitteeActionDate.split(" ")[0] ));
+      }
+      if(NULMSEPRequest.applicationForwardedOnDate){
+        dispatch(prepareFinalObject(`NULMSEPRequest.applicationForwardedOnDate`, NULMSEPRequest.applicationForwardedOnDate.split(" ")[0] ));
+      }
+      if(NULMSEPRequest.sanctionDate){
+        dispatch(prepareFinalObject(`NULMSEPRequest.sanctionDate`, NULMSEPRequest.sanctionDate.split(" ")[0] ));
+      }
     }
   }
 }
 
 const roleBasedValidationForFooter = () => {
-  if(process.env.REACT_APP_NAME === "Employee" && status === "CREATED"){
+  if(process.env.REACT_APP_NAME === "Employee" && (status !== SANCTION_BY_BANK && status!==REJECTED_BY_TASK_FORCE_COMMITTEE)){
       return poViewFooter();
   }
   else{
@@ -204,7 +214,7 @@ const roleBasedValidationForFooter = () => {
     name: "view-sep",
     beforeInitScreen: (action, state, dispatch) => {
       getSEPDetails(state, dispatch);
-
+      window.localStorage.setItem("SEP_Status",status);
       set(
         action.screenConfig,
         "components.div.children.headerDiv.children.header.children.applicationNumber.props.number",

@@ -67,10 +67,11 @@ export const prepareDocumentsUploadData = async (state, dispatch, type) => {
   documents.forEach(doc => {
     // Handle the case for multiple muildings
     const isHandicapped = get(state.screenConfiguration.preparedFinalObject, "NULMSEPRequest.isHandicapped");      
+    const isDisabilityCertificateAvailable = get(state.screenConfiguration.preparedFinalObject, "NULMSEPRequest.isDisabilityCertificateAvailable");
     let card = {};
     card["name"] = doc.code;
     card["code"] = doc.code;
-    if(isHandicapped ==='YES' && doc.code ==='NULM_DISABILITY_CERTIFICATE')
+    if(isHandicapped ==='YES'&& isDisabilityCertificateAvailable==="YES" && doc.code ==='NULM_DISABILITY_CERTIFICATE')
     {
       card["required"] = true ;
     }
