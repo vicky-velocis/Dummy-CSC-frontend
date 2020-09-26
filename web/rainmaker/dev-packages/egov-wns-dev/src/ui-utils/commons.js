@@ -1044,17 +1044,26 @@ export const applyForWater = async (state, dispatch) => {
               set(queryObjectForUpdate, "processInstance.action", "INITIATE");
               set(queryObjectForUpdate, "waterApplication", null);
               set(queryObjectForUpdate, "activityType", wnsStatus);
-            }
-                if(localStorage.getItem("WNS_STATUS")){
-                    window.localStorage.removeItem("WNS_STATUS");
-                }
+            }             
            
             set(queryObjectForUpdate, "waterSource", (queryObjectForUpdate.waterSource + "." + queryObjectForUpdate.waterSubSource));
             queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
             await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
+            
+            const btnName = ["UPDATE_CONNECTION_HOLDER_INFO","APPLY_FOR_REGULAR_INFO","REACTIVATE_CONNECTION","CONNECTION_CONVERSION","TEMPORARY_DISCONNECTION","PERMANENT_DISCONNECTION"];
+        if(btnName.includes(wnsStatus)){
+            dispatch(prepareFinalObject("WaterConnection", queryObjectForUpdate));
+        }
+        else{
             let searchResponse = await getSearchResults(searchQueryObject);
             dispatch(prepareFinalObject("WaterConnection", searchResponse.WaterConnection));
+        }
+
+            if(localStorage.getItem("WNS_STATUS")){
+                window.localStorage.removeItem("WNS_STATUS");
+            }
+            
         } else {
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
