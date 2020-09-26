@@ -69,7 +69,7 @@ import {
       try {
         const response = await httpRequest(
           "post",
-          "store-asset-services/stores/_update",
+          "nulm-services/v1/suh/citizen/_update",
           "",
           queryObject,
           requestBody
@@ -108,10 +108,10 @@ import {
       };
       dispatch(toggleSnackbar(true, errorMessage, "warning"));
     } else {
-        const {OrganizationRequest} = state.screenConfiguration.preparedFinalObject;
+        const {NulmSuhCitizenNGORequest} = state.screenConfiguration.preparedFinalObject;
 
-        if(OrganizationRequest && OrganizationRequest.nominatedBy && OrganizationRequest.nominatedBy==="Others"){
-                if(!(OrganizationRequest.nomineeName && OrganizationRequest.nomineeNumber)){
+        if(NulmSuhCitizenNGORequest && NulmSuhCitizenNGORequest.nominatedBy && NulmSuhCitizenNGORequest.nominatedBy==="Others"){
+                if(!(NulmSuhCitizenNGORequest.nameOfNominatedPerson && NulmSuhCitizenNGORequest.contactNo)){
                     const errorMessage = {
                         labelName: "Please fill Nominee Details",
                         labelKey: "NILM_SUH_CITIZEN_FILL_NOMINEE",
@@ -120,39 +120,39 @@ import {
                       return;
                 }
         }else{
-            OrganizationRequest.nominatedBy ="Self";
+            NulmSuhCitizenNGORequest.nominatedBy ="Self";
         }
 
       //trigger api for create store
-    //   const { screenConfiguration } = state;
-    //   const { OrganizationRequest } = screenConfiguration.preparedFinalObject;
-    //   const tenantId = getTenantId();
-    //   OrganizationRequest.tenantId = tenantId;
+      const { screenConfiguration } = state;
+     // const { NulmSuhCitizenNGORequest } = screenConfiguration.preparedFinalObject;
+      const tenantId = getTenantId();
+      NulmSuhCitizenNGORequest.tenantId = tenantId;
 
-    //   const queryObject = [];
-    //   const requestBody = { OrganizationRequest };
-    //   console.log("requestbody", requestBody);
-    //   try {
-    //     const response = await httpRequest(
-    //       "post",
-    //       "/nulm-services/v1/organization/_create",
-    //       "",
-    //       queryObject,
-    //       requestBody
-    //     );
-    //     if (response) {
-    //       dispatch(setRoute(`/egov-nulm/acknowledgement?screen=regOrganization&mode=create&code=${OrganizationRequest.organizationName}`));
-    //     }
+      const queryObject = [];
+      const requestBody = { NulmSuhCitizenNGORequest };
+      console.log("requestbody", requestBody);
+      try {
+        const response = await httpRequest(
+          "post",
+          "/nulm-services/v1/suh/citizen/_create",
+          "",
+          queryObject,
+          requestBody
+        );
+        if (response) {
+          dispatch(setRoute(`/egov-nulm/acknowledgement?screen=suhcitezen&mode=create&code=${response.ResponseBody.nameOfNominatedPerson}`));
+        }
   
-    //   } catch (error) {
-    //     dispatch(
-    //       toggleSnackbar(
-    //         true,
-    //         { labelName: error.message, labelCode: error.message },
-    //         "error"
-    //       )
-    //     );
-    //   }
+      } catch (error) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            { labelName: error.message, labelCode: error.message },
+            "error"
+          )
+        );
+      }
   
     }
   };
@@ -186,7 +186,7 @@ import {
       }
     }
   
-    dispatch(prepareFinalObject("OrganizationRequest", {}));
+    dispatch(prepareFinalObject("NulmSuhCitizenNGORequest", {}));
   };
   
   export const buttonController = () => {
@@ -268,8 +268,8 @@ import {
   
   export const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: `SUH Program`,
-      labelKey: "NULM_APPLICATION_FOR_SUH_PROGRAM",
+      labelName: `Request for selter`,
+      labelKey: "NULM_SUH_CITIZEN_SELTER_REQUEST",
     }),
   });
   export const formwizardFirstStep = {
@@ -282,8 +282,8 @@ import {
       formDetail: getCommonCard({
         header: getCommonTitle(
           {
-            labelName: "SUH Details",
-            labelKey: "NULM_SUH_DETAILS",
+            labelName: "Citizen details",
+            labelKey: "NILM_SUH_CITIZEN_DETAILS",
           },
           {
             style: {
@@ -306,7 +306,7 @@ import {
                   },
                   required: true,
                   pattern: getPattern("Name") || null,
-                  jsonPath: "OrganizationRequest.personName"
+                  jsonPath: "NulmSuhCitizenNGORequest.shelterRequestedForPerson"
                 })
               },
               gender: {
@@ -315,11 +315,11 @@ import {
                 gridDefination: {
                   xs: 6
                 },
-                jsonPath: "OrganizationRequest.gender",
+                jsonPath: "NulmSuhCitizenNGORequest.gender",
                 type: "array",
                 props: {
                   required: true,
-                  jsonPath: "OrganizationRequest.gender",
+                  jsonPath: "NulmSuhCitizenNGORequest.gender",
                   label: { name: "Gender", key: "NULM_SEP_GENDER" },
                   buttons: [
                     {
@@ -356,7 +356,7 @@ import {
                   },
                   required: true,
                   pattern: getPattern("age") || null,
-                  jsonPath: "OrganizationRequest.age"
+                  jsonPath: "NulmSuhCitizenNGORequest.age"
                 })
               },          
               address: {
@@ -371,7 +371,7 @@ import {
                   },
                   required: true,
                   pattern: getPattern("Address") || null,
-                  jsonPath: "OrganizationRequest.address"
+                  jsonPath: "NulmSuhCitizenNGORequest.address"
                 })
               },
               reasonForStaying: {
@@ -386,7 +386,7 @@ import {
                   },
                   required: true,
                   pattern: getPattern("Address") || null,
-                  jsonPath: "OrganizationRequest.reasonForStaying"
+                  jsonPath: "NulmSuhCitizenNGORequest.reasonForStaying"
                 })
               },
               isHandicapped: {
@@ -395,11 +395,11 @@ import {
                 gridDefination: {
                   xs: 6
                 },
-                jsonPath: "OrganizationRequest.isHandicapped",
+                jsonPath: "NulmSuhCitizenNGORequest.isDisabled",
                 type: "array",
                 props: {
                   required: true,
-                  jsonPath: "OrganizationRequest.isHandicapped",
+                  jsonPath: "NulmSuhCitizenNGORequest.isDisabled",
                   label: { name: "Urban Poor", key: "NULM_SEP_HANDICAPPED" },
                   buttons: [
                     {
@@ -423,11 +423,11 @@ import {
                 gridDefination: {
                   xs: 6
                 },
-                jsonPath: "OrganizationRequest.nominatedBy",
+                jsonPath: "NulmSuhCitizenNGORequest.nominatedBy",
                 type: "array",
                 props: {
                   required: true,
-                  jsonPath: "OrganizationRequest.nominatedBy",
+                  jsonPath: "NulmSuhCitizenNGORequest.nominatedBy",
                   label: { name: "Nominated by", key: "NULM_SUH_CITIZEN_SHELTER_NOMINATED_BY" },
                   buttons: [
                     {
@@ -445,27 +445,26 @@ import {
                 },
                 type: "array",   
                 beforeFieldChange: (action, state, dispatch) => {
-                    let nomineeNamePath = action.componentJsonpath.replace(
-                      ".nominatedBy",
-                      ".nomineeName"
-                    );
-                    let nomineeNumberPath = action.componentJsonpath.replace(
-                        ".nominatedBy",
-                        ".nomineeNumber"
-                      );
-                    if (action.value === "Self") {
-                      dispatch( handleField("createSuh", nomineeNamePath, "props.value",""));
-                      dispatch( handleField("createSuh", nomineeNumberPath, "props.value",""));
-                      dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",true));
-                     dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",true));
-                  } 
-                  if (action.value === "Others") {
-                    dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",false));
-                    dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",false));
-                } 
+                //     let nomineeNamePath = action.componentJsonpath.replace(
+                //       ".nominatedBy",
+                //       ".nomineeName"
+                //     );
+                //     let nomineeNumberPath = action.componentJsonpath.replace(
+                //         ".nominatedBy",
+                //         ".nomineeNumber"
+                //       );
+                //     if (action.value === "Self") {
+                //       dispatch( handleField("createSuh", nomineeNamePath, "props.value",""));
+                //       dispatch( handleField("createSuh", nomineeNumberPath, "props.value",""));
+                //       dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",true));
+                //      dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",true));
+                //   } 
+                //   if (action.value === "Others") {
+                //     dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",false));
+                //     dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",false));
+                // } 
                 }
               },
-
               nomineeName: {
                 ...getTextField({
                   label: {
@@ -478,13 +477,12 @@ import {
                   },
                 //  required: true,
                   props: {
-                    disabled: true
+                    disabled: false
                 },
                   pattern: getPattern("Name") || null,
-                  jsonPath: "OrganizationRequest.nomineeName"
+                  jsonPath: "NulmSuhCitizenNGORequest.nameOfNominatedPerson"
                 })
-              },
-          
+              },          
               nomineeNumber: {
                 ...getTextField({
                   label: {
@@ -497,10 +495,10 @@ import {
                   },
                 //  required: true,
                   props: {
-                    disabled: true
+                    disabled: false
                 },
                   pattern: getPattern("MobileNo") || null,
-                  jsonPath: "OrganizationRequest.nomineeNumber"
+                  jsonPath: "NulmSuhCitizenNGORequest.contactNo"
                 })
               },
         }),

@@ -21,7 +21,7 @@ import {
   const code = getQueryArg(window.location.href, "code");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const headerrow = getCommonContainer({
-    header: getCommonHeader({ labelKey: "NULM_APPLICATION_FOR_SUH_PROGRAM" }),
+    header: getCommonHeader({ labelKey: "NILM_SUH_CITIZEN_VIEW_HEADER" }),
   });
   export const getLabelWithValue = (label, value, props = {}) => {
     return {
@@ -76,39 +76,39 @@ import {
     return getCommonContainer({
     personName: getLabelWithValue(
         { labelKey: "NULM_SUH_CITIZEN_SHELTER_PERSON_NAME" },
-        { jsonPath: "OrganizationRequest.organizationName" }
+        { jsonPath: "NulmSuhCitizenNGORequest.nameOfNominatedPerson" }
       ),
       gender: getLabelWithValue(
         { labelKey: "NULM_SEP_GENDER" },
-        { jsonPath: "OrganizationRequest.address" }
+        { jsonPath: "NulmSuhCitizenNGORequest.gender" }
       ),
       age: getLabelWithValue(
         { labelKey: "NULM_SEP_AGE" },
-        { jsonPath: "OrganizationRequest.emailId" }
+        { jsonPath: "NulmSuhCitizenNGORequest.age" }
       ),
       address: getLabelWithValue(
         { labelKey: "NULM_SMID_ADDRESS" },
-        { jsonPath: "OrganizationRequest.representativeName" }
+        { jsonPath: "NulmSuhCitizenNGORequest.address" }
       ),   
       reasonForStaying: getLabelWithValue(
         { labelKey: "NULM_SUH_LOG_REASON_FOR_STAY" },
-        { jsonPath: "OrganizationRequest.mobileNo" }
+        { jsonPath: "NulmSuhCitizenNGORequest.reasonForStaying" }
       ),
       isHandicapped: getLabelWithValue(
         { labelKey: "NULM_SEP_HANDICAPPED" },
-        { jsonPath: "OrganizationRequest.registrationNo" }
+        { jsonPath: "NulmSuhCitizenNGORequest.isDisabled" }
       ),
       nominatedBy: getLabelWithValue(
         { labelKey: "NULM_SUH_CITIZEN_SHELTER_NOMINATED_BY" },
-        { jsonPath: "OrganizationRequest.registrationNo" }
+        { jsonPath: "NulmSuhCitizenNGORequest.nominatedBy" }
       ),
       nomineeName: getLabelWithValue(
         { labelKey: "NULM_SUH_CITIZEN_SHELTER_NOMINEE_NAME" },
-        { jsonPath: "OrganizationRequest.registrationNo" }
+        { jsonPath: "NulmSuhCitizenNGORequest.shelterRequestedForPerson" }
       ),
       nomineeNumber: getLabelWithValue(
         { labelKey: "NULM_SUH_CITIZEN_SHELTER_NOMINEE_CONTACT" },
-        { jsonPath: "OrganizationRequest.registrationNo" }
+        { jsonPath: "NulmSuhCitizenNGORequest.contactNo" }
       ),
     });
   };
@@ -128,7 +128,7 @@ import {
               sm: 10,
             },
             ...getCommonSubHeader({
-              labelKey: "NULM_SUH_DETAILS",
+              labelKey: "NILM_SUH_CITIZEN_DETAILS",
             }),
           },
         },
@@ -143,15 +143,15 @@ import {
     uiFramework: "material-ui",
     name: "viewSuh",
     beforeInitScreen: (action, state, dispatch) => {
-    //   let OrganizationRequest = {};
-    //   OrganizationRequest.tenantId = tenantId;
-    //   OrganizationRequest.organizationUuid= code;
-    //   const requestBody = {OrganizationRequest}
-    //   getSearchResults([],requestBody, dispatch,"organization")
-    //   .then(response =>{
-    //     if(response && response.ResponseBody)
-    //           dispatch(prepareFinalObject("OrganizationRequest", response.ResponseBody[0]));
-    //   });
+      let NulmSuhCitizenNGORequest = {};
+      NulmSuhCitizenNGORequest.tenantId = tenantId;
+      NulmSuhCitizenNGORequest.suhCitizenNGOUuid= code;
+      const requestBody = {NulmSuhCitizenNGORequest}
+      getSearchResults([],requestBody, dispatch,"suhcitizen")
+      .then(response =>{
+        if(response && response.ResponseBody)
+              dispatch(prepareFinalObject("NulmSuhCitizenNGORequest", response.ResponseBody[0]));
+      });
        return action;
     },
     components: {
