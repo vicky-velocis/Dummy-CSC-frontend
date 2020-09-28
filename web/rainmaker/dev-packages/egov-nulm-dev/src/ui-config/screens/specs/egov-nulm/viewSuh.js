@@ -151,7 +151,7 @@ import {
       .then(response =>{
         if(response && response.ResponseBody)
         {
-          
+          dispatch(prepareFinalObject("NulmSuhCitizenNGORequest", response.ResponseBody[0]));
           const NulmSuhCitizenNGORequest  = { ...response.ResponseBody[0]};
           const radioButtonValue = ["isDisabled",];
         
