@@ -75,7 +75,7 @@ import {
           requestBody
         );
         if (response) {
-          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=storeMaster&mode=update&code=${response.stores[0].name}`));
+          dispatch(setRoute(`/egov-store-asset/acknowledgement?screen=SUHLOGC&mode=update&code=${response.stores[0].name}`));
         }
   
       } catch (error) {
@@ -141,7 +141,7 @@ import {
           requestBody
         );
         if (response) {
-          dispatch(setRoute(`/egov-nulm/acknowledgement?screen=suhcitezen&mode=create&code=${response.ResponseBody.nameOfNominatedPerson}`));
+          dispatch(setRoute(`/egov-nulm/acknowledgement?screen=SUHLOGC&mode=create&code=${response.ResponseBody.nameOfNominatedPerson}`));
         }
   
       } catch (error) {
