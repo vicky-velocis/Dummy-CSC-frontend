@@ -150,7 +150,7 @@ export const getSuhDetailsView = (isReview = true) => {
           labelName: "Assign To",
           labelKey: "NULM_SUH_ASSIGN_TO"
         },
-        { jsonPath: "NulmSuhRequest.assignedTo" }
+        { jsonPath: "NulmSuhRequest.assignedToName" }
       ),
     }),
   });

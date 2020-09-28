@@ -218,15 +218,15 @@ import {
   
   const getShelterName = async(action, state, dispatch) => {
     try{
-      let NulmSuhRequest = {};
-      NulmSuhRequest.tenantId = "ch.chandigarh";
-      const requestBody = {NulmSuhRequest}
-      let response = await getSearchResults([],requestBody, dispatch,"suh");
+      let OrganizationRequest = {};
+      OrganizationRequest.tenantId = "ch.chandigarh";
+      const requestBody = {OrganizationRequest}
+      let response = await getSearchResults([],requestBody, dispatch,"organization");
       if(response){
-        const shelterName = response.ResponseBody.map(suhObj => {
+        const shelterName = response.ResponseBody.map(orgObj => {
            let shelter = {};
-           shelter.name = suhObj.nameOfShelter;
-           shelter.code = suhObj.suhUuid;
+           shelter.name = orgObj.organizationName;
+           shelter.code = orgObj.organizationUuid;
 
            return shelter;
         });
