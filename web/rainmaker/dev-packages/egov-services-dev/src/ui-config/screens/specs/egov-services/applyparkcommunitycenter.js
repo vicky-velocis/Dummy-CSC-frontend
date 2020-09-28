@@ -211,20 +211,20 @@ export const prepareEditFlow = async (
 
         if (availabilityCheckData !== undefined) {
 
-            let paymentStatus = get(
-                state,
-                "screenConfiguration.preparedFinalObject.availabilityCheckData.bkPaymentStatus",
-                ""
-            );
-            if (paymentStatus === "SUCCESS" || paymentStatus === "success") {
-                let queryObject = [
-                    { key: "tenantId", value: tenantId },
-                    { key: "consumerCode", value: applicationNumber },
-                ];
-                const response = await getPreviousBill(queryObject);
-                dispatch(prepareFinalObject("oldBill", response.data));
-                console.log(response.data, "myresponse");
-            }
+            // let paymentStatus = get(
+            //     state,
+            //     "screenConfiguration.preparedFinalObject.availabilityCheckData.bkPaymentStatus",
+            //     ""
+            // );
+            // if (paymentStatus === "SUCCESS" || paymentStatus === "success") {
+            //     let queryObject = [
+            //         { key: "tenantId", value: tenantId },
+            //         { key: "consumerCode", value: applicationNumber },
+            //     ];
+            //     const response = await getPreviousBill(queryObject);
+            //     dispatch(prepareFinalObject("oldBill", response.data));
+            //     console.log(response.data, "myresponse");
+            // }
 
 
 
