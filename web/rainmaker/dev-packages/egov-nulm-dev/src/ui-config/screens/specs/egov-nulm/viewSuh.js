@@ -150,7 +150,20 @@ import {
       getSearchResults([],requestBody, dispatch,"suhcitizen")
       .then(response =>{
         if(response && response.ResponseBody)
-              dispatch(prepareFinalObject("NulmSuhCitizenNGORequest", response.ResponseBody[0]));
+        {
+          
+          const NulmSuhCitizenNGORequest  = { ...response.ResponseBody[0]};
+          const radioButtonValue = ["isDisabled",];
+        
+          radioButtonValue.forEach(value => {
+            if(NulmSuhCitizenNGORequest[value] && NulmSuhCitizenNGORequest[value]=== true ){
+              dispatch(prepareFinalObject(`NulmSuhCitizenNGORequest[${value}]`, "YES" ));
+            }else{
+              dispatch(prepareFinalObject(`NulmSuhCitizenNGORequest[${value}]`, "NO" ));
+            }
+          })
+             // dispatch(prepareFinalObject("NulmSuhCitizenNGORequest", response.ResponseBody[0]));
+        }
       });
        return action;
     },

@@ -23,6 +23,7 @@ import {
   import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
   import { getSearchResults } from "../../../../ui-utils/commons";
   import get from "lodash/get";
+  import set from "lodash/set";
   import { httpRequest } from "../../../../ui-utils/api";
   import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
   import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
@@ -128,7 +129,15 @@ import {
      // const { NulmSuhCitizenNGORequest } = screenConfiguration.preparedFinalObject;
       const tenantId = getTenantId();
       NulmSuhCitizenNGORequest.tenantId = tenantId;
-
+      const radioButtonValue = ["isDisabled",];
+    
+      radioButtonValue.forEach(value => {
+        if(NulmSuhCitizenNGORequest[value] && NulmSuhCitizenNGORequest[value]==="YES" ){
+          set( NulmSuhCitizenNGORequest, value, true );
+        }else{
+          set( NulmSuhCitizenNGORequest, value, false );
+        }
+      })
       const queryObject = [];
       const requestBody = { NulmSuhCitizenNGORequest };
       console.log("requestbody", requestBody);
@@ -141,7 +150,7 @@ import {
           requestBody
         );
         if (response) {
-          dispatch(setRoute(`/egov-nulm/acknowledgement?screen=SUHLOGC&mode=create&code=${response.ResponseBody.nameOfNominatedPerson}`));
+          dispatch(setRoute(`/egov-nulm/acknowledgement?screen=SUHLOGC&mode=create&code=${response.ResponseBody.shelterRequestedForPerson}`));
         }
   
       } catch (error) {
@@ -307,7 +316,21 @@ import {
                   required: true,
                   pattern: getPattern("Name") || null,
                   jsonPath: "NulmSuhCitizenNGORequest.shelterRequestedForPerson"
-                })
+                }),
+                beforeFieldChange: (action, state, dispatch) => {
+                  let nomineeNamePath = action.componentJsonpath.replace(
+                    ".personName",
+                    ".nomineeName"
+                  );
+                  if (action.value) {   
+                    const {NulmSuhCitizenNGORequest} = state.screenConfiguration.preparedFinalObject;
+                    if(NulmSuhCitizenNGORequest && ( NulmSuhCitizenNGORequest.shelterRequestedForPerson && NulmSuhCitizenNGORequest.shelterRequestedForPerson ==='Self'))
+                    {
+                      dispatch( handleField("createSuh", nomineeNamePath, "props.value",action.value));                   
+                    }      
+                     
+                 }
+                }
               },
               gender: {
                 uiFramework: "custom-containers",
@@ -445,24 +468,21 @@ import {
                 },
                 type: "array",   
                 beforeFieldChange: (action, state, dispatch) => {
-                //     let nomineeNamePath = action.componentJsonpath.replace(
-                //       ".nominatedBy",
-                //       ".nomineeName"
-                //     );
-                //     let nomineeNumberPath = action.componentJsonpath.replace(
-                //         ".nominatedBy",
-                //         ".nomineeNumber"
-                //       );
-                //     if (action.value === "Self") {
-                //       dispatch( handleField("createSuh", nomineeNamePath, "props.value",""));
-                //       dispatch( handleField("createSuh", nomineeNumberPath, "props.value",""));
-                //       dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",true));
-                //      dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",true));
-                //   } 
-                //   if (action.value === "Others") {
-                //     dispatch( handleField("createSuh", nomineeNamePath, "props.disabled",false));
-                //     dispatch( handleField("createSuh", nomineeNumberPath, "props.disabled",false));
-                // } 
+                  let nomineeNamePath = action.componentJsonpath.replace(
+                    ".nominatedBy",
+                    ".nomineeName"
+                  );
+                  if (action.value === "Self") {
+                    const {NulmSuhCitizenNGORequest} = state.screenConfiguration.preparedFinalObject;
+                    if(NulmSuhCitizenNGORequest && NulmSuhCitizenNGORequest.shelterRequestedForPerson)
+                    {
+                     dispatch( handleField("createSuh", nomineeNamePath, "props.value",NulmSuhCitizenNGORequest.shelterRequestedForPerson));
+                    }
+                 }
+                 if (action.value === "Others") {
+                   
+dispatch( handleField("createSuh", nomineeNamePath, "props.value",""));
+                 }
                 }
               },
               nomineeName: {
@@ -515,7 +535,13 @@ import {
     uiFramework: "material-ui",
     name: "createSuh",
     beforeInitScreen: (action, state, dispatch) => {
-      
+
+       const {NulmSuhCitizenNGORequest} = state.screenConfiguration.preparedFinalObject;
+       if(!NulmSuhCitizenNGORequest &&  !NulmSuhCitizenNGORequest.shelterRequestedForPerson)
+       {
+        dispatch(prepareFinalObject("NulmSuhCitizenNGORequest.nominatedBy", 'Self'));
+       }
+       
       return action;
     },
     components: {
