@@ -65,8 +65,8 @@ const getShelterName = async(action, state, dispatch) => {
       if(response){
         const shelterName = response.ResponseBody.map(suhObj => {
            let shelter = {};
-           shelter.name = suhObj.nameOfShelter;
-           shelter.code = suhObj.nameOfShelter;
+           shelter.name = suhObj.name_of_shelter;
+           shelter.code = suhObj.name_of_shelter;
 
            return shelter;
         });
