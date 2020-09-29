@@ -169,10 +169,10 @@ const callBackForBookTimeSlot = async (state, dispatch) => {
     };
     dispatch(toggleSnackbar(true, warrningMsg, "warning"));
   } else {
-    if (
+    if ( !(availabilityCheckData.bkApplicationNumber) && (
       availabilityCheckData.bkToTime === undefined ||
       availabilityCheckData.bkToTime === "" ||
-      availabilityCheckData.bkToTime === null
+      availabilityCheckData.bkToTime === null)
     ) {
       let warrningMsg = {
         labelName: "Please Select Time Slot you want to Book",
