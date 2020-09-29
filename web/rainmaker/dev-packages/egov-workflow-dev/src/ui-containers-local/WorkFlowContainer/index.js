@@ -194,7 +194,7 @@ class WorkFlowContainer extends React.Component {
       "applicationNumber"
     );
 
-    if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+    if (moduleName === "NewWS1" || moduleName === "NewSW1"|| moduleName === "WS_CONVERSION" || moduleName === "WS_DISCONNECTION" || moduleName === "WS_RENAME" || moduleName === "WS_TUBEWELL") {
       data = data[0];
       data.assignees = [];
       if (data.assignee) {
@@ -245,7 +245,7 @@ class WorkFlowContainer extends React.Component {
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
 
-        if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+        if (moduleName === "NewWS1" || moduleName === "NewSW1" || moduleName === "WS_CONVERSION" || moduleName === "WS_DISCONNECTION" || moduleName === "WS_RENAME" || moduleName === "WS_TUBEWELL") {
           window.location.href = `acknowledgement?${this.getPurposeString(label)}&applicationNumber=${applicationNumber}&tenantId=${tenant}`;
         }
 
@@ -329,9 +329,9 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "BPA") {
       baseUrl = "egov-bpa";
       bservice = ((applicationStatus == "PENDING_APPL_FEE") ? "BPA.NC_APP_FEE" : "BPA.NC_SAN_FEE");
-    } else if (moduleName === "NewWS1" || moduleName === "NewSW1") {
+    } else if (moduleName === "NewWS1" || moduleName === "NewSW1" ||moduleName === "WS_CONVERSION" || moduleName === "WS_DISCONNECTION" || moduleName === "WS_RENAME" || moduleName === "WS_TUBEWELL") {
       baseUrl = "wns"
-      if (moduleName === "NewWS1") {
+      if (moduleName === "NewWS1" || moduleName === "WS_CONVERSION" || moduleName === "WS_DISCONNECTION" || moduleName === "WS_RENAME" || moduleName === "WS_TUBEWELL") {
         bservice = "WS.ONE_TIME_FEE"
       } else {
         bservice = "SW.ONE_TIME_FEE"
@@ -506,7 +506,7 @@ class WorkFlowContainer extends React.Component {
         isLast: item.action === "PAY"||  item.action ===  "PAY_FOR_TEMPORARY_CONNECTION"||item.action === "PAY_FOR_REGULAR_CONNECTION" ? true : false,
         buttonUrl: getRedirectUrl(item.action, businessId, businessService),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
+        showEmployeeList: (businessService === "NewWS1" || businessService === "NewSW1" ||businessService === "WS_CONVERSION" || businessService === "WS_DISCONNECTION" || businessService === "WS_RENAME" || businessService === "WS_TUBEWELL") ? !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SEND_BACK_TO_CITIZEN" && item.action !== "RESUBMIT_APPLICATION" : !checkIfTerminatedState(item.nextState, businessService) && item.action !== "SENDBACKTOCITIZEN",
         roles: getEmployeeRoles(item.nextState, item.currentState, businessService),
         isDocRequired: checkIfDocumentRequired(item.nextState, businessService)
       };
@@ -590,7 +590,7 @@ class WorkFlowContainer extends React.Component {
       ProcessInstances.length > 0 &&
       this.prepareWorkflowContract(ProcessInstances, moduleName);
      let showFooter;
-      if(moduleName==='NewWS1'||moduleName==='NewSW1'){
+      if(moduleName==='NewWS1'||moduleName==='NewSW1' ||moduleName === "WS_CONVERSION" || moduleName === "WS_DISCONNECTION" || moduleName === "WS_RENAME" || moduleName === "WS_TUBEWELL"){
          showFooter=true;
       } else if(moduleName==='ROADCUTNOC'||moduleName==='PETNOC'||moduleName==='ADVERTISEMENTNOC'||moduleName==='SELLMEATNOC'){
         showFooter=false;
