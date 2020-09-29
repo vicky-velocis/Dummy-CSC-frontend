@@ -169,7 +169,7 @@ const callBackForBookTimeSlot = async (state, dispatch) => {
     };
     dispatch(toggleSnackbar(true, warrningMsg, "warning"));
   } else {
-    if ( !(availabilityCheckData.bkApplicationNumber) && (
+    if (!(availabilityCheckData.bkApplicationNumber) && (
       availabilityCheckData.bkToTime === undefined ||
       availabilityCheckData.bkToTime === "" ||
       availabilityCheckData.bkToTime === null)
@@ -616,7 +616,7 @@ export const availabilityForm = getCommonCard({
           let response = await getMasterDataPCC(requestBody);
 
           let responseStatus = get(response, "status", "");
-          console.log(responseStatus, "responseStatus");
+
           if (responseStatus == "SUCCESS" || responseStatus == "success") {
             let newResponse = response.data.map((el) => {
               let bkDuration =
@@ -624,8 +624,16 @@ export const availabilityForm = getCommonCard({
               let newObj = { ...el, bkDuration };
               return newObj;
             });
-            console.log(newResponse, "newResponse");
-            dispatch(prepareFinalObject("masterData", newResponse));
+            if (response.data.length > 0) {
+              dispatch(prepareFinalObject("masterData", newResponse));
+            } else {
+              let warrningMsg = {
+                labelName: "No data found. Please select other sector/area",
+                labelKey: "", //UPLOAD_FILE_TOAST
+              };
+              dispatch(toggleSnackbar(true, warrningMsg, "warning"));
+            }
+
           } else {
             let errorMessage = {
               labelName: "Something went wrong, Try Again later!",

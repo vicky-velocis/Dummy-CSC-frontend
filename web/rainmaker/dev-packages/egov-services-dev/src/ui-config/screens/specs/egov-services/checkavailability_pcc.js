@@ -66,6 +66,10 @@ const getMdmsData = async (action, state, dispatch) => {
                         {
                             name: "PCC_Document",
                         },
+                        {
+                            name: "Booking_Config",
+                        },
+
                     ],
                 },
             ],
