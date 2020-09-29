@@ -8,6 +8,7 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
+import set from "lodash/set";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
@@ -250,6 +251,21 @@ export const getData = async (action, state, dispatch) => {
         payloadWater.WaterConnection[0].water = true;
         payloadWater.WaterConnection[0].sewerage = false;
         dispatch(prepareFinalObject("WaterConnection", payloadWater.WaterConnection));
+
+        if(payloadWater && payloadWater.WaterConnection.length > 0){
+          const {usageCategory} = payloadWater.WaterConnection[0].waterProperty;
+
+          let subTypeValues = get(
+                state.screenConfiguration.preparedFinalObject,
+                "applyScreenMdmsData.PropertyTax.subUsageType"
+              );
+    
+            let subUsage=[];
+            subUsage = subTypeValues.filter(cur => {
+                        return (cur.code.startsWith(usageCategory))
+                      });
+                dispatch(prepareFinalObject("propsubusagetypeForSelectedusageCategory",subUsage));
+        }
       }
       const waterConnections = payloadWater ? payloadWater.WaterConnection : []
       const sewerageConnections = payloadSewerage ? payloadSewerage.SewerageConnections : [];

@@ -7,6 +7,8 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import set from "lodash/set";
+import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTodaysDateInYMD } from "../../utils";
 
 export const SMIDDetails = getCommonCard({
@@ -94,11 +96,11 @@ export const SMIDDetails = getCommonCard({
     bplNo: {
       ...getTextField({
         label: {
-          labelName: "BPL NULM_SMID_BPL_NUMBER",
+          labelName: "Ration card / Priority household number",
           labelKey: "NULM_SMID_BPL_NUMBER"
         },
         placeholder: {
-          labelName: "Enter NULM_SMID_BPL_NUMBER",
+          labelName: "Enter Ration card / Priority household number",
           labelKey: "NULM_SMID_BPL_NUMBER_PLACEHOLDER"
         },
         required: false,
@@ -167,7 +169,7 @@ export const SMIDDetails = getCommonCard({
       })
     },
     qualification: {
-      ...getTextField({
+      ...getSelectField({
         label: {
           labelName: "Qualification",
           labelKey: "NULM_SEP_QUALIFACATION"
@@ -178,6 +180,8 @@ export const SMIDDetails = getCommonCard({
         },
         required: true,
         pattern: getPattern("Address") || null,
+        sourceJsonPath:
+        "applyScreenMdmsData.NULM.Qualification",
         jsonPath: "NULMSMIDRequest.qualification"
       })
     },
@@ -213,7 +217,7 @@ export const SMIDDetails = getCommonCard({
           labelName: "Enter Email Id",
           labelKey: "NULM_SMID_EMAIL_ID_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         pattern: getPattern("Email") || null,
         jsonPath: "NULMSMIDRequest.emailId",
       })
@@ -238,13 +242,13 @@ export const SMIDDetails = getCommonCard({
       ...getTextField({
         label: {
           labelName: "Phone Number",
-          labelKey: "NULM_SMID_PHONE_NUMBER"
+          labelKey: "NULM_SMID_PHONE_NUMBER_INPUT"
         },
         placeholder: {
           labelName: "Enter Phone Number",
-          labelKey: "NULM_SMID_PHONE_NUMBER_PLACEHOLDER"
+          labelKey: "NULM_SMID_PHONE_NUMBER_INPUT_PLACEHOLDER"
         },
-        required: true,
+        required: false,
         pattern: getPattern("numeric-only") || null,
         jsonPath: "NULMSMIDRequest.phoneNo"
       })
@@ -319,7 +323,7 @@ export const SMIDDetails = getCommonCard({
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
-        xs: 6
+        xs: 12
       },
       jsonPath: "NULMSMIDRequest.isMinority",
       type: "array",
@@ -341,9 +345,68 @@ export const SMIDDetails = getCommonCard({
         ],      
         defaultValue: "NO"
       },
-      type: "array",     
-    },
+      type: "array",  
+      beforeFieldChange: (action, state, dispatch) => {
 
+        if (action.value === "NO") {
+          // dispatch(
+          //   handleField(
+          //     "create-smid",
+          //     "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minority",
+          //     "props",
+          //     { display: "none" }
+          //   )
+          // );
+          // set(
+          //   action.screenConfig,
+          //   "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minority.props",
+          //   { display: "none" }
+          // ); 
+          // set(
+          //   action.screenConfig,
+          //   "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minorityUI.props.style",
+          //   { display: "none" }
+          // );
+          dispatch(
+            handleField(
+              `create-smid`,
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minorityUI",
+              "props.style",
+              { display: "none" }
+            )
+          ); 
+
+          dispatch(prepareFinalObject("NULMSMIDRequest.minority",null));
+
+        }
+        else{
+          // dispatch(
+          //   handleField(
+          //     "create-smid",
+          //     "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minority",
+          //     "props",
+          //     { display: "inline-block" }
+          //   )
+          // );
+
+          // set(
+          //   action.screenConfig,
+          //   "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minorityUI.props.style",
+          //   { display: "inline-block" }
+          // ); 
+          dispatch(
+            handleField(
+              `create-smid`,
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.minorityUI",
+              "props.style",
+              { display: "inline-block" }
+            )
+          ); 
+        }
+      }   
+    },
+    minorityUI:getCommonContainer(
+      {
     minority: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
@@ -354,6 +417,7 @@ export const SMIDDetails = getCommonCard({
       type: "array",
       props: {
         required: false,
+        disabled:true,
         jsonPath: "NULMSMIDRequest.minority",
         label: { name: "Minority Religion", key: "NULM_SEP_MINORITY_RELIGION_INPUT" },
         buttons: [
@@ -391,16 +455,18 @@ export const SMIDDetails = getCommonCard({
       
      //   defaultValue: "MUSLIM"
       },
-      type: "array",     
+           
     },
+    //isFieldValid:true,
+   }),
     wardNo: {
       ...getTextField({
         label: {
-          labelName: "Ward No",
+          labelName: "Sector/Village",
           labelKey: "NULM_SMID_WARD_NO"
         },
         placeholder: {
-          labelName: "Enter Ward No",
+          labelName: "Enter Sector/Village",
           labelKey: "NULM_SMID_WARD_NO_PLACEHOLDER"
         },
         required: true,
@@ -426,14 +492,16 @@ export const SMIDDetails = getCommonCard({
     adharNo: {
       ...getTextField({
         label: {
-          labelName: "Adhar Number",
-          labelKey: "NULM_SMID_ADHAR_NUMBER"
+          labelName: "Adhar Number(mentioned last four digits only)",
+          labelKey: "NULM_SEP_ADHAR_NUMBER_INPUT"
         },
         placeholder: {
           labelName: "Enter Adhar Number",
           labelKey: "NULM_SMID_ADHAR_NUMBER_PLACEHOLDER"
         },
-        pattern: getPattern("aadhar") || null,
+        required:true,
+        pattern: getPattern("UOMValue") || null,
+        errorMessage: "NULM_SEP_ADHAR_NUMBER_INPUT_VALIDATION",
         jsonPath: "NULMSMIDRequest.adharNo"
       })
     },
@@ -449,10 +517,39 @@ export const SMIDDetails = getCommonCard({
           labelKey: "NULM_SMID_ADHAR_ACKNOWLEDGEMENT_NUMBER_PLACEHOLDER"
         },
         pattern: getPattern("aadharAcknowledgementNo") || null,
+        visible:false,
         jsonPath: "NULMSMIDRequest.adharAcknowledgementNo"
       })
     },
-      
+    isHomeless: {
+      uiFramework: "custom-containers",
+      componentPath: "RadioGroupContainer",
+      gridDefination: {
+        xs: 6
+      },
+      jsonPath: "NULMSMIDRequest.isHomeless",
+      type: "array",
+      props: {
+        required: true,
+        jsonPath: "NULMSMIDRequest.isHomeless",
+        label: { name: "Homeless", key: "NULM_SMID_HOMELESS_INPUT" },
+        buttons: [
+          {
+            labelName: "YES",
+            labelKey: "NULM_SMID_YES",
+            value:"YES",           
+          },
+          {
+            label: "NO",
+            labelKey: "NULM_SMID_NO",
+            value:"NO",           
+          },
+         
+        ],      
+        defaultValue: "NO"
+      },
+      type: "array", 
+    },
     isInsurance: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
@@ -464,7 +561,7 @@ export const SMIDDetails = getCommonCard({
       props: {
         required: true,
         jsonPath: "NULMSMIDRequest.isInsurance",
-        label: { name: "Insurance", key: "NULM_SMID_INSURANCE" },
+        label: { name: "Insurance", key: "NULM_SMID_INSURANCE_INPUT" },
         buttons: [
           {
             labelName: "YES",
@@ -481,6 +578,46 @@ export const SMIDDetails = getCommonCard({
         defaultValue: "NO"
       },
       type: "array",
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value === "NO") {
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.insuranceThrough",
+              "props.style",
+              { display: "none" }
+            )
+          ); 
+          dispatch(prepareFinalObject("NULMSMIDRequest.insuranceThrough",null));
+          // dispatch(
+          //   handleField(
+          //     "create-smid",
+          //     "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.insuranceThrough",
+          //     // "props",
+          //     { disabled: true }
+          //   )
+          // ); 
+        }
+        else  if (action.value === "YES") {
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.insuranceThrough",
+              "props.style",
+              { display: "inline-block" }
+            )
+          ); 
+          // dispatch(
+          //   handleField(
+          //     "create-smid",
+          //     "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.insuranceThrough",
+          //     // "props",
+          //     { disabled: false }
+          //   )
+          // ); 
+        }
+           
+      }
      
     },
     insuranceThrough: {
@@ -510,7 +647,7 @@ export const SMIDDetails = getCommonCard({
       props: {
         required: true,
         jsonPath: "NULMSMIDRequest.isStreetVendor",
-        label: { name: "Street vendor", key: "NULM_SMID_STREET_VENDOR" },
+        label: { name: "Street vendor", key: "NULM_SMID_STREET_VENDOR_INPUT" },
         buttons: [
           {
             labelName: "YES",
@@ -527,20 +664,51 @@ export const SMIDDetails = getCommonCard({
         defaultValue: "NO"
       },
       type: "array",
+      beforeFieldChange: (action, state, dispatch) => {
+
+
+
+        if (action.value === "NO") {
+          dispatch(
+            handleField(
+              `create-smid`,
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.RegistredCMC",
+              "props.style",
+              { display: "none" }
+            )
+          ); 
+          dispatch(prepareFinalObject("NULMSMIDRequest.isRegistered",false));
+         
+        }
+        else  if (action.value === "YES") {
+          dispatch(
+            handleField(
+              `create-smid`,
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.RegistredCMC",
+              "props.style",
+              { display: "inline-block" }
+            )
+          ); 
+         
+        }
+           
+      }
      
     },
-    isHomeless: {
+    RegistredCMC:getCommonContainer(
+      {
+        isRegistered: {
       uiFramework: "custom-containers",
       componentPath: "RadioGroupContainer",
       gridDefination: {
         xs: 6
       },
-      jsonPath: "NULMSMIDRequest.isHomeless",
+      jsonPath: "NULMSMIDRequest.isRegistered",
       type: "array",
       props: {
         required: true,
-        jsonPath: "NULMSMIDRequest.isHomeless",
-        label: { name: "Homeless", key: "NULM_SMID_HOMELESS" },
+        jsonPath: "NULMSMIDRequest.isRegistered",
+        label: { name: "Are you registered with Chandigarh Municipal Corporation?", key: "NULM_SMID_CMC_INPUT" },
         buttons: [
           {
             labelName: "YES",
@@ -556,7 +724,71 @@ export const SMIDDetails = getCommonCard({
         ],      
         defaultValue: "NO"
       },
-      type: "array", 
+      type: "array",
+      beforeFieldChange: (action, state, dispatch) => {
+        if (action.value === "NO") {
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.cobNumber",
+              "props.style",
+              { display: "none" }
+            )
+          ); 
+          dispatch(prepareFinalObject("NULMSMIDRequest.cobNumber",null));
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.cobNumber",
+              "required",
+              false
+              
+            )
+          );
+        }
+        else  if (action.value === "YES") {
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.cobNumber",
+              "props.style",
+              { display: "inline-block" }
+            )
+          ); 
+          dispatch(
+            handleField(
+              "create-smid",
+              "components.div.children.formwizardFirstStep.children.SMIDDetails.children.cardContent.children.SMIDDetailsContainer.children.cobNumber",
+              "required",
+              true
+              
+            )
+          );
+         
+        }
+           
+      }
+    },
+    gridDefination: {
+      xs: 6
+    },
+    }
+    ),
+    
+    cobNumber: {
+      ...getTextField({
+        label: {
+          labelName: "COB Number",
+          labelKey: "NULM_SEP_COB_NUMBER_INPUT"
+        },
+        placeholder: {
+          labelName: "Enter COB Number",
+          labelKey: "NULM_SEP_COB_NUMBER_INPUT_PLACEHOLDER"
+        },
+        pattern: getPattern("Name") || null,
+        errorMessage: "NULM_SEP_COB_NUMBER_INPUT_VALIDATION",
+        jsonPath: "NULMSMIDRequest.cobNumber"
+      })
     },
   })
 });

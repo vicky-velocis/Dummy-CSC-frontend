@@ -33,10 +33,6 @@ const fatherOrHusbandsNameField = {
         labelName: "Father/ Husband's Name",
         labelKey: "RP_FATHER_OR_HUSBANDS_NAME_LABEL"
     },
-    // placeholder: {
-    //     labelName: "Enter Father/ Husband's Name",
-    //     labelKey: "TL_FATHER_OR_HUSBANDS_NAME_NAME_PLACEHOLDER"
-    // },
     gridDefination: {
         xs: 12,
         sm: 6
@@ -309,8 +305,6 @@ const getPropertyDetailsForNotice = () => {
 const getPaymentDetailsNotice = () => {
     return {
             detailsContainer: getCommonContainer({    
-            demandNoticeFromDate: getDateField(demandNoticeFromDate),
-            demandNoticeLastDate: getDateField(demandNoticeLastDate),
             recoveryType: getSelectField(recoveryTypeField),
             paymentAmount: getTextField(paymentAmountFieldNotice),
         })

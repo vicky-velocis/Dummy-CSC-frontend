@@ -143,7 +143,45 @@ const callBackForNext = async (state, dispatch) => {
     //   isFormValid = await appl;
     // }
 
-// if wnsStatus is present then check the required fields
+
+
+    if (getQueryArg(window.location.href, "action") === "edit") {
+      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      const uploadedDocData = application.documents;
+      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
+        return {
+          title: `WS_${item.documentType}`,
+          link: item.fileUrl && item.fileUrl.split(",")[0],
+          linkText: "View",
+          name: item.fileName
+        };
+      });
+      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
+      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
+      let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
+       //connectionholdercode
+       let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
+       let holderData = connectionHolderObj[0];
+        if (holderData !== null && holderData !== undefined) {
+          if (holderData.sameAsPropertyAddress === true) {
+            holderData = null
+          }
+        }
+        if (holderData == null) {
+          applyScreenObject.connectionHolders = holderData;
+       } else {
+          let arrayHolderData = [];
+          arrayHolderData.push(holderData);
+          applyScreenObj.connectionHolders = arrayHolderData;
+        }
+
+      if(!isActiveProperty(applyScreenObj.property)){
+        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));     
+        showHideFieldsFirstStep(dispatch,"",false);        
+        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
+        return false;
+      }
+      // if wnsStatus is present then check the required fields
 const wnsStatus =  window.localStorage.getItem("WNS_STATUS");
 if(wnsStatus && wnsStatus === "CONNECTION_CONVERSION"){
   const iswaterConnFomValid = validateFields(
@@ -231,45 +269,6 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
   }
  
 }
-
-
-
-    if (getQueryArg(window.location.href, "action") === "edit") {
-      let application = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      const uploadedDocData = application.documents;
-      const reviewDocData = uploadedDocData && uploadedDocData.map(item => {
-        return {
-          title: `WS_${item.documentType}`,
-          link: item.fileUrl && item.fileUrl.split(",")[0],
-          linkText: "View",
-          name: item.fileName
-        };
-      });
-      dispatch(prepareFinalObject("applyScreen.reviewDocData", reviewDocData));
-      let applyScreenObject = findAndReplace(get(state.screenConfiguration.preparedFinalObject, "applyScreen", {}), "NA", null);
-      let applyScreenObj = findAndReplace(applyScreenObject, 0, null);
-       //connectionholdercode
-       let connectionHolderObj = get(state.screenConfiguration.preparedFinalObject, "connectionHolders");
-       let holderData = connectionHolderObj[0];
-        if (holderData !== null && holderData !== undefined) {
-          if (holderData.sameAsPropertyAddress === true) {
-            holderData = null
-          }
-        }
-        if (holderData == null) {
-          applyScreenObject.connectionHolders = holderData;
-       } else {
-          let arrayHolderData = [];
-          arrayHolderData.push(holderData);
-          applyScreenObj.connectionHolders = arrayHolderData;
-        }
-
-      if(!isActiveProperty(applyScreenObj.property)){
-        dispatch(toggleSnackbar(true, { labelKey: `ERR_WS_PROP_STATUS_${applyScreenObj.property.status}`, labelName: `Property Status is ${applyScreenObj.property.status}` }, "warning"));     
-        showHideFieldsFirstStep(dispatch,"",false);        
-        dispatch(prepareFinalObject("applyScreen", applyScreenObj));
-        return false;
-      }
 
     } else {
 
