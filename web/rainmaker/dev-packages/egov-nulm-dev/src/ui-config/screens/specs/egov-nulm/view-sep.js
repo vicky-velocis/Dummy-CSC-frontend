@@ -9,6 +9,7 @@ import {
   import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
   import { httpRequest } from "../../../../ui-utils";
   import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+  import { downloadAcknowledgementForm} from '../utils';
   import { getSearchResults ,SANCTION_BY_BANK,REJECTED_BY_TASK_FORCE_COMMITTEE } from "../../../../ui-utils/commons";
   let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
   let status = getQueryArg(window.location.href, "status");
@@ -208,6 +209,15 @@ const roleBasedValidationForFooter = () => {
   }
  
 }
+let printMenu = [];
+let receiptPrintObject = {
+  label: { labelName: "Receipt", labelKey: "NULM_PRINT_SEP" },
+  link: () => {
+    downloadAcknowledgementForm("Sep");
+  },
+  leftIcon: "receipt"
+};
+printMenu = [receiptPrintObject];
 
   const screenConfig = {
     uiFramework: "material-ui",
@@ -246,6 +256,31 @@ const roleBasedValidationForFooter = () => {
                   sm: 10
                 },
                 ...header
+              },
+              printMenu: {
+                uiFramework: "custom-atoms-local",
+                moduleName: "egov-tradelicence",
+                componentPath: "MenuButton",
+                gridDefination: {
+                  xs: 12,
+                  sm: 4,
+                  md:3,
+                  lg:3,
+                  align: "right",
+                },  
+                visible: true,// enableButton,
+                props: {
+                  data: {
+                    label: {
+                      labelName:"PRINT",
+                      labelKey:"NULM_PRINT"
+                    },
+                    leftIcon: "print",
+                    rightIcon: "arrow_drop_down",
+                    props: { variant: "outlined", style: { marginLeft: 10 } },
+                    menu: printMenu
+                  }
+                }
               }
             }
           },
