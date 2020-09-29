@@ -170,8 +170,9 @@ class InboxData extends React.Component {
     } else if(row[0].subtext === "MasterRP") {
       queryParams = `transitNumber=${taskId}&tenantId=${tenantId}`
     }
-    else if (row[0].subtext === "NewWS1") {
+    else if (row[0].subtext === "NewWS1" || row[0].subtext === "WS_CONVERSION" || row[0].subtext === "WS_DISCONNECTION" || row[0].subtext === "WS_RENAME" || row[0].subtext === "WS_TUBEWELL") {
       queryParams += '&history=true&service=WATER';
+      window.localStorage.setItem("wns_workflow",row[0].subtext);
     }
     else if (row[0].subtext === "NewSW1") {
       queryParams += '&history=true&service=SEWERAGE';
