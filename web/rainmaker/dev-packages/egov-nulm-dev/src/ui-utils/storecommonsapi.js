@@ -117,6 +117,7 @@ const fileStoreIdsObj = NULMSEPRequest.applicationDocument.filter(docInfo => {
    if(fileUrlPayload){
     const photoUrl = getFileUrl(fileUrlPayload[fileStoreIds]);
     SepApplication[0].applicantPhoto = photoUrl;
+      SepApplication[0].nameOfApplicant = SepApplication[0].name;
    let requestBody = {SepApplication};
     const response = await httpRequest(
       "post",
