@@ -8,7 +8,7 @@ import set from "lodash/set";
 import store from "redux/store";
 import { convertDateToEpoch, getCheckBoxJsonpath, getHygeneLevelJson, getLocalityHarmedJson, getSafetyNormsJson, getTranslatedLabel, ifUserRoleExists, updateDropDowns } from "../ui-config/screens/specs/utils";
 import { httpRequest } from "./api";
-
+import cloneDeep from "lodash/cloneDeep";
 export const serviceConst = {
     "WATER": "WATER",
     "SEWERAGE": "SEWERAGE"
@@ -1047,13 +1047,22 @@ export const applyForWater = async (state, dispatch) => {
             }             
            
             set(queryObjectForUpdate, "waterSource", (queryObjectForUpdate.waterSource + "." + queryObjectForUpdate.waterSubSource));
-            queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
-            await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
+            const appNumber =   getQueryArg(window.location.href, "applicationNumber");
+
+                queryObjectForUpdate = findAndReplace(queryObjectForUpdate, "NA", null);
+            
+           
+          let responseWater =  await httpRequest("post", "/ws-services/wc/_update", "", [], { WaterConnection: queryObjectForUpdate });
             let searchQueryObject = [{ key: "tenantId", value: queryObjectForUpdate.tenantId }, { key: "applicationNumber", value: queryObjectForUpdate.applicationNo }];
             
             const btnName = ["UPDATE_CONNECTION_HOLDER_INFO","APPLY_FOR_REGULAR_INFO","REACTIVATE_CONNECTION","CONNECTION_CONVERSION","TEMPORARY_DISCONNECTION","PERMANENT_DISCONNECTION"];
         if(btnName.includes(wnsStatus)){
-            dispatch(prepareFinalObject("WaterConnection", queryObjectForUpdate));
+            responseWater.WaterConnection[0].property = queryObjectForUpdate.property;
+            dispatch(prepareFinalObject("WaterConnection", responseWater.WaterConnection));
+            setApplicationNumberBox(state, dispatch);
+            dispatch(prepareFinalObject("applyScreen", findAndReplace(responseWater.WaterConnection[0], "null", "NA")));
+            let oldcombinedArray = cloneDeep(responseWater.WaterConnection[0]);
+            dispatch(prepareFinalObject("applyScreenOld", findAndReplace(oldcombinedArray, "null", "NA")));
         }
         else{
             let searchResponse = await getSearchResults(searchQueryObject);
