@@ -30,7 +30,6 @@ export const applicationSuccessFooter = (
   tenant,
   type
 ) => {
-  debugger
   const roleExists = ifUserRoleExists("CITIZEN");
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   const redirectionURL = roleExists ? "/" : "/inbox";
