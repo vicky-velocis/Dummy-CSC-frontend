@@ -122,6 +122,38 @@ class WorkFlowContainer extends React.Component {
         return "purpose=activate&status=success";
       case "REVOCATE":
         return "purpose=application&status=revocated";
+
+      case "VERIFY_AND_FORWARD_EE":
+      case "VERIFY_AND_FORWARD_JE_BR":
+          return "purpose=verify&status=success";
+
+      case "PAY":
+      case "PAY_FOR_REGULAR_CONNECTION":
+      case "PAY_FOR_TEMPORARY_CONNECTION":
+          return "purpose=payment&status=success";
+          
+      case "INITIATE":
+          return "purpose=initiated&status=success";
+          
+      case "APPLY_SECURITY_DEPOSIT":
+      case "APPLY_FOR_REGULAR_CONNECTION":
+      case "APPLY_CONNECTION_REACTIVATION":
+          return "purpose=apply&status=success";
+
+      case "APPROVE":
+      case "APPROVE_TEMP_CONNECTION":
+      case "APPROVE_FOR_CONNECTION_CONVERSION":
+      case "APPROVE_ACTIVATE_CONNECTION":
+      case "APPROVE_AND_STOP_BILLING":
+      case "APPROVE_AND_TEMP_STOP_BILLING":
+      case "APPROVE_FOR_CONNECTION_RENAME":
+      case "APPROVE_FOR_CONNECTION":
+      case "APPROVE_BY_JE_BR":
+          return "purpose=approve&status=success";
+
+      case "SEND_BACK_FOR_ADDON_PAYMENT":
+      case "SEND_BACK":
+          return "purpose=sendback&status=success";
       default :
         return "purpose=forward&status=success";
     }
