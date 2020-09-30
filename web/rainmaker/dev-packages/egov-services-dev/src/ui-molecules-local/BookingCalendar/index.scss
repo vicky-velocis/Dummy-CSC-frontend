@@ -70,7 +70,7 @@
     border-bottom-right-radius: 50% !important;
 }
 
-.Selectable .DayPicker-Day--today {
+.Selectable .DayPicker-Day--today:not(.DayPicker-Day--outside) {
     color: #ffffff;
     background: #4a90e2;
     border-radius: 50% !important;

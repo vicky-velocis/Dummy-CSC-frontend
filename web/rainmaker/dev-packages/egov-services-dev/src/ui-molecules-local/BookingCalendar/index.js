@@ -40,26 +40,6 @@ class BookingCalendar extends React.Component {
             });
         }
 
-        // for (let i = 0; i < this.props.reservedDays.length; i++) {
-        //     pushReservedDay.push(new Date(this.props.reservedDays[i]));
-        // }
-
-        //  if(this.props.reservedDays.length > 0) {
-
-        //     this.setState({
-        //         from: new Date(this.props.availabilityCheckData.bkFromDate),
-        //         // to: new Date(this.props.availabilityCheckData.bkToDate),
-        //         enteredTo: new Date(this.props.availabilityCheckData.bkToDate),
-        //     });
-        // }
-        // if(applicationNumber !== null || applicationNumber !== undefined){
-        //     alert("in it")
-        //     this.setState({
-        //         from: new Date(localStorageGet("fromDateCG")),
-        //         // to: new Date(this.props.availabilityCheckData.bkToDate),
-        //         enteredTo: new Date(localStorageGet("toDateCG")),
-        //     });
-        // }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -265,8 +245,8 @@ class BookingCalendar extends React.Component {
 
         let initialMonthDateStr = `${initialMonthDateYear}, ${initialMonthDateMonth}`;
 
-        console.log(initialMonthDateStr, "initialMonthDateStr");
-        console.log(from, "initialMonthDateStr");
+        // console.log(initialMonthDateStr, "initialMonthDateStr");
+        // console.log(from, "initialMonthDateStr");
         return (
             <div className="calendar-wrapper">
                 <div className="calendar-section">

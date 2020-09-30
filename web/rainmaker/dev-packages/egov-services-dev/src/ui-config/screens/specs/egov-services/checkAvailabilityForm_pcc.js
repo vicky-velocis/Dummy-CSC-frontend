@@ -10,38 +10,19 @@ import {
   getLabel,
   getPattern,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showHideAdhocPopup } from "../utils";
-import {
-  getTenantId,
-  setapplicationType,
-  lSRemoveItem,
-  lSRemoveItemlocal,
-  setapplicationNumber,
-  getUserInfo,
-  localStorageSet,
-} from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField,
   toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  getFileUrlFromAPI,
-  getQueryArg,
-  getTransformedLocale,
-} from "egov-ui-framework/ui-utils/commons";
-import {
-  getAvailabilityDataOSWMCC,
-  getPerDayRateOSWMCC,
-  getNewLocatonImages,
-  getMasterDataPCC,
-  getBetweenDays,
-} from "../utils";
+
+import { getMasterDataPCC } from "../utils";
 import { dispatchMultipleFieldChangeAction } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getTodaysDateInYMD, getFinancialYearDates } from "../utils";
+import { convertDateInYMD } from "../utils";
 
 export const validatestepform = (activeStep, isFormValid, hasFieldToaster) => {
   let allAreFilled = true;
@@ -169,10 +150,11 @@ const callBackForBookTimeSlot = async (state, dispatch) => {
     };
     dispatch(toggleSnackbar(true, warrningMsg, "warning"));
   } else {
-    if (!(availabilityCheckData.bkApplicationNumber) && (
-      availabilityCheckData.bkToTime === undefined ||
-      availabilityCheckData.bkToTime === "" ||
-      availabilityCheckData.bkToTime === null)
+    if (
+      !availabilityCheckData.bkApplicationNumber &&
+      (availabilityCheckData.bkToTime === undefined ||
+        availabilityCheckData.bkToTime === "" ||
+        availabilityCheckData.bkToTime === null)
     ) {
       let warrningMsg = {
         labelName: "Please Select Time Slot you want to Book",
@@ -194,9 +176,18 @@ const callBackForBookTimeSlot = async (state, dispatch) => {
 };
 
 const callBackForBook = async (state, dispatch) => {
-  // dispatch(setRoute(`/egov-services/applyparkcommunitycenter`));
-  let availabilityCheckData =
-    state.screenConfiguration.preparedFinalObject.availabilityCheckData;
+  let availabilityCheckData = get(
+    state,
+    "screenConfiguration.preparedFinalObject.availabilityCheckData",
+    {}
+  );
+  let oldAvailabilityCheckData = get(
+    state,
+    "screenConfiguration.preparedFinalObject.oldAvailabilityCheckData",
+    {}
+  );
+  console.log(availabilityCheckData, "availabilityCheckData");
+  console.log(oldAvailabilityCheckData, "oldAvailabilityCheckData");
   if (availabilityCheckData === undefined) {
     let warrningMsg = {
       labelName: "Please Select Date Range",
@@ -204,56 +195,66 @@ const callBackForBook = async (state, dispatch) => {
     };
     dispatch(toggleSnackbar(true, warrningMsg, "warning"));
   } else {
-    if (
-      availabilityCheckData.bkToDate === undefined ||
-      availabilityCheckData.bkToDate === "" ||
-      availabilityCheckData.bkToDate === null
-    ) {
-      let warrningMsg = {
-        labelName: "Please Select Date Range",
-        labelKey: "",
-      };
-      dispatch(toggleSnackbar(true, warrningMsg, "warning"));
-    } else {
-      if ("bkApplicationNumber" in availabilityCheckData) {
-        dispatch(
-          setRoute(
-            `/egov-services/applyparkcommunitycenter?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}`
-          )
-        );
+    if (oldAvailabilityCheckData !== undefined) {
+      console.log(
+        convertDateInYMD(availabilityCheckData.bkFromDate),
+        oldAvailabilityCheckData.bkFromDate,
+        convertDateInYMD(availabilityCheckData.bkToDate),
+        oldAvailabilityCheckData.bkToDate,
+        availabilityCheckData.bkBookingVenue,
+        oldAvailabilityCheckData.bkBookingVenue
+      );
+      console.log(
+        convertDateInYMD(availabilityCheckData.bkFromDate) ===
+          oldAvailabilityCheckData.bkFromDate &&
+          convertDateInYMD(availabilityCheckData.bkToDate) ===
+            oldAvailabilityCheckData.bkToDate &&
+          availabilityCheckData.bkBookingVenue ===
+            oldAvailabilityCheckData.bkBookingVenue
+      );
+      if (
+        convertDateInYMD(availabilityCheckData.bkFromDate) ===
+          oldAvailabilityCheckData.bkFromDate &&
+        convertDateInYMD(availabilityCheckData.bkToDate) ===
+          oldAvailabilityCheckData.bkToDate &&
+        availabilityCheckData.bkBookingVenue ===
+          oldAvailabilityCheckData.bkBookingVenue
+      ) {
+        let warrningMsg = {
+          labelName: "Please Change Date/Venue",
+          labelKey: "",
+        };
+        dispatch(toggleSnackbar(true, warrningMsg, "warning"));
       } else {
-        dispatch(setRoute(`/egov-services/applyparkcommunitycenter`));
+        dispatch(
+            setRoute(
+              `/egov-services/applyparkcommunitycenter?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}`
+            )
+          );
+      }
+    } else {
+      if (
+        availabilityCheckData.bkToDate === undefined ||
+        availabilityCheckData.bkToDate === "" ||
+        availabilityCheckData.bkToDate === null
+      ) {
+        let warrningMsg = {
+          labelName: "Please Select Date Range",
+          labelKey: "",
+        };
+        dispatch(toggleSnackbar(true, warrningMsg, "warning"));
+      } else {
+        if ("bkApplicationNumber" in availabilityCheckData) {
+          dispatch(
+            setRoute(
+              `/egov-services/applyparkcommunitycenter?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}`
+            )
+          );
+        } else {
+          dispatch(setRoute(`/egov-services/applyparkcommunitycenter`));
+        }
       }
     }
-
-    // if (
-    //     availabilityCheckData.bkToDate === undefined ||
-    //     availabilityCheckData.bkToDate === ""
-    // ) {
-    //     let warrningMsg = {
-    //         labelName: "Please select Date RANGE",
-    //         labelKey: "",
-    //     };
-    //     dispatch(toggleSnackbar(true, warrningMsg, "warning"));
-    // } else if ("bkApplicationNumber" in availabilityCheckData) {
-    //     // dispatch(
-    //     //     setRoute(
-    //     //         `/egov-services/applyparkcommunitycentre?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}&fromDate=${availabilityCheckData.bkFromDate}&toDate=${availabilityCheckData.bkToDate}&sector=${availabilityCheckData.bkSector}&venue=${availabilityCheckData.bkBookingVenue}`
-    //     //     )
-    //     // );
-    //     dispatch(
-    //         setRoute(
-    //             `/egov-services/applyparkcommunitycentre?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}`
-    //         )
-    //     );
-    // } else {
-    //     dispatch(
-    //         // setRoute(
-    //         //     `/egov-services/applyparkcommunitycentre?fromDate=${availabilityCheckData.bkFromDate}&toDate=${availabilityCheckData.bkToDate}&sector=${availabilityCheckData.bkSector}&venue=${availabilityCheckData.bkBookingVenue}`
-    //         // )
-    //         setRoute(`/egov-services/applyparkcommunitycentre`)
-    //     );
-    // }
   }
 };
 
@@ -633,7 +634,6 @@ export const availabilityForm = getCommonCard({
               };
               dispatch(toggleSnackbar(true, warrningMsg, "warning"));
             }
-
           } else {
             let errorMessage = {
               labelName: "Something went wrong, Try Again later!",

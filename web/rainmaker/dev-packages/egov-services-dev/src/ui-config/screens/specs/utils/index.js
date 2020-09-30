@@ -781,7 +781,7 @@ export const downloadReceipt = (
                     { key: "key", value: "pacc-payment-receipt" },
                     {
                         key: "tenantId",
-                        value: "ch",
+                        value: tenantId,
                     },
                 ];
             } else {
@@ -789,7 +789,7 @@ export const downloadReceipt = (
                     { key: "key", value: "bk-payment-receipt" },
                     {
                         key: "tenantId",
-                        value: "ch",
+                        value: tenantId,
                     },
                 ];
             }
@@ -947,7 +947,7 @@ export const downloadReceipt = (
                 res.filestoreIds[0];
                 if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                     res.filestoreIds.map((fileStoreId) => {
-                        downloadReceiptFromFilestoreID(fileStoreId, mode);
+                        downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId);
                     });
                 } else {
                     console.log("Error In Receipt Download");
@@ -990,7 +990,7 @@ export const downloadCertificate = async (
                                 ? "bk-oswmcc-booking-pl"
                                 : "bk-cg-pl",
             },
-            { key: "tenantId", value: "ch" },
+            { key: "tenantId", value: tenantId },
         ];
 
         // applicationData.businessService == "OSBM"
@@ -1107,7 +1107,7 @@ export const downloadCertificate = async (
             res.filestoreIds[0];
             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                 res.filestoreIds.map((fileStoreId) => {
-                    downloadReceiptFromFilestoreID(fileStoreId, mode);
+                    downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId);
                 });
             } else {
                 console.log("Error In Permission Letter Download");
@@ -1162,7 +1162,7 @@ export const downloadApplication = async (
                                             ? "bk-wt-app-form"
                                             : "bk-wt-unpaid-app-form",
             },
-            { key: "tenantId", value: "ch" },
+            { key: "tenantId", value: tenantId },
         ];
 
         let bookingDataOsbm = {
@@ -1355,7 +1355,7 @@ export const downloadApplication = async (
             res.filestoreIds[0];
             if (res && res.filestoreIds && res.filestoreIds.length > 0) {
                 res.filestoreIds.map((fileStoreId) => {
-                    downloadReceiptFromFilestoreID(fileStoreId, mode);
+                    downloadReceiptFromFilestoreID(fileStoreId, mode, tenantId);
                 });
             } else {
                 console.log("Error In Application Download");

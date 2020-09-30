@@ -149,6 +149,17 @@ const prepareEditFlow = async (
                     bookingsModelList[0]
                 )
             );
+            let oldAvailabilityCheckData = {
+                bkFromDate :  bookingsModelList[0].bkFromDate,
+                bkToDate :  bookingsModelList[0].bkToDate,
+                bkBookingVenue :  bookingsModelList[0].bkBookingVenue,
+            }
+            dispatch(
+                prepareFinalObject(
+                    "oldAvailabilityCheckData",
+                    oldAvailabilityCheckData
+                )
+            );
 
             set(
                 action.screenConfig,
