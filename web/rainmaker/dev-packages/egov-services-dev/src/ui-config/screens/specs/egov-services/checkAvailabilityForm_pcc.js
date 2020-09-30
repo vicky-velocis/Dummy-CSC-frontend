@@ -573,11 +573,7 @@ export const availabilityForm = getCommonCard({
           );
           dispatch(prepareFinalObject("Booking.bkBookingType", bkBookingType));
 
-          set(
-            state.screenConfiguration.screenConfig["checkavailability_pcc"],
-            "components.div.children.availabilityMediaCardWrapper.visible",
-            true
-          );
+         
           // set(
           //     state.screenConfiguration.screenConfig[
           //     "checkavailability_pcc"
@@ -626,8 +622,18 @@ export const availabilityForm = getCommonCard({
               return newObj;
             });
             if (response.data.length > 0) {
+				set(
+					state.screenConfiguration.screenConfig["checkavailability_pcc"],
+					"components.div.children.availabilityMediaCardWrapper.visible",
+					true
+				  );
               dispatch(prepareFinalObject("masterData", newResponse));
             } else {
+				set(
+					state.screenConfiguration.screenConfig["checkavailability_pcc"],
+					"components.div.children.availabilityMediaCardWrapper.visible",
+					false
+				  );
               let warrningMsg = {
                 labelName: "No data found. Please select other sector/area",
                 labelKey: "", //UPLOAD_FILE_TOAST
