@@ -289,6 +289,10 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
         state.screenConfiguration.preparedFinalObject,
         "applyScreen.sewerage"
       );
+      const tubewell = get(
+        state.screenConfiguration.preparedFinalObject,
+        "applyScreen.tubewell"
+      );
       const searchPropertyId = get(
         state.screenConfiguration.preparedFinalObject,
         "searchScreen.propertyIds"
@@ -320,18 +324,23 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
         if (validateConnHolderDetails(applyScreenObject)) {
                    isFormValid = true;
                    hasFieldToaster = false;
-        if (applyScreenObject.water || applyScreenObject.sewerage) {
+        if (applyScreenObject.water || applyScreenObject.sewerage || applyScreenObject.tubewell) {
           if (
             applyScreenObject.hasOwnProperty("property") &&
             !_.isUndefined(applyScreenObject["property"]) &&
             !_.isNull(applyScreenObject["property"]) &&
             !_.isEmpty(applyScreenObject["property"])
           ) {
-            if (water && sewerage) {
-              if (validateFeildsForBothWaterAndSewerage(applyScreenObject)) {
+            if ((water && sewerage) ||(sewerage && tubewell)) {
+              if (water && sewerage && validateFeildsForBothWaterAndSewerage(applyScreenObject)) {
                 isFormValid = true;
                 hasFieldToaster = false;
-              } else {
+              } 
+              else if (tubewell && validateFeildsForSewerage(applyScreenObject) ){
+                isFormValid = true;
+                hasFieldToaster = false;
+              }
+                else {
                 isFormValid = false;
                 dispatch(
                   toggleSnackbar(
@@ -391,7 +400,8 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
           let waterData = get(state, "screenConfiguration.preparedFinalObject.WaterConnection");
           let sewerData = get(state, "screenConfiguration.preparedFinalObject.SewerageConnection")
           let waterChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.water");
-          let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")
+          let sewerChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage");
+          let tubewellChecked = get(state, "screenConfiguration.preparedFinalObject.applyScreen.tubewell");
           if (isFormValid) {
             if ((waterData && waterData.length > 0) || (sewerData && sewerData.length > 0)) {
               if (waterChecked && sewerChecked) {
@@ -420,7 +430,7 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
                 );
                 await applyForWater(state, dispatch);
               }
-            } else if (waterChecked && sewerChecked) {
+            } else if ((waterChecked && sewerChecked) || (sewerChecked && tubewellChecked)) {
               dispatch(
                 prepareFinalObject(
                   "applyScreen.service",
@@ -428,7 +438,7 @@ else if(wnsStatus && (wnsStatus === "REACTIVATE_CONNECTION"||wnsStatus === "TEMP
                 )
               );
               if (waterData.length === 0 && sewerData.length === 0) { isFormValid = await applyForWaterOrSewerage(state, dispatch); }
-            } else if (waterChecked) {
+            } else if (waterChecked || tubewellChecked) {
               dispatch(
                 prepareFinalObject(
                   "applyScreen.service",

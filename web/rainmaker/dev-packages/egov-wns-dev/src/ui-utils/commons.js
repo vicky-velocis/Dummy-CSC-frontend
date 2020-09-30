@@ -1002,7 +1002,12 @@ export const applyForWaterOrSewerage = async (state, dispatch) => {
     if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.water") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")) {
         let response = await applyForBothWaterAndSewerage(state, dispatch);
         return response;
-    } else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
+    }
+    else if (get(state, "screenConfiguration.preparedFinalObject.applyScreen.tubewell") && get(state, "screenConfiguration.preparedFinalObject.applyScreen.sewerage")){
+        let response = await applyForBothWaterAndSewerage(state, dispatch);
+        return response;
+    }
+     else if (get(state.screenConfiguration.preparedFinalObject, "applyScreen.sewerage")) {
         let response = await applyForSewerage(state, dispatch);
         return response;
     } else {
@@ -1076,7 +1081,12 @@ export const applyForWater = async (state, dispatch) => {
         } else {
             set(queryObject, "processInstance.action", "INITIATE")
             queryObject = findAndReplace(queryObject, "NA", null);
-            queryObject.activityType = "NEW_WS_CONNECTION"
+            if(get(state, "screenConfiguration.preparedFinalObject.applyScreen.tubewell")){
+                queryObject.activityType = "NEW_TUBEWELL_CONNECTION";
+            }else{
+                queryObject.activityType = "NEW_WS_CONNECTION"
+            }
+           
             response = await httpRequest("post", "/ws-services/wc/_create", "", [], { WaterConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
             setApplicationNumberBox(state, dispatch);
@@ -1181,7 +1191,12 @@ export const applyForBothWaterAndSewerage = async (state, dispatch) => {
             set(queryObject, "processInstance.action", "INITIATE");
             queryObject = findAndReplace(queryObject, "NA", null);
             let waterObject = queryObject;
-            waterObject.activityType = "NEW_WS_CONNECTION";
+            if(get(state, "screenConfiguration.preparedFinalObject.applyScreen.tubewell")){
+                waterObject.activityType = "NEW_TUBEWELL_CONNECTION";
+            }else{
+                waterObject.activityType = "NEW_WS_CONNECTION";
+            }
+            
             response = await httpRequest("post", "/ws-services/wc/_create", "_create", [], { WaterConnection: waterObject });
             const sewerageResponse = await httpRequest("post", "/sw-services/swc/_create", "_create", [], { SewerageConnection: queryObject });
             dispatch(prepareFinalObject("WaterConnection", response.WaterConnection));
