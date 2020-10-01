@@ -28,6 +28,7 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from '../../../../config/common';
 import store from "egov-ui-framework/ui-redux/store";
+import { getSTOREPattern} from "../../../../ui-utils/commons";
 let isEditMode = getQueryArg(window.location.href, "edited");
 const storeName = getQueryArg(window.location.href, "name");
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -400,7 +401,7 @@ export const formwizardFirstStep = {
           },
           required: true,
             errorMessage:"STORE_VALIDATION_DIVISION_NAME",
-          pattern: getPattern("non-empty-alpha-numeric"),
+          pattern: getPattern("Name"),
          
           jsonPath: "stores[0].divisionName",
         }),
