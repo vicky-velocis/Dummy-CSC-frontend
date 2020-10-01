@@ -229,11 +229,18 @@ export const getWFConfig = (module, businessService, taskId) => {
           INITIATED: "/fire-noc/apply",
           DEFAULT: "/fire-noc/search-preview",
         };
+		
+		case "MCC-BOOKING-NEW-LOCATION":
+		return {	
+			DEFAULT: "/egov-services/newLocation-application-details", 
+			}
+		 
+		
         case "BOOKING-SERVICES":
           return {
             DEFAULT: "/egov-services/application-details",
           }
-    
+		 
         case "WATER-TANKER-SERVICES":
           return {
             DEFAULT: "/egov-services/bwt-application-details",
