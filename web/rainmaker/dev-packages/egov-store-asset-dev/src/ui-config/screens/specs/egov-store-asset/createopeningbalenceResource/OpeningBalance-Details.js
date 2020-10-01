@@ -105,7 +105,7 @@ import {
               required: true,
               errorMessage:"STORE_VALIDATION_OPENING_QUANTITY",
               pattern: getPattern("Amount") || null,
-              jsonPath: "materialReceipt[0].receiptDetails[0].userReceivedQty"
+              jsonPath: "materialReceipt[0].receiptDetails[0].userQuantity"
             })
           },
           OpeningRate: {

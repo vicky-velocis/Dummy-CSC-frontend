@@ -127,7 +127,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
     let jasonpath =  "materialReceipt[0].receiptDetails";//indents[0].indentDetails
     let value = "material.code";
     let DuplicatItem = ValidateCard(state,dispatch,cardJsonPath,pagename,jasonpath,value)
-    let InputQtyValue = "userReceivedQty";
+    let InputQtyValue = "userQuantity";
     let CompareQtyValue = "indentQuantity";
     let balanceQuantity = "balanceQty";
     let doubleqtyCheck = false
@@ -258,7 +258,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
   set(materialReceiptObject[0],"mrnStatus","CREATED");
   set(materialReceiptObject[0],"receiptDetails[0].material.description","");
  
-  
+  }
   
   set(materialReceiptObject[0],"receiptDetails[0].receivedQty","");
 
@@ -277,7 +277,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
     console.log(UOMCode);
       set(materialReceiptObject[0],`receiptDetails[${index}].uom.code`,UOMCode[0].baseUom.code);  
        set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].lotNo`, element.lotNo);
-       set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].userAcceptedQty`, element.userAcceptedQty);
+       set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].userQuantity`, element.userQuantity);
        set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].oldReceiptNumber`, element.oldReceiptNumber);       
        set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].receivedDate`, convertDateToEpoch(element.receivedDate));
        set(materialReceiptObject[0], `receiptDetails[${index}].receiptDetailsAddnInfo[0].expiryDate`, convertDateToEpoch(element.expiryDate));
@@ -285,7 +285,7 @@ export const handleCreateUpdateOpeningBalence = (state, dispatch) => {
        set(materialReceiptObject[0], `receiptDetails[${index}].expiryDate`, convertDateToEpoch(element.expiryDate));
        //set(materialReceiptObject[0],"receiptDate",convertDateToEpoch(element.receiptDate));
   }
-}
+
   set(materialReceiptObject[0],"tenantId", tenantId);
 
   

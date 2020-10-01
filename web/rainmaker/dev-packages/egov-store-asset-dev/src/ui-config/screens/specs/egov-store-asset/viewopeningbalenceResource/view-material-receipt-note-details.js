@@ -47,12 +47,12 @@ import {
             { jsonPath: "materialReceipt[0].receiptDetails[0].expiryDate",          
           }
           ),
-          userAcceptedQty: getLabelWithValue(
+          userQuantity: getLabelWithValue(
             {
               labelName: "Opening Qty",
               labelKey: "STORE_MATERIAL_OPENNING_BALANCE_OPENING_QTY"
             },
-            { jsonPath: "materialReceipt[0].receiptDetails[0].userAcceptedQty",          
+            { jsonPath: "materialReceipt[0].receiptDetails[0].userQuantity",          
           }
           ),
           unitRate: getLabelWithValue(
@@ -71,7 +71,7 @@ import {
             { jsonPath: "materialReceipt[0].receiptDetails[0].oldReceiptNumber",          
           }
           ),
-          receiptDate: getLabelWithValue(
+          receivedDate: getLabelWithValue(
             {
               labelName: "Receipt Date",
               labelKey: "STORE_MATERIAL_OPENNING_BALANCE_RECEIPT_DATE"
