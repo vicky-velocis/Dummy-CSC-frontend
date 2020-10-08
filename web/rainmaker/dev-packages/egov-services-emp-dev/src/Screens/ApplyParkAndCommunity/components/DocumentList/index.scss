@@ -21,7 +21,11 @@
   margin-bottom: 10px;
   position: relative;
 }
-
 label > .label-container {
-    display: inline-block !important;
+  display: inline-block !important;
 } 
+
+.myDOC {
+    padding-top: 24px;
+    font-weight: bold;
+}

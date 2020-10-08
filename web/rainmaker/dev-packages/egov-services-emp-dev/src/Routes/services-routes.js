@@ -63,6 +63,11 @@ const NewLocationApplicationDetails = Loadable({
   loading: Loading
 });
 
+const CheckAvailabilityPcc= Loadable({
+  loader: () => import("../Screens/ApplyParkAndCommunity/components/CheckAvailability"),
+  loading: Loading
+})
+
 const ServiceHome = Loadable({
   loader: () => import("../Screens/ApplicationDetails"),
   loading: Loading
@@ -185,6 +190,20 @@ const routes = [
     hideFor: "ao",
     customFor: "employee",
     customTitle: "MYBK_ALL_APPLICAION_HEADER"
+  }
+},
+{
+  path: "egov-services/checkavailability_pcc",
+  component: CheckAvailabilityPcc,
+  needsAuthentication: true,
+  options: {
+    hideFooter: true,
+    title: "BK_MYBK_APPLY_PACC_REQUEST_HEADER",
+    hideTitle: false,
+    redirectionUrl,
+    hideFor: "ao",
+    customFor: "employee",
+    customTitle: "BK_MYBK_CHECK_AVAILABILITY_HEADER"
   }
 },
   {
