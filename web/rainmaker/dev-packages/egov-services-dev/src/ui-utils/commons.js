@@ -362,7 +362,7 @@ export const createUpdatePCCApplication = async (state, dispatch, action) => {
         set(payload, "businessService", "PACC");
         // set(payload, "timeslots", [{
         //     "slot" : "9:00 AM - 8:59 AM"
-           
+
         // }]);
         // set(payload, "totime", "9:00 AM");
         // set(payload, "fromtime", "8:59 AM");

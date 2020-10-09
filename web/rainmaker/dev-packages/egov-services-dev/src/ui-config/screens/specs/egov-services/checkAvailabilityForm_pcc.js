@@ -206,19 +206,19 @@ const callBackForBook = async (state, dispatch) => {
       );
       console.log(
         convertDateInYMD(availabilityCheckData.bkFromDate) ===
-          oldAvailabilityCheckData.bkFromDate &&
-          convertDateInYMD(availabilityCheckData.bkToDate) ===
-            oldAvailabilityCheckData.bkToDate &&
-          availabilityCheckData.bkBookingVenue ===
-            oldAvailabilityCheckData.bkBookingVenue
+        oldAvailabilityCheckData.bkFromDate &&
+        convertDateInYMD(availabilityCheckData.bkToDate) ===
+        oldAvailabilityCheckData.bkToDate &&
+        availabilityCheckData.bkBookingVenue ===
+        oldAvailabilityCheckData.bkBookingVenue
       );
       if (
         convertDateInYMD(availabilityCheckData.bkFromDate) ===
-          oldAvailabilityCheckData.bkFromDate &&
+        oldAvailabilityCheckData.bkFromDate &&
         convertDateInYMD(availabilityCheckData.bkToDate) ===
-          oldAvailabilityCheckData.bkToDate &&
+        oldAvailabilityCheckData.bkToDate &&
         availabilityCheckData.bkBookingVenue ===
-          oldAvailabilityCheckData.bkBookingVenue
+        oldAvailabilityCheckData.bkBookingVenue
       ) {
         let warrningMsg = {
           labelName: "Please Change Date/Venue",
@@ -226,11 +226,15 @@ const callBackForBook = async (state, dispatch) => {
         };
         dispatch(toggleSnackbar(true, warrningMsg, "warning"));
       } else {
-        dispatch(
+        if ("bkApplicationNumber" in availabilityCheckData) {
+          dispatch(
             setRoute(
               `/egov-services/applyparkcommunitycenter?applicationNumber=${availabilityCheckData.bkApplicationNumber}&tenantId=${availabilityCheckData.tenantId}&businessService=${availabilityCheckData.businessService}`
             )
           );
+        } else {
+          dispatch(setRoute(`/egov-services/applyparkcommunitycenter`));
+        }
       }
     } else {
       if (
@@ -573,7 +577,7 @@ export const availabilityForm = getCommonCard({
           );
           dispatch(prepareFinalObject("Booking.bkBookingType", bkBookingType));
 
-         
+
           // set(
           //     state.screenConfiguration.screenConfig[
           //     "checkavailability_pcc"
@@ -622,18 +626,18 @@ export const availabilityForm = getCommonCard({
               return newObj;
             });
             if (response.data.length > 0) {
-				set(
-					state.screenConfiguration.screenConfig["checkavailability_pcc"],
-					"components.div.children.availabilityMediaCardWrapper.visible",
-					true
-				  );
+              set(
+                state.screenConfiguration.screenConfig["checkavailability_pcc"],
+                "components.div.children.availabilityMediaCardWrapper.visible",
+                true
+              );
               dispatch(prepareFinalObject("masterData", newResponse));
             } else {
-				set(
-					state.screenConfiguration.screenConfig["checkavailability_pcc"],
-					"components.div.children.availabilityMediaCardWrapper.visible",
-					false
-				  );
+              set(
+                state.screenConfiguration.screenConfig["checkavailability_pcc"],
+                "components.div.children.availabilityMediaCardWrapper.visible",
+                false
+              );
               let warrningMsg = {
                 labelName: "No data found. Please select other sector/area",
                 labelKey: "", //UPLOAD_FILE_TOAST
