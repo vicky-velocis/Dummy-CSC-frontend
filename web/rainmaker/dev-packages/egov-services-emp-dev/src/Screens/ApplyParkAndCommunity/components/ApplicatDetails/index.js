@@ -18,6 +18,7 @@ class ApplicatInfo extends Component {
   continue = e => {
     let re = /\S+@\S+\.\S+/;
     let mb=/^\d{10}$/;
+    let fname = /^[a-zA-Z'-]+$/;
     e.preventDefault();
     if(this.props.firstName==""||this.props.email==""||this.props.mobileNo==""||this.props.houseNo==""){
 
@@ -29,7 +30,17 @@ class ApplicatInfo extends Component {
         },
         "warning"
       );
-    }else if(!re.test(this.props.email)){
+    }
+    else if(!fname.test(this.props.firstName)){
+      this.props.toggleSnackbarAndSetText(
+        true,
+        {
+          labelName: "Please Enter Name in Alphabets",
+          labelKey: `Please Enter Name in Alphabets`
+        },
+        "warning"
+      )}
+    else if(!re.test(this.props.email)){
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -68,13 +79,14 @@ class ApplicatInfo extends Component {
     return (
       <div style={{float: 'left', width: '100%', padding: '36px 15px' }}>
       <div className="col-xs-12" style={{background:'#fff', padding: '15px 0'}}>
-        
+     
       <div className="col-sm-6 col-xs-6">       
           <TextField
             id="name"
             name="name"
-            type="string"
+            type="text"
             value={firstName}
+            pattern="[A-Za-z]"
             required = {true}
             hintText={
               <Label
