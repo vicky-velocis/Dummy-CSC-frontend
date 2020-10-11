@@ -5,15 +5,13 @@ import {
     toggleSnackbar,
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import { Button } from "components";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Label from "egov-ui-kit/utils/translationNode";
+
 import "react-day-picker/lib/style.css";
 import "./index.css";
 import get from "lodash/get";
 import set from "lodash/set";
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 class BookingCalendar extends React.Component {
     constructor(props) {
@@ -29,17 +27,17 @@ class BookingCalendar extends React.Component {
     componentDidMount() {
         const { availabilityCheckData } = this.props;
        
-        console.log('availabilityCheckDataVal in bcalendar111111',availabilityCheckData)
+        // console.log('availabilityCheckDataVal in bcalendar111111',availabilityCheckData)
   //      console.log('availabilityCheckDataVal in bcalendar',availabilityCheckDataVal&&availabilityCheckDataVal.reservedDays)
 
         if (availabilityCheckData&&availabilityCheckData.reservedDays) {
-            console.log('pushReservedDayssssssssssssssssssssssssssssss');
+            // console.log('pushReservedDayssssssssssssssssssssssssssssss');
             let pushReservedDay = [];
             availabilityCheckData.reservedDays.length > 0 &&
                 availabilityCheckData.reservedDays.map((el) => {
                     pushReservedDay.push(new Date(el));
                 });
-                console.log('pushReservedDay',pushReservedDay);
+                // console.log('pushReservedDay',pushReservedDay);
             this.setState({
                 dselectedDays: pushReservedDay,
                 from: new Date(availabilityCheckData.bkFromDate),
@@ -71,10 +69,10 @@ class BookingCalendar extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(
-            nextProps.availabilityCheckData,
-            "myNextprops.availabilityCheckData"
-        );
+        // console.log(
+        //     nextProps.availabilityCheckData,
+        //     "myNextprops.availabilityCheckData"
+        // );
         if (
             nextProps.availabilityCheckData === undefined ||
             nextProps.availabilityCheckData.length === 0
@@ -151,10 +149,6 @@ class BookingCalendar extends React.Component {
         };
     }
 
-    continue = e => {
-        // this.props.history.push(`/egov-services/applyPark-community-center`);
-    }
-
     isSelectingFirstDay(from, to, day) {
        // console.log('isSelectingFirstDay',from,to,day)
         const isBeforeFirstDay = from && DateUtils.isDayBefore(day, from);
@@ -163,8 +157,8 @@ class BookingCalendar extends React.Component {
     }
 
     handleDayClick = (day, modifiers = {}) => {
-        console.log('day====>>>',day)
-        console.log('availabilityCheckData====>>>',availabilityCheckData)
+        // console.log('day====>>>',day)
+        // console.log('availabilityCheckData====>>>',availabilityCheckData)
         const { availabilityCheckData } = this.props;
         // if ("reservedDays" in availabilityCheckData) {
             const { from, to } = this.state;
@@ -257,18 +251,13 @@ class BookingCalendar extends React.Component {
     }
 
     render() {
-    
         const {ChangeFromDate, ChangeToDate, resetDate} = this.props;
-        
-        console.log("propsInBookingCalender--",this.props)
+   
         let { from, to, enteredTo } = this.state;
-        console.log("ResetDateInrender--",resetDate)
         if(resetDate){
             from = ChangeFromDate;
             to = ChangeToDate
         }
-        console.log("fromInrender--",from),
-        console.log("toInrender--",to)
         const modifiers = { start: from, end: enteredTo };
         const disabledDays = { before: this.state.from };
         const selectedDays = [from, { from, to: enteredTo }];
@@ -379,51 +368,22 @@ class BookingCalendar extends React.Component {
                         </span>
                     </div>
 
-
-
-
                     {/* {from && !to && (
                         <span style={{ color: "#fe7a51", fontWeight: "600" }}>
                             ** Please click same day for booking single Date.
                         </span>
                     )} */}
                 </div>
-
-
-                <Button
-              className="responsive-action-button"
-              primary={true}
-              label={<Label buttonLabel={true} label="RESET" />}
-              fullWidth={true}
-              onClick={this.continue}
-              startIcon={<ArrowForwardIosIcon />}
-            />
-
             </div>
         );
     }
 }
-
-
-// const mapStateToProps = state => {
-
-//     const { complaints, common, auth, form } = state;
-//     console.log("stateoFsummaryPage--",state)
-//     let resetDate = state.screenConfiguration.preparedFinalObject ? state.screenConfiguration.preparedFinalObject.availabilityCheckData: "";
-    
-//     let ChangeFromDate = resetDate ?resetDate.bkFromDate:"";
-//     let ChangeToDate = resetDate ?resetDate.bkToDate:"";
-//     const { createPACCApplicationData } = complaints;
-//     console.log('ChangeFromDate', ChangeFromDate)
-//     console.log("ChangeToDate--",ChangeToDate)
+// const mapStateToProps = (state) => {
 //     return {
-//         createPACCApplicationData,
-//         ChangeFromDate,
-//         ChangeToDate,
-//         resetDate
-//     }
-
-// }
+//         availabilityCheckData:
+//             state.screenConfiguration.preparedFinalObject.availabilityCheckData,
+//     };
+// };
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -470,17 +430,10 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 const mapStateToProps = (state, ownProps) => {
-
-    const { bookings, common, auth, form } = state;
-    console.log("stateoFsummaryPage--",state)
     let resetDate = state.screenConfiguration.preparedFinalObject ? state.screenConfiguration.preparedFinalObject.availabilityCheckData: "";
     
     let ChangeFromDate = resetDate ?resetDate.bkFromDate:"";
     let ChangeToDate = resetDate ?resetDate.bkToDate:"";
-    const { createPACCApplicationData } = bookings;
-    console.log('ChangeFromDate', ChangeFromDate)
-    console.log("ChangeToDate--",ChangeToDate)
-    
     let availabilityCheckData = get(
         state,
         "screenConfiguration.preparedFinalObject.availabilityCheckData",
@@ -488,23 +441,13 @@ const mapStateToProps = (state, ownProps) => {
     );
   if(availabilityCheckData&&availabilityCheckData.reservedDays){
     availabilityCheckData=availabilityCheckData;
-    console.log('availabilityCheckData in bcalendar00',availabilityCheckData)
+    // console.log('availabilityCheckData in bcalendar00',availabilityCheckData)
   }
-  console.log('availabilityCheckData in bcalendar333',availabilityCheckData)
+//   console.log('availabilityCheckData in bcalendar333',availabilityCheckData)
   if(availabilityCheckData.reservedDays){
-    return { availabilityCheckData,
-        createPACCApplicationData,
-        ChangeFromDate,
-        ChangeToDate,
-        resetDate
-     };
+    return { availabilityCheckData,resetDate,ChangeFromDate,ChangeToDate };
   }else{
-      return{
-        createPACCApplicationData,
-        ChangeFromDate,
-        ChangeToDate,
-        resetDate
-      }
+      return {resetDate,ChangeFromDate,ChangeToDate}
 }
  
 }

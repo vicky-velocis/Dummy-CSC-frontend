@@ -744,7 +744,7 @@ class AllRequests extends Component {
             onClick={() => this.gotoMcc()}
           /> : ''
         }
-        {/* 
+      
           <Button
             className="responsive-action-button"
             label={<Label buttonLabel={true} label="BK_MYBK_WATER_TANKER_APPLY" />}
@@ -752,7 +752,7 @@ class AllRequests extends Component {
             primary={true}
             style={{ float: 'right', marginRight: '50px', marginTop: '40px' }}
             onClick={() => this.gotoPArkAndCommunityTanker()
-            } /> : '' */}
+            } /> : '' 
 
 
 

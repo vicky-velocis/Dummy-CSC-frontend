@@ -19,6 +19,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+
 // import { RadioButton } from '../RadioButton'
 
 class BookingsDetails extends Component {
@@ -34,9 +35,10 @@ class BookingsDetails extends Component {
   }
   continue = e => {
     e.preventDefault();
-    const {jobTitle, jobCompany, toggleSnackbarAndSetText, utGST, GSTnumber, jobLocation, handleChange, facilitationCharges, approverName, dimension, location, cleaningCharges, comment, houseNo, rent, purpose, surcharge, cGST, locality, type, residenials, fromDate, toDate } = this.props;
+    const { jobTitle, jobCompany, toggleSnackbarAndSetText, utGST, GSTnumber, jobLocation, handleChange, facilitationCharges, approverName, dimension, location, cleaningCharges, comment, houseNo, rent, purpose, surcharge, cGST, locality, type, residenials, fromDate, toDate } = this.props;
     //|| purpose == "" || locality == "" || residenials == "" || dimension == "" || location == "" || cleaningCharges == "" || rent == "" || facilitationCharges == "" || surcharge == "" || utGST == "" || cGST== "" || GSTnumber == "" || type == ""||fromDate==""||toDate==""
     if (purpose == "" || facilitationCharges == "" || residenials == "") {
+
 
       toggleSnackbarAndSetText(
         true,
@@ -121,13 +123,14 @@ class BookingsDetails extends Component {
       <div style={{ float: 'left', width: '100%', padding: '36px 15px' }}>
         <div className="col-xs-12" style={{ background: '#fff', padding: '15px 0' }}>
 
+
           <div className="col-sm-6 col-xs-6">
             <TextField
               id="purpose"
               name="purpose"
               type="text"
-              required = {true}
               value={purpose}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_NAME_PURPOSE_PLACEHOLDER"
@@ -155,8 +158,8 @@ class BookingsDetails extends Component {
               id="location"
               name="location"
               type="text"
-              required = {true}
               value={location}
+              required = {true}
               disabled
               hintText={
                 <Label
@@ -185,8 +188,8 @@ class BookingsDetails extends Component {
               id="cleaningCharges"
               name="cleaningCharges"
               type="text"
-              required = {true}
               value={cleaningCharges}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_CLEANING_CHARGES_PLACEHOLDER"
@@ -214,8 +217,8 @@ class BookingsDetails extends Component {
               id="rent"
               name="rent"
               type="text"
-              required = {true}
               value={rent}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_RENT_PLACEHOLDER"
@@ -243,8 +246,8 @@ class BookingsDetails extends Component {
               id="facilitationCharges"
               name="facilitationCharges"
               type="text"
-              required = {true}
               value={facilitationCharges}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_FACILITATION_CHARGES_PLACEHOLDER"
@@ -272,8 +275,8 @@ class BookingsDetails extends Component {
               id="surcharge"
               name="surcharge"
               type="text"
-              required = {true}
               value={surcharge}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_NAME_SURCHARGE_PLACEHOLDER"
@@ -301,8 +304,8 @@ class BookingsDetails extends Component {
               id="utGST"
               name="utGST"
               type="text"
-              required = {true}
               value={utGST}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_UTGST_PLACEHOLDER"
@@ -330,8 +333,8 @@ class BookingsDetails extends Component {
               id="cGST"
               name="cGST"
               type="text"
-              required = {true}
               value={cGST}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_CGST_PLACEHOLDER"
@@ -359,7 +362,6 @@ class BookingsDetails extends Component {
               id="GSTnumber"
               name="GSTnumber"
               type="text"
-              // required = {true}
               value={GSTnumber}
               hintText={
                 <Label
@@ -389,8 +391,8 @@ class BookingsDetails extends Component {
               id="locality"
               name="locality"
               type="text"
-              required = {true}
               value={locality}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_SETCOR_PLACEHOLDER"
@@ -413,16 +415,15 @@ class BookingsDetails extends Component {
               hintStyle={{ width: "100%" }}
             />
           </div> 
-
-
           <div className="col-sm-6 col-xs-6">
           
             <TextField
             id="from-Date"
             name="from-Date"
             type="text"
-            required = {true}
+
             value={fromDate}
+            required = {true}
             disabled={true}
             hintText={
               <Label
@@ -451,8 +452,9 @@ class BookingsDetails extends Component {
               id="to-date"
               name="to-date"
               type="text"
-              required = {true}
+
               value={toDate}
+              required = {true}
               disabled={true}
               hintText={
                 <Label
@@ -481,8 +483,9 @@ class BookingsDetails extends Component {
               id="dimension"
               name="dimension"
               type="text"
-              required = {true}
+
               value={dimension}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_DIMENSION_PLACEHOLDER"
@@ -531,13 +534,13 @@ class BookingsDetails extends Component {
 
           <div className="col-sm-6 col-xs-6">
             <FormControl style={{ width: '100%' }}>
-              <InputLabel shrink style={{ width: '100%' }} id="demo-controlled-open-select-label"><Label  
+            <InputLabel shrink style={{ width: '100%' }} id="demo-controlled-open-select-label"><Label  
                   required = {true}   
                   label="BK_MYBK_NORMAL_RESIDENTIAL"
                 /></InputLabel>
               <Select
                 maxWidth={false}
-                required = {true}
+                required = {true} 
                 labelId="demo-controlled-open-select-label"
                 id="demo-controlled-open-select"
                 open={this.state.SetOpen}
@@ -594,8 +597,8 @@ class BookingsDetails extends Component {
   }
 }
 const mapStateToProps = state => {
-  const { bookings, common, auth, form } = state;
-  const { complaintSector } = bookings;
+  const { complaints, common, auth, form } = state;
+  const { complaintSector } = complaints;
 
   return {
     complaintSector

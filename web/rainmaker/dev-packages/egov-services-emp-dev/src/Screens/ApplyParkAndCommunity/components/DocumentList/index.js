@@ -17,8 +17,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import  UploadSingleFile  from "../UploadSingleFile";
-// import {fetchUploadedDoc, UploadDocComplete,testingPurpose } from ".../../../redux/bookings/actions"
-import {UploadDocComplete} from "egov-ui-kit/redux/complaints/actions"
 import "./index.css";
 
 // import { httpRequest } from "egov-ui-kit/utils/api";
@@ -243,7 +241,7 @@ class DocumentList extends Component {
     handleDocument = async (file, fileStoreId) => {
         let { uploadedDocIndex } = this.state;
         let documentMap = {};
-        const { prepareFinalObject, documentsUploadRedux, fetchUploadedDoc, userInfo, UploadDocComplete} = this.props;
+        const { prepareFinalObject, documentsUploadRedux, fetchUploadedDoc, userInfo} = this.props;
         console.log("file--,file--",file),
         console.log("documentName--",file.name)
         console.log("filestoreId--",fileStoreId)
@@ -268,7 +266,7 @@ class DocumentList extends Component {
         const fileUrl = await getFileUrlFromAPI(fileStoreId);
         console.log("fileURL--",fileUrl),
 
-         UploadDocComplete(documentMap)
+       //  UploadDocComplete(documentMap)
            
         // fetchUploadedDoc([
         //     { key: "tenantId", value: userInfo.tenantId },{ key: "module", value: file.name },])
@@ -344,7 +342,7 @@ console.log("getUploadCard-documentsUploadRedux--",documentsUploadRedux)
 // font-weight: 500;
 <div>
 <Label
-label="Required Documents"
+label="BK_MYBK_REQUIRED_DOC_HEADING"
 color="#000000"
 fontSize="21px"
 labelClassName={"myDOC"}
@@ -399,7 +397,7 @@ labelClassName={"myDOC"}
                             data={card.dropdown.menu}
                             optionValue="code"
                             optionLabel="label"
-                            required={true}
+                            // required={true}
                             onChange={(event) => this.handleChange(key, event),
                                 (event) => this.handleChangeTwo(key, event)
                             }
@@ -541,7 +539,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         prepareFinalObject: (jsonPath, value) =>
             dispatch(prepareFinalObject(jsonPath, value)),
-            UploadDocComplete: criteria => dispatch(UploadDocComplete(criteria)), 
+           // UploadDocComplete: criteria => dispatch(UploadDocComplete(criteria)), 
     };
 };
 

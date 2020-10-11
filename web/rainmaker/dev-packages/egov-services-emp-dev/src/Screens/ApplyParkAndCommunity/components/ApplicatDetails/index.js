@@ -6,20 +6,14 @@ import { connect } from "react-redux";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Grid from '@material-ui/core/Grid';
 import Footer from "../../../../modules/footer"
+
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
  import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
-
-
+import "./index.css"; 
 class ApplicatInfo extends Component {
-
-requiredIcon = (
-    <sup style={{ color: "#E54D42", paddingLeft: "5px" }}>*</sup>
-);
-
-
  
   continue = e => {
     let re = /\S+@\S+\.\S+/;
@@ -55,7 +49,6 @@ requiredIcon = (
       );
 
     }
-
     else{this.props.nextStep();}
     
   }
@@ -72,10 +65,6 @@ requiredIcon = (
       width: "90%",
       overflow: "hidden"
     };
-
-    const myStyle = {
-      display: 'inline-block'
-    }
     return (
       <div style={{float: 'left', width: '100%', padding: '36px 15px' }}>
       <div className="col-xs-12" style={{background:'#fff', padding: '15px 0'}}>
@@ -84,18 +73,17 @@ requiredIcon = (
           <TextField
             id="name"
             name="name"
-            type="text"
+            type="string"
             value={firstName}
             required = {true}
             hintText={
-              <Label 
+              <Label
                 label="BK_MYBK_NAME_CITIZEN_PLACEHOLDER"
                 color="rgba(0, 0, 0, 0.3799999952316284)"
                 fontSize={16}
                 labelStyle={hintTextStyle}
               />
             }
-            
             floatingLabelText={
               <Label
                 key={0}
@@ -109,7 +97,6 @@ requiredIcon = (
             underlineFocusStyle={{ bottom: 7 }}
             hintStyle={{ width: "100%" }}
           />
-     
         </div>
         
         <div className="col-sm-6 col-xs-6">
@@ -117,8 +104,8 @@ requiredIcon = (
             id="email"
             name="email"
             type="string"
-            required = {true}
             value={email}
+            required = {true}
             hintText={
               <Label
                 label="BK_MYBK_CITIZEN_EMAIL_PLACEHOLDER"
@@ -129,7 +116,6 @@ requiredIcon = (
             }
             floatingLabelText={
               <Label
-               className
                 key={0}
                 label="BK_MYBK_CREATE_CITIZEN_EMAIL"
                 color="rgba(0,0,0,0.60)"
@@ -149,8 +135,8 @@ requiredIcon = (
             id="mobile-no"
             name="mobile-no"
             type="text"
-            required = {true}
             value={mobileNo}
+            required = {true}
             hintText={
               <Label
                 label="BK_MYBK_CITIZEN_MOBILENO_PLACEHOLDER"
@@ -180,8 +166,8 @@ requiredIcon = (
               id="houseNo"
               name="houseNo"
               type="text"
-              required = {true}
               value={houseNo}
+              required = {true}
               hintText={
                 <Label
                   label="BK_MYBK_CITIZEN_HOUSE_NUMBER_PLACEHOLDER"
@@ -240,12 +226,12 @@ requiredIcon = (
 
 
 
-// const mapStateToProps = state => {
-//   const { complaints, common, auth, form } = state;
-//   return {
+const mapStateToProps = state => {
+  const { complaints, common, auth, form } = state;
+  return {
     
-//   }
-// }
+  }
+}
 const mapDispatchToProps = dispatch => {
   return {
       toggleSnackbarAndSetText: (open, message, error) =>
@@ -255,6 +241,6 @@ const mapDispatchToProps = dispatch => {
 
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ApplicatInfo);

@@ -57,14 +57,14 @@ class PlotArea extends React.Component {
             "_search", [],
             requestBody
           );
-           console.log('response in response', responseData)
+            console.log('response in response', responseData)
 
          let response= { status: "success", data: responseData.data };
 
         let responseStatus = get(response, "status", "");
-        console.log('response in checkData', response)
+        // console.log('response in checkData', response)
         if (responseStatus == "SUCCESS" || responseStatus == "success") {
-            console.log('in if condition data')
+            // console.log('in if condition data')
             let data = response.data;
             let reservedDates = [];
             var daylist = [];
@@ -81,7 +81,7 @@ class PlotArea extends React.Component {
                 "availabilityCheckData.reservedDays",
                 reservedDates
             );
-            console.log('availabilityCheckData in rsv date',availabilityCheckData)
+            // console.log('availabilityCheckData in rsv date',availabilityCheckData)
             window.scrollTo({
                 top: document.body.scrollHeight,
                 behavior: "smooth",
@@ -96,7 +96,7 @@ class PlotArea extends React.Component {
     };
 
     render() {
-        console.log("render in ploatArea",this.props);
+        // console.log("render in ploatArea",this.props);
         const { masterDataPCC, availabilityCheckData } = this.props;
         return masterDataPCC.map((item) => {
             // console.log('itemmmmm',item)
@@ -127,7 +127,7 @@ class PlotArea extends React.Component {
     }
 }
 const mapStateToProps = (state) => {
-    console.log('state in mapstatetoprops',state)
+    // console.log('state in mapstatetoprops',state)
     return {
         calendarVisiblity: state.screenConfiguration.screenConfig,
     };

@@ -57,6 +57,11 @@ const ApplicationBWTSummary = Loadable({
   loader: () => import("../Screens/BwtApplicationDetails"),
   loading: Loading
 });
+//Successpagepcc
+const CreateSuccessForPCC= Loadable({
+  loader: () => import("../Screens/CreateSuccessForPCC"),
+  loading: Loading
+});
 //NewLocationApplicationDetails
 const NewLocationApplicationDetails = Loadable({
   loader: () => import("../Screens/NewLocationApplicationDetails"),
@@ -177,6 +182,20 @@ const routes = [
       customTitle: "BK_MYBK_ALL_APPLICAION_HEADER"
     }
   },
+//successPageForPCC
+{
+  path: "egov-services/create-success-pcc",
+  component: CreateSuccessForPCC,
+  needsAuthentication: true,
+  options: {
+    hideBackButton: true,
+    hideFooter: true,
+    title: "CS_COMPLAINT_DETAILS_COMPLAINT_RESOLVED",
+    hideTitle: true,
+    redirectionUrl
+  }
+},
+
 //newMasterData
 {
   path: "egov-services/MasterData",

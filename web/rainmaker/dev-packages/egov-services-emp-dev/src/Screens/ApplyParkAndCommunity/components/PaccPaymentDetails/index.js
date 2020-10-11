@@ -9,7 +9,7 @@ import Footer from "../../../../modules/footer"
 import { fetchApplications, fetchApplicaionSector } from "egov-ui-kit/redux/bookings/actions";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import "./index.css";
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -30,6 +30,7 @@ class ApplicatInfo extends Component {
     let mb=/^\d{10}$/;
     e.preventDefault();
     if(this.props.amount==""||this.props.transactionDate==""){
+
 
       this.props.toggleSnackbarAndSetText(
         true,
@@ -84,7 +85,7 @@ class ApplicatInfo extends Component {
   render() {
     let { bankName, transactionNumber,finalRent,facilitationCharges,applicationPmode,  discountType,rent, paymentMode, amount,transactionDate,transactionDateChange, handleChange } = this.props;
     console.log('facilitationCharges==1',facilitationCharges,'finalRent===1',applicationPmode)
-    
+    // finalRent=Math.round((finalRent + Number.EPSILON) * 100) / 100;
    
     let sectorData=[];
     sectorData.push(applicationPmode);
@@ -115,7 +116,6 @@ console.log('arrayData',arrayData)
             id="bankName"
             name="bankName"
             type="text"
-            required = {true}
             value={bankName}
             hintText={
               <Label
@@ -145,8 +145,8 @@ console.log('arrayData',arrayData)
             id="transactionNumber"
             name="transactionNumber"
             type="string"
-            required = {true}
             value={transactionNumber}
+            required = {true} 
             hintText={
               <Label
                 label="BK_MYBK_TRANSACTION_NUMBER_PLACEHOLDER"
@@ -172,17 +172,14 @@ console.log('arrayData',arrayData)
         </div>
         
         <div className="col-sm-6 col-xs-6">
-
-
-
-
         <FormControl style={{ width: '100%' }}>
-          <InputLabel shrink style={{ width: '100%' }} id="demo-controlled-open-select-label"><Label  
+        <InputLabel shrink style={{ width: '100%' }} id="demo-controlled-open-select-label"><Label  
                   required = {true}   
                   label="BK_MYBK_PAYMENT_MODE"
                 /></InputLabel>
-          {/* <Select
+          <Select
             maxWidth={false}
+            required = {true}   
             labelId="demo-controlled-open-select-label-Locality"
             id="demo-controlled-open-select-locality"
             open={this.state.SetOpen}
@@ -192,17 +189,20 @@ console.log('arrayData',arrayData)
             displayEmpty
             onChange={handleChange('paymentMode')}
           >
+             <MenuItem value="" disabled>Payment Mode</MenuItem>
              {arrayData.map((child, index) => (
             <MenuItem value={child.name}>{child.name}</MenuItem>
             ))}
            
-          </Select> */}
-        </FormControl>          
+          </Select>
+        </FormControl>
+
+
+
           {/* <TextField
             id="paymentMode"
             name="paymentMode"
             type="text"
-            required = {true}
             value={paymentMode}
             hintText={
               <Label
@@ -233,8 +233,8 @@ console.log('arrayData',arrayData)
             id="amount"
             name="amount"
             type="number"
-            required = {true}
             value={amount}
+            required = {true}   
             hintText={
               <Label
                 label="BK_MYBK_AMOUNT_PLACEHOLDER"
@@ -251,7 +251,7 @@ console.log('arrayData',arrayData)
                 fontSize="12px"
               />
             }
-            onChange={handleChange('finalRent')}
+            onChange={handleChange('amount')}
             underlineStyle={{ bottom: 7 }}
             underlineFocusStyle={{ bottom: 7 }}
             hintStyle={{ width: "100%" }}
@@ -264,10 +264,10 @@ console.log('arrayData',arrayData)
                     id="transactionDate"
                     name="transactionDate"
                     value={transactionDate}
+                    required = {true}   
                     hintText={
                       <Label
                         color="rgba(0, 0, 0, 0.3799999952316284)"
-                        required = {true}   
                         fontSize={16}
                         labelStyle={hintTextStyle}
                       />
@@ -306,7 +306,6 @@ console.log('arrayData',arrayData)
             id="transactionDate"
             name="transactionDate"
             type="text"
-            required = {true}
             value={transactionDate}
             hintText={
               <Label

@@ -5,24 +5,36 @@ import isEmpty from "lodash/isEmpty";
 import { connect } from "react-redux";
 import "./index.css";
 
-class PayDetails extends Component {
-  
+class CGBookingDetails extends Component {
+//   convertEpochToDate = (dateEpoch) => {
+//     const dateFromApi = new Date(dateEpoch);
+//     let month = dateFromApi.getMonth() + 1;
+//     let day = dateFromApi.getDate();
+//     let year = dateFromApi.getFullYear();
+//     month = (month > 9 ? "" : "0") + month;
+//     day = (day > 9 ? "" : "0") + day;
+//     return `${day}-${month}-${year}`;
+//   };
+
   render() {
     const { locality, surcharge, fromDate, toDate,
        utGST, cGST, GSTnumber, cgstone,
        utgstRateOne,surchargeOne,
       dimension, cleaningCharges, rent, purpose, bkLocation, myLocation, secondRate ,myLocationtwo,firstrent, cleanOne} = this.props;
       console.log("propsInSummaryApplicationDetails--",this.props)
-
-    return (
+return (
       <div>
-        {/* <Card
-          textChildren={ */}
+        <Card
+          textChildren={
             <div>
-            <div className="col-xs-12" style={{ marginLeft: '10px' }}>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: '30px' }}>
-                        <div className="complaint-detail-detail-section-status row">
-                            <div className="col-md-4">
+              <div className="rainmaker-displayInline">
+                
+                <Label label="BK_MYBK_APPLICANTION_DETAILS" containerStyle={{ marginLeft: "13px" }} labelClassName="dark-heading" />
+              </div>
+              <div key={10} className="complaint-detail-full-width">
+              
+              <div className="complaint-detail-detail-section-status row">
+              <div className="col-md-4">
                                 <Label className="col-xs-12  col-sm-12 col-md-12 status-color" label="BK_MYBK_CREATE_PURPOSE" />
                                 <Label
                                     labelStyle={{ color: "inherit" }}
@@ -40,7 +52,6 @@ class PayDetails extends Component {
                                     label={locality}
                                 />
                             </div>
-
                             <div className="col-md-4">
                                 <Label className="col-xs-12  col-sm-12 col-md-12 status-color" label="BK_MYBK_CREATE_DIMENSION_AREA" />
                                 <Label
@@ -70,7 +81,6 @@ class PayDetails extends Component {
                                     label={fromDate}
                                 />
                             </div>
-
                             <div className="col-md-4">
                                 <Label className="col-xs-12  col-sm-12 col-md-12 status-color" label="BK_MYBK_TO_DATE" />
                                 <Label
@@ -138,36 +148,21 @@ class PayDetails extends Component {
                                     labelStyle={{ color: "inherit" }}
                                     label={GSTnumber?GSTnumber:"NA"}
                                 />
-                            </div>
-                           
-                           
-                            {/* <div className="col-md-4">
-                                <Label className="col-xs-12  col-sm-12 col-md-12 status-color" label="BK_MYBK_CREATE_FCHARGES" />
-                                <Label
-                                    className="col-xs-12  col-sm-12 col-md-12  status-result-color"
-                                    id="complaint-details-current-status"
-                                    labelStyle={{ color: "inherit" }}
-                                    label={ myLocationtwo}
-                                />
-                            </div> */}
-                           
-                          
-                       
-                        </div>
-                    </div>
-                </div>
+                            </div>           
+                          </div>
             </div>
-          {/* // }
-        // /> */}
-      </div>
-    );
-  }
+          </div>
+        }
+      />
+    </div>
+  );
+}
 }
 
 
 const mapStateToProps = state => {
 
-    const { bookings, common, auth, form } = state;
+    const { complaints, common, auth, form } = state;
     console.log("stateoFsummaryPage--",state)
     let myLocation = state.screenConfiguration.preparedFinalObject ? state.screenConfiguration.preparedFinalObject.availabilityCheckData:"";  
     console.log("mylocation--",myLocation)
@@ -185,7 +180,7 @@ const mapStateToProps = state => {
     console.log("cleanOne--",cgstone)
     let utgstRateOne =  firstrent?firstrent.utgstRate:""; 
     console.log("cleanOne--",utgstRateOne)
-    const { createPACCApplicationData } = bookings;
+    const { createPACCApplicationData } = complaints;
     console.log('createPACCApplicationData', createPACCApplicationData)
     return {
         createPACCApplicationData,
@@ -212,5 +207,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(PayDetails);
-// export default PayDetails;
+)(CGBookingDetails);
+
