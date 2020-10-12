@@ -54,7 +54,7 @@ class CreateWBTApplicationSuccess extends Component {
                 applicationDetails.bkFromDate,
                 applicationDetails.bkToDate
               ),
-              "venueName": applicationDetails.bkBookingVenue,
+              "venueName": applicationDetails.bkLocation,
               "sector": applicationDetails.bkSector,
               "bookingPurpose": applicationDetails.bkBookingPurpose,
               "parkDim": applicationDetails.bkDimension

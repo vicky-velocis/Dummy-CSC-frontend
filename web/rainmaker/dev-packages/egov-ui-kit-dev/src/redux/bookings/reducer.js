@@ -58,6 +58,32 @@ const complaintsReducer = (state = intialState, action) => {
         fetchSuccess: true,
         createPACCApplicationData: action.payload
       };
+      case actionTypes.CREATE_PACCAPP_ERROR:
+        return {
+          ...state,
+          loading: false,
+          fetchSuccess: true,
+          error: true,
+          errorMessage: action.error,
+        };
+        case actionTypes.UPDATE_PARKCCAPP_COMPLETE:
+          return {
+            ...state,
+            loading: false,
+            fetchSuccess: true,
+            updatePACCApplicationData: action.payload
+          };
+  
+      case actionTypes.UPDATE_PACCAPP_ERROR:
+        return {
+          ...state,
+          loading: false,
+          fetchSuccess: true,
+          error: true,
+          errorMessage: action.error,
+        };
+
+
     case actionTypes.CREATE_WATER_ERROR:
       return {
         ...state,
@@ -247,17 +273,32 @@ const complaintsReducer = (state = intialState, action) => {
           ...complaintDepartment,
         },
       };
-    case actionTypes.APPLICATION_SECTOR_FETCH_SUCCESS:
-         let applicationSector = transformById(action.payload.MdmsRes["Booking"].Sector, "code");
-      console.log('action.payload i reducer0----', applicationSector)
-      return {
-        ...state,
-        loading: false,
-        fetchSuccess: true,
-        applicationSector: {
-          ...state.applicationSector,
-          ...applicationSector}
-      };
+  
+
+      case actionTypes.APPLICATION_SECTOR_FETCH_SUCCESS:
+        let applicationSector = transformById(action.payload.MdmsRes["Booking"].Sector, "code");
+        let applicationPmode = transformById(action.payload.MdmsRes["Booking"].Payment_Mode, "code");
+        let sImageUrl = action.payload.MdmsRes["Booking"].Booking_Config
+        console.log('payload in sImageUrl', sImageUrl)
+        //  let a = action.payload.MdmsRes["Booking"];
+  
+        // console.log('applicationSector,Payment_Mode',applicationPmode,'aaaaa',a)
+        return {
+          ...state,
+          loading: false,
+          applicationSector: {
+            ...state.applicationSector,
+            ...applicationSector,
+          },
+          applicationPmode: {
+            ...state.applicationPmode,
+            ...applicationPmode,
+          },
+          sImageUrl: {
+            ...state.sImageUrl,
+            ...sImageUrl,
+          },
+        };
 
     case actionTypes.APPLICATION_TYPE_FETCH_SUCCESS:
        let applicationType = action.payload.MdmsRes["Booking"];
@@ -270,7 +311,10 @@ const complaintsReducer = (state = intialState, action) => {
           ...applicationType,
         },
       };
+    
+   
 
+        
 
     case actionTypes.COMPLAINTS_SECTOR_FETCH_SUCCESS:
       let complaintSector = transformById(action.payload.MdmsRes["RAINMAKER-PGR"].Sector, "code");
@@ -486,7 +530,21 @@ const complaintsReducer = (state = intialState, action) => {
           shareContent: shareCont,
         },
       };
-
+      case actionTypes.DOWNLOAD_ESAMPARK_APP_COMPLETE_PCC:
+        return {
+          ...state,
+          loading: false,
+          fetchSuccess: true,
+          Downloadesamparkdetails: action.payload
+        };
+      case actionTypes.DOWNLOAD_ESAMPARK_APP__ERROR_PCC:
+        return {
+          ...state,
+          loading: false,
+          fetchSuccess: true,
+          error: true,
+          errorMessage: action.error,
+        };
     default:
       return state;
   }

@@ -333,4 +333,16 @@ export const DWONLOADRECEIPTFORPCC = {
     ACTION: "_search",
   },
 };
+export const UPDATEPACCAPPLICATION = {
+  POST: {
+    URL: "bookings/park/community/_update?",
+    ACTION: "_search",
+  },
+};
+export const ESAMPARK = {
+  POST: {
+    URL: "pdf-service/v1/_create?key=pacc-booking-app-form",
+    ACTION: "_search",
+  },
+};
 
