@@ -63,6 +63,8 @@ const moveToReview = (state, dispatch, applnid) => {
                     );
                     validateDocumentField = false;
                     break;
+                } else {
+                    validateDocumentField = true;
                 }
                 // if (isDocumentTypeRequired) {
                 //     if (get(documentsFormat[i], "dropdown.value")) {

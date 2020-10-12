@@ -261,7 +261,7 @@ class DocumentList extends Component {
     };
 
     getUploadCard = (card, key) => {
-
+console.log(card, "Card He");
         const { classes, documentsUploadRedux } = this.props;
         let jsonPath = `documentsUploadRedux[${key}].dropdown.value`;
         return (
@@ -333,7 +333,15 @@ class DocumentList extends Component {
                     className={classes.descriptionDiv}
                 >
                     <LabelContainer
-                        labelKey={card.code=="OSWMCC_LOCATION_IMAGE_1" || "OSWMCC_LOCATION_IMAGE_2" || "OSWMCC_LOCATION_IMAGE_3"?"Supported Documents: jpg, png. Max file size: 1MB":"Supported Documents: pdf, jpg, png. Max file size: 1MB"}
+                        labelKey={(()=>{
+                            if(card.code == "OSWMCC_LOCATION_IMAGE_1" || card.code == "OSWMCC_LOCATION_IMAGE_2" || card.code == "OSWMCC_LOCATION_IMAGE_3"){
+                                return "Supported Documents: jpg, png. Max file size: 1MB";
+                            }else{
+                                return "Supported Documents: pdf, jpg, png. Max file size: 1MB";
+                            }
+                        })()}
+
+
                         style={styles.descStyle}
                     />
 

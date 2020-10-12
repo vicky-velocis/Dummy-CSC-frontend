@@ -54,6 +54,8 @@ const moveToReview = (state, dispatch, applnid) => {
                     );
                     validateDocumentField = false;
                     break;
+                } else {
+                    validateDocumentField = true;
                 }
                 // if (isDocumentTypeRequired) {
                 //     if (get(documentsFormat[i], "dropdown.value")) {
@@ -119,7 +121,7 @@ const callBackForNext = async (state, dispatch) => {
         let response = await createUpdatePCCApplication(
             state,
             dispatch,
-            paymentStatus === "SUCCESS" || paymentStatus === "succes" ? "RE_INITIATED": "INITIATE"
+            paymentStatus === "SUCCESS" || paymentStatus === "succes" ? "RE_INITIATED" : "INITIATE"
         );
         let responseStatus = get(response, "status", "");
         if (responseStatus == "SUCCESS" || responseStatus == "success") {
@@ -192,17 +194,17 @@ const callBackForNext = async (state, dispatch) => {
         // console.log(response, "step3Response");
         // let responseStatus = get(response, "status", "");
         // if (responseStatus == "SUCCESS" || responseStatus == "success") {
-            // let successMessage = {
-            //     labelName: "APPLICATION SUBMITTED SUCCESSFULLY! ",
-            //     labelKey: "", //UPLOAD_FILE_TOAST
-            // };
-            // dispatch(toggleSnackbar(true, successMessage, "success"));
-            let applicationData = get(
-                state.screenConfiguration.preparedFinalObject,
-                "Booking"
-            );
-            const reviewUrl = `/egov-services/pay?applicationNumber=${applicationData.bkApplicationNumber}&tenantId=${applicationData.tenantId}&businessService=${applicationData.businessService}`;
-            dispatch(setRoute(reviewUrl));
+        // let successMessage = {
+        //     labelName: "APPLICATION SUBMITTED SUCCESSFULLY! ",
+        //     labelKey: "", //UPLOAD_FILE_TOAST
+        // };
+        // dispatch(toggleSnackbar(true, successMessage, "success"));
+        let applicationData = get(
+            state.screenConfiguration.preparedFinalObject,
+            "Booking"
+        );
+        const reviewUrl = `/egov-services/pay?applicationNumber=${applicationData.bkApplicationNumber}&tenantId=${applicationData.tenantId}&businessService=${applicationData.businessService}`;
+        dispatch(setRoute(reviewUrl));
         // }
         //  else {
         //     let errorMessage = {
